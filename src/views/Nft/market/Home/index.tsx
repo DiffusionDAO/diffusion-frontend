@@ -69,7 +69,7 @@ const Home = () => {
     (collection) => (collection.createdAt ? Date.parse(collection.createdAt) : 0),
     'desc',
   )
-
+  console.log("newestCollections:",newestCollections)
   return (
     <>
       <PageMeta />

@@ -44,14 +44,14 @@ const TabMenu = () => {
       >
         NFTs
       </Tab>
-      <Tab
+      {/* <Tab
         onClick={() => setIsAchievementsActive(true)}
         $active={achievementsActive}
         as={NextLinkFromReactRouter}
         to={`${nftsBaseUrl}/profile/${accountAddress}/achievements`}
       >
         {t('Achievements')}
-      </Tab>
+      </Tab> */}
     </Flex>
   )
 }

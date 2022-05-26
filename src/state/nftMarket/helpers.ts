@@ -36,7 +36,18 @@ import {
   UserActivity,
 } from './types'
 import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } from './queries'
+import { ethers } from 'ethers'
+import starlightContract from 'abi/starlightContract.json'
+import { useWeb3React } from '@web3-react/core'
 
+const toBuffer = require('it-to-buffer')
+
+const { create } = require('ipfs-http-client')
+export const ipfs = create({
+  host: 'ipfs.infura.io',
+  port: '5001',
+  protocol: 'https',
+})
 /**
  * API HELPERS
  */
@@ -46,13 +57,18 @@ import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } f
  * @returns
  */
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
-  const res = await fetch(`${API_NFT}/collections`)
-  if (res.ok) {
-    const json = await res.json()
-    return json
-  }
-  console.error('Failed to fetch NFT collections', res.statusText)
-  return null
+  var res = await ipfs.cat('QmZPQ2cP6StXPgSvYSWMMTvJdz7CEoTCmqeWShxBga7jGQ')
+  var buffer = await toBuffer(res)
+  const json = JSON.parse(Buffer.from(buffer).toString('utf8'))
+  return json
+  // const res = await fetch(`${API_NFT}/collections`)
+  // if (res.ok) {
+  //   const json = await res.json()
+  //   console.log("json:",json)
+  //   return json
+  // }
+  // console.error('Failed to fetch NFT collections', res.statusText)
+  // return null
 }
 
 const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promise<number[]> => {
@@ -75,7 +91,10 @@ const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promis
  */
 export const getCollections = async (): Promise<Record<string, Collection>> => {
   try {
-    const [collections, collectionsMarket] = await Promise.all([getCollectionsApi(), getCollectionsSg()])
+    // const [collections, collectionsMarket] = await Promise.all([getCollectionsApi(), getCollectionsSg()])
+    const [collections] = await Promise.all([getCollectionsApi()])
+
+    // const [collections] = await Promise.all([getCollectionsApi()])
     const collectionApiData: ApiCollection[] = collections?.data ?? []
     const collectionsTotalSupply = await fetchCollectionsTotalSupply(collectionApiData)
     const collectionApiDataCombinedOnChain = collectionApiData.map((collection, index) => {
@@ -86,8 +105,8 @@ export const getCollections = async (): Promise<Record<string, Collection>> => {
         totalSupply: Math.max(totalSupplyFromApi, totalSupplyFromOnChain).toString(),
       }
     })
-
-    return combineCollectionData(collectionApiDataCombinedOnChain, collectionsMarket)
+    // return {collectionApiDataCombinedOnChain}
+    return combineCollectionData(collectionApiDataCombinedOnChain, [])
   } catch (error) {
     console.error('Unable to fetch data:', error)
     return null
@@ -127,6 +146,7 @@ export const getCollectionApi = async (collectionAddress: string): Promise<ApiCo
   const res = await fetch(`${API_NFT}/collections/${collectionAddress}`)
   if (res.ok) {
     const json = await res.json()
+    console.log('getCollectionApi:', json.data)
     return json.data
   }
   console.error(`API: Failed to fetch NFT collection ${collectionAddress}`, res.statusText)
@@ -184,14 +204,47 @@ export const getNftApi = async (
   collectionAddress: string,
   tokenId: string,
 ): Promise<ApiResponseSpecificToken['data']> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}`)
-  if (res.ok) {
-    const json = await res.json()
-    return json.data
-  }
+  const { connector, library } = useWeb3React()
+  var nftContract = new ethers.Contract(collectionAddress, starlightContract, library)
+  const uri = await nftContract.tokenURI()
 
-  console.error(`API: Can't fetch NFT token ${tokenId} in ${collectionAddress}`, res.status)
-  return null
+  console.log('uri:', uri)
+  // var res = ipfs.cat(uri);
+  // var buffer = await toBuffer(res)
+  // var blob = new Blob([buffer])
+  // var img = new Image()
+  // img.src = URL.createObjectURL(blob)
+  // img.onload = () => {
+  //     console.log("onload")
+  // }
+  // img.onerror = event => {
+  //     console.log("onerror")
+  // }
+  const json = {
+    tokenId,
+    name: '',
+    description: '',
+    image: {
+      original: uri,
+      thumbnail: uri,
+    },
+    createdAt: '',
+    updatedAt: '',
+    attributes: [],
+    collection: {
+      name: '',
+    },
+  }
+  return json
+  // const res = await fetch(`${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}`)
+  // if (res.ok) {
+  //   const json = await res.json()
+  //   console.log("getNftApi:",json)
+  //   return json.data
+  // }
+
+  // console.error(`API: Can't fetch NFT token ${tokenId} in ${collectionAddress}`, res.status)
+  // return null
 }
 
 /**
@@ -1177,7 +1230,7 @@ export const getCompleteAccountNftData = async (
     ...forSaleNftIds,
     ...walletNftIdsWithCollectionAddress,
   ])
-
+  console.log("metadataForAllNfts:", metadataForAllNfts)
   const completeNftData = combineNftMarketAndMetadata(
     metadataForAllNfts,
     onChainForSaleNfts,

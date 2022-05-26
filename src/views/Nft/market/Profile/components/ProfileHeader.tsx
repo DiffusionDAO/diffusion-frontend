@@ -168,14 +168,14 @@ const ProfileHeader: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <BannerHeader bannerImage={getBannerImage()} bannerAlt={t('User team banner')} avatar={getAvatar()} />
+      {/* <BannerHeader bannerImage={getBannerImage()} bannerAlt={t('User team banner')} avatar={getAvatar()} />
       <MarketPageTitle pb="48px" title={getTitle()} description={renderDescription()}>
         <StatBox>
           <StatBoxItem title={t('NFT Collected')} stat={numNftCollected} />
           <StatBoxItem title={t('Points')} stat={numPoints} />
           <StatBoxItem title={t('Achievements')} stat={numAchievements} />
         </StatBox>
-      </MarketPageTitle>
+      </MarketPageTitle> */}
     </>
   )
 }

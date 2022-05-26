@@ -41,7 +41,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 1,
     }
   }
-
+  console.log("metadata:",metadata)
   const nft: NftToken = {
     tokenId,
     collectionAddress,

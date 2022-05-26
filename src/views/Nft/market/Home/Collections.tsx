@@ -5,6 +5,14 @@ import { Collection } from 'state/nftMarket/types'
 import { useTranslation } from 'contexts/Localization'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
+const toBuffer = require('it-to-buffer')
+
+const { create } = require('ipfs-http-client')
+export const ipfs = create({
+  host: 'ipfs.infura.io',
+  port: '5001',
+  protocol: 'https',
+})
 
 const Collections: React.FC<{ title: string; testId: string; collections: Collection[] }> = ({
   title,
@@ -12,6 +20,27 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
   collections,
 }) => {
   const { t } = useTranslation()
+
+  collections.slice(0, 6).map(async (collection) => {
+    const path = collection.banner.small.slice(1)
+    try {
+      const res = ipfs.cat(path)
+      var buffer = await toBuffer(res)
+      var blob = new Blob([buffer])
+      collection.banner.small = URL.createObjectURL(blob)
+    } catch (error) {
+      console.log(error)
+    }
+    const avatar = collection.avatar.slice(1)
+    try {
+      const res = ipfs.cat(avatar)
+      var buffer = await toBuffer(res)
+      var blob = new Blob([buffer])
+      collection.avatar = URL.createObjectURL(blob)
+    } catch (error) {
+      console.log(error)
+    }
+  })
 
   return (
     <>

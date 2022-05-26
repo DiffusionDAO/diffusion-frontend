@@ -23,9 +23,9 @@ const Collection = () => {
 
   const hash = useMemo(() => getHashFromRouter(router)?.[0], [router])
 
-  if (!collection) {
-    return <PageLoader />
-  }
+  // if (!collection) {
+  //   return <PageLoader />
+  // }
 
   let content = <Items />
 
