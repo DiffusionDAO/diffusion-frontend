@@ -64,7 +64,6 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   // const res = await fetch(`${API_NFT}/collections`)
   // if (res.ok) {
   //   const json = await res.json()
-  //   console.log("json:",json)
   //   return json
   // }
   // console.error('Failed to fetch NFT collections', res.statusText)
@@ -106,7 +105,9 @@ export const getCollections = async (): Promise<Record<string, Collection>> => {
       }
     })
     // return {collectionApiDataCombinedOnChain}
-    return combineCollectionData(collectionApiDataCombinedOnChain, [])
+    const collectionData = combineCollectionData(collectionApiDataCombinedOnChain, [])
+    console.log("collectionData:",collectionData)
+    return collectionData
   } catch (error) {
     console.error('Unable to fetch data:', error)
     return null
@@ -208,7 +209,6 @@ export const getNftApi = async (
   var nftContract = new ethers.Contract(collectionAddress, starlightContract, library)
   const uri = await nftContract.tokenURI()
 
-  console.log('uri:', uri)
   // var res = ipfs.cat(uri);
   // var buffer = await toBuffer(res)
   // var blob = new Blob([buffer])

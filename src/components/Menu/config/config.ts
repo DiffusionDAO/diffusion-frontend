@@ -36,7 +36,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     label: t('NFT'),
     icon: NftIcon,
     fillIcon: NftFillIcon,
-    href: `${nftsBaseUrl}/collections`,
+    href: `${nftsBaseUrl}`,
     items: [
       // {
       //   label: t('Overview'),
