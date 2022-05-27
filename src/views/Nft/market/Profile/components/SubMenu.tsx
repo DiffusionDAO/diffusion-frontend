@@ -14,10 +14,10 @@ const SubMenuComponent: React.FC = () => {
       label: t('Items'),
       href: `${nftsBaseUrl}/profile/${accountAddress}`,
     },
-    // {
-    //   label: t('Activity'),
-    //   href: `${nftsBaseUrl}/profile/${accountAddress}/activity`,
-    // },
+    {
+      label: t('Activity'),
+      href: `${nftsBaseUrl}/profile/${accountAddress}/activity`,
+    },
   ]
 
   return <BaseSubMenu items={ItemsConfig} activeItem={asPath} justifyContent="flex-start" mb="60px" />

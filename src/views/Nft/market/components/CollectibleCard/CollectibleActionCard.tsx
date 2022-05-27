@@ -1,4 +1,4 @@
-import { StyledCollectibleCard } from './styles'
+import { StyledCollectibleCard, CheckBox } from './styles'
 import CardBody from './CardBody'
 import { CollectibleCardProps } from './types'
 
@@ -11,6 +11,7 @@ const CollectibleActionCard: React.FC<CollectibleCardProps> = ({
 }) => {
   return (
     <StyledCollectibleCard {...props}>
+      <CheckBox selected={nft.selected} />
       <CardBody nft={nft} nftLocation={nftLocation} currentAskPrice={currentAskPrice} isUserNft={isUserNft} />
     </StyledCollectibleCard>
   )

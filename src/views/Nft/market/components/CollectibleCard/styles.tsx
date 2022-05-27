@@ -133,6 +133,24 @@ export const StyledCollectibleCard = styled(Card)`
     }
   }
 `
+interface CheckdBoxProps {
+  selected: boolean;
+}
+
+export const CheckBox = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: 3px solid grey;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  z-index: 1;
+  background: ${({ selected }: CheckdBoxProps) => {
+    return selected ? 'blue' : 'white';
+  }};
+`
 interface LowestPriceMetaRowProps {
   lowestPrice: number
   isFetching: boolean
