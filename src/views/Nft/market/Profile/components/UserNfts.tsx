@@ -20,11 +20,13 @@ interface SellNftProps {
 }
 
 const UserNfts: React.FC<{
+  isCompound: boolean
   nfts: NftToken[]
   isLoading: boolean
   onSuccessSale: () => void
   onSuccessEditProfile: () => void
-}> = ({ nfts, isLoading, onSuccessSale, onSuccessEditProfile }) => {
+  selectNft: (param: NftToken) => void
+}> = ({ isCompound, nfts, isLoading, onSuccessSale, onSuccessEditProfile, selectNft }) => {
   const [clickedProfileNft, setClickedProfileNft] = useState<ProfileNftProps>({ nft: null, location: null })
   const [clickedSellNft, setClickedSellNft] = useState<SellNftProps>({ nft: null, location: null, variant: null })
   const [onPresentProfileNftModal] = useModal(
@@ -41,18 +43,23 @@ const UserNfts: React.FC<{
   const { t } = useTranslation()
 
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
-    switch (location) {
-      case NftLocation.PROFILE:
-        setClickedProfileNft({ nft, location })
-        break
-      case NftLocation.WALLET:
-        setClickedSellNft({ nft, location, variant: 'sell' })
-        break
-      case NftLocation.FORSALE:
-        setClickedSellNft({ nft, location, variant: 'edit' })
-        break
-      default:
-        break
+    // 如果是已经点击了合成按钮，则点击卡片后就是代表卡片是否选中，否则就按照卡片自身的点击事件执行
+    if (isCompound) {
+      selectNft(nft)
+    } else {
+      switch (location) {
+        case NftLocation.PROFILE:
+          setClickedProfileNft({ nft, location })
+          break
+        case NftLocation.WALLET:
+          setClickedSellNft({ nft, location, variant: 'sell' })
+          break
+        case NftLocation.FORSALE:
+          setClickedSellNft({ nft, location, variant: 'edit' })
+          break
+        default:
+          break
+      }
     }
   }
 
@@ -94,6 +101,7 @@ const UserNfts: React.FC<{
 
             return (
               <CollectibleActionCard
+                isCompound={isCompound}
                 isUserNft
                 onClick={() => handleCollectibleClick(nft, location)}
                 key={`${nft?.tokenId}-${nft?.collectionName}`}

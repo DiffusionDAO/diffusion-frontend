@@ -75,7 +75,6 @@ export interface TokenMarketData {
 
 // Represents single NFT token, either Squad-like NFT or single PancakeBunny.
 export interface NftToken {
-  selected: boolean,
   tokenId: string
   name: string
   description: string
@@ -88,6 +87,7 @@ export interface NftToken {
   marketData?: TokenMarketData
   location?: NftLocation
   meta?: Record<string, string | number>
+  selected?: boolean
 }
 
 export interface NftFilter {
