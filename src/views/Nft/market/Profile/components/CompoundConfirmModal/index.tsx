@@ -27,11 +27,19 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
     >
       <ContentWrap>
         <div>
-          <div>得到</div>
-          <NFTMedia height={320} width={320} mb="8px" borderRadius="8px" />
+          <h2>得到</h2>
+          <CollectibleActionCard
+            isUserNft
+            key={`${nfts[0]?.tokenId}-${nfts[0]?.collectionName}`}
+            nft={nfts[0]}
+            currentAskPrice={
+              nfts[0].marketData?.currentAskPrice && nfts[0].marketData?.isTradable && parseFloat(nfts[0].marketData?.currentAskPrice)
+            }
+            nftLocation={nfts[0].location}
+          />
         </div>
         <div>
-          <div>消耗</div>
+          <h2>消耗</h2>
           {
             nfts.length && (
             <Grid
