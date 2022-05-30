@@ -11,16 +11,12 @@ const SubMenuComponent: React.FC = () => {
 
   const ItemsConfig = [
     {
-      label: t('Items'),
+      label: t('我购买的NFT'),
       href: `${nftsBaseUrl}/profile/${accountAddress}`,
-    },
-    {
-      label: t('Activity'),
-      href: `${nftsBaseUrl}/profile/${accountAddress}/activity`,
     },
   ]
 
-  return <BaseSubMenu items={ItemsConfig} activeItem={asPath} justifyContent="flex-start" mb="60px" />
+  return <BaseSubMenu items={ItemsConfig} activeItem={asPath} justifyContent="flex-start" mb="20px" />
 }
 
 export default SubMenuComponent

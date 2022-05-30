@@ -3,7 +3,7 @@ import { Button, Grid } from '@pancakeswap/uikit'
 import { NftToken } from 'state/nftMarket/types'
 import { StyledModal, ContentWrap } from './styles'
 import NFTMedia from '../../../components/NFTMedia'
-import { CollectibleActionCard } from '../../../components/CollectibleCard'
+import { CollectibleLinkCard } from '../../../components/CollectibleCard'
 
 
 
@@ -28,14 +28,13 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
       <ContentWrap>
         <div>
           <h2>得到</h2>
-          <CollectibleActionCard
+          <CollectibleLinkCard
             isUserNft
             key={`${nfts[0]?.tokenId}-${nfts[0]?.collectionName}`}
             nft={nfts[0]}
             currentAskPrice={
               nfts[0].marketData?.currentAskPrice && nfts[0].marketData?.isTradable && parseFloat(nfts[0].marketData?.currentAskPrice)
             }
-            nftLocation={nfts[0].location}
           />
         </div>
         <div>
@@ -50,14 +49,13 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
               {nfts.map((nft) => {
                 const { marketData, location } = nft
                 return (
-                  <CollectibleActionCard
+                  <CollectibleLinkCard
                     isUserNft
                     key={`${nft?.tokenId}-${nft?.collectionName}`}
                     nft={nft}
                     currentAskPrice={
                       marketData?.currentAskPrice && marketData?.isTradable && parseFloat(marketData?.currentAskPrice)
                     }
-                    nftLocation={location}
                   />
                 )
               })}

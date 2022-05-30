@@ -87,17 +87,15 @@ function NftProfilePage() {
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", marginBottom: "20px"  }}>
+        <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "20px" }}>
           <div style={{ maxWidth: "200px", marginRight: "50px" }}>
             <SubMenu />
           </div>
-          <div style={{ maxWidth: "200px" }}>
-            <Select
-              options={sortByItems} 
-              width={200} 
-            />
-          </div>
+          <Select
+            options={sortByItems}
+            style={{ width: "200px"}} 
+          />
         </div>
         {
           isCompound ? 
@@ -116,11 +114,6 @@ function NftProfilePage() {
           nfts={nftDatas}
           isCompound={isCompound}
           isLoading={isNftLoading}
-          onSuccessSale={refreshUserNfts}
-          onSuccessEditProfile={async () => {
-            await refreshProfile()
-            refreshUserNfts()
-          } } 
           selectNft={selectNft}
           />
       ) : (

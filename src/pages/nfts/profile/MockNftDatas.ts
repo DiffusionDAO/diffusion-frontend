@@ -21,6 +21,15 @@ export const nftDatasMock: NftToken[] = [
     createdAt: "2022/05/27 14:00",
     updatedAt: "2022/05/27 14:00",
     location: NftLocation.FORSALE,
+    marketData: {
+      tokenId: "xxx1",
+      collection: {
+        id: "xxx1",
+      },
+      currentAskPrice: "0.22",
+      currentSeller: "xxx",
+      isTradable: true,
+    }
   },
   {
     tokenId: "xxx2",
@@ -42,6 +51,15 @@ export const nftDatasMock: NftToken[] = [
     createdAt: "2022/05/27 14:00",
     updatedAt: "2022/05/27 14:00",
     location: NftLocation.PROFILE,
+    marketData: {
+      tokenId: "xxx1",
+      collection: {
+        id: "xxx1",
+      },
+      currentAskPrice: "0.22",
+      currentSeller: "xxx",
+      isTradable: true,
+    }
   },
   {
     tokenId: "xxx3",
@@ -63,6 +81,15 @@ export const nftDatasMock: NftToken[] = [
     createdAt: "2022/05/27 14:00",
     updatedAt: "2022/05/27 14:00",
     location: NftLocation.WALLET,
+    marketData: {
+      tokenId: "xxx1",
+      collection: {
+        id: "xxx1",
+      },
+      currentAskPrice: "0.22",
+      currentSeller: "xxx",
+      isTradable: true,
+    }
   },
   {
     tokenId: "xxx4",
@@ -84,5 +111,14 @@ export const nftDatasMock: NftToken[] = [
     createdAt: "2022/05/27 14:00",
     updatedAt: "2022/05/27 14:00",
     location: NftLocation.WALLET,
+    marketData: {
+      tokenId: "xxx1",
+      collection: {
+        id: "xxx1",
+      },
+      currentAskPrice: "0.22",
+      currentSeller: "xxx",
+      isTradable: true,
+    }
   },
 ]
