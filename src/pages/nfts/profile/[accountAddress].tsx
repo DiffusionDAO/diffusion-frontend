@@ -5,6 +5,7 @@ import { NftProfileLayout } from 'views/Nft/market/Profile'
 import SubMenu from 'views/Nft/market/Profile/components/SubMenu'
 import UnconnectedProfileNfts from 'views/Nft/market/Profile/components/UnconnectedProfileNfts'
 import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
+import { SubMenuWrap, SelectWrap, CompoundBtnWrap, CountWrap } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
 import { Button, useModal } from '@pancakeswap/uikit'
 import Select, { OptionProps } from 'components/Select/Select'
@@ -35,6 +36,9 @@ function NftProfilePage() {
   const [selectNfts, setSelectedNfts] = useState<NftToken[]>([])
 
   const [nftDatas, setNftDatas] = useState<NftToken[]>(nftDatasMock)
+  const [selectedCount, setSelectedCount] = useState<number>(0)
+
+
 
   const sortByItems = [
     { label: t('Recently listed'), value: { field: 'updatedAt', direction: 'desc' } },
@@ -82,32 +86,39 @@ function NftProfilePage() {
       if (obj.tokenId === nft.tokenId) obj.selected = !obj.selected
       return obj
     })
+    const count = data.filter(item => item.selected).length
     setNftDatas(data)
+    setSelectedCount(count)
   }
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", marginBottom: "20px"  }}>
-        <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "20px" }}>
-          <div style={{ maxWidth: "200px", marginRight: "50px" }}>
-            <SubMenu />
-          </div>
+      <SubMenuWrap>
+        <SubMenu />
+        <SelectWrap>
           <Select
-            options={sortByItems}
-            style={{ width: "200px"}} 
-          />
-        </div>
-        {
-          isCompound ? 
-          <div>
-            <Button variant="primary" scale="md" mr="8px" onClick={cancelCompound}>{t('取消')}</Button>
-            <Button variant="primary" scale="md" mr="8px" onClick={confirmCompound}>{t('确认')}</Button>
-          </div>
-          : 
-          <Button variant="primary" scale="md" mr="8px" onClick={startCompound}>{t('合成')}</Button>
-        }
-        
-      </div>
+              options={sortByItems}
+              style={{ width: "200px"}} 
+            />
+        </SelectWrap>
+      </SubMenuWrap>
+        <CompoundBtnWrap isCompound={isCompound}>
+          {
+            isCompound ? 
+            <>
+              <div>
+                {t('Selected')} 
+                <CountWrap>{selectedCount}</CountWrap>
+              </div>
+              <div>
+                <Button variant="primary" scale="md" mr="8px" onClick={confirmCompound}>{t('Save')}</Button>
+                <Button variant="primary" scale="md" onClick={cancelCompound}>{t('Cancel')}</Button>
+              </div>
+            </> :
+            <div role="button" aria-hidden="true" onClick={startCompound}>{t('Synthetic')}</div>
+          }
+
+        </CompoundBtnWrap>
       {isConnectedProfile ? (
         <UserNfts
           // nfts={nfts}
