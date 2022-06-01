@@ -1,5 +1,5 @@
 import { NextLinkFromReactRouter } from 'components/NextLink'
-import { StyledCollectibleCard, CheckBox } from './styles'
+import { StyledCollectibleCard, CheckBoxWrap, CheckBox } from './styles'
 import CardBody from './CardBody'
 import { CollectibleCardProps } from './types'
 import { nftsBaseUrl, pancakeBunniesAddress } from '../../constants'
@@ -11,7 +11,9 @@ const CollectibleLinkCard: React.FC<CollectibleCardProps> = ({ isCompound, nft, 
     <StyledCollectibleCard {...props}>
       {
         isCompound ? <>
-          <CheckBox selected={!!nft.selected} />
+          <CheckBoxWrap>
+            <CheckBox selected={!!nft.selected} />
+          </CheckBoxWrap>
           <CardBody nft={nft} nftLocation={nftLocation} currentAskPrice={currentAskPrice} />
         </> : 
         <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${urlId}`}>

@@ -11,7 +11,7 @@ const SubMenuComponent: React.FC = () => {
 
   const ItemsConfig = [
     {
-      label: t('我购买的NFT'),
+      label: t('I Bought NFT'),
       href: `${nftsBaseUrl}/profile/${accountAddress}`,
     },
   ]

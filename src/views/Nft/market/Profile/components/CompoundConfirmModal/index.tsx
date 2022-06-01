@@ -1,7 +1,7 @@
 import { useTranslation } from 'contexts/Localization'
 import { Button, Grid } from '@pancakeswap/uikit'
 import { NftToken } from 'state/nftMarket/types'
-import { StyledModal, ContentWrap } from './styles'
+import { StyledModal, ContentWrap, GetCardWrap, GetCardTitle } from './styles'
 import NFTMedia from '../../../components/NFTMedia'
 import { CollectibleLinkCard } from '../../../components/CollectibleCard'
 
@@ -22,12 +22,11 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
 
   return (
     <StyledModal
-      title={t('合成')}
+      title={t('Synthetic')}
       onDismiss={onDismiss}
     >
       <ContentWrap>
         <div>
-          <h2>得到</h2>
           <CollectibleLinkCard
             isUserNft
             key={`${nfts[0]?.tokenId}-${nfts[0]?.collectionName}`}
@@ -37,16 +36,10 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
             }
           />
         </div>
-        <div>
-          <h2>消耗</h2>
+        <GetCardWrap>
+          <GetCardTitle>{t('Consumption')}</GetCardTitle>
           {
-            nfts.length && (
-            <Grid
-              gridGap="16px"
-              gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
-              alignItems="start"
-            >
-              {nfts.map((nft) => {
+            nfts.length && nfts.map((nft) => {
                 const { marketData, location } = nft
                 return (
                   <CollectibleLinkCard
@@ -58,14 +51,10 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
                     }
                   />
                 )
-              })}
-            </Grid>
-          )
-        }
-        </div>
-        <div>
-          <Button variant="primary" scale="md" mr="8px" onClick={submitCompound}>{t('开始合成')}</Button>
-        </div>
+              })
+          }
+        </GetCardWrap>
+        <div role="button" aria-hidden="true" onClick={submitCompound}>{t('Synthetic')}</div>
       </ContentWrap>
     </StyledModal>
   )

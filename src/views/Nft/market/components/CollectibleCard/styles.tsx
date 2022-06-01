@@ -15,7 +15,7 @@ import {
 import { Price } from '@pancakeswap/sdk'
 import { useTranslation } from 'contexts/Localization'
 import { multiplyPriceByAmount } from 'utils/prices'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 export const Footer: React.FC<BoxProps> = ({ children, ...props }) => (
   <Box borderTop={[null, null, null, '1px solid']} borderColor="cardBorder" pt="8px" {...props}>
@@ -137,19 +137,33 @@ interface CheckdBoxProps {
   selected: boolean;
 }
 
-export const CheckBox = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  border: 3px solid grey;
+export const CheckBoxWrap = styled.div`
   position: absolute;
-  right: 20px;
   top: 20px;
-  cursor: pointer;
+  right: 20px;
+  width:24px;
+  height:24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   z-index: 1;
-  background: ${({ selected }: CheckdBoxProps) => {
-    return selected ? 'blue' : 'white';
-  }};
+  background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+`
+export const CheckBox = styled.div`
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  ${({ selected }: CheckdBoxProps) => {
+    if (selected) {
+      return css`
+        background-color: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+      `;
+    }
+    return css`
+      background-color: antiquewhite;
+    `;
+  }}
 `
 interface LowestPriceMetaRowProps {
   lowestPrice: number
