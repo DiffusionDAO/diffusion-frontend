@@ -154,16 +154,7 @@ export const CheckBox = styled.div`
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  ${({ selected }: CheckdBoxProps) => {
-    if (selected) {
-      return css`
-        background-color: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
-      `;
-    }
-    return css`
-      background-color: antiquewhite;
-    `;
-  }}
+  background-color: antiquewhite;
 `
 interface LowestPriceMetaRowProps {
   lowestPrice: number

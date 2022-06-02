@@ -12,7 +12,9 @@ const CollectibleLinkCard: React.FC<CollectibleCardProps> = ({ isCompound, nft, 
       {
         isCompound ? <>
           <CheckBoxWrap>
-            <CheckBox selected={!!nft.selected} />
+            {
+              nft.selected ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: "8px" }} /> : <CheckBox />
+            }
           </CheckBoxWrap>
           <CardBody nft={nft} nftLocation={nftLocation} currentAskPrice={currentAskPrice} />
         </> : 
@@ -20,8 +22,6 @@ const CollectibleLinkCard: React.FC<CollectibleCardProps> = ({ isCompound, nft, 
           <CardBody nft={nft} nftLocation={nftLocation} currentAskPrice={currentAskPrice} />
         </NextLinkFromReactRouter>
       }
-
-
     </StyledCollectibleCard>
   )
 }

@@ -8,7 +8,7 @@ declare module 'styled-components' {
 
 const GlobalStyle = createGlobalStyle`
   * {
-    font-family: 'Kanit', sans-serif;
+    font-family: HelveticaNeue-Medium, HelveticaNeue;
   }
   body {
     background-color: ${({ theme }) => theme.colors.background};

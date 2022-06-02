@@ -1,7 +1,10 @@
 import styled, { css }  from 'styled-components'
-import compoundBtnWrapSvg from "../../../../../../public/images/nfts/compoundBtnWrap.svg"
 
 export const SubMenuWrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
   position: relative;
   margin: 20px 0;
   border-bottom:1px solid rgba(255, 255, 255, 0.1);
@@ -9,7 +12,11 @@ export const SubMenuWrap = styled.div`
     border-bottom: none;
   }
 `
-export const CountWrap = styled.span`
+
+export const SelectedCountBox = styled.div`
+  color: #fff;
+`
+export const SelectedCountWrap = styled.span`
   padding: 2px 20px;
   width: 39px;
   height: 27px;
@@ -19,21 +26,29 @@ export const CountWrap = styled.span`
 `
 
 export const SelectWrap = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
+.ant-select-selector {
+  background: rgba(171, 182, 255, 0.2);
+  border-radius: 8px;
+}
 `
 interface CompoundBtnWrapProps {
   isCompound: boolean;
 }
 export const CompoundBtnWrap = styled.div`
-  width: 100%;
+  padding: 20px;
   height: 90px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  background-image: url(${compoundBtnWrapSvg});
-  background-repeat: no-repeat;
-  background-size: cover;
+  position: relative;
+  >img {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
   ${({ isCompound }: CompoundBtnWrapProps) => {
     if (isCompound) {
       return css`
@@ -44,4 +59,12 @@ export const CompoundBtnWrap = styled.div`
       justify-content: center;
     `;
   }}
+`
+export const SyntheticBtn = styled.div`
+  color: #fff;
+  cursor: pointer;
+  width: 150px;
+  height: 90px;
+  text-align: center;
+  line-height: 90px;
 `

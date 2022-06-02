@@ -2,19 +2,20 @@ import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
 import { useProfileForAddress } from 'state/profile/hooks'
 import { NftProfileLayout } from 'views/Nft/market/Profile'
-import SubMenu from 'views/Nft/market/Profile/components/SubMenu'
 import UnconnectedProfileNfts from 'views/Nft/market/Profile/components/UnconnectedProfileNfts'
 import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
-import { SubMenuWrap, SelectWrap, CompoundBtnWrap, CountWrap } from 'views/Nft/market/Profile/components/styles'
+import { SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, SelectedCountBox } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
-import { Button, useModal } from '@pancakeswap/uikit'
-import Select, { OptionProps } from 'components/Select/Select'
+import { useModal } from '@pancakeswap/uikit'
+import { Cascader, Tabs, Button } from 'antd';
 import { useTranslation } from 'contexts/Localization'
 import { useState, useEffect } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import cloneDeep from "lodash/cloneDeep";
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
 import { nftDatasMock } from './MockNftDatas'
+
+const { TabPane } = Tabs;
 
 function NftProfilePage() {
   const { account } = useWeb3React()
@@ -41,10 +42,9 @@ function NftProfilePage() {
 
 
   const sortByItems = [
-    { label: t('Recently listed'), value: { field: 'updatedAt', direction: 'desc' } },
-    { label: t('Lowest price'), value: { field: 'currentAskPrice', direction: 'asc' } },
-    { label: t('Highest price'), value: { field: 'currentAskPrice', direction: 'desc' } },
-    { label: t('Token ID'), value: { field: 'tokenId', direction: 'asc' } },
+    { label: t('智者'), value: '智者', children: [{ label: t('银色'), value: '银色'}, { label: t('金色'), value: '金色'}] },
+    { label: t('将领'), value: '将领', children: [{ label: t('银色'), value: '银色'}, { label: t('金色'), value: '金色'}] },
+    { label: t('议员'), value: '议员', children: [{ label: t('银色'), value: '银色'}, { label: t('金色'), value: '金色'}] },
   ]
 
   // 点击合成按钮
@@ -94,28 +94,38 @@ function NftProfilePage() {
   return (
     <>
       <SubMenuWrap>
-        <SubMenu />
+        <Tabs defaultActiveKey="1">
+          <TabPane 
+          tab={
+            <span>
+              {`${t('I Bought NFT')}`}
+              <SelectedCountWrap>{nftDatas.length}</SelectedCountWrap>
+            </span>
+          }
+          />
+        </Tabs>
         <SelectWrap>
-          <Select
+          <Cascader
               options={sortByItems}
               style={{ width: "200px"}} 
             />
         </SelectWrap>
       </SubMenuWrap>
         <CompoundBtnWrap isCompound={isCompound}>
+          <img src="/images/nfts/compoundBtnWrap.png" alt=""/>
           {
             isCompound ? 
             <>
-              <div>
+              <SelectedCountBox>
                 {t('Selected')} 
-                <CountWrap>{selectedCount}</CountWrap>
-              </div>
+                <SelectedCountWrap>{selectedCount}</SelectedCountWrap>
+              </SelectedCountBox>
               <div>
-                <Button variant="primary" scale="md" mr="8px" onClick={confirmCompound}>{t('Save')}</Button>
-                <Button variant="primary" scale="md" onClick={cancelCompound}>{t('Cancel')}</Button>
+                <Button type="primary" size='middle' style={{ marginRight: '10px' }} onClick={confirmCompound}>{t('Save')}</Button>
+                <Button size='middle' onClick={cancelCompound}>{t('Cancel')}</Button>
               </div>
             </> :
-            <div role="button" aria-hidden="true" onClick={startCompound}>{t('Synthetic')}</div>
+            <SyntheticBtn role="button" aria-hidden="true" onClick={startCompound}>{t('Synthetic')}</SyntheticBtn>
           }
 
         </CompoundBtnWrap>
