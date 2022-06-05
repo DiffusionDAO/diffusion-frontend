@@ -28,7 +28,9 @@
   border: none;
   border-radius: 8px;
   padding: 4px 20px;
-  background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+  background: linear-gradient(90deg, #3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: anime 5s ease infinite;
 }
 .ant-btn-primary:hover, .ant-btn-primary:focus {
   color: #fff;
@@ -47,4 +49,50 @@
   background-color: rgba(255,255,255,0);
   border-image: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%) 4 4;
   opacity: 0.6;
+}
+
+// modal央视覆盖
+.ant-modal-content {
+  background: #141529;
+  border-radius: 15px; 
+  border: 0px solid rgba(87, 77, 102, 0.45);
+  .ant-modal-close {
+    color: #ABB6FF;
+  }
+  .ant-modal-header {
+    background: #141529;
+    border-radius: 15px;
+    border-bottom: none;
+    .ant-modal-title {
+      color: #fff;
+    }
+  }
+  .ant-modal-footer  {
+    display: none;
+  }
+}
+.no-header {
+  .ant-modal-content {
+    .ant-modal-close {
+      display: none;
+    }
+    .ant-modal-header {
+      display: none;
+    }
+  }
+}
+
+// 渐变动画效果
+@keyframes anime {
+  0% {
+      background-position: 0% 50%;
+  }
+
+  50% {
+      background-position: 100% 50%;
+  }
+
+  100% {
+      background-position: 0% 50%;
+  }
 }

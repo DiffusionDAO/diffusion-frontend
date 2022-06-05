@@ -1,11 +1,7 @@
 import { useTranslation } from 'contexts/Localization'
-import { Button, Grid } from '@pancakeswap/uikit'
 import { NftToken } from 'state/nftMarket/types'
-import { StyledModal, ContentWrap, GetCardWrap, GetCardTitle } from './styles'
-import NFTMedia from '../../../components/NFTMedia'
-import { CollectibleLinkCard } from '../../../components/CollectibleCard'
-
-
+import { StyledModal, ContentWrap, CardListWrap, CardListTitle, CardItem, CardImg, 
+  CardName, SyntheticBtn, AchievWrap, AchievCard, AchievImg } from './styles'
 
 interface CompoundConfirmModalProps {
   nfts: NftToken[]
@@ -23,38 +19,31 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
   return (
     <StyledModal
       title={t('Synthetic')}
-      onDismiss={onDismiss}
+      onCancel={onDismiss}
+      visible
+      footer={[]}
     >
       <ContentWrap>
-        <div>
-          <CollectibleLinkCard
-            isUserNft
-            key={`${nfts[0]?.tokenId}-${nfts[0]?.collectionName}`}
-            nft={nfts[0]}
-            currentAskPrice={
-              nfts[0].marketData?.currentAskPrice && nfts[0].marketData?.isTradable && parseFloat(nfts[0].marketData?.currentAskPrice)
-            }
-          />
-        </div>
-        <GetCardWrap>
-          <GetCardTitle>{t('Consumption')}</GetCardTitle>
+        <AchievWrap>
+          <AchievCard>
+            <AchievImg src={nfts[0]?.image.thumbnail} />
+          </AchievCard>
+        </AchievWrap>
+        <CardListWrap>
+          <CardListTitle>{t('Consumption')}</CardListTitle>
           {
             nfts.length && nfts.map((nft) => {
                 const { marketData, location } = nft
                 return (
-                  <CollectibleLinkCard
-                    isUserNft
-                    key={`${nft?.tokenId}-${nft?.collectionName}`}
-                    nft={nft}
-                    currentAskPrice={
-                      marketData?.currentAskPrice && marketData?.isTradable && parseFloat(marketData?.currentAskPrice)
-                    }
-                  />
+                  <CardItem key={`${nft?.tokenId}-${nft?.collectionName}`}>
+                    <CardImg src={nft?.image.thumbnail} />
+                    <CardName>{nft.name}</CardName>
+                  </CardItem>
                 )
               })
           }
-        </GetCardWrap>
-        <div role="button" aria-hidden="true" onClick={submitCompound}>{t('Synthetic')}</div>
+        </CardListWrap>
+        <SyntheticBtn role="button" aria-hidden="true" onClick={submitCompound}>{t('Synthetic')}</SyntheticBtn>
       </ContentWrap>
     </StyledModal>
   )

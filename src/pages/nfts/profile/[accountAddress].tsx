@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import cloneDeep from "lodash/cloneDeep";
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
+import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
 import { nftDatasMock } from './MockNftDatas'
 
 const { TabPane } = Tabs;
@@ -39,6 +40,11 @@ function NftProfilePage() {
   const [nftDatas, setNftDatas] = useState<NftToken[]>(nftDatasMock)
   const [selectedCount, setSelectedCount] = useState<number>(0)
 
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false)
+  const [successModalVisible, setSuccessModalVisible] = useState(false)
+
+  
+
 
 
   const sortByItems = [
@@ -57,26 +63,33 @@ function NftProfilePage() {
     setIsCompound(false);
   }
 
-  // 提交合成
-  const submitCompound = () => {
-    alert('开始合成啦！')
+  const closeCompoundSuccessModal = () => {
+    setSuccessModalVisible(false)
+    setIsCompound(false)
+    const data = cloneDeep(nftDatas)
+    data.map((item: NftToken) => {
+      const obj = item
+      obj.selected = false
+      return obj
+    })
+    setNftDatas(data)
+    setSelectedCount(0)
   }
 
-  const [onCompoundConfirmModal] = useModal(
-    <CompoundConfirmModal  nfts={selectNfts} onDismiss={() => onCompoundConfirmModal} submitCompound={submitCompound} />,
-  )
+  // 提交合成
+  const submitCompound = () => {
+    setConfirmModalVisible(false)
+    setSuccessModalVisible(true)
+  }
 
   // 确认合成
   const confirmCompound = () => {
     const data = nftDatas.filter(item => item.selected)
     setSelectedNfts(data)
-  }
-
-  useEffect(() => {
-    if (selectNfts.length) {
-      onCompoundConfirmModal()
+    if (data.length) {
+      setConfirmModalVisible(true)
     }
-  }, [selectNfts])
+  }
 
   // 选中nft
   const selectNft = (nft) => {
@@ -140,6 +153,17 @@ function NftProfilePage() {
       ) : (
         <UnconnectedProfileNfts nfts={nfts} isLoading={isNftLoading} />
       )}
+      {/* 合成弹窗 */}
+      {
+        confirmModalVisible ?
+        <CompoundConfirmModal  nfts={selectNfts} onDismiss={() => setConfirmModalVisible(false)} submitCompound={submitCompound} />
+        : null
+      }
+      {/* 合成成功的弹窗 */}
+      {
+        successModalVisible ? <CompoundSuccessModal nfts={selectNfts} onClose={closeCompoundSuccessModal} /> 
+        : null
+      }
     </>
   )
 }
