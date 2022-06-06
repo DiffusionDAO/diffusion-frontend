@@ -7,7 +7,6 @@ import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
 import { SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, CompoundBtnWrapImg, SelectedCountBox,
   BackgroundWrap, ConentWrap, BackgroundTitle, BackgroundDes, BackgroundText, BackgroundImg } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
-import { useModal } from '@pancakeswap/uikit'
 import { Cascader, Tabs, Button } from 'antd';
 import { useTranslation } from 'contexts/Localization'
 import { useState, useEffect } from 'react'
@@ -15,6 +14,7 @@ import { NftToken } from 'state/nftMarket/types'
 import cloneDeep from "lodash/cloneDeep";
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
+import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import { nftDatasMock } from './MockNftDatas'
 
 const { TabPane } = Tabs;
@@ -43,6 +43,11 @@ function NftProfilePage() {
 
   const [confirmModalVisible, setConfirmModalVisible] = useState(false)
   const [successModalVisible, setSuccessModalVisible] = useState(false)
+  const [noteModalVisible, seNoteModalVisible] = useState(false)
+  const [modalTitle, seNoteModalTitle] = useState('')
+  const [modalDescription, setModalDescription] = useState('')
+
+
 
   
 
@@ -87,9 +92,14 @@ function NftProfilePage() {
   const confirmCompound = () => {
     const data = nftDatas.filter(item => item.selected)
     setSelectedNfts(data)
-    if (data.length) {
-      setConfirmModalVisible(true)
+    // 判断是否符合合成条件
+    if (data.length % 2 !== 0 || !data.length) {
+      seNoteModalTitle('Important note')
+      setModalDescription('The NFTs you selected is across levels, please select the same color at the same level for composition')
+      seNoteModalVisible(true)
+      return
     }
+    setConfirmModalVisible(true)
   }
 
   // 选中nft
@@ -163,6 +173,11 @@ function NftProfilePage() {
           <UnconnectedProfileNfts nfts={nfts} isLoading={isNftLoading} />
         )}
       </ConentWrap>
+      {/* 提示弹窗 */}
+      {
+        noteModalVisible ? <CustomModal title={modalTitle} description={modalDescription} onClose={() => seNoteModalVisible(false) } /> 
+        : null
+      }
       {/* 合成弹窗 */}
       {
         confirmModalVisible ?

@@ -27,9 +27,9 @@ export const SyntheticBtn = styled.div`
 export const AchievWrap = styled.div`
   width: 100%;
   height: 300px;
-  background: url(/images/nfts/achievWrap-bg.svg);
+  background: url(/images/nfts/final-achiev-wrap.svg);
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: cover;
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;

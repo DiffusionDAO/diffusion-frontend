@@ -87,6 +87,12 @@ nav {
     }
   }
 }
+.star-bg {
+  .ant-modal-content {
+    background-image: url('/images/nfts/star-bg.png');
+    background-size: cover;
+  }
+}
 
 // 渐变动画效果
 @keyframes anime {

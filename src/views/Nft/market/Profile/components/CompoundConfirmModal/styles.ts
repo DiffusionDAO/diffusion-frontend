@@ -67,13 +67,10 @@ export const CardName = styled.div`
   color: #ABB6FF;
   line-height: 30px;
 `
-export const SyntheticBtn = styled.div`
+export const SyntheticBtn = styled.img`
   color: #fff;
   cursor: pointer;
-  width: 150px;
-  height: 90px;
-  text-align: center;
-  line-height: 90px;
+  height: 130px;
 `
 
 export const AchievWrap = styled.div`

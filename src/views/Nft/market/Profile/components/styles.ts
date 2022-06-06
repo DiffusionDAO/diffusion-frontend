@@ -76,7 +76,7 @@ export const BackgroundImg = styled.img`
   width: 100%;
   position: absolute;
   right: 60px;
-  top: -530px;
+  bottom: 0px;
 `
 export const BackgroundText = styled.div`
   width: 500px;

@@ -17,10 +17,11 @@ const CompoundSuccessModal: React.FC<CompoundSuccessModalProps> = ({
   return (
     <StyledModal
       width={500}
-      className="no-header"
+      className="no-header star-bg"
       title={t('Synthetic')}
       onCancel={onClose}
       visible
+      centered
       footer={[]}
     >
       <ContentWrap>

@@ -21,6 +21,7 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
       title={t('Synthetic')}
       onCancel={onDismiss}
       visible
+      centered
       footer={[]}
     >
       <ContentWrap>
@@ -43,7 +44,7 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
               })
           }
         </CardListWrap>
-        <SyntheticBtn role="button" aria-hidden="true" onClick={submitCompound}>{t('Synthetic')}</SyntheticBtn>
+        <SyntheticBtn src="/images/nfts/synthetic-btn.svg" onClick={submitCompound} />
       </ContentWrap>
     </StyledModal>
   )
