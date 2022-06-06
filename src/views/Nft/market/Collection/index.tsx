@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { NextRouter, useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { useGetCollection } from 'state/nftMarket/hooks'
+import { getCollectionApi } from 'state/nftMarket/helpers'
 import Header from './Header'
 import Items from './Items'
 
@@ -19,7 +20,8 @@ const getHashFromRouter = (router: NextRouter) => router.asPath.match(/#([a-z0-9
 const Collection = () => {
   const router = useRouter()
   const collectionAddress = router.query.collectionAddress as string
-  const collection = useGetCollection(collectionAddress)
+  // const collection = useGetCollection(collectionAddress)
+  const collection = getCollectionApi(collectionAddress)
 
   const hash = useMemo(() => getHashFromRouter(router)?.[0], [router])
 

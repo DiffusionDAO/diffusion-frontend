@@ -93,7 +93,6 @@ export const getCollections = async (): Promise<Record<string, Collection>> => {
     // const [collections, collectionsMarket] = await Promise.all([getCollectionsApi(), getCollectionsSg()])
     const [collections] = await Promise.all([getCollectionsApi()])
 
-    // const [collections] = await Promise.all([getCollectionsApi()])
     const collectionApiData: ApiCollection[] = collections?.data ?? []
     const collectionsTotalSupply = await fetchCollectionsTotalSupply(collectionApiData)
     const collectionApiDataCombinedOnChain = collectionApiData.map((collection, index) => {
@@ -119,12 +118,13 @@ export const getCollections = async (): Promise<Record<string, Collection>> => {
  */
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
-    const [collection, collectionMarket] = await Promise.all([
+    const [collection] = await Promise.all([
       getCollectionApi(collectionAddress),
-      getCollectionSg(collectionAddress),
+      // getCollectionSg(collectionAddress),
     ])
 
     const collectionsTotalSupply = await fetchCollectionsTotalSupply([collection])
+    console.log("collectionsTotalSupply:", collectionsTotalSupply)
     const totalSupplyFromApi = Number(collection?.totalSupply) || 0
     const totalSupplyFromOnChain = collectionsTotalSupply[0]
     const collectionApiDataCombinedOnChain = {
@@ -132,7 +132,7 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
       totalSupply: Math.max(totalSupplyFromApi, totalSupplyFromOnChain).toString(),
     }
 
-    return combineCollectionData([collectionApiDataCombinedOnChain], [collectionMarket])
+    return combineCollectionData([collectionApiDataCombinedOnChain], [])
   } catch (error) {
     console.error('Unable to fetch data:', error)
     return null
@@ -144,14 +144,19 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
  * @returns
  */
 export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}`)
-  if (res.ok) {
-    const json = await res.json()
-    console.log('getCollectionApi:', json.data)
-    return json.data
-  }
-  console.error(`API: Failed to fetch NFT collection ${collectionAddress}`, res.statusText)
-  return null
+  var res = await ipfs.cat('QmZPQ2cP6StXPgSvYSWMMTvJdz7CEoTCmqeWShxBga7jGQ')
+  var buffer = await toBuffer(res)
+  const json = JSON.parse(Buffer.from(buffer).toString('utf8'))
+  return json
+
+  // const res = await fetch(`${API_NFT}/collections/${collectionAddress}`)
+  // if (res.ok) {
+  //   const json = await res.json()
+  //   console.log('getCollectionApi:', json.data)
+  //   return json.data
+  // }
+  // console.error(`API: Failed to fetch NFT collection ${collectionAddress}`, res.statusText)
+  // return null
 }
 
 /**

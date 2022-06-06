@@ -55,7 +55,6 @@ export const featured = {
   one: '0x7B1015a820c9cA137634A0631aa73feF15220F7A',
   two: '0x39AFCb05e2B776De42AE4Ac8FB41F948f9e6c9f4',
   address: '0x0e6dfbCe936ABe08cda0Caf576E3CfcF13A11830',
-
   token_address: 'TBA',
   abi_name: '',
   raised: 0,
