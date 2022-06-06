@@ -1,3 +1,9 @@
+// 头部样式覆盖
+nav {
+  background-color: rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(13px);
+  border-bottom: none !important;
+}
 // tab的样式覆盖
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   font-size: 16px;
@@ -94,5 +100,18 @@
 
   100% {
       background-position: 0% 50%;
+  }
+}
+
+// 打字机动画效果
+@keyframes typing {
+  from {
+    width: 0
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent
   }
 }

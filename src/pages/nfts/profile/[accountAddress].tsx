@@ -4,7 +4,8 @@ import { useProfileForAddress } from 'state/profile/hooks'
 import { NftProfileLayout } from 'views/Nft/market/Profile'
 import UnconnectedProfileNfts from 'views/Nft/market/Profile/components/UnconnectedProfileNfts'
 import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
-import { SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, SelectedCountBox } from 'views/Nft/market/Profile/components/styles'
+import { SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, SelectedCountBox,
+  BackgroundWrap, ConentWrap, BackgroundTitle, BackgroundDes, BackgroundText, BackgroundImg } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
 import { useModal } from '@pancakeswap/uikit'
 import { Cascader, Tabs, Button } from 'antd';
@@ -106,24 +107,32 @@ function NftProfilePage() {
 
   return (
     <>
-      <SubMenuWrap>
-        <Tabs defaultActiveKey="1">
-          <TabPane 
-          tab={
-            <span>
-              {`${t('I Bought NFT')}`}
-              <SelectedCountWrap>{nftDatas.length}</SelectedCountWrap>
-            </span>
-          }
-          />
-        </Tabs>
-        <SelectWrap>
-          <Cascader
-              options={sortByItems}
-              style={{ width: "200px"}} 
+      <BackgroundWrap>
+        <BackgroundText>
+          <BackgroundTitle>Text Haed Auhu</BackgroundTitle>
+          <BackgroundDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BackgroundDes>
+        </BackgroundText>
+        <BackgroundImg src="/images/nfts/background-wrap.png" />
+      </BackgroundWrap>
+      <ConentWrap>
+        <SubMenuWrap>
+          <Tabs defaultActiveKey="1">
+            <TabPane 
+            tab={
+              <span>
+                {`${t('I Bought NFT')}`}
+                <SelectedCountWrap>{nftDatas.length}</SelectedCountWrap>
+              </span>
+            }
             />
-        </SelectWrap>
-      </SubMenuWrap>
+          </Tabs>
+          <SelectWrap>
+            <Cascader
+                options={sortByItems}
+                style={{ width: "200px"}} 
+              />
+          </SelectWrap>
+        </SubMenuWrap>
         <CompoundBtnWrap isCompound={isCompound}>
           <img src="/images/nfts/compoundBtnWrap.png" alt=""/>
           {
@@ -142,17 +151,18 @@ function NftProfilePage() {
           }
 
         </CompoundBtnWrap>
-      {isConnectedProfile ? (
-        <UserNfts
-          // nfts={nfts}
-          nfts={nftDatas}
-          isCompound={isCompound}
-          isLoading={isNftLoading}
-          selectNft={selectNft}
-          />
-      ) : (
-        <UnconnectedProfileNfts nfts={nfts} isLoading={isNftLoading} />
-      )}
+        {isConnectedProfile ? (
+          <UserNfts
+            // nfts={nfts}
+            nfts={nftDatas}
+            isCompound={isCompound}
+            isLoading={isNftLoading}
+            selectNft={selectNft}
+            />
+        ) : (
+          <UnconnectedProfileNfts nfts={nfts} isLoading={isNftLoading} />
+        )}
+      </ConentWrap>
       {/* 合成弹窗 */}
       {
         confirmModalVisible ?

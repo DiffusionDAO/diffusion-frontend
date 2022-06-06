@@ -68,3 +68,48 @@ export const SyntheticBtn = styled.div`
   text-align: center;
   line-height: 90px;
 `
+
+export const BackgroundWrap = styled.div`
+  width: 100%;
+  height: 500px;
+  position: relative;
+`
+export const BackgroundImg = styled.img`
+  width: 100%;
+  position: absolute;
+  right: 60px;
+  top: -530px;
+`
+export const BackgroundText = styled.div`
+  width: 500px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+export const BackgroundTitle = styled.div`
+  width: 100%;
+  font-size: 56px;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  font-weight: bold;
+  color: #FFFFFF;
+  line-height: 72px;
+  letter-spacing: 2px;
+  margin-left: 40px;
+  margin-bottom: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typing 4s steps(22), blink .5s step-end infinite alternate;
+`
+export const BackgroundDes = styled.div`
+  width: 100%;
+  height: 56px;
+  font-size: 18px;
+  font-family: HelveticaNeue;
+  color: #ABB6FF;
+  line-height: 28px;
+  margin-left: 40px;
+`
+export const ConentWrap = styled.div`
+  margin: 20px;
+`

@@ -50,7 +50,7 @@ const NftProfile: FC = ({ children }) => {
   if (invalidAddress) {
     return (
       <>
-        <MarketPageHeader position="relative">
+        {/* <MarketPageHeader position="relative">
           <ProfileHeader
             accountPath={accountAddress}
             profile={null}
@@ -60,22 +60,22 @@ const NftProfile: FC = ({ children }) => {
             isNftLoading={false}
             isProfileLoading={false}
           />
-        </MarketPageHeader>
-        <Page style={{ minHeight: 'auto' }}>
+        </MarketPageHeader> */}
+        <div style={{ minHeight: 'auto', margin: '20px' }}>
           <Flex p="24px" flexDirection="column" alignItems="center">
             <NoNftsImage />
             <Text textAlign="center" maxWidth="420px" pt="8px" bold>
               {t('Please enter a valid address, or connect your wallet to view your profile')}
             </Text>
           </Flex>
-        </Page>
+        </div>
       </>
     )
   }
 
   return (
     <>
-      <MarketPageHeader position="relative">
+      {/* <MarketPageHeader position="relative">
         <ProfileHeader
           accountPath={accountAddress}
           profile={profile}
@@ -92,8 +92,8 @@ const NftProfile: FC = ({ children }) => {
         <TabMenuWrapper>
           <TabMenu />
         </TabMenuWrapper>
-      </MarketPageHeader>
-      <Page style={{ minHeight: 'auto' }}>{children}</Page>
+      </MarketPageHeader> */}
+      <div style={{ minHeight: 'auto' }}>{children}</div>
     </>
   )
 }
