@@ -41,14 +41,7 @@ export const CompoundBtnWrap = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  >img {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
+  overflow: hodden;
   ${({ isCompound }: CompoundBtnWrapProps) => {
     if (isCompound) {
       return css`
@@ -60,13 +53,18 @@ export const CompoundBtnWrap = styled.div`
     `;
   }}
 `
-export const SyntheticBtn = styled.div`
-  color: #fff;
+export const CompoundBtnWrapImg = styled.img`
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+`
+export const SyntheticBtn = styled.img`
   cursor: pointer;
-  width: 150px;
-  height: 90px;
-  text-align: center;
-  line-height: 90px;
+  height: 120px;
+  cursor: pointer;
 `
 
 export const BackgroundWrap = styled.div`

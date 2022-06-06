@@ -4,7 +4,7 @@ import { useProfileForAddress } from 'state/profile/hooks'
 import { NftProfileLayout } from 'views/Nft/market/Profile'
 import UnconnectedProfileNfts from 'views/Nft/market/Profile/components/UnconnectedProfileNfts'
 import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
-import { SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, SelectedCountBox,
+import { SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, CompoundBtnWrapImg, SelectedCountBox,
   BackgroundWrap, ConentWrap, BackgroundTitle, BackgroundDes, BackgroundText, BackgroundImg } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
 import { useModal } from '@pancakeswap/uikit'
@@ -134,7 +134,7 @@ function NftProfilePage() {
           </SelectWrap>
         </SubMenuWrap>
         <CompoundBtnWrap isCompound={isCompound}>
-          <img src="/images/nfts/compoundBtnWrap.png" alt=""/>
+          <CompoundBtnWrapImg src="/images/nfts/compoundBtnWrap.png" />
           {
             isCompound ? 
             <>
@@ -147,7 +147,7 @@ function NftProfilePage() {
                 <Button size='middle' onClick={cancelCompound}>{t('Cancel')}</Button>
               </div>
             </> :
-            <SyntheticBtn role="button" aria-hidden="true" onClick={startCompound}>{t('Synthetic')}</SyntheticBtn>
+            <SyntheticBtn src="/images/nfts/synthetic-btn.svg" onClick={startCompound} />
           }
 
         </CompoundBtnWrap>
