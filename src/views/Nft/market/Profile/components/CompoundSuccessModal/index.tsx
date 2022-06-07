@@ -1,7 +1,7 @@
 import { useTranslation } from 'contexts/Localization'
 import { NftToken } from 'state/nftMarket/types'
 import { Button } from 'antd'
-import { StyledModal, ContentWrap, AchievWrap, AchievCard, AchievImg, CongratulationsTitle, CongratulationsDes } from './styles'
+import { StyledModal, ContentWrap, AchievWrap, AchievCard, AchievImg, CongratulationsTitle, CongratulationsDes, StarWrap, StarImg } from './styles'
 
 interface CompoundSuccessModalProps {
   nfts: NftToken[]
@@ -30,6 +30,9 @@ const CompoundSuccessModal: React.FC<CompoundSuccessModalProps> = ({
         <AchievWrap>
           <AchievCard>
             <AchievImg src={nfts[0]?.image.thumbnail} />
+            <StarWrap>
+              <StarImg src="/images/nfts/star.svg" />
+            </StarWrap>
           </AchievCard>
         </AchievWrap>
         <Button type="primary" size='large' style={{ padding: '0px 35px' }} onClick={onClose}>{t('Close')}</Button>

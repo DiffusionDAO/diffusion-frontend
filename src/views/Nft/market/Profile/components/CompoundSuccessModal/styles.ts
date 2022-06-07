@@ -45,6 +45,7 @@ export const AchievCard = styled.div`
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
+  position: relative;
 `
 
 export const AchievImg = styled.img`
@@ -71,4 +72,22 @@ export const CongratulationsDes = styled.div`
   font-family: HelveticaNeue;
   color: #FFFFFF;
   line-height: 15px;
+`
+
+export const StarWrap = styled.div`
+  width: 300px;
+  height: 60px;
+  text-align: center;
+  background: url(/images/nfts/ellipse.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  bottom: 0;
+  left: - 150px;
+`
+
+export const StarImg = styled.img`
+  position: absolute;
+  right: -5px;
+  top: 20px;
 `
