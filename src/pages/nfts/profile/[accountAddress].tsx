@@ -48,11 +48,6 @@ function NftProfilePage() {
   const [modalDescription, setModalDescription] = useState('')
 
 
-
-  
-
-
-
   const sortByItems = [
     { label: t('智者'), value: '智者', children: [{ label: t('银色'), value: '银色'}, { label: t('金色'), value: '金色'}] },
     { label: t('将领'), value: '将领', children: [{ label: t('银色'), value: '银色'}, { label: t('金色'), value: '金色'}] },

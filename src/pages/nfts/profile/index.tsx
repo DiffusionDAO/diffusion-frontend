@@ -2,7 +2,6 @@ import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
-import './index.scss'
 
 const ProfilePage = () => {
   const { account } = useWeb3React()

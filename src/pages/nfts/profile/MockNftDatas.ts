@@ -1,6 +1,6 @@
 import { NftToken, NftLocation } from 'state/nftMarket/types'
 
-export const nftDatasMock: NftToken[] = [
+const nftDatasMock: NftToken[] = [
   {
     tokenId: "xxx1",
     name: "test1",
@@ -122,3 +122,4 @@ export const nftDatasMock: NftToken[] = [
     }
   },
 ]
+export default nftDatasMock
