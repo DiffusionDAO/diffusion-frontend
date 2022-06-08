@@ -115,6 +115,20 @@ export const BackgroundText = styled.div`
   flex-direction: column;
   justify-content: center;
 `
+// export const BackgroundTitle = styled.div`
+//   width: 100%;
+//   font-size: 56px;
+//   font-family: HelveticaNeue-Bold, HelveticaNeue;
+//   font-weight: bold;
+//   color: #FFFFFF;
+//   line-height: 72px;
+//   letter-spacing: 2px;
+//   margin-left: 40px;
+//   margin-bottom: 40px;
+//   white-space: nowrap;
+//   overflow: hidden;
+//   animation: typing 4s steps(22), blink .5s step-end infinite alternate;
+// `
 export const BackgroundTitle = styled.div`
   width: 100%;
   font-size: 56px;
@@ -125,9 +139,7 @@ export const BackgroundTitle = styled.div`
   letter-spacing: 2px;
   margin-left: 40px;
   margin-bottom: 40px;
-  white-space: nowrap;
-  overflow: hidden;
-  animation: typing 4s steps(22), blink .5s step-end infinite alternate;
+  z-index: 2;
 `
 export const BackgroundDes = styled.div`
   width: 100%;

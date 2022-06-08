@@ -15,7 +15,8 @@ import cloneDeep from "lodash/cloneDeep";
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
-import { nftDatasMock } from './MockNftDatas'
+import Typed from 'react-typed';
+import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
 
 const { TabPane } = Tabs;
 
@@ -114,7 +115,13 @@ function NftProfilePage() {
     <>
       <BackgroundWrap>
         <BackgroundText>
-          <BackgroundTitle>Text Haed Auhu</BackgroundTitle>
+          <BackgroundTitle>
+            <Typed
+              strings={['Text Haed AuhuAuhuAuhuAuhuAuhu']}
+              typeSpeed={50}
+              cursorChar=""
+            />
+          </BackgroundTitle>
           <BackgroundDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BackgroundDes>
         </BackgroundText>
         <BackgroundImg src="/images/nfts/background-wrap.png" />
