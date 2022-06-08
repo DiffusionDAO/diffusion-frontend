@@ -21,7 +21,7 @@ const Collection = () => {
   const router = useRouter()
   const collectionAddress = router.query.collectionAddress as string
   // const collection = useGetCollection(collectionAddress)
-  const collection = getCollectionApi(collectionAddress)
+  const collection: any = getCollectionApi(collectionAddress)
 
   const hash = useMemo(() => getHashFromRouter(router)?.[0], [router])
 
