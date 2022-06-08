@@ -12,7 +12,9 @@ nav {
   color: #FFFFFF;
 }
 .ant-tabs-ink-bar {
-  background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+  background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
 }
 
 // select 的样式覆盖
@@ -36,19 +38,40 @@ nav {
   padding: 4px 20px;
   background: linear-gradient(90deg, #3C00FF, #EC6EFF);
   background-size: 400% 400%;
-  animation: anime 5s ease infinite;
+  animation: gradient 5s ease infinite;
 }
 .ant-btn-primary:hover, .ant-btn-primary:focus {
   color: #fff;
   background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
   opacity: 0.6;
 }
+// .ant-btn-default {
+//   border: 2px solid;
+//   border-image: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%) 4 4;
+//   color: #EC6EFF;
+//   background-color: rgba(255,255,255,0);
+//   border-radius: 8px;
+// }
 .ant-btn-default {
-  border: 2px solid;
-  border-image: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%) 4 4;
   color: #EC6EFF;
-  background-color: rgba(255,255,255,0);
+  background-color: rgba(0,0,0);
   border-radius: 8px;
+  position: relative;
+  border: none;
+}
+.ant-btn-default:after {
+  content:'';
+  position: absolute;
+  top: -2px; 
+  bottom: -2px;
+  left: -2px; 
+  right: -2px;
+  border-radius: 8px;
+  content: '';
+  z-index: -1;
+  background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
 }
 .ant-btn-default:hover, .ant-btn-default:focus {
   color: #EC6EFF;
@@ -91,33 +114,5 @@ nav {
   .ant-modal-content {
     background-image: url('/images/nfts/star-bg.png');
     background-size: cover;
-  }
-}
-
-// 渐变动画效果
-@keyframes anime {
-  0% {
-      background-position: 0% 50%;
-  }
-
-  50% {
-      background-position: 100% 50%;
-  }
-
-  100% {
-      background-position: 0% 50%;
-  }
-}
-
-// 打字机动画效果
-@keyframes typing {
-  from {
-    width: 0
-  }
-}
-
-@keyframes blink {
-  50% {
-    border-color: transparent
   }
 }

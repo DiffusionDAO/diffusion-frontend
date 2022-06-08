@@ -148,7 +148,9 @@ export const CheckBoxWrap = styled.div`
   justify-content: center;
   border-radius: 50%;
   z-index: 1;
-  background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+  background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
 `
 export const CheckBox = styled.div`
   height: 20px;

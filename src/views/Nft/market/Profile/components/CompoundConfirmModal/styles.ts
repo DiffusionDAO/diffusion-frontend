@@ -76,14 +76,41 @@ export const SyntheticBtn = styled.img`
 export const AchievWrap = styled.div`
   width: 100%;
   height: 160px;
-  background: url(/images/nfts/achievWrap-bg.svg);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
+`
+export const BlueHalo = styled.span`
+  position: absolute;
+  bottom: 50%;
+  left: 40px;
+  height: 100px;
+  width: 100px;
+  background-color: #3C00FF;
+  border-radius: 50%;
+  transform-origin: 100px;
+  animation: halo 10s linear infinite;
+  animation-duration: 10s;
+  animation-direction: reverse;
+  mix-blend-mode: plus-lighter;
+  filter: blur(50px)
+`
+export const RedHalo = styled.span`
+  position: absolute;
+  bottom: 50%;
+  right: 40px;
+  height: 100px;
+  width: 100px;
+  background-color: #EC6EFF;
+  border-radius: 50%;
+  transform-origin: 100px;
+  animation: halo 10s linear infinite;
+  animation-duration: 10s;
+  mix-blend-mode: plus-lighter;
+  filter: blur(50px)
 `
 export const AchievCard = styled.div`
   width: 160px;

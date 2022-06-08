@@ -25,6 +25,7 @@ import GlobalStyle from '../style/Global'
 import 'antd/dist/antd.css';
 import "./ido.scss";
 import "./index.scss";
+import "./animation.scss";
 import "./cover.scss";
 
 const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })

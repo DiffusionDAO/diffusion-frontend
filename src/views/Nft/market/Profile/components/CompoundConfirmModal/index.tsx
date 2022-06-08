@@ -1,7 +1,7 @@
 import { useTranslation } from 'contexts/Localization'
 import { NftToken } from 'state/nftMarket/types'
 import { StyledModal, ContentWrap, CardListWrap, CardListTitle, CardItem, CardImg, 
-  CardName, SyntheticBtn, AchievWrap, AchievCard, AchievImg } from './styles'
+  CardName, SyntheticBtn, AchievWrap, AchievCard, AchievImg, BlueHalo, RedHalo } from './styles'
 
 interface CompoundConfirmModalProps {
   nfts: NftToken[]
@@ -29,6 +29,8 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
           <AchievCard>
             <AchievImg src={nfts[0]?.image.thumbnail} />
           </AchievCard>
+          <BlueHalo />
+          <RedHalo />
         </AchievWrap>
         <CardListWrap>
           <CardListTitle>{t('Consumption')}</CardListTitle>

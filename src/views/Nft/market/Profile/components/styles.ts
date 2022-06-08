@@ -70,6 +70,7 @@ export const SyntheticBtn = styled.img`
 export const BackgroundWrap = styled.div`
   width: 100%;
   height: 500px;
+  overflow: hidden;
   position: relative;
 `
 export const BackgroundImg = styled.img`
@@ -77,6 +78,35 @@ export const BackgroundImg = styled.img`
   position: absolute;
   right: 60px;
   bottom: 0px;
+`
+export const BlueHalo = styled.span`
+  position: absolute;
+  top: 10px;
+  right: 0px;
+  height: 300px;
+  width: 300px;
+  background-color: #3C00FF;
+  border-radius: 50%;
+  transform-origin: 100px;
+  animation: halo 10s linear infinite;
+  animation-duration: 5s;
+  animation-direction: reverse;
+  mix-blend-mode: plus-lighter;
+  filter: blur(150px)
+`
+export const RedHalo = styled.span`
+  position: absolute;
+  bottom: 50%;
+  left: 100px;
+  height: 300px;
+  width: 300px;
+  background-color: #EC6EFF;
+  border-radius: 50%;
+  transform-origin: 100px;
+  animation: halo 10s linear infinite;
+  animation-duration: 5s;
+  mix-blend-mode: plus-lighter;
+  filter: blur(150px)
 `
 export const BackgroundText = styled.div`
   width: 500px;
