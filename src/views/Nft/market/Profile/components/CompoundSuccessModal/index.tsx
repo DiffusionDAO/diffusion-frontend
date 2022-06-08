@@ -23,6 +23,7 @@ const CompoundSuccessModal: React.FC<CompoundSuccessModalProps> = ({
       onCancel={onClose}
       visible
       centered
+      maskClosable={false}
       footer={[]}
     >
       <ContentWrap>

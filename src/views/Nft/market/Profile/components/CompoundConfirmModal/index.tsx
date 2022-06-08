@@ -22,6 +22,7 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
       onCancel={onDismiss}
       visible
       centered
+      maskClosable={false}
       footer={[]}
     >
       <ContentWrap>

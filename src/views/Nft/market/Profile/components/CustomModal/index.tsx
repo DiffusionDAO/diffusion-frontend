@@ -24,13 +24,14 @@ const CustomModal: React.FC<CustomModalProps> = ({
       onCancel={onClose}
       visible
       centered
+      maskClosable={false}
       footer={[]}
     >
       <ContentWrap>
         <TitleText>{title}</TitleText>
         <DesText>{description}</DesText>
         <BtnWrap>
-          <Button size='middle' style={{ marginRight: '10px' }} onClick={onClose}>{t('Cancel')}</Button>
+          <Button type="primary" size='middle' style={{ marginRight: '10px' }} onClick={onClose}>{t('Cancel')}</Button>
           <Button type="primary" size='middle' onClick={onClose}>{t('Save')}</Button>
         </BtnWrap>
       </ContentWrap>
