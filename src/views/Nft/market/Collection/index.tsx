@@ -20,8 +20,8 @@ const getHashFromRouter = (router: NextRouter) => router.asPath.match(/#([a-z0-9
 const Collection = () => {
   const router = useRouter()
   const collectionAddress = router.query.collectionAddress as string
-  // const collection = useGetCollection(collectionAddress)
-  const collection: any = getCollectionApi(collectionAddress)
+  const collection = useGetCollection(collectionAddress)
+  // const collection = getCollectionApi(collectionAddress)
 
   const hash = useMemo(() => getHashFromRouter(router)?.[0], [router])
 

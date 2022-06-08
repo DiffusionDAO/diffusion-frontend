@@ -16,7 +16,7 @@ import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundCo
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import Typed from 'react-typed';
-import { nftDatasMock } from 'views/Nft/market/Profile/MockNftDatas'
+import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
 
 const { TabPane } = Tabs;
 
@@ -47,11 +47,6 @@ function NftProfilePage() {
   const [noteModalVisible, seNoteModalVisible] = useState(false)
   const [modalTitle, seNoteModalTitle] = useState('')
   const [modalDescription, setModalDescription] = useState('')
-
-
-
-  
-
 
 
   const sortByItems = [
