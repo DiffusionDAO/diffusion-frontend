@@ -25,6 +25,14 @@ export type ConfigMenuItemsType = MenuItemsType & { hideSubNav?: boolean }
 
 const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType[] = (t, languageCode) => [
   {
+    label: t('Dashboard'),
+    icon: EarnIcon,
+    fillIcon: EarnFillIcon,
+    href: '/dashboard',
+    showItemsOnMobile: false,
+    items: [],
+  },
+  {
     label: t('IDO'),
     icon: EarnIcon,
     fillIcon: EarnFillIcon,

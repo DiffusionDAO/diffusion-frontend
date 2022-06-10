@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { Box, Flex, Text, BinanceIcon, Input } from '@pancakeswap/uikit'
 import { Modal } from 'antd';
 
 

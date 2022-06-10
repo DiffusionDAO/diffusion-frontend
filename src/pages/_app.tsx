@@ -27,6 +27,8 @@ import "./ido.scss";
 import "./index.scss";
 import "./animation.scss";
 import "./cover.scss";
+import "./DiffusionChart.scss";
+import "./Dashboard.scss";
 
 const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
 
