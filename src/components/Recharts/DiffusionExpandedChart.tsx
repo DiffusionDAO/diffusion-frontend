@@ -1,5 +1,7 @@
 import { Box, Typography } from "@material-ui/core";
-import { Tooltip as InfoTooltip  , Modal } from "antd";
+import { Tooltip as InfoTooltip, Modal } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
+
 import React from "react";
 import { ResponsiveContainer } from "recharts";
 
@@ -46,7 +48,7 @@ function DiffusionExpandedChart({
             style={{ width: "100%", marginLeft: "5px" }}
           >
             <InfoTooltip title={infoTooltipMessage}>
-              <Typography variant="h6" style={{ cursor: "pointer" }} />
+              <InfoCircleOutlined style={{ color: "rgb(153, 153, 153)", marginLeft: "10px", fontSize:"18px", cursor: "pointer" }} />
             </InfoTooltip>
           </Box>
         </Box>

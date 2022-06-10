@@ -1,6 +1,7 @@
 import { Box, CircularProgress, MenuItem, Select, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { Tooltip as InfoTooltip  } from "antd";
+import { Tooltip as InfoTooltip } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import { CSSProperties, useEffect, useState } from "react";
 import {
   Area,
@@ -399,7 +400,7 @@ function DiffusionChart({
               {headerText}
             </Typography>
             <InfoTooltip title={infoTooltipMessage}>
-              <Typography variant="h6" style={{ color: "rgb(153, 153, 153)", fontWeight: 500 }} />
+              <InfoCircleOutlined style={{ color: "rgb(153, 153, 153)", marginLeft: "10px", fontSize:"18px", cursor: "pointer" }} />
             </InfoTooltip>
           </Box>
           {/* could make this svgbutton */}

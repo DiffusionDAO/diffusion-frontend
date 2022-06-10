@@ -34,7 +34,7 @@ export const OneGraph = () => {
       stroke={["#0031FF"]}
       bulletpointColors={bulletpoints.one}
       infoTooltipMessage={tooltipInfoMessages().one}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].one)}`}
     />
   );
@@ -55,7 +55,7 @@ export const TwoGraph = () => {
       itemNames={tooltipItems.two}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().two}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
 };
@@ -71,7 +71,7 @@ export const ThreeGraph = () => {
             <Typography
               variant="h6"
               className="card-sub-title-fixation-text"
-              style={{ fontWeight: 400, color: "#ABB6FF", fontSize: "14px" }}
+              style={{ fontWeight: 400, color: "rgba(171, 182, 255, 0.05)", fontSize: "14px" }}
             >
               {item}
             </Typography>
@@ -100,7 +100,7 @@ export const ThreeGraph = () => {
       itemNames={tooltipItems.three}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().three}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       HeaderSuElement={<HeaderSuElement />}
     />
   );
@@ -120,7 +120,7 @@ export const FourGraph = () => {
       stroke={["#D257FF"]}
       bulletpointColors={bulletpoints.four}
       infoTooltipMessage={tooltipInfoMessages().four}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].four)}`}
     />
   );
@@ -143,7 +143,7 @@ export const FiveGraph = () => {
       itemType=""
       margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().five}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       minHeight={150}
     />
   );
@@ -166,7 +166,7 @@ export const SixGraph = () => {
       itemType=""
       margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().six}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       minHeight={150}
     />
   );
@@ -189,7 +189,7 @@ export const SevenGraph = () => {
       itemType=""
       margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().seven}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       minHeight={150}
     />
   );
@@ -206,7 +206,7 @@ export const EightGraph = () => {
             <Typography
               variant="h6"
               className="card-sub-title-fixation-text"
-              style={{ fontWeight: 400, color: "#ABB6FF", fontSize: "14px" }}
+              style={{ fontWeight: 400, color: "rgba(171, 182, 255, 0.05)", fontSize: "14px" }}
             >
               {item}
             </Typography>
@@ -236,7 +236,7 @@ export const EightGraph = () => {
       itemNames={tooltipItems.eight}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().eight}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       HeaderSuElement={<HeaderSuElement />}
     />
   );
@@ -261,7 +261,7 @@ export const NineGraph = () => {
         <Typography
           variant="h6"
           className="card-sub-title-fixation-text"
-          style={{ fontWeight: 400, color: "#ABB6FF", fontSize: "14px" }}
+          style={{ fontWeight: 400, color: "rgba(171, 182, 255, 0.05)", fontSize: "14px" }}
         >
           Today
         </Typography>
@@ -285,7 +285,7 @@ export const NineGraph = () => {
       stroke={["#00A1FF"]}
       bulletpointColors={bulletpoints.nine}
       infoTooltipMessage={tooltipInfoMessages().nine}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].nine)}`}
       HeaderSuElement={<HeaderSuElement />}
     />
@@ -311,7 +311,7 @@ export const TenGraph = () => {
       itemType=""
       margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().ten}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
 };
@@ -332,7 +332,7 @@ export const ElevenGraph = () => {
       itemNames={tooltipItems.eleven}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().eleven}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
 };
@@ -353,7 +353,7 @@ export const TwelveGraph = () => {
       itemNames={tooltipItems.twelve}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().twelve}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
 };
@@ -374,7 +374,7 @@ export const ThirteenGraph = () => {
       itemNames={tooltipItems.thirteen}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().thirteen}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
 };
@@ -397,7 +397,7 @@ export const MarketValueGraph = () => {
       itemNames={tooltipItems.coin}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().mvt}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
 };
@@ -416,7 +416,7 @@ export const AreaGraph = () => {
       itemNames={tooltipItems.coin}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().mvt}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
 };
@@ -438,7 +438,7 @@ export const RunwayAvailableGraph = () => {
       itemType=""
       margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().runway}
-      expandedGraphStrokeColor={theme.palette.graphStrokeColor}
+      expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
 };
