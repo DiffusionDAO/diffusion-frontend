@@ -30,28 +30,26 @@ function DiffusionExpandedChart({
     <Modal
       visible={open}
       onCancel={handleClose}
+      width="calc(100% - 40px)"
       style={{
         minHeight: "450px"
       }}
     >
       <div className="chart-card-header">
-        <Box display="flex">
-          <Box display="flex" alignItems="center" style={{ width: "max-content", whiteSpace: "nowrap" }}>
-            <Typography variant="h6" color="textSecondary" style={{ fontWeight: 400 }}>
-              {headerText}
-            </Typography>
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            style={{ width: "100%", marginLeft: "5px" }}
+        {/* 头部标题 */}
+        <Box display="flex" alignItems="center">
+          <Typography
+            variant="h5"
+            className="card-title-text"
+            style={{ fontWeight: 700, overflow: "hidden", color: "#6495f9" }}
           >
-            <InfoTooltip title={infoTooltipMessage}>
-              <InfoCircleOutlined style={{ color: "rgb(153, 153, 153)", marginLeft: "10px", fontSize:"18px", cursor: "pointer" }} />
-            </InfoTooltip>
-          </Box>
+            {headerText}
+          </Typography>
+          <InfoTooltip title={infoTooltipMessage}>
+            <InfoCircleOutlined style={{ color: "rgb(153, 153, 153)", marginLeft: "10px", fontSize:"18px", cursor: "pointer" }} />
+          </InfoTooltip>
         </Box>
+
         {HeaderSuElement || (
           <Box display="flex" alignItems="center">
             <Typography
@@ -76,7 +74,7 @@ function DiffusionExpandedChart({
           )}
         </Box>
         <Box display="flex" style={{ width: "100%", margin: "15px" }}>
-          <Typography variant="h6">{infoTooltipMessage}</Typography>
+          <Typography variant="h6" style={{ fontWeight: 400, color: "#ABB6FF", fontSize: "14px" }}>{infoTooltipMessage}</Typography>
         </Box>
       </div>
     </Modal>
