@@ -7,6 +7,7 @@ import { useGetCollection } from 'state/nftMarket/hooks'
 import { getCollectionApi } from 'state/nftMarket/helpers'
 import Header from './Header'
 import Items from './Items'
+import {combineCollectionData} from 'state/nftMarket/helpers'
 
 const Traits = dynamic(() => import('./Traits'), {
   loading: () => <PageLoader />,
@@ -21,8 +22,10 @@ const Collection = () => {
   const router = useRouter()
   const collectionAddress = router.query.collectionAddress as string
   const collection = useGetCollection(collectionAddress)
-  // const collection = getCollectionApi(collectionAddress)
-
+  // const apiCollection = getCollectionApi(collectionAddress)
+  // console.log("apiCollection:", apiCollection)
+  // const collection = combineCollectionData([apiCollection], [])
+  console.log("collection:", collection)
   const hash = useMemo(() => getHashFromRouter(router)?.[0], [router])
 
   // if (!collection) {

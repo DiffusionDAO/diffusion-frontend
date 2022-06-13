@@ -27,7 +27,6 @@ export const useGetCollections = (): { data: ApiCollections; status: FetchStatus
 
 export const useGetCollection = (collectionAddress: string): Collection | undefined => {
   const checksummedCollectionAddress = isAddress(collectionAddress) || ''
-
   const { data } = useSWR(
     checksummedCollectionAddress ? ['nftMarket', 'collections', checksummedCollectionAddress.toLowerCase()] : null,
     async () => getCollection(checksummedCollectionAddress),
