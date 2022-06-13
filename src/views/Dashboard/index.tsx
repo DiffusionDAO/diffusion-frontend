@@ -56,7 +56,7 @@ const Dashboard = () => {
             </div>
           </div>
         ) : (
-          <div style={{ fontWeight: 500, fontSize: "15px", overflow: "hidden", lineHeight: "40px" }}>
+          <div style={{ fontWeight: 500, fontSize: "15px", overflow: "hidden", lineHeight: "40px", color: "#fff" }}>
             Overview
             <span style={{ color: "grey", fontSize: "12px", fontWeight: 400, marginLeft: "16px" }}>
               2020/09/09 22:22:22
