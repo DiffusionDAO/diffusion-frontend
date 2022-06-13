@@ -34,13 +34,13 @@ const Collection = () => {
 
   let content = <Items />
 
-  if (hash === '#traits') {
-    content = <Traits />
-  }
+  // if (hash === '#traits') {
+  //   content = <Traits />
+  // }
 
-  if (hash === '#activity') {
-    content = <Activity />
-  }
+  // if (hash === '#activity') {
+  //   content = <Activity />
+  // }
 
   return (
     <>

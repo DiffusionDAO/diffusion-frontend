@@ -2,14 +2,14 @@ import { NftToken, NftLocation } from 'state/nftMarket/types'
 
 const nftDatasMock: NftToken[] = [
   {
-    tokenId: "xxx1",
-    name: "test1",
-    description: "xxx1",
-    collectionName: "xxx1",
-    collectionAddress: "xxx1",
+    tokenId: "1",
+    name: "Carina II.png",
+    description: "Carina II.png",
+    collectionName: "StarLight",
+    collectionAddress: "0x84B3d5A4CD6E235cE3cc4c0A9169aAb14f8621DF",
     image: {
       original: "string",
-      thumbnail: "https://static-nft.pancakeswap.com/mainnet/0xDf7952B35f24aCF7fC0487D01c8d5690a60DBa07/churro-1000.png"
+      thumbnail: "QmasbYJBxVzLJFk9HUKxaKu4XFRQ97oQCmHpuDnXBC5mXu"
     },
     attributes: [
       {
@@ -32,14 +32,14 @@ const nftDatasMock: NftToken[] = [
     }
   },
   {
-    tokenId: "xxx2",
+    tokenId: "2",
     name: "test1",
     description: "xxx1",
-    collectionName: "xxx1",
-    collectionAddress: "xxx1",
+    collectionName: "StarLight",
+    collectionAddress: "0x84B3d5A4CD6E235cE3cc4c0A9169aAb14f8621DF",
     image: {
       original: "string",
-      thumbnail: "https://static-nft.pancakeswap.com/mainnet/0x0a8901b0E25DEb55A87524f0cC164E9644020EBA/pancake-squad-5049-1000.png"
+      thumbnail: "QmasbYJBxVzLJFk9HUKxaKu4XFRQ97oQCmHpuDnXBC5mXu"
     },
     attributes: [
       {
@@ -62,14 +62,14 @@ const nftDatasMock: NftToken[] = [
     }
   },
   {
-    tokenId: "xxx3",
+    tokenId: "3",
     name: "test1",
     description: "xxx1",
-    collectionName: "xxx1",
-    collectionAddress: "xxx1",
+    collectionName: "StarLight",
+    collectionAddress: "0x84B3d5A4CD6E235cE3cc4c0A9169aAb14f8621DF",
     image: {
       original: "string",
-      thumbnail: "https://static-nft.pancakeswap.com/mainnet/0x8e311dB45B55DF68b7C1C8D01888a4C43986c60F/degen-ape-782-1000.png"
+      thumbnail: "QmasbYJBxVzLJFk9HUKxaKu4XFRQ97oQCmHpuDnXBC5mXu"
     },
     attributes: [
       {
@@ -92,14 +92,14 @@ const nftDatasMock: NftToken[] = [
     }
   },
   {
-    tokenId: "xxx4",
+    tokenId: "4",
     name: "test1",
     description: "xxx1",
-    collectionName: "xxx1",
-    collectionAddress: "xxx1",
+    collectionName: "StarLight",
+    collectionAddress: "0x84B3d5A4CD6E235cE3cc4c0A9169aAb14f8621DF",
     image: {
       original: "string",
-      thumbnail: "https://static-nft.pancakeswap.com/mainnet/0xDf7952B35f24aCF7fC0487D01c8d5690a60DBa07/claire-1000.png"
+      thumbnail: "QmasbYJBxVzLJFk9HUKxaKu4XFRQ97oQCmHpuDnXBC5mXu"
     },
     attributes: [
       {

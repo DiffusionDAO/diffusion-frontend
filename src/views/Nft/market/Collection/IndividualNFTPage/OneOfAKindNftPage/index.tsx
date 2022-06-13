@@ -36,7 +36,7 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
     refetch,
   } = useCompleteNft(collectionAddress, tokenId)
 
-  const properties = nft?.attributes
+  const properties = nft?.attributes || null
 
   const attributesRarity = useMemo(() => {
     if (distributionData && !isFetchingDistribution && properties) {
@@ -67,7 +67,7 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
       <TwoColumnsContainer flexDirection={['column', 'column', 'row']}>
         <Flex flexDirection="column" width="100%">
           <ManageNFTsCard nft={nft} isOwnNft={isOwnNft} isLoading={isLoading} onSuccess={refetch} />
-          <PropertiesCard properties={properties} rarity={attributesRarity} />
+          {/* <PropertiesCard properties={properties} rarity={attributesRarity} /> */}
           <DetailsCard contractAddress={collectionAddress} ipfsJson={nft?.marketData?.metadataUrl} />
         </Flex>
         <OwnerActivityContainer flexDirection="column" width="100%">

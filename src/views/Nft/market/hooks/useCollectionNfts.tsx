@@ -19,6 +19,7 @@ import useSWRInfinite from 'swr/infinite'
 import isEmpty from 'lodash/isEmpty'
 import uniqBy from 'lodash/uniqBy'
 import { REQUEST_SIZE } from '../Collection/config'
+import nftDatasMock from '../Profile/MockNftDatas'
 
 interface ItemListingSettings {
   field: string
@@ -48,10 +49,10 @@ const fetchMarketDataNfts = async (
 ): Promise<NftToken[]> => {
   const whereClause = tokenIdsFromFilter
     ? {
-        collection: collection.address.toLowerCase(),
-        isTradable: true,
-        tokenId_in: tokenIdsFromFilter,
-      }
+      collection: collection.address.toLowerCase(),
+      isTradable: true,
+      tokenId_in: tokenIdsFromFilter,
+    }
     : { collection: collection.address.toLowerCase(), isTradable: true }
   const subgraphRes = await getNftsMarketData(
     whereClause,
@@ -187,6 +188,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const fallbackModePage = useRef(0)
   const isLastPage = useRef(false)
   const collection = useGetCollection(collectionAddress)
+  // console.log("useCollectionNfts:", collection)
   const { field, direction } = useGetNftOrdering(collectionAddress)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(collectionAddress)
   const nftFilters = useGetNftFilters(collectionAddress)
@@ -233,10 +235,13 @@ export const useCollectionNfts = (collectionAddress: string) => {
     },
     async (address, settingsJson, page) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
+
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
+
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
         newNfts = await fetchMarketDataNfts(collection, settings, page, tokenIdsFromFilter)
+        newNfts = nftDatasMock
       } else {
         const {
           nfts: allNewNfts,

@@ -5,7 +5,15 @@ import { useTranslation } from 'contexts/Localization'
 import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard } from '../../components/CollectibleCard'
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
+const toBuffer = require('it-to-buffer')
 
+const { create } = require('ipfs-http-client')
+
+const ipfs = create({
+  host: '207.148.117.14',
+  port: '5001',
+  protocol: 'http',
+})
 interface CollectionNftsProps {
   collection: Collection
 }
