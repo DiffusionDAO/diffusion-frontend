@@ -1,9 +1,10 @@
 import styled, { css }  from 'styled-components'
 
 export const HaloWrap = styled.span`
-  position: absolute;
+  position: fixed;
   height: 500px;
   width: 500px;
+  z-index: -1000;
 `
 export const BlueHalo = styled.span`
   position: absolute;
