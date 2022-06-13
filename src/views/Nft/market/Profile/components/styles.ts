@@ -66,9 +66,10 @@ export const SyntheticBtn = styled.img`
   height: 120px;
   cursor: pointer;
 `
-
+export const AccountNftWrap = styled.div`
+  margin: 24px;
+`
 export const BackgroundWrap = styled.div`
-  width: 100%;
   height: 500px;
   position: relative;
 `
@@ -79,26 +80,12 @@ export const BackgroundImg = styled.img`
   bottom: 0px;
 `
 export const BackgroundText = styled.div`
-  width: 500px;
+  max-width: 500px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 `
-// export const BackgroundTitle = styled.div`
-//   width: 100%;
-//   font-size: 56px;
-//   font-family: HelveticaNeue-Bold, HelveticaNeue;
-//   font-weight: bold;
-//   color: #FFFFFF;
-//   line-height: 72px;
-//   letter-spacing: 2px;
-//   margin-left: 40px;
-//   margin-bottom: 40px;
-//   white-space: nowrap;
-//   overflow: hidden;
-//   animation: typing 4s steps(22), blink .5s step-end infinite alternate;
-// `
 export const BackgroundTitle = styled.div`
   width: 100%;
   font-size: 56px;
@@ -107,7 +94,6 @@ export const BackgroundTitle = styled.div`
   color: #FFFFFF;
   line-height: 72px;
   letter-spacing: 2px;
-  margin-left: 40px;
   margin-bottom: 40px;
   z-index: 2;
 `
@@ -118,8 +104,6 @@ export const BackgroundDes = styled.div`
   font-family: HelveticaNeue;
   color: #ABB6FF;
   line-height: 28px;
-  margin-left: 40px;
 `
 export const ConentWrap = styled.div`
-  margin: 20px;
 `

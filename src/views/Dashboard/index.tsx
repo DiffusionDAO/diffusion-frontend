@@ -1,6 +1,6 @@
 import { Grid, Typography, useMediaQuery } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { memo, useState } from "react";
+import { useState } from "react";
 import { Paper } from "./style";
 
 import { DataCell } from "./components/DataCell/DataCell";
@@ -42,7 +42,7 @@ const Dashboard = () => {
     setActiveTab(tab);
   };
   return (
-    <div id="dashboard-view">
+    <div className="dashboard-view">
         <Typography variant="h4" style={{ fontWeight: 700, overflow: "hidden", color: "#fff" }}>
           Dashboard
         </Typography>
@@ -296,4 +296,4 @@ const Dashboard = () => {
   );
 };
 
-export default memo(Dashboard);
+export default Dashboard;
