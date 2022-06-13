@@ -461,7 +461,6 @@ export const getNftsOnChainMarketData = async (
     const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
     // const askInfo = response?.askInfo
     const askInfo = nftDatasMock
-    console.log("askInfo:", askInfo)
     if (!askInfo) return []
 
     return askInfo
