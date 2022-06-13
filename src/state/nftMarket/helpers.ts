@@ -39,27 +39,60 @@ import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } f
 import { ethers } from 'ethers'
 import starlightContract from 'abi/starlightContract.json'
 import { useWeb3React } from '@web3-react/core'
+import cloneDeep from "lodash/cloneDeep"
 
 const toBuffer = require('it-to-buffer')
 
 const { create } = require('ipfs-http-client')
+// export const ipfs = create({
+//   host: 'ipfs.infura.io',
+//   port: '5001',
+//   protocol: 'https',
+// })
+
 export const ipfs = create({
-  host: 'ipfs.infura.io',
+  host: '207.148.117.14',
   port: '5001',
-  protocol: 'https',
+  protocol: 'http',
 })
-/**
- * API HELPERS
- */
 
 /**
  * Fetch static data from all collections using the API
  * @returns
  */
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
-  var res = await ipfs.cat('QmZPQ2cP6StXPgSvYSWMMTvJdz7CEoTCmqeWShxBga7jGQ')
+  var res = await ipfs.cat('QmXcRjkoanCY2xN3vaCVShhMaUHVxvBECtfxBW1L4x1MVL/metadata.json')
   var buffer = await toBuffer(res)
   const json = JSON.parse(Buffer.from(buffer).toString('utf8'))
+  json.data.map(async (collection) => {
+    const small = collection.banner.small.slice(1)
+    try {
+      const res = ipfs.cat(small)
+      var buffer = await toBuffer(res)
+      var blob = new Blob([buffer])
+      collection.banner.small = URL.createObjectURL(blob)
+    } catch (error) {
+      console.log("error:", error)
+    }
+    const avatar = collection.avatar.slice(1)
+    try {
+      const res = ipfs.cat(avatar)
+      var buffer = await toBuffer(res)
+      var blob = new Blob([buffer])
+      collection.avatar = URL.createObjectURL(blob)
+    } catch (error) {
+      console.log("error:", error)
+    }
+    const large = collection.banner.large.slice(1)
+    try {
+      const res = ipfs.cat(large)
+      var buffer = await toBuffer(res)
+      var blob = new Blob([buffer])
+      collection.banner.large = URL.createObjectURL(blob)
+    } catch (error) {
+      console.log("error:", error)
+    }
+  })
   return json
   // const res = await fetch(`${API_NFT}/collections`)
   // if (res.ok) {
@@ -90,22 +123,24 @@ const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promis
  */
 export const getCollections = async (): Promise<Record<string, Collection>> => {
   try {
-    // const [collections, collectionsMarket] = await Promise.all([getCollectionsApi(), getCollectionsSg()])
     const [collections] = await Promise.all([getCollectionsApi()])
-
+    console.log("getCollections collections:", collections.data[0])
+    var avatar = collections.data[0].avatar
+    console.log("avatar:",avatar)
     const collectionApiData: ApiCollection[] = collections?.data ?? []
-    const collectionsTotalSupply = await fetchCollectionsTotalSupply(collectionApiData)
-    const collectionApiDataCombinedOnChain = collectionApiData.map((collection, index) => {
-      const totalSupplyFromApi = Number(collection?.totalSupply) || 0
-      const totalSupplyFromOnChain = collectionsTotalSupply[index]
-      return {
-        ...collection,
-        totalSupply: Math.max(totalSupplyFromApi, totalSupplyFromOnChain).toString(),
-      }
-    })
+
+    // const collectionsTotalSupply = await fetchCollectionsTotalSupply(collectionApiData)
+
+    // const collectionApiDataCombinedOnChain = collectionApiData.map((collection, index) => {
+    //   const totalSupplyFromApi = Number(collection?.totalSupply) || 0
+    //   const totalSupplyFromOnChain = collectionsTotalSupply[index]
+    //   return {
+    //     ...collection,
+    //     totalSupply: Math.max(totalSupplyFromApi, totalSupplyFromOnChain).toString(),
+    //   }
+    // })
     // return {collectionApiDataCombinedOnChain}
-    const collectionData = combineCollectionData(collectionApiDataCombinedOnChain, [])
-    console.log("collectionData:",collectionData)
+    const collectionData = combineCollectionData(collectionApiData, [])
     return collectionData
   } catch (error) {
     console.error('Unable to fetch data:', error)
@@ -119,20 +154,22 @@ export const getCollections = async (): Promise<Record<string, Collection>> => {
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
     const [collection] = await Promise.all([
-      getCollectionApi(collectionAddress),
       // getCollectionSg(collectionAddress),
+      getCollectionApi(collectionAddress),
     ])
 
-    const collectionsTotalSupply = await fetchCollectionsTotalSupply([collection])
-    console.log("collectionsTotalSupply:", collectionsTotalSupply)
-    const totalSupplyFromApi = Number(collection?.totalSupply) || 0
-    const totalSupplyFromOnChain = collectionsTotalSupply[0]
-    const collectionApiDataCombinedOnChain = {
+    // const collectionsTotalSupply = await fetchCollectionsTotalSupply([collection])
+    // const totalSupplyFromApi = Number(collection?.totalSupply) || 0
+    // const totalSupplyFromOnChain = collectionsTotalSupply[0]
+    var collectionMarket: CollectionMarketDataBaseFields
+    const collections: Collection = {
       ...collection,
-      totalSupply: Math.max(totalSupplyFromApi, totalSupplyFromOnChain).toString(),
+      ...collectionMarket,
     }
 
-    return combineCollectionData([collectionApiDataCombinedOnChain], [])
+    var collectionData = {[collectionAddress]:collections}
+    return collectionData
+    // return combineCollectionData([collectionApiDataCombinedOnChain], [])
   } catch (error) {
     console.error('Unable to fetch data:', error)
     return null
@@ -144,9 +181,38 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
  * @returns
  */
 export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
-  var res = await ipfs.cat('QmZPQ2cP6StXPgSvYSWMMTvJdz7CEoTCmqeWShxBga7jGQ')
+  var res = await ipfs.cat('QmXcRjkoanCY2xN3vaCVShhMaUHVxvBECtfxBW1L4x1MVL/metadata.json')
   var buffer = await toBuffer(res)
   const json = JSON.parse(Buffer.from(buffer).toString('utf8'))
+  json.data.map(async (collection) => {
+    const small = collection.banner.small.slice(1)
+    try {
+      const res = ipfs.cat(small)
+      var buffer = await toBuffer(res)
+      var blob = new Blob([buffer])
+      collection.banner.small = URL.createObjectURL(blob)
+    } catch (error) {
+      console.log("error:", error)
+    }
+    const avatar = collection.avatar.slice(1)
+    try {
+      const res = ipfs.cat(avatar)
+      var buffer = await toBuffer(res)
+      var blob = new Blob([buffer])
+      collection.avatar = URL.createObjectURL(blob)
+    } catch (error) {
+      console.log("error:", error)
+    }
+    const large = collection.banner.large.slice(1)
+    try {
+      const res = ipfs.cat(large)
+      var buffer = await toBuffer(res)
+      var blob = new Blob([buffer])
+      collection.banner.large = URL.createObjectURL(blob)
+    } catch (error) {
+      console.log("error:", error)
+    }
+  })
   return json
 
   // const res = await fetch(`${API_NFT}/collections/${collectionAddress}`)
@@ -214,17 +280,6 @@ export const getNftApi = async (
   var nftContract = new ethers.Contract(collectionAddress, starlightContract, library)
   const uri = await nftContract.tokenURI()
 
-  // var res = ipfs.cat(uri);
-  // var buffer = await toBuffer(res)
-  // var blob = new Blob([buffer])
-  // var img = new Image()
-  // img.src = URL.createObjectURL(blob)
-  // img.onload = () => {
-  //     console.log("onload")
-  // }
-  // img.onerror = event => {
-  //     console.log("onerror")
-  // }
   const json = {
     tokenId,
     name: '',
@@ -1235,7 +1290,7 @@ export const getCompleteAccountNftData = async (
     ...forSaleNftIds,
     ...walletNftIdsWithCollectionAddress,
   ])
-  console.log("metadataForAllNfts:", metadataForAllNfts)
+  console.log('metadataForAllNfts:', metadataForAllNfts)
   const completeNftData = combineNftMarketAndMetadata(
     metadataForAllNfts,
     onChainForSaleNfts,

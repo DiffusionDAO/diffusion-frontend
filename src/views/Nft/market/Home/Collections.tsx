@@ -8,40 +8,34 @@ import { BNBAmountLabel } from '../components/CollectibleCard/styles'
 const toBuffer = require('it-to-buffer')
 
 const { create } = require('ipfs-http-client')
-export const ipfs = create({
-  host: 'ipfs.infura.io',
-  port: '5001',
-  protocol: 'https',
-})
+// export const ipfs = create({
+//   host: 'ipfs.infura.io',
+//   port: '5001',
+//   protocol: 'https',
+// })
 
+export const ipfs = create({
+  host: '207.148.117.14',
+  port: '5001',
+  protocol: 'http',
+})
 const Collections: React.FC<{ title: string; testId: string; collections: Collection[] }> = ({
   title,
   testId,
   collections,
 }) => {
   const { t } = useTranslation()
-
-  collections.slice(0, 6).map(async (collection) => {
-    const path = collection.banner.small.slice(1)
-    try {
-      const res = ipfs.cat(path)
-      var buffer = await toBuffer(res)
-      var blob = new Blob([buffer])
-      collection.banner.small = URL.createObjectURL(blob)
-      console.log("collection.banner.small:",collection.banner.small)
-    } catch (error) {
-    }
+  collections.filter(collection=> collection.avatar[0]=="/").map(async(collection)=>{
     const avatar = collection.avatar.slice(1)
     try {
       const res = ipfs.cat(avatar)
       var buffer = await toBuffer(res)
       var blob = new Blob([buffer])
       collection.avatar = URL.createObjectURL(blob)
-      console.log("collection.avatar:",collection.avatar)
     } catch (error) {
+      console.log("error:", error)
     }
   })
-
   return (
     <>
       {/* <Flex alignItems="center" justifyContent="space-between" mb="32px">
@@ -59,7 +53,7 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
         </Button>
       </Flex> */}
       <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="64px">
-        {collections.slice(0, 6).map((collection) => {
+        {collections.map((collection) => {
           return (
             <CollectionCard
               key={collection.address}

@@ -158,7 +158,7 @@ const Collectible = () => {
       sortDirection ? 'desc' : 'asc',
     )
   }, [collections, sortField, sortDirection])
-
+  console.log("sortedCollections:", sortedCollections)
   return (
     <>
       {/* <PageHeader>
