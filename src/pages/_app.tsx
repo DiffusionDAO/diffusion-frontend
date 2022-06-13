@@ -124,7 +124,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         </Layout>
       </Menu>
         {/* 左边光晕展示 */}
-              <HaloWrap style={{ left: '30%', top: '180px'}}>
+        <HaloWrap style={{ left: '20%', top: '150px'}}>
           <BlueHalo />
           <RedHalo />
         </HaloWrap>

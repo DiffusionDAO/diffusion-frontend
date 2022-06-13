@@ -4,7 +4,7 @@ import { useProfileForAddress } from 'state/profile/hooks'
 import { NftProfileLayout } from 'views/Nft/market/Profile'
 import UnconnectedProfileNfts from 'views/Nft/market/Profile/components/UnconnectedProfileNfts'
 import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
-import { SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, CompoundBtnWrapImg, SelectedCountBox,
+import { AccountNftWrap, SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, CompoundBtnWrapImg, SelectedCountBox,
   BackgroundWrap, ConentWrap, BackgroundTitle, BackgroundDes, BackgroundText, BackgroundImg, } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
 import { Cascader, Tabs, Button } from 'antd';
@@ -112,7 +112,7 @@ function NftProfilePage() {
   }
 
   return (
-    <>
+    <AccountNftWrap>
       <BackgroundWrap>
         <BackgroundText>
           <BackgroundTitle>
@@ -125,7 +125,7 @@ function NftProfilePage() {
           <BackgroundDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BackgroundDes>
         </BackgroundText>
         <BackgroundImg src="/images/nfts/background-wrap.png" />
-        </BackgroundWrap>
+      </BackgroundWrap>
       <ConentWrap>
         <SubMenuWrap>
           <Tabs defaultActiveKey="1">
@@ -191,7 +191,7 @@ function NftProfilePage() {
         successModalVisible ? <CompoundSuccessModal nfts={selectNfts} onClose={closeCompoundSuccessModal} /> 
         : null
       }
-    </>
+    </AccountNftWrap>
   )
 }
 

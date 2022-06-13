@@ -2,13 +2,13 @@ import styled, { css }  from 'styled-components'
 
 export const HaloWrap = styled.span`
   position: absolute;
-  height: 400px;
-  width: 400px;
+  height: 500px;
+  width: 500px;
 `
 export const BlueHalo = styled.span`
   position: absolute;
-  height: 400px;
-  width: 400px;
+  height: 500px;
+  width: 500px;
   background-color: #3C00FF;
   border-radius: 50%;
   transform-origin: 100px;
@@ -16,7 +16,7 @@ export const BlueHalo = styled.span`
   animation-duration: 8s;
   animation-direction: reverse;
   mix-blend-mode: plus-lighter;
-  filter: blur(200px)
+  filter: blur(300px)
 `
 export const RedHalo = styled.span`
   position: absolute;
