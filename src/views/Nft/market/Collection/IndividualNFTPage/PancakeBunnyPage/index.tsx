@@ -81,10 +81,6 @@ const IndividualPancakeBunnyPageBase: React.FC<IndividualPancakeBunnyPageProps> 
   }, [cheapestBunny, isFetchedCheapestBunny, nftMetadata, bunnyId])
 
   if (!cheapestBunny && !nothingForSaleBunny) {
-    // TODO redirect to nft market page if collection or bunny id does not exist (came here from some bad url)
-    // That would require tracking loading states and stuff...
-
-    // For now this if is used to show loading spinner while we're getting the data
     return <PageLoader />
   }
 
@@ -102,7 +98,7 @@ const IndividualPancakeBunnyPageBase: React.FC<IndividualPancakeBunnyPageProps> 
     return null
   }
 
-  const properties = cheapestBunny?.attributes || nothingForSaleBunny?.attributes
+  const properties = cheapestBunny?.attributes || nothingForSaleBunny?.attributes || null
 
   const propertyRarity = { bunnyId: getBunnyIdRarity() }
 

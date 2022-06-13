@@ -235,17 +235,13 @@ export const useCollectionNfts = (collectionAddress: string) => {
     },
     async (address, settingsJson, page) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
-      console.log("settings:", settings)
 
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
-      console.log("tokenIdsFromFilter:", tokenIdsFromFilter)
 
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
         newNfts = await fetchMarketDataNfts(collection, settings, page, tokenIdsFromFilter)
-        console.log("newNfts:", newNfts)
         newNfts = nftDatasMock
-         
       } else {
         const {
           nfts: allNewNfts,

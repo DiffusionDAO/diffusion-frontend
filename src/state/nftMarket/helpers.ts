@@ -39,17 +39,9 @@ import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } f
 import { ethers } from 'ethers'
 import starlightContract from 'abi/starlightContract.json'
 import { useWeb3React } from '@web3-react/core'
-import cloneDeep from "lodash/cloneDeep"
 
 const toBuffer = require('it-to-buffer')
-
 const { create } = require('ipfs-http-client')
-// export const ipfs = create({
-//   host: 'ipfs.infura.io',
-//   port: '5001',
-//   protocol: 'https',
-// })
-
 export const ipfs = create({
   host: '207.148.117.14',
   port: '5001',
@@ -61,7 +53,7 @@ export const ipfs = create({
  * @returns
  */
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
-  var res = await ipfs.cat('QmXcRjkoanCY2xN3vaCVShhMaUHVxvBECtfxBW1L4x1MVL/metadata.json')
+  var res = await ipfs.cat('QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/metadata.json')
   var buffer = await toBuffer(res)
   const json = JSON.parse(Buffer.from(buffer).toString('utf8'))
   json.data.map(async (collection) => {
@@ -180,7 +172,7 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
  * @returns
  */
 export const getCollectionApi = async (collectionAddress): Promise<ApiCollection> => {
-  var res = await ipfs.cat('QmXcRjkoanCY2xN3vaCVShhMaUHVxvBECtfxBW1L4x1MVL/metadata.json')
+  var res = await ipfs.cat('QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/metadata.json')
   var buffer = await toBuffer(res)
   const json = JSON.parse(Buffer.from(buffer).toString('utf8'))
   return json.data[0]

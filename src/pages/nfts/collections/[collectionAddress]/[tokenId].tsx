@@ -2,8 +2,9 @@ import IndividualNFT from 'views/Nft/market/Collection/IndividualNFTPage'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getCollection, getNftApi } from 'state/nftMarket/helpers'
 import { NftToken } from 'state/nftMarket/types'
-// eslint-disable-next-line camelcase
+/* eslint-disable camelcase */
 import { SWRConfig, unstable_serialize } from 'swr'
+
 
 const IndividualNFTPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -26,38 +27,38 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { collectionAddress, tokenId } = params
-
+  console.log("getStaticProps:",collectionAddress, tokenId)
   if (typeof collectionAddress !== 'string' || typeof tokenId !== 'string') {
     return {
       notFound: true,
     }
   }
 
-  const metadata = await getNftApi(collectionAddress, tokenId)
+  // const metadata = await getNftApi(collectionAddress, tokenId)
   const collection = await getCollection(collectionAddress)
+  const metadata = collection[collectionAddress]
   if (!metadata) {
     return {
       notFound: true,
       revalidate: 1,
     }
   }
-  console.log("metadata:",metadata)
   const nft: NftToken = {
     tokenId,
     collectionAddress,
-    collectionName: metadata.collection.name,
+    collectionName: metadata.name,
     name: metadata.name,
     description: metadata.description,
-    image: metadata.image,
-    attributes: metadata.attributes,
+    image: {original:"string", thumbnail: metadata.banner.large},
+    // attributes: metadata.attributes,
   }
 
   return {
     props: {
       fallback: {
         [unstable_serialize(['nft', nft.collectionAddress, nft.tokenId])]: nft,
-        ...(collection && {
-          [unstable_serialize(['nftMarket', 'collections', collectionAddress.toLowerCase()])]: collection,
+        ...(metadata && {
+          [unstable_serialize(['nftMarket', 'collections', collectionAddress.toLowerCase()])]: metadata,
         }),
       },
     },
