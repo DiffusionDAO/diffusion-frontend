@@ -3,62 +3,38 @@
   overflow-x: hidden;
   height: 100%;
   min-width: 300px;
-  margin: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  margin: 40px 20px;
   overflow-y: auto;
   -ms-overflow-style: none !important; /* IE and Edge */
   scrollbar-width: none !important; /* Firefox */
 
-  & div[role="tabpanel"] > div {
-    padding: 22px 0;
-  }
-
-  & .flex {
-    display: flex;
-  }
-
-  & .multifarm-widget-table {
-    border-spacing: 0 0.75rem;
-  }
-
-  & .multifarm-widget-accordion {
-    margin-bottom: 0.75rem;
-  }
-
-  & .multifarm-widget-income-view-per-type__pie-charts,
-  & .multifarm-widget-dashboard__pie-charts {
-    margin-bottom: 0.75rem;
-  }
-
-  & .multifarm-widget-dashboard__pie-charts {
-    grid-gap: 0.75rem;
-  }
-
-  & .multifarm-widget-table__container {
-    margin-bottom: 0.25rem;
-  }
-
-  & .multifarm-widget-powered-by-badge {
+  .dashboard-tab {
     width: 100%;
-    margin-top: 0.75rem;
-    justify-content: center;
-  }
-
-  & .multifarm-widget-dashboard__sub-tabs {
-    justify-content: center;
-  }
-
-  & .multifarm-widget-dashboard__tab-title-container {
+    height: 44px;
+    padding: 0 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-  }
-
-  & .multifarm-widget-accordion__title,
-  & .multifarm-widget-card__title {
-    font-weight: 400;
+    margin: 10px 0;
+    > div {
+      width: 50%;
+      height: 36px;
+      line-height: 36px;
+      color: #fff;
+      border-radius: 8px;
+      text-align: center;
+      height: 36px;
+      cursor: pointer;
+    }
+    .active {
+      // background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+      background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+      background-size: 400% 400%;
+      animation: gradient 5s ease infinite;
+    }
   }
 
   &::-webkit-scrollbar {
@@ -270,241 +246,6 @@
   }
   .data-grid {
     overflow: hidden;
-  }
-}
-
-.smaller {
-  .MuiTabs-root {
-    width: 100%;
-  }
-
-  .multifarm-widget-table__top-pagination {
-    margin-right: 10px;
-  }
-
-  .multifarm-widget-scroll-tabs__arrow {
-    top: -4px;
-  }
-
-  .multifarm-widget-dashboard__tab-title {
-    margin: 0 auto;
-    font-size: 1.25rem;
-    font-weight: 500;
-  }
-
-  .multifarm-widget-dashboard-tabs__tab {
-    padding: 0 0.5rem;
-  }
-
-  .multifarm-widget-tabs__tab {
-    min-width: 41px;
-  }
-
-  .multifarm-widget-dashboard__sub-tabs {
-    margin: 1.5rem 0 1.75rem;
-  }
-
-  .multifarm-widget-dashboard__tab-container .multifarm-widget-tabs {
-    padding: 0 2px;
-    margin-left: 0;
-    height: 51px;
-  }
-
-  .multifarm-widget-card__title {
-    font-size: 1rem;
-  }
-
-  .multifarm-widget-tabs__tab {
-    padding: 0.125rem 0.25rem;
-    font-size: 0.85rem;
-  }
-
-  .multifarm-widget-technologies-used__icons {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-  }
-}
-
-.mobile {
-  & .multifarm-widget-dashboard__tab-container .multifarm-widget-dashboard-tabs {
-    justify-content: unset !important;
-  }
-
-  .ohm-card {
-    & .multifarm-widget-card__header {
-      margin-bottom: 1.25rem !important;
-    }
-  }
-
-  div.metric {
-    white-space: nowrap;
-    min-width: 30% !important;
-    max-width: 60%;
-    text-align: left !important;
-    &.market,
-    &.price,
-    &.wsoprice,
-    &.circ,
-    &.bpo,
-    &.index {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
-}
-
-.dashboard-pro,
-.proteus,
-.treasury {
-  margin-top: 15px;
-}
-
-.income {
-  margin-top: 15px;
-}
-
-.multifarm-widget-dashboard-pro,
-.multifarm-widget-dashboard__tab-container {
-  .multifarm-widget-incomes-bar__text {
-    font-size: 1rem;
-    margin: 8px auto;
-  }
-
-  .multifarm-widget-dashboard-tabs__tab:first-child {
-    padding-left: 0;
-  }
-
-  .multifarm-widget-dashboard-tabs__tab-text {
-    font-size: 19px;
-    padding: 0.25rem 0;
-    border-bottom: 2px solid transparent;
-  }
-
-  .multifarm-widget-select__select {
-    border-radius: 5px;
-  }
-
-  .multifarm-widget-accordion,
-  .multifarm-widget-card {
-    border: none;
-    border-radius: var(--ohm-card-border-radius);
-  }
-
-  .multifarm-widget-table-cell:first-child {
-    border-radius: var(--ohm-card-border-radius) 0 0 var(--ohm-card-border-radius);
-  }
-
-  .multifarm-widget-table-cell:last-child {
-    border-radius: 0 var(--ohm-card-border-radius) var(--ohm-card-border-radius) 0;
-  }
-
-  .multifarm-widget-incomes-bar__text span {
-    font-size: 1rem;
-  }
-
-  .multifarm-widget-typography_page-title {
-    font-weight: 600;
-  }
-
-  .multifarm-widget-tabs {
-    padding: 0 10px;
-    margin-left: 10px;
-    height: 51px;
-    border-radius: 6px;
-  }
-
-  .multifarm-widget-tabs__tab {
-    font-weight: 500;
-    font-size: 0.85rem;
-    &[data-active="true"] {
-      border-radius: 6px;
-      height: 39px;
-    }
-  }
-}
-
-.light {
-  .multifarm-widget-dashboard-pro__partner,
-  .multifarm-widget-powered-by-badge,
-  .multifarm-widget-accordion {
-    background: var(--light-paper-bg);
-  }
-
-  :not(.multifarm-widget-accordion__content) {
-    .multifarm-widget-table {
-      tbody tr {
-        background: var(--light-paper-bg);
-      }
-      .multifarm-widget-table-cell {
-        background-color: transparent;
-      }
-    }
-  }
-
-  .multifarm-widget-accordion__content {
-    .multifarm-widget-table {
-      .multifarm-widget-table-cell {
-        background-color: #f0f0f0;
-      }
-    }
-  }
-
-  .multifarm-widget-chart-tooltip__trigger {
-    cursor: pointer;
-    &:hover {
-      color: var(--list-text-primary);
-    }
-  }
-
-  .multifarm-widget-dashboard__tab-container {
-    .multifarm-widget-dashboard-tabs__tab[data-active="true"] .multifarm-widget-dashboard-tabs__tab-text {
-      color: #000;
-      font-weight: 400;
-      border-color: #000;
-    }
-  }
-}
-
-.dark {
-  .multifarm-widget-dashboard-pro__partner,
-  .multifarm-widget-powered-by-badge,
-  .multifarm-widget-accordion {
-    background: var(--dark-paper-bg);
-  }
-
-  :not(.multifarm-widget-accordion__content) {
-    .multifarm-widget-table {
-      tbody tr {
-        background: var(--dark-paper-bg);
-      }
-      .multifarm-widget-table-cell {
-        background-color: transparent;
-      }
-    }
-  }
-
-  .multifarm-widget-accordion__content {
-    .multifarm-widget-table {
-      .multifarm-widget-table-cell {
-        background-color: #1d2026;
-      }
-    }
-  }
-
-  .multifarm-widget-chart-tooltip__trigger {
-    cursor: pointer;
-    &:hover {
-      color: var(--ohm-gold);
-    }
-  }
-
-  .multifarm-widget-dashboard__tab-container {
-    .multifarm-widget-dashboard-tabs__tab[data-active="true"] .multifarm-widget-dashboard-tabs__tab-text {
-      color: var(--ohm-gold);
-      font-weight: 400;
-      border-color: var(--ohm-gold);
-    }
   }
 }
 

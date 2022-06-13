@@ -1,6 +1,6 @@
-import { Grid, useMediaQuery } from "@material-ui/core";
+import { Grid, Typography, useMediaQuery } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Paper } from "./style";
 
 import { DataCell } from "./components/DataCell/DataCell";
@@ -30,20 +30,43 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Dashboard = () => {
+  // xs, extra-small: 0px or larger
+  // sm, small: 600px or larger
+  // md, medium: 960px or larger
+  // lg, large: 1280px or larger
+  // xl, xlarge: 1920px or larger
   const isSmallScreen = useMediaQuery("(max-width: 650px)");
-  const isVerySmallScreen = useMediaQuery("(max-width: 379px)");
   const classes = useStyles();
+  const [activeTab, setActiveTab] = useState<string>("Overview");
+  const clickTab = (tab: string) => {
+    setActiveTab(tab);
+  };
   return (
-    <div id="dashboard-view" className={`${isSmallScreen && "smaller"} ${isVerySmallScreen && "very-small"}`}>
-      <div style={{ fontWeight: 500, fontSize: "15px", overflow: "hidden", lineHeight: "40px", color: "#fff", width: "100%" }}>
-        Overview
-        <span style={{ color: "grey", fontSize: "12px", fontWeight: 400, marginLeft: "16px" }}>
-          2020/09/09 22:22:22
-        </span>
-      </div>
+    <div id="dashboard-view">
+        <Typography variant="h4" style={{ fontWeight: 700, overflow: "hidden", color: "#fff" }}>
+          Dashboard
+        </Typography>
+        {isSmallScreen ? (
+          <div className="dashboard-tab">
+            <div aria-hidden="true" className={`${activeTab === "Overview" && "active"}`} onClick={() => clickTab("Overview")}>
+              Overview
+            </div>
+            <div aria-hidden="true" className={`${activeTab === "Chart" && "active"}`} onClick={() => clickTab("Chart")}>
+              Chart
+            </div>
+          </div>
+        ) : (
+          <div style={{ fontWeight: 500, fontSize: "15px", overflow: "hidden", lineHeight: "40px" }}>
+            Overview
+            <span style={{ color: "grey", fontSize: "12px", fontWeight: 400, marginLeft: "16px" }}>
+              2020/09/09 22:22:22
+            </span>
+          </div>
+        )}
       <Grid container spacing={2}>
         {/* 13个指标 */}
-        <Grid item lg={12} md={12} sm={12} xs={12}>
+        {/* 小屏幕的时候要根据tab切换来显示 */}
+        {!(isSmallScreen && activeTab !== "Overview") ? ( <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container spacing={2}>
             <Grid item lg={9} md={9} sm={12} xs={12}>
               <Grid container spacing={2}>
@@ -170,9 +193,11 @@ const Dashboard = () => {
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        </Grid>) : null}
+
         {/* echarts图表 */}
-        <Grid item lg={12} md={12} sm={12} xs={12}>
+        {!(isSmallScreen && activeTab !== "Chart") ? (<>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container spacing={2}>
             <Grid item lg={7} md={7} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
@@ -265,6 +290,7 @@ const Dashboard = () => {
             </Grid>
           </Grid>
         </Grid>
+        </>): null }
       </Grid>
     </div>
   );
