@@ -39,6 +39,7 @@ import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } f
 import { ethers } from 'ethers'
 import starlightContract from 'abi/starlightContract.json'
 import { useWeb3React } from '@web3-react/core'
+import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
 
 const toBuffer = require('it-to-buffer')
 const { create } = require('ipfs-http-client')
@@ -458,16 +459,17 @@ export const getNftsOnChainMarketData = async (
   try {
     const nftMarketContract = getNftMarketContract()
     const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
-    const askInfo = response?.askInfo
-
+    // const askInfo = response?.askInfo
+    const askInfo = nftDatasMock
+    console.log("askInfo:", askInfo)
     if (!askInfo) return []
 
     return askInfo
       .map((tokenAskInfo, index) => {
-        if (!tokenAskInfo.seller || !tokenAskInfo.price) return null
-        const currentSeller = tokenAskInfo.seller
+        if (!tokenAskInfo.marketData.currentSeller || !tokenAskInfo.marketData.currentAskPrice) return null
+        const currentSeller = tokenAskInfo.marketData.currentSeller
         const isTradable = currentSeller.toLowerCase() !== NOT_ON_SALE_SELLER
-        const currentAskPrice = tokenAskInfo.price && formatBigNumber(tokenAskInfo.price)
+        const currentAskPrice = tokenAskInfo.marketData.currentAskPrice && tokenAskInfo.marketData.currentAskPrice
 
         return {
           collection: { id: collectionAddress.toLowerCase() },

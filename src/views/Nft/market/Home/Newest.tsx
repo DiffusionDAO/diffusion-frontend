@@ -42,7 +42,7 @@ const useNewestNfts = () => {
 const Newest: React.FC = () => {
   const { t } = useTranslation()
   const nfts = useNewestNfts()
-
+  console.log("Newest:", nfts)
   return (
     <div>
       <Flex justifyContent="space-between" alignItems="center" mb="26px">

@@ -27,7 +27,7 @@ const nftDatasMock: NftToken[] = [
         id: "xxx1",
       },
       currentAskPrice: "0.22",
-      currentSeller: "xxx",
+      currentSeller: "diffusion",
       isTradable: true,
     }
   },
@@ -57,7 +57,7 @@ const nftDatasMock: NftToken[] = [
         id: "xxx1",
       },
       currentAskPrice: "0.22",
-      currentSeller: "xxx",
+      currentSeller: "diffusion",
       isTradable: true,
     }
   },
@@ -87,7 +87,7 @@ const nftDatasMock: NftToken[] = [
         id: "xxx1",
       },
       currentAskPrice: "0.22",
-      currentSeller: "xxx",
+      currentSeller: "diffusion",
       isTradable: true,
     }
   },
@@ -117,7 +117,7 @@ const nftDatasMock: NftToken[] = [
         id: "xxx1",
       },
       currentAskPrice: "0.22",
-      currentSeller: "xxx",
+      currentSeller: "diffusion",
       isTradable: true,
     }
   },
