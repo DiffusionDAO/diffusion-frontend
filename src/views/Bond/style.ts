@@ -24,7 +24,7 @@ export const OverviewCard = styled.div`
 `
 export const OverviewCardItem = styled.div`
   min-width: 350px;
-  padding: 20px;
+  padding: 36px;
 `
 export const OverviewCardItemTitle = styled.div`
   height: 16px;
@@ -32,7 +32,7 @@ export const OverviewCardItemTitle = styled.div`
   font-family: HelveticaNeue;
   color: #FFFFFF;
   line-height: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 36px;
 `
 export const OverviewCardItemContent = styled.div`
   height: 40px;
@@ -58,8 +58,8 @@ export const Percent = styled.div`
   border-radius: 12px;
   padding: 0 10px;
   margin: 0 10px;
-  ${({ isUp }: { isUp: boolean }) => {
-    if (isUp) {
+  ${({ isRise }: { isRise: boolean }) => {
+    if (isRise) {
       return css`
         color: rgba(0, 255, 238, 1);
         background: rgba(0, 255, 238, 0.24);
@@ -74,8 +74,8 @@ export const Percent = styled.div`
 export const Icon = styled.div`
   width: 16px;
   height: 16px;
-  ${({ isUp }: { isUp: boolean }) => {
-    if (isUp) {
+  ${({ isRise }: { isRise: boolean }) => {
+    if (isRise) {
       return css`
         background-image: url("/images/bond/arrow-up-chart.png")
       `;
@@ -85,6 +85,117 @@ export const Icon = styled.div`
     `;
   }};
 `
+
+export const BondListItem = styled.div`
+  border-radius: 15px;
+  border: 1px solid rgba(70, 96, 255, 0.4);
+  background: rgba(171, 182, 255, 0.08);
+  padding: 36px;
+`
+export const BondListItemHeader = styled.div`
+  width: 100%;
+  padding: 0 0 36px 0;
+  border-bottom: 1px solid rgba(70, 96, 255, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+export const ImgWrap = styled.div`
+  width: 40px;
+  height: 40px;
+  position: relative;
+`
+export const FromImg = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  position: absolute;
+  left: -15px;
+`
+export const ToImg = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  position: absolute;
+  right: -15px;
+  z-index: 1;
+`
+export const BondHeaderName = styled.div`
+  width: 100%;
+  height: 20px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 21px;
+  text-align: center;
+`
+
+export const BondListItemContent = styled.div`
+  width: 100%;
+  margin: 36px 0;
+  display: flex;
+  flex-direction: row;
+`
+export const ContentCell = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`
+export const CellTitle = styled.div`
+  width: 100%;
+  height: 15px;
+  font-size: 13px;
+  font-family: HelveticaNeue;
+  color: #ABB6FF;
+  line-height: 15px;
+  margin-bottom: 10px;
+  text-align: center;
+`
+export const CellText = styled.div`
+  width: 100%;
+  height: 24px;
+  font-size: 20px;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  font-weight: bold;
+  color: #FFFFFF;
+  line-height: 25px;
+  text-align: center;
+`
+export const CellTextColor = styled.div`
+  width: 100%;
+  height: 24px;
+  font-size: 20px;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  font-weight: bold;
+  line-height: 25px;
+  text-align: center;
+  ${({ isRise }: { isRise: boolean }) => {
+    if (isRise) {
+      return css`
+        color: rgba(0, 255, 238, 1);
+      `;
+    }
+    return css`
+      color: rgba(255, 39, 87, 1);
+    `;
+  }};
+`
+export const BondListItemBtn = styled.div`
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+  border-radius: 7px;
+  cursor: pointer;
+  background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+`
+
 
 
 

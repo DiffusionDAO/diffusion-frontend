@@ -50,7 +50,7 @@ const Logo: React.FC<Props> = ({ isDark, href }) => {
     <>
       {/* <LogoIcon className="mobile-icon" />
       <LogoWithTextIcon className="desktop-icon" isDark={isDark} /> */}
-      <img src="/images/DiffusionDAO.png" style={{ height: "3.5rem" }} />
+      <img src="/images/logo.png" alt="" />
     </>
   );
 
