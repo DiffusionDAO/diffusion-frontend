@@ -29,6 +29,7 @@ import "./animation.scss";
 import "./cover.scss";
 import "./DiffusionChart.scss";
 import "./Dashboard.scss";
+import { HaloWrap, BlueHalo, RedHalo } from "./style";
 
 const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
 
@@ -122,6 +123,17 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
           <Component {...pageProps} />
         </Layout>
       </Menu>
+        {/* 左边光晕展示 */}
+              <HaloWrap style={{ left: '30%', top: '180px'}}>
+          <BlueHalo />
+          <RedHalo />
+        </HaloWrap>
+
+        {/* 右边光晕展示 */}
+        <HaloWrap style={{ right: '0px', top: '0'}}>
+          <BlueHalo />
+          <RedHalo />
+        </HaloWrap>
       {/* <EasterEgg iterations={2} /> */}
       <ToastListener />
       {/* <FixedSubgraphHealthIndicator /> */}
