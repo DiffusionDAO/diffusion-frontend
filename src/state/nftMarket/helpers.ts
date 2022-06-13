@@ -74,7 +74,7 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
     } catch (error) {
       console.log("error:", error)
     }
-    const avatar = collection.avatar.slice(1)
+    var avatar = collection.avatar.slice(1)
     try {
       const res = ipfs.cat(avatar)
       var buffer = await toBuffer(res)
@@ -124,7 +124,6 @@ const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promis
 export const getCollections = async (): Promise<Record<string, Collection>> => {
   try {
     const [collections] = await Promise.all([getCollectionsApi()])
-    console.log("getCollections collections:", collections.data[0])
     var avatar = collections.data[0].avatar
     console.log("avatar:",avatar)
     const collectionApiData: ApiCollection[] = collections?.data ?? []
@@ -180,49 +179,11 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
  * Fetch static data from a collection using the API
  * @returns
  */
-export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
+export const getCollectionApi = async (collectionAddress): Promise<ApiCollection> => {
   var res = await ipfs.cat('QmXcRjkoanCY2xN3vaCVShhMaUHVxvBECtfxBW1L4x1MVL/metadata.json')
   var buffer = await toBuffer(res)
   const json = JSON.parse(Buffer.from(buffer).toString('utf8'))
-  json.data.map(async (collection) => {
-    const small = collection.banner.small.slice(1)
-    try {
-      const res = ipfs.cat(small)
-      var buffer = await toBuffer(res)
-      var blob = new Blob([buffer])
-      collection.banner.small = URL.createObjectURL(blob)
-    } catch (error) {
-      console.log("error:", error)
-    }
-    const avatar = collection.avatar.slice(1)
-    try {
-      const res = ipfs.cat(avatar)
-      var buffer = await toBuffer(res)
-      var blob = new Blob([buffer])
-      collection.avatar = URL.createObjectURL(blob)
-    } catch (error) {
-      console.log("error:", error)
-    }
-    const large = collection.banner.large.slice(1)
-    try {
-      const res = ipfs.cat(large)
-      var buffer = await toBuffer(res)
-      var blob = new Blob([buffer])
-      collection.banner.large = URL.createObjectURL(blob)
-    } catch (error) {
-      console.log("error:", error)
-    }
-  })
-  return json
-
-  // const res = await fetch(`${API_NFT}/collections/${collectionAddress}`)
-  // if (res.ok) {
-  //   const json = await res.json()
-  //   console.log('getCollectionApi:', json.data)
-  //   return json.data
-  // }
-  // console.error(`API: Failed to fetch NFT collection ${collectionAddress}`, res.statusText)
-  // return null
+  return json.data[0]
 }
 
 /**

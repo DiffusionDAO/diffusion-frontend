@@ -5,6 +5,7 @@ import { Collection } from 'state/nftMarket/types'
 import { useTranslation } from 'contexts/Localization'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
+import { useEffect, useLayoutEffect, useMemo } from 'react'
 const toBuffer = require('it-to-buffer')
 
 const { create } = require('ipfs-http-client')
@@ -25,17 +26,36 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
   collections,
 }) => {
   const { t } = useTranslation()
-  collections.filter(collection=> collection.avatar[0]=="/").map(async(collection)=>{
-    const avatar = collection.avatar.slice(1)
-    try {
-      const res = ipfs.cat(avatar)
-      var buffer = await toBuffer(res)
-      var blob = new Blob([buffer])
-      collection.avatar = URL.createObjectURL(blob)
-    } catch (error) {
-      console.log("error:", error)
-    }
-  })
+    // collections.map(async (collection) => {
+    //   const small = collection.banner.small.slice(1)
+    //   try {
+    //     const res = ipfs.cat(small)
+    //     var buffer = await toBuffer(res)
+    //     var blob = new Blob([buffer])
+    //     collection.banner.small = URL.createObjectURL(blob)
+    //   } catch (error) {
+    //     console.log("error:", error)
+    //   }
+    //   var avatar = collection.avatar.slice(1)
+    //   try {
+    //     const res = ipfs.cat(avatar)
+    //     var buffer = await toBuffer(res)
+    //     var blob = new Blob([buffer])
+    //     collection.avatar = URL.createObjectURL(blob)
+    //   } catch (error) {
+    //     console.log("error:", error)
+    //   }
+    //   const large = collection.banner.large.slice(1)
+    //   try {
+    //     const res = ipfs.cat(large)
+    //     var buffer = await toBuffer(res)
+    //     var blob = new Blob([buffer])
+    //     collection.banner.large = URL.createObjectURL(blob)
+    //   } catch (error) {
+    //     console.log("error:", error)
+    //   }
+    // })
+
   return (
     <>
       {/* <Flex alignItems="center" justifyContent="space-between" mb="32px">
