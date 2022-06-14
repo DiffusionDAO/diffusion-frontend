@@ -20,6 +20,7 @@ import { NextPage } from 'next'
 import { Blocklist, Updaters } from '..'
 import ErrorBoundary from '../components/ErrorBoundary'
 import Menu from '../components/Menu'
+import Halo from '../components/Halo'
 import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import 'antd/dist/antd.css';
@@ -29,7 +30,6 @@ import "./animation.scss";
 import "./cover.scss";
 import "./DiffusionChart.scss";
 import "./Dashboard.scss";
-import { HaloWrap, BlueHalo, RedHalo } from "./style";
 
 const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
 
@@ -123,17 +123,8 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
           <Component {...pageProps} />
         </Layout>
       </Menu>
-        {/* 左边光晕展示 */}
-        <HaloWrap style={{ left: '20%', top: '150px'}}>
-          <BlueHalo />
-          <RedHalo />
-        </HaloWrap>
-
-        {/* 右边光晕展示 */}
-        <HaloWrap style={{ right: '0px', top: '0'}}>
-          <BlueHalo />
-          <RedHalo />
-        </HaloWrap>
+      {/* 光晕组件 */}
+      <Halo />
       {/* <EasterEgg iterations={2} /> */}
       <ToastListener />
       {/* <FixedSubgraphHealthIndicator /> */}

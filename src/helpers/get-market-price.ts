@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
+import { Networks } from 'constants/blockchain'
 import { LpReserveContract } from '../abi'
 import { daiOHM } from './bond'
-import { Networks } from 'constants/blockchain'
 
 export async function getMarketPrice(
   networkID: Networks,
