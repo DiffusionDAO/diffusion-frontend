@@ -3,13 +3,21 @@ import Typed from 'react-typed';
 import { Grid } from "@material-ui/core";
 import { BondPageWrap, BondPageTitle, OverviewCard, OverviewCardItem, OverviewCardItemTitle, OverviewCardItemContent,
   Price, Percent, Icon, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
-  CellTextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
+  TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
 import bondDatasMock from './MockBondData'
+import BondModal from './components/BondModal'
 
 
 
 const Bond: FC = () => {
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
+  const [bondModalVisible, setBondModalVisible] = useState<boolean>(false);
+  const openBondModal = () => {
+    setBondModalVisible(true)
+  }
+  const closeBondModal = () => {
+    setBondModalVisible(false)
+  }
   return (<BondPageWrap>
     <BondPageTitle>
       <Typed
@@ -57,20 +65,24 @@ const Bond: FC = () => {
                 </ContentCell>
                 <ContentCell>
                   <CellTitle>Discount</CellTitle>
-                  <CellTextColor isRise={bondItem.discount>0}>{bondItem.discount}%</CellTextColor>
+                  <CellText><TextColor isRise={bondItem.discount>0}>{bondItem.discount}%</TextColor></CellText>
                 </ContentCell>
                 <ContentCell>
                   <CellTitle>Duration</CellTitle>
                   <CellText>{bondItem.duration}day</CellText>
                 </ContentCell>
               </BondListItemContent>
-              <BondListItemBtn>Bond</BondListItemBtn>
+              <BondListItemBtn onClick={openBondModal}>Bond</BondListItemBtn>
             </BondListItem>
+            {/* bond的弹窗 */}
+            {
+              bondModalVisible ? <BondModal bondData={bondItem} onClose={closeBondModal} /> 
+              : null
+            }
           </Grid>
         ))
       }
     </Grid>
-
   </BondPageWrap>)
 }
 export default Bond;

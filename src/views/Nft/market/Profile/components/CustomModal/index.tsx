@@ -20,7 +20,6 @@ const CustomModal: React.FC<CustomModalProps> = ({
     <StyledModal
       width={500}
       className="no-header"
-      title={t('Synthetic')}
       onCancel={onClose}
       visible
       centered

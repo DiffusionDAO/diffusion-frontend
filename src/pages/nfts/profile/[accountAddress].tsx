@@ -4,8 +4,9 @@ import { useProfileForAddress } from 'state/profile/hooks'
 import { NftProfileLayout } from 'views/Nft/market/Profile'
 import UnconnectedProfileNfts from 'views/Nft/market/Profile/components/UnconnectedProfileNfts'
 import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
-import { AccountNftWrap, SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, CompoundBtnWrapImg, SelectedCountBox,
-  BackgroundWrap, ConentWrap, BackgroundTitle, BackgroundDes, BackgroundText, BackgroundImg, } from 'views/Nft/market/Profile/components/styles'
+import { AccountNftWrap, SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn, 
+  CompoundBtnWrapImg, SelectedCountBox, BackgroundWrap, ConentWrap, BackgroundTitle, BackgroundDes, 
+  BackgroundText, BackgroundImg, } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
 import { Cascader, Tabs, Button } from 'antd';
 import { useTranslation } from 'contexts/Localization'
