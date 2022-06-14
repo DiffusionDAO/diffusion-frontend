@@ -19,15 +19,15 @@ export const HeaderWrap = styled.div`
   }
 `
 export const BondListItem = styled.div`
-  border-radius: 15px;
-  border: 1px solid rgba(70, 96, 255, 0.4);
-  background: rgba(171, 182, 255, 0.08);
   margin-bottom: 20px;
+  background: rgba(171, 182, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(171, 182, 255, 0.1);
 `
 export const BondListItemHeader = styled.div`
   width: 100%;
-  padding: 36px 0;
-  border-bottom: 1px solid rgba(70, 96, 255, 0.4);
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(171, 182, 255, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,7 +58,7 @@ export const ToImg = styled.img`
 export const BondName = styled.div`
   width: 100%;
   height: 20px;
-  margin-top: 10px;
+  margin: 10px 0px;
   font-size: 16px;
   font-family: HelveticaNeue-Medium, HelveticaNeue;
   font-weight: 500;
@@ -67,6 +67,12 @@ export const BondName = styled.div`
   text-align: center;
 `
 export const BondTime = styled.div`
+  font-size: 12px;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  color: rgba(171, 182, 255, 1);
+  background: rgba(171, 182, 255, 0.1);
+  border-radius: 12px;
+  padding: 2px 8px;
 `
 export const BondListItemContent = styled.div`
   width: 100%;
@@ -111,6 +117,23 @@ export const TextColor = styled.div`
     `;
   }};
 `
+
+export const TipsWrap = styled.div`
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  line-height: 16px;
+  border-radius: 7px;
+  margin-bottom: 20px;
+  background-color: #000;
+`
+export const TipsText = styled.div`
+  margin-left: 5px;
+  font-size: 12px;
+  font-family: HelveticaNeue;
+  color: #ABB6FF;
+`
+
 
 export const BondListItemBtn = styled.div`
   width: 100%;
