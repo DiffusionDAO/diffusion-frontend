@@ -2,7 +2,7 @@ import { useTranslation } from 'contexts/Localization'
 import { Button } from 'antd'
 import { CloseIcon, CogIcon, InfoIcon } from '@pancakeswap/uikit'
 import { StyledModal, ContentWrap, HeaderWrap, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
-  TextColor, ImgWrap, FromImg, ToImg, BondName, BondTime, TipsWrap, TipsText,  BondListItemBtn } from './styles'
+  TextColor, ImgWrap, FromImg, ToImg, BondName, BondTime, TipsWrap, TipsText,  BondListItemBtn, ListItem, ListLable, ListContent } from './styles'
 
 interface BondModalProps {
   bondData: any;
@@ -39,7 +39,7 @@ const BondModal: React.FC<BondModalProps> = ({
               <ToImg src={bondData.to} />
             </ImgWrap>
             <BondName>{bondData.name}</BondName>
-            <BondTime>{bondData.duration}day</BondTime>
+            <BondTime>{bondData.duration}days</BondTime>
           </BondListItemHeader>
           <BondListItemContent>
             <ContentCell>
@@ -58,6 +58,26 @@ const BondModal: React.FC<BondModalProps> = ({
         </TipsWrap>
         {/* 按钮 */}
         <BondListItemBtn>Connection</BondListItemBtn>
+        <ListItem>
+          <ListLable>Your Balance</ListLable>
+          <ListContent>{bondData.balance}</ListContent>
+        </ListItem>
+        <ListItem>
+          <ListLable>Your Will Get</ListLable>
+          <ListContent>{bondData.getFee}</ListContent>
+        </ListItem>
+        <ListItem>
+          <ListLable>Max You Can Buy</ListLable>
+          <ListContent>{bondData.maxFee}</ListContent>
+        </ListItem>
+        <ListItem>
+          <ListLable>Your Balance</ListLable>
+          <ListContent><TextColor isRise={bondData.discount>0}>{bondData.discount}</TextColor></ListContent>
+        </ListItem>
+        <ListItem>
+          <ListLable>Duration</ListLable>
+          <ListContent>{bondData.duration}days</ListContent>
+        </ListItem>
       </ContentWrap>
     </StyledModal>
   )

@@ -69,7 +69,7 @@ const Bond: FC = () => {
                 </ContentCell>
                 <ContentCell>
                   <CellTitle>Duration</CellTitle>
-                  <CellText>{bondItem.duration}day</CellText>
+                  <CellText>{bondItem.duration}days</CellText>
                 </ContentCell>
               </BondListItemContent>
               <BondListItemBtn onClick={openBondModal}>Bond</BondListItemBtn>

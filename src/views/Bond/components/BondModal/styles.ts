@@ -149,3 +149,25 @@ export const BondListItemBtn = styled.div`
   background-size: 400% 400%;
   animation: gradient 5s ease infinite;
 `
+export const ListItem = styled.div`
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+`
+export const ListLable = styled.div`
+  height: 15px;
+  font-size: 12px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #ABB6FF;
+  line-height: 15px;
+`
+export const ListContent = styled.div`
+  height: 15px;
+  font-size: 12px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 15px;
+`
