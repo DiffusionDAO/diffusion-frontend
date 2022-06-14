@@ -18,7 +18,7 @@ import {
 import { getBscScanLink } from 'utils'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useTranslation } from 'contexts/Localization'
-import { usePriceCakeBusd } from 'state/farms/hooks'
+// import { usePriceCakeBusd } from 'state/farms/hooks'
 import { Bidder } from 'config/constants/types'
 import WhitelistedBiddersModal from '../WhitelistedBiddersModal'
 
@@ -111,7 +111,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({ bidder, cakePriceBusd, 
 
 const AuctionLeaderboardTable: React.FC<{ bidders: Bidder[]; noBidsText: string }> = ({ bidders, noBidsText }) => {
   const [visibleBidders, setVisibleBidders] = useState(10)
-  const cakePriceBusd = usePriceCakeBusd()
+  // const cakePriceBusd = usePriceCakeBusd()
   const { t } = useTranslation()
 
   const { isMobile } = useMatchBreakpoints()
@@ -149,10 +149,9 @@ const AuctionLeaderboardTable: React.FC<{ bidders: Bidder[]; noBidsText: string 
           {t('CAKE bid')}
         </Text>
         <Box />
-        {/* Rows */}
-        {bidders.slice(0, visibleBidders).map((bidder) => (
+        {/* {bidders.slice(0, visibleBidders).map((bidder) => (
           <LeaderboardRow key={bidder.account} bidder={bidder} cakePriceBusd={cakePriceBusd} isMobile={isMobile} />
-        ))}
+        ))} */}
       </LeaderboardContainer>
       <Flex mt="16px" px="24px" flexDirection="column" justifyContent="center" alignItems="center">
         {visibleBidders <= 10 && totalBidders > 10 && (

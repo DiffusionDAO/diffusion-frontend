@@ -36,10 +36,10 @@ const MigrationPage: React.FC = () => {
   ]
 
   // v1 Farms
-  usePollFarmsV1WithUserData()
+  // usePollFarmsV1WithUserData()
 
   // v1 Pools
-  useFetchPublicPoolsData()
+  // useFetchPublicPoolsData()
   const { data: cakePool, userDataLoaded } = useFetchUserPools(account)
 
   const v1Pools = useMemo(() => {
@@ -83,7 +83,7 @@ const MigrationPage: React.FC = () => {
           </Button>
         </Link>
       </PageHeader>
-      <Page>
+      {/* <Page>
         <ProgressSteps pickedStep={step} steps={steps} onClick={setStep} />
         {step === ProgressStepsType.STEP1 ? (
           <>
@@ -96,7 +96,7 @@ const MigrationPage: React.FC = () => {
             <NewFarm />
           </>
         )}
-      </Page>
+      </Page> */}
       <MigrationSticky step={step} handleClick={handleMigrationStickyClick} />
     </div>
   )

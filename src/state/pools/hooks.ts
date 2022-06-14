@@ -13,7 +13,7 @@ import {
   fetchPoolsStakingLimitsAsync,
 } from '.'
 import { DeserializedPool, VaultKey } from '../types'
-import { fetchFarmsPublicDataAsync } from '../farms'
+// import { fetchFarmsPublicDataAsync } from '../farms'
 import {
   poolsWithUserDataLoadingSelector,
   makePoolWithUserDataLoadingSelector,
@@ -28,7 +28,7 @@ export const useFetchPublicPoolsData = () => {
     (currentBlock) => {
       const fetchPoolsDataWithFarms = async () => {
         const activeFarms = farmsConfig.filter((farm) => farm.pid !== 0)
-        await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+        // await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
         batch(() => {
           dispatch(fetchPoolsPublicDataAsync(currentBlock))
           dispatch(fetchPoolsStakingLimitsAsync())

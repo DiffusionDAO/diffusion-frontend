@@ -8,7 +8,7 @@ import { useAppDispatch } from 'state'
 import { deserializeToken } from 'state/user/hooks/helpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
-import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync } from '.'
+// import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync } from '.'
 import { DeserializedFarm, DeserializedFarmsState, DeserializedFarmUserData, SerializedFarm, State } from '../types'
 
 const deserializeFarmUserData = (farm: SerializedFarm): DeserializedFarmUserData => {
@@ -50,10 +50,10 @@ export const usePollFarmsV1WithUserData = () => {
   useSlowRefreshEffect(() => {
     const pids = farmsConfig.filter((farmToFetch) => farmToFetch.v1pid).map((farmToFetch) => farmToFetch.v1pid)
 
-    dispatch(fetchFarmsPublicDataAsync(pids))
+    // dispatch(fetchFarmsPublicDataAsync(pids))
 
     if (account) {
-      dispatch(fetchFarmUserDataAsync({ account, pids }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids }))
     }
   }, [dispatch, account])
 }
@@ -67,7 +67,7 @@ export const usePollCoreFarmData = () => {
   const dispatch = useAppDispatch()
 
   useFastRefreshEffect(() => {
-    dispatch(fetchFarmsPublicDataAsync([251, 252]))
+    // dispatch(fetchFarmsPublicDataAsync([251, 252]))
   }, [dispatch])
 }
 
@@ -98,51 +98,55 @@ export const useFarmFromLpSymbol = (lpSymbol: string): DeserializedFarm => {
 }
 
 export const useFarmUser = (pid): DeserializedFarmUserData => {
-  const { userData } = useFarmFromPid(pid)
-  const { allowance, tokenBalance, stakedBalance, earnings } = userData
-  return {
-    allowance,
-    tokenBalance,
-    stakedBalance,
-    earnings,
-  }
+  var result: DeserializedFarmUserData
+  return result
+  // const { userData } = useFarmFromPid(pid)
+  // const { allowance, tokenBalance, stakedBalance, earnings } = userData
+  // return {
+  //   allowance,
+  //   tokenBalance,
+  //   stakedBalance,
+  //   earnings,
+  // }
 }
 
-// Return the base token price for a farm, from a given pid
-export const useBusdPriceFromPid = (pid: number): BigNumber => {
-  const farm = useFarmFromPid(pid)
-  return farm && new BigNumber(farm.tokenPriceBusd)
-}
+// // Return the base token price for a farm, from a given pid
+// export const useBusdPriceFromPid = (pid: number): BigNumber => {
+//   const farm = useFarmFromPid(pid)
+//   return farm && new BigNumber(farm.tokenPriceBusd)
+// }
 
 export const useLpTokenPrice = (symbol: string) => {
-  const farm = useFarmFromLpSymbol(symbol)
-  const farmTokenPriceInUsd = useBusdPriceFromPid(farm.pid)
-  let lpTokenPrice = BIG_ZERO
+  return BIG_ZERO
+  // const farm = useFarmFromLpSymbol(symbol)
+  // const farmTokenPriceInUsd = useBusdPriceFromPid(farm.pid)
+  // let lpTokenPrice = BIG_ZERO
 
-  if (farm.lpTotalSupply.gt(0) && farm.lpTotalInQuoteToken.gt(0)) {
-    // Total value of base token in LP
-    const valueOfBaseTokenInFarm = farmTokenPriceInUsd.times(farm.tokenAmountTotal)
-    // Double it to get overall value in LP
-    const overallValueOfAllTokensInFarm = valueOfBaseTokenInFarm.times(2)
-    // Divide total value of all tokens, by the number of LP tokens
-    const totalLpTokens = getBalanceAmount(farm.lpTotalSupply)
-    lpTokenPrice = overallValueOfAllTokensInFarm.div(totalLpTokens)
-  }
+  // if (farm.lpTotalSupply.gt(0) && farm.lpTotalInQuoteToken.gt(0)) {
+  //   // Total value of base token in LP
+  //   const valueOfBaseTokenInFarm = farmTokenPriceInUsd.times(farm.tokenAmountTotal)
+  //   // Double it to get overall value in LP
+  //   const overallValueOfAllTokensInFarm = valueOfBaseTokenInFarm.times(2)
+  //   // Divide total value of all tokens, by the number of LP tokens
+  //   const totalLpTokens = getBalanceAmount(farm.lpTotalSupply)
+  //   lpTokenPrice = overallValueOfAllTokensInFarm.div(totalLpTokens)
+  // }
 
-  return lpTokenPrice
+  // return lpTokenPrice
 }
 
-/**
- * @@deprecated use the BUSD hook in /hooks
- */
+// /**
+//  * @@deprecated use the BUSD hook in /hooks
+//  */
 export const usePriceCakeBusd = (): BigNumber => {
-  const cakeBnbFarm = useFarmFromPid(251)
+  return new BigNumber(0)
+  // const cakeBnbFarm = useFarmFromPid(251)
 
-  const cakePriceBusdAsString = cakeBnbFarm.tokenPriceBusd
+  // const cakePriceBusdAsString = cakeBnbFarm.tokenPriceBusd
 
-  const cakePriceBusd = useMemo(() => {
-    return new BigNumber(cakePriceBusdAsString)
-  }, [cakePriceBusdAsString])
+  // const cakePriceBusd = useMemo(() => {
+  //   return new BigNumber(cakePriceBusdAsString)
+  // }, [cakePriceBusdAsString])
 
-  return cakePriceBusd
+  // return cakePriceBusd
 }

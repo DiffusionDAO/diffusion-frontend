@@ -35,9 +35,9 @@ export interface RoiCalculatorModalProps {
   displayApr?: string
   linkLabel: string
   linkHref: string
-  stakingTokenBalance: BigNumber
+  stakingTokenBalance?: BigNumber
   stakingTokenSymbol: string
-  stakingTokenPrice: number
+  stakingTokenPrice?: number
   earningTokenSymbol?: string
   multiplier?: string
   autoCompoundFrequency?: number

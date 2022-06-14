@@ -6,9 +6,9 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useTranslation } from 'contexts/Localization'
 import { useAppDispatch } from 'state'
-import { fetchFarmUserDataAsync } from 'state/farms'
+// import { fetchFarmUserDataAsync } from 'state/farms'
 import { useRouter } from 'next/router'
-import { useLpTokenPrice, useFarmUser, usePriceCakeBusd } from 'state/farms/hooks'
+// import { useLpTokenPrice, useFarmUser, usePriceCakeBusd } from 'state/farms/hooks'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import useUnstakeFarms from '../../hooks/useUnstakeFarms'
@@ -46,12 +46,12 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   const { t } = useTranslation()
   const { onStake } = useStakeFarms(pid)
   const { onUnstake } = useUnstakeFarms(pid)
-  const { tokenBalance, stakedBalance } = useFarmUser(pid)
-  const cakePrice = usePriceCakeBusd()
+  // const { tokenBalance, stakedBalance } = useFarmUser(pid)
+  // const cakePrice = usePriceCakeBusd()
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { account } = useWeb3React()
-  const lpPrice = useLpTokenPrice(lpSymbol)
+  // const lpPrice = useLpTokenPrice(lpSymbol)
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError } = useCatchTxError()
 
@@ -66,7 +66,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
           {t('Your funds have been staked in the farm')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }
 
@@ -81,57 +81,60 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
           {t('Your earnings have also been harvested to your wallet')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }
 
   const [onPresentDeposit] = useModal(
     <DepositModal
-      max={tokenBalance}
-      stakedBalance={stakedBalance}
+      // max={tokenBalance}
+      // stakedBalance={stakedBalance}
       onConfirm={handleStake}
       tokenName={lpSymbol}
       multiplier={multiplier}
-      lpPrice={lpPrice}
+      // lpPrice={lpPrice}
       lpLabel={lpLabel}
       apr={apr}
       displayApr={displayApr}
       addLiquidityUrl={addLiquidityUrl}
-      cakePrice={cakePrice}
+      // cakePrice={cakePrice}
     />,
   )
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} />,
+    <WithdrawModal 
+    // max={stakedBalance} 
+    onConfirm={handleUnstake} 
+    tokenName={lpSymbol} />,
   )
 
-  const renderStakingButtons = () => {
-    return stakedBalance.eq(0) ? (
-      <Button
-        onClick={onPresentDeposit}
-        disabled={['history', 'archived'].some((item) => router.pathname.includes(item))}
-      >
-        {t('Stake LP')}
-      </Button>
-    ) : (
-      <IconButtonWrapper>
-        <IconButton variant="tertiary" onClick={onPresentWithdraw} mr="6px">
-          <MinusIcon color="primary" width="14px" />
-        </IconButton>
-        <IconButton
-          variant="tertiary"
-          onClick={onPresentDeposit}
-          disabled={['history', 'archived'].some((item) => router.pathname.includes(item))}
-        >
-          <AddIcon color="primary" width="14px" />
-        </IconButton>
-      </IconButtonWrapper>
-    )
-  }
+  // const renderStakingButtons = () => {
+  //   return stakedBalance.eq(0) ? (
+  //     <Button
+  //       onClick={onPresentDeposit}
+  //       disabled={['history', 'archived'].some((item) => router.pathname.includes(item))}
+  //     >
+  //       {t('Stake LP')}
+  //     </Button>
+  //   ) : (
+  //     <IconButtonWrapper>
+  //       <IconButton variant="tertiary" onClick={onPresentWithdraw} mr="6px">
+  //         <MinusIcon color="primary" width="14px" />
+  //       </IconButton>
+  //       <IconButton
+  //         variant="tertiary"
+  //         onClick={onPresentDeposit}
+  //         disabled={['history', 'archived'].some((item) => router.pathname.includes(item))}
+  //       >
+  //         <AddIcon color="primary" width="14px" />
+  //       </IconButton>
+  //     </IconButtonWrapper>
+  //   )
+  // }
 
   return (
     <Flex justifyContent="space-between" alignItems="center">
       <StakedLP
-        stakedBalance={stakedBalance}
+        // stakedBalance={stakedBalance}
         lpSymbol={lpSymbol}
         quoteTokenSymbol={quoteToken.symbol}
         tokenSymbol={token.symbol}
@@ -139,7 +142,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
         tokenAmountTotal={tokenAmountTotal}
         quoteTokenAmountTotal={quoteTokenAmountTotal}
       />
-      {renderStakingButtons()}
+      {/* {renderStakingButtons()} */}
     </Flex>
   )
 }

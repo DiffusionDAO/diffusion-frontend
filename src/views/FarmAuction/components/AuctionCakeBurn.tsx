@@ -3,7 +3,7 @@ import { Text, Flex, Skeleton, Image } from '@pancakeswap/uikit'
 import { useFarmAuctionContract } from 'hooks/useContract'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { useTranslation } from 'contexts/Localization'
-import { usePriceCakeBusd } from 'state/farms/hooks'
+// import { usePriceCakeBusd } from 'state/farms/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import Balance from 'components/Balance'
@@ -22,9 +22,9 @@ const AuctionCakeBurn: React.FC = () => {
   const { t } = useTranslation()
   const farmAuctionContract = useFarmAuctionContract(false)
   const { observerRef, isIntersecting } = useIntersectionObserver()
-  const cakePriceBusd = usePriceCakeBusd()
+  // const cakePriceBusd = usePriceCakeBusd()
 
-  const burnedAmountAsUSD = cakePriceBusd.times(burnedCakeAmount)
+  // const burnedAmountAsUSD = cakePriceBusd.times(burnedCakeAmount)
 
   useEffect(() => {
     const fetchBurnedCakeAmount = async () => {
@@ -54,13 +54,13 @@ const AuctionCakeBurn: React.FC = () => {
         <Text fontSize="24px" bold>
           {t('through community auctions so far!')}
         </Text>
-        {!burnedAmountAsUSD.isNaN() && !burnedAmountAsUSD.isZero() ? (
+        {/* {!burnedAmountAsUSD.isNaN() && !burnedAmountAsUSD.isZero() ? (
           <Text color="textSubtle">
             ~${burnedAmountAsUSD.toNumber().toLocaleString('en', { maximumFractionDigits: 0 })}
           </Text>
         ) : (
           <Skeleton width="128px" />
-        )}
+        )} */}
       </Flex>
       <Image width={350} height={320} src="/images/burnt-cake.png" alt={t('Burnt CAKE')} />
     </Flex>

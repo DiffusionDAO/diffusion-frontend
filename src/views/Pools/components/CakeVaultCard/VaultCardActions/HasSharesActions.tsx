@@ -24,10 +24,10 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
 
   const { stakingToken } = pool
 
-  const cakePriceBusd = usePriceCakeBusd()
-  const stakedDollarValue = cakePriceBusd.gt(0)
-    ? getBalanceNumber(cakeAsBigNumber.multipliedBy(cakePriceBusd), stakingToken.decimals)
-    : 0
+  // const cakePriceBusd = usePriceCakeBusd()
+  // const stakedDollarValue = cakePriceBusd.gt(0)
+  //   ? getBalanceNumber(cakeAsBigNumber.multipliedBy(cakePriceBusd), stakingToken.decimals)
+  //   : 0
 
   const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol={stakingToken.symbol} />)
   const [onPresentStake] = useModal(
@@ -45,7 +45,7 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
       <Flex mb="16px" justifyContent="space-between" alignItems="center">
         <Flex flexDirection="column">
           <Balance fontSize="20px" bold value={cakeAsNumberBalance} decimals={5} />
-          <Text as={Flex} fontSize="12px" color="textSubtle" flexWrap="wrap">
+          {/* <Text as={Flex} fontSize="12px" color="textSubtle" flexWrap="wrap">
             {cakePriceBusd.gt(0) ? (
               <Balance
                 value={stakedDollarValue}
@@ -58,7 +58,7 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
             ) : (
               <Skeleton mt="1px" height={16} width={64} />
             )}
-          </Text>
+          </Text> */}
         </Flex>
         <Flex>
           <IconButton variant="secondary" onClick={onPresentUnstake} mr="6px">

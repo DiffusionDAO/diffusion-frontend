@@ -15,7 +15,7 @@ import useToast from 'hooks/useToast'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ApproveConfirmButtons, { ButtonArrangement } from 'components/ApproveConfirmButtons'
 import { ConnectedBidder, FetchStatus } from 'config/constants/types'
-import { usePriceCakeBusd } from 'state/farms/hooks'
+// import { usePriceCakeBusd } from 'state/farms/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import tokens from 'config/constants/tokens'
@@ -67,7 +67,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
   const { balance: userCake, fetchStatus } = useTokenBalance(tokens.cake.address)
   const userCakeBalance = getBalanceAmount(userCake)
 
-  const cakePriceBusd = usePriceCakeBusd()
+  // const cakePriceBusd = usePriceCakeBusd()
   const farmAuctionContract = useFarmAuctionContract()
   const { reader: cakeContractReader, signer: cakeContractApprover } = useCake()
 
@@ -164,10 +164,10 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
           placeholder="0"
           value={bid}
           onUserInput={handleInputChange}
-          currencyValue={
-            cakePriceBusd.gt(0) &&
-            `~${bid ? cakePriceBusd.times(new BigNumber(bid)).toNumber().toLocaleString() : '0.00'} USD`
-          }
+          // currencyValue={
+          //   cakePriceBusd.gt(0) &&
+          //   `~${bid ? cakePriceBusd.times(new BigNumber(bid)).toNumber().toLocaleString() : '0.00'} USD`
+          // }
         />
         <Flex justifyContent="flex-end" mt="8px">
           <Text fontSize="12px" color="textSubtle" mr="8px">

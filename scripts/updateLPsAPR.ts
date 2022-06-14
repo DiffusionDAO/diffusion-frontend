@@ -118,4 +118,4 @@ const fetchAndUpdateLPsAPR = async () => {
   })
 }
 
-fetchAndUpdateLPsAPR()
+// fetchAndUpdateLPsAPR()

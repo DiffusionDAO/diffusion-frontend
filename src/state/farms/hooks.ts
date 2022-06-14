@@ -8,7 +8,7 @@ import useSWRImmutable from 'swr/immutable'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, fetchFarmsAuctionDataAsync } from '.'
+// import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, fetchFarmsAuctionDataAsync } from '.'
 import { DeserializedFarm, DeserializedFarmsState, DeserializedFarmUserData, State } from '../types'
 import {
   farmSelector,
@@ -19,6 +19,8 @@ import {
   makeLpTokenPriceFromLpSymbolSelector,
   makeFarmFromPidSelector,
 } from './selectors'
+import { BIG_ZERO } from 'utils/bigNumber'
+
 import { useInitialBlock } from '../block/hooks'
 
 export const usePollFarmsWithUserData = () => {
@@ -26,25 +28,25 @@ export const usePollFarmsWithUserData = () => {
   const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
 
-  const { data: auctionData } = useSWRImmutable(initialBlock ? ['farmsAuctionData'] : null, async () => {
-    return dispatch(fetchFarmsAuctionDataAsync(initialBlock))
-  })
+  // const { data: auctionData } = useSWRImmutable(initialBlock ? ['farmsAuctionData'] : null, async () => {
+  //   return dispatch(fetchFarmsAuctionDataAsync(initialBlock))
+  // })
 
-  useSWRImmutable(
-    auctionData ? ['farmsWithUserData', account] : null,
-    () => {
-      const pids = farmsConfig.map((farmToFetch) => farmToFetch.pid)
+  // useSWRImmutable(
+  //   auctionData ? ['farmsWithUserData', account] : null,
+  //   () => {
+  //     const pids = farmsConfig.map((farmToFetch) => farmToFetch.pid)
 
-      dispatch(fetchFarmsPublicDataAsync(pids))
+  //     // dispatch(fetchFarmsPublicDataAsync(pids))
 
-      if (account) {
-        dispatch(fetchFarmUserDataAsync({ account, pids }))
-      }
-    },
-    {
-      refreshInterval: SLOW_INTERVAL,
-    },
-  )
+  //     // if (account) {
+  //     //   dispatch(fetchFarmUserDataAsync({ account, pids }))
+  //     // }
+  //   },
+  //   {
+  //     refreshInterval: SLOW_INTERVAL,
+  //   },
+  // )
 }
 
 /**
@@ -56,17 +58,20 @@ const coreFarmPIDs = CHAIN_ID === String(ChainId.MAINNET) ? [2, 3] : [1, 2]
 export const usePollCoreFarmData = () => {
   const dispatch = useAppDispatch()
 
-  useFastRefreshEffect(() => {
-    dispatch(fetchFarmsPublicDataAsync(coreFarmPIDs))
-  }, [dispatch])
+  // useFastRefreshEffect(() => {
+  //   dispatch(fetchFarmsPublicDataAsync(coreFarmPIDs))
+  // }, [dispatch])
 }
 
 export const useFarms = (): DeserializedFarmsState => {
-  return useSelector(farmSelector)
+  var result: DeserializedFarmsState
+  return result
+  // return useSelector(farmSelector)
 }
 
 export const useFarmsPoolLength = (): number => {
-  return useSelector((state: State) => state.farms.poolLength)
+  return 0
+  // return useSelector((state: State) => state.farms.poolLength)
 }
 
 export const useFarmFromPid = (pid: number): DeserializedFarm => {
@@ -91,13 +96,15 @@ export const useBusdPriceFromPid = (pid: number): BigNumber => {
 }
 
 export const useLpTokenPrice = (symbol: string) => {
-  const lpTokenPriceFromLpSymbol = useMemo(() => makeLpTokenPriceFromLpSymbolSelector(symbol), [symbol])
-  return useSelector(lpTokenPriceFromLpSymbol)
+  return BIG_ZERO
+  // const lpTokenPriceFromLpSymbol = useMemo(() => makeLpTokenPriceFromLpSymbolSelector(symbol), [symbol])
+  // return useSelector(lpTokenPriceFromLpSymbol)
 }
 
-/**
- * @@deprecated use the BUSD hook in /hooks
- */
+// /**
+//  * @@deprecated use the BUSD hook in /hooks
+//  */
 export const usePriceCakeBusd = (): BigNumber => {
-  return useSelector(priceCakeFromPidSelector)
+  return BIG_ZERO
+  // return useSelector(priceCakeFromPidSelector)
 }

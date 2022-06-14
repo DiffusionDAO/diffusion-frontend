@@ -6,7 +6,7 @@ import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 
 interface WithdrawModalProps {
-  max: BigNumber
+  max?: BigNumber
   onConfirm: (amount: string) => void
   onDismiss?: () => void
   tokenName?: string
