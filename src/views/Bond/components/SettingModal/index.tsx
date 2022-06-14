@@ -1,18 +1,16 @@
 import { useTranslation } from 'contexts/Localization'
-import { CloseIcon, CogIcon, InfoIcon } from '@pancakeswap/uikit'
+import { CloseIcon, ChevronLeftIcon, InfoIcon } from '@pancakeswap/uikit'
 import { StyledModal, ContentWrap, HeaderWrap, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, ImgWrap, FromImg, ToImg, BondName, BondTime, TipsWrap, TipsText,  BondListItemBtn, ListItem, ListLable, ListContent } from './styles'
 
 interface BondModalProps {
   bondData: any;
   onClose: () => void;
-  openSettingModal: () => void;
 }
 
-const BondModal: React.FC<BondModalProps> = ({
+const SettingModal: React.FC<BondModalProps> = ({
   bondData,
   onClose,
-  openSettingModal
 }) => {
   const { t } = useTranslation()
 
@@ -29,7 +27,7 @@ const BondModal: React.FC<BondModalProps> = ({
       <ContentWrap>
         {/* 头部按钮 */}
         <HeaderWrap>
-          <CogIcon width="24px" color="#ABB6FF" onClick={openSettingModal} />
+          <ChevronLeftIcon width="24px" color="#ABB6FF" />
           <CloseIcon width="24px" color="#ABB6FF" onClick={onClose} />
         </HeaderWrap>
         {/* 中间内容 */}
@@ -84,4 +82,4 @@ const BondModal: React.FC<BondModalProps> = ({
   )
 }
 
-export default BondModal
+export default SettingModal

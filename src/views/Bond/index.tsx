@@ -6,17 +6,26 @@ import { BondPageWrap, BondPageTitle, OverviewCard, OverviewCardItem, OverviewCa
   TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
 import bondDatasMock from './MockBondData'
 import BondModal from './components/BondModal'
+import SettingModal from './components/SettingModal'
 
 
 
 const Bond: FC = () => {
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false);
+  const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
+  // 打开bond窗口
   const openBondModal = () => {
     setBondModalVisible(true)
   }
   const closeBondModal = () => {
     setBondModalVisible(false)
+  }
+  const openSettingModal = () => {
+    setSettingModalVisible(true)
+  }
+  const closeSettingModal = () => {
+    setSettingModalVisible(false)
   }
   return (<BondPageWrap>
     <BondPageTitle>
@@ -76,7 +85,11 @@ const Bond: FC = () => {
             </BondListItem>
             {/* bond的弹窗 */}
             {
-              bondModalVisible ? <BondModal bondData={bondItem} onClose={closeBondModal} /> 
+              bondModalVisible ? <BondModal bondData={bondItem} onClose={closeBondModal} openSettingModal={openSettingModal} /> 
+              : null
+            }
+            {
+              settingModalVisible ? <SettingModal bondData={bondItem} onClose={closeSettingModal} /> 
               : null
             }
           </Grid>
