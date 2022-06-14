@@ -28,7 +28,6 @@ const UnstakeButton: React.FC<UnstakeButtonProps> = ({ pid }) => {
 
   const handleUnstake = async (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
-
     const receipt = await fetchWithCatchTxError(() => {
       const balance = getFullDisplayBalance(stakedBalance)
       return onUnstake(balance)
@@ -41,7 +40,7 @@ const UnstakeButton: React.FC<UnstakeButtonProps> = ({ pid }) => {
           {t('Your earnings have also been harvested to your wallet')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }
 
@@ -58,7 +57,7 @@ const UnstakeButton: React.FC<UnstakeButtonProps> = ({ pid }) => {
         </Button>
       ) : (
         <Button width="138px" marginLeft="auto" disabled={!isNeedUnstake} onClick={handleUnstake}>
-          {isNeedUnstake ? t('Unstake All') : t('Unstaked')}
+          {/* {isNeedUnstake ? t('Unstake All') : t('Unstaked')} */}
         </Button>
       )}
     </>

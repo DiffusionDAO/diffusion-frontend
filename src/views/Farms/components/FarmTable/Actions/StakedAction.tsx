@@ -10,8 +10,8 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 import { useAppDispatch } from 'state'
-import { fetchFarmUserDataAsync } from 'state/farms'
-import { useFarmUser, useLpTokenPrice, usePriceCakeBusd } from 'state/farms/hooks'
+// import { fetchFarmUserDataAsync } from 'state/farms'
+// import { useFarmUser, useLpTokenPrice, usePriceCakeBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
 import { getAddress } from 'utils/addressHelpers'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
@@ -23,6 +23,7 @@ import WithdrawModal from '../../WithdrawModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import { FarmWithStakedValue } from '../../types'
 import StakedLP from '../../StakedLP'
+import BigNumber from 'bignumber.js'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -53,13 +54,15 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { account } = useWeb3React()
-  const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
+  // const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
+  const { allowance, tokenBalance, stakedBalance } = { allowance: new BigNumber(0), tokenBalance: new BigNumber(0), stakedBalance: new BigNumber(0) }
   const { onStake } = useStakeFarms(pid)
   const { onUnstake } = useUnstakeFarms(pid)
   const router = useRouter()
-  const lpPrice = useLpTokenPrice(lpSymbol)
-  const cakePrice = usePriceCakeBusd()
-
+  // const lpPrice = useLpTokenPrice(lpSymbol)
+  // const cakePrice = usePriceCakeBusd()
+  const lpPrice = new BigNumber(0)
+  const cakePrice = new BigNumber(0)
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
   const lpAddress = getAddress(lpAddresses)
@@ -80,7 +83,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
           {t('Your funds have been staked in the farm')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }
 
@@ -95,7 +98,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
           {t('Your earnings have also been harvested to your wallet')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }
 
@@ -127,7 +130,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     })
     if (receipt?.status) {
       toastSuccess(t('Contract Enabled'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }, [onApprove, dispatch, account, pid, t, toastSuccess, fetchWithCatchTxError])
 

@@ -7,7 +7,7 @@ import useToast from 'hooks/useToast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallback } from 'react'
 import { useAppDispatch } from 'state'
-import { fetchFarmUserDataAsync } from 'state/farms'
+// import { fetchFarmUserDataAsync } from 'state/farms'
 import styled from 'styled-components'
 import { getAddress } from 'utils/addressHelpers'
 import { FarmWithStakedValue } from '../types'
@@ -47,7 +47,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
     })
     if (receipt?.status) {
       toastSuccess(t('Contract Enabled'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }, [onApprove, dispatch, account, pid, t, toastSuccess, fetchWithCatchTxError])
 

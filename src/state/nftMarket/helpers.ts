@@ -44,9 +44,9 @@ import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
 const toBuffer = require('it-to-buffer')
 const { create } = require('ipfs-http-client')
 export const ipfs = create({
-  host: '207.148.117.14',
+  host: 'ipfs.infura.io',
   port: '5001',
-  protocol: 'http',
+  protocol: 'https',
 })
 
 /**
@@ -197,7 +197,8 @@ export const getNftsFromCollectionApi = async (
   }`
 
   try {
-    const res = await fetch(requestPath)
+    const res:any = {}
+    // const res = await fetch(requestPath)
     if (res.ok) {
       const data = await res.json()
       const filteredAttributesDistribution = Object.entries(data.attributesDistribution).filter(([, value]) =>
@@ -457,8 +458,8 @@ export const getNftsOnChainMarketData = async (
   tokenIds: string[],
 ): Promise<TokenMarketData[]> => {
   try {
-    const nftMarketContract = getNftMarketContract()
-    const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
+    // const nftMarketContract = getNftMarketContract()
+    // const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
     // const askInfo = response?.askInfo
     const askInfo = nftDatasMock
     if (!askInfo) return []
@@ -918,7 +919,8 @@ export const fetchNftsFiltered = async (
   collectionAddress: string,
   filters: Record<string, string | number>,
 ): Promise<ApiTokenFilterResponse> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}/filter?${stringify(filters)}`)
+  // const res = await fetch(`${API_NFT}/collections/${collectionAddress}/filter?${stringify(filters)}`)
+  const res:any = {}
 
   if (res.ok) {
     const data = await res.json()
@@ -1262,7 +1264,9 @@ export const getCompleteAccountNftData = async (
  * @returns
  */
 export const getCollectionDistributionApi = async <T>(collectionAddress: string): Promise<T> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}/distribution`)
+  // const res = await fetch(`${API_NFT}/collections/${collectionAddress}/distribution`)
+  const res:any = {}
+
   if (res.ok) {
     const data = await res.json()
     return data

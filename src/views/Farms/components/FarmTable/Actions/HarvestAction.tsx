@@ -8,8 +8,8 @@ import useToast from 'hooks/useToast'
 import useCatchTxError from 'hooks/useCatchTxError'
 
 import { useAppDispatch } from 'state'
-import { fetchFarmUserDataAsync } from 'state/farms'
-import { usePriceCakeBusd } from 'state/farms/hooks'
+// import { fetchFarmUserDataAsync } from 'state/farms'
+// import { usePriceCakeBusd } from 'state/farms/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { FarmWithStakedValue } from '../../types'
@@ -24,7 +24,8 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const earningsBigNumber = new BigNumber(userData.earnings)
-  const cakePrice = usePriceCakeBusd()
+  // const cakePrice = usePriceCakeBusd()
+  const cakePrice = 0
   let earnings = BIG_ZERO
   let earningsBusd = 0
   let displayBalance = userDataReady ? earnings.toLocaleString() : <Skeleton width={60} />
@@ -71,7 +72,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
                   {t('Your %symbol% earnings have been sent to your wallet!', { symbol: 'CAKE' })}
                 </ToastDescriptionWithTx>,
               )
-              dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+              // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
             }
           }}
           ml="4px"

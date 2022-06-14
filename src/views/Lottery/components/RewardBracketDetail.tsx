@@ -23,7 +23,7 @@ const RewardBracketDetail: React.FC<RewardBracketDetailProps> = ({
   isLoading,
 }) => {
   const { t } = useTranslation()
-  const cakePriceBusd = usePriceCakeBusd()
+    const cakePriceBusd = usePriceCakeBusd()
 
   const getRewardText = () => {
     const numberMatch = rewardBracket + 1

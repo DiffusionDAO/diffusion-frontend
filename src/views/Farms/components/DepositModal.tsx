@@ -31,10 +31,10 @@ const AnnualRoiDisplay = styled(Text)`
 `
 
 interface DepositModalProps {
-  max: BigNumber
-  stakedBalance: BigNumber
+  max?: BigNumber
+  stakedBalance?: BigNumber
   multiplier?: string
-  lpPrice: BigNumber
+  lpPrice?: BigNumber
   lpLabel?: string
   onConfirm: (amount: string) => void
   onDismiss?: () => void

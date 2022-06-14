@@ -11,13 +11,13 @@ import useToast from 'hooks/useToast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { getAddress } from 'utils/addressHelpers'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
-import { useFarmUser, useLpTokenPrice, usePriceCakeBusd } from 'state/farms/hooks'
+// import { useFarmUser, useLpTokenPrice, usePriceCakeBusd } from 'state/farms/hooks'
 import useApproveFarm from 'views/Farms/hooks/useApproveFarm'
 import useStakeFarms from 'views/Farms/hooks/useStakeFarms'
 import useUnstakeFarms from 'views/Farms/hooks/useUnstakeFarms'
 import DepositModal from 'views/Farms/components/DepositModal'
 import WithdrawModal from 'views/Farms/components/WithdrawModal'
-import { fetchFarmUserDataAsync } from 'state/farms'
+// import { fetchFarmUserDataAsync } from 'state/farms'
 import { useAppDispatch } from 'state'
 
 const IconButtonWrapper = styled.div`
@@ -45,13 +45,13 @@ const StakeButton: React.FC<StackedActionProps> = ({
   const { isDesktop } = useMatchBreakpoints()
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
-  const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
+  // const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
   const { onStake } = useStakeFarms(pid)
   const { onUnstake } = useUnstakeFarms(pid)
-  const lpPrice = useLpTokenPrice(lpSymbol)
-  const cakePrice = usePriceCakeBusd()
+  // const lpPrice = useLpTokenPrice(lpSymbol)
+  // const cakePrice = usePriceCakeBusd()
 
-  const isApproved = account && allowance && allowance.isGreaterThan(0)
+  // const isApproved = account && allowance && allowance.isGreaterThan(0)
 
   const lpAddress = getAddress(lpAddresses)
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
@@ -71,7 +71,7 @@ const StakeButton: React.FC<StackedActionProps> = ({
           {t('Your funds have been staked in the farm')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }
 
@@ -86,27 +86,30 @@ const StakeButton: React.FC<StackedActionProps> = ({
           {t('Your earnings have also been harvested to your wallet')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }
 
   const [onPresentDeposit] = useModal(
     <DepositModal
-      max={tokenBalance}
-      lpPrice={lpPrice}
+      // max={tokenBalance}
+      // lpPrice={lpPrice}
       lpLabel={lpLabel}
       apr={apr}
       displayApr={displayApr}
-      stakedBalance={stakedBalance}
+      // stakedBalance={stakedBalance}
       onConfirm={handleStake}
       tokenName={lpSymbol}
       multiplier={multiplier}
       addLiquidityUrl={addLiquidityUrl}
-      cakePrice={cakePrice}
+    // cakePrice={cakePrice}
     />,
   )
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} />,
+    <WithdrawModal
+      // max={stakedBalance}
+      onConfirm={handleUnstake}
+      tokenName={lpSymbol} />,
   )
   const lpContract = useERC20(lpAddress)
   const dispatch = useAppDispatch()
@@ -123,7 +126,7 @@ const StakeButton: React.FC<StackedActionProps> = ({
     })
     if (receipt?.status) {
       toastSuccess(t('Contract Enabled'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      // dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
     }
   }, [onApprove, dispatch, account, pid, t, toastSuccess, fetchWithCatchTxError])
 
@@ -137,26 +140,26 @@ const StakeButton: React.FC<StackedActionProps> = ({
     onPresentWithdraw()
   }
 
-  if (isApproved) {
-    if (stakedBalance.gt(0)) {
-      return (
-        <IconButtonWrapper>
-          <IconButton variant="secondary" onClick={handleWithdraw} mr="6px">
-            <MinusIcon color="primary" width="14px" />
-          </IconButton>
-          <IconButton variant="secondary" onClick={handleDeposit}>
-            <AddIcon color="primary" width="14px" />
-          </IconButton>
-        </IconButtonWrapper>
-      )
-    }
+  // if (isApproved) {
+  //   if (stakedBalance.gt(0)) {
+  //     return (
+  //       <IconButtonWrapper>
+  //         <IconButton variant="secondary" onClick={handleWithdraw} mr="6px">
+  //           <MinusIcon color="primary" width="14px" />
+  //         </IconButton>
+  //         <IconButton variant="secondary" onClick={handleDeposit}>
+  //           <AddIcon color="primary" width="14px" />
+  //         </IconButton>
+  //       </IconButtonWrapper>
+  //     )
+  //   }
 
-    return (
-      <Button width={isDesktop ? '142px' : '120px'} onClick={onPresentDeposit} marginLeft="auto">
-        {t('Stake')}
-      </Button>
-    )
-  }
+  //   return (
+  //     <Button width={isDesktop ? '142px' : '120px'} onClick={onPresentDeposit} marginLeft="auto">
+  //       {t('Stake')}
+  //     </Button>
+  //   )
+  // }
 
   return (
     <Button

@@ -20,7 +20,7 @@ const OldFarmStep1: React.FC = () => {
   const { data: farmsV1LP } = useFarmsV1()
   const cakePrice = usePriceCakeBusd()
 
-  usePollFarmsWithUserData()
+  // usePollFarmsWithUserData()
 
   const userDataReady = !account || (!!account && userDataLoaded)
 

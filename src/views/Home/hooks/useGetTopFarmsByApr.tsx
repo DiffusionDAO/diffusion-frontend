@@ -3,7 +3,7 @@ import { ChainId } from '@pancakeswap/sdk'
 import { useFarms, usePriceCakeBusd } from 'state/farms/hooks'
 import { useAppDispatch } from 'state'
 import farmsConfig from 'config/constants/farms'
-import { fetchFarmsPublicDataAsync } from 'state/farms'
+// import { fetchFarmsPublicDataAsync } from 'state/farms'
 import { getFarmApr } from 'utils/apr'
 import orderBy from 'lodash/orderBy'
 import { DeserializedFarm } from 'state/types'
@@ -15,14 +15,14 @@ const useGetTopFarmsByApr = (isIntersecting: boolean) => {
   const { data: farms, regularCakePerBlock } = useFarms()
   const [fetchStatus, setFetchStatus] = useState(FetchStatus.Idle)
   const [topFarms, setTopFarms] = useState<FarmWithStakedValue[]>([null, null, null, null, null])
-  const cakePriceBusd = usePriceCakeBusd()
+    const cakePriceBusd = usePriceCakeBusd()
 
   useEffect(() => {
     const fetchFarmData = async () => {
       setFetchStatus(FetchStatus.Fetching)
       const activeFarms = farmsConfig.filter((farm) => farm.pid !== 0)
       try {
-        await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+        // await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
         setFetchStatus(FetchStatus.Fetched)
       } catch (e) {
         console.error(e)

@@ -2,11 +2,11 @@ import { Heading, Flex } from '@pancakeswap/uikit'
 import { BigNumber } from 'bignumber.js'
 import Balance from 'components/Balance'
 import { useCallback } from 'react'
-import { useLpTokenPrice } from 'state/farms/hooks'
+// import { useLpTokenPrice } from 'state/farms/hooks'
 import { getBalanceAmount, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 
 interface StackedLPProps {
-  stakedBalance: BigNumber
+  stakedBalance?: BigNumber
   lpSymbol: string
   tokenSymbol: string
   quoteTokenSymbol: string
@@ -24,7 +24,7 @@ const StakedLP: React.FunctionComponent<StackedLPProps> = ({
   tokenAmountTotal,
   quoteTokenAmountTotal,
 }) => {
-  const lpPrice = useLpTokenPrice(lpSymbol)
+  // const lpPrice = useLpTokenPrice(lpSymbol)
 
   const displayBalance = useCallback(() => {
     const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
@@ -40,7 +40,7 @@ const StakedLP: React.FunctionComponent<StackedLPProps> = ({
   return (
     <Flex flexDirection="column" alignItems="flex-start">
       <Heading color={stakedBalance.eq(0) ? 'textDisabled' : 'text'}>{displayBalance()}</Heading>
-      {stakedBalance.gt(0) && lpPrice.gt(0) && (
+      {/* {stakedBalance.gt(0) && lpPrice.gt(0) && (
         <>
           <Balance
             fontSize="12px"
@@ -67,7 +67,7 @@ const StakedLP: React.FunctionComponent<StackedLPProps> = ({
             />
           </Flex>
         </>
-      )}
+      )} */}
     </Flex>
   )
 }

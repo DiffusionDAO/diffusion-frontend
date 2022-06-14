@@ -94,9 +94,9 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
   const [percent, setPercent] = useState(0)
   const [showRoiCalculator, setShowRoiCalculator] = useState(false)
   const { hasUnstakingFee } = useWithdrawalFeeTimer(parseInt(lastDepositedTime, 10), userShares)
-  const cakePriceBusd = usePriceCakeBusd()
-  const usdValueStaked = new BigNumber(stakeAmount).times(cakePriceBusd)
-  const formattedUsdValueStaked = cakePriceBusd.gt(0) && stakeAmount ? formatNumber(usdValueStaked.toNumber()) : ''
+  // const cakePriceBusd = usePriceCakeBusd()
+  // const usdValueStaked = new BigNumber(stakeAmount).times(cakePriceBusd)
+  // const formattedUsdValueStaked = cakePriceBusd.gt(0) && stakeAmount ? formatNumber(usdValueStaked.toNumber()) : ''
 
   const { flexibleApy } = useVaultApy()
 
@@ -104,16 +104,16 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     gasLimit: vaultPoolConfig[pool.vaultKey].gasLimit,
   }
 
-  const interestBreakdown = getInterestBreakdown({
-    principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
-    apr: +flexibleApy,
-    earningTokenPrice,
-    performanceFee,
-    compoundFrequency: 0,
-  })
+  // const interestBreakdown = getInterestBreakdown({
+  //   principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
+  //   apr: +flexibleApy,
+  //   earningTokenPrice,
+  //   performanceFee,
+  //   compoundFrequency: 0,
+  // })
 
-  const annualRoi = interestBreakdown[3] * pool.earningTokenPrice
-  const formattedAnnualRoi = formatNumber(annualRoi, annualRoi > 10000 ? 0 : 2, annualRoi > 10000 ? 0 : 2)
+  // const annualRoi = interestBreakdown[3] * pool.earningTokenPrice
+  // const formattedAnnualRoi = formatNumber(annualRoi, annualRoi > 10000 ? 0 : 2, annualRoi > 10000 ? 0 : 2)
 
   const getTokenLink = stakingToken.address ? `/swap?outputCurrency=${stakingToken.address}` : '/swap'
   const convertedStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)
@@ -226,7 +226,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
       <BalanceInput
         value={stakeAmount}
         onUserInput={handleStakeInputChange}
-        currencyValue={cakePriceBusd.gt(0) && `~${formattedUsdValueStaked || 0} USD`}
+        // currencyValue={cakePriceBusd.gt(0) && `~${formattedUsdValueStaked || 0} USD`}
         decimals={stakingToken.decimals}
       />
       <Text mt="8px" ml="auto" color="textSubtle" fontSize="12px" mb="8px">
@@ -255,7 +255,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
           {t('Max')}
         </StyledButton>
       </Flex>
-      {isRemovingStake && hasUnstakingFee && (
+      {/* {isRemovingStake && hasUnstakingFee && (
         <FeeSummary vaultKey={vaultKey} stakingTokenSymbol={stakingToken.symbol} stakeAmount={stakeAmount} />
       )}
       {!isRemovingStake && (
@@ -279,7 +279,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
             <Skeleton width={60} />
           )}
         </Flex>
-      )}
+      )} */}
       {cakeAsNumberBalance ? (
         <Box mt="8px" maxWidth="370px">
           <ConvertToLock stakingToken={stakingToken} currentStakedAmount={cakeAsNumberBalance} />
