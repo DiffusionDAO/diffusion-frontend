@@ -105,7 +105,7 @@ export default {
   },
   nftMarket: {
     56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',
-    97: '0x7f9f37ddcaa33893f9beb3d8748c8d6bfbde6ab2',
+    97: '0xb8BBFfAbf59AF8029288296468395b72c9082371',
   },
   nftSale: {
     56: '0x29fE7148636b7Ae0b1E53777b28dfbaA9327af8E',

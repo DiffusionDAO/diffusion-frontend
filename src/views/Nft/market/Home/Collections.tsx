@@ -6,15 +6,6 @@ import { useTranslation } from 'contexts/Localization'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
 import { useEffect, useLayoutEffect, useMemo } from 'react'
-// const toBuffer = require('it-to-buffer')
-
-// const { create } = require('ipfs-http-client')
-// export const ipfs = create({
-//   host: 'ipfs.infura.io',
-//   port: '5001',
-//   protocol: 'https',
-// })
-
 
 const Collections: React.FC<{ title: string; testId: string; collections: Collection[] }> = ({
   title,

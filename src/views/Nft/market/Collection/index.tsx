@@ -25,7 +25,6 @@ const Collection = () => {
   // const apiCollection = getCollectionApi(collectionAddress)
   // console.log("apiCollection:", apiCollection)
   // const collection = combineCollectionData([apiCollection], [])
-  console.log("collection:", collection)
   const hash = useMemo(() => getHashFromRouter(router)?.[0], [router])
 
   // if (!collection) {

@@ -14,7 +14,6 @@ const Items = () => {
   const [sortBy, setSortBy] = useState('updatedAt')
   const { t } = useTranslation()
   const collection = useGetCollection(collectionAddress)
-  console.log("useGetCollection:",collection)
 
   const isPBCollection = collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase()
 

@@ -20,6 +20,12 @@ import isEmpty from 'lodash/isEmpty'
 import uniqBy from 'lodash/uniqBy'
 import { REQUEST_SIZE } from '../Collection/config'
 import nftDatasMock from '../Profile/MockNftDatas'
+import { getNftMarketAddress } from 'utils/addressHelpers'
+import { simpleRpcProvider } from 'utils/providers'
+import nftMarketAbi from 'config/abi/nftMarket.json'
+import { ethers } from 'ethers'
+import { useWeb3React } from '@web3-react/core'
+ 
 
 interface ItemListingSettings {
   field: string
@@ -183,6 +189,8 @@ const fetchAllNfts = async (
 }
 
 export const useCollectionNfts = (collectionAddress: string) => {
+  const { library } = useWeb3React()
+
   const fetchedNfts = useRef<NftToken[]>([])
   const fallbackMode = useRef(false)
   const fallbackModePage = useRef(0)
@@ -241,7 +249,18 @@ export const useCollectionNfts = (collectionAddress: string) => {
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
         // newNfts = await fetchMarketDataNfts(collection, settings, page, tokenIdsFromFilter)
-        newNfts = nftDatasMock
+        const nftMarketAddress = getNftMarketAddress()
+
+        const nftMarketContract =  new ethers.Contract(nftMarketAddress, nftMarketAbi, library)
+        const response = await nftMarketContract.fetchMarketItems()
+        // newNfts = nftDatasMock
+        newNfts = response.map((item, index)=> {
+          nftDatasMock[index].marketData.currentAskPrice =  ethers.utils.formatUnits(item.price,"ether")
+          nftDatasMock[index].marketData.currentSeller = item.seller
+          var merge = {...nftDatasMock[index], item}
+          return merge})
+        console.log("useCollectionNfts newNfts:",newNfts)
+
       } else {
         const {
           nfts: allNewNfts,
