@@ -1,19 +1,22 @@
+import { FC, useState } from 'react'
 import { useTranslation } from 'contexts/Localization'
-import { CloseIcon, ChevronLeftIcon, InfoIcon } from '@pancakeswap/uikit'
-import { StyledModal, ContentWrap, HeaderWrap, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
-  TextColor, ImgWrap, FromImg, ToImg, BondName, BondTime, TipsWrap, TipsText,  BondListItemBtn, ListItem, ListLable, ListContent } from './styles'
+import { CloseIcon, ChevronLeftIcon  } from '@pancakeswap/uikit'
+import { StyledModal, ContentWrap, HeaderWrap,   BondListItemBtn, SettingItem,
+  SettingLabel, SettingCont, SettingInput, SettingTips } from './styles'
 
 interface BondModalProps {
   bondData: any;
+  account: string;
   onClose: () => void;
 }
 
 const SettingModal: React.FC<BondModalProps> = ({
   bondData,
+  account,
   onClose,
 }) => {
   const { t } = useTranslation()
-
+  const [addressValue, setAddressValue] = useState<string>(account);
   return (
     <StyledModal
       width={500}
@@ -27,56 +30,26 @@ const SettingModal: React.FC<BondModalProps> = ({
       <ContentWrap>
         {/* 头部按钮 */}
         <HeaderWrap>
-          <ChevronLeftIcon width="24px" color="#ABB6FF" />
+          <ChevronLeftIcon width="24px" color="#ABB6FF" onClick={onClose} />
           <CloseIcon width="24px" color="#ABB6FF" onClick={onClose} />
         </HeaderWrap>
         {/* 中间内容 */}
-        <BondListItem>
-          <BondListItemHeader>
-            <ImgWrap>
-              <FromImg src={bondData.from} />
-              <ToImg src={bondData.to} />
-            </ImgWrap>
-            <BondName>{bondData.name}</BondName>
-            <BondTime>{bondData.duration}days</BondTime>
-          </BondListItemHeader>
-          <BondListItemContent>
-            <ContentCell>
-              <CellTitle>Bond Price</CellTitle>
-              <CellText >${bondData.price}</CellText>
-            </ContentCell>
-            <ContentCell>
-              <CellTitle>Market Price</CellTitle>
-              <CellText >${bondData.price}</CellText>
-            </ContentCell>
-          </BondListItemContent>
-        </BondListItem>
-        <TipsWrap>
-          <InfoIcon  width="20px" color="#ABB6FF" />
-          <TipsText>First time bonding LUSD-OHM LP?Please approve Olympus Dao to useyourLUSD-OHMLP for bonding</TipsText>
-        </TipsWrap>
+        <SettingItem>
+          <SettingLabel>Slippage</SettingLabel>
+          <SettingCont>
+            <SettingInput className="noBorder" suffix="%" />
+            <SettingTips>If the price changes beyond the slip number, trading may resume</SettingTips>
+          </SettingCont>
+        </SettingItem>
+        <SettingItem>
+          <SettingLabel>Receive the address</SettingLabel>
+          <SettingCont>
+            <SettingInput className="noBorder"  value={addressValue} />
+            <SettingTips>By default, it is the current login address</SettingTips>
+          </SettingCont>
+        </SettingItem>
         {/* 按钮 */}
-        <BondListItemBtn>Connection</BondListItemBtn>
-        <ListItem>
-          <ListLable>Your Balance</ListLable>
-          <ListContent>{bondData.balance}</ListContent>
-        </ListItem>
-        <ListItem>
-          <ListLable>Your Will Get</ListLable>
-          <ListContent>{bondData.getFee}</ListContent>
-        </ListItem>
-        <ListItem>
-          <ListLable>Max You Can Buy</ListLable>
-          <ListContent>{bondData.maxFee}</ListContent>
-        </ListItem>
-        <ListItem>
-          <ListLable>Your Balance</ListLable>
-          <ListContent><TextColor isRise={bondData.discount>0}>{bondData.discount}</TextColor></ListContent>
-        </ListItem>
-        <ListItem>
-          <ListLable>Duration</ListLable>
-          <ListContent>{bondData.duration}days</ListContent>
-        </ListItem>
+        <BondListItemBtn>Confirm</BondListItemBtn>
       </ContentWrap>
     </StyledModal>
   )

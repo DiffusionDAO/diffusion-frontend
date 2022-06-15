@@ -1,21 +1,35 @@
+import { FC, useState } from 'react'
 import { useTranslation } from 'contexts/Localization'
 import { CloseIcon, CogIcon, InfoIcon } from '@pancakeswap/uikit'
 import { StyledModal, ContentWrap, HeaderWrap, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
-  TextColor, ImgWrap, FromImg, ToImg, BondName, BondTime, TipsWrap, TipsText,  BondListItemBtn, ListItem, ListLable, ListContent } from './styles'
+  TextColor, ImgWrap, FromImg, ToImg, BondName, BondTime, TipsWrap, TipsText,  BondListItemBtn, ListItem, ListLable, ListContent,
+  MoneyLable, MoneyInput, RecomandWrap, CheckBoxWrap, CheckBox, RecomandLable, RecomandInput } from './styles'
 
 interface BondModalProps {
   bondData: any;
+  isApprove: boolean;
+  account: string;
+  getApprove: () => void;
   onClose: () => void;
   openSettingModal: () => void;
 }
 
 const BondModal: React.FC<BondModalProps> = ({
   bondData,
+  isApprove,
+  account,
+  getApprove,
   onClose,
   openSettingModal
 }) => {
-  const { t } = useTranslation()
-
+  const { t } = useTranslation();
+  const [hasRecomand, sethasRecomand] = useState<boolean>(false);
+  const [recomander, setRecomander] = useState<string>();
+  const [money, setMoney] = useState<number>();
+  const changeRecomand = () => {
+    setRecomander('')
+    sethasRecomand(!hasRecomand)
+  }
   return (
     <StyledModal
       width={500}
@@ -53,12 +67,41 @@ const BondModal: React.FC<BondModalProps> = ({
             </ContentCell>
           </BondListItemContent>
         </BondListItem>
-        <TipsWrap>
-          <InfoIcon  width="20px" color="#ABB6FF" />
-          <TipsText>First time bonding LUSD-OHM LP?Please approve Olympus Dao to useyourLUSD-OHMLP for bonding</TipsText>
-        </TipsWrap>
-        {/* 按钮 */}
-        <BondListItemBtn>Connection</BondListItemBtn>
+        {
+          account ? 
+          ( isApprove ? 
+            <>
+              <MoneyLable>Money</MoneyLable>
+              <MoneyInput prefix="￥" suffix="ALL" value={money} />
+              <RecomandWrap>
+                <CheckBoxWrap onClick={changeRecomand}>
+                  {
+                    hasRecomand ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: "4px" }} /> : <CheckBox />
+                  }
+                </CheckBoxWrap>
+                <RecomandLable onClick={changeRecomand}>Does anyone recommend</RecomandLable>
+                {
+                  hasRecomand ? <RecomandInput value={recomander} placeholder="Please enter references" /> : null
+                }
+              </RecomandWrap>
+              <BondListItemBtn>Buy</BondListItemBtn>
+            </> : 
+            <>
+              <TipsWrap>
+                <InfoIcon  width="20px" color="#ABB6FF" />
+                <TipsText>You need to connect the wallet to operate</TipsText>
+              </TipsWrap>
+              <BondListItemBtn onClick={getApprove}>Approve</BondListItemBtn>
+            </> 
+          ):
+          <>
+            <TipsWrap>
+                <InfoIcon  width="20px" color="#ABB6FF" />
+                <TipsText>You need to connect the wallet to operate</TipsText>
+              </TipsWrap>
+            <BondListItemBtn>Connection</BondListItemBtn>
+          </>
+        }
         <ListItem>
           <ListLable>Your Balance</ListLable>
           <ListContent>{bondData.balance}</ListContent>

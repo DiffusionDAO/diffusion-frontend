@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components'
-import { Box, Flex, Text, BinanceIcon, Input } from '@pancakeswap/uikit'
-import { Modal } from 'antd';
+import { Modal, Input } from 'antd';
 
 
 export const StyledModal = styled(Modal)`
@@ -133,8 +132,102 @@ export const TipsText = styled.div`
   font-family: HelveticaNeue;
   color: #ABB6FF;
 `
-
-
+export const MoneyLable = styled.div`
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ABB6FF;
+`
+export const MoneyInput = styled(Input)`
+  height: 40px;
+  margin-bottom: 10px;
+  color: #fff;
+  box-shadow: none !important;
+  background: rgba(171, 182, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(171, 182, 255, 0.1);
+  :focus {
+    box-shadow: none !important;
+  }
+  input.ant-input {
+    background: none;
+    color: #fff;
+    :focus {
+      box-shadow: none;
+    }
+  }
+  .ant-input-suffix {
+    color: #ABB6FF;
+  }
+`
+export const RecomandWrap = styled.div`
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+`
+export const CheckBoxWrap = styled.div`
+  width:16px;
+  height:16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  z-index: 1;
+  cursor: pointer;
+  background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+`
+export const CheckBox = styled.div`
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background-color: antiquewhite;
+`
+export const RecomandLable = styled.div`
+  width: 200px;
+  margin: 0 5px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ABB6FF;
+  cursor: pointer;
+`
+export const RecomandInput = styled(Input)`
+  width: 220px;
+  height: 32px;
+  margin-bottom: 10px;
+  color: #fff;
+  box-shadow: none !important;
+  background: rgba(171, 182, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(171, 182, 255, 0.1);
+  :focus {
+    box-shadow: none !important;
+  }
+  input.ant-input {
+    background: none;
+    color: #fff;
+    :focus {
+      box-shadow: none;
+    }
+    &::placeholder {
+      font-size: 12px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      color: #ABB6FF;
+      line-height: 20px;
+    }
+  }
+  .ant-input-suffix {
+    color: #ABB6FF;
+  }
+`
 export const BondListItemBtn = styled.div`
   width: 100%;
   height: 40px;
