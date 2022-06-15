@@ -16,7 +16,7 @@ const Bond: FC = () => {
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false);
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
-  const [isApprove, setIsApprove] = useState<boolean>(true);
+  const [isApprove, setIsApprove] = useState<boolean>(false);
   const { account } = useWeb3React()
   // 打开bond窗口
   const openBondModal = () => {

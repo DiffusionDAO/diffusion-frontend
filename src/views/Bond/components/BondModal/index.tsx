@@ -89,7 +89,7 @@ const BondModal: React.FC<BondModalProps> = ({
             <>
               <TipsWrap>
                 <InfoIcon  width="20px" color="#ABB6FF" />
-                <TipsText>You need to connect the wallet to operate</TipsText>
+                <TipsText>First time bonding LUSD-OHM LP?Please approve Olympus Dao to useyourLUSD-OHMLP for bonding</TipsText>
               </TipsWrap>
               <BondListItemBtn onClick={getApprove}>Approve</BondListItemBtn>
             </> 
