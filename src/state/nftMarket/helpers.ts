@@ -147,10 +147,10 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
  */
  export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
   const url = `${API_NFT}/collections/${collectionAddress}`
-  console.log("getCollectionApi:", url)
   const res = await fetch(url)
   if (res.ok) {
     const json = await res.json()
+    console.log("getCollectionApi:",json.data[0])
     return json.data[0]
   }
   console.error(`API: Failed to fetch NFT collection ${collectionAddress}`, res.statusText)

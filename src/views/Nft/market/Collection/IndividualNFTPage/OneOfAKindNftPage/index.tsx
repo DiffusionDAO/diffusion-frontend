@@ -26,7 +26,6 @@ const OwnerActivityContainer = styled(Flex)`
 `
 
 const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress, tokenId }) => {
-  console.log("IndividualNFTPage")
   const collection = useGetCollection(collectionAddress)
   const { data: distributionData, isFetching: isFetchingDistribution } = useGetCollectionDistribution(collectionAddress)
   const {

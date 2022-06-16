@@ -26,6 +26,7 @@ import nftMarketAbi from 'config/abi/nftMarket.json'
 import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
 import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
+import { getNftMarketContract } from 'utils/contractHelpers'
 const toBuffer = require('it-to-buffer')
 const { create } = require('ipfs-http-client')
 export const ipfs = create({
@@ -262,12 +263,12 @@ export const useCollectionNfts = (collectionAddress: string) => {
         if (res.ok) {
           const json = await res.json()
           nftJson = json[collectionAddress]
+          console.log("nftJson:", nftJson)
         }
         // newNfts = await fetchMarketDataNfts(collection, settings, page, tokenIdsFromFilter)
-        const nftMarketAddress = getNftMarketAddress()
-
-        const nftMarketContract = new ethers.Contract(nftMarketAddress, nftMarketAbi, library)
+        const nftMarketContract = getNftMarketContract()
         const response = await nftMarketContract.fetchMarketItems()
+        console.log("response:", response)
         newNfts = response.map((item, index) => {
           nftJson[index].marketData.currentAskPrice = ethers.utils.formatUnits(item.price, "ether")
           nftJson[index].marketData.currentSeller = item.seller
