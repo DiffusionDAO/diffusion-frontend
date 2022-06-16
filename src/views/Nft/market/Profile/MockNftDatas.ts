@@ -6,10 +6,10 @@ const nftDatasMock: NftToken[] = [
     name: "Carina II.png",
     description: "Carina II.png",
     collectionName: "StarLight",
-    collectionAddress: "0x84B3d5A4CD6E235cE3cc4c0A9169aAb14f8621DF",
+    collectionAddress: "0x69E01E8AdA552DFd66028D7201147288Ea6470de",
     image: {
       original: "string",
-      thumbnail: "QmasbYJBxVzLJFk9HUKxaKu4XFRQ97oQCmHpuDnXBC5mXu"
+      thumbnail: "QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/1"
     },
     attributes: [
       {
@@ -22,9 +22,9 @@ const nftDatasMock: NftToken[] = [
     updatedAt: "2022/05/27 14:00",
     location: NftLocation.FORSALE,
     marketData: {
-      tokenId: "xxx1",
+      tokenId: "1",
       collection: {
-        id: "xxx1",
+        id: "1",
       },
       currentAskPrice: "0.22",
       currentSeller: "diffusion",
@@ -36,10 +36,10 @@ const nftDatasMock: NftToken[] = [
     name: "test1",
     description: "xxx1",
     collectionName: "StarLight",
-    collectionAddress: "0x84B3d5A4CD6E235cE3cc4c0A9169aAb14f8621DF",
+    collectionAddress: "0x69E01E8AdA552DFd66028D7201147288Ea6470de",
     image: {
       original: "string",
-      thumbnail: "QmasbYJBxVzLJFk9HUKxaKu4XFRQ97oQCmHpuDnXBC5mXu"
+      thumbnail: "QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/2"
     },
     attributes: [
       {
@@ -66,10 +66,10 @@ const nftDatasMock: NftToken[] = [
     name: "test1",
     description: "xxx1",
     collectionName: "StarLight",
-    collectionAddress: "0x84B3d5A4CD6E235cE3cc4c0A9169aAb14f8621DF",
+    collectionAddress: "0x69E01E8AdA552DFd66028D7201147288Ea6470de",
     image: {
       original: "string",
-      thumbnail: "QmasbYJBxVzLJFk9HUKxaKu4XFRQ97oQCmHpuDnXBC5mXu"
+      thumbnail: "QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/3"
     },
     attributes: [
       {
@@ -96,10 +96,10 @@ const nftDatasMock: NftToken[] = [
     name: "test1",
     description: "xxx1",
     collectionName: "StarLight",
-    collectionAddress: "0x84B3d5A4CD6E235cE3cc4c0A9169aAb14f8621DF",
+    collectionAddress: "0x69E01E8AdA552DFd66028D7201147288Ea6470de",
     image: {
       original: "string",
-      thumbnail: "QmasbYJBxVzLJFk9HUKxaKu4XFRQ97oQCmHpuDnXBC5mXu"
+      thumbnail: "QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/4"
     },
     attributes: [
       {

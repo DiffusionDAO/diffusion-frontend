@@ -40,6 +40,7 @@ import { ethers } from 'ethers'
 import starlightContract from 'abi/starlightContract.json'
 import { useWeb3React } from '@web3-react/core'
 import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
+import { simpleRpcProvider } from 'utils/providers'
 
 const toBuffer = require('it-to-buffer')
 const { create } = require('ipfs-http-client')
@@ -48,7 +49,11 @@ export const ipfs = create({
   port: '5001',
   protocol: 'http',
 })
-
+// export const ipfs = create({
+//   host: '207.148.117.14',
+//   port: '5001',
+//   protocol: 'http',
+// })
 /**
  * Fetch static data from all collections using the API
  * @returns
@@ -232,13 +237,14 @@ export const getNftApi = async (
   tokenId: string,
 ): Promise<ApiResponseSpecificToken['data']> => {
   const { connector, library } = useWeb3React()
-  var nftContract = new ethers.Contract(collectionAddress, starlightContract, library)
+  const starlighAddress = "0x69E01E8AdA552DFd66028D7201147288Ea6470de"
+  var nftContract = new ethers.Contract(starlighAddress, starlightContract, library)
   const uri = await nftContract.tokenURI()
-
+  console.log("uri:", uri)
   const json = {
     tokenId,
-    name: '',
-    description: '',
+    name: 'StarLight',
+    description: 'StarLight',
     image: {
       original: uri,
       thumbnail: uri,
@@ -458,10 +464,14 @@ export const getNftsOnChainMarketData = async (
   tokenIds: string[],
 ): Promise<TokenMarketData[]> => {
   try {
+    const nftMarketAddress = getNftMarketAddress()
+    const nftMarketContract =  new ethers.Contract(nftMarketAddress, nftMarketAbi, simpleRpcProvider)
+    const response = await nftMarketContract.fetchMarketItems()
+    console.log("getNftsOnChainMarketData repsonse:",response)
     // const nftMarketContract = getNftMarketContract()
     // const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
     // const askInfo = response?.askInfo
-    const askInfo = nftDatasMock
+    const askInfo = response
     if (!askInfo) return []
 
     return askInfo
@@ -1246,7 +1256,6 @@ export const getCompleteAccountNftData = async (
     ...forSaleNftIds,
     ...walletNftIdsWithCollectionAddress,
   ])
-  console.log('metadataForAllNfts:', metadataForAllNfts)
   const completeNftData = combineNftMarketAndMetadata(
     metadataForAllNfts,
     onChainForSaleNfts,
