@@ -37,6 +37,7 @@ function NftProfilePage() {
     nfts, isLoading: isNftLoading, refresh: refreshUserNfts,
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
+  console.log("nfts:", nfts)
   const [isCompound, setIsCompound] = useState(false)
   const [selectNfts, setSelectedNfts] = useState<NftToken[]>([])
 
@@ -49,19 +50,16 @@ function NftProfilePage() {
   const [modalTitle, seNoteModalTitle] = useState('')
   const [modalDescription, setModalDescription] = useState('')
 
-
   const sortByItems = [
     { label: t('智者'), value: '智者', children: [{ label: t('银色'), value: '银色'}, { label: t('金色'), value: '金色'}] },
     { label: t('将领'), value: '将领', children: [{ label: t('银色'), value: '银色'}, { label: t('金色'), value: '金色'}] },
     { label: t('议员'), value: '议员', children: [{ label: t('银色'), value: '银色'}, { label: t('金色'), value: '金色'}] },
   ]
 
-  // 点击合成按钮
   const startCompound = () => {
     setIsCompound(true);
   }
 
-  // 取消合成
   const cancelCompound = () => {
     setIsCompound(false);
   }
@@ -79,17 +77,14 @@ function NftProfilePage() {
     setSelectedCount(0)
   }
 
-  // 提交合成
   const submitCompound = () => {
     setConfirmModalVisible(false)
     setSuccessModalVisible(true)
   }
 
-  // 确认合成
   const confirmCompound = () => {
     const data = nftDatas.filter(item => item.selected)
     setSelectedNfts(data)
-    // 判断是否符合合成条件
     if (data.length % 2 !== 0 || !data.length) {
       seNoteModalTitle('Important note')
       setModalDescription('The NFTs you selected is across levels, please select the same color at the same level for composition')
@@ -99,7 +94,6 @@ function NftProfilePage() {
     setConfirmModalVisible(true)
   }
 
-  // 选中nft
   const selectNft = (nft) => {
     const data = cloneDeep(nftDatas)
     data.map((item: NftToken) => {
@@ -118,7 +112,7 @@ function NftProfilePage() {
         <BackgroundText>
           <BackgroundTitle>
             <Typed
-              strings={['Text Haed AuhuAuhuAuhuAuhuAuhu']}
+              strings={['Text Haed DiffusionDAO']}
               typeSpeed={50}
               cursorChar=""
             />
@@ -176,18 +170,15 @@ function NftProfilePage() {
           <UnconnectedProfileNfts nfts={nfts} isLoading={isNftLoading} />
         )}
       </ConentWrap>
-      {/* 提示弹窗 */}
       {
         noteModalVisible ? <CustomModal title={modalTitle} description={modalDescription} onClose={() => seNoteModalVisible(false) } /> 
         : null
       }
-      {/* 合成弹窗 */}
       {
         confirmModalVisible ?
         <CompoundConfirmModal  nfts={selectNfts} onDismiss={() => setConfirmModalVisible(false)} submitCompound={submitCompound} />
         : null
       }
-      {/* 合成成功的弹窗 */}
       {
         successModalVisible ? <CompoundSuccessModal nfts={selectNfts} onClose={closeCompoundSuccessModal} /> 
         : null

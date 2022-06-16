@@ -63,8 +63,7 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const res = await fetch(`${API_NFT}/collections`)
   if (res.ok) {
     const json = await res.json()
-
-    console.log('json:', json)
+    console.log('getCollectionsApi:', json)
     return json
   }
   console.error('Failed to fetch NFT collections', res.statusText)
