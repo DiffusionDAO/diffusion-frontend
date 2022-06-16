@@ -1,7 +1,5 @@
 import styled from 'styled-components'
-import { Box, Flex, Text, BinanceIcon, Input } from '@pancakeswap/uikit'
 import { Modal } from 'antd';
-
 
 export const StyledModal = styled(Modal)`
   width: 60%;
@@ -12,6 +10,16 @@ export const ContentWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  #tsparticles {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
 `
 
 
