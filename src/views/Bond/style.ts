@@ -2,8 +2,45 @@ import styled, { css } from 'styled-components'
 
 export const BondPageWrap = styled.div`
   margin: 24px;
+  position: relative;
+`
+export const BondSculptureWrap = styled.div`
+  position: absolute;
+  right: -40px;
+  top: -96px;
+  height: 450px;
+  width: 450px;
+
+`
+export const BondSculptureWrapImg = styled.img`
+  width: 100%;
+  height: 100%;
+  // position: absolute;
+  // right: -60px;
+  // top: -20px;
+`
+export const BondSculptureGif = styled.img`
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  left: -70px;
+  bottom: -60px;
+`
+export const BondGearImg = styled.img`
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  right: 100px;
+  bottom: -20px;
+  animation: gear 10s linear infinite;
+  animation-duration: 10s;
+`
+export const BondPageText = styled.div`
+  max-width: 500px;
+  margin: 0 0 40px 20px;
 `
 export const BondPageTitle = styled.div`
+  width: 100%;
   height: 72px;
   font-size: 56px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
@@ -13,10 +50,16 @@ export const BondPageTitle = styled.div`
   letter-spacing: 2px;
   margin: 40px 0;
 `
+export const BondPageDes = styled.div`
+  width: 100%;
+  font-size: 16px;
+  font-family: HelveticaNeue;
+  color: #ABB6FF;
+  line-height: 26px;
+`
 
 export const OverviewCard = styled.div`
-  width: 100%;
-  margin-bottom: 40px;
+  margin: 0 20px 40px 20px;
   border-radius: 16px;
   background: rgba(171, 182, 255, 0.05);
   border: 1px solid rgba(70, 96, 255, 0.32);

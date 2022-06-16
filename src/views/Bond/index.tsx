@@ -2,9 +2,10 @@ import { FC, useState } from 'react'
 import Typed from 'react-typed';
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
-import { BondPageWrap, BondPageTitle, OverviewCard, OverviewCardItem, OverviewCardItemTitle, OverviewCardItemContent,
-  Price, Percent, Icon, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
-  TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
+import { BondPageWrap, BondPageText, BondPageTitle, BondPageDes, OverviewCard, OverviewCardItem, OverviewCardItemTitle, 
+  OverviewCardItemContent, Price, Percent, Icon, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
+  TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName, BondSculptureWrap, BondSculptureWrapImg,
+  BondSculptureGif, BondGearImg  } from './style'
 import bondDatasMock from './MockBondData'
 import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
@@ -35,13 +36,21 @@ const Bond: FC = () => {
     setIsApprove(true)
   }
   return (<BondPageWrap>
-    <BondPageTitle>
-      <Typed
-        strings={['Bond']}
-        typeSpeed={50}
-        cursorChar=""
-      />
-    </BondPageTitle>
+    <BondSculptureWrap>
+      <BondSculptureWrapImg src="/images/bond/bond-sculpture-wrap.png" alt="" />
+      <BondSculptureGif src="/images/bond/bond-sculpture.gif" alt="" />
+      <BondGearImg src="/images/bond/gear.png" alt="" />
+    </BondSculptureWrap>
+    <BondPageText>
+      <BondPageTitle>
+        <Typed
+          strings={['Bond']}
+          typeSpeed={50}
+          cursorChar=""
+        />
+      </BondPageTitle>
+      <BondPageDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BondPageDes>
+    </BondPageText>
     <OverviewCard>
       <OverviewCardItem>
         <OverviewCardItemTitle>Our price</OverviewCardItemTitle>
