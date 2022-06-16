@@ -44,9 +44,9 @@ import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
 const toBuffer = require('it-to-buffer')
 const { create } = require('ipfs-http-client')
 export const ipfs = create({
-  host: 'ipfs.infura.io',
+  host: '207.148.117.14',
   port: '5001',
-  protocol: 'https',
+  protocol: 'http',
 })
 
 /**
