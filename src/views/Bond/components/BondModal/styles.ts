@@ -160,7 +160,7 @@ export const MoneyInput = styled(Input)`
     }
   }
   .ant-input-suffix {
-    color: #ABB6FF;
+    color: rgba(210, 87, 255, 1);
   }
 `
 export const RecomandWrap = styled.div`
