@@ -64,7 +64,6 @@ export const CompoundBtnWrapImg = styled.img`
 export const SyntheticBtn = styled.img`
   cursor: pointer;
   height: 120px;
-  cursor: pointer;
 `
 export const AccountNftWrap = styled.div`
   margin: 24px;

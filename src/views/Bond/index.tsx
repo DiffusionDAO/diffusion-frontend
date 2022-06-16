@@ -11,7 +11,6 @@ import SettingModal from './components/SettingModal'
 
 
 
-
 const Bond: FC = () => {
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false);

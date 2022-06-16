@@ -3,6 +3,7 @@ import { NftToken } from 'state/nftMarket/types'
 import { Button } from 'antd'
 import { StyledModal, ContentWrap, AchievWrap, AchievCard, AchievImg, CongratulationsTitle, CongratulationsDes, 
   StarWrap, StarImg, BlueHalo, RedHalo } from './styles'
+import ParticleAnimation from '../../../../../../components/ParticleAnimation'
 
 interface CompoundSuccessModalProps {
   nfts: NftToken[]
@@ -39,7 +40,9 @@ const CompoundSuccessModal: React.FC<CompoundSuccessModalProps> = ({
           <BlueHalo />
           <RedHalo />
         </AchievWrap>
+        <ParticleAnimation />
         <Button type="primary" size='large' style={{ padding: '0px 35px' }} onClick={onClose}>{t('Close')}</Button>
+        {/* 散花动画 */}
       </ContentWrap>
     </StyledModal>
   )
