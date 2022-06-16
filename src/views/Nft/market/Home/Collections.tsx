@@ -6,6 +6,7 @@ import { useTranslation } from 'contexts/Localization'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
 import { useEffect, useLayoutEffect, useMemo } from 'react'
+import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
 
 const Collections: React.FC<{ title: string; testId: string; collections: Collection[] }> = ({
   title,
@@ -15,7 +16,7 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
   const { t } = useTranslation()
   return (
     <>
-      {/* <Flex alignItems="center" justifyContent="space-between" mb="32px">
+      <Flex alignItems="center" justifyContent="space-between" mb="32px">
         <Heading as="h3" scale="lg" data-test={testId}>
           {title}
         </Heading>
@@ -28,9 +29,10 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
         >
           {t('View All')}
         </Button>
-      </Flex> */}
+      </Flex>
       <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="64px">
         {collections.map((collection) => {
+          console.log(`${nftsBaseUrl}/collections/${collection.address}`)
           return (
             <CollectionCard
               key={collection.address}

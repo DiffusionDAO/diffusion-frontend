@@ -38,7 +38,7 @@ const config = {
   },
   reactStrictMode: true,
   images: {
-    domains: ['static-nft.pancakeswap.com'],
+    domains: ['localhost','test.diffusiondao.org','154.210.13.181'],
   },
   async rewrites() {
     return [

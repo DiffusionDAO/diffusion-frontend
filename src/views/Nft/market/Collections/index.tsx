@@ -34,6 +34,7 @@ import PageLoader from 'components/Loader/PageLoader'
 import ToggleView from 'components/ToggleView/ToggleView'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
+import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
 
 export const ITEMS_PER_PAGE = 9
 
@@ -158,7 +159,6 @@ const Collectible = () => {
       sortDirection ? 'desc' : 'asc',
     )
   }, [collections, sortField, sortDirection])
-  console.log("sortedCollections:", sortedCollections)
   return (
     <>
       {/* <PageHeader>

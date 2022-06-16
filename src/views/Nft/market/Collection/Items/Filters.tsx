@@ -86,6 +86,7 @@ const ScrollableFlexContainer = styled(Flex)`
 `
 
 const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
+  console.log("Filters")
   const dispatch = useAppDispatch()
   const { data } = useGetCollectionDistribution(address)
   const { t } = useTranslation()

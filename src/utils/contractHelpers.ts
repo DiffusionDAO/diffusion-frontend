@@ -240,7 +240,7 @@ export const getGalaxyNTFClaimingContract = (signer?: Signer | Provider) => {
 }
 
 export const getNftMarketContract = (signer?: Signer | Provider) => {
-  return getContract(nftMarketAbi, getNftMarketAddress(), signer) as NftMarket
+  return getContract(nftMarketAbi, getNftMarketAddress(), signer) 
 }
 export const getNftSaleContract = (signer?: Signer | Provider) => {
   return getContract(nftSaleAbi, getNftSaleAddress(), signer) as NftSale

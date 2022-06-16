@@ -25,7 +25,14 @@ import { simpleRpcProvider } from 'utils/providers'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
- 
+import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
+const toBuffer = require('it-to-buffer')
+const { create } = require('ipfs-http-client')
+export const ipfs = create({
+  host: 'ipfs.infura.io',
+  port: '5001',
+  protocol: 'https',
+})
 
 interface ItemListingSettings {
   field: string
@@ -246,20 +253,29 @@ export const useCollectionNfts = (collectionAddress: string) => {
 
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
 
+
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
+        var nftJson
+        var url = `${API_NFT}/collections/${collectionAddress}`
+        const res = await fetch(url)
+        if (res.ok) {
+          const json = await res.json()
+          nftJson = json[collectionAddress]
+        }
         // newNfts = await fetchMarketDataNfts(collection, settings, page, tokenIdsFromFilter)
         const nftMarketAddress = getNftMarketAddress()
 
-        const nftMarketContract =  new ethers.Contract(nftMarketAddress, nftMarketAbi, library)
+        const nftMarketContract = new ethers.Contract(nftMarketAddress, nftMarketAbi, library)
         const response = await nftMarketContract.fetchMarketItems()
-        // newNfts = nftDatasMock
-        newNfts = response.map((item, index)=> {
-          nftDatasMock[index].marketData.currentAskPrice =  ethers.utils.formatUnits(item.price,"ether")
-          nftDatasMock[index].marketData.currentSeller = item.seller
-          var merge = {...nftDatasMock[index], item}
-          return merge})
-        console.log("useCollectionNfts newNfts:",newNfts)
+        newNfts = response.map((item, index) => {
+          nftJson[index].marketData.currentAskPrice = ethers.utils.formatUnits(item.price, "ether")
+          nftJson[index].marketData.currentSeller = item.seller
+          var merge = { ...nftJson[index], ...response[index] }
+          return merge
+        })
+
+        console.log("useCollectionNfts newNfts:", newNfts)
 
       } else {
         const {
