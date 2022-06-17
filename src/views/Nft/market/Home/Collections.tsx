@@ -14,6 +14,9 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
   collections,
 }) => {
   const { t } = useTranslation()
+  console.log("collections:",collections)
+
+  var addresses = Object.keys(collections)
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" mb="32px">
@@ -31,8 +34,8 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
         </Button>
       </Flex>
       <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="64px">
-        {collections.map((collection) => {
-          console.log(`${nftsBaseUrl}/collections/${collection.address}`)
+        {addresses.map((address) => {
+          const collection = collections[address].data[0]
           return (
             <CollectionCard
               key={collection.address}

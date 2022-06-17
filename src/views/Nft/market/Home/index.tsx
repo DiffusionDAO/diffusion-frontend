@@ -58,18 +58,18 @@ const Home = () => {
   const { theme } = useTheme()
   const { data: collections, status } = useGetCollections()
 
-  // const hotCollections = orderBy(
-  //   collections,
-  //   (collection) => (collection.totalVolumeBNB ? parseFloat(collection.totalVolumeBNB) : 0),
-  //   'desc',
-  // )
+  const hotCollections = orderBy(
+    collections,
+    (collection) => (collection.totalVolumeBNB ? parseFloat(collection.totalVolumeBNB) : 0),
+    'desc',
+  )
 
   const newestCollections = orderBy(
     collections,
     (collection) => (collection.createdAt ? Date.parse(collection.createdAt) : 0),
     'desc',
   )
-  // console.log("newestCollections:",newestCollections)
+  console.log("newestCollections:",newestCollections)
   return (
     <>
       <PageMeta />

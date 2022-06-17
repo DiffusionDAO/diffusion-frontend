@@ -36,25 +36,7 @@ import {
   UserActivity,
 } from './types'
 import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } from './queries'
-import { ethers } from 'ethers'
-import starlightContract from 'abi/starlightContract.json'
-import { useWeb3React } from '@web3-react/core'
-import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
-import { simpleRpcProvider } from 'utils/providers'
-import { deepCopy } from '@ethersproject/properties'
-
-const toBuffer = require('it-to-buffer')
-const { create } = require('ipfs-http-client')
-export const ipfs = create({
-  host: 'ipfs.infura.io',
-  port: '5001',
-  protocol: 'https',
-})
-// export const ipfs = create({
-//   host: '207.148.117.14',
-//   port: '5001',
-//   protocol: 'http',
-// })
+import { useSWRContract } from 'hooks/useSWRContract'
 /**
  * Fetch static data from all collections using the API
  * @returns
@@ -63,7 +45,6 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const res = await fetch(`${API_NFT}/collections`)
   if (res.ok) {
     const json = await res.json()
-    console.log('getCollectionsApi:', json)
     return json
   }
   console.error('Failed to fetch NFT collections', res.statusText)
@@ -88,24 +69,10 @@ const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promis
 /**
  * Fetch all collections data by combining data from the API (static metadata) and the Subgraph (dynamic market data)
  */
-export const getCollections = async (): Promise<Record<string, Collection>> => {
+export const getCollections = async (): Promise<Record<string, any>> => {
   try {
-    const [collections] = await Promise.all([getCollectionsApi()])
-    const collectionApiData: ApiCollection[] = collections?.data ?? []
-
-    // const collectionsTotalSupply = await fetchCollectionsTotalSupply(collectionApiData)
-
-    // const collectionApiDataCombinedOnChain = collectionApiData.map((collection, index) => {
-    //   const totalSupplyFromApi = Number(collection?.totalSupply) || 0
-    //   const totalSupplyFromOnChain = collectionsTotalSupply[index]
-    //   return {
-    //     ...collection,
-    //     totalSupply: Math.max(totalSupplyFromApi, totalSupplyFromOnChain).toString(),
-    //   }
-    // })
-    // return {collectionApiDataCombinedOnChain}
-    const collectionData = combineCollectionData(collectionApiData, [])
-    return collectionData
+    var collections = await getCollectionsApi()
+    return collections
   } catch (error) {
     console.error('Unable to fetch data:', error)
     return null
@@ -117,21 +84,9 @@ export const getCollections = async (): Promise<Record<string, Collection>> => {
  */
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
-    const [collection] = await Promise.all([
-      // getCollectionSg(collectionAddress),
-      getCollectionApi(collectionAddress),
-    ])
+    const collection = await getCollectionApi(collectionAddress) as any
+    var collectionData = {[collectionAddress] : collection[collectionAddress].data[0]}
 
-    // const collectionsTotalSupply = await fetchCollectionsTotalSupply([collection])
-    // const totalSupplyFromApi = Number(collection?.totalSupply) || 0
-    // const totalSupplyFromOnChain = collectionsTotalSupply[0]
-    var collectionMarket: CollectionMarketDataBaseFields
-    const collections: Collection = {
-      ...collection,
-      ...collectionMarket,
-    }
-
-    var collectionData = { [collectionAddress]: collections }
     return collectionData
     // return combineCollectionData([collectionApiDataCombinedOnChain], [])
   } catch (error) {
@@ -149,8 +104,7 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
   const res = await fetch(url)
   if (res.ok) {
     const json = await res.json()
-    console.log("getCollectionApi:",json.data[0])
-    return json.data[0]
+    return json
   }
   console.error(`API: Failed to fetch NFT collection ${collectionAddress}`, res.statusText)
   return null
@@ -211,7 +165,6 @@ export const getNftApi = async (
   const res = await fetch(url)
   if (res.ok) {
     const json = await res.json()
-    console.log("getNftApi:", json)
     return json
   }
 
@@ -416,10 +369,10 @@ export const getNftsOnChainMarketData = async (
 ): Promise<TokenMarketData[]> => {
   try {
     const nftMarketContract = getNftMarketContract()
-    const response = await nftMarketContract.fetchMarketItems()
+    const { data } = useSWRContract([nftMarketContract, 'fetchMarketItems'])
     // const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
     // const askInfo = response?.askInfo
-    const askInfo = response
+    const askInfo = data
     if (!askInfo) return []
 
     return askInfo

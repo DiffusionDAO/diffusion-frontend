@@ -13,16 +13,14 @@ const UserNfts: React.FC<{
 }> = ({ isCompound, nfts, isLoading, selectNft }) => {
   const { t } = useTranslation()
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
-    // 如果是已经点击了合成按钮，则点击卡片后就是代表卡片是否选中，否则就按照卡片自身的点击事件执行
     if (isCompound) {
       selectNft(nft)
     }
   }
-
   return (
     <>
       {/* User has no NFTs */}
-      {nfts.length === 0 && !isLoading ? (
+      {nfts?.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />
           <Text pt="8px" bold>
@@ -30,13 +28,13 @@ const UserNfts: React.FC<{
           </Text>
         </Flex>
       ) : // User has NFTs and data has been fetched
-      nfts.length > 0 ? (
+      nfts?.length > 0 ? (
         <Grid
           gridGap="16px"
           gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
           alignItems="start"
         >
-          {nfts.map((nft) => {
+          {nfts?.map((nft) => {
             const { marketData, location } = nft
 
             return (

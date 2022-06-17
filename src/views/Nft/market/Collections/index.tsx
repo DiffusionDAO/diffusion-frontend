@@ -144,7 +144,7 @@ const Collectible = () => {
     setMaxPage(Math.max(Math.floor(collections.length / ITEMS_PER_PAGE) + extraPages, 1))
   }, [collections])
 
-  const sortedCollections = useMemo(() => {
+  const sortedCollections:any = useMemo(() => {
     return orderBy(
       collections,
       (collection) => {
@@ -321,7 +321,7 @@ const Collectible = () => {
                 mb="32px"
                 data-test="nft-collection-row"
               >
-                {sortedCollections.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => {
+                {sortedCollections[0].data.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => {
                   return (
                     <CollectionCard
                       key={collection.address}

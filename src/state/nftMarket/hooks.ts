@@ -20,8 +20,7 @@ const EMPTY_OBJECT = {}
 
 export const useGetCollections = (): { data: ApiCollections; status: FetchStatus } => {
   const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections())
-  const collections = data ?? ({} as ApiCollections)
-  // console.log("useGetCollections:", data)
+  const collections: any = data ?? {} 
   return { data: collections, status }
 }
 
