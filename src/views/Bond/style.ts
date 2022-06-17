@@ -1,43 +1,53 @@
 import styled, { css } from 'styled-components'
 
+const HEADER_HEIGHT = 400;
+const MARGIN = 20;
+const NAV_HEIGHT = 56;
+const SCULPTURE_WRAP_HEIGHT = HEADER_HEIGHT + MARGIN + NAV_HEIGHT;
+
 export const BondPageWrap = styled.div`
-  margin: 24px;
+  margin: ${MARGIN}px;
+`
+export const BondHeaderWrap = styled.div`
+  width: 100%;
+  height: ${HEADER_HEIGHT}px;
+  margin-bottom: 40px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `
 export const BondSculptureWrap = styled.div`
   position: absolute;
-  right: -40px;
-  top: -96px;
-  height: 450px;
-  width: 450px;
+  right: 0px;
+  bottom: 0px;
+  height: ${HEADER_HEIGHT}px;
+  width: ${HEADER_HEIGHT}px;
 
 `
 export const BondSculptureWrapImg = styled.img`
   width: 100%;
   height: 100%;
-  // position: absolute;
-  // right: -60px;
-  // top: -20px;
 `
 export const BondSculptureGif = styled.img`
-  width: 400px;
-  height: 400px;
+  height: ${HEADER_HEIGHT}px;
+  width: ${HEADER_HEIGHT}px;
   position: absolute;
-  left: -70px;
-  bottom: -60px;
+  left: 0px;
+  bottom: 0px;
 `
 export const BondGearImg = styled.img`
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   position: absolute;
-  right: 100px;
+  left: 250px;
   bottom: -20px;
   animation: gear 10s linear infinite;
   animation-duration: 10s;
 `
 export const BondPageText = styled.div`
   max-width: 500px;
-  margin: 0 0 40px 20px;
+  margin-left: 20px;
 `
 export const BondPageTitle = styled.div`
   width: 100%;
@@ -59,7 +69,7 @@ export const BondPageDes = styled.div`
 `
 
 export const OverviewCard = styled.div`
-  margin: 0 20px 40px 20px;
+  margin-left: 20px;
   border-radius: 16px;
   background: rgba(171, 182, 255, 0.05);
   border: 1px solid rgba(70, 96, 255, 0.32);
