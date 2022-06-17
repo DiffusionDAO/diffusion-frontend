@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import Typed from 'react-typed';
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
-import { BondPageWrap, BondPageText, BondPageTitle, BondPageDes, OverviewCard, OverviewCardItem, OverviewCardItemTitle, 
+import { BondPageWrap, BondHeaderWrap, BondPageText, BondPageTitle, BondPageDes, OverviewCard, OverviewCardItem, OverviewCardItemTitle, 
   OverviewCardItemContent, Price, Percent, Icon, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName, BondSculptureWrap, BondSculptureWrapImg,
   BondSculptureGif, BondGearImg  } from './style'
@@ -36,40 +36,43 @@ const Bond: FC = () => {
     setIsApprove(true)
   }
   return (<BondPageWrap>
-    <BondSculptureWrap>
-      <BondSculptureWrapImg src="/images/bond/bond-sculpture-wrap.png" alt="" />
-      <BondSculptureGif src="/images/bond/bond-sculpture.gif" alt="" />
-      <BondGearImg src="/images/bond/gear.png" alt="" />
-    </BondSculptureWrap>
-    <BondPageText>
-      <BondPageTitle>
-        <Typed
-          strings={['Bond']}
-          typeSpeed={50}
-          cursorChar=""
-        />
-      </BondPageTitle>
-      <BondPageDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BondPageDes>
-    </BondPageText>
-    <OverviewCard>
-      <OverviewCardItem>
-        <OverviewCardItemTitle>Our price</OverviewCardItemTitle>
-        <OverviewCardItemContent>
-          <Price>$123.22M</Price>
-          <Percent isRise={4.02>0}>+4.02</Percent>
-          <Icon isRise={4.02>0} />
-        </OverviewCardItemContent>
-      </OverviewCardItem>
+    <BondHeaderWrap>
+      <BondSculptureWrap>
+        <BondSculptureWrapImg src="/images/bond/bond-sculpture-wrap.png" alt="" />
+        <BondSculptureGif src="/images/bond/bond-sculpture.gif" alt="" />
+        <BondGearImg src="/images/bond/gear.png" alt="" />
+      </BondSculptureWrap>
+      <BondPageText>
+        <BondPageTitle>
+          <Typed
+            strings={['Bond']}
+            typeSpeed={50}
+            cursorChar=""
+          />
+        </BondPageTitle>
+        <BondPageDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BondPageDes>
+      </BondPageText>
+      <OverviewCard>
+        <OverviewCardItem>
+          <OverviewCardItemTitle>Our price</OverviewCardItemTitle>
+          <OverviewCardItemContent>
+            <Price>$123.22M</Price>
+            <Percent isRise={4.02>0}>+4.02</Percent>
+            <Icon isRise={4.02>0} />
+          </OverviewCardItemContent>
+        </OverviewCardItem>
 
-      <OverviewCardItem>
-        <OverviewCardItemTitle>Treasury balance</OverviewCardItemTitle>
-        <OverviewCardItemContent>
-          <Price>$123.22M</Price>
-          <Percent isRise={-4.02>0}>-4.02</Percent>
-          <Icon isRise={-4.02>0} />
-        </OverviewCardItemContent>
-      </OverviewCardItem>
-    </OverviewCard>
+        <OverviewCardItem>
+          <OverviewCardItemTitle>Treasury balance</OverviewCardItemTitle>
+          <OverviewCardItemContent>
+            <Price>$123.22M</Price>
+            <Percent isRise={-4.02>0}>-4.02</Percent>
+            <Icon isRise={-4.02>0} />
+          </OverviewCardItemContent>
+        </OverviewCardItem>
+      </OverviewCard>
+    </BondHeaderWrap>
+
 
     <Grid container spacing={2}>
       {
