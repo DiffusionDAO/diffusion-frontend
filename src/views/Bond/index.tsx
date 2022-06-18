@@ -4,8 +4,7 @@ import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { BondPageWrap, BondHeaderWrap, BondPageText, BondPageTitle, BondPageDes, OverviewCard, OverviewCardItem, OverviewCardItemTitle, 
   OverviewCardItemContent, Price, Percent, Icon, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
-  TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName, BondSculptureWrap, BondSculptureWrapImg,
-  BondSculptureGif, BondGearImg  } from './style'
+  TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName, BondSculptureWrap, BondSculptureGif, BondGearImg, BondBallImg  } from './style'
 import bondDatasMock from './MockBondData'
 import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
@@ -38,9 +37,9 @@ const Bond: FC = () => {
   return (<BondPageWrap>
     <BondHeaderWrap>
       <BondSculptureWrap>
-        <BondSculptureWrapImg src="/images/bond/bond-sculpture-wrap.png" alt="" />
         <BondSculptureGif src="/images/bond/bond-sculpture.gif" alt="" />
         <BondGearImg src="/images/bond/gear.png" alt="" />
+        <BondBallImg src="/images/bond/ball.png" alt="" />
       </BondSculptureWrap>
       <BondPageText>
         <BondPageTitle>

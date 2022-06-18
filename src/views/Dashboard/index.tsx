@@ -2,7 +2,7 @@ import { Grid, Typography, useMediaQuery } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 import { Paper } from "./style";
-
+import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { DataCell } from "./components/DataCell/DataCell";
 import {
   EightGraph,
@@ -35,7 +35,7 @@ const Dashboard = () => {
   // md, medium: 960px or larger
   // lg, large: 1280px or larger
   // xl, xlarge: 1920px or larger
-  const isSmallScreen = useMediaQuery("(max-width: 650px)");
+  const { isMobile } = useMatchBreakpoints();
   const classes = useStyles();
   const [activeTab, setActiveTab] = useState<string>("Overview");
   const clickTab = (tab: string) => {
@@ -46,7 +46,7 @@ const Dashboard = () => {
         <Typography variant="h4" style={{ fontWeight: 700, overflow: "hidden", color: "#fff" }}>
           Dashboard
         </Typography>
-        {isSmallScreen ? (
+        {isMobile ? (
           <div className="dashboard-tab">
             <div aria-hidden="true" className={`${activeTab === "Overview" && "active"}`} onClick={() => clickTab("Overview")}>
               Overview
@@ -66,7 +66,7 @@ const Dashboard = () => {
       <Grid container spacing={2}>
         {/* 13个指标 */}
         {/* 小屏幕的时候要根据tab切换来显示 */}
-        {!(isSmallScreen && activeTab !== "Overview") ? ( <Grid item lg={12} md={12} sm={12} xs={12}>
+        {!(isMobile && activeTab !== "Overview") ? ( <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container spacing={2}>
             <Grid item lg={9} md={9} sm={12} xs={12}>
               <Grid container spacing={2}>
@@ -196,7 +196,7 @@ const Dashboard = () => {
         </Grid>) : null}
 
         {/* echarts图表 */}
-        {!(isSmallScreen && activeTab !== "Chart") ? (<>
+        {!(isMobile && activeTab !== "Chart") ? (<>
           <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container spacing={2}>
             <Grid item lg={7} md={7} sm={12} xs={12}>
