@@ -40,18 +40,18 @@ function NftProfilePage() {
 
   const nftMarketContract = getNftMarketContract()
   const { data } = useSWRContract([nftMarketContract, 'fetchMarketItems'])
-  // console.log("data:", data)
+  console.log("data:", data)
 
   const collections: any = useGetCollections()
   const filters = data?.filter(item => item[6] === account)
-  // console.log("filters:", filters)
+  console.log("filters:", filters)
 
   const mynfts = filters?.map(item => {
     const nftAddress = item[4]
     const tokenId = item[5]
     return collections.data[nftAddress].tokens[tokenId]
   })
-  // console.log("mynfts:", mynfts)
+  console.log("mynfts:", mynfts)
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
   const {
     profile, isValidating: isProfileFetching, refresh: refreshProfile,
