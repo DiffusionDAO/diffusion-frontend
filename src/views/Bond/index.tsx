@@ -2,21 +2,22 @@ import { FC, useState } from 'react'
 import Typed from 'react-typed';
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
-import { BondPageWrap, BondHeaderWrap, BondPageText, BondPageTitle, BondPageDes, OverviewCard, OverviewCardItem, OverviewCardItemTitle, 
+import { BondPageWrap, BondHeaderWrap, BondPageText, BondPageTitle, BondPageDes, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
   OverviewCardItemContent, Price, Percent, Icon, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName, BondSculptureWrap, BondSculptureGif, BondGearImg, BondBallImg  } from './style'
 import bondDatasMock from './MockBondData'
 import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
-
-
+import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 
 const Bond: FC = () => {
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false);
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
   const [isApprove, setIsApprove] = useState<boolean>(false);
-  const { account } = useWeb3React()
+  const { account } = useWeb3React();
+  const { isMobile } = useMatchBreakpoints();
+
   // 打开bond窗口
   const openBondModal = () => {
     setBondModalVisible(true)
@@ -35,12 +36,12 @@ const Bond: FC = () => {
     setIsApprove(true)
   }
   return (<BondPageWrap>
-    <BondHeaderWrap>
-      <BondSculptureWrap>
-        <BondSculptureGif src="/images/bond/bond-sculpture.gif" alt="" />
-        <BondGearImg src="/images/bond/gear.png" alt="" />
-        <BondBallImg src="/images/bond/ball.png" alt="" />
-      </BondSculptureWrap>
+    <BondSculptureWrap isMobile={isMobile}>
+      <BondSculptureGif isMobile={isMobile} src="/images/bond/bond-sculpture.gif" alt="" />
+      <BondGearImg isMobile={isMobile} src="/images/gear.png" alt="" />
+      <BondBallImg isMobile={isMobile} src="/images/ball.png" alt="" />
+    </BondSculptureWrap>
+    <BondHeaderWrap isMobile={isMobile}>
       <BondPageText>
         <BondPageTitle>
           <Typed
@@ -52,7 +53,7 @@ const Bond: FC = () => {
         <BondPageDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BondPageDes>
       </BondPageText>
       <OverviewCard>
-        <OverviewCardItem>
+        <OverviewCardItem isMobile={isMobile} className="borderBottom">
           <OverviewCardItemTitle>Our price</OverviewCardItemTitle>
           <OverviewCardItemContent>
             <Price>$123.22M</Price>
@@ -60,8 +61,10 @@ const Bond: FC = () => {
             <Icon isRise={4.02>0} />
           </OverviewCardItemContent>
         </OverviewCardItem>
-
-        <OverviewCardItem>
+        {
+          isMobile ? <Horizontal /> : null
+        }
+        <OverviewCardItem isMobile={isMobile}>
           <OverviewCardItemTitle>Treasury balance</OverviewCardItemTitle>
           <OverviewCardItemContent>
             <Price>$123.22M</Price>

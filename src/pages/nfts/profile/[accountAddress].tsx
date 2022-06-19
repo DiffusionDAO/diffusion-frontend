@@ -8,7 +8,7 @@ import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
 import {
   AccountNftWrap, SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn,
   CompoundBtnWrapImg, SelectedCountBox, BackgroundWrap, ConentWrap, BackgroundTitle, BackgroundDes,
-  BackgroundText, BackgroundImg,
+  BackgroundText, NftSculptureWrap, NftSculptureGif, NftGearImg, NftBallImg
 } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
 import { Cascader, Tabs, Button } from 'antd';
@@ -25,11 +25,13 @@ import { useSWRContract } from 'hooks/useSWRContract'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { ethers } from 'ethers'
 import { useGetCollections } from 'state/nftMarket/hooks'
+import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
 
 const { TabPane } = Tabs;
 
 function NftProfilePage() {
   const { account } = useWeb3React()
+  const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
   const route = useRouter().route
   const query = useRouter().query
@@ -119,7 +121,12 @@ function NftProfilePage() {
 
   return (
     <AccountNftWrap>
-      <BackgroundWrap>
+      <NftSculptureWrap isMobile={isMobile}>
+        <NftSculptureGif isMobile={isMobile} src="/images/nfts/nft-sculpture.gif" alt="" />
+        <NftGearImg isMobile={isMobile} src="/images/gear.png" alt="" />
+        <NftBallImg isMobile={isMobile} src="/images/ball.png" alt="" />
+      </NftSculptureWrap>
+      <BackgroundWrap isMobile={isMobile}>
         <BackgroundText>
           <BackgroundTitle>
             <Typed
@@ -130,7 +137,6 @@ function NftProfilePage() {
           </BackgroundTitle>
           <BackgroundDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BackgroundDes>
         </BackgroundText>
-        <BackgroundImg src="/images/nfts/background-wrap.png" />
       </BackgroundWrap>
       <ConentWrap>
         <SubMenuWrap>

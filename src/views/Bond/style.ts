@@ -3,53 +3,109 @@ import styled, { css } from 'styled-components'
 const HEADER_HEIGHT = 400;
 const MARGIN = 20;
 const NAV_HEIGHT = 56;
-const SCULPTURE_WRAP_HEIGHT = HEADER_HEIGHT + MARGIN + NAV_HEIGHT + 100;
+const TOP_HEIGHT = MARGIN + NAV_HEIGHT + 100;
+const SCULPTURE_WRAP_HEIGHT = HEADER_HEIGHT + TOP_HEIGHT;
 
 export const BondPageWrap = styled.div`
   margin: ${MARGIN}px;
 `
-export const BondHeaderWrap = styled.div`
-  width: 100%;
-  height: ${HEADER_HEIGHT}px;
-  margin-bottom: 40px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`
 export const BondSculptureWrap = styled.div`
-  position: absolute;
-  right: -140px;
-  bottom: 0px;
-  height: ${SCULPTURE_WRAP_HEIGHT}px;
-  width: ${SCULPTURE_WRAP_HEIGHT}px;
+  top: -${TOP_HEIGHT}px;
   background: url('/images/bond/bond-sculpture-wrap.png');
   background-repeat: no-repeat;
   background-size: cover;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        height: calc(${SCULPTURE_WRAP_HEIGHT}px - 100px);
+        width: calc(${SCULPTURE_WRAP_HEIGHT}px - 100px);
+        position: absolute;
+        right: -40px;
+      `;
+    }
+    return css`
+      height: ${SCULPTURE_WRAP_HEIGHT}px;
+      width: ${SCULPTURE_WRAP_HEIGHT}px;
+      position: absolute;
+      right: -140px;
+    `;
+  }};
 `
 export const BondSculptureGif = styled.img`
-  height: ${SCULPTURE_WRAP_HEIGHT}px;
-  width: ${SCULPTURE_WRAP_HEIGHT}px;
   position: absolute;
   left: -100px;
   bottom: -94px;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        height: calc(${SCULPTURE_WRAP_HEIGHT}px - 100px);
+        width: calc(${SCULPTURE_WRAP_HEIGHT}px - 100px);
+      `;
+    }
+    return css`
+      height: ${SCULPTURE_WRAP_HEIGHT}px;
+      width: ${SCULPTURE_WRAP_HEIGHT}px;
+    `;
+  }};
 `
 export const BondGearImg = styled.img`
-  width: 180px;
-  height: 180px;
   position: absolute;
-  left: 250px;
-  bottom: -50px;
   animation: gear 10s linear infinite;
   animation-duration: 10s;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        width: 150px;
+        height: 150px;
+        left: 160px;
+        bottom: -30px;
+      `;
+    }
+    return css`
+      width: 180px;
+      height: 180px;
+      left: 250px;
+      bottom: -50px;
+    `;
+  }};
 `
 export const BondBallImg = styled.img`
   width: 50px;
   height: 50px;
   position: absolute;
-  left: -25px;
-  bottom: 300px;
   animation: ball 3s ease-in-out infinite;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        bottom: 200px;
+        left: -40px;
+      `;
+    }
+    return css`
+      bottom: 300px;
+      left: -25px;
+    `;
+  }};
+`
+export const BondHeaderWrap = styled.div`
+  width: 100%;
+  margin-bottom: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        margin-top: 300px;
+        height: calc(${HEADER_HEIGHT}px + 150px);
+      `;
+    }
+    return css`
+      margin-top: 0px;
+      height: ${HEADER_HEIGHT}px;
+    `;
+  }};
 `
 export const BondPageText = styled.div`
   max-width: 500px;
@@ -74,14 +130,30 @@ export const BondPageDes = styled.div`
 `
 
 export const OverviewCard = styled.div`
+  padding: 36px;
   border-radius: 16px;
   background: rgba(171, 182, 255, 0.05);
   border: 1px solid rgba(70, 96, 255, 0.32);
   display: flex;
+  flex-wrap: wrap;
+`
+export const Horizontal = styled.div`
+  height: 1px;
+  width: 100%;
+  margin: 20px 0;
+  background-color: rgba(255, 255, 255, 0.1);
 `
 export const OverviewCardItem = styled.div`
-  min-width: 350px;
-  padding: 36px;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        width: 100%;
+      `;
+    }
+    return css`
+      min-width: 40%;
+    `;
+  }};
 `
 export const OverviewCardItemTitle = styled.div`
   height: 16px;
@@ -89,7 +161,7 @@ export const OverviewCardItemTitle = styled.div`
   font-family: HelveticaNeue;
   color: #FFFFFF;
   line-height: 16px;
-  margin-bottom: 36px;
+  margin-bottom: 20px;
 `
 export const OverviewCardItemContent = styled.div`
   height: 40px;
