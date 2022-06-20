@@ -44,7 +44,7 @@ const NftProfile: FC = ({ children }) => {
   const {
     nfts: userNfts,
     isLoading: isNftLoading,
-    refresh: refreshUserNfts,
+    // refresh: refreshUserNfts,
   } = useNftsForAddress(accountAddress, profile, isProfileValidating)
 
   if (invalidAddress) {

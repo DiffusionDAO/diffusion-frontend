@@ -61,7 +61,7 @@ function NftProfilePage() {
     revalidateOnReconnect: true,
   })
   const {
-    nfts, isLoading: isNftLoading, refresh: refreshUserNfts,
+    nfts, isLoading: isNftLoading,
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
   const [isCompound, setIsCompound] = useState(false)
