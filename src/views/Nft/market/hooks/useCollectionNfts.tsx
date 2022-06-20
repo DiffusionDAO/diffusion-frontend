@@ -19,13 +19,8 @@ import useSWRInfinite from 'swr/infinite'
 import isEmpty from 'lodash/isEmpty'
 import uniqBy from 'lodash/uniqBy'
 import { REQUEST_SIZE } from '../Collection/config'
-import nftDatasMock from '../Profile/MockNftDatas'
-import { getNftMarketAddress } from 'utils/addressHelpers'
-import { simpleRpcProvider } from 'utils/providers'
-import nftMarketAbi from 'config/abi/nftMarket.json'
-import { ethers } from 'ethers'
-import { useWeb3React } from '@web3-react/core'
- 
+import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
+import { getNftMarketContract } from 'utils/contractHelpers'
 
 interface ItemListingSettings {
   field: string
@@ -60,15 +55,17 @@ const fetchMarketDataNfts = async (
       tokenId_in: tokenIdsFromFilter,
     }
     : { collection: collection.address.toLowerCase(), isTradable: true }
-  const subgraphRes = await getNftsMarketData(
-    whereClause,
-    REQUEST_SIZE,
-    settings.field,
-    settings.direction,
-    page * REQUEST_SIZE,
-  )
+  // const subgraphRes = await getNftsMarketData(
+  //   whereClause,
+  //   REQUEST_SIZE,
+  //   settings.field,
+  //   settings.direction,
+  //   page * REQUEST_SIZE,
+  // )
+  const nftMarketContract = getNftMarketContract()
+  const marketItems = await nftMarketContract.fetchMarketItems()
 
-  const apiRequestPromises = subgraphRes.map((marketNft) => getNftApi(collection.address, marketNft.tokenId))
+  const apiRequestPromises = marketItems.map((marketNft) => getNftApi(collection.address, marketNft.tokenId))
   const apiResponses = await Promise.all(apiRequestPromises)
   const newNfts: NftToken[] = apiResponses.reduce((acc, apiNft) => {
     if (apiNft) {
@@ -76,11 +73,12 @@ const fetchMarketDataNfts = async (
         ...apiNft,
         collectionAddress: collection.address,
         collectionName: apiNft.collection.name,
-        marketData: subgraphRes.find((marketNft) => marketNft.tokenId === apiNft.tokenId),
+        marketData: marketItems.find((marketNft) => marketNft.tokenId === apiNft.tokenId),
       })
     }
     return acc
   }, [] as NftToken[])
+  console.log("newNfts:",newNfts)
   return newNfts
 }
 
@@ -189,14 +187,11 @@ const fetchAllNfts = async (
 }
 
 export const useCollectionNfts = (collectionAddress: string) => {
-  const { library } = useWeb3React()
-
   const fetchedNfts = useRef<NftToken[]>([])
   const fallbackMode = useRef(false)
   const fallbackModePage = useRef(0)
   const isLastPage = useRef(false)
   const collection = useGetCollection(collectionAddress)
-  // console.log("useCollectionNfts:", collection)
   const { field, direction } = useGetNftOrdering(collectionAddress)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(collectionAddress)
   const nftFilters = useGetNftFilters(collectionAddress)
@@ -214,6 +209,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
         ? collection.numberTokensListed
         : collection?.totalSupply
       : null
+  console.log("resultSize:", resultSize)
 
   const itemListingSettingsJson = JSON.stringify(itemListingSettings)
   const filtersJson = JSON.stringify(nftFilters)
@@ -245,22 +241,15 @@ export const useCollectionNfts = (collectionAddress: string) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
 
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
-
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
+        var url = `${API_NFT}/collections/${collectionAddress}`
+        const res = await fetch(url)
+        if (res.ok) {
+          const json = await res.json()
+          newNfts = json[collectionAddress].tokens
+        }
         // newNfts = await fetchMarketDataNfts(collection, settings, page, tokenIdsFromFilter)
-        const nftMarketAddress = getNftMarketAddress()
-
-        const nftMarketContract =  new ethers.Contract(nftMarketAddress, nftMarketAbi, library)
-        const response = await nftMarketContract.fetchMarketItems()
-        // newNfts = nftDatasMock
-        newNfts = response.map((item, index)=> {
-          nftDatasMock[index].marketData.currentAskPrice =  ethers.utils.formatUnits(item.price,"ether")
-          nftDatasMock[index].marketData.currentSeller = item.seller
-          var merge = {...nftDatasMock[index], item}
-          return merge})
-        console.log("useCollectionNfts newNfts:",newNfts)
-
       } else {
         const {
           nfts: allNewNfts,

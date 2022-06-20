@@ -34,6 +34,7 @@ import PageLoader from 'components/Loader/PageLoader'
 import ToggleView from 'components/ToggleView/ToggleView'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
+import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
 
 export const ITEMS_PER_PAGE = 9
 
@@ -143,7 +144,7 @@ const Collectible = () => {
     setMaxPage(Math.max(Math.floor(collections.length / ITEMS_PER_PAGE) + extraPages, 1))
   }, [collections])
 
-  const sortedCollections = useMemo(() => {
+  const sortedCollections:any = useMemo(() => {
     return orderBy(
       collections,
       (collection) => {
@@ -158,7 +159,6 @@ const Collectible = () => {
       sortDirection ? 'desc' : 'asc',
     )
   }, [collections, sortField, sortDirection])
-  console.log("sortedCollections:", sortedCollections)
   return (
     <>
       {/* <PageHeader>
@@ -321,7 +321,7 @@ const Collectible = () => {
                 mb="32px"
                 data-test="nft-collection-row"
               >
-                {sortedCollections.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => {
+                {sortedCollections[0].data.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => {
                   return (
                     <CollectionCard
                       key={collection.address}

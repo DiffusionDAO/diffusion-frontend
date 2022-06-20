@@ -1,5 +1,11 @@
 import styled, { css }  from 'styled-components'
 
+
+const HEADER_HEIGHT = 400;
+const MARGIN = 20;
+const NAV_HEIGHT = 56;
+const TOP_HEIGHT = MARGIN + NAV_HEIGHT + 100;
+
 export const SubMenuWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -64,20 +70,102 @@ export const CompoundBtnWrapImg = styled.img`
 export const SyntheticBtn = styled.img`
   cursor: pointer;
   height: 120px;
-  cursor: pointer;
 `
 export const AccountNftWrap = styled.div`
   margin: 24px;
 `
+export const NftSculptureWrap = styled.div`
+  top: -50px;
+  background: url('/images/nfts/nft-sculpture-wrap.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        height: 400px;
+        width: 400px;
+        position: absolute;
+        right: 10px;
+      `;
+    }
+    return css`
+      height: 500px;
+      width: 500px;
+      position: absolute;
+      right: 0px;
+    `;
+  }};
+`
+export const NftSculptureGif = styled.img`
+  position: absolute;
+  left: -0px;
+  bottom: -60px;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        height: 400px;
+        width: 400px;
+      `;
+    }
+    return css`
+      height: 500px;
+      width: 500px;
+    `;
+  }};
+`
+export const NftGearImg = styled.img`
+  position: absolute;
+  animation: gear 10s linear infinite;
+  animation-duration: 10s;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        width: 150px;
+        height: 150px;
+        left: 0px;
+        bottom: -30px;
+      `;
+    }
+    return css`
+      width: 180px;
+      height: 180px;
+      left: 0px;
+      bottom: -50px;
+    `;
+  }};
+`
+export const NftBallImg = styled.img`
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  animation: ball 3s ease-in-out infinite;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        bottom: 200px;
+        left: 330px;
+      `;
+    }
+    return css`
+      bottom: 300px;
+      left: 425px;
+    `;
+  }};
+`
 export const BackgroundWrap = styled.div`
   height: 500px;
   position: relative;
-`
-export const BackgroundImg = styled.img`
-  width: 100%;
-  position: absolute;
-  right: 60px;
-  bottom: 0px;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        margin-top: 300px;
+      `;
+    }
+    return css`
+      margin-top: 0px;
+    `;
+  }};
 `
 export const BackgroundText = styled.div`
   max-width: 500px;

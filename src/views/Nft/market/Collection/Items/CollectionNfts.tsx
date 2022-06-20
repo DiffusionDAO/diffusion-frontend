@@ -6,6 +6,7 @@ import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard } from '../../components/CollectibleCard'
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
 
+
 interface CollectionNftsProps {
   collection: Collection
 }
@@ -25,13 +26,13 @@ const CollectionNfts: React.FC<CollectionNftsProps> = ({ collection }) => {
 
   return (
     <>
-      {/* {resultSize && (
+      {resultSize && (
         <Flex p="16px">
           <Text bold>
             {resultSize} {t('Results')}
           </Text>
         </Flex>
-      )} */}
+      )}
       {nfts.length > 0 ? (
         <>
           <Grid

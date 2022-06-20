@@ -53,6 +53,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     icon: NftIcon,
     fillIcon: NftFillIcon,
     href: `${nftsBaseUrl}`,
+    showItemsOnMobile: false,
     items: [
       // {
       //   label: t('Overview'),

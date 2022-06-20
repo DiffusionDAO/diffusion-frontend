@@ -9,7 +9,7 @@ if (
 
 // Array of available nodes to connect to
 // export const nodes = [process.env.NEXT_PUBLIC_NODE_1, process.env.NEXT_PUBLIC_NODE_2, process.env.NEXT_PUBLIC_NODE_3]
-export const nodes = []
+export const nodes = [process.env.NEXT_PUBLIC_NODE_1]
 
 const getNodeUrl = () => {
   // Use custom node if available (both for development and production)

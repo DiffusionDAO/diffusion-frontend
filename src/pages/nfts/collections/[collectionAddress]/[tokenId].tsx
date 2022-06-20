@@ -2,9 +2,8 @@ import IndividualNFT from 'views/Nft/market/Collection/IndividualNFTPage'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getCollection, getNftApi } from 'state/nftMarket/helpers'
 import { NftToken } from 'state/nftMarket/types'
-/* eslint-disable camelcase */
+// eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
-
 
 const IndividualNFTPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -27,38 +26,38 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { collectionAddress, tokenId } = params
-  console.log("getStaticProps:",collectionAddress, tokenId)
+
   if (typeof collectionAddress !== 'string' || typeof tokenId !== 'string') {
     return {
       notFound: true,
     }
   }
 
-  // const metadata = await getNftApi(collectionAddress, tokenId)
+  const metadata:any = await getNftApi(collectionAddress, tokenId)
   const collection = await getCollection(collectionAddress)
-  const metadata = collection[collectionAddress]
   if (!metadata) {
     return {
       notFound: true,
       revalidate: 1,
     }
   }
+
   const nft: NftToken = {
     tokenId,
     collectionAddress,
-    collectionName: metadata.name,
+    collectionName: metadata.collectionName,
     name: metadata.name,
     description: metadata.description,
-    image: {original:"string", thumbnail: metadata.banner.large},
-    // attributes: metadata.attributes,
+    image: metadata.image,
+    attributes: metadata.attributes,
   }
 
   return {
     props: {
       fallback: {
         [unstable_serialize(['nft', nft.collectionAddress, nft.tokenId])]: nft,
-        ...(metadata && {
-          [unstable_serialize(['nftMarket', 'collections', collectionAddress.toLowerCase()])]: metadata,
+        ...(collection && {
+          [unstable_serialize(['nftMarket', 'collections', collectionAddress.toLowerCase()])]: collection,
         }),
       },
     },

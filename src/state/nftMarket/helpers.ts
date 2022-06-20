@@ -36,6 +36,7 @@ import {
   UserActivity,
 } from './types'
 import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } from './queries'
+<<<<<<< HEAD
 import { ethers } from 'ethers'
 import starlightContract from 'abi/starlightContract.json'
 import { useWeb3React } from '@web3-react/core'
@@ -54,51 +55,21 @@ export const ipfs = create({
 //   port: '5001',
 //   protocol: 'http',
 // })
+=======
+import { useSWRContract } from 'hooks/useSWRContract'
+>>>>>>> d0f20d4d4050392e99964357de8309b100f65656
 /**
  * Fetch static data from all collections using the API
  * @returns
  */
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
-  var res = await ipfs.cat('QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/metadata.json')
-  var buffer = await toBuffer(res)
-  const json = JSON.parse(Buffer.from(buffer).toString('utf8'))
-  json.data.map(async (collection) => {
-    const small = collection.banner.small.slice(1)
-    try {
-      const res = ipfs.cat(small)
-      var buffer = await toBuffer(res)
-      var blob = new Blob([buffer])
-      collection.banner.small = URL.createObjectURL(blob)
-    } catch (error) {
-      console.log("error:", error)
-    }
-    var avatar = collection.avatar.slice(1)
-    try {
-      const res = ipfs.cat(avatar)
-      var buffer = await toBuffer(res)
-      var blob = new Blob([buffer])
-      collection.avatar = URL.createObjectURL(blob)
-    } catch (error) {
-      console.log("error:", error)
-    }
-    const large = collection.banner.large.slice(1)
-    try {
-      const res = ipfs.cat(large)
-      var buffer = await toBuffer(res)
-      var blob = new Blob([buffer])
-      collection.banner.large = URL.createObjectURL(blob)
-    } catch (error) {
-      console.log("error:", error)
-    }
-  })
-  return json
-  // const res = await fetch(`${API_NFT}/collections`)
-  // if (res.ok) {
-  //   const json = await res.json()
-  //   return json
-  // }
-  // console.error('Failed to fetch NFT collections', res.statusText)
-  // return null
+  const res = await fetch(`${API_NFT}/collections`)
+  if (res.ok) {
+    const json = await res.json()
+    return json
+  }
+  console.error('Failed to fetch NFT collections', res.statusText)
+  return null
 }
 
 const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promise<number[]> => {
@@ -119,26 +90,10 @@ const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promis
 /**
  * Fetch all collections data by combining data from the API (static metadata) and the Subgraph (dynamic market data)
  */
-export const getCollections = async (): Promise<Record<string, Collection>> => {
+export const getCollections = async (): Promise<Record<string, any>> => {
   try {
-    const [collections] = await Promise.all([getCollectionsApi()])
-    var avatar = collections.data[0].avatar
-    console.log("avatar:",avatar)
-    const collectionApiData: ApiCollection[] = collections?.data ?? []
-
-    // const collectionsTotalSupply = await fetchCollectionsTotalSupply(collectionApiData)
-
-    // const collectionApiDataCombinedOnChain = collectionApiData.map((collection, index) => {
-    //   const totalSupplyFromApi = Number(collection?.totalSupply) || 0
-    //   const totalSupplyFromOnChain = collectionsTotalSupply[index]
-    //   return {
-    //     ...collection,
-    //     totalSupply: Math.max(totalSupplyFromApi, totalSupplyFromOnChain).toString(),
-    //   }
-    // })
-    // return {collectionApiDataCombinedOnChain}
-    const collectionData = combineCollectionData(collectionApiData, [])
-    return collectionData
+    var collections = await getCollectionsApi()
+    return collections
   } catch (error) {
     console.error('Unable to fetch data:', error)
     return null
@@ -150,21 +105,9 @@ export const getCollections = async (): Promise<Record<string, Collection>> => {
  */
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
-    const [collection] = await Promise.all([
-      // getCollectionSg(collectionAddress),
-      getCollectionApi(collectionAddress),
-    ])
+    const collection = await getCollectionApi(collectionAddress) as any
+    var collectionData = {[collectionAddress] : collection[collectionAddress].data[0]}
 
-    // const collectionsTotalSupply = await fetchCollectionsTotalSupply([collection])
-    // const totalSupplyFromApi = Number(collection?.totalSupply) || 0
-    // const totalSupplyFromOnChain = collectionsTotalSupply[0]
-    var collectionMarket: CollectionMarketDataBaseFields
-    const collections: Collection = {
-      ...collection,
-      ...collectionMarket,
-    }
-
-    var collectionData = {[collectionAddress]:collections}
     return collectionData
     // return combineCollectionData([collectionApiDataCombinedOnChain], [])
   } catch (error) {
@@ -177,13 +120,16 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
  * Fetch static data from a collection using the API
  * @returns
  */
-export const getCollectionApi = async (collectionAddress): Promise<ApiCollection> => {
-  var res = await ipfs.cat('QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/metadata.json')
-  var buffer = await toBuffer(res)
-  const json = JSON.parse(Buffer.from(buffer).toString('utf8'))
-  return json.data[0]
+ export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
+  const url = `${API_NFT}/collections/${collectionAddress}`
+  const res = await fetch(url)
+  if (res.ok) {
+    const json = await res.json()
+    return json
+  }
+  console.error(`API: Failed to fetch NFT collection ${collectionAddress}`, res.statusText)
+  return null
 }
-
 /**
  * Fetch static data for all nfts in a collection using the API
  * @param collectionAddress
@@ -202,7 +148,7 @@ export const getNftsFromCollectionApi = async (
   }`
 
   try {
-    const res:any = {}
+    const res: any = {}
     // const res = await fetch(requestPath)
     if (res.ok) {
       const data = await res.json()
@@ -236,36 +182,15 @@ export const getNftApi = async (
   collectionAddress: string,
   tokenId: string,
 ): Promise<ApiResponseSpecificToken['data']> => {
-  const { connector, library } = useWeb3React()
-  const starlighAddress = "0x69E01E8AdA552DFd66028D7201147288Ea6470de"
-  var nftContract = new ethers.Contract(starlighAddress, starlightContract, library)
-  const uri = await nftContract.tokenURI()
-  console.log("uri:", uri)
-  const json = {
-    tokenId,
-    name: 'StarLight',
-    description: 'StarLight',
-    image: {
-      original: uri,
-      thumbnail: uri,
-    },
-    createdAt: '',
-    updatedAt: '',
-    attributes: [],
-    collection: {
-      name: '',
-    },
+  const url = `${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}`
+  const res = await fetch(url)
+  if (res.ok) {
+    const json = await res.json()
+    return json
   }
-  return json
-  // const res = await fetch(`${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}`)
-  // if (res.ok) {
-  //   const json = await res.json()
-  //   console.log("getNftApi:",json)
-  //   return json.data
-  // }
 
-  // console.error(`API: Can't fetch NFT token ${tokenId} in ${collectionAddress}`, res.status)
-  // return null
+  console.error(`API: Can't fetch NFT token ${tokenId} in ${collectionAddress}`, res.status)
+  return null
 }
 
 /**
@@ -464,14 +389,11 @@ export const getNftsOnChainMarketData = async (
   tokenIds: string[],
 ): Promise<TokenMarketData[]> => {
   try {
-    const nftMarketAddress = getNftMarketAddress()
-    const nftMarketContract =  new ethers.Contract(nftMarketAddress, nftMarketAbi, simpleRpcProvider)
-    const response = await nftMarketContract.fetchMarketItems()
-    console.log("getNftsOnChainMarketData repsonse:",response)
-    // const nftMarketContract = getNftMarketContract()
+    const nftMarketContract = getNftMarketContract()
+    const { data } = useSWRContract([nftMarketContract, 'fetchMarketItems'])
     // const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
     // const askInfo = response?.askInfo
-    const askInfo = response
+    const askInfo = data
     if (!askInfo) return []
 
     return askInfo
@@ -929,8 +851,9 @@ export const fetchNftsFiltered = async (
   collectionAddress: string,
   filters: Record<string, string | number>,
 ): Promise<ApiTokenFilterResponse> => {
+  console.log("fetchNftsFiltered")
   // const res = await fetch(`${API_NFT}/collections/${collectionAddress}/filter?${stringify(filters)}`)
-  const res:any = {}
+  const res: any = {}
 
   if (res.ok) {
     const data = await res.json()
@@ -1273,8 +1196,9 @@ export const getCompleteAccountNftData = async (
  * @returns
  */
 export const getCollectionDistributionApi = async <T>(collectionAddress: string): Promise<T> => {
+  console.log("getCollectionDistributionApi")
   // const res = await fetch(`${API_NFT}/collections/${collectionAddress}/distribution`)
-  const res:any = {}
+  const res: any = {}
 
   if (res.ok) {
     const data = await res.json()

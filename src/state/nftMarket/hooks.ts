@@ -20,19 +20,20 @@ const EMPTY_OBJECT = {}
 
 export const useGetCollections = (): { data: ApiCollections; status: FetchStatus } => {
   const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections())
-  const collections = data ?? ({} as ApiCollections)
-  // console.log("useGetCollections:", data)
+  const collections: any = data ?? {} 
   return { data: collections, status }
 }
 
 export const useGetCollection = (collectionAddress: string): Collection | undefined => {
   const checksummedCollectionAddress = isAddress(collectionAddress) || ''
-  const { data } = useSWR(
-    checksummedCollectionAddress ? ['nftMarket', 'collections', checksummedCollectionAddress.toLowerCase()] : null,
-    async () => getCollection(checksummedCollectionAddress),
-  )
-  const collectionObject = data ?? {}
-  return collectionObject[checksummedCollectionAddress]
+  if (checksummedCollectionAddress) {
+    const { data } = useSWR(
+      checksummedCollectionAddress ? ['nftMarket', 'collections', checksummedCollectionAddress.toLowerCase()] : null,
+      async () => getCollection(checksummedCollectionAddress),
+    )
+    const collectionObject = data ?? {}
+    return collectionObject[checksummedCollectionAddress]
+  }
 }
 
 export const useGetShuffledCollections = (): { data: Collection[]; status: FetchStatus } => {
