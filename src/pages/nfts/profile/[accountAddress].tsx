@@ -177,7 +177,6 @@ function NftProfilePage() {
         </CompoundBtnWrap>
         {isConnectedProfile ? (
           <UserNfts
-            // nfts={nfts}
             isCompound={isCompound}
             nfts={mynfts}
             isLoading={isNftLoading}
