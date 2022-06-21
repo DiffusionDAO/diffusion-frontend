@@ -4,7 +4,7 @@ import { formatCurrency, trim } from "../../../../helpers/dashboard";
 import DiffusionChart from "../../../../components/Recharts/DiffusionChart";
 
 import { bulletpoints, dataKey, headerText, itemType, tooltipInfoMessages, tooltipItems } from "../../dashboardData";
-import { data } from "./MockData";
+import { data } from "../../MockData";
 
 export const Graph = ({ children }) => <>{children}</>;
 
