@@ -11,13 +11,11 @@ export const Graph = ({ children }) => <>{children}</>;
 const { dashboardData } = data;
 
 const menuItemData = [
-  { label: "24h", value: "24h" },
-  { label: "14d", value: "14d" },
-  { label: "30d", value: "30d" },
-  { label: "90d", value: "90d" },
-  { label: "180d", value: "180d" },
-  { label: "1year", value: "1year" },
-  { label: "max", value: "max" },
+  { label: "1s", value: "1s" },
+  { label: "1h", value: "1h" },
+  { label: "1d", value: "1d" },
+  { label: "1w", value: "1w" },
+  { label: "1m", value: "1m" },
 ];
 
 export const OneGraph = () => {
