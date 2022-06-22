@@ -17,7 +17,7 @@ export const data = Mock.mock({
     "thirteen|1-100": 1,
     "fourteen|1-100": 1,
   },
-  // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
+ 
   "dashboardData|5-20": [
     {
       "timestamp|1-100": 1,

@@ -37,7 +37,6 @@ export const OneGraph = () => {
     />
   );
 };
-// 第二个指标图
 export const TwoGraph = () => {
   const theme = useTheme();
   return (
@@ -58,7 +57,6 @@ export const TwoGraph = () => {
   );
 };
 
-// 第三个指标图
 export const ThreeGraph = () => {
   const theme = useTheme();
   const HeaderSuElement = () => {
@@ -103,7 +101,6 @@ export const ThreeGraph = () => {
     />
   );
 };
-// 第四个指标图
 export const FourGraph = () => {
   const theme = useTheme();
   return (
@@ -124,7 +121,6 @@ export const FourGraph = () => {
   );
 };
 
-// 第五个指标
 export const FiveGraph = () => {
   const theme = useTheme();
   return (
@@ -147,7 +143,6 @@ export const FiveGraph = () => {
   );
 };
 
-// 第六个指标
 export const SixGraph = () => {
   const theme = useTheme();
   return (
@@ -170,7 +165,6 @@ export const SixGraph = () => {
   );
 };
 
-// 第七个指标
 export const SevenGraph = () => {
   const theme = useTheme();
   return (
@@ -180,7 +174,7 @@ export const SevenGraph = () => {
       dataKey={dataKey().seven}
       stroke={["#DF741A"]}
       headerText={headerText().seven}
-      headerSubText={`${dashboardData && trim(dashboardData[0].seven, 1)} Days`}
+      headerSubText={`${dashboardData && trim(dashboardData[0].seven, 1)}`}
       dataFormat="days"
       bulletpointColors={bulletpoints.seven}
       itemNames={tooltipItems.seven}
@@ -193,7 +187,6 @@ export const SevenGraph = () => {
   );
 };
 
-// 第8个指标图
 export const EightGraph = () => {
   const theme = useTheme();
   const HeaderSuElement = () => {

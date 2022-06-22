@@ -20,6 +20,7 @@ import {
   TwoGraph,
 } from "./components/Graph/Graph";
 import { data } from "./MockData";
+import useSWR from 'swr'
 
 const useStyles = makeStyles(theme => ({
   hasRLBorder: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const { one, two,three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen } = data.OverviewData 
+const { one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen } = data.OverviewData
 
 const Dashboard = () => {
   // xs, extra-small: 0px or larger
@@ -44,30 +45,38 @@ const Dashboard = () => {
   const clickTab = (tab: string) => {
     setActiveTab(tab);
   };
+  const { data } = useSWR("dashboard", async () => {
+    var data = await fetch("https://middle.diffusiondao.org/api/v0/dashboard")
+    var json = data.json()
+    return json
+  })
+  const conentractions = Object.keys(data.concentration).map(key => data.concentration[key])
+  const avgConentraction = conentractions.reduce((acc, cur) => acc += cur, 0) / conentractions.length
+
   return (
     <div className="dashboard-view">
-        <Typography variant="h4" style={{ fontWeight: 700, overflow: "hidden", color: "#fff" }}>
-          Dashboard
-        </Typography>
-        {isMobile ? (
-          <div className="dashboard-tab">
-            <div aria-hidden="true" className={`${activeTab === "Overview" && "active"}`} onClick={() => clickTab("Overview")}>
-              Overview
-            </div>
-            <div aria-hidden="true" className={`${activeTab === "Chart" && "active"}`} onClick={() => clickTab("Chart")}>
-              Chart
-            </div>
-          </div>
-        ) : (
-          <div style={{ fontWeight: 500, fontSize: "15px", overflow: "hidden", lineHeight: "40px", color: "#fff" }}>
+      <Typography variant="h4" style={{ fontWeight: 700, overflow: "hidden", color: "#fff" }}>
+        Dashboard
+      </Typography>
+      {isMobile ? (
+        <div className="dashboard-tab">
+          <div aria-hidden="true" className={`${activeTab === "Overview" && "active"}`} onClick={() => clickTab("Overview")}>
             Overview
-            <span style={{ color: "grey", fontSize: "12px", fontWeight: 400, marginLeft: "16px" }}>
-              2020/09/09 22:22:22
-            </span>
           </div>
-        )}
+          <div aria-hidden="true" className={`${activeTab === "Chart" && "active"}`} onClick={() => clickTab("Chart")}>
+            Chart
+          </div>
+        </div>
+      ) : (
+        <div style={{ fontWeight: 500, fontSize: "15px", overflow: "hidden", lineHeight: "40px", color: "#fff" }}>
+          Overview
+          <span style={{ color: "grey", fontSize: "12px", fontWeight: 400, marginLeft: "16px" }}>
+            2020/09/09 22:22:22
+          </span>
+        </div>
+      )}
       <Grid container spacing={2}>
-        {!(isMobile && activeTab !== "Overview") ? ( <Grid item lg={12} md={12} sm={12} xs={12}>
+        {!(isMobile && activeTab !== "Overview") ? (<Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container spacing={2}>
             <Grid item lg={9} md={9} sm={12} xs={12}>
               <Grid container spacing={2}>
@@ -101,16 +110,16 @@ const Dashboard = () => {
                       <div className="ctir-image">
                         <CircularProgress
                           variant="determinate"
-                          style={{ color: 'rgba(171, 182, 255, 0.1)', margin: 'auto', width: '100%', height: '100%' }} 
+                          style={{ color: 'rgba(171, 182, 255, 0.1)', margin: 'auto', width: '100%', height: '100%' }}
                           size={40}
                           thickness={4}
                           value={100}
                         />
-                        <CircularProgress variant="determinate" 
+                        <CircularProgress variant="determinate"
                           size={40}
                           thickness={4}
-                          style={{ color: '#0819ff', width: '100%', height: '100%', position:'absolute', left: 0, top: 0, }} 
-                          value={parseInt(six)} 
+                          style={{ color: '#0819ff', width: '100%', height: '100%', position: 'absolute', left: 0, top: 0, }}
+                          value={parseInt(six)}
                         />
                         <div className="ctir-data">{six}</div>
                       </div>
@@ -183,8 +192,8 @@ const Dashboard = () => {
                         <img src="/images/dashboard/di.png" style={{ width: "56px", height: "52px" }} alt="" />
                       </div>
                       <div className="di-font">Diffusion index</div>
-                      {/* <h3 className="di-content">{eleven}</h3>
-                      <DataCell title="Factors of attention" data={twelve} titleStyle={{ color: "#ABB6FF" }} /> */}
+                      {/* {/* <h3 className="di-content">{eleven}</h3> */}
+                      <DataCell title="Factors of attention" data={avgConentraction.toString()} titleStyle={{ color: "#ABB6FF" }} />
                       <DataCell
                         title="Call fator"
                         data={thirteen}
@@ -210,82 +219,82 @@ const Dashboard = () => {
         {/* echarts图表 */}
         {!(isMobile && activeTab !== "Chart") ? (<>
           <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Grid container spacing={2}>
-            <Grid item lg={7} md={7} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                <OneGraph />
-              </Paper>
-            </Grid>
-            <Grid item lg={5} md={5} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                <TwoGraph />
-              </Paper>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Grid container spacing={2}>
-            <Grid item lg={7} md={7} sm={12} xs={12}>
-              <Grid container spacing={4}>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
-                    <ThreeGraph />
-                  </Paper>
-                </Grid>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
-                    <FourGraph />
-                  </Paper>
-                </Grid>
+            <Grid container spacing={2}>
+              <Grid item lg={7} md={7} sm={12} xs={12}>
+                <Paper className="ohm-card ohm-chart-card">
+                  <OneGraph />
+                </Paper>
               </Grid>
-            </Grid>
-            <Grid item lg={5} md={5} sm={12} xs={12}>
-              <Grid container spacing={2}>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card" style={{ height: "238px" }}>
-                    <FiveGraph />
-                  </Paper>
-                </Grid>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card" style={{ height: "238px" }}>
-                    <SixGraph />
-                  </Paper>
-                </Grid>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card" style={{ height: "238px" }}>
-                    <SevenGraph />
-                  </Paper>
-                </Grid>
+              <Grid item lg={5} md={5} sm={12} xs={12}>
+                <Paper className="ohm-card ohm-chart-card">
+                  <TwoGraph />
+                </Paper>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
 
-        <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Grid container spacing={2}>
-            <Grid item lg={7} md={7} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                <EightGraph />
-              </Paper>
-            </Grid>
-            <Grid item lg={5} md={5} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                <NineGraph />
-              </Paper>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Grid container spacing={2}>
+              <Grid item lg={7} md={7} sm={12} xs={12}>
+                <Grid container spacing={4}>
+                  <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Paper className="ohm-card ohm-chart-card">
+                      <ThreeGraph />
+                    </Paper>
+                  </Grid>
+                  <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Paper className="ohm-card ohm-chart-card">
+                      <FourGraph />
+                    </Paper>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item lg={5} md={5} sm={12} xs={12}>
+                <Grid container spacing={2}>
+                  <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Paper className="ohm-card ohm-chart-card" style={{ height: "238px" }}>
+                      <FiveGraph />
+                    </Paper>
+                  </Grid>
+                  <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Paper className="ohm-card ohm-chart-card" style={{ height: "238px" }}>
+                      <SixGraph />
+                    </Paper>
+                  </Grid>
+                  <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Paper className="ohm-card ohm-chart-card" style={{ height: "238px" }}>
+                      <SevenGraph />
+                    </Paper>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
 
-        <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Paper className="ohm-card ohm-chart-card">
-            <TenGraph />
-          </Paper>
-        </Grid>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Grid container spacing={2}>
+              <Grid item lg={7} md={7} sm={12} xs={12}>
+                <Paper className="ohm-card ohm-chart-card">
+                  <EightGraph />
+                </Paper>
+              </Grid>
+              <Grid item lg={5} md={5} sm={12} xs={12}>
+                <Paper className="ohm-card ohm-chart-card">
+                  <NineGraph />
+                </Paper>
+              </Grid>
+            </Grid>
+          </Grid>
 
-        <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Grid container spacing={2}>
-            {/* <Grid item lg={4} md={4} sm={12} xs={12}>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Paper className="ohm-card ohm-chart-card">
+              <TenGraph />
+            </Paper>
+          </Grid>
+
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Grid container spacing={2}>
+              {/* <Grid item lg={4} md={4} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
                 <ElevenGraph />
               </Paper>
@@ -295,14 +304,14 @@ const Dashboard = () => {
                 <TwelveGraph />
               </Paper>
             </Grid> */}
-            <Grid item lg={4} md={4} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                <ThirteenGraph />
-              </Paper>
+              <Grid item lg={4} md={4} sm={12} xs={12}>
+                <Paper className="ohm-card ohm-chart-card">
+                  <ThirteenGraph />
+                </Paper>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        </>): null }
+        </>) : null}
       </Grid>
     </div>
   );
