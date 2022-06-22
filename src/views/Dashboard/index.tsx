@@ -47,18 +47,11 @@ const Dashboard = () => {
   };
   const { data } = useSWR("dashboard", async () => {
     var response = await fetch("https://middle.diffusiondao.org/api/v0/dashboard")
-    var data = response.json()
-    console.log("data:",data)
+    var data = await response.json()
     return data
   })
-  console.log("Dashboard:", data)
-  let conentractions
-  let avgConentraction
-  if (data){
-    conentractions = Object.keys(data?.concentration).map(key => data?.concentration[key])
-    avgConentraction = conentractions?.reduce((acc, cur) => acc += cur, 0) / conentractions.length
-  }
-
+  const conentractions = Object.keys(data?.concentration?? {}).map(key => data?.concentration[key])
+  const avgConentraction = conentractions.reduce((acc, cur) => acc += cur, 0) / conentractions.length 
 
   return (
     <div className="dashboard-view">
@@ -200,7 +193,7 @@ const Dashboard = () => {
                       </div>
                       <div className="di-font">Diffusion index</div>
                       {/* {/* <h3 className="di-content">{eleven}</h3> */}
-                      <DataCell title="Factors of attention" data={avgConentraction?.toString()} titleStyle={{ color: "#ABB6FF" }} />
+                      <DataCell title="Factors of attention" data={conentractions.length ? avgConentraction?.toString(): "0"} titleStyle={{ color: "#ABB6FF" }} />
                       <DataCell
                         title="Call fator"
                         data={thirteen}
