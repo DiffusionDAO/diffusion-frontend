@@ -14,7 +14,6 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
   collections,
 }) => {
   const { t } = useTranslation()
-  console.log("collections:",collections)
 
   var addresses = Object.keys(collections)
   return (

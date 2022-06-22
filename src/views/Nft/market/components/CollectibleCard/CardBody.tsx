@@ -15,7 +15,7 @@ const CollectibleCardBody: React.FC<CollectibleCardProps> = ({ nft, nftLocation,
   const bnbBusdPrice = useBNBBusdPrice()
   const isPancakeBunny = nft.collectionAddress?.toLowerCase() === pancakeBunniesAddress.toLowerCase()
   const { isFetching, lowestPrice } = useGetLowestPriceFromNft(nft)
-  var thumbnail = nft?.image.thumbnail
+  var thumbnail = nft?.image?.thumbnail
 
   return (
     <CardBody p="8px">

@@ -6,7 +6,7 @@ import { nftsBaseUrl, pancakeBunniesAddress } from '../../constants'
 
 const CollectibleLinkCard: React.FC<CollectibleCardProps> = ({ isCompound, nft, nftLocation, currentAskPrice, ...props }) => {
   const urlId =
-    nft.collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase() ? nft.attributes[0].value : nft.tokenId
+    nft?.collectionAddress?.toLowerCase() === pancakeBunniesAddress.toLowerCase() ? nft.attributes[0].value : nft.tokenId
   return (
     <StyledCollectibleCard {...props}>
       {
