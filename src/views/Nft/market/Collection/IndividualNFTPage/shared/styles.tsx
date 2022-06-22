@@ -19,6 +19,7 @@ export const RoundedImage = styled(Image)`
   border-radius: ${({ theme }) => theme.radii.default};
   overflow: hidden;
   & > img {
+    
     object-fit: contain;
   }
 `
@@ -65,5 +66,10 @@ export const ButtonContainer = styled(Box)`
 `
 
 export const TableHeading = styled(Grid)`
-  border-bottom: ${({ theme }) => `1px solid ${theme.colors.cardBorder}`};
+  //border-bottom: ${({ theme }) => `1px solid ${theme.colors.cardBorder}`};
+  margin-top:6px;
+  background: rgba(171, 182, 255, 0.05);
+  border-radius: 8px;
+  height:28px;
+  padding:0;
 `

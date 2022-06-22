@@ -57,9 +57,9 @@ const OwnerCard: React.FC<OwnerCardProps> = ({ nft, isOwnNft, nftIsProfilePic, o
         alignItems="center"
         height="72px"
         px="24px"
-        borderBottom={`1px solid ${theme.colors.cardBorder}`}
+        borderBottom={`1px solid rgba(255, 255, 255, 0.1)`}
       >
-        <SellIcon width="24px" height="24px" />
+        {/* <SellIcon width="24px" height="24px" /> */}
         <Text bold>{t('Owner')}</Text>
       </Grid>
       {owner && (

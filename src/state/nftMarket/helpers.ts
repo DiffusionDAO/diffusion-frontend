@@ -36,7 +36,7 @@ import {
   UserActivity,
 } from './types'
 import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } from './queries'
-<<<<<<< HEAD
+
 import { ethers } from 'ethers'
 import starlightContract from 'abi/starlightContract.json'
 import { useWeb3React } from '@web3-react/core'
@@ -55,9 +55,9 @@ export const ipfs = create({
 //   port: '5001',
 //   protocol: 'http',
 // })
-=======
+
 import { useSWRContract } from 'hooks/useSWRContract'
->>>>>>> d0f20d4d4050392e99964357de8309b100f65656
+// d0f20d4d4050392e99964357de8309b100f65656
 /**
  * Fetch static data from all collections using the API
  * @returns
