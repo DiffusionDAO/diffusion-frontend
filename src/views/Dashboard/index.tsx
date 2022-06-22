@@ -51,8 +51,13 @@ const Dashboard = () => {
     return json
   })
   console.log("Dashboard:", data)
-  const conentractions = Object.keys(data?.concentration).map(key => data?.concentration[key])
-  const avgConentraction = conentractions?.reduce((acc, cur) => acc += cur, 0) / conentractions.length
+  let conentractions
+  let avgConentraction
+  if (data){
+    conentractions = Object.keys(data?.concentration).map(key => data?.concentration[key])
+    avgConentraction = conentractions?.reduce((acc, cur) => acc += cur, 0) / conentractions.length
+  }
+
 
   return (
     <div className="dashboard-view">
