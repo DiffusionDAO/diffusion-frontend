@@ -67,8 +67,6 @@ const Dashboard = () => {
           </div>
         )}
       <Grid container spacing={2}>
-        {/* 13个指标 */}
-        {/* 小屏幕的时候要根据tab切换来显示 */}
         {!(isMobile && activeTab !== "Overview") ? ( <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container spacing={2}>
             <Grid item lg={9} md={9} sm={12} xs={12}>
@@ -185,8 +183,8 @@ const Dashboard = () => {
                         <img src="/images/dashboard/di.png" style={{ width: "56px", height: "52px" }} alt="" />
                       </div>
                       <div className="di-font">Diffusion index</div>
-                      <h3 className="di-content">{eleven}</h3>
-                      <DataCell title="Factors of attention" data={twelve} titleStyle={{ color: "#ABB6FF" }} />
+                      {/* <h3 className="di-content">{eleven}</h3>
+                      <DataCell title="Factors of attention" data={twelve} titleStyle={{ color: "#ABB6FF" }} /> */}
                       <DataCell
                         title="Call fator"
                         data={thirteen}
@@ -287,7 +285,7 @@ const Dashboard = () => {
 
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container spacing={2}>
-            <Grid item lg={4} md={4} sm={12} xs={12}>
+            {/* <Grid item lg={4} md={4} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
                 <ElevenGraph />
               </Paper>
@@ -296,7 +294,7 @@ const Dashboard = () => {
               <Paper className="ohm-card ohm-chart-card">
                 <TwelveGraph />
               </Paper>
-            </Grid>
+            </Grid> */}
             <Grid item lg={4} md={4} sm={12} xs={12}>
               <Paper className="ohm-card ohm-chart-card">
                 <ThirteenGraph />
