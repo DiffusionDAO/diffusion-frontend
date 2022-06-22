@@ -48,6 +48,7 @@ const Dashboard = () => {
   const { data } = useSWR("dashboard", async () => {
     var data = await fetch("https://middle.diffusiondao.org/api/v0/dashboard")
     var json = data.json()
+    console.log("json:",json)
     return json
   })
   console.log("Dashboard:", data)
