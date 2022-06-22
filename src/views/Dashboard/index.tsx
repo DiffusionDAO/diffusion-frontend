@@ -46,10 +46,10 @@ const Dashboard = () => {
     setActiveTab(tab);
   };
   const { data } = useSWR("dashboard", async () => {
-    var data = await fetch("https://middle.diffusiondao.org/api/v0/dashboard")
-    var json = data.json()
-    console.log("json:",json)
-    return json
+    var response = await fetch("https://middle.diffusiondao.org/api/v0/dashboard")
+    var data = response.json()
+    console.log("data:",data)
+    return data
   })
   console.log("Dashboard:", data)
   let conentractions
@@ -200,7 +200,7 @@ const Dashboard = () => {
                       </div>
                       <div className="di-font">Diffusion index</div>
                       {/* {/* <h3 className="di-content">{eleven}</h3> */}
-                      <DataCell title="Factors of attention" data={avgConentraction.toString()} titleStyle={{ color: "#ABB6FF" }} />
+                      <DataCell title="Factors of attention" data={avgConentraction?.toString()} titleStyle={{ color: "#ABB6FF" }} />
                       <DataCell
                         title="Call fator"
                         data={thirteen}
