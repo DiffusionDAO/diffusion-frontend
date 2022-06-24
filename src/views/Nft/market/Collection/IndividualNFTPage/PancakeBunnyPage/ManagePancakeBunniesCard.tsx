@@ -106,7 +106,7 @@ interface CollectiblesByLocationProps {
   location: NftLocation
   nfts: NftToken[]
   lowestPrice: string
-  onSuccessSale: () => void
+  onSuccessSale?: () => void
 }
 
 const CollectiblesByLocation: React.FC<CollectiblesByLocationProps> = ({
@@ -144,7 +144,7 @@ const ManagePancakeBunniesCard: React.FC<ManagePancakeBunniesCardProps> = ({ bun
   const { account } = useWeb3React()
 
   const { isLoading: isProfileLoading, profile } = useProfile()
-  const { nfts: userNfts, isLoading, refresh } = useNftsForAddress(account, profile, isProfileLoading)
+  const { nfts: userNfts, isLoading } = useNftsForAddress(account, profile, isProfileLoading)
 
   const bunniesInWallet = userNfts.filter(
     (nft) => nft.attributes[0].value === bunnyId && nft.location === NftLocation.WALLET,
@@ -185,7 +185,7 @@ const ManagePancakeBunniesCard: React.FC<ManagePancakeBunniesCardProps> = ({ bun
           location={NftLocation.FORSALE}
           nfts={bunniesForSale}
           lowestPrice={lowestPrice}
-          onSuccessSale={refresh}
+          // onSuccessSale={refresh}
         />
       )}
       {bunniesInWallet.length > 0 && (
@@ -195,7 +195,7 @@ const ManagePancakeBunniesCard: React.FC<ManagePancakeBunniesCardProps> = ({ bun
             location={NftLocation.WALLET}
             nfts={bunniesInWallet}
             lowestPrice={lowestPrice}
-            onSuccessSale={refresh}
+            // onSuccessSale={refresh}
           />
         </>
       )}
@@ -206,7 +206,7 @@ const ManagePancakeBunniesCard: React.FC<ManagePancakeBunniesCardProps> = ({ bun
             location={NftLocation.PROFILE}
             nfts={profilePicBunny}
             lowestPrice={lowestPrice}
-            onSuccessSale={refresh}
+            // onSuccessSale={refresh}
           />
         </>
       )}

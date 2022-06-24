@@ -11,7 +11,8 @@ import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
 import { nftsBaseUrl } from '../../../constants'
 import { CollectionLink, Container } from '../shared/styles'
-//import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks"
+import { useMatchBreakpoints } from "../../../../../../../packages/uikit/src/hooks"
+
 
 const NftBg = styled.div`
 width: 300px;
@@ -21,7 +22,17 @@ border-radius: 30px;
 border: 1px solid rgba(70, 96, 255, 0.32);
 position:absolute;
 transform:rotate(10deg);
+`
 
+const NftBgMobile = styled.div`
+width: 245px;
+height: 245px;
+background: rgba(255, 255, 255, 0.05);
+border-radius: 30px;
+border: 1px solid rgba(70, 96, 255, 0.32);
+position:absolute;
+top:30px;
+transform:rotate(10deg);
 `
 const TitleRow = styled.div`
   display:flex;  
@@ -61,7 +72,7 @@ const BondGearImg = styled.img`
     `;
   }};
 `
-//const { isMobile } = useMatchBreakpoints();
+
 const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess }) => {
   const { t } = useTranslation()
   const bnbBusdPrice = useBNBBusdPrice()
@@ -73,7 +84,7 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
     <SellModal variant={nft.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
   const [onEditProfileModal] = useModal(<EditProfileModal />, false)
-  
+  const { isMobile } = useMatchBreakpoints()
   const ownerButtons = (
     <Flex flexDirection={['column', 'column', 'row']}>
       <Button
@@ -99,13 +110,14 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
       )}
     </Flex>
   )
-
+  
   return (
     <Card mb="40px">
       <CardBody>
         <Container flexDirection={['column-reverse', null, 'row']}>
           <Flex flex="2">
-            <Box style={{marginLeft:'48px'}}>
+
+            { !isMobile ? (<Box style={{marginLeft:'48px'}}>
               <TitleRow>
               <div style={{marginRight:'120px'}}>
               <CollectionLink to={`${nftsBaseUrl}/collections/${nft.collectionAddress}`}>
@@ -165,16 +177,86 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
                 </BtnB>
               )}
               </div>
-            </Box>
+            </Box>) :(<Box style={{marginTop:'248px'}}>
+              <TitleRow>
+              <div style={{display:'flex',flexDirection:'column'}}>
+              <CollectionLink to={`${nftsBaseUrl}/collections/${nft.collectionAddress}`}>
+                {nft?.collectionName}
+              </CollectionLink>
+              <Text fontSize="32px" bold mt="12px">
+                {nft.name}
+              </Text>            
+             
+             
+              {/* {nft.description && <Text mt={['16px', '16px', '48px']}>{t(nft.description)}</Text>} */}
+              <Text color="textSubtle" mt={['16px', '16px', '48px']}>
+                {t('Price')}
+              </Text>
+              {currentAskPriceAsNumber > 0 ? (
+                <Flex alignItems="center" mt="10px">
+                  <BinanceIcon width={18} height={18} mr="4px" />
+                  <Text fontSize="32px" bold mr="4px">
+                    {formatNumber(currentAskPriceAsNumber, 0, 5)}
+                  </Text>
+                  {bnbBusdPrice ? (
+                    <Text color="textSubtle">{`(~${priceInUsd.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })} USD)`}</Text>
+                  ) : (
+                    <Skeleton width="64px" />
+                  )}
+                </Flex>
+              ) : (
+                <Text fontSize="32px">{t('Not for sale')}</Text>
+              )}
+               </div>
+              </TitleRow>
+              {nftIsProfilePic && (
+                <Text color="failure">
+                  {t(
+                    'This NFT is your profile picture, you must change it to some other NFT if you want to sell this one.',
+                  )}
+                </Text>
+              )}
+              
+            
+              {isOwnNft && ownerButtons}
+              {!isOwnNft && (
+                <BtnB                 
+                  minWidth="168px"
+                  disabled={!nft.marketData?.isTradable}
+                  mr="16px"
+                  width={['100%', null, 'max-content']}
+                  mt="24px"
+                  onClick={onPresentBuyModal}
+                >
+                  {t('Buy')}
+                 
+                </BtnB>
+              )}
+              
+            </Box>) }
           </Flex>
           <Flex style={{position:'relative'}} flex="2" justifyContent={['center', null, 'flex-end']} alignItems="center" maxWidth={440}>
            
-             <NftBg/>
-              <div style={{position:'absolute',width:'334px',height:'334px'}}><img src='/images/nfts/imgbg.png'/></div>
-              <NFTMedia key={nft.tokenId} nft={nft} width={304} height={304} />
+             { !isMobile ? <NftBg/> : <NftBgMobile/> }              
               
-              <BondGearImg isMobile ={ false } src="/images/gear.png"/>
-           
+             { !isMobile ? <div style={{position:'absolute',width:'334px',height:'334px'}}><img src='/images/nfts/imgbg.png'/></div>
+             : <div style={{position:'absolute',width:'260px',height:'260px',top:'20px'}}><img src='/images/nfts/imgbg.png'/></div>
+            }
+
+             {!isMobile ? <NFTMedia style={{position:'absolute',right:'10px'}} key={nft.tokenId} nft={nft} width={!isMobile ? 304 : 243}
+               height={!isMobile ? 304 : 243} />
+               :<NFTMedia style={{position:'absolute',top:'35px'}} key={nft.tokenId} nft={nft} width={!isMobile ? 304 : 223}
+               height={!isMobile ? 304 : 223} />
+             }
+              
+              { !isMobile && <BondGearImg isMobile ={ false } src="/images/gear.png"/> }
+              
+              
+
+
            
           </Flex>
         </Container>

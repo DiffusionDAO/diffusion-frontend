@@ -4,20 +4,18 @@ import { formatCurrency, trim } from "../../../../helpers/dashboard";
 import DiffusionChart from "../../../../components/Recharts/DiffusionChart";
 
 import { bulletpoints, dataKey, headerText, itemType, tooltipInfoMessages, tooltipItems } from "../../dashboardData";
-import { data } from "./MockData";
+import { data } from "../../MockData";
 
 export const Graph = ({ children }) => <>{children}</>;
 
 const { dashboardData } = data;
 
 const menuItemData = [
-  { label: "24h", value: "24h" },
-  { label: "14d", value: "14d" },
-  { label: "30d", value: "30d" },
-  { label: "90d", value: "90d" },
-  { label: "180d", value: "180d" },
-  { label: "1year", value: "1year" },
-  { label: "max", value: "max" },
+  { label: "1s", value: "1s" },
+  { label: "1h", value: "1h" },
+  { label: "1d", value: "1d" },
+  { label: "1w", value: "1w" },
+  { label: "1m", value: "1m" },
 ];
 
 export const OneGraph = () => {
@@ -39,7 +37,6 @@ export const OneGraph = () => {
     />
   );
 };
-// 第二个指标图
 export const TwoGraph = () => {
   const theme = useTheme();
   return (
@@ -60,7 +57,6 @@ export const TwoGraph = () => {
   );
 };
 
-// 第三个指标图
 export const ThreeGraph = () => {
   const theme = useTheme();
   const HeaderSuElement = () => {
@@ -105,7 +101,6 @@ export const ThreeGraph = () => {
     />
   );
 };
-// 第四个指标图
 export const FourGraph = () => {
   const theme = useTheme();
   return (
@@ -126,7 +121,6 @@ export const FourGraph = () => {
   );
 };
 
-// 第五个指标
 export const FiveGraph = () => {
   const theme = useTheme();
   return (
@@ -149,7 +143,6 @@ export const FiveGraph = () => {
   );
 };
 
-// 第六个指标
 export const SixGraph = () => {
   const theme = useTheme();
   return (
@@ -172,7 +165,6 @@ export const SixGraph = () => {
   );
 };
 
-// 第七个指标
 export const SevenGraph = () => {
   const theme = useTheme();
   return (
@@ -182,7 +174,7 @@ export const SevenGraph = () => {
       dataKey={dataKey().seven}
       stroke={["#DF741A"]}
       headerText={headerText().seven}
-      headerSubText={`${dashboardData && trim(dashboardData[0].seven, 1)} Days`}
+      headerSubText={`${dashboardData && trim(dashboardData[0].seven, 1)}`}
       dataFormat="days"
       bulletpointColors={bulletpoints.seven}
       itemNames={tooltipItems.seven}
@@ -195,7 +187,6 @@ export const SevenGraph = () => {
   );
 };
 
-// 第8个指标图
 export const EightGraph = () => {
   const theme = useTheme();
   const HeaderSuElement = () => {

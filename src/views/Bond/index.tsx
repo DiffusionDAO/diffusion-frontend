@@ -18,14 +18,12 @@ const Bond: FC = () => {
   const { account } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
 
-  // 打开bond窗口
   const openBondModal = () => {
     setBondModalVisible(true)
   }
   const closeBondModal = () => {
     setBondModalVisible(false)
   }
-  // 打开设置窗口
   const openSettingModal = () => {
     setSettingModalVisible(true)
   }

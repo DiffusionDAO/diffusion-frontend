@@ -1,4 +1,6 @@
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface Props {
   title: string;
@@ -7,6 +9,7 @@ interface Props {
   imgStyle?: CSSProperties;
   titleStyle?: CSSProperties;
   imgUrl?: string;
+  progressColor?: string;
 }
 export const DataCell: React.FC<Props> = props => {
   return (
@@ -21,6 +24,24 @@ export const DataCell: React.FC<Props> = props => {
         <div className="data-cell-img">
           <img src={props.imgUrl} style={props.imgStyle} alt="" />
         </div>
+      )}
+      {props.progressColor && (
+          <div className="data-cell-img">
+            <CircularProgress
+              variant="determinate"
+              style={{ color: 'rgba(171, 182, 255, 0.1)', position: 'absolute', left:0, right: 0, margin: 'auto' }} 
+              size={44}
+              thickness={8}
+              value={100}
+            />
+            <CircularProgress 
+              variant="determinate" 
+              size={44}
+              thickness={8}
+              style={{ color: props.progressColor, position: 'absolute', left:0, right: 0, margin: 'auto' }} 
+              value={parseInt(props.data)} 
+            />
+          </div>
       )}
     </div>
   );

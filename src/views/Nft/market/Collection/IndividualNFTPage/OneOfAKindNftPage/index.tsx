@@ -66,13 +66,15 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
     return <PageLoader />
   }
   const { isMobile } = useMatchBreakpoints()
+  let bgImg = isMobile ? "url('/images/nfts/smx1.png')": "url('/images/nfts/smxl.png')"
   
   return (
     <Page>
-      <div style={{backgroundImage:`url('/images/nfts/smxl.png')`,backgroundRepeat:'no-repeat',
-      backgroundPosition: '6px'
+      <div style={{backgroundImage:`${bgImg}`,backgroundRepeat:'no-repeat',
+      backgroundPosition: '4px'
     }}>
-         <MainNFTCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={isProfilePic} onSuccess={refetch} />
+         <MainNFTCard 
+         nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={isProfilePic} onSuccess={refetch} />
       </div>
       <TwoColumnsContainer flexDirection={['column', 'column', 'row']}>
         <Flex flexDirection="column" width="100%">
