@@ -48,13 +48,15 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({ icon, title, content })
   return (
     <FullWidthCard>
       <Grid
-        gridTemplateColumns="1fr 8fr 1fr"
+        gridTemplateColumns="8fr 1fr"
         alignItems="center"
         height="72px"
         px="24px"
-        borderBottom={`1px solid ${theme.colors.cardBorder}`}
+        //borderBottom={`1px solid ${theme.colors.cardBorder}`}
+        borderBottom={`1px solid #1d126747`}
+
       >
-        {icon}
+        {/* {icon} */}
         <Text bold>{title}</Text>
         <IconButton
           onClick={() => {

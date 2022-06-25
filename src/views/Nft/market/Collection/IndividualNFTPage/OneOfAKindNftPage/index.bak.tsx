@@ -15,17 +15,12 @@ import OwnerCard from './OwnerCard'
 import MoreFromThisCollection from '../shared/MoreFromThisCollection'
 import ActivityCard from './ActivityCard'
 import { useCompleteNft } from '../../../hooks/useCompleteNft'
-import { useMatchBreakpoints } from "../../../../../../../packages/uikit/src/hooks"
 
 interface IndividualNFTPageProps {
   collectionAddress: string
   tokenId: string
 }
-const BorderWrap = styled.div`
-backgroundColor:rgba(70, 96, 255, 0.4);
-border: 2px solid rgba(70, 96, 255, 0.2);
-border-radius:16px;
-`
+
 const OwnerActivityContainer = styled(Flex)`
   gap: 22px;
 `
@@ -41,7 +36,7 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
     refetch,
   } = useCompleteNft(collectionAddress, tokenId)
 
-  const properties = nft?.attributes || null
+  const properties = nft?.attributes
 
   const attributesRarity = useMemo(() => {
     if (distributionData && !isFetchingDistribution && properties) {
@@ -65,41 +60,24 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
     // For now this if is used to show loading spinner while we're getting the data
     return <PageLoader />
   }
-  const { isMobile } = useMatchBreakpoints()
-  let bgImg = isMobile ? "url('/images/nfts/smx1.png')": "url('/images/nfts/smxl.png')"
-  
+
   return (
     <Page>
-      <div style={{backgroundImage:`${bgImg}`,backgroundRepeat:'no-repeat',
-      backgroundPosition: '4px'
-    }}>
-         <MainNFTCard 
-         nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={isProfilePic} onSuccess={refetch} />
-      </div>
+      <MainNFTCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={isProfilePic} onSuccess={refetch} />
       <TwoColumnsContainer flexDirection={['column', 'column', 'row']}>
         <Flex flexDirection="column" width="100%">
-          <BorderWrap>
           <ManageNFTsCard nft={nft} isOwnNft={isOwnNft} isLoading={isLoading} onSuccess={refetch} />
-          </BorderWrap>
-          {/* <PropertiesCard properties={properties} rarity={attributesRarity} /> */}
-          <BorderWrap>
+          <PropertiesCard properties={properties} rarity={attributesRarity} />
           <DetailsCard contractAddress={collectionAddress} ipfsJson={nft?.marketData?.metadataUrl} />
-          </BorderWrap>
         </Flex>
-        
         <OwnerActivityContainer flexDirection="column" width="100%">
-        <BorderWrap>
           <OwnerCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={isProfilePic} onSuccess={refetch} />
-         </BorderWrap>
-         <BorderWrap>
           <ActivityCard nft={nft} />
-          </BorderWrap>
         </OwnerActivityContainer>
       </TwoColumnsContainer>
       <MoreFromThisCollection collectionAddress={collectionAddress} currentTokenName={nft.name} />
     </Page>
   )
 }
-
 
 export default IndividualNFTPage

@@ -36,7 +36,28 @@ import {
   UserActivity,
 } from './types'
 import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } from './queries'
+
+import { ethers } from 'ethers'
+import starlightContract from 'abi/starlightContract.json'
+import { useWeb3React } from '@web3-react/core'
+import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
+import { simpleRpcProvider } from 'utils/providers'
+
+const toBuffer = require('it-to-buffer')
+const { create } = require('ipfs-http-client')
+export const ipfs = create({
+  host: '207.148.117.14',
+  port: '5001',
+  protocol: 'http',
+})
+// export const ipfs = create({
+//   host: '207.148.117.14',
+//   port: '5001',
+//   protocol: 'http',
+// })
+
 import { useSWRContract } from 'hooks/useSWRContract'
+// d0f20d4d4050392e99964357de8309b100f65656
 /**
  * Fetch static data from all collections using the API
  * @returns

@@ -7,7 +7,7 @@ yarn build
 yarn integration-tests
 ```
 
-### Run just one test
+### Run j one test
 
 If you want to run single test you first need to build an app and then serve it
 
