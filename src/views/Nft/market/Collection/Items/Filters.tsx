@@ -86,7 +86,6 @@ const ScrollableFlexContainer = styled(Flex)`
 `
 
 const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
-  console.log("Filters")
   const dispatch = useAppDispatch()
   const { data } = useGetCollectionDistribution(address)
   const { t } = useTranslation()
@@ -113,7 +112,7 @@ const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
 
   return (
     <GridContainer>
-      {/* <FilterByTitle textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
+      <FilterByTitle textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
         {t('Filter by')}
       </FilterByTitle>
       <FilterByControls>
@@ -127,7 +126,7 @@ const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
       </SortByTitle>
       <SortByControls>
         <SortSelect collectionAddress={address} />
-      </SortByControls> */}
+      </SortByControls>
       <ScrollableFlexContainer>
         {uniqueTraitTypes.map((traitType) => {
           const attrs = attrsByType[traitType]

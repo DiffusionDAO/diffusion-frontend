@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ collection }) => {
 
   return (
     <>
-      {/* <MarketPageHeader>
+      <MarketPageHeader>
         <TopBar />
         <BannerHeader bannerImage={banner.large} avatar={<AvatarImage src={avatar} />} />
         <MarketPageTitle
@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ collection }) => {
             <StatBoxItem title={t('Vol. (%symbol%)', { symbol: 'BNB' })} stat={volume} />
           </StatBox>
         </MarketPageTitle>
-      </MarketPageHeader> */}
+      </MarketPageHeader>
       <Container>
         <BaseSubMenu items={itemsConfig} activeItem={router.asPath} mt="24px" mb="8px" />
       </Container>
