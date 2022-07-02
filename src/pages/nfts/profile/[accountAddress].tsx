@@ -71,10 +71,9 @@ function NftProfilePage() {
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
   const [isCompound, setIsCompound] = useState(false)
-  // console.log("mynfts:", mynfts)
-  // console.log("selectNfts:", selectNfts)
 
   const [selectedCount, setSelectedCount] = useState<number>(0)
+  const [composedNFT, setComposedNFT] = useState()
 
   const [confirmModalVisible, setConfirmModalVisible] = useState(false)
   const [successModalVisible, setSuccessModalVisible] = useState(false)
@@ -112,9 +111,19 @@ function NftProfilePage() {
   const composeNFT = useNftComposeContract()
   const submitCompound = async () => {
     const selectedToken = selectNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
+    
     console.log("selectedToken:", selectedToken)
-    await composeNFT.ComposeLv0(selectedToken)
-  // await composeNFT.ComposeLvX(selectedToken)
+    if (selectNfts.length === 6) {
+      const id = await composeNFT.ComposeLv0(selectedToken)
+      // console.log("id:", id)
+      // const item = await composeNFT.getItems(id)
+      // setComposedNFT(item)
+    } else if (selectNfts.length === 2 && selectNfts[0].attributes[0].value === selectNfts[1].attributes[0].value) {
+      const id = await composeNFT.ComposeLvX(selectedToken,selectNfts[0].attributes[0].value)
+      // console.log("id:", id)
+      // const item = await composeNFT.getItems(id)
+      // setComposedNFT(item)
+    }
     setConfirmModalVisible(false)
     setSuccessModalVisible(true)
 
