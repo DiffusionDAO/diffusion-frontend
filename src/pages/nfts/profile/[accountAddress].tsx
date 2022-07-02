@@ -54,7 +54,7 @@ function NftProfilePage() {
   const mynfts = keys.map(key => collections.data[key].tokens.filter(item =>
     item.marketData.currentSeller === accountAddress
   )).flat()
-  // console.log("mynfts:", mynfts)
+  console.log("mynfts:", mynfts)
 
   const [selectNfts, setSelectedNfts] = useState<NftToken[]>(mynfts)
 
@@ -111,12 +111,11 @@ function NftProfilePage() {
 
   const composeNFT = useNftComposeContract()
   const submitCompound = async () => {
-    setConfirmModalVisible(false)
     const selectedToken = selectNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
     console.log("selectedToken:", selectedToken)
-
     await composeNFT.ComposeLv0(selectedToken)
-    // await composeNFT.ComposeLvX(selectedToken)
+  // await composeNFT.ComposeLvX(selectedToken)
+    setConfirmModalVisible(false)
     setSuccessModalVisible(true)
 
   }
