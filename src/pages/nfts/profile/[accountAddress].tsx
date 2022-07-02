@@ -118,14 +118,25 @@ function NftProfilePage() {
       // console.log("id:", id)
       // const item = await composeNFT.getItems(id)
       // setComposedNFT(item)
-    } else if (selectNfts.length === 2 && selectNfts[0].attributes[0].value === selectNfts[1].attributes[0].value) {
-      const id = await composeNFT.ComposeLvX(selectedToken,selectNfts[0].attributes[0].value)
-      // console.log("id:", id)
-      // const item = await composeNFT.getItems(id)
-      // setComposedNFT(item)
+      setConfirmModalVisible(false)
+      setSuccessModalVisible(true)
+    } else if (selectNfts.length === 2 ) {
+      if (selectNfts[0].attributes[0].value === selectNfts[1].attributes[0].value) {
+        const id = await composeNFT.ComposeLvX(selectedToken,selectNfts[0].attributes[0].value)
+        // console.log("id:", id)
+        // const item = await composeNFT.getItems(id)
+        // setComposedNFT(item)
+        setConfirmModalVisible(false)
+        setSuccessModalVisible(true)
+      } else {
+        console.log(selectNfts[0].attributes[0].value, selectNfts[1].attributes[0].value)
+        // seNoteModalTitle('Important note')
+        // setModalDescription(selectNfts[0].attributes[0].value, selectNfts[1].attributes[0].value)
+        // seNoteModalVisible(true)
+      }
+
     }
-    setConfirmModalVisible(false)
-    setSuccessModalVisible(true)
+
 
   }
 
