@@ -96,6 +96,7 @@ function NftProfilePage() {
   }
 
   const cancelCompound = () => {
+    selectNfts.map((item) => { item.selected = false; return item })
     setSelectedNfts(mynfts)
     setIsCompound(false)
   }
@@ -111,7 +112,7 @@ function NftProfilePage() {
   const composeNFT = useNftComposeContract()
   const submitCompound = async () => {
     const selectedToken = selectNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
-    
+    const composeAddress = getNFTComposeAddress()
     console.log("selectedToken:", selectedToken)
     if (selectNfts.length === 6) {
       const id = await composeNFT.ComposeLv0(selectedToken)
@@ -120,16 +121,19 @@ function NftProfilePage() {
       // setComposedNFT(item)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
+      selectNfts.map(nft=>nft.marketData.currentSeller = composeAddress)
     } else if (selectNfts.length === 2 ) {
-      if (selectNfts[0].attributes[0].value === selectNfts[1].attributes[0].value) {
-        const id = await composeNFT.ComposeLvX(selectedToken,selectNfts[0].attributes[0].value)
+      const attributesValue = selectNfts[0].attributes[0].value
+      if (attributesValue > 0 && attributesValue === selectNfts[1].attributes[0].value) {
+        const id = await composeNFT.ComposeLvX(selectedToken, attributesValue)
         // console.log("id:", id)
         // const item = await composeNFT.getItems(id)
         // setComposedNFT(item)
         setConfirmModalVisible(false)
         setSuccessModalVisible(true)
+        selectNfts.map(nft=> nft.marketData.currentSeller = composeAddress)
       } else {
-        console.log(selectNfts[0].attributes[0].value, selectNfts[1].attributes[0].value)
+        console.log(attributesValue, selectNfts[1].attributes[0].value)
         // seNoteModalTitle('Important note')
         // setModalDescription(selectNfts[0].attributes[0].value, selectNfts[1].attributes[0].value)
         // seNoteModalVisible(true)
