@@ -30,6 +30,7 @@ import {
   getBunnySpecialLotteryContract,
   getAnniversaryAchievementContract,
   getNftMarketContract,
+  getNftComposeContract,
   getNftSaleContract,
   getPancakeSquadContract,
   getErc721CollectionContract,
@@ -277,6 +278,12 @@ export const useNftMarketContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getNftMarketContract(library.getSigner()), [library])
 }
+
+export const useNftComposeContract = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getNftComposeContract(library.getSigner()), [library])
+}
+
 
 export const useErc721CollectionContract = (
   collectionAddress: string,

@@ -20,7 +20,7 @@ const CompoundSuccessModal: React.FC<CompoundSuccessModalProps> = ({
     <StyledModal
       width={500}
       className="no-header star-bg"
-      title={t('Synthetic')}
+      title={t('Compose')}
       onCancel={onClose}
       visible
       centered

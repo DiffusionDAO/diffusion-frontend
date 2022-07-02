@@ -25,6 +25,8 @@ import { useSWRContract } from 'hooks/useSWRContract'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { ethers } from 'ethers'
 import { useGetCollections } from 'state/nftMarket/hooks'
+import { getDFSNFTAddress, getNFTComposeAddress } from 'utils/addressHelpers'
+import { useNftComposeContract } from 'hooks/useContract'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
 
 const { TabPane } = Tabs;
@@ -37,6 +39,7 @@ function NftProfilePage() {
   const query = useRouter().query
 
   const accountAddress = query.accountAddress as string
+  console.log("accountAddress:", accountAddress)
 
   // const nftMarketContract = getNftMarketContract()
   // const { data } = useSWRContract([nftMarketContract, 'fetchMarketItems'])
@@ -45,13 +48,16 @@ function NftProfilePage() {
   const collections: any = useGetCollections()
   const keys = Object.keys(collections.data)
   console.log(keys)
-  console.log("collections:", collections.data)
+  // console.log("collections:", collections.data)
+
 
   const mynfts = keys.map(key => collections.data[key].tokens.filter(item =>
     item.marketData.currentSeller === accountAddress
   )).flat()
+  // console.log("mynfts:", mynfts)
 
-  console.log("mynfts:", mynfts)
+  const [selectNfts, setSelectedNfts] = useState<NftToken[]>(mynfts)
+
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
   const {
     profile, isValidating: isProfileFetching, refresh: refreshProfile,
@@ -65,7 +71,8 @@ function NftProfilePage() {
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
   const [isCompound, setIsCompound] = useState(false)
-  const [selectNfts, setSelectedNfts] = useState<NftToken[]>([])
+  // console.log("mynfts:", mynfts)
+  // console.log("selectNfts:", selectNfts)
 
   const [selectedCount, setSelectedCount] = useState<number>(0)
 
@@ -82,27 +89,40 @@ function NftProfilePage() {
   ]
 
   const startCompound = () => {
-    setIsCompound(true);
+    setIsCompound(true)
+
+    const dfsnft = selectNfts.filter(item => item.collectionAddress === getDFSNFTAddress())
+    setSelectedNfts(dfsnft)
+    // console.log("dfsnft:",dfsnft)
   }
 
   const cancelCompound = () => {
-    setIsCompound(false);
+    setSelectedNfts(mynfts)
+    setIsCompound(false)
   }
 
   const closeCompoundSuccessModal = () => {
+    setSelectedNfts(mynfts)
     setSuccessModalVisible(false)
     setIsCompound(false)
-    mynfts.map((item) => { item.selected = false; return item })
+    selectNfts.map((item) => { item.selected = false; return item })
     setSelectedCount(0)
   }
 
-  const submitCompound = () => {
+  const composeNFT = useNftComposeContract()
+  const submitCompound = async () => {
     setConfirmModalVisible(false)
+    const selectedToken = selectNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
+    console.log("selectedToken:", selectedToken)
+
+    await composeNFT.ComposeLv0(selectedToken)
+    // await composeNFT.ComposeLvX(selectedToken)
     setSuccessModalVisible(true)
+
   }
 
   const confirmCompound = () => {
-    const selected = mynfts.filter(item => item.selected)
+    const selected = selectNfts.filter(item => item.selected)
     setSelectedNfts(selected)
     if (selected.length % 2 !== 0 || !selected.length) {
       seNoteModalTitle('Important note')
@@ -115,7 +135,7 @@ function NftProfilePage() {
 
   const selectNft = (nft) => {
     nft.selected = !nft.selected
-    const count = mynfts.filter(item => item.selected).length
+    const count = selectNfts.filter(item => item.selected).length
     setSelectedCount(count)
   }
 
@@ -144,8 +164,8 @@ function NftProfilePage() {
             <TabPane
               tab={
                 <span>
-                  {`${t('I Bought NFT')}`}
-                  <SelectedCountWrap>{mynfts?.length}</SelectedCountWrap>
+                  {`${t('NFTs')}`}
+                  <SelectedCountWrap>{selectNfts?.length}</SelectedCountWrap>
                 </span>
               }
             />
@@ -178,7 +198,7 @@ function NftProfilePage() {
         {isConnectedProfile ? (
           <UserNfts
             isCompound={isCompound}
-            nfts={mynfts}
+            nfts={selectNfts}
             isLoading={isNftLoading}
             selectNft={selectNft}
           />
