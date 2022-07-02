@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
 import { useProfileForAddress } from 'state/profile/hooks'
@@ -96,7 +97,7 @@ function NftProfilePage() {
   }
 
   const cancelCompound = () => {
-    selectNfts.map((item) => { item.selected = false; return item })
+    selectNfts.map(item => { item.selected = false; return item })
     setSelectedNfts(mynfts)
     setIsCompound(false)
   }
@@ -105,7 +106,7 @@ function NftProfilePage() {
     setSelectedNfts(mynfts)
     setSuccessModalVisible(false)
     setIsCompound(false)
-    selectNfts.map((item) => { item.selected = false; return item })
+    selectNfts.map(item => { item.selected = false; return item })
     setSelectedCount(0)
   }
 
