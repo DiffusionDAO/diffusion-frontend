@@ -87,19 +87,21 @@ function NftProfilePage() {
     { label: t('General'), value: 'General', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
     { label: t('Congressman'), value: 'Congressman', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
   ]
-
+  const dfsNFTAddress = getDFSNFTAddress()
   const startCompound = () => {
     setIsCompound(true)
 
-    const dfsnft = selectNfts.filter(item => item.collectionAddress === getDFSNFTAddress())
+    const dfsnft = selectNfts.filter(item => item.collectionAddress === dfsNFTAddress)
     setSelectedNfts(dfsnft)
     // console.log("dfsnft:",dfsnft)
   }
 
   const cancelCompound = () => {
     selectNfts.map(item => { item.selected = false; return item })
+    setSelectedCount(0)
     setSelectedNfts(mynfts)
     setIsCompound(false)
+
   }
 
   const closeCompoundSuccessModal = () => {
@@ -158,6 +160,7 @@ function NftProfilePage() {
   }
 
   const selectNft = (nft) => {
+    const attributesValue = selectNfts[0].attributes[0].value
     nft.selected = !nft.selected
     const count = selectNfts.filter(item => item.selected).length
     setSelectedCount(count)
