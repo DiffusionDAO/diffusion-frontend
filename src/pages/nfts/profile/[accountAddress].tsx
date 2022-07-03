@@ -44,6 +44,7 @@ interface noteProps {
   description: string;
   visible: boolean;
 }
+const zeroAddress = '0x0000000000000000000000000000000000000000'
 
 function NftProfilePage() {
   const { account } = useWeb3React()
@@ -160,7 +161,7 @@ function NftProfilePage() {
           await sleep(0.5)
         }
       }
-      selectNfts.map(nft => nft.marketData.currentSeller = composeAddress)
+      selectNfts.map(nft => nft.marketData.currentSeller = zeroAddress)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
     } else if (selectNfts.length === 2) {
@@ -189,7 +190,7 @@ function NftProfilePage() {
             await sleep(0.5)
           }
         }
-        selectNfts.map(nft => nft.marketData.currentSeller = composeAddress)
+        selectNfts.map(nft => nft.marketData.currentSeller = zeroAddress)
         setConfirmModalVisible(false)
         setSuccessModalVisible(true)
       } else {
