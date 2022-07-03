@@ -30,6 +30,8 @@ import {
   getBunnySpecialLotteryContract,
   getAnniversaryAchievementContract,
   getNftMarketContract,
+  getNftComposeContract,
+  getDFSNFTContract,
   getNftSaleContract,
   getPancakeSquadContract,
   getErc721CollectionContract,
@@ -276,6 +278,16 @@ export const useFarmAuctionContract = (withSignerIfPossible = true) => {
 export const useNftMarketContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getNftMarketContract(library.getSigner()), [library])
+}
+
+export const useNftComposeContract = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getNftComposeContract(library.getSigner()), [library])
+}
+
+export const useDFSNftContract = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getDFSNFTContract(library.getSigner()), [library])
 }
 
 export const useErc721CollectionContract = (

@@ -18,7 +18,7 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({
 
   return (
     <StyledModal
-      title={t('Synthetic')}
+      title={t('Compose')}
       onCancel={onDismiss}
       visible
       centered

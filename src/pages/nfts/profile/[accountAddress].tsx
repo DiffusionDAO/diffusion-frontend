@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
 import { useProfileForAddress } from 'state/profile/hooks'
@@ -25,6 +26,8 @@ import { useSWRContract } from 'hooks/useSWRContract'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { ethers } from 'ethers'
 import { useGetCollections } from 'state/nftMarket/hooks'
+import { getDFSNFTAddress, getNFTComposeAddress } from 'utils/addressHelpers'
+import { useDFSNftContract, useNftComposeContract } from 'hooks/useContract'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
 
 const { TabPane } = Tabs;
@@ -42,6 +45,7 @@ function NftProfilePage() {
   const {query} = useRouter()
 
   const accountAddress = query.accountAddress as string
+  console.log("accountAddress:", accountAddress)
 
   // const nftMarketContract = getNftMarketContract()
   // const { data } = useSWRContract([nftMarketContract, 'fetchMarketItems'])
@@ -50,13 +54,16 @@ function NftProfilePage() {
   const collections: any = useGetCollections()
   const keys = Object.keys(collections.data)
   console.log(keys)
-  console.log("collections:", collections.data)
+  // console.log("collections:", collections.data)
+
 
   const mynfts = keys.map(key => collections.data[key].tokens.filter(item =>
     item.marketData.currentSeller === accountAddress
   )).flat()
-
   console.log("mynfts:", mynfts)
+
+  const [selectNfts, setSelectedNfts] = useState<NftToken[]>(mynfts)
+
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
   const {
     profile, isValidating: isProfileFetching, refresh: refreshProfile,
@@ -74,6 +81,7 @@ function NftProfilePage() {
   const [option, setOption] = useState<string>('')
 
   const [selectedCount, setSelectedCount] = useState<number>(0)
+  const [composedNFT, setComposedNFT] = useState()
 
   const [confirmModalVisible, setConfirmModalVisible] = useState(false)
   const [successModalVisible, setSuccessModalVisible] = useState(false)
@@ -92,32 +100,73 @@ function NftProfilePage() {
 
   const resetPage = () => {
     setIsSelected(false)
-    mynfts.map((item) => { item.selected = false; return item })
+    selectNfts.map(item => { item.selected = false; return item })
+    setSelectedNfts(mynfts)
     setSelectedCount(0)
   }
   const changeTab = (key) => {
     resetPage()
     setActiveTab(key)
   }
-
+  const dfsNFTAddress = getDFSNFTAddress()
   // 合成
   const startCompound = () => {
     setIsSelected(true);
     setOption('compound')
+    const dfsnft = selectNfts.filter(item => item.collectionAddress === dfsNFTAddress)
+    setSelectedNfts(dfsnft)
   }
 
   const cancelOpt = () => {
     setIsSelected(false);
+    resetPage()
   }
 
   const closeCompoundSuccessModal = () => {
+    setSelectedNfts(mynfts)
     setSuccessModalVisible(false)
     resetPage()
   }
 
-  const submitCompound = () => {
-    setConfirmModalVisible(false)
-    setSuccessModalVisible(true)
+  const composeNFT = useNftComposeContract()
+  const dfsNFT = useDFSNftContract()
+  const submitCompound = async () => {
+    const selectedTokenIds = selectNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
+    const composeAddress = getNFTComposeAddress()
+    console.log("selectedToken:", selectedTokenIds)
+    if (selectNfts.length === 6) {
+      const tx = await composeNFT.ComposeLv0(selectedTokenIds)
+      const id = await tx.wait()
+      console.log("id:", id)
+      // const item = await composeNFT.getItems(id)
+      // setComposedNFT(item)
+      selectNfts.map(nft=>nft.marketData.currentSeller = composeAddress)
+      setConfirmModalVisible(false)
+      setSuccessModalVisible(true)
+    } else if (selectNfts.length === 2 ) {
+      console.log(selectNfts)
+      const attributesValue = selectNfts[0].attributes[0].value
+      if (attributesValue > 0 && attributesValue === selectNfts[1].attributes[0].value) {
+        const tx = await composeNFT.ComposeLvX(selectedTokenIds, attributesValue)
+        const id = await tx.wait()
+        console.log("id:", id)
+        // var owner = await dfsNFT.ownerOf(selectedTokenIds[0])
+        // console.log("owner:", owner)
+        // owner = await dfsNFT.ownerOf(selectedTokenIds[1])
+        // console.log("owner:", owner)
+        selectNfts.map(nft=> nft.marketData.currentSeller = composeAddress)
+        setConfirmModalVisible(false)
+        setSuccessModalVisible(true)
+      } else {
+        console.log(attributesValue, selectNfts[1].attributes[0].value)
+        // seNoteModalTitle('Important note')
+        // setModalDescription(selectNfts[0].attributes[0].value, selectNfts[1].attributes[0].value)
+        // seNoteModalVisible(true)
+      }
+
+    }
+
+
   }
 
   // 质押
@@ -171,8 +220,9 @@ function NftProfilePage() {
   }
 
   const selectNft = (nft) => {
+    const attributesValue = selectNfts[0].attributes[0].value
     nft.selected = !nft.selected
-    const count = mynfts.filter(item => item.selected).length
+    const count = selectNfts.filter(item => item.selected).length
     setSelectedCount(count)
   }
 
