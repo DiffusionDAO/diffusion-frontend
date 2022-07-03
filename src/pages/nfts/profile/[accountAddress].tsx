@@ -141,7 +141,7 @@ function NftProfilePage() {
       const tx = await composeNFT.ComposeLv0(selectedTokenIds)
       const recipient = await tx.wait()
       const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
-      const tokenId = id.toNumber()
+      const tokenId = id.toString()
       while (true) {
         const res = await fetch(`https://middle.diffusiondao.org/nfts/collections`)
         if (res.ok) {
@@ -150,7 +150,9 @@ function NftProfilePage() {
             item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
           )).flat()
           if (newnfts.length < mynfts.length) {
+            console.log("tokenId:", tokenId)
             const composed = newnfts.filter(nft=>nft.tokenId === tokenId)
+            console.log("composed:", composed)
             setComposedNFT(composed)
             setMynfts(newnfts)
             break
