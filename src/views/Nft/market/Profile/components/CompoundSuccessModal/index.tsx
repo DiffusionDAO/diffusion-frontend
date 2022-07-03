@@ -42,7 +42,6 @@ const CompoundSuccessModal: React.FC<CompoundSuccessModalProps> = ({
         </AchievWrap>
         <ParticleAnimation />
         <Button type="primary" size='large' style={{ padding: '0px 35px' }} onClick={onClose}>{t('Close')}</Button>
-        {/* 散花动画 */}
       </ContentWrap>
     </StyledModal>
   )
