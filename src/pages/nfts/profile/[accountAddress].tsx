@@ -28,7 +28,9 @@ import { ethers } from 'ethers'
 import { useGetCollections } from 'state/nftMarket/hooks'
 import { getDFSNFTAddress, getNFTComposeAddress } from 'utils/addressHelpers'
 import { useDFSNftContract, useNftComposeContract } from 'hooks/useContract'
+import BigNumber from 'bignumber.js'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
+import { deepCopy } from '@ethersproject/properties'
 
 const { TabPane } = Tabs;
 
@@ -40,7 +42,6 @@ function NftProfilePage() {
   const query = useRouter().query
 
   const accountAddress = query.accountAddress as string
-  console.log("accountAddress:", accountAddress)
 
   // const nftMarketContract = getNftMarketContract()
   // const { data } = useSWRContract([nftMarketContract, 'fetchMarketItems'])
@@ -48,16 +49,20 @@ function NftProfilePage() {
 
   const collections: any = useGetCollections()
   const keys = Object.keys(collections.data)
-  console.log(keys)
   // console.log("collections:", collections.data)
 
+  const [selectNfts, setSelectedNfts] = useState<NftToken[]>()
 
-  const mynfts = keys.map(key => collections.data[key].tokens.filter(item =>
-    item.marketData.currentSeller === accountAddress
-  )).flat()
-  console.log("mynfts:", mynfts)
-
-  const [selectNfts, setSelectedNfts] = useState<NftToken[]>(mynfts)
+  let mynfts
+  useEffect(() => {
+    mynfts = keys.map(key => collections.data[key].tokens.filter(item =>
+      item.marketData.currentSeller === accountAddress
+    )).flat()
+    if (mynfts.lenght > 0){
+      setSelectedNfts(mynfts)
+    }
+    console.log("mynfts:", mynfts)
+  },[keys])
 
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
   const {
@@ -91,13 +96,13 @@ function NftProfilePage() {
   const startCompound = () => {
     setIsCompound(true)
 
-    const dfsnft = selectNfts.filter(item => item.collectionAddress === dfsNFTAddress)
+    const dfsnft = selectNfts?.filter(item => item.collectionAddress === dfsNFTAddress)
     setSelectedNfts(dfsnft)
     // console.log("dfsnft:",dfsnft)
   }
 
   const cancelCompound = () => {
-    selectNfts.map(item => { item.selected = false; return item })
+    selectNfts?.map(item => { item.selected = false; return item })
     setSelectedCount(0)
     setSelectedNfts(mynfts)
     setIsCompound(false)
@@ -120,25 +125,34 @@ function NftProfilePage() {
     console.log("selectedToken:", selectedTokenIds)
     if (selectNfts.length === 6) {
       const tx = await composeNFT.ComposeLv0(selectedTokenIds)
-      const id = await tx.wait()
-      console.log("id:", id)
-      // const item = await composeNFT.getItems(id)
-      // setComposedNFT(item)
-      selectNfts.map(nft=>nft.marketData.currentSeller = composeAddress)
+      const recipient = await tx.wait()
+      const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
+      const idNumber = id.toNumber()
+      var level = await dfsNFT.getItems(idNumber)
+      var newNft = deepCopy(selectNfts[0])
+      console.log("newNft:", newNft)
+      newNft.attributes[0].value = level
+      mynfts.push(newNft)
+      setSelectedNfts(mynfts)
+      selectNfts.map(nft => nft.marketData.currentSeller = composeAddress)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
-    } else if (selectNfts.length === 2 ) {
+    } else if (selectNfts.length === 2) {
       console.log(selectNfts)
       const attributesValue = selectNfts[0].attributes[0].value
       if (attributesValue > 0 && attributesValue === selectNfts[1].attributes[0].value) {
         const tx = await composeNFT.ComposeLvX(selectedTokenIds, attributesValue)
-        const id = await tx.wait()
-        console.log("id:", id)
-        // var owner = await dfsNFT.ownerOf(selectedTokenIds[0])
+        const recipient = await tx.wait()
+        const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
+        const idNumber = id.toNumber()
+        var level = await dfsNFT.getItems(idNumber)
+        var newNft = deepCopy(selectNfts[0])
+        console.log("newNft:", newNft)
+        newNft.attributes[0].value = level
+        mynfts.push(newNft)
+        setSelectedNfts(mynfts)
         // console.log("owner:", owner)
-        // owner = await dfsNFT.ownerOf(selectedTokenIds[1])
-        // console.log("owner:", owner)
-        selectNfts.map(nft=> nft.marketData.currentSeller = composeAddress)
+        selectNfts.map(nft => nft.marketData.currentSeller = composeAddress)
         setConfirmModalVisible(false)
         setSuccessModalVisible(true)
       } else {
