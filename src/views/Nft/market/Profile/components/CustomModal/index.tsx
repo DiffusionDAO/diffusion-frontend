@@ -6,13 +6,19 @@ import { StyledModal, ContentWrap, TitleText, DesText, BtnWrap } from './styles'
 interface CustomModalProps {
   title: string;
   description: string;
-  onClose: () => void
+  onConfirm: () => void;
+  onClose: () => void;
+  cancelText?: string;
+  okText?: string;
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
   title,
   description,
   onClose,
+  onConfirm,
+  cancelText="Cancel",
+  okText="Confirm",
 }) => {
   const { t } = useTranslation()
 
@@ -30,8 +36,8 @@ const CustomModal: React.FC<CustomModalProps> = ({
         <TitleText>{title}</TitleText>
         <DesText>{description}</DesText>
         <BtnWrap>
-          <Button type="primary" size='middle' style={{ marginRight: '10px' }} onClick={onClose}>{t('Cancel')}</Button>
-          <Button type="primary" size='middle' onClick={onClose}>{t('Save')}</Button>
+          <Button type="primary" size='middle' style={{ marginRight: '10px' }} onClick={onClose}>{t(cancelText)}</Button>
+          <Button type="primary" size='middle' onClick={onConfirm}>{t(okText)}</Button>
         </BtnWrap>
       </ContentWrap>
     </StyledModal>

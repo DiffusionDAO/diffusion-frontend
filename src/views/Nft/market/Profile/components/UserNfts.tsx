@@ -6,14 +6,14 @@ import GridPlaceholder from '../../components/GridPlaceholder'
 import NoNftsImage from '../../components/Activity/NoNftsImage'
 
 const UserNfts: React.FC<{
-  isCompound: boolean
+  isSelected: boolean
   nfts: NftToken[]
   isLoading: boolean
   selectNft: (param: NftToken) => void
-}> = ({ isCompound, nfts, isLoading, selectNft }) => {
+}> = ({ isSelected, nfts, isLoading, selectNft }) => {
   const { t } = useTranslation()
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
-    if (isCompound) {
+    if (isSelected) {
       selectNft(nft)
     }
   }
@@ -39,7 +39,7 @@ const UserNfts: React.FC<{
 
             return (
               <CollectibleLinkCard
-                isCompound={isCompound}
+                isSelected={isSelected}
                 isUserNft
                 onClick={() => handleCollectibleClick(nft, location)}
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
