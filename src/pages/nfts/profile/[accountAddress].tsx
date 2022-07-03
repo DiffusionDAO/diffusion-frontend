@@ -43,6 +43,8 @@ function NftProfilePage() {
   const { t } = useTranslation()
   const {route} = useRouter()
   const {query} = useRouter()
+  const collections: any = useGetCollections()
+
 
   const accountAddress = query.accountAddress as string
   console.log("accountAddress:", accountAddress)
@@ -51,18 +53,8 @@ function NftProfilePage() {
   // const { data } = useSWRContract([nftMarketContract, 'fetchMarketItems'])
   // console.log("data:", data)
 
-  const collections: any = useGetCollections()
-  const keys = Object.keys(collections.data)
-  console.log(keys)
-  // console.log("collections:", collections.data)
-
-
-  const mynfts = keys.map(key => collections.data[key].tokens.filter(item =>
-    item.marketData.currentSeller === accountAddress
-  )).flat()
-  console.log("mynfts:", mynfts)
-
-  const [selectNfts, setSelectedNfts] = useState<NftToken[]>(mynfts)
+  const [selectNfts, setSelectedNfts] = useState<NftToken[]>([])
+  const [mynfts,setMynfts] =  useState<NftToken[]>([])
 
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
   const {
@@ -77,7 +69,6 @@ function NftProfilePage() {
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
   const [isSelected, setIsSelected] = useState<boolean>(false)
-  const [selectNfts, setSelectedNfts] = useState<NftToken[]>([])
   const [option, setOption] = useState<string>('')
 
   const [selectedCount, setSelectedCount] = useState<number>(0)
@@ -97,12 +88,23 @@ function NftProfilePage() {
     { label: t('General'), value: 'General', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
     { label: t('Congressman'), value: 'Congressman', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
   ]
+  
+  useEffect(() => {
+    const keys = Object.keys(collections.data)
+    console.log(keys)
+    // console.log("collections:", collections.data)
+    const initNfts = keys.map(key => collections.data[key].tokens.filter(item =>
+      item.marketData.currentSeller === accountAddress
+    )).flat()
+    console.log("mynfts:", initNfts)
+    setMynfts(initNfts)
+  }, [])
 
   const resetPage = () => {
     setIsSelected(false)
-    selectNfts.map(item => { item.selected = false; return item })
-    setSelectedNfts(mynfts)
     setSelectedCount(0)
+    const nftData = mynfts.map(item => { item.selected = false; return item })
+    setMynfts(nftData)
   }
   const changeTab = (key) => {
     resetPage()
@@ -186,8 +188,8 @@ function NftProfilePage() {
   }
 
   const submitPledge = () => {
-    setIsSelected(false)
     resetPage()
+    message.success('Pledge success')
   }
 
   const confirmOpt = () => {
@@ -220,9 +222,14 @@ function NftProfilePage() {
   }
 
   const selectNft = (nft) => {
-    const attributesValue = selectNfts[0].attributes[0].value
-    nft.selected = !nft.selected
-    const count = selectNfts.filter(item => item.selected).length
+    const data = cloneDeep(mynfts)
+    data.map((item: NftToken) => {
+      const obj = item
+      if (obj.tokenId === nft.tokenId) obj.selected = !obj.selected
+      return obj
+    })
+    const count = data.filter(item => item.selected).length
+    setMynfts(data)
     setSelectedCount(count)
   }
 
