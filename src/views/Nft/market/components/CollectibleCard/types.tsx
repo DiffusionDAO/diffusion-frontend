@@ -6,5 +6,5 @@ export interface CollectibleCardProps extends CardProps {
   nftLocation?: NftLocation
   currentAskPrice?: number
   isUserNft?: boolean
-  isCompound?: boolean
+  isSelected?: boolean
 }

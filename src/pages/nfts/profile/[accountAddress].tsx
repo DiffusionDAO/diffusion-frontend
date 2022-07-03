@@ -6,12 +6,12 @@ import { NftProfileLayout } from 'views/Nft/market/Profile'
 import UnconnectedProfileNfts from 'views/Nft/market/Profile/components/UnconnectedProfileNfts'
 import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
 import {
-  AccountNftWrap, SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn,
+  AccountNftWrap, SubMenuWrap, SubMenuRight, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn,
   CompoundBtnWrapImg, SelectedCountBox, BackgroundWrap, ConentWrap, BackgroundTitle, BackgroundDes,
   BackgroundText, NftSculptureWrap, NftSculptureGif, NftGearImg, NftBallImg
 } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
-import { Cascader, Tabs, Button } from 'antd';
+import { Cascader, Tabs, Button, message } from 'antd';
 import { useTranslation } from 'contexts/Localization'
 import { useState, useEffect, useCallback } from 'react'
 import { NftToken } from 'state/nftMarket/types'
@@ -28,13 +28,18 @@ import { useGetCollections } from 'state/nftMarket/hooks'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
 
 const { TabPane } = Tabs;
+interface noteProps {
+  title: string;
+  description: string;
+  visible: boolean;
+}
 
 function NftProfilePage() {
   const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
-  const route = useRouter().route
-  const query = useRouter().query
+  const {route} = useRouter()
+  const {query} = useRouter()
 
   const accountAddress = query.accountAddress as string
 
@@ -64,16 +69,20 @@ function NftProfilePage() {
     nfts, isLoading: isNftLoading,
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
-  const [isCompound, setIsCompound] = useState(false)
+  const [isSelected, setIsSelected] = useState<boolean>(false)
   const [selectNfts, setSelectedNfts] = useState<NftToken[]>([])
+  const [option, setOption] = useState<string>('')
 
   const [selectedCount, setSelectedCount] = useState<number>(0)
 
   const [confirmModalVisible, setConfirmModalVisible] = useState(false)
   const [successModalVisible, setSuccessModalVisible] = useState(false)
-  const [noteModalVisible, seNoteModalVisible] = useState(false)
-  const [modalTitle, seNoteModalTitle] = useState('')
-  const [modalDescription, setModalDescription] = useState('')
+  const [noteContent, setNoteContent] = useState<noteProps>({
+    title: '',
+    description: '',
+    visible: false,
+  })
+  const [activeTab, setActiveTab] = useState<string>('WithoutPledge')
 
   const sortByItems = [
     { label: t('Lord'), value: 'Lord', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
@@ -81,19 +90,29 @@ function NftProfilePage() {
     { label: t('Congressman'), value: 'Congressman', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
   ]
 
-  const startCompound = () => {
-    setIsCompound(true);
+  const resetPage = () => {
+    setIsSelected(false)
+    mynfts.map((item) => { item.selected = false; return item })
+    setSelectedCount(0)
+  }
+  const changeTab = (key) => {
+    resetPage()
+    setActiveTab(key)
   }
 
-  const cancelCompound = () => {
-    setIsCompound(false);
+  // 合成
+  const startCompound = () => {
+    setIsSelected(true);
+    setOption('compound')
+  }
+
+  const cancelOpt = () => {
+    setIsSelected(false);
   }
 
   const closeCompoundSuccessModal = () => {
     setSuccessModalVisible(false)
-    setIsCompound(false)
-    mynfts.map((item) => { item.selected = false; return item })
-    setSelectedCount(0)
+    resetPage()
   }
 
   const submitCompound = () => {
@@ -101,16 +120,54 @@ function NftProfilePage() {
     setSuccessModalVisible(true)
   }
 
-  const confirmCompound = () => {
+  // 质押
+  const startPledge = () => {
+    setIsSelected(true)
+    setOption('pledge')
+  }
+
+  // note modal confirm
+  const noteConfirm = () => {
+    setNoteContent({
+      title: '',
+      description: '',
+      visible: false,
+    })
+    if (option === 'pledge' && selectedCount > 0) submitPledge()
+  }
+
+  const submitPledge = () => {
+    setIsSelected(false)
+    resetPage()
+  }
+
+  const confirmOpt = () => {
     const selected = mynfts.filter(item => item.selected)
     setSelectedNfts(selected)
-    if (selected.length % 2 !== 0 || !selected.length) {
-      seNoteModalTitle('Important note')
-      setModalDescription('The NFTs you selected is across levels, please select the same color at the same level for composition')
-      seNoteModalVisible(true)
+    if (!selected.length) {
+      setNoteContent({
+        title: t('Important note'),
+        description: t('Please select one NFT at least'),
+        visible: true,
+      })
       return
     }
-    setConfirmModalVisible(true)
+    if (option === 'compound') {
+      if (selected.length % 2 !== 0 || !selected.length) {
+        setNoteContent({
+          title: t('Important note'),
+          description: t('The NFTs you selected is across levels, please select the same color at the same level for composition'),
+          visible: true,
+        });
+        return
+      }
+      setConfirmModalVisible(true)
+    }
+    setNoteContent({
+      title: t('Important note'),
+      description: t('You will pledge the NFT to the platform and a 15% handling fee will be charged when you cancel the pledge'),
+      visible: true,
+    });
   }
 
   const selectNft = (nft) => {
@@ -140,35 +197,51 @@ function NftProfilePage() {
       </BackgroundWrap>
       <ConentWrap>
         <SubMenuWrap>
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey={activeTab} onChange={changeTab}>
             <TabPane
+              key="WithoutPledge"
               tab={
                 <span>
-                  {`${t('I Bought NFT')}`}
+                  {`${t('Without the pledge')}`}
+                  <SelectedCountWrap>{mynfts?.length}</SelectedCountWrap>
+                </span>
+              }
+            />
+            <TabPane
+              key="Pledge"
+              tab={
+                <span>
+                  {`${t('Has pledged')}`}
                   <SelectedCountWrap>{mynfts?.length}</SelectedCountWrap>
                 </span>
               }
             />
           </Tabs>
-          <SelectWrap>
-            <Cascader
-              options={sortByItems}
-              style={{ width: "200px" }}
-            />
-          </SelectWrap>
+          <SubMenuRight>
+            <SelectWrap>
+              <Cascader
+                options={sortByItems}
+                style={{ width: "200px" }}
+              />
+            </SelectWrap>
+            {
+              activeTab === 'WithoutPledge' &&  
+              <Button type="primary" style={{ marginLeft: '10px' }} size='middle' onClick={startPledge}>{t('Pledge')}</Button>
+            }
+          </SubMenuRight>
         </SubMenuWrap>
-        <CompoundBtnWrap isCompound={isCompound}>
+        <CompoundBtnWrap isSelected={isSelected}>
           <CompoundBtnWrapImg src="/images/nfts/compoundBtnWrap.png" />
           {
-            isCompound ?
+            isSelected ?
               <>
                 <SelectedCountBox>
                   {t('Selected')}
                   <SelectedCountWrap>{selectedCount}</SelectedCountWrap>
                 </SelectedCountBox>
                 <div>
-                  <Button type="primary" size='middle' style={{ marginRight: '10px' }} onClick={confirmCompound}>{t('Save')}</Button>
-                  <Button size='middle' onClick={cancelCompound}>{t('Cancel')}</Button>
+                  <Button type="primary" size='middle' style={{ marginRight: '10px' }} onClick={confirmOpt}>{t('Save')}</Button>
+                  <Button size='middle' onClick={cancelOpt}>{t('Cancel')}</Button>
                 </div>
               </> :
               <SyntheticBtn src="/images/nfts/synthetic-btn.svg" onClick={startCompound} />
@@ -177,7 +250,7 @@ function NftProfilePage() {
         </CompoundBtnWrap>
         {isConnectedProfile ? (
           <UserNfts
-            isCompound={isCompound}
+            isSelected={isSelected}
             nfts={mynfts}
             isLoading={isNftLoading}
             selectNft={selectNft}
@@ -187,7 +260,8 @@ function NftProfilePage() {
         )}
       </ConentWrap>
       {
-        noteModalVisible ? <CustomModal title={modalTitle} description={modalDescription} onClose={() => seNoteModalVisible(false)} />
+        noteContent.visible ? <CustomModal title={noteContent.title} description={noteContent.description}
+        onClose={() => setNoteContent({title:'', description:'',visible: false})} onConfirm={noteConfirm}  />
           : null
       }
       {
