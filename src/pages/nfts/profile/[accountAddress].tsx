@@ -88,7 +88,7 @@ function NftProfilePage() {
     { label: t('General'), value: 'General', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
     { label: t('Congressman'), value: 'Congressman', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
   ]
-  
+
   useEffect(() => {
     const keys = Object.keys(collections.data)
     console.log(keys)
@@ -213,12 +213,16 @@ function NftProfilePage() {
         return
       }
       setConfirmModalVisible(true)
+      return
     }
-    setNoteContent({
-      title: t('Important note'),
-      description: t('You will pledge the NFT to the platform and a 15% handling fee will be charged when you cancel the pledge'),
-      visible: true,
-    });
+    if (option === 'pledge') {
+      setNoteContent({
+        title: t('Important note'),
+        description: t('You will pledge the NFT to the platform and a 15% handling fee will be charged when you cancel the pledge'),
+        visible: true,
+      });
+    }
+
   }
 
   const selectNft = (nft) => {
