@@ -27,7 +27,7 @@ import { getNftMarketContract } from 'utils/contractHelpers'
 import { ethers } from 'ethers'
 import { useGetCollections } from 'state/nftMarket/hooks'
 import { getDFSNFTAddress, getNFTComposeAddress } from 'utils/addressHelpers'
-import { useNftComposeContract } from 'hooks/useContract'
+import { useDFSNftContract, useNftComposeContract } from 'hooks/useContract'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
 
 const { TabPane } = Tabs;
@@ -113,28 +113,34 @@ function NftProfilePage() {
   }
 
   const composeNFT = useNftComposeContract()
+  const dfsNFT = useDFSNftContract()
   const submitCompound = async () => {
-    const selectedToken = selectNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
+    const selectedTokenIds = selectNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
     const composeAddress = getNFTComposeAddress()
-    console.log("selectedToken:", selectedToken)
+    console.log("selectedToken:", selectedTokenIds)
     if (selectNfts.length === 6) {
-      const id = await composeNFT.ComposeLv0(selectedToken)
-      // console.log("id:", id)
+      const tx = await composeNFT.ComposeLv0(selectedTokenIds)
+      const id = await tx.wait()
+      console.log("id:", id)
       // const item = await composeNFT.getItems(id)
       // setComposedNFT(item)
+      selectNfts.map(nft=>nft.marketData.currentSeller = composeAddress)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
-      selectNfts.map(nft=>nft.marketData.currentSeller = composeAddress)
     } else if (selectNfts.length === 2 ) {
+      console.log(selectNfts)
       const attributesValue = selectNfts[0].attributes[0].value
       if (attributesValue > 0 && attributesValue === selectNfts[1].attributes[0].value) {
-        const id = await composeNFT.ComposeLvX(selectedToken, attributesValue)
-        // console.log("id:", id)
-        // const item = await composeNFT.getItems(id)
-        // setComposedNFT(item)
+        const tx = await composeNFT.ComposeLvX(selectedTokenIds, attributesValue)
+        const id = await tx.wait()
+        console.log("id:", id)
+        // var owner = await dfsNFT.ownerOf(selectedTokenIds[0])
+        // console.log("owner:", owner)
+        // owner = await dfsNFT.ownerOf(selectedTokenIds[1])
+        // console.log("owner:", owner)
+        selectNfts.map(nft=> nft.marketData.currentSeller = composeAddress)
         setConfirmModalVisible(false)
         setSuccessModalVisible(true)
-        selectNfts.map(nft=> nft.marketData.currentSeller = composeAddress)
       } else {
         console.log(attributesValue, selectNfts[1].attributes[0].value)
         // seNoteModalTitle('Important note')

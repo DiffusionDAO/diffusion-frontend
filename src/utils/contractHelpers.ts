@@ -243,6 +243,7 @@ export const getAnniversaryAchievementContract = (signer?: Signer | Provider) =>
 export const getGalaxyNTFClaimingContract = (signer?: Signer | Provider) => {
   return getContract(galaxyNFTClaimingAbi, getGalaxyNFTClaimingAddress(), signer) as GalaxyNFTClaiming
 }
+
 export const getNftComposeContract =  (signer?: Signer | Provider) => {
   return getContract(nftComposeAbi, getNFTComposeAddress(), signer) 
 }
