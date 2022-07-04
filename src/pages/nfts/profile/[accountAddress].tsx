@@ -99,9 +99,9 @@ function NftProfilePage() {
     const nfts = keys.map(key => collections[key].tokens.filter(item =>
       item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
     )).flat()
-    nfts.map(nft => {
+    nfts.map(nft =>
       nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
-    })
+    )
     console.log("nfts:", nfts)
 
     setMynfts(nfts)
@@ -260,11 +260,11 @@ function NftProfilePage() {
       return obj
     })
     if (level === '0') {
-      var datas = data.slice(0, 6)
+      const datas = data.slice(0, 6)
       setSelectedNfts(datas)
       setSelectedCount(datas.filter(item => item.selected).length)
     } else {
-      var datas = data.slice(0, 2)
+      const datas = data.slice(0, 2)
       setSelectedNfts(datas)
       setSelectedCount(datas.filter(item => item.selected).length)
     }
