@@ -72,12 +72,6 @@ export const DrawBlindBoxHeader  = styled.div`
     background-size: contain;
   }
 `
-export const DrawBlindBoxHeaderBg = styled.img`
-  height: 50px;
-  position: absolute;
-  top: 0;
-  left: 0;
-`
 
 export const DrawBlindBoxFooter = styled.div`
   height: 90px;
@@ -93,9 +87,25 @@ export const DrawBlindBoxFooter = styled.div`
   left: 0;
 `
 
-export const DrawBlindBoxFooterBtn = styled(Button)`
+export const DrawBlindBoxFooterBtn = styled.div`
   min-width: 120px;
   height: 40px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  &.purpleBtn {
+    background: linear-gradient(90deg, #3C00FF, #EC6EFF);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
+  &.orangeBtn {
+    background: linear-gradient(90deg, #FFA16E, #FF7056);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
 `
 
 

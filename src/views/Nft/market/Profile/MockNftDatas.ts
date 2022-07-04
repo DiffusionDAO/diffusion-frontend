@@ -9,7 +9,7 @@ const nftDatasMock: NftToken[] = [
     collectionAddress: "0x69E01E8AdA552DFd66028D7201147288Ea6470de",
     image: {
       original: "string",
-      thumbnail: "QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/1"
+      thumbnail: "https://static-nft.pancakeswap.com/mainnet/0x5F41842CFF838120271d772C6994F051d418a4aD/pixel-sweeper-7218-1000.png"
     },
     attributes: [
       {
@@ -39,7 +39,7 @@ const nftDatasMock: NftToken[] = [
     collectionAddress: "0x69E01E8AdA552DFd66028D7201147288Ea6470de",
     image: {
       original: "string",
-      thumbnail: "QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/2"
+      thumbnail: "https://static-nft.pancakeswap.com/mainnet/0x5F41842CFF838120271d772C6994F051d418a4aD/pixel-sweeper-7237-1000.png"
     },
     attributes: [
       {
@@ -69,7 +69,7 @@ const nftDatasMock: NftToken[] = [
     collectionAddress: "0x69E01E8AdA552DFd66028D7201147288Ea6470de",
     image: {
       original: "string",
-      thumbnail: "QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/3"
+      thumbnail: "https://static-nft.pancakeswap.com/mainnet/0xAFc7647b584730694B9606511F11F423A0816eFf/horror-ape-club-1912-1000.png"
     },
     attributes: [
       {
@@ -99,7 +99,7 @@ const nftDatasMock: NftToken[] = [
     collectionAddress: "0x69E01E8AdA552DFd66028D7201147288Ea6470de",
     image: {
       original: "string",
-      thumbnail: "QmZUnmBhAJ7fKsktYzuCHwkzgUhdQ3T91K7EYdP97UJkov/4"
+      thumbnail: "https://static-nft.pancakeswap.com/mainnet/0x0D464bDde2301C30871bB4C29bB7DD935f5a985C/liquid-monster-857-1000.png"
     },
     attributes: [
       {
