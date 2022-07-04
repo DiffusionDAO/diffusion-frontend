@@ -3,7 +3,7 @@ import { useTranslation } from 'contexts/Localization'
 import { CloseIcon, CogIcon, InfoIcon } from '@pancakeswap/uikit'
 import { StyledModal, ContentWrap, HeaderWrap, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, ImgWrap, FromImg, ToImg, BondName, BondTime, TipsWrap, TipsText,  BondListItemBtn, ListItem, ListLable, ListContent,
-  MoneyLable, MoneyInput, RecomandWrap, CheckBoxWrap, CheckBox, RecomandLable, RecomandInput } from './styles'
+  TabList, TabItem, MoneyLable, MoneyInput, RecomandWrap, CheckBoxWrap, CheckBox, RecomandLable, RecomandInput } from './styles'
 
 interface BondModalProps {
   bondData: any;
@@ -26,10 +26,15 @@ const BondModal: React.FC<BondModalProps> = ({
   const [hasRecomand, sethasRecomand] = useState<boolean>(false);
   const [recomander, setRecomander] = useState<string>();
   const [money, setMoney] = useState<number>();
+  const [activeTab, setActiveTab] = useState<string>("mint");
   const changeRecomand = () => {
     setRecomander('')
     sethasRecomand(!hasRecomand)
   }
+  const clickTab = (key) => {
+    setActiveTab(key)
+  }
+
   return (
     <StyledModal
       width={500}
@@ -67,25 +72,43 @@ const BondModal: React.FC<BondModalProps> = ({
             </ContentCell>
           </BondListItemContent>
         </BondListItem>
+        {/* mint or remeed choice */}
+        {
+          account && isApprove && 
+          <TabList>
+            <TabItem className={`${activeTab === "mint" && "active"}`} onClick={() => clickTab("mint")}>
+              {t('mint')}
+            </TabItem>
+            <TabItem className={`${activeTab === "remeed" && "active"}`} onClick={() => clickTab("remeed")}>
+              {t('remeed')}
+            </TabItem>
+          </TabList>
+        }
         {
           account ? 
           ( isApprove ? 
-            <>
-              <MoneyLable>Money</MoneyLable>
-              <MoneyInput prefix="￥" suffix="ALL" value={money} />
-              <RecomandWrap>
-                <CheckBoxWrap onClick={changeRecomand}>
+            (
+              activeTab === "mint" ? 
+              <>
+                <MoneyLable>Money</MoneyLable>
+                <MoneyInput prefix="￥" suffix="ALL" value={money} />
+                <RecomandWrap>
+                  <CheckBoxWrap onClick={changeRecomand}>
+                    {
+                      hasRecomand ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: "4px" }} /> : <CheckBox />
+                    }
+                  </CheckBoxWrap>
+                  <RecomandLable onClick={changeRecomand}>Does anyone recommend</RecomandLable>
                   {
-                    hasRecomand ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: "4px" }} /> : <CheckBox />
+                    hasRecomand ? <RecomandInput value={recomander} placeholder="Please enter references" /> : null
                   }
-                </CheckBoxWrap>
-                <RecomandLable onClick={changeRecomand}>Does anyone recommend</RecomandLable>
-                {
-                  hasRecomand ? <RecomandInput value={recomander} placeholder="Please enter references" /> : null
-                }
-              </RecomandWrap>
-              <BondListItemBtn>Buy</BondListItemBtn>
-            </> : 
+                </RecomandWrap>
+                <BondListItemBtn>{t('Buy')}</BondListItemBtn>
+              </>
+              : 
+              <BondListItemBtn>{t('Confirm')}</BondListItemBtn>
+            )
+             : 
             <>
               <TipsWrap>
                 <InfoIcon  width="20px" color="#ABB6FF" />

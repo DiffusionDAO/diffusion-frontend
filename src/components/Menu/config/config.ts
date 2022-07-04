@@ -33,10 +33,10 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     items: [],
   },
   {
-    label: t('Bond'),
+    label: t('Mint'),
     icon: EarnIcon,
     fillIcon: EarnFillIcon,
-    href: '/bond',
+    href: '/mint',
     showItemsOnMobile: false,
     items: [],
   },

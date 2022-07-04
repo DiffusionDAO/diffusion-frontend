@@ -132,6 +132,26 @@ export const TipsText = styled.div`
   font-family: HelveticaNeue;
   color: #ABB6FF;
 `
+export const TabList = styled.div`
+  width: 100%;
+  display: flex;
+  margin-bottom: 20px;
+`
+export const TabItem = styled.div`
+  width: 50%;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  &.active {
+    border: 1px solid rgba(171, 182, 255, 0.1);
+    background: linear-gradient(135deg,rgba(60, 0, 255, 1), rgba(236, 110, 255, 1));
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
+`
 export const MoneyLable = styled.div`
   width: 100%;
   height: 40px;
