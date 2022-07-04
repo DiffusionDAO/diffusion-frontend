@@ -99,7 +99,11 @@ function NftProfilePage() {
     const nfts = keys.map(key => collections[key].tokens.filter(item =>
       item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
     )).flat()
+    nfts.map(nft => {
+      nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
+    })
     console.log("nfts:", nfts)
+
     setMynfts(nfts)
     setSelectedNfts(nfts)
 
@@ -142,7 +146,7 @@ function NftProfilePage() {
     const composeAddress = getNFTComposeAddress()
     const attributes = selectedNfts[0].attributes[0].value
     if (attributes === '0') {
-      const sixFragement = selectedTokenIds.slice(0, 6)
+      const sixFragement = selectedTokenIds
       const tx = await composeNFT.ComposeLv0(sixFragement)
       const recipient = await tx.wait()
       const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
@@ -167,7 +171,7 @@ function NftProfilePage() {
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
     } else {
-      const tx = await composeNFT.ComposeLvX(selectedTokenIds.slice(0,2), attributes)
+      const tx = await composeNFT.ComposeLvX(selectedTokenIds, attributes)
       const recipient = await tx.wait()
       const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
       const tokenId = id.toString()
@@ -248,17 +252,23 @@ function NftProfilePage() {
   }
 
   const selectNft = (nft) => {
-    const data = cloneDeep(mynfts.filter(my => my.attributes[0].value === nft.attributes[0].value))
+    const level = nft.attributes[0].value
+    const data = cloneDeep(mynfts.filter(my => my.attributes[0].value === level))
     data.map((item: NftToken) => {
       const obj = item
       if (obj.attributes[0].value === nft.attributes[0].value) { obj.selected = !obj.selected }
       return obj
     })
-    const count = data.filter(item => item.selected).length
-    // setMynfts(data)
-    setSelectedNfts(data)
+    if (level === '0') {
+      var datas = data.slice(0, 6)
+      setSelectedNfts(datas)
+      setSelectedCount(datas.filter(item => item.selected).length)
+    } else {
+      var datas = data.slice(0, 2)
+      setSelectedNfts(datas)
+      setSelectedCount(datas.filter(item => item.selected).length)
+    }
 
-    setSelectedCount(count)
   }
 
   return (
