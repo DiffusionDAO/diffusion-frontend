@@ -52,10 +52,9 @@ function NftProfilePage() {
   const { t } = useTranslation()
   const { route } = useRouter()
   const { query } = useRouter()
-  const { cache } = useSWRConfig() as any
 
   const accountAddress = query.accountAddress as string
-
+  console.log("accountAddress:",accountAddress)
   const [selectNfts, setSelectedNfts] = useState<NftToken[]>([])
   const [mynfts, setMynfts] = useState<NftToken[]>([])
 
@@ -94,12 +93,15 @@ function NftProfilePage() {
 
   const { data: collections, mutate } = useGetCollections() as any
   useEffect(() => {
+    console.log("collections:",collections)
     const keys = Object.keys(collections)
-    const initNfts = keys.map(key => collections[key].tokens.filter(item =>
+    console.log("keys:",keys)
+    const nfts = keys.map(key => collections[key].tokens.filter(item =>
       item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
     )).flat()
-    setMynfts(initNfts)
-  }, [account, cache])
+    console.log("nfts:",nfts)
+    setMynfts(nfts)
+  }, [account])
 
   const resetPage = () => {
     setIsSelected(false)
@@ -113,10 +115,9 @@ function NftProfilePage() {
   }
   const dfsNFTAddress = getDFSNFTAddress()
   const startCompound = () => {
-    cache.clear()
     setIsSelected(true)
     setOption('compound')
-    const dfsnft = selectNfts.filter(item => item.collectionAddress === dfsNFTAddress)
+    const dfsnft = mynfts.filter(item => item.collectionAddress === dfsNFTAddress)
     console.log("dfsnft:", dfsnft.length)
     setSelectedNfts(dfsnft)
   }
