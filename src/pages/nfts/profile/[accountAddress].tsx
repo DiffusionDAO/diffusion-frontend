@@ -20,7 +20,7 @@ import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
 import { Cascader, Tabs, Button, message } from 'antd';
 import { useTranslation } from 'contexts/Localization'
 import { useState, useEffect, useCallback } from 'react'
-import { NftToken } from 'state/nftMarket/types'
+import { NftLocation, NftToken } from 'state/nftMarket/types'
 import cloneDeep from "lodash/cloneDeep";
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
@@ -37,6 +37,7 @@ import { useSWRConfig } from 'swr'
 import BigNumber from 'bignumber.js'
 import { sleep } from 'helpers'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
+import { makeFarmFromPidSelector } from 'state/farms/selectors'
 
 const { TabPane } = Tabs;
 interface noteProps {
@@ -45,6 +46,8 @@ interface noteProps {
   visible: boolean;
 }
 const zeroAddress = '0x0000000000000000000000000000000000000000'
+const dfsName = { 0: "Lord fragment", 1: "Lord", 2: "Golden Lord", 3: "General", 4: "Golden General", 5: "Congressman", 6: "Golden Congressman" }
+const greeceNumber = { 0: "I", 1: "II", 2: "III", 3: "IV", 4: "V", 5: "VI", 6: "VII" }
 
 function NftProfilePage() {
   const { account } = useWeb3React()
@@ -54,7 +57,7 @@ function NftProfilePage() {
   const { query } = useRouter()
 
   const accountAddress = query.accountAddress as string
-  console.log("accountAddress:", accountAddress)
+  // console.log("accountAddress:", accountAddress)
   const [selectedNfts, setSelectedNfts] = useState<NftToken[]>([])
   const [mynfts, setMynfts] = useState<NftToken[]>([])
 
@@ -123,7 +126,7 @@ function NftProfilePage() {
   const dfsNFTAddress = getDFSNFTAddress()
   const startCompound = () => {
     setIsSelected(true)
-    setOption('compound')
+    setOption('compose')
     const dfsnft = mynfts.filter(item => item.collectionAddress === dfsNFTAddress)
     setSelectedNfts(dfsnft)
   }
@@ -143,60 +146,78 @@ function NftProfilePage() {
   const dfsNFT = useDFSNftContract()
   const submitCompound = async () => {
     const selectedTokenIds = selectedNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
+    console.log("selectedTokenIds:",selectedTokenIds)
     const composeAddress = getNFTComposeAddress()
-    const attributes = selectedNfts[0].attributes[0].value
-    if (attributes === '0') {
-      const sixFragement = selectedTokenIds
-      const tx = await composeNFT.ComposeLv0(sixFragement)
-      const recipient = await tx.wait()
-      const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
-      const tokenId = id.toString()
-      while (true) {
-        const res = await fetch(`https://middle.diffusiondao.org/nfts/collections`)
-        if (res.ok) {
-          const json = await res.json()
-          const newnfts = Object.keys(json).map(key => json[key].tokens.filter(item =>
-            item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
-          )).flat()
-          if (newnfts.length < mynfts.length) {
-            const composed = newnfts.filter(nft => nft.tokenId === tokenId)
-            setComposedNFT(composed)
-            setMynfts(newnfts)
-            break
-          }
-          await sleep(0.5)
-        }
-      }
-      selectedNfts.map(nft => nft.marketData.currentSeller = zeroAddress)
-      setConfirmModalVisible(false)
-      setSuccessModalVisible(true)
+    const attribute = selectedNfts[0].attributes[0].value
+    let tx
+    if (selectedTokenIds.length === 6) {
+      tx = await composeNFT.ComposeLv0(selectedTokenIds)
     } else {
-      const tx = await composeNFT.ComposeLvX(selectedTokenIds, attributes)
-      const recipient = await tx.wait()
-      const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
-      const tokenId = id.toString()
-      while (true) {
-        const res = await fetch(`https://middle.diffusiondao.org/nfts/collections`)
-        if (res.ok) {
-          const json = await res.json()
-          const newnfts = Object.keys(json).map(key => json[key].tokens.filter(item =>
-            item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
-          )).flat()
-          if (newnfts.length < mynfts.length) {
-            const ids = newnfts.map(nft => nft.tokenId)
-            const composed = newnfts.filter(nft => nft.tokenId === tokenId)
-            setComposedNFT(composed)
-            setMynfts(newnfts)
-            break
-          }
-          await sleep(0.5)
-        }
-      }
-      selectedNfts.map(nft => nft.marketData.currentSeller = zeroAddress)
-      setConfirmModalVisible(false)
-      setSuccessModalVisible(true)
-
+      tx = await composeNFT.ComposeLvX(selectedTokenIds, attribute)
     }
+    const recipient = await tx.wait()
+    const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
+    const tokenId = id.toString()
+    console.log("tokenId:", tokenId)
+    const level = await dfsNFT.getItems(tokenId)
+    const newNft: NftToken = {
+      "tokenId": tokenId,
+      "name": greeceNumber[level],
+      "description": dfsName[level],
+      "collectionName": dfsName[level],
+      "collectionAddress": dfsNFTAddress,
+      "image": {
+        "original": "string",
+        "thumbnail": `/images/nfts/${level}`
+      },
+      "attributes": [
+        {
+          "traitType": "",
+          "value": level,
+          "displayType": ""
+        }
+      ],
+      "createdAt": "",
+      "updatedAt": "",
+      "location": NftLocation.FORSALE,
+      "marketData": {
+        "tokenId": tokenId,
+        "collection": {
+          "id": tokenId
+        },
+        "currentAskPrice": "",
+        "currentSeller": accountAddress,
+        "isTradable": true
+      }
+    }
+    setComposedNFT([newNft])
+    mynfts.map((nft,i) => {
+      if (selectedTokenIds.includes(nft.tokenId)) {
+        mynfts.splice(i,1)
+      }
+    })
+    mynfts.push(newNft)
+    setMynfts(mynfts)
+
+
+    // while (true) {
+    //   const res = await fetch(`https://middle.diffusiondao.org/nfts/collections`)
+    //   if (res.ok) {
+    //     const json = await res.json()
+    //     const newnfts = Object.keys(json).map(key => json[key].tokens.filter(item =>
+    //       item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
+    //     )).flat()
+    //     if (newnfts.length < mynfts.length) {
+    //       const composed = newnfts.filter(nft => nft.tokenId === tokenId)
+    //       setComposedNFT(composed)
+    //       setMynfts(newnfts)
+    //       break
+    //     }
+    //     await sleep(0.5)
+    //   }
+    // }
+    setConfirmModalVisible(false)
+    setSuccessModalVisible(true)
   }
 
   const startStake = () => {
@@ -229,7 +250,7 @@ function NftProfilePage() {
       })
       return
     }
-    if (option === 'compound') {
+    if (option === 'compose') {
       if (selected.length % 2 !== 0 || !selected.length) {
         setNoteContent({
           title: t('Important note'),

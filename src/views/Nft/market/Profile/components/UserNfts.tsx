@@ -19,7 +19,6 @@ const UserNfts: React.FC<{
   }
   return (
     <>
-      {/* User has no NFTs */}
       {nfts?.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />
@@ -27,7 +26,7 @@ const UserNfts: React.FC<{
             {t('No NFTs found')}
           </Text>
         </Flex>
-      ) : // User has NFTs and data has been fetched
+      ) : 
       nfts?.length > 0 ? (
         <Grid
           gridGap="16px"
@@ -36,7 +35,6 @@ const UserNfts: React.FC<{
         >
           {nfts?.map((nft) => {
             const { marketData, location } = nft
-
             return (
               <CollectibleLinkCard
                 isSelected={isSelected}
@@ -52,7 +50,6 @@ const UserNfts: React.FC<{
           })}
         </Grid>
       ) : (
-        // User NFT data hasn't been fetched
         <GridPlaceholder />
       )}
     </>
