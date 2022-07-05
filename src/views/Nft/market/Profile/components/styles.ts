@@ -81,6 +81,7 @@ export const SyntheticBtn = styled.img`
 export const AccountNftWrap = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
   position: relative;
 `
 export const NftSculptureWrap = styled.div`

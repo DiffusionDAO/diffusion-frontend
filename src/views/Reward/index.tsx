@@ -18,7 +18,7 @@ const Reward: FC = () => {
 
   return (
     <RewardPageWrap>
-      <Grid container spacing={2}>
+      <Grid container spacing={8}>
         <Grid item lg={4} md={4} sm={12} xs={12}>
           <DiffusionGoldWrap>
             <DiffusionGoldBgImg src="images/reward/diffusionGoldBg.png" />

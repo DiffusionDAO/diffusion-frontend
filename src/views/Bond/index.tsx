@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
 import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxCont, DrawBlindBoxImg, DrawBlindBoxHeader, DrawBlindBoxFooter, 
-  DrawBlindBoxFooterBtn, DrawBlindBoxFooterBtnBorder, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
+  DrawBlindBoxFooterBtn, DrawBlindBoxFooterBtnBorder, DrawBlindBoxFooterBtnBorderImg, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
   OverviewCardItemContent, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
 import bondDatasMock from './MockBondData'
@@ -68,7 +68,10 @@ const Bond: FC = () => {
           <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
           <DrawBlindBoxFooter>
             <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-            <DrawBlindBoxFooterBtnBorder className="purpleBtn" onClick={drawBlind}>{t('Max')}</DrawBlindBoxFooterBtnBorder>
+            <DrawBlindBoxFooterBtnBorder onClick={drawBlind}>
+              <DrawBlindBoxFooterBtnBorderImg src="/images/bond/purpleBtnBorderBg.png" />
+              {t('Max')}
+            </DrawBlindBoxFooterBtnBorder>
           </DrawBlindBoxFooter>
         </DrawBlindBoxCont>
       </DrawBlindBoxItem>
@@ -78,7 +81,10 @@ const Bond: FC = () => {
           <DrawBlindBoxHeader className='item2'>{t('Senior blind box')}</DrawBlindBoxHeader>
           <DrawBlindBoxFooter>
             <DrawBlindBoxFooterBtn className="orangeBtn"  style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-            <DrawBlindBoxFooterBtn className="orangeBtn" onClick={drawBlind}>{t('Max')}</DrawBlindBoxFooterBtn>
+            <DrawBlindBoxFooterBtnBorder onClick={drawBlind}>
+              <DrawBlindBoxFooterBtnBorderImg src="/images/bond/orangeBtnBorderBg.png" />
+              {t('Max')}
+            </DrawBlindBoxFooterBtnBorder>
           </DrawBlindBoxFooter>
         </DrawBlindBoxCont>
         </DrawBlindBoxItem>

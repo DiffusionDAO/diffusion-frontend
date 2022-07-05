@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components'
 import { Input } from 'antd';
 
-const MARGIN = 24
 export const RewardPageWrap = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
 `
 
 export const DiffusionGoldWrap = styled.div`

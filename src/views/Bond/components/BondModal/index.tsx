@@ -74,7 +74,7 @@ const BondModal: React.FC<BondModalProps> = ({
       </BondListItem>
       {/* mint or redeem choice */}
       {
-        account && isApprove && 
+        account && 
         <TabList>
           <TabItem className={`${activeTab === "mint" && "active"}`} onClick={() => clickTab("mint")}>
             {t('mint')}

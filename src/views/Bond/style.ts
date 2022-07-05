@@ -8,6 +8,7 @@ const DRAW_BLIND_BOX_WIDTH = 556
 export const BondPageWrap = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
 `
 export const DrawBlindBoxList = styled.div`
   display: flex;
@@ -122,18 +123,15 @@ export const DrawBlindBoxFooterBtnBorder = styled.div`
   line-height: 40px;
   text-align: center;
   cursor: pointer;
-  &.purpleBtn {
-    background: linear-gradient(90deg, #3C00FF, #EC6EFF);
-    background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
-  }
-  &.orangeBtn {
-    background: linear-gradient(90deg, #FFA16E, #FF7056);
-    background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
-  }
+  position: relative;
 `
-
+export const DrawBlindBoxFooterBtnBorderImg = styled.img`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+`
 
 export const OverviewCard = styled.div`
   padding: 36px;
