@@ -1,19 +1,26 @@
 import styled, { css } from 'styled-components'
 import { Button } from 'antd';
 
-const HEADER_HEIGHT = 400;
 const MARGIN = 20;
-const NAV_HEIGHT = 56;
-const TOP_HEIGHT = MARGIN + NAV_HEIGHT + 100;
-const SCULPTURE_WRAP_HEIGHT = HEADER_HEIGHT + TOP_HEIGHT;
+const DRAW_BLIND_BOX_HEIGHT = 355
+const DRAW_BLIND_BOX_WIDTH = 556
+
 
 export const BondPageWrap = styled.div`
   margin: ${MARGIN}px;
 `
+export const DrawBlindBoxList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+`
+
 export const DrawBlindBoxItem = styled.div`
-  height: 308px;
+  width: ${DRAW_BLIND_BOX_WIDTH}px;
+  height: ${DRAW_BLIND_BOX_HEIGHT}px;
   border-radius: 16px;
   position: relative;
+  margin-bottom: 20px;
   &.item1 {
     background: linear-gradient(135deg,rgba(60, 0, 255, 1), rgba(236, 110, 255, 1));
     background-size: 400% 400%;
@@ -27,7 +34,7 @@ export const DrawBlindBoxItem = styled.div`
 `
 
 export const DrawBlindBoxCont = styled.div`
-  height: 300px;
+  height: calc(${DRAW_BLIND_BOX_HEIGHT}px - 8px);
   border-radius: 14px;
   width: calc(100% - 8px);
   background-color: #fff;
@@ -88,9 +95,28 @@ export const DrawBlindBoxFooter = styled.div`
 `
 
 export const DrawBlindBoxFooterBtn = styled.div`
-  min-width: 120px;
+  width: 120px;
   height: 40px;
-  border: none;
+  border-radius: 8px;
+  color: #fff;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  &.purpleBtn {
+    background: linear-gradient(90deg, #3C00FF, #EC6EFF);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
+  &.orangeBtn {
+    background: linear-gradient(90deg, #FFA16E, #FF7056);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
+`
+
+export const DrawBlindBoxFooterBtnBorder = styled.div`
+  width: 120px;
+  height: 40px;
   border-radius: 8px;
   color: #fff;
   line-height: 40px;

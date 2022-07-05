@@ -3,7 +3,8 @@ import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
-import { BondPageWrap, DrawBlindBoxItem, DrawBlindBoxCont, DrawBlindBoxImg, DrawBlindBoxHeader, DrawBlindBoxFooter, DrawBlindBoxFooterBtn, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
+import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxCont, DrawBlindBoxImg, DrawBlindBoxHeader, DrawBlindBoxFooter, 
+  DrawBlindBoxFooterBtn, DrawBlindBoxFooterBtnBorder, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
   OverviewCardItemContent, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
 import bondDatasMock from './MockBondData'
@@ -50,20 +51,21 @@ const Bond: FC = () => {
   }
 
   return (<BondPageWrap>
-    <Grid container spacing={2}>
-      <Grid item lg={6} md={6} sm={12} xs={12}>
+    <DrawBlindBoxList>
+    {/* <Grid container spacing={2}>
+      <Grid item lg={6} md={6} sm={12} xs={12}> */}
         <DrawBlindBoxItem className='item1'>
           <DrawBlindBoxCont>
             <DrawBlindBoxImg src="images/bond/drawBlindBoxBg1.png" />
             <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
             <DrawBlindBoxFooter>
               <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-              <DrawBlindBoxFooterBtn className="purpleBtn" onClick={drawBlind}>{t('Max')}</DrawBlindBoxFooterBtn>
+              <DrawBlindBoxFooterBtnBorder className="purpleBtn" onClick={drawBlind}>{t('Max')}</DrawBlindBoxFooterBtnBorder>
             </DrawBlindBoxFooter>
           </DrawBlindBoxCont>
         </DrawBlindBoxItem>
-      </Grid>
-      <Grid item lg={6} md={6} sm={12} xs={12}>
+      {/* </Grid>
+      <Grid item lg={6} md={6} sm={12} xs={12}> */}
         <DrawBlindBoxItem className='item2'>
           <DrawBlindBoxCont>
             <DrawBlindBoxImg src="images/bond/drawBlindBoxBg2.png" />
@@ -74,8 +76,9 @@ const Bond: FC = () => {
             </DrawBlindBoxFooter>
           </DrawBlindBoxCont>
         </DrawBlindBoxItem>
-      </Grid>
-    </Grid>
+      {/* </Grid>
+    </Grid> */}
+    </DrawBlindBoxList>
 
     <OverviewCard>
         <OverviewCardItem>

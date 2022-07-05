@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'contexts/Localization'
 import { Grid } from "@material-ui/core";
 import { NftToken } from 'state/nftMarket/types'
-import { StyledModal, ContentWrap, CardItem, CardImg, TakeCardBtn } from './styles'
+import { StyledModal, ContentWrap, CardItem, CardImg, BtnWrap, TakeCardBtn, JumpBtnCont } from './styles'
 
 
 interface BondModalProps {
@@ -17,7 +17,7 @@ const BlindBoxModal: React.FC<BondModalProps> = ({
   const { t } = useTranslation()
   return (
     <StyledModal
-      width={500}
+      width={528}
       onCancel={onClose}
       visible
       centered
@@ -36,8 +36,12 @@ const BlindBoxModal: React.FC<BondModalProps> = ({
             ))
           }
         </Grid>
-        <TakeCardBtn>{t('Continue to take card')}</TakeCardBtn>
-        <TakeCardBtn>{t('You have synthetic NFT >')}</TakeCardBtn>
+        <BtnWrap>
+          <TakeCardBtn>{t('Continue to take card')}</TakeCardBtn>
+          <TakeCardBtn>
+            <JumpBtnCont>{t('You have synthetic NFT >')}</JumpBtnCont>
+          </TakeCardBtn>
+        </BtnWrap>
       </ContentWrap>
     </StyledModal>
   )
