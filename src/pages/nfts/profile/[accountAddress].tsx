@@ -4,6 +4,7 @@
 /* eslint-disable vars-on-top */
 /* eslint-disable block-scoped-var */
 /* eslint-disable block-scoped-var */
+/* eslint-disable array-callback-return */
 
 import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
@@ -37,7 +38,6 @@ import { useSWRConfig } from 'swr'
 import BigNumber from 'bignumber.js'
 import { sleep } from 'helpers'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
-import { makeFarmFromPidSelector } from 'state/farms/selectors'
 
 const { TabPane } = Tabs;
 interface noteProps {
