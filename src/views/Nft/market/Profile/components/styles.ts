@@ -79,7 +79,9 @@ export const SyntheticBtn = styled.img`
   height: 120px;
 `
 export const AccountNftWrap = styled.div`
-  margin: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
 `
 export const NftSculptureWrap = styled.div`
   top: -50px;

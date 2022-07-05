@@ -48,14 +48,14 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     showItemsOnMobile: false,
     items: [],
   },
-  {
-    label: t('IDO'),
-    icon: EarnIcon,
-    fillIcon: EarnFillIcon,
-    href: '/ido',
-    showItemsOnMobile: false,
-    items: [],
-  },
+  // {
+  //   label: t('IDO'),
+  //   icon: EarnIcon,
+  //   fillIcon: EarnFillIcon,
+  //   href: '/ido',
+  //   showItemsOnMobile: false,
+  //   items: [],
+  // },
   {
     label: t('NFT'),
     icon: NftIcon,

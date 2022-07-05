@@ -29,6 +29,10 @@ border-radius:16px;
 const OwnerActivityContainer = styled(Flex)`
   gap: 22px;
 `
+export const PageWrap = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`
 
 const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress, tokenId }) => {
   const collection = useGetCollection(collectionAddress)
@@ -69,7 +73,7 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
   let bgImg = isMobile ? "url('/images/nfts/smx1.png')": "url('/images/nfts/smxl.png')"
   
   return (
-    <Page>
+    <PageWrap>
       <div style={{backgroundImage:`${bgImg}`,backgroundRepeat:'no-repeat',
       backgroundPosition: '4px'
     }}>
@@ -97,7 +101,7 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
         </OwnerActivityContainer>
       </TwoColumnsContainer>
       <MoreFromThisCollection collectionAddress={collectionAddress} currentTokenName={nft.name} />
-    </Page>
+    </PageWrap>
   )
 }
 

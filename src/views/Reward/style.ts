@@ -3,7 +3,8 @@ import { Input } from 'antd';
 
 const MARGIN = 24
 export const RewardPageWrap = styled.div`
-  margin: ${MARGIN}px;
+  max-width: 1200px;
+  margin: 0 auto;
 `
 
 export const DiffusionGoldWrap = styled.div`

@@ -6,12 +6,13 @@ const DRAW_BLIND_BOX_WIDTH = 556
 
 
 export const BondPageWrap = styled.div`
-  margin: ${MARGIN}px;
+  max-width: 1200px;
+  margin: 0 auto;
 `
 export const DrawBlindBoxList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
 `
 
 export const DrawBlindBoxItem = styled.div`
