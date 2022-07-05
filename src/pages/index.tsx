@@ -8,13 +8,12 @@ import { bitQueryServerClient, infoServerClient } from 'utils/graphql'
 import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { useWeb3React } from '@web3-react/core'
 
-import Home from '../views/Home'
-import IDO from '../views/IDO'
+import Home from '../views/Nft/market/Home'
 
 const IndexPage = () => {
   const { account } = useWeb3React()
 
-  return <IDO account={account} />
+  return <Home />
 }
 
 export default IndexPage
