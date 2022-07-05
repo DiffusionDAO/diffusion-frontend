@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
+import { Input } from 'antd';
 
-const MARGIN = 20
+const MARGIN = 24
 export const RewardPageWrap = styled.div`
   margin: ${MARGIN}px;
 `
@@ -8,7 +9,7 @@ export const RewardPageWrap = styled.div`
 export const DiffusionGoldWrap = styled.div`
   width: 100%;
   height: 400px;
-  padding: 0 20px;
+  padding: 0 24px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -25,7 +26,7 @@ export const DiffusionGoldBgImg = styled.img`
 `
 export const DiffusionGoldHeader = styled.div`
   width: 100%;
-  padding: 20px;
+  padding: 24px;
   height: 50px;
   line-height: 50px;
   display: flex;
@@ -40,7 +41,7 @@ export const  DiffusionGoldTitle = styled.div`
   font-family: HelveticaNeue-Medium, HelveticaNeue;
   font-weight: 500;
   color: #ABB6FF;
-  line-height: 20px;
+  line-height: 24px;
 `
 
 export const DiffusionGoldDetailJump = styled.div`
@@ -75,7 +76,7 @@ export const RewardValueDiv = styled.div`
   margin-bottom: 40px;
 `
 export const ExtractBtn  = styled.div`
-  width: 120px;
+  width: 124px;
   height: 40px;
   border-radius: 8px;
   color: #fff;
@@ -90,7 +91,7 @@ export const ExtractBtn  = styled.div`
 export const MySposWrap = styled.div`
   width: 100%;
   height: 400px;
-  padding: 0 20px;
+  padding: 0 24px;
   position: relative;
 `
 export const MySposWrapBgImg = styled.img`
@@ -114,7 +115,7 @@ export const  MySposTitle = styled.div`
   font-family: HelveticaNeue-Medium, HelveticaNeue;
   font-weight: 500;
   color: #ABB6FF;
-  line-height: 20px;
+  line-height: 24px;
 `
 export const MySposDetailJump = styled.div`
   font-size: 14px;
@@ -124,26 +125,77 @@ export const MySposDetailJump = styled.div`
   cursor: pointer;
 `
 export const CardWrap = styled.div`
-  padding: 20px;
+  padding: 24px;
   background: rgba(171,182,255,0.05);
-  // border: 1px solid rgba(70,96,255,0.32);
   border-radius: 16px;
-  margin-top: 20px;
+  margin-top: 24px;
 `
 
 export const CardItem = styled.div`
   width: 100%;
-  height: 400px;
+  height: 228px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
   &.hasBorder {
     ${({ isMobile }: { isMobile: boolean }) => {
       if (isMobile) {
         return css`
-          border-bottom: 1px solid rgba(70, 96, 255, 0.2);
+          border-top: 1px solid rgba(70, 96, 255, 0.2);
+          padding-top: 24px;
         `;
       }
       return css`
-        border-right: 1px solid rgba(70, 96, 255, 0.2);
+        border-left: 1px solid rgba(70, 96, 255, 0.2);
+        padding-left: 24px;
       `;
     }};
   }
+`
+export const DataCellWrap = styled.div`
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(70, 96, 255, 0.2);
+`
+export const BalanceWrap = styled.div`
+  display: flex;
+`
+export const MoneyInput = styled(Input)`
+  height: 40px;
+  margin-bottom: 10px;
+  color: #fff;
+  box-shadow: none !important;
+  background: rgba(171, 182, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(171, 182, 255, 0.1);
+  :focus {
+    box-shadow: none !important;
+  }
+  input.ant-input {
+    background: none;
+    color: #fff;
+    :focus {
+      box-shadow: none;
+    }
+  }
+  .ant-input-suffix {
+    color: rgba(210, 87, 255, 1);
+  }
+`
+
+export const BtnWrap = styled.div`
+  display: flex;
+`
+
+export const StakeBtn = styled.div`
+  width: calc(50% - 5px);
+  height: 40px;
+  border-radius: 8px;
+  color: #fff;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  background: linear-gradient(90deg, #3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
 `
