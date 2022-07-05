@@ -5,21 +5,32 @@ import { Modal,Input } from 'antd';
 export const StyledModal = styled(Modal)`
   width: 60%;
 `
-export const ContentWrap = styled.div`
+export const JumpWrap = styled.div`
   display: flex;
   margin: 40px;
   flex-direction: column;
   align-items: center;
 `
-export const CardItem = styled.div`
+export const JumpTitle = styled.div`
   width: 100%;
+  height: 24px;
+  font-size: 20px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 24px;
+  text-align: center;
 `
-export const CardImg = styled.img`
+export const JumpDes = styled.div`
+  margin: 20px;
   width: 100%;
-  border-radius: 11px;
-`
-export const BtnWrap = styled.div`
-  width: 228px;
+  height: 16px;
+  font-size: 14px;
+  font-family: HelveticaNeue;
+  color: #ABB6FF;
+  line-height: 16px;
+  text-align: center;
+  marginbottom: 40px;
 `
 
 export const TakeCardBtn = styled.div`
@@ -41,6 +52,10 @@ export const JumpBtnCont = styled.div`
   height: 44px;
   line-height: 44px;
   border-radius: 8px;
+  font-size: 14px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #EC6EFF;
   background: #141529;
   position: absolute;
   top: 0;
@@ -48,4 +63,13 @@ export const JumpBtnCont = styled.div`
   bottom: 0;
   right: 0;
   margin: auto;
+`
+export const JumpInvite = styled.a`
+  height: 16px;
+  font-size: 14px;
+  font-family: HelveticaNeue;
+  color: #EC6EFF;
+  line-height: 16px;
+  text-decoration: revert;
+  margin-top: 40px;
 `

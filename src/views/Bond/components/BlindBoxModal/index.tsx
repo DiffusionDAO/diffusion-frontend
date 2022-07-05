@@ -1,9 +1,10 @@
-import { FC, useState } from 'react'
+import { useRouter } from 'next/router'
+import { nftsBaseUrl } from 'views/Nft/market/constants'
+import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import { Grid } from "@material-ui/core";
 import { NftToken } from 'state/nftMarket/types'
-import { StyledModal, ContentWrap, CardItem, CardImg, TakeCardBtn } from './styles'
-
+import { StyledModal, ContentWrap, CardItem, CardImg, BtnWrap, TakeCardBtn, JumpBtnCont } from './styles'
 
 interface BondModalProps {
   nftData: NftToken[];
@@ -15,9 +16,11 @@ const BlindBoxModal: React.FC<BondModalProps> = ({
   onClose,
 }) => {
   const { t } = useTranslation()
+  const { account } = useWeb3React()
+  const router = useRouter()
   return (
     <StyledModal
-      width={500}
+      width={528}
       onCancel={onClose}
       visible
       centered
@@ -36,8 +39,14 @@ const BlindBoxModal: React.FC<BondModalProps> = ({
             ))
           }
         </Grid>
-        <TakeCardBtn>{t('Continue to take card')}</TakeCardBtn>
-        <TakeCardBtn>{t('You have synthetic NFT >')}</TakeCardBtn>
+        <BtnWrap>
+          <TakeCardBtn>{t('Continue to take card')}</TakeCardBtn>
+          <TakeCardBtn 
+            onClick={() => router.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)}
+            >
+            <JumpBtnCont>{t('You have synthetic NFT >')}</JumpBtnCont>
+          </TakeCardBtn>
+        </BtnWrap>
       </ContentWrap>
     </StyledModal>
   )

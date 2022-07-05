@@ -41,6 +41,14 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     items: [],
   },
   {
+    label: t('Reward'),
+    icon: EarnIcon,
+    fillIcon: EarnFillIcon,
+    href: '/reward',
+    showItemsOnMobile: false,
+    items: [],
+  },
+  {
     label: t('IDO'),
     icon: EarnIcon,
     fillIcon: EarnFillIcon,

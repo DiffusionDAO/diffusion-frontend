@@ -3,26 +3,30 @@ import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
-import { BondPageWrap, DrawBlindBoxItem, DrawBlindBoxCont, DrawBlindBoxImg, DrawBlindBoxHeader, DrawBlindBoxFooter, DrawBlindBoxFooterBtn, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
+import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxCont, DrawBlindBoxImg, DrawBlindBoxHeader, DrawBlindBoxFooter, 
+  DrawBlindBoxFooterBtn, DrawBlindBoxFooterBtnBorder, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
   OverviewCardItemContent, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
 import bondDatasMock from './MockBondData'
 import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
 import BlindBoxModal from './components/BlindBoxModal'
+import JumpModal from './components/JumpModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 
 const Bond: FC = () => {
+  const { account } = useWeb3React();
+  const { isMobile } = useMatchBreakpoints();
+  const { t } = useTranslation()
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false);
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
   const [blindBoxModalVisible, setBlindBoxModalVisible] = useState<boolean>(false);
+  const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false);
+  const [balance,setBalance] = useState(1);
+
   const [isApprove, setIsApprove] = useState<boolean>(false);
   const [bondItem, setBondItem] = useState<any>(null);
-
-  const { account } = useWeb3React();
-  const { isMobile } = useMatchBreakpoints();
-  const { t } = useTranslation()
 
 
   const openBondModal = (item) => {
@@ -43,39 +47,42 @@ const Bond: FC = () => {
   }
   // 抽取盲盒
   const drawBlind = () => {
+    if (balance <= 0) {
+      setJumpModalVisible(true)
+      return
+    }
     setBlindBoxModalVisible(true)
   }
   const closeBlindBoxModal = () => {
     setBlindBoxModalVisible(false)
   }
+  const closeJumpModal = () => {
+    setJumpModalVisible(false)
+  }
 
   return (<BondPageWrap>
-    <Grid container spacing={2}>
-      <Grid item lg={6} md={6} sm={12} xs={12}>
-        <DrawBlindBoxItem className='item1'>
-          <DrawBlindBoxCont>
-            <DrawBlindBoxImg src="images/bond/drawBlindBoxBg1.png" />
-            <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
-            <DrawBlindBoxFooter>
-              <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-              <DrawBlindBoxFooterBtn className="purpleBtn" onClick={drawBlind}>{t('Max')}</DrawBlindBoxFooterBtn>
-            </DrawBlindBoxFooter>
-          </DrawBlindBoxCont>
+    <DrawBlindBoxList>
+      <DrawBlindBoxItem className='item1'>
+        <DrawBlindBoxCont>
+          <DrawBlindBoxImg src="images/bond/drawBlindBoxBg1.png" />
+          <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
+          <DrawBlindBoxFooter>
+            <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
+            <DrawBlindBoxFooterBtnBorder className="purpleBtn" onClick={drawBlind}>{t('Max')}</DrawBlindBoxFooterBtnBorder>
+          </DrawBlindBoxFooter>
+        </DrawBlindBoxCont>
+      </DrawBlindBoxItem>
+      <DrawBlindBoxItem className='item2'>
+        <DrawBlindBoxCont>
+          <DrawBlindBoxImg src="images/bond/drawBlindBoxBg2.png" />
+          <DrawBlindBoxHeader className='item2'>{t('Senior blind box')}</DrawBlindBoxHeader>
+          <DrawBlindBoxFooter>
+            <DrawBlindBoxFooterBtn className="orangeBtn"  style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
+            <DrawBlindBoxFooterBtn className="orangeBtn" onClick={drawBlind}>{t('Max')}</DrawBlindBoxFooterBtn>
+          </DrawBlindBoxFooter>
+        </DrawBlindBoxCont>
         </DrawBlindBoxItem>
-      </Grid>
-      <Grid item lg={6} md={6} sm={12} xs={12}>
-        <DrawBlindBoxItem className='item2'>
-          <DrawBlindBoxCont>
-            <DrawBlindBoxImg src="images/bond/drawBlindBoxBg2.png" />
-            <DrawBlindBoxHeader className='item2'>{t('Senior blind box')}</DrawBlindBoxHeader>
-            <DrawBlindBoxFooter>
-              <DrawBlindBoxFooterBtn className="orangeBtn"  style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-              <DrawBlindBoxFooterBtn className="orangeBtn" onClick={drawBlind}>{t('Max')}</DrawBlindBoxFooterBtn>
-            </DrawBlindBoxFooter>
-          </DrawBlindBoxCont>
-        </DrawBlindBoxItem>
-      </Grid>
-    </Grid>
+    </DrawBlindBoxList>
 
     <OverviewCard>
         <OverviewCardItem>
@@ -148,9 +155,14 @@ const Bond: FC = () => {
       settingModalVisible ? <SettingModal account={account}  bondData={bondItem} onClose={closeSettingModal} /> 
       : null
     }
-    {/* bond的弹窗 */}
+    {/* 盲盒成功的弹窗 */}
     {
       blindBoxModalVisible ? <BlindBoxModal nftData={nftDatasMock} onClose={closeBlindBoxModal} />
+      : null
+    }
+    {/* 跳转选项的弹窗 */}
+    {
+      jumpModalVisible ? <JumpModal onClose={closeJumpModal} />
       : null
     }
   </BondPageWrap>)
