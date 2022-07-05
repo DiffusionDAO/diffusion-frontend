@@ -209,7 +209,6 @@ export const useCollectionNfts = (collectionAddress: string) => {
         ? collection.numberTokensListed
         : collection?.totalSupply
       : null
-  console.log("resultSize:", resultSize)
 
   const itemListingSettingsJson = JSON.stringify(itemListingSettings)
   const filtersJson = JSON.stringify(nftFilters)
