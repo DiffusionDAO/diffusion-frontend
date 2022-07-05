@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components'
-import { Button } from 'antd';
 
 const MARGIN = 20;
 const DRAW_BLIND_BOX_HEIGHT = 355
