@@ -25,12 +25,15 @@ const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: Toke
       nftIsProfilePic = tokenId === profile?.tokenId?.toString() && collectionAddress === profile?.collectionAddress
       const nftIsOnSale = marketData ? marketData?.currentSeller !== NOT_ON_SALE_SELLER : false
       if (nftIsOnSale) {
+        console.log('sale1')
         isOwn = marketData?.currentSeller.toLowerCase() === account.toLowerCase()
         location = NftLocation.FORSALE
       } else if (nftIsProfilePic) {
+        console.log('sale2')
         isOwn = true
         location = NftLocation.PROFILE
       } else {
+        console.log('sale3')
         isOwn = tokenOwner.toLowerCase() === account.toLowerCase()
         location = NftLocation.WALLET
       }

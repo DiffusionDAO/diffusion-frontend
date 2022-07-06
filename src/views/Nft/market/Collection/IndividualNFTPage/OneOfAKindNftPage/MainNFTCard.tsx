@@ -74,10 +74,13 @@ const BondGearImg = styled.img`
 `
 
 const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess }) => {
+  
+  console.log('++++++++isOwnNft++++++++',isOwnNft)
   const { t } = useTranslation()
   const bnbBusdPrice = useBNBBusdPrice()
 
   const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ? parseFloat(nft.marketData?.currentAskPrice) : 0
+ // let currentAskPriceAsNumber = 0.1
   const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, currentAskPriceAsNumber)
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
@@ -220,7 +223,7 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
                 </Text>
               )}
               
-            
+             
               {isOwnNft && ownerButtons}
               {!isOwnNft && (
                 <BtnB                 
@@ -253,10 +256,6 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
              }
               
               { !isMobile && <BondGearImg isMobile ={ false } src="/images/gear.png"/> }
-              
-              
-
-
            
           </Flex>
         </Container>

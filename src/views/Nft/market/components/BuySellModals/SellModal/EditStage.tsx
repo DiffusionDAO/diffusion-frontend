@@ -90,7 +90,7 @@ const EditStage: React.FC<EditStageProps> = ({
         <Button variant="danger" onClick={continueToRemoveFromMarketStage}>
           {t('Remove from Market')}
         </Button>
-      </Flex>
+      </Flex>         
     </>
   )
 }

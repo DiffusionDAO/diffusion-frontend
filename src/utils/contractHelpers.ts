@@ -249,5 +249,6 @@ export const getPancakeSquadContract = (signer?: Signer | Provider) => {
   return getContract(pancakeSquadAbi, getPancakeSquadAddress(), signer) as PancakeSquad
 }
 export const getErc721CollectionContract = (signer?: Signer | Provider, address?: string) => {
+ // return getContract(nftMarketAbi, address, signer) as Erc721collection
   return getContract(erc721CollectionAbi, address, signer) as Erc721collection
 }

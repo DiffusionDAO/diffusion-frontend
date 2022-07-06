@@ -44,6 +44,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   const [stage, setStage] = useState(BuyingStage.REVIEW)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const [paymentCurrency, setPaymentCurrency] = useState<PaymentCurrency>(PaymentCurrency.BNB)
+ // const [paymentCurrency, setPaymentCurrency] = useState<PaymentCurrency>(PaymentCurrency.DFS)
   const [isPaymentCurrentInitialized, setIsPaymentCurrentInitialized] = useState(false)
   const { theme } = useTheme()
   const { t } = useTranslation()
@@ -88,15 +89,18 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
     onApprove: () => {
       return callWithGasPrice(wbnbContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
     },
+    // why approve require gas 
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
         t('Contract approved - you can now buy NFT with WBNB!'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
       )
     },
+    // note this is buy NFT  confirm pay gas by BNB  remark by dry
     onConfirm: () => {
       const payAmount = Number.isNaN(nftPrice) ? Zero : parseUnits(nftToBuy?.marketData?.currentAskPrice)
       if (paymentCurrency === PaymentCurrency.BNB) {
+        // use ours contract  remark dry
         return callWithGasPrice(nftMarketContract, 'buyTokenUsingBNB', [nftToBuy.collectionAddress, nftToBuy.tokenId], {
           value: payAmount,
         })

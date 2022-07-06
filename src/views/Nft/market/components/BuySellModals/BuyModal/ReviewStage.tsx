@@ -70,7 +70,7 @@ const ReviewStage: React.FC<ReviewStageProps> = ({
             scale="sm"
             variant="subtle"
           >
-            <ButtonMenuItem>BNB</ButtonMenuItem>
+            <ButtonMenuItem>DFS</ButtonMenuItem>
             <ButtonMenuItem>WBNB</ButtonMenuItem>
           </ButtonMenu>
           <Text small color="textSubtle">
