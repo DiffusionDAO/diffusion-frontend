@@ -81,6 +81,11 @@ const UserMenu: React.FC<UserMenuProps> = ({
     modifiers: [{ name: "offset", options: { offset: [0, 0] } }],
   });
 
+  const finalStyle = {
+    ...styles.popper,
+    transform: 'translate3d(0px, 44px, 0px)',
+  }
+
   useEffect(() => {
     const showDropdownMenu = () => {
       setIsOpen(true);
@@ -114,7 +119,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
         <LabelText title={text || account}>{text || accountEllipsis}</LabelText>
         <ChevronDownIcon color="text" width="24px" />
       </StyledUserMenu>
-      <Menu style={styles.popper} ref={setTooltipRef} {...attributes.popper} isOpen={isOpen}>
+      <Menu style={ finalStyle } ref={setTooltipRef} {...attributes.popper} isOpen={isOpen}>
         <Box onClick={() => setIsOpen(false)}>{children?.({ isOpen })}</Box>
       </Menu>
     </Flex>

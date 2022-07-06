@@ -852,7 +852,6 @@ export const fetchNftsFiltered = async (
   collectionAddress: string,
   filters: Record<string, string | number>,
 ): Promise<ApiTokenFilterResponse> => {
-  console.log("fetchNftsFiltered")
   // const res = await fetch(`${API_NFT}/collections/${collectionAddress}/filter?${stringify(filters)}`)
   const res: any = {}
 

@@ -1,4 +1,11 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable vars-on-top */
+/* eslint-disable block-scoped-var */
+/* eslint-disable block-scoped-var */
+/* eslint-disable array-callback-return */
+
 import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
 import { useProfileForAddress } from 'state/profile/hooks'
@@ -6,15 +13,15 @@ import { NftProfileLayout } from 'views/Nft/market/Profile'
 import UnconnectedProfileNfts from 'views/Nft/market/Profile/components/UnconnectedProfileNfts'
 import UserNfts from 'views/Nft/market/Profile/components/UserNfts'
 import {
-  AccountNftWrap, SubMenuWrap, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn,
+  AccountNftWrap, SubMenuWrap, SubMenuRight, SelectWrap, CompoundBtnWrap, SelectedCountWrap, SyntheticBtn,
   CompoundBtnWrapImg, SelectedCountBox, BackgroundWrap, ConentWrap, BackgroundTitle, BackgroundDes,
   BackgroundText, NftSculptureWrap, NftSculptureGif, NftGearImg, NftBallImg
 } from 'views/Nft/market/Profile/components/styles'
 import useNftsForAddress from 'views/Nft/market/hooks/useNftsForAddress'
-import { Cascader, Tabs, Button } from 'antd';
+import { Cascader, Tabs, Button, message } from 'antd';
 import { useTranslation } from 'contexts/Localization'
 import { useState, useEffect, useCallback } from 'react'
-import { NftToken } from 'state/nftMarket/types'
+import { NftLocation, NftToken } from 'state/nftMarket/types'
 import cloneDeep from "lodash/cloneDeep";
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
@@ -25,33 +32,35 @@ import { useSWRContract } from 'hooks/useSWRContract'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { ethers } from 'ethers'
 import { useGetCollections } from 'state/nftMarket/hooks'
+import { getDFSNFTAddress, getNFTComposeAddress } from 'utils/addressHelpers'
+import { useDFSNftContract, useNftComposeContract } from 'hooks/useContract'
+import { useSWRConfig } from 'swr'
+import BigNumber from 'bignumber.js'
+import { sleep } from 'helpers'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
 
 const { TabPane } = Tabs;
+interface noteProps {
+  title: string;
+  description: string;
+  visible: boolean;
+}
+const zeroAddress = '0x0000000000000000000000000000000000000000'
+const dfsName = { 0: "Lord fragment", 1: "Lord", 2: "Golden Lord", 3: "General", 4: "Golden General", 5: "Congressman", 6: "Golden Congressman" }
+const greeceNumber = { 0: "I", 1: "II", 2: "III", 3: "IV", 4: "V", 5: "VI", 6: "VII" }
 
 function NftProfilePage() {
   const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
-  const route = useRouter().route
-  const query = useRouter().query
+  const { route } = useRouter()
+  const { query } = useRouter()
 
   const accountAddress = query.accountAddress as string
+  // console.log("accountAddress:", accountAddress)
+  const [selectedNfts, setSelectedNfts] = useState<NftToken[]>([])
+  const [mynfts, setMynfts] = useState<NftToken[]>([])
 
-  // const nftMarketContract = getNftMarketContract()
-  // const { data } = useSWRContract([nftMarketContract, 'fetchMarketItems'])
-  // console.log("data:", data)
-
-  const collections: any = useGetCollections()
-  const keys = Object.keys(collections.data)
-  console.log(keys)
-  console.log("collections:", collections.data)
-
-  const mynfts = keys.map(key => collections.data[key].tokens.filter(item =>
-    item.marketData.currentSeller === accountAddress
-  )).flat()
-
-  console.log("mynfts:", mynfts)
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
   const {
     profile, isValidating: isProfileFetching, refresh: refreshProfile,
@@ -64,16 +73,20 @@ function NftProfilePage() {
     nfts, isLoading: isNftLoading,
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
-  const [isCompound, setIsCompound] = useState(false)
-  const [selectNfts, setSelectedNfts] = useState<NftToken[]>([])
+  const [isSelected, setIsSelected] = useState<boolean>(false)
+  const [option, setOption] = useState<string>('')
 
   const [selectedCount, setSelectedCount] = useState<number>(0)
+  const [composedNFT, setComposedNFT] = useState([])
 
   const [confirmModalVisible, setConfirmModalVisible] = useState(false)
   const [successModalVisible, setSuccessModalVisible] = useState(false)
-  const [noteModalVisible, seNoteModalVisible] = useState(false)
-  const [modalTitle, seNoteModalTitle] = useState('')
-  const [modalDescription, setModalDescription] = useState('')
+  const [noteContent, setNoteContent] = useState<noteProps>({
+    title: '',
+    description: '',
+    visible: false,
+  })
+  const [activeTab, setActiveTab] = useState<string>('WithoutStake')
 
   const sortByItems = [
     { label: t('Lord'), value: 'Lord', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
@@ -81,42 +94,202 @@ function NftProfilePage() {
     { label: t('Congressman'), value: 'Congressman', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
   ]
 
+  const { data: collections, mutate } = useGetCollections() as any
+  useEffect(() => {
+    console.log("collections:", collections)
+    const keys = Object.keys(collections)
+    console.log("keys:", keys)
+    const nfts = keys.map(key => collections[key].tokens.filter(item =>
+      item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
+    )).flat()
+    nfts.map(nft =>
+      nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
+    )
+    console.log("nfts:", nfts)
+
+    setMynfts(nfts)
+    setSelectedNfts(nfts)
+
+  }, [account])
+
+  const resetPage = () => {
+    setIsSelected(false)
+    setSelectedCount(0)
+    const nftData = mynfts.map(item => { item.selected = false; return item })
+    setMynfts(nftData)
+    setSelectedNfts(nftData)
+  }
+  const changeTab = (key) => {
+    resetPage()
+    setActiveTab(key)
+  }
+  const dfsNFTAddress = getDFSNFTAddress()
   const startCompound = () => {
-    setIsCompound(true);
+    setIsSelected(true)
+    setOption('compose')
+    const dfsnft = mynfts.filter(item => item.collectionAddress === dfsNFTAddress)
+    setSelectedNfts(dfsnft)
   }
 
-  const cancelCompound = () => {
-    setIsCompound(false);
+  const cancelOpt = () => {
+    setIsSelected(false);
+    resetPage()
   }
 
   const closeCompoundSuccessModal = () => {
+    setSelectedNfts(mynfts)
     setSuccessModalVisible(false)
-    setIsCompound(false)
-    mynfts.map((item) => { item.selected = false; return item })
-    setSelectedCount(0)
+    resetPage()
   }
 
-  const submitCompound = () => {
+  const composeNFT = useNftComposeContract()
+  const dfsNFT = useDFSNftContract()
+  const submitCompound = async () => {
+    const selectedTokenIds = selectedNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
+    console.log("selectedTokenIds:",selectedTokenIds)
+    const composeAddress = getNFTComposeAddress()
+    const attribute = selectedNfts[0].attributes[0].value
+    let tx
+    if (selectedTokenIds.length === 6) {
+      tx = await composeNFT.ComposeLv0(selectedTokenIds)
+    } else {
+      tx = await composeNFT.ComposeLvX(selectedTokenIds, attribute)
+    }
+    const recipient = await tx.wait()
+    const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
+    const tokenId = id.toString()
+    console.log("tokenId:", tokenId)
+    const level = await dfsNFT.getItems(tokenId)
+    const newNft: NftToken = {
+      "tokenId": tokenId,
+      "name": greeceNumber[level],
+      "description": dfsName[level],
+      "collectionName": dfsName[level],
+      "collectionAddress": dfsNFTAddress,
+      "image": {
+        "original": "string",
+        "thumbnail": `/images/nfts/${level}`
+      },
+      "attributes": [
+        {
+          "traitType": "",
+          "value": level,
+          "displayType": ""
+        }
+      ],
+      "createdAt": "",
+      "updatedAt": "",
+      "location": NftLocation.FORSALE,
+      "marketData": {
+        "tokenId": tokenId,
+        "collection": {
+          "id": tokenId
+        },
+        "currentAskPrice": "",
+        "currentSeller": accountAddress,
+        "isTradable": true
+      }
+    }
+    setComposedNFT([newNft])
+    mynfts.map((nft,i) => {
+      if (selectedTokenIds.includes(nft.tokenId)) {
+        mynfts.splice(i,1)
+      }
+    })
+    mynfts.push(newNft)
+    setMynfts(mynfts)
+
+
+    // while (true) {
+    //   const res = await fetch(`https://middle.diffusiondao.org/nfts/collections`)
+    //   if (res.ok) {
+    //     const json = await res.json()
+    //     const newnfts = Object.keys(json).map(key => json[key].tokens.filter(item =>
+    //       item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
+    //     )).flat()
+    //     if (newnfts.length < mynfts.length) {
+    //       const composed = newnfts.filter(nft => nft.tokenId === tokenId)
+    //       setComposedNFT(composed)
+    //       setMynfts(newnfts)
+    //       break
+    //     }
+    //     await sleep(0.5)
+    //   }
+    // }
     setConfirmModalVisible(false)
     setSuccessModalVisible(true)
   }
 
-  const confirmCompound = () => {
-    const selected = mynfts.filter(item => item.selected)
+  const startStake = () => {
+    setIsSelected(true)
+    setOption('stake')
+  }
+
+  const noteConfirm = () => {
+    setNoteContent({
+      title: '',
+      description: '',
+      visible: false,
+    })
+    if (option === 'stake' && selectedCount > 0) submitStake()
+  }
+
+  const submitStake = () => {
+    resetPage()
+    message.success('Stake success')
+  }
+
+  const confirmOpt = () => {
+    const selected = selectedNfts.filter(item => item.selected)
     setSelectedNfts(selected)
-    if (selected.length % 2 !== 0 || !selected.length) {
-      seNoteModalTitle('Important note')
-      setModalDescription('The NFTs you selected is across levels, please select the same color at the same level for composition')
-      seNoteModalVisible(true)
+    if (!selected.length) {
+      setNoteContent({
+        title: t('Important note'),
+        description: t('Please select one NFT at least'),
+        visible: true,
+      })
       return
     }
-    setConfirmModalVisible(true)
+    if (option === 'compose') {
+      if (selected.length % 2 !== 0 || !selected.length) {
+        setNoteContent({
+          title: t('Important note'),
+          description: t('The NFTs you selected is across levels, please select the same color at the same level for composition'),
+          visible: true,
+        });
+        return
+      }
+      setConfirmModalVisible(true)
+      return
+    }
+    if (option === 'stake') {
+      setNoteContent({
+        title: t('Important note'),
+        description: t('You will stake the NFT to the platform and a 15% handling fee will be charged when you cancel the stake'),
+        visible: true,
+      });
+    }
+
   }
 
   const selectNft = (nft) => {
-    nft.selected = !nft.selected
-    const count = mynfts.filter(item => item.selected).length
-    setSelectedCount(count)
+    const level = nft.attributes[0].value
+    const data = cloneDeep(mynfts.filter(my => my.attributes[0].value === level))
+    data.map((item: NftToken) => {
+      const obj = item
+      if (obj.attributes[0].value === nft.attributes[0].value) { obj.selected = !obj.selected }
+      return obj
+    })
+    if (level === '0') {
+      const datas = data.slice(0, 6)
+      setSelectedNfts(datas)
+      setSelectedCount(datas.filter(item => item.selected).length)
+    } else {
+      const datas = data.slice(0, 2)
+      setSelectedNfts(datas)
+      setSelectedCount(datas.filter(item => item.selected).length)
+    }
+
   }
 
   return (
@@ -140,35 +313,51 @@ function NftProfilePage() {
       </BackgroundWrap>
       <ConentWrap>
         <SubMenuWrap>
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey={activeTab} onChange={changeTab}>
             <TabPane
+              key="WithoutStake"
               tab={
                 <span>
-                  {`${t('I Bought NFT')}`}
-                  <SelectedCountWrap>{mynfts?.length}</SelectedCountWrap>
+                  {`${t('Without the stake')}`}
+                  <SelectedCountWrap>{selectedNfts?.length}</SelectedCountWrap>
+                </span>
+              }
+            />
+            <TabPane
+              key="Stake"
+              tab={
+                <span>
+                  {`${t('Has staked')}`}
+                  <SelectedCountWrap>{selectedNfts?.length}</SelectedCountWrap>
                 </span>
               }
             />
           </Tabs>
-          <SelectWrap>
-            <Cascader
-              options={sortByItems}
-              style={{ width: "200px" }}
-            />
-          </SelectWrap>
+          <SubMenuRight>
+            <SelectWrap>
+              <Cascader
+                options={sortByItems}
+                style={{ width: "200px" }}
+              />
+            </SelectWrap>
+            {
+              activeTab === 'WithoutStake' &&
+              <Button type="primary" style={{ marginLeft: '10px' }} size='middle' onClick={startStake}>{t('Stake')}</Button>
+            }
+          </SubMenuRight>
         </SubMenuWrap>
-        <CompoundBtnWrap isCompound={isCompound}>
+        <CompoundBtnWrap isSelected={isSelected}>
           <CompoundBtnWrapImg src="/images/nfts/compoundBtnWrap.png" />
           {
-            isCompound ?
+            isSelected ?
               <>
                 <SelectedCountBox>
                   {t('Selected')}
                   <SelectedCountWrap>{selectedCount}</SelectedCountWrap>
                 </SelectedCountBox>
                 <div>
-                  <Button type="primary" size='middle' style={{ marginRight: '10px' }} onClick={confirmCompound}>{t('Save')}</Button>
-                  <Button size='middle' onClick={cancelCompound}>{t('Cancel')}</Button>
+                  <Button type="primary" size='middle' style={{ marginRight: '10px' }} onClick={confirmOpt}>{t('Save')}</Button>
+                  <Button size='middle' onClick={cancelOpt}>{t('Cancel')}</Button>
                 </div>
               </> :
               <SyntheticBtn src="/images/nfts/synthetic-btn.svg" onClick={startCompound} />
@@ -177,8 +366,8 @@ function NftProfilePage() {
         </CompoundBtnWrap>
         {isConnectedProfile ? (
           <UserNfts
-            isCompound={isCompound}
-            nfts={mynfts}
+            isSelected={isSelected}
+            nfts={selectedNfts}
             isLoading={isNftLoading}
             selectNft={selectNft}
           />
@@ -187,16 +376,17 @@ function NftProfilePage() {
         )}
       </ConentWrap>
       {
-        noteModalVisible ? <CustomModal title={modalTitle} description={modalDescription} onClose={() => seNoteModalVisible(false)} />
+        noteContent.visible ? <CustomModal title={noteContent.title} description={noteContent.description}
+          onClose={() => setNoteContent({ title: '', description: '', visible: false })} onConfirm={noteConfirm} />
           : null
       }
       {
         confirmModalVisible ?
-          <CompoundConfirmModal nfts={selectNfts} onDismiss={() => setConfirmModalVisible(false)} submitCompound={submitCompound} />
+          <CompoundConfirmModal nfts={selectedNfts} onDismiss={() => setConfirmModalVisible(false)} submitCompound={submitCompound} />
           : null
       }
       {
-        successModalVisible ? <CompoundSuccessModal nfts={selectNfts} onClose={closeCompoundSuccessModal} />
+        successModalVisible ? <CompoundSuccessModal nfts={composedNFT} onClose={closeCompoundSuccessModal} />
           : null
       }
     </AccountNftWrap>

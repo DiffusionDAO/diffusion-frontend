@@ -1,132 +1,136 @@
 import styled, { css } from 'styled-components'
 
-const HEADER_HEIGHT = 400;
 const MARGIN = 20;
-const NAV_HEIGHT = 56;
-const TOP_HEIGHT = MARGIN + NAV_HEIGHT + 100;
-const SCULPTURE_WRAP_HEIGHT = HEADER_HEIGHT + TOP_HEIGHT;
+const DRAW_BLIND_BOX_HEIGHT = 355
+const DRAW_BLIND_BOX_WIDTH = 556
+
 
 export const BondPageWrap = styled.div`
-  margin: ${MARGIN}px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 `
-export const BondSculptureWrap = styled.div`
-  top: -${TOP_HEIGHT}px;
-  background: url('/images/bond/bond-sculpture-wrap.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
-      return css`
-        height: calc(${SCULPTURE_WRAP_HEIGHT}px - 100px);
-        width: calc(${SCULPTURE_WRAP_HEIGHT}px - 100px);
-        position: absolute;
-        right: -40px;
-      `;
-    }
-    return css`
-      height: ${SCULPTURE_WRAP_HEIGHT}px;
-      width: ${SCULPTURE_WRAP_HEIGHT}px;
-      position: absolute;
-      right: -140px;
-    `;
-  }};
-`
-export const BondSculptureGif = styled.img`
-  position: absolute;
-  left: -100px;
-  bottom: -94px;
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
-      return css`
-        height: calc(${SCULPTURE_WRAP_HEIGHT}px - 100px);
-        width: calc(${SCULPTURE_WRAP_HEIGHT}px - 100px);
-      `;
-    }
-    return css`
-      height: ${SCULPTURE_WRAP_HEIGHT}px;
-      width: ${SCULPTURE_WRAP_HEIGHT}px;
-    `;
-  }};
-`
-export const BondGearImg = styled.img`
-  position: absolute;
-  animation: gear 10s linear infinite;
-  animation-duration: 10s;
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
-      return css`
-        width: 150px;
-        height: 150px;
-        left: 160px;
-        bottom: -30px;
-      `;
-    }
-    return css`
-      width: 180px;
-      height: 180px;
-      left: 250px;
-      bottom: -50px;
-    `;
-  }};
-`
-export const BondBallImg = styled.img`
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  animation: ball 3s ease-in-out infinite;
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
-      return css`
-        bottom: 200px;
-        left: -40px;
-      `;
-    }
-    return css`
-      bottom: 300px;
-      left: -25px;
-    `;
-  }};
-`
-export const BondHeaderWrap = styled.div`
-  width: 100%;
-  margin-bottom: 40px;
-  position: relative;
+export const DrawBlindBoxList = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: space-between;
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
-      return css`
-        margin-top: 300px;
-        height: calc(${HEADER_HEIGHT}px + 150px);
-      `;
-    }
-    return css`
-      margin-top: 0px;
-      height: ${HEADER_HEIGHT}px;
-    `;
-  }};
 `
-export const BondPageText = styled.div`
-  max-width: 500px;
+
+export const DrawBlindBoxItem = styled.div`
+  width: ${DRAW_BLIND_BOX_WIDTH}px;
+  height: ${DRAW_BLIND_BOX_HEIGHT}px;
+  border-radius: 16px;
+  position: relative;
+  margin-bottom: 20px;
+  &.item1 {
+    background: linear-gradient(135deg,rgba(60, 0, 255, 1), rgba(236, 110, 255, 1));
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
+  &.item2 {
+    background: linear-gradient(135deg, rgba(255, 161, 110, 1), rgba(255, 112, 86, 1));
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
 `
-export const BondPageTitle = styled.div`
+
+export const DrawBlindBoxCont = styled.div`
+  height: calc(${DRAW_BLIND_BOX_HEIGHT}px - 8px);
+  border-radius: 14px;
+  width: calc(100% - 8px);
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+`
+export const DrawBlindBoxImg = styled.img`
   width: 100%;
-  height: 72px;
-  font-size: 56px;
-  font-family: HelveticaNeue-Bold, HelveticaNeue;
-  font-weight: bold;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+`
+export const DrawBlindBoxHeader  = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50px;
+  width: 100%;
+  text-indent: 10px;
+  border-radius: 16px;
+  color: #fff;
+  overflow: hidden;
+  font-size: 24px;
+  font-family: HelveticaNeue-BoldItalic, HelveticaNeue;
+  font-weight: normal;
   color: #FFFFFF;
-  line-height: 72px;
-  letter-spacing: 2px;
-  margin: 40px 0;
+  line-height: 50px;
+  text-shadow: 0px 2px 19px rgba(255, 255, 255, 0.5);
+  &.item1 {
+    background: url('/images/bond/drawBlindBoxHeaderBg1.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  &.item2 {
+    background: url('/images/bond/drawBlindBoxHeaderBg2.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 `
-export const BondPageDes = styled.div`
+
+export const DrawBlindBoxFooter = styled.div`
+  height: 90px;
   width: 100%;
-  font-size: 16px;
-  font-family: HelveticaNeue;
-  color: #ABB6FF;
-  line-height: 26px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+`
+
+export const DrawBlindBoxFooterBtn = styled.div`
+  width: 120px;
+  height: 40px;
+  border-radius: 8px;
+  color: #fff;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  &.purpleBtn {
+    background: linear-gradient(90deg, #3C00FF, #EC6EFF);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
+  &.orangeBtn {
+    background: linear-gradient(90deg, #FFA16E, #FF7056);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
+`
+
+export const DrawBlindBoxFooterBtnBorder = styled.div`
+  width: 120px;
+  height: 40px;
+  border-radius: 8px;
+  color: #fff;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+`
+export const DrawBlindBoxFooterBtnBorderImg = styled.img`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
 `
 
 export const OverviewCard = styled.div`
@@ -136,6 +140,8 @@ export const OverviewCard = styled.div`
   border: 1px solid rgba(70, 96, 255, 0.32);
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0;
 `
 export const Horizontal = styled.div`
   height: 1px;
@@ -144,16 +150,6 @@ export const Horizontal = styled.div`
   background-color: rgba(255, 255, 255, 0.1);
 `
 export const OverviewCardItem = styled.div`
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
-      return css`
-        width: 100%;
-      `;
-    }
-    return css`
-      min-width: 40%;
-    `;
-  }};
 `
 export const OverviewCardItemTitle = styled.div`
   height: 16px;
@@ -168,66 +164,42 @@ export const OverviewCardItemContent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-`
-export const Price = styled.div`
-  height: 38px;
   font-size: 32px;
-  line-height: 39px;
-  text-shadow: 0px 2px 34px rgba(255, 255, 255, 0.5);
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   color: #FFFFFF;
+  line-height: 40px;
+  text-shadow: 0px 2px 34px rgba(255, 255, 255, 0.5);
 `
-export const Percent = styled.div`
-  height: 24px;
-  font-size: 14px;
-  font-family: HelveticaNeue-Medium, HelveticaNeue;
-  font-weight: 500;
-  line-height: 24px;
-  border-radius: 12px;
-  padding: 0 10px;
-  margin: 0 10px;
-  ${({ isRise }: { isRise: boolean }) => {
-    if (isRise) {
-      return css`
-        color: rgba(0, 255, 238, 1);
-        background: rgba(0, 255, 238, 0.24);
-      `;
-    }
-    return css`
-      color: rgba(255, 39, 87, 1);
-      background: rgba(255, 39, 87, 0.24)
-    `;
-  }};
-`
-export const Icon = styled.div`
-  width: 16px;
-  height: 16px;
-  ${({ isRise }: { isRise: boolean }) => {
-    if (isRise) {
-      return css`
-        background-image: url("/images/bond/arrow-up-chart.png")
-      `;
-    }
-    return css`
-      background-image: url("/images/bond/arrow-down-chart.png")
-    `;
-  }};
-`
-
 export const BondListItem = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   border-radius: 15px;
   border: 1px solid rgba(70, 96, 255, 0.4);
   background: rgba(171, 182, 255, 0.08);
   padding: 36px;
 `
 export const BondListItemHeader = styled.div`
-  width: 100%;
-  padding: 0 0 36px 0;
-  border-bottom: 1px solid rgba(70, 96, 255, 0.4);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        width: 100%;
+        padding: 0 0 36px 0;
+        border-bottom: 1px solid rgba(70, 96, 255, 0.4);
+      `;
+    }
+    return css`
+      padding: 0 36px 0 0;
+      border-right: 1px solid rgba(70, 96, 255, 0.4);
+    `;
+  }};
 `
 export const ImgWrap = styled.div`
   width: 40px;
@@ -251,26 +223,46 @@ export const ToImg = styled.img`
 `
 export const BondHeaderName = styled.div`
   width: 100%;
-  height: 20px;
+  height: 30px;
   margin-top: 10px;
-  font-size: 16px;
-  font-family: HelveticaNeue-Medium, HelveticaNeue;
-  font-weight: 500;
+  font-size: 24px;
+  font-family: HelveticaNeue-BoldItalic, HelveticaNeue;
+  font-weight: normal;
   color: #FFFFFF;
-  line-height: 21px;
+  line-height: 30px;
+  text-shadow: 0px 2px 19px rgba(255, 255, 255, 0.5);
   text-align: center;
 `
 
 export const BondListItemContent = styled.div`
-  width: 100%;
   margin: 36px 0;
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        width: 100%;
+      `;
+    }
+    return css`
+    `;
+  }};
 `
 export const ContentCell = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+      `;
+    }
+    return css`
+      margin: 0 38px;
+    `;
+  }};
 `
 export const CellTitle = styled.div`
   width: 100%;
@@ -281,6 +273,7 @@ export const CellTitle = styled.div`
   line-height: 15px;
   margin-bottom: 10px;
   text-align: center;
+  align-items: center;
 `
 export const CellText = styled.div`
   width: 100%;
@@ -305,7 +298,6 @@ export const TextColor = styled.div`
   }};
 `
 export const BondListItemBtn = styled.div`
-  width: 100%;
   height: 40px;
   line-height: 40px;
   color: #fff;
@@ -316,6 +308,16 @@ export const BondListItemBtn = styled.div`
   background: linear-gradient(135deg,#3C00FF, #EC6EFF);
   background-size: 400% 400%;
   animation: gradient 5s ease infinite;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        width: 100%;
+      `;
+    }
+    return css`
+      min-width: 150px;
+    `;
+  }};
 `
 
 

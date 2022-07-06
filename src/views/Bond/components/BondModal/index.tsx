@@ -3,7 +3,7 @@ import { useTranslation } from 'contexts/Localization'
 import { CloseIcon, CogIcon, InfoIcon } from '@pancakeswap/uikit'
 import { StyledModal, ContentWrap, HeaderWrap, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, ImgWrap, FromImg, ToImg, BondName, BondTime, TipsWrap, TipsText,  BondListItemBtn, ListItem, ListLable, ListContent,
-  MoneyLable, MoneyInput, RecomandWrap, CheckBoxWrap, CheckBox, RecomandLable, RecomandInput } from './styles'
+  TabList, TabItem, MoneyLable, MoneyInput, RecomandWrap, CheckBoxWrap, CheckBox, RecomandLable, RecomandInput } from './styles'
 
 interface BondModalProps {
   bondData: any;
@@ -26,10 +26,15 @@ const BondModal: React.FC<BondModalProps> = ({
   const [hasRecomand, sethasRecomand] = useState<boolean>(false);
   const [recomander, setRecomander] = useState<string>();
   const [money, setMoney] = useState<number>();
+  const [activeTab, setActiveTab] = useState<string>("mint");
   const changeRecomand = () => {
     setRecomander('')
     sethasRecomand(!hasRecomand)
   }
+  const clickTab = (key) => {
+    setActiveTab(key)
+  }
+
   return (
     <StyledModal
       width={500}
@@ -40,60 +45,78 @@ const BondModal: React.FC<BondModalProps> = ({
       maskClosable={false}
       footer={[]}
     >
-      <ContentWrap>
-        {/* 头部按钮 */}
-        <HeaderWrap>
-          <CogIcon width="24px" color="#ABB6FF" onClick={openSettingModal} />
-          <CloseIcon width="24px" color="#ABB6FF" onClick={onClose} />
-        </HeaderWrap>
-        {/* 中间内容 */}
-        <BondListItem>
-          <BondListItemHeader>
-            <ImgWrap>
-              <FromImg src={bondData.from} />
-              <ToImg src={bondData.to} />
-            </ImgWrap>
-            <BondName>{bondData.name}</BondName>
-            <BondTime>{bondData.duration}days</BondTime>
-          </BondListItemHeader>
-          <BondListItemContent>
-            <ContentCell>
-              <CellTitle>Bond Price</CellTitle>
-              <CellText >${bondData.price}</CellText>
-            </ContentCell>
-            <ContentCell>
-              <CellTitle>Market Price</CellTitle>
-              <CellText >${bondData.price}</CellText>
-            </ContentCell>
-          </BondListItemContent>
-        </BondListItem>
-        {
-          account ? 
-          ( isApprove ? 
-            <>
-              <MoneyLable>Money</MoneyLable>
-              <MoneyInput prefix="￥" suffix="ALL" value={money} />
-              <RecomandWrap>
-                <CheckBoxWrap onClick={changeRecomand}>
-                  {
-                    hasRecomand ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: "4px" }} /> : <CheckBox />
-                  }
-                </CheckBoxWrap>
-                <RecomandLable onClick={changeRecomand}>Does anyone recommend</RecomandLable>
+    <ContentWrap>
+      {/* 头部按钮 */}
+      <HeaderWrap>
+        <CogIcon width="24px" color="#ABB6FF" onClick={openSettingModal} />
+        <CloseIcon width="24px" color="#ABB6FF" onClick={onClose} />
+      </HeaderWrap>
+      {/* 中间内容 */}
+      <BondListItem>
+        <BondListItemHeader>
+          <ImgWrap>
+            <FromImg src={bondData.from} />
+            <ToImg src={bondData.to} />
+          </ImgWrap>
+          <BondName>{bondData.name}</BondName>
+          <BondTime>{bondData.duration}days</BondTime>
+        </BondListItemHeader>
+        <BondListItemContent>
+          <ContentCell>
+            <CellTitle>Bond Price</CellTitle>
+            <CellText >${bondData.price}</CellText>
+          </ContentCell>
+          <ContentCell>
+            <CellTitle>Market Price</CellTitle>
+            <CellText >${bondData.price}</CellText>
+          </ContentCell>
+        </BondListItemContent>
+      </BondListItem>
+      {/* mint or redeem choice */}
+      {
+        account && 
+        <TabList>
+          <TabItem className={`${activeTab === "mint" && "active"}`} onClick={() => clickTab("mint")}>
+            {t('mint')}
+          </TabItem>
+          <TabItem className={`${activeTab === "redeem" && "active"}`} onClick={() => clickTab("redeem")}>
+            {t('redeem')}
+          </TabItem>
+        </TabList>
+      }
+      { account && isApprove && activeTab === "mint" &&
+          <>
+            <MoneyLable>Money</MoneyLable>
+            <MoneyInput prefix="￥" suffix="ALL" value={money} />
+            <RecomandWrap>
+              <CheckBoxWrap onClick={changeRecomand}>
                 {
-                  hasRecomand ? <RecomandInput value={recomander} placeholder="Please enter references" /> : null
+                  hasRecomand ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: "4px" }} /> : <CheckBox />
                 }
-              </RecomandWrap>
-              <BondListItemBtn>Buy</BondListItemBtn>
-            </> : 
-            <>
-              <TipsWrap>
-                <InfoIcon  width="20px" color="#ABB6FF" />
-                <TipsText>First time bonding LUSD-OHM LP?Please approve Olympus Dao to useyourLUSD-OHMLP for bonding</TipsText>
-              </TipsWrap>
-              <BondListItemBtn onClick={getApprove}>Approve</BondListItemBtn>
-            </> 
-          ):
+              </CheckBoxWrap>
+              <RecomandLable onClick={changeRecomand}>Does anyone recommend</RecomandLable>
+              {
+                hasRecomand ? <RecomandInput value={recomander} placeholder="Please enter references" /> : null
+              }
+            </RecomandWrap>
+            <BondListItemBtn>{t('Buy')}</BondListItemBtn>
+          </>
+        }
+        {
+          account && isApprove && activeTab === "redeem"  && <BondListItemBtn>{t('Claim')}</BondListItemBtn>
+        }
+        {
+          account && !isApprove && 
+          <>
+            <TipsWrap>
+              <InfoIcon  width="20px" color="#ABB6FF" />
+              <TipsText>First time bonding LUSD-OHM LP?Please approve Olympus Dao to useyourLUSD-OHMLP for bonding</TipsText>
+            </TipsWrap>
+            <BondListItemBtn onClick={getApprove}>Approve</BondListItemBtn>
+          </>
+        }
+
+        { !account && 
           <>
             <TipsWrap>
                 <InfoIcon  width="20px" color="#ABB6FF" />

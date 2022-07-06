@@ -1,194 +1,202 @@
 import styled, { css } from 'styled-components'
+import { Input } from 'antd';
 
 export const RewardPageWrap = styled.div`
-  margin: 24px;
-`
-export const BondPageTitle = styled.div`
-  height: 72px;
-  font-size: 56px;
-  font-family: HelveticaNeue-Bold, HelveticaNeue;
-  font-weight: bold;
-  color: #FFFFFF;
-  line-height: 72px;
-  letter-spacing: 2px;
-  margin: 40px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 `
 
-export const OverviewCard = styled.div`
+export const DiffusionGoldWrap = styled.div`
   width: 100%;
-  margin-bottom: 40px;
-  border-radius: 16px;
-  background: rgba(171, 182, 255, 0.05);
-  border: 1px solid rgba(70, 96, 255, 0.32);
+  height: 400px;
+  padding: 0 24px;
+  position: relative;
   display: flex;
-`
-export const OverviewCardItem = styled.div`
-  min-width: 350px;
-  padding: 36px;
-`
-export const OverviewCardItemTitle = styled.div`
-  height: 16px;
-  font-size: 14px;
-  font-family: HelveticaNeue;
-  color: #FFFFFF;
-  line-height: 16px;
-  margin-bottom: 36px;
-`
-export const OverviewCardItemContent = styled.div`
-  height: 40px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-export const Price = styled.div`
-  height: 38px;
-  font-size: 32px;
-  line-height: 39px;
-  text-shadow: 0px 2px 34px rgba(255, 255, 255, 0.5);
-  font-family: HelveticaNeue-Bold, HelveticaNeue;
-  font-weight: bold;
-  color: #FFFFFF;
-`
-export const Percent = styled.div`
-  height: 24px;
-  font-size: 14px;
-  font-family: HelveticaNeue-Medium, HelveticaNeue;
-  font-weight: 500;
-  line-height: 24px;
-  border-radius: 12px;
-  padding: 0 10px;
-  margin: 0 10px;
-  ${({ isRise }: { isRise: boolean }) => {
-    if (isRise) {
-      return css`
-        color: rgba(0, 255, 238, 1);
-        background: rgba(0, 255, 238, 0.24);
-      `;
-    }
-    return css`
-      color: rgba(255, 39, 87, 1);
-      background: rgba(255, 39, 87, 0.24)
-    `;
-  }};
-`
-export const Icon = styled.div`
-  width: 16px;
-  height: 16px;
-  ${({ isRise }: { isRise: boolean }) => {
-    if (isRise) {
-      return css`
-        background-image: url("/images/bond/arrow-up-chart.png")
-      `;
-    }
-    return css`
-      background-image: url("/images/bond/arrow-down-chart.png")
-    `;
-  }};
-`
-
-export const BondListItem = styled.div`
-  border-radius: 15px;
-  border: 1px solid rgba(70, 96, 255, 0.4);
-  background: rgba(171, 182, 255, 0.08);
-  padding: 36px;
-`
-export const BondListItemHeader = styled.div`
-  width: 100%;
-  padding: 0 0 36px 0;
-  border-bottom: 1px solid rgba(70, 96, 255, 0.4);
-  display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
 `
-export const ImgWrap = styled.div`
-  width: 40px;
-  height: 40px;
-  position: relative;
-`
-export const FromImg = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  position: absolute;
-  left: -15px;
-`
-export const ToImg = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  position: absolute;
-  right: -15px;
-  z-index: 1;
-`
-export const BondHeaderName = styled.div`
+export const DiffusionGoldBgImg = styled.img`
   width: 100%;
-  height: 20px;
-  margin-top: 10px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+`
+export const DiffusionGoldHeader = styled.div`
+  width: 100%;
+  padding: 24px;
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+`
+export const  DiffusionGoldTitle = styled.div`
   font-size: 16px;
   font-family: HelveticaNeue-Medium, HelveticaNeue;
   font-weight: 500;
-  color: #FFFFFF;
-  line-height: 21px;
-  text-align: center;
+  color: #ABB6FF;
+  line-height: 24px;
 `
 
-export const BondListItemContent = styled.div`
-  width: 100%;
-  margin: 36px 0;
-  display: flex;
-  flex-direction: row;
+export const DiffusionGoldDetailJump = styled.div`
+  font-size: 14px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #D257FF;
+  cursor: pointer;
 `
-export const ContentCell = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+
+export const Petal = styled.img`
+  width: 85px;
+  height: 85px;
+  margin-bottom: 40px;
 `
-export const CellTitle = styled.div`
-  width: 100%;
-  height: 15px;
-  font-size: 13px;
-  font-family: HelveticaNeue;
-  color: #ABB6FF;
-  line-height: 15px;
-  margin-bottom: 10px;
-  text-align: center;
+export const RewardText = styled.div`
+  height: 21px;
+  font-size: 18px;
+  font-family: HelveticaNeue-CondensedBold, HelveticaNeue;
+  font-weight: normal;
+  color: grey;
+  line-height: 21px;
 `
-export const CellText = styled.div`
-  width: 100%;
-  height: 24px;
-  font-size: 20px;
+export const RewardValueDiv = styled.div`
+  height: 50px;
+  font-size: 35px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   color: #FFFFFF;
-  line-height: 25px;
-  text-align: center;
+  line-height: 50px;
+  text-shadow: 0px 2px 27px rgba(255, 255, 255, 0.5);
+  margin-bottom: 40px;
 `
-export const TextColor = styled.div`
-  ${({ isRise }: { isRise: boolean }) => {
-    if (isRise) {
-      return css`
-        color: rgba(0, 255, 238, 1);
-      `;
-    }
-    return css`
-      color: rgba(255, 39, 87, 1);
-    `;
-  }};
-`
-export const BondListItemBtn = styled.div`
-  width: 100%;
+export const ExtractBtn  = styled.div`
+  width: 124px;
   height: 40px;
-  line-height: 40px;
+  border-radius: 8px;
   color: #fff;
+  line-height: 40px;
   text-align: center;
-  background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
-  border-radius: 7px;
   cursor: pointer;
-  background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+  background: linear-gradient(90deg, #3C00FF, #EC6EFF);
   background-size: 400% 400%;
   animation: gradient 5s ease infinite;
 `
 
+export const MySposWrap = styled.div`
+  width: 100%;
+  height: 400px;
+  padding: 0 24px;
+  position: relative;
+`
+export const MySposWrapBgImg = styled.img`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+`
+export const  MySposHeader = styled.div`
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+export const  MySposTitle = styled.div`
+  font-size: 16px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #ABB6FF;
+  line-height: 24px;
+`
+export const MySposDetailJump = styled.div`
+  font-size: 14px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+`
+export const CardWrap = styled.div`
+  padding: 24px;
+  background: rgba(171,182,255,0.05);
+  border-radius: 16px;
+  margin-top: 24px;
+`
 
+export const CardItem = styled.div`
+  width: 100%;
+  height: 228px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  &.hasBorder {
+    ${({ isMobile }: { isMobile: boolean }) => {
+      if (isMobile) {
+        return css`
+          border-top: 1px solid rgba(70, 96, 255, 0.2);
+          padding-top: 24px;
+        `;
+      }
+      return css`
+        border-left: 1px solid rgba(70, 96, 255, 0.2);
+        padding-left: 24px;
+      `;
+    }};
+  }
+`
+export const DataCellWrap = styled.div`
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(70, 96, 255, 0.2);
+`
+export const BalanceWrap = styled.div`
+  display: flex;
+`
+export const MoneyInput = styled(Input)`
+  height: 40px;
+  margin-bottom: 10px;
+  color: #fff;
+  box-shadow: none !important;
+  background: rgba(171, 182, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(171, 182, 255, 0.1);
+  :focus {
+    box-shadow: none !important;
+  }
+  input.ant-input {
+    background: none;
+    color: #fff;
+    :focus {
+      box-shadow: none;
+    }
+  }
+  .ant-input-suffix {
+    color: rgba(210, 87, 255, 1);
+  }
+`
 
+export const BtnWrap = styled.div`
+  display: flex;
+`
 
+export const StakeBtn = styled.div`
+  width: calc(50% - 5px);
+  height: 40px;
+  border-radius: 8px;
+  color: #fff;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  background: linear-gradient(90deg, #3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+`

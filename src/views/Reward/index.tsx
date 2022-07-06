@@ -1,91 +1,83 @@
 import { FC, useState } from 'react'
-import Typed from 'react-typed';
 import { Grid } from "@material-ui/core";
-import { useWeb3React } from '@web3-react/core'
-import { RewardPageWrap, Icon } from './style'
-import styled, { css } from 'styled-components'
-
-import {  
-  TenGraph 
-} from "../Dashboard/components/Graph/Graph"
-import ExtractModal from './components/SettingModal'
-import TopBanner from './components/banner'
-
+import { useTranslation } from 'contexts/Localization'
+import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
+import { RewardPageWrap, DiffusionGoldWrap, DiffusionGoldBgImg, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
+  Petal, RewardText, RewardValueDiv, ExtractBtn, 
+  MySposWrap, MySposWrapBgImg, MySposHeader, MySposTitle, MySposDetailJump, 
+  CardWrap, CardItem, DataCellWrap, BalanceWrap, MoneyInput, BtnWrap, StakeBtn, 
+ } from './style'
+ import DataCell from "./components/DataCell"
+ import { rewardData } from "./MockData"
 
 const Reward: FC = () => {
-  
-  const [extractModalVisible, setExtractModalVisible] = useState<boolean>(false);
-  const [isApprove, setIsApprove] = useState<boolean>(false);
-  const { account } = useWeb3React()
+  const { t } = useTranslation()
+  const [rewardValue, setRewardValue] = useState('123,123');
+  const [money, setMoney] = useState<number>();
+  const { isMobile } = useMatchBreakpoints();
 
-  // 打开窗口
-  const openExtractModal = () => {
-    setExtractModalVisible(true)
-  }
-  const closeExtractModal = () => {
-    setExtractModalVisible(false)
-  }
-  const TopBannerWrap = styled.div`
-  
-  margin-top:60px;
-  margin-bottom:55px;
-  `
   return (
-  <RewardPageWrap>
-     <div style={{display:'flex',justifyContent:'center',position:'absolute',top:'-120px',left:'50%',
-     width:'300px',height:'313px',transform:'translateX(-50%)'}}><img style={{width:'300px',height:'313px'}} src="/images/reward/bg1.png"/></div>
-      
-    <TopBannerWrap>  
-    <div style={{backgroundImage:`url('/images/reward/path.png')`,height:'331px',backgroundSize:'100% 100%',
-      padding:'0 48px'
-    }}>
-      <TopBanner />
-    </div>
-    
-    </TopBannerWrap>
-    
-    <Grid container spacing={2}> 
-       
-          <Grid item lg={3} md={3} sm={12} xs={12}>
-          
-            <div style={{backgroundImage:`url('/images/reward/leftbg.png')`,opacity: '0.4',
-            display:'flex',flexDirection:'column',alignItems:'center',
-            height:'408px',backgroundRepeat:'no-repeat'}}>
-              <img src="/images/reward/circel.png" alt="" style={{marginTop:'45px',marginBottom:'25px'}} />
-              <h4 style={{fontSize:'22px',color:'#FFFFFF',marginBottom:'25px'}}>reward</h4>
-              <h3 style={{fontSize:'44px',color:'#FFFFFF',marginBottom:'50px'}}>123,123</h3>
-
-              <div style={{background: 'linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%)',borderRadius:'12px',
-              height:'48px',width:'156px',textAlign:'center',lineHeight:'48px',position:'relative'}}>
-                <span style={{color:'#ffffff'}}>Extract</span>
-                <span style={{backgroundImage:`url('/images/reward/start.png')`,width:'32px',height:'32px',
-                position:'absolute',right:'-12px',top:'-12px'
-              }}></span>
-
-                <span style={{backgroundImage:`url('/images/reward/start.png')`,width:'14px',height:'14px',
-                backgroundSize:'100% 100%',
-                position:'absolute',right:'20px',top:'10px'}}></span>
-
-              </div>
-           </div>
-            
-          </Grid>
-          <Grid item lg={9} md={9} sm={12} xs={12}>
-          
-          
-          <div style={{backgroundImage:`url('/images/reward/rightbg.png')`,height:'408px',backgroundSize:'100% 100%',
-           paddingTop:'30px',paddingLeft:'24px'
-        }}>
-            <h3 style={{color:'#ffffff',fontSize:'16px',marginBottom:'30px'}}>Overal diffustion effect</h3>
-            <div><span>Today:</span><span>$12323.22M</span></div>
-            <div >
-            <TenGraph/>
-            </div>
-          </div>  
+    <RewardPageWrap>
+      <Grid container spacing={8}>
+        <Grid item lg={4} md={4} sm={12} xs={12}>
+          <DiffusionGoldWrap>
+            <DiffusionGoldBgImg src="images/reward/diffusionGoldBg.png" />
+            <DiffusionGoldHeader>
+              <DiffusionGoldTitle>{t('My diffusion gold')}</DiffusionGoldTitle>
+              <DiffusionGoldDetailJump>{t('Check details >')}</DiffusionGoldDetailJump>
+            </DiffusionGoldHeader>
+            <Petal src="/images/reward/petal.png" />
+            <RewardText>{t('reward')}</RewardText>
+            <RewardValueDiv>{rewardValue}</RewardValueDiv>
+            <ExtractBtn>{t('Extract')}</ExtractBtn>
+          </DiffusionGoldWrap>
         </Grid>
-        
-      
-    </Grid>
-  </RewardPageWrap>)
+        <Grid item lg={8} md={8} sm={12} xs={12}>
+          <MySposWrap>
+            <MySposWrapBgImg src="images/reward/mySposBg.png" />
+            <MySposHeader>
+              <MySposTitle>{t('My diffusion gold')}</MySposTitle>
+              <MySposDetailJump>{t('Check details >')}</MySposDetailJump>
+            </MySposHeader>
+          </MySposWrap>
+        </Grid>
+      </Grid>
+
+      <CardWrap>
+        <Grid container spacing={2}>
+          <Grid item lg={4} md={4} sm={12} xs={12}>
+            <CardItem isMobile={isMobile}>
+              <DataCell label='apy' value={rewardData.apy} />
+              <DataCell label='current index' value={rewardData.curIndex} />
+              <DataCell label='total value deposited' value={rewardData.totalValueDeposited} />
+            </CardItem>
+          </Grid>
+          <Grid item lg={4} md={4} sm={12} xs={12}>
+            <CardItem isMobile={isMobile} className='hasBorder'>
+              <DataCellWrap>
+                <DataCell label='Next base change' value={rewardData.nextBaseChange} />
+              </DataCellWrap>
+              <DataCell label='The next reward yield' value={rewardData.nextRewardYield} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
+              <DataCell label='ROI (Return on Investment) (5 days)' value={rewardData.roi} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
+              <DataCell label='Next bonus amount' value={rewardData.nextBonusAmount} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
+            </CardItem>
+          </Grid>
+          <Grid item lg={4} md={4} sm={12} xs={12}>
+            <CardItem isMobile={isMobile} className='hasBorder'>
+              <BalanceWrap>
+                <DataCell label='Mortgaged balance' value={rewardData.mortgagedBalance} />
+                <DataCell label='Mortgageable balance' value={rewardData.mortgagedBalance} />
+              </BalanceWrap>
+              <MoneyInput prefix="￥" suffix="ALL" value={money} />
+              <BtnWrap>
+                <StakeBtn style={{marginRight: '10px'}}>{t('Take out')}</StakeBtn>
+                <StakeBtn>{t('Stake')}</StakeBtn>
+              </BtnWrap>
+            </CardItem>
+          </Grid>
+        </Grid>
+      </CardWrap>
+
+    </RewardPageWrap>)
 }
 export default Reward;

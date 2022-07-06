@@ -27,6 +27,7 @@ import {
   getBunnySpecialLotteryAddress,
   getFarmAuctionAddress,
   getAnniversaryAchievement,
+  getNFTComposeAddress,
   getNftMarketAddress,
   getNftSaleAddress,
   getPancakeSquadAddress,
@@ -35,6 +36,7 @@ import {
   getTradingCompetitionAddressMoD,
   getBunnySpecialXmasAddress,
   getGalaxyNFTClaimingAddress,
+  getDFSNFTAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -73,6 +75,9 @@ import farmAuctionAbi from 'config/abi/farmAuction.json'
 import anniversaryAchievementAbi from 'config/abi/anniversaryAchievement.json'
 import galaxyNFTClaimingAbi from 'config/abi/galaxyNFTClaiming.json'
 import nftMarketAbi from 'config/abi/nftMarket.json'
+import nftComposeAbi from 'config/abi/nftComposeAbi.json'
+import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
+
 import nftSaleAbi from 'config/abi/nftSale.json'
 import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
 import erc721CollectionAbi from 'config/abi/erc721collection.json'
@@ -239,8 +244,14 @@ export const getGalaxyNTFClaimingContract = (signer?: Signer | Provider) => {
   return getContract(galaxyNFTClaimingAbi, getGalaxyNFTClaimingAddress(), signer) as GalaxyNFTClaiming
 }
 
+export const getNftComposeContract =  (signer?: Signer | Provider) => {
+  return getContract(nftComposeAbi, getNFTComposeAddress(), signer) 
+}
 export const getNftMarketContract = (signer?: Signer | Provider) => {
   return getContract(nftMarketAbi, getNftMarketAddress(), signer) 
+}
+export const getDFSNFTContract = (signer?: Signer | Provider) => {
+  return getContract(dfsNFTAbi, getDFSNFTAddress(), signer) 
 }
 export const getNftSaleContract = (signer?: Signer | Provider) => {
   return getContract(nftSaleAbi, getNftSaleAddress(), signer) as NftSale

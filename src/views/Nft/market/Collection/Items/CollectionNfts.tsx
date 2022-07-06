@@ -5,6 +5,7 @@ import { useTranslation } from 'contexts/Localization'
 import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard } from '../../components/CollectibleCard'
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
+import { getDFSNFTAddress } from 'utils/addressHelpers'
 
 
 interface CollectionNftsProps {
@@ -15,7 +16,12 @@ const CollectionNfts: React.FC<CollectionNftsProps> = ({ collection }) => {
   const { address: collectionAddress } = collection || {}
   const { t } = useTranslation()
   const { nfts, isFetchingNfts, page, setPage, resultSize, isLastPage } = useCollectionNfts(collectionAddress)
-
+  const dfsNFTAddress = getDFSNFTAddress()
+  nfts.map(nft => {
+    if (nft.collectionAddress === dfsNFTAddress) {
+      nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
+    }
+  })
   const handleLoadMore = useCallback(() => {
     setPage(page + 1)
   }, [setPage, page])

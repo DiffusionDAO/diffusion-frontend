@@ -19,19 +19,19 @@ const Wrapper = styled.div`
   position: relative;
   width: 100%;
 `;
-
-const StyledNav = styled.nav`
+const StyledNavWrap = styled.nav`
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+const StyledNav = styled.nav`
   width: 100%;
   height: ${MENU_HEIGHT}px;
   background-color: ${({ theme }) => theme.nav.background};
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
   transform: translate3d(0, 0, 0);
-
-  padding-left: 16px;
-  padding-right: 16px;
 `;
 
 const FixedContainer = styled.div<{ showMenu: boolean; height: number }>`
@@ -131,29 +131,31 @@ const Menu: React.FC<NavProps> = ({
         <FixedContainer showMenu={showMenu} height={totalTopMenuHeight}>
           {banner && <TopBannerContainer height={topBannerHeight}>{banner}</TopBannerContainer>}
           <StyledNav>
-            <Flex>
-              <Logo isDark={isDark} href={homeLink?.href ?? "/"} />
-              {!isMobile && <MenuItems items={links} activeItem={activeItem} activeSubItem={activeSubItem} ml="24px" />}
-            </Flex>
-            <Flex alignItems="center" height="100%">
-              {!isMobile && !isMd && (
-                <Box mr="12px">
-                  <CakePrice showSkeleton={false} cakePriceUsd={cakePriceUsd} />
+            <StyledNavWrap>
+              <Flex>
+                <Logo isDark={isDark} href={homeLink?.href ?? "/"} />
+                {!isMobile && <MenuItems items={links} activeItem={activeItem} activeSubItem={activeSubItem} ml="24px" />}
+              </Flex>
+              <Flex alignItems="center" height="100%">
+                {!isMobile && !isMd && (
+                  <Box mr="12px">
+                    <CakePrice showSkeleton={false} cakePriceUsd={cakePriceUsd} />
+                  </Box>
+                )}
+                <Box mt="4px">
+                  <LangSelector
+                    currentLang={currentLang}
+                    langs={langs}
+                    setLang={setLang}
+                    buttonScale="xs"
+                    color="textSubtle"
+                    hideLanguage
+                  />
                 </Box>
-              )}
-              <Box mt="4px">
-                <LangSelector
-                  currentLang={currentLang}
-                  langs={langs}
-                  setLang={setLang}
-                  buttonScale="xs"
-                  color="textSubtle"
-                  hideLanguage
-                />
-              </Box>
-              {globalMenu} {userMenu}
-            </Flex>
-          </StyledNav>
+                {globalMenu} {userMenu}
+              </Flex>
+              </StyledNavWrap>
+            </StyledNav>
         </FixedContainer>
         {subLinks && (
           <Flex justifyContent="space-around">

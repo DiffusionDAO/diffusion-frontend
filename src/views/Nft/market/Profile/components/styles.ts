@@ -13,10 +13,17 @@ export const SubMenuWrap = styled.div`
   align-items: center;
   position: relative;
   margin: 20px 0;
+  padding: 20px 0;
   border-bottom:1px solid rgba(255, 255, 255, 0.1);
   > div {
     border-bottom: none;
   }
+`
+export const SubMenuRight = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 `
 
 export const SelectedCountBox = styled.div`
@@ -38,7 +45,7 @@ export const SelectWrap = styled.div`
 }
 `
 interface CompoundBtnWrapProps {
-  isCompound: boolean;
+  isSelected: boolean;
 }
 export const CompoundBtnWrap = styled.div`
   padding: 20px;
@@ -48,8 +55,8 @@ export const CompoundBtnWrap = styled.div`
   align-items: center;
   position: relative;
   overflow: hodden;
-  ${({ isCompound }: CompoundBtnWrapProps) => {
-    if (isCompound) {
+  ${({ isSelected }: CompoundBtnWrapProps) => {
+    if (isSelected) {
       return css`
         justify-content: space-between;
       `;
@@ -72,7 +79,10 @@ export const SyntheticBtn = styled.img`
   height: 120px;
 `
 export const AccountNftWrap = styled.div`
-  margin: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
 `
 export const NftSculptureWrap = styled.div`
   top: -50px;

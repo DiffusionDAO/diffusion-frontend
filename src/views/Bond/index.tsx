@@ -1,24 +1,36 @@
 import { FC, useState } from 'react'
-import Typed from 'react-typed';
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
-import { BondPageWrap, BondHeaderWrap, BondPageText, BondPageTitle, BondPageDes, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
-  OverviewCardItemContent, Price, Percent, Icon, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
-  TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName, BondSculptureWrap, BondSculptureGif, BondGearImg, BondBallImg  } from './style'
+import { useTranslation } from 'contexts/Localization'
+import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
+import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxCont, DrawBlindBoxImg, DrawBlindBoxHeader, DrawBlindBoxFooter, 
+  DrawBlindBoxFooterBtn, DrawBlindBoxFooterBtnBorder, DrawBlindBoxFooterBtnBorderImg, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
+  OverviewCardItemContent, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
+  TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
 import bondDatasMock from './MockBondData'
 import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
+import BlindBoxModal from './components/BlindBoxModal'
+import JumpModal from './components/JumpModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 
 const Bond: FC = () => {
+  const { account } = useWeb3React();
+  const { isMobile } = useMatchBreakpoints();
+  const { t } = useTranslation()
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false);
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
-  const [isApprove, setIsApprove] = useState<boolean>(false);
-  const { account } = useWeb3React();
-  const { isMobile } = useMatchBreakpoints();
+  const [blindBoxModalVisible, setBlindBoxModalVisible] = useState<boolean>(false);
+  const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false);
+  const [balance,setBalance] = useState(1);
 
-  const openBondModal = () => {
+  const [isApprove, setIsApprove] = useState<boolean>(false);
+  const [bondItem, setBondItem] = useState<any>(null);
+
+
+  const openBondModal = (item) => {
+    setBondItem(item)
     setBondModalVisible(true)
   }
   const closeBondModal = () => {
@@ -33,89 +45,132 @@ const Bond: FC = () => {
   const getApprove = () => {
     setIsApprove(true)
   }
+  // 抽取盲盒
+  const drawBlind = () => {
+    if (balance <= 0) {
+      setJumpModalVisible(true)
+      return
+    }
+    setBlindBoxModalVisible(true)
+  }
+  const closeBlindBoxModal = () => {
+    setBlindBoxModalVisible(false)
+  }
+  const closeJumpModal = () => {
+    setJumpModalVisible(false)
+  }
+
   return (<BondPageWrap>
-    <BondSculptureWrap isMobile={isMobile}>
-      <BondSculptureGif isMobile={isMobile} src="/images/bond/bond-sculpture.gif" alt="" />
-      <BondGearImg isMobile={isMobile} src="/images/gear.png" alt="" />
-      <BondBallImg isMobile={isMobile} src="/images/ball.png" alt="" />
-    </BondSculptureWrap>
-    <BondHeaderWrap isMobile={isMobile}>
-      <BondPageText>
-        <BondPageTitle>
-          <Typed
-            strings={['Bond']}
-            typeSpeed={50}
-            cursorChar=""
-          />
-        </BondPageTitle>
-        <BondPageDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BondPageDes>
-      </BondPageText>
-      <OverviewCard>
-        <OverviewCardItem isMobile={isMobile} className="borderBottom">
-          <OverviewCardItemTitle>Our price</OverviewCardItemTitle>
+    <DrawBlindBoxList>
+      <DrawBlindBoxItem className='item1'>
+        <DrawBlindBoxCont>
+          <DrawBlindBoxImg src="images/bond/drawBlindBoxBg1.png" />
+          <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
+          <DrawBlindBoxFooter>
+            <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
+            <DrawBlindBoxFooterBtnBorder onClick={drawBlind}>
+              <DrawBlindBoxFooterBtnBorderImg src="/images/bond/purpleBtnBorderBg.png" />
+              {t('Max')}
+            </DrawBlindBoxFooterBtnBorder>
+          </DrawBlindBoxFooter>
+        </DrawBlindBoxCont>
+      </DrawBlindBoxItem>
+      <DrawBlindBoxItem className='item2'>
+        <DrawBlindBoxCont>
+          <DrawBlindBoxImg src="images/bond/drawBlindBoxBg2.png" />
+          <DrawBlindBoxHeader className='item2'>{t('Senior blind box')}</DrawBlindBoxHeader>
+          <DrawBlindBoxFooter>
+            <DrawBlindBoxFooterBtn className="orangeBtn"  style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
+            <DrawBlindBoxFooterBtnBorder onClick={drawBlind}>
+              <DrawBlindBoxFooterBtnBorderImg src="/images/bond/orangeBtnBorderBg.png" />
+              {t('Max')}
+            </DrawBlindBoxFooterBtnBorder>
+          </DrawBlindBoxFooter>
+        </DrawBlindBoxCont>
+        </DrawBlindBoxItem>
+    </DrawBlindBoxList>
+
+    <OverviewCard>
+        <OverviewCardItem>
+          <OverviewCardItemTitle>The Treasury balance</OverviewCardItemTitle>
           <OverviewCardItemContent>
-            <Price>$123.22M</Price>
-            <Percent isRise={4.02>0}>+4.02</Percent>
-            <Icon isRise={4.02>0} />
+            $123.22
           </OverviewCardItemContent>
         </OverviewCardItem>
         {
           isMobile ? <Horizontal /> : null
         }
-        <OverviewCardItem isMobile={isMobile}>
-          <OverviewCardItemTitle>Treasury balance</OverviewCardItemTitle>
+        <OverviewCardItem>
+          <OverviewCardItemTitle>The price of DFS</OverviewCardItemTitle>
           <OverviewCardItemContent>
-            <Price>$123.22M</Price>
-            <Percent isRise={-4.02>0}>-4.02</Percent>
-            <Icon isRise={-4.02>0} />
+            $123.22M
+          </OverviewCardItemContent>
+        </OverviewCardItem>
+        {
+          isMobile ? <Horizontal /> : null
+        }
+        <OverviewCardItem>
+          <OverviewCardItemTitle>Straight driving performance</OverviewCardItemTitle>
+          <OverviewCardItemContent>
+            1000000U
           </OverviewCardItemContent>
         </OverviewCardItem>
       </OverviewCard>
-    </BondHeaderWrap>
 
 
     <Grid container spacing={2}>
       {
-        bonData.map(bondItem => (
-          <Grid item lg={6} md={6} sm={12} xs={12} key={bondItem.key}>
+        bonData.map(item => (
+          <Grid item lg={12} md={12} sm={12} xs={12} key={item.key}>
             <BondListItem>
-              <BondListItemHeader>
+              <BondListItemHeader isMobile={isMobile}>
                 <ImgWrap>
-                  <FromImg src={bondItem.from} />
-                  <ToImg src={bondItem.to} />
+                  <FromImg src={item.from} />
+                  <ToImg src={item.to} />
                 </ImgWrap>
-                <BondHeaderName>{bondItem.name}</BondHeaderName>
+                <BondHeaderName>{item.name}</BondHeaderName>
               </BondListItemHeader>
-              <BondListItemContent>
-                <ContentCell>
+              <BondListItemContent isMobile={isMobile}>
+                <ContentCell isMobile={isMobile}>
                   <CellTitle>Price</CellTitle>
-                  <CellText >${bondItem.price}</CellText>
+                  <CellText >${item.price}</CellText>
                 </ContentCell>
-                <ContentCell>
+                <ContentCell isMobile={isMobile}>
                   <CellTitle>Discount</CellTitle>
-                  <CellText><TextColor isRise={bondItem.discount>0}>{bondItem.discount}%</TextColor></CellText>
+                  <CellText><TextColor isRise={item.discount>0}>{item.discount}%</TextColor></CellText>
                 </ContentCell>
-                <ContentCell>
+                <ContentCell isMobile={isMobile}>
                   <CellTitle>Duration</CellTitle>
-                  <CellText>{bondItem.duration}days</CellText>
+                  <CellText>{item.duration}days</CellText>
                 </ContentCell>
               </BondListItemContent>
-              <BondListItemBtn onClick={openBondModal}>Bond</BondListItemBtn>
+              <BondListItemBtn onClick={()=> openBondModal(item)} isMobile={isMobile}>Bond</BondListItemBtn>
             </BondListItem>
-            {/* bond的弹窗 */}
-            {
-              bondModalVisible ? <BondModal bondData={bondItem} onClose={closeBondModal} openSettingModal={openSettingModal} 
-              account={account} isApprove={isApprove} getApprove={getApprove} /> 
-              : null
-            }
-            {
-              settingModalVisible ? <SettingModal account={account}  bondData={bondItem} onClose={closeSettingModal} /> 
-              : null
-            }
           </Grid>
         ))
       }
     </Grid>
+    {/* bond的弹窗 */}
+    {
+      bondModalVisible ? <BondModal bondData={bondItem} onClose={closeBondModal} openSettingModal={openSettingModal} 
+      account={account} isApprove={isApprove} getApprove={getApprove} /> 
+      : null
+    }
+    {/* bond设置弹窗 */}
+    {
+      settingModalVisible ? <SettingModal account={account}  bondData={bondItem} onClose={closeSettingModal} /> 
+      : null
+    }
+    {/* 盲盒成功的弹窗 */}
+    {
+      blindBoxModalVisible ? <BlindBoxModal nftData={nftDatasMock} onClose={closeBlindBoxModal} />
+      : null
+    }
+    {/* 跳转选项的弹窗 */}
+    {
+      jumpModalVisible ? <JumpModal onClose={closeJumpModal} />
+      : null
+    }
   </BondPageWrap>)
 }
 export default Bond;

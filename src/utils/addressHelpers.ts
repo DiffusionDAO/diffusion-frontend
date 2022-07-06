@@ -95,6 +95,12 @@ export const getGalaxyNFTClaimingAddress = () => {
 export const getNftMarketAddress = () => {
   return getAddress(addresses.nftMarket)
 }
+export const getNFTComposeAddress = () => {
+  return getAddress(addresses.nftCompose)
+}
+export const getDFSNFTAddress = () => {
+  return getAddress(addresses.dfsNFT)
+}
 export const getNftSaleAddress = () => {
   return getAddress(addresses.nftSale)
 }

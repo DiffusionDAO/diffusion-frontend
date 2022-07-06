@@ -9,12 +9,12 @@ import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamp
 import { useWeb3React } from '@web3-react/core'
 
 import Home from '../views/Home'
-import IDO from '../views/IDO'
+import Dashboard from '../views/Dashboard'
 
 const IndexPage = () => {
   const { account } = useWeb3React()
 
-  return <IDO account={account} />
+  return <Dashboard />
 }
 
 export default IndexPage

@@ -5,16 +5,27 @@ nav {
   border-bottom: none !important;
 }
 // tab的样式覆盖
+.ant-tabs-tab .ant-tabs-tab-btn {
+  font-size: 16px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #ABB6FF;
+}
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   font-size: 16px;
   font-family: HelveticaNeue-Medium, HelveticaNeue;
   font-weight: 500;
   color: #FFFFFF;
 }
+
 .ant-tabs-ink-bar {
+  height: 4px !important;
   background: linear-gradient(135deg,#3C00FF, #EC6EFF);
   background-size: 400% 400%;
   animation: gradient 5s ease infinite;
+}
+.ant-tabs-top > .ant-tabs-nav::before {
+  border-bottom: none;
 }
 
 // select 的样式覆盖

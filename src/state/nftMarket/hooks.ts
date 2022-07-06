@@ -5,7 +5,7 @@ import { FetchStatus } from 'config/constants/types'
 import erc721Abi from 'config/abi/erc721.json'
 import { useSWRMulticall } from 'hooks/useSWRContract'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
-import useSWR from 'swr'
+import useSWR, { KeyedMutator } from 'swr'
 import useSWRImmutable from 'swr/immutable'
 import isEmpty from 'lodash/isEmpty'
 import shuffle from 'lodash/shuffle'
@@ -18,10 +18,10 @@ const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'as
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
 const EMPTY_OBJECT = {}
 
-export const useGetCollections = (): { data: ApiCollections; status: FetchStatus } => {
-  const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections())
+export const useGetCollections = (): { data: ApiCollections; status: FetchStatus; mutate: KeyedMutator<any> } => {
+  const { data, status, mutate } = useSWR(['nftMarket', 'collections'], async () => getCollections())
   const collections: any = data ?? {} 
-  return { data: collections, status }
+  return { data: collections, status, mutate }
 }
 
 export const useGetCollection = (collectionAddress: string): Collection | undefined => {

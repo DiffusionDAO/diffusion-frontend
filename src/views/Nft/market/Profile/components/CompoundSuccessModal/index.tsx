@@ -20,7 +20,7 @@ const CompoundSuccessModal: React.FC<CompoundSuccessModalProps> = ({
     <StyledModal
       width={500}
       className="no-header star-bg"
-      title={t('Synthetic')}
+      title={t('Compose')}
       onCancel={onClose}
       visible
       centered
@@ -42,7 +42,6 @@ const CompoundSuccessModal: React.FC<CompoundSuccessModalProps> = ({
         </AchievWrap>
         <ParticleAnimation />
         <Button type="primary" size='large' style={{ padding: '0px 35px' }} onClick={onClose}>{t('Close')}</Button>
-        {/* 散花动画 */}
       </ContentWrap>
     </StyledModal>
   )

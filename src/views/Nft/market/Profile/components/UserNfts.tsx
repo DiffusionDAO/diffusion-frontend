@@ -6,20 +6,19 @@ import GridPlaceholder from '../../components/GridPlaceholder'
 import NoNftsImage from '../../components/Activity/NoNftsImage'
 
 const UserNfts: React.FC<{
-  isCompound: boolean
+  isSelected: boolean
   nfts: NftToken[]
   isLoading: boolean
   selectNft: (param: NftToken) => void
-}> = ({ isCompound, nfts, isLoading, selectNft }) => {
+}> = ({ isSelected, nfts, isLoading, selectNft }) => {
   const { t } = useTranslation()
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
-    if (isCompound) {
+    if (isSelected) {
       selectNft(nft)
     }
   }
   return (
     <>
-      {/* User has no NFTs */}
       {nfts?.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />
@@ -27,7 +26,7 @@ const UserNfts: React.FC<{
             {t('No NFTs found')}
           </Text>
         </Flex>
-      ) : // User has NFTs and data has been fetched
+      ) : 
       nfts?.length > 0 ? (
         <Grid
           gridGap="16px"
@@ -36,10 +35,9 @@ const UserNfts: React.FC<{
         >
           {nfts?.map((nft) => {
             const { marketData, location } = nft
-
             return (
               <CollectibleLinkCard
-                isCompound={isCompound}
+                isSelected={isSelected}
                 isUserNft
                 onClick={() => handleCollectibleClick(nft, location)}
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
@@ -52,7 +50,6 @@ const UserNfts: React.FC<{
           })}
         </Grid>
       ) : (
-        // User NFT data hasn't been fetched
         <GridPlaceholder />
       )}
     </>
