@@ -62,32 +62,38 @@ const Bond: FC = () => {
 
   return (<BondPageWrap>
     <DrawBlindBoxList>
-      <DrawBlindBoxItem className='item1'>
-        <DrawBlindBoxCont>
-          <DrawBlindBoxImg src="images/bond/drawBlindBoxBg1.png" />
-          <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
-          <DrawBlindBoxFooter>
-            <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-            <DrawBlindBoxFooterBtnBorder onClick={drawBlind}>
-              <DrawBlindBoxFooterBtnBorderImg src="/images/bond/purpleBtnBorderBg.png" />
-              {t('Max')}
-            </DrawBlindBoxFooterBtnBorder>
-          </DrawBlindBoxFooter>
-        </DrawBlindBoxCont>
-      </DrawBlindBoxItem>
-      <DrawBlindBoxItem className='item2'>
-        <DrawBlindBoxCont>
-          <DrawBlindBoxImg src="images/bond/drawBlindBoxBg2.png" />
-          <DrawBlindBoxHeader className='item2'>{t('Senior blind box')}</DrawBlindBoxHeader>
-          <DrawBlindBoxFooter>
-            <DrawBlindBoxFooterBtn className="orangeBtn"  style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-            <DrawBlindBoxFooterBtnBorder onClick={drawBlind}>
-              <DrawBlindBoxFooterBtnBorderImg src="/images/bond/orangeBtnBorderBg.png" />
-              {t('Max')}
-            </DrawBlindBoxFooterBtnBorder>
-          </DrawBlindBoxFooter>
-        </DrawBlindBoxCont>
-        </DrawBlindBoxItem>
+      <Grid container spacing={2}>
+        <Grid item lg={6} md={6} sm={12} xs={12}>
+          <DrawBlindBoxItem className='item1'>
+              <DrawBlindBoxCont>
+                <DrawBlindBoxImg src="images/bond/drawBlindBoxBg1.png" />
+                <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
+                <DrawBlindBoxFooter>
+                  <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
+                  <DrawBlindBoxFooterBtnBorder onClick={drawBlind}>
+                    <DrawBlindBoxFooterBtnBorderImg src="/images/bond/purpleBtnBorderBg.png" />
+                    {t('Max')}
+                  </DrawBlindBoxFooterBtnBorder>
+                </DrawBlindBoxFooter>
+              </DrawBlindBoxCont>
+            </DrawBlindBoxItem>
+        </Grid>
+        <Grid item lg={6} md={6} sm={12} xs={12}>
+          <DrawBlindBoxItem className='item2'>
+            <DrawBlindBoxCont>
+              <DrawBlindBoxImg src="images/bond/drawBlindBoxBg2.png" />
+              <DrawBlindBoxHeader className='item2'>{t('Senior blind box')}</DrawBlindBoxHeader>
+              <DrawBlindBoxFooter>
+                <DrawBlindBoxFooterBtn className="orangeBtn"  style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
+                <DrawBlindBoxFooterBtnBorder onClick={drawBlind}>
+                  <DrawBlindBoxFooterBtnBorderImg src="/images/bond/orangeBtnBorderBg.png" />
+                  {t('Max')}
+                </DrawBlindBoxFooterBtnBorder>
+              </DrawBlindBoxFooter>
+            </DrawBlindBoxCont>
+          </DrawBlindBoxItem>
+        </Grid>
+      </Grid>
     </DrawBlindBoxList>
 
     <OverviewCard>

@@ -9,4 +9,6 @@ export const rewardData = Mock.mock({
     "roi": '3.2888%',
     "nextBonusAmount": '0.8888OHM%',
     "mortgagedBalance": '3,123.22DFS',
+    "NextRewardRevenue": '90',
+    "interestRate": '15%',
 });

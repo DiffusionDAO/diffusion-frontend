@@ -4,7 +4,8 @@ import { useTranslation } from 'contexts/Localization'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { RewardPageWrap, DiffusionGoldWrap, DiffusionGoldBgImg, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
   Petal, RewardText, RewardValueDiv, ExtractBtn, 
-  MySposWrap, MySposWrapBgImg, MySposHeader, MySposTitle, MySposDetailJump, 
+  MySposWrap, MySposWrapBgImg, MySposHeader, MySposTitle, MySposDetailJump, MySposOveview, MySposOveviewItem, CoinImg,
+  MySposConWrap, MySposDashboard, MySposRewardWrap, MySposRewardBg,
   CardWrap, CardItem, DataCellWrap, BalanceWrap, MoneyInput, BtnWrap, StakeBtn, 
  } from './style'
  import DataCell from "./components/DataCell"
@@ -39,6 +40,33 @@ const Reward: FC = () => {
               <MySposTitle>{t('My diffusion gold')}</MySposTitle>
               <MySposDetailJump>{t('Check details >')}</MySposDetailJump>
             </MySposHeader>
+            <MySposOveview>
+              <MySposOveviewItem>
+                <DataCell label={t('Time to next generate revenue')} value={rewardData.nextBaseChange} valueDivStyle={{ fontSize: "16px" }} />
+              </MySposOveviewItem>
+              <MySposOveviewItem>
+                <DataCell label={t('Next reward revenue')} value={rewardData.NextRewardRevenue} valueDivStyle={{ fontSize: "16px" }} />
+              </MySposOveviewItem>
+              <MySposOveviewItem>
+                <DataCell label='The current interest rate' value={rewardData.interestRate} valueDivStyle={{ fontSize: "16px" }} />
+              </MySposOveviewItem>
+              <CoinImg src="/images/reward/coin.png" />
+            </MySposOveview>
+            {/* <MySposConWrap> */}
+            <Grid container spacing={2}>
+              <Grid item lg={7} md={7} sm={12} xs={12}>
+                <MySposDashboard />
+              </Grid>
+              <Grid item lg={5} md={5} sm={12} xs={12}>
+                <MySposRewardWrap>
+                  <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
+                  <RewardValueDiv>{rewardValue}</RewardValueDiv>
+                  <RewardText>{t('reward')}</RewardText>
+                  <ExtractBtn>{t('Extract')}</ExtractBtn>
+                </MySposRewardWrap>
+                </Grid>
+              </Grid>
+            {/* </MySposConWrap> */}
           </MySposWrap>
         </Grid>
       </Grid>
