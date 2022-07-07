@@ -1,10 +1,66 @@
+import { Slider } from '@pancakeswap/uikit';
 import styled, { css } from 'styled-components'
 import { Input } from 'antd';
 
+const SLIDER_HEIGHT = 310
 export const RewardPageWrap = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+`
+export const SwiperWrap = styled.div`
+  width: 100%;
+  height: ${SLIDER_HEIGHT}px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  position: relative;
+`
+export const SwiperWrapBgImg = styled.img`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -2;
+`
+export const SwiperMiddleImg = styled.img`
+  width: 310px;
+  height: 270px;
+  position: absolute;
+  left: calc(50% - 155px);
+  top: -150px;
+  z-index: -1;
+`
+export const SwiperItem = styled.div`
+  width: 100px;
+  height: ${SLIDER_HEIGHT}px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
+export const SwiperItemImg = styled.img`
+  width: 100%;
+`
+export const SwiperItemName = styled.div`
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  font-weight: bold;
+  color: #FFFFFF;
+`
+export const SwiperItemDes = styled.div`
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 12px;
+  font-family: HelveticaNeue;
+  color: #ABB6FF;
 `
 
 export const DiffusionGoldWrap = styled.div`

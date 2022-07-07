@@ -1,8 +1,13 @@
 import { FC, useState } from 'react'
 import { Grid } from "@material-ui/core";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
 import { useTranslation } from 'contexts/Localization'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
-import { RewardPageWrap, DiffusionGoldWrap, DiffusionGoldBgImg, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
+import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperMiddleImg, SwiperItem, SwiperItemImg, SwiperItemName, SwiperItemDes,
+  DiffusionGoldWrap, DiffusionGoldBgImg, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
   Petal, RewardText, RewardValueDiv, ExtractBtn, 
   MySposWrap, MySposWrapBgImg, MySposHeader, MySposTitle, MySposDetailJump, MySposOveview, MySposOveviewItem, CoinImg,
   MySposConWrap, MySposDashboard, MySposRewardWrap, MySposRewardBg,
@@ -16,9 +21,48 @@ const Reward: FC = () => {
   const [rewardValue, setRewardValue] = useState('123,123');
   const [money, setMoney] = useState<number>();
   const { isMobile } = useMatchBreakpoints();
+  
+  const swiperSlideData = [
+    { name: 'No Bonus1', describetion:'No bonus for now' },
+    { name: 'No Bonus2', describetion:'No bonus for now' },
+    { name: 'No Bonus3', describetion:'No bonus for now' },
+    { name: 'No Bonus4', describetion:'No bonus for now' },
+    { name: 'No Bonus5', describetion:'No bonus for now' },
+    { name: 'No Bonus6', describetion:'No bonus for now' },
+    { name: 'No Bonus7', describetion:'No bonus for now' },
+    { name: 'No Bonus8', describetion:'No bonus for now' },
+    { name: 'No Bonus9', describetion:'No bonus for now' },
+  ]
 
   return (
     <RewardPageWrap>
+      <SwiperWrap>
+        <Swiper
+          modules={[Navigation]}
+          spaceBetween={50}
+          slidesPerView={5}
+          onSlideChange={() => console.log('slide change')}
+          centeredSlides
+          navigation
+          onSwiper={(swiper) => console.log(swiper)}
+        >
+          {
+            swiperSlideData.map((item, index) => {
+              return <SwiperSlide>
+                <SwiperItem>
+                  {/* <SwiperItemImg src={`/images/reward/headPortrait${index}.png`} /> */}
+                  <SwiperItemImg src="/images/reward/headPortrait1.png" />
+                  <SwiperItemName>{item.name}</SwiperItemName>
+                  <SwiperItemDes>{item.describetion}</SwiperItemDes>
+                </SwiperItem>
+              </SwiperSlide>
+            })
+          }
+        </Swiper>
+        <SwiperWrapBgImg src="/images/reward/swiperWrapBg.png" />
+        <SwiperMiddleImg src="/images/reward/swiperMiddleImg.png" />
+        
+      </SwiperWrap>
       <Grid container spacing={8}>
         <Grid item lg={4} md={4} sm={12} xs={12}>
           <DiffusionGoldWrap>
