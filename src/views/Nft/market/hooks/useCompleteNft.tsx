@@ -49,6 +49,7 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
     collectionAddress && tokenId ? ['nft', collectionAddress, tokenId] : null,
     async () => {
       const metadata = await getNftApi(collectionAddress, tokenId)
+      console.log(metadata)
       if (metadata) {
         const basicNft: NftToken = {
           tokenId,

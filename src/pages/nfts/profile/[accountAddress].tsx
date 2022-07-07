@@ -50,6 +50,8 @@ const dfsName = { 0: "Lord fragment", 1: "Lord", 2: "Golden Lord", 3: "General",
 const greeceNumber = { 0: "I", 1: "II", 2: "III", 3: "IV", 4: "V", 5: "VI", 6: "VII" }
 
 function NftProfilePage() {
+  const { data: collections, status } = useGetCollections() as any
+
   const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
@@ -57,7 +59,6 @@ function NftProfilePage() {
   const { query } = useRouter()
 
   const accountAddress = query.accountAddress as string
-  // console.log("accountAddress:", accountAddress)
   const [selectedNfts, setSelectedNfts] = useState<NftToken[]>([])
   const [mynfts, setMynfts] = useState<NftToken[]>([])
 
@@ -94,23 +95,20 @@ function NftProfilePage() {
     { label: t('Congressman'), value: 'Congressman', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
   ]
 
-  const { data: collections, mutate } = useGetCollections() as any
   useEffect(() => {
-    console.log("collections:", collections)
+    // console.log("collections:", collections)
     const keys = Object.keys(collections)
-    console.log("keys:", keys)
-    const nfts = keys.map(key => collections[key].tokens.filter(item =>
+    // console.log("keys:", keys)
+    const initNfts = keys.map(key => collections[key].tokens.filter(item =>
       item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
     )).flat()
-    nfts.map(nft =>
+    initNfts.map(nft =>
       nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
     )
-    console.log("nfts:", nfts)
-
-    setMynfts(nfts)
-    setSelectedNfts(nfts)
-
-  }, [account])
+    // console.log("nfts:", nfts)
+    setMynfts(initNfts)
+    setSelectedNfts(initNfts)
+  }, [account,status])
 
   const resetPage = () => {
     setIsSelected(false)
@@ -146,7 +144,7 @@ function NftProfilePage() {
   const dfsNFT = useDFSNftContract()
   const submitCompound = async () => {
     const selectedTokenIds = selectedNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
-    console.log("selectedTokenIds:",selectedTokenIds)
+    console.log("selectedTokenIds:", selectedTokenIds)
     const composeAddress = getNFTComposeAddress()
     const attribute = selectedNfts[0].attributes[0].value
     let tx
@@ -191,31 +189,14 @@ function NftProfilePage() {
       }
     }
     setComposedNFT([newNft])
-    mynfts.map((nft,i) => {
+    mynfts.map((nft, i) => {
       if (selectedTokenIds.includes(nft.tokenId)) {
-        mynfts.splice(i,1)
+        mynfts.splice(i, 1)
       }
     })
     mynfts.push(newNft)
     setMynfts(mynfts)
 
-
-    // while (true) {
-    //   const res = await fetch(`https://middle.diffusiondao.org/nfts/collections`)
-    //   if (res.ok) {
-    //     const json = await res.json()
-    //     const newnfts = Object.keys(json).map(key => json[key].tokens.filter(item =>
-    //       item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
-    //     )).flat()
-    //     if (newnfts.length < mynfts.length) {
-    //       const composed = newnfts.filter(nft => nft.tokenId === tokenId)
-    //       setComposedNFT(composed)
-    //       setMynfts(newnfts)
-    //       break
-    //     }
-    //     await sleep(0.5)
-    //   }
-    // }
     setConfirmModalVisible(false)
     setSuccessModalVisible(true)
   }
