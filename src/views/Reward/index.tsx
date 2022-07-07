@@ -1,7 +1,6 @@
 import { FC, useState } from 'react'
 import { Grid } from "@material-ui/core";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useTranslation } from 'contexts/Localization'
@@ -38,7 +37,7 @@ const Reward: FC = () => {
     <RewardPageWrap>
       <SwiperWrap>
         <Swiper
-          modules={[Navigation]}
+          className="rewardSwiper"
           spaceBetween={50}
           slidesPerView={5}
           onSlideChange={() => console.log('slide change')}
