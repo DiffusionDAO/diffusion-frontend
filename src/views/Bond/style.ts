@@ -119,20 +119,18 @@ export const DrawBlindBoxFooterBtn = styled.div`
 
 export const DrawBlindBoxFooterBtnBorder = styled.div`
   width: 120px;
-  height: 40px;
+  line-height: 40px;
   border-radius: 8px;
   color: #fff;
-  line-height: 40px;
   text-align: center;
   cursor: pointer;
   position: relative;
-`
-export const DrawBlindBoxFooterBtnBorderImg = styled.img`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
+  &.purpleBtn {
+    border: 2px solid #EC6EFF;
+  }
+  &.orangeBtn {
+    border: 2px solid #FF7056;
+  }
 `
 
 export const OverviewCard = styled.div`

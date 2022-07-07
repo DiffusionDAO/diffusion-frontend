@@ -14,6 +14,22 @@ export const SwiperWrap = styled.div`
   padding: 0 20px;
   margin-bottom: 20px;
   position: relative;
+  .swiper {
+    padding: 0 40px;
+    .swiper-slide {
+      opacity: 0.8
+    }
+    .swiper-slide-prev {
+      transform: scale(1.2);
+    }
+    .swiper-slide-active {
+      transform: scale(1.6);
+      opacity: 1
+    }
+    .swiper-slide-next {
+      transform: scale(1.2);
+    }
+  }
 `
 export const SwiperWrapBgImg = styled.img`
   width: 100%;
@@ -32,7 +48,7 @@ export const SwiperMiddleImg = styled.img`
   z-index: -1;
 `
 export const SwiperItem = styled.div`
-  width: 100px;
+  width: 100%;
   height: ${SLIDER_HEIGHT}px;
   display: flex;
   flex-direction: column;
@@ -40,7 +56,7 @@ export const SwiperItem = styled.div`
   justify-content: center;
 `
 export const SwiperItemImg = styled.img`
-  width: 100%;
+  width: 100px;
 `
 export const SwiperItemName = styled.div`
   width: 100%;
@@ -66,6 +82,8 @@ export const SwiperItemDes = styled.div`
 export const DiffusionGoldWrap = styled.div`
   width: 100%;
   height: 480px;
+  border: 2px solid #8836ff;
+  border-radius: 16px;
   padding: 24px;
   display: flex;
   justify-content: center;
@@ -149,6 +167,8 @@ export const MySposWrap = styled.div`
   width: 100%;
   padding: 24px;
   min-height: 480px;
+  border: 2px solid #e972ff;
+  border-radius: 16px;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -322,4 +342,13 @@ export const StakeBtn = styled.div`
   background: linear-gradient(90deg, #3C00FF, #EC6EFF);
   background-size: 400% 400%;
   animation: gradient 5s ease infinite;
+`
+export const TakeOutBtn = styled.div`
+  width: calc(50% - 5px);
+  border-radius: 8px;
+  color: #fff;
+  line-height: 36px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid #EC6EFF;
 `

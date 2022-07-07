@@ -1,9 +1,4 @@
-import { FC, useState } from 'react'
-import { Grid } from "@material-ui/core";
-import { useTranslation } from 'contexts/Localization'
 import styled, { css } from 'styled-components'
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
-
 
 export const CellWrap = styled.div`
   width: 100%;
@@ -37,26 +32,3 @@ export const ValueDiv = styled.div`
   color: #FFFFFF;
   line-height: 40px;
 `
-
-interface DataCellProps {
-  label: string;
-  value: string;
-  position?: string;
-  valueDivStyle?: CSSProperties;
-}
-
-const DataCell: FC<DataCellProps> = ({
-  label,
-  value,
-  position='vertical',
-  valueDivStyle,
-}) => {
-  const { t } = useTranslation()
-  return (
-    <CellWrap position={position}>
-      <LabelDiv>{label}</LabelDiv>
-      <ValueDiv style={valueDivStyle}>{value}</ValueDiv>
-    </CellWrap>
-    )
-}
-export default DataCell;
