@@ -33,19 +33,10 @@ export const SwiperWrap = styled.div`
 `
 export const SwiperWrapBgImg = styled.img`
   width: 100%;
-  height: 100%;
   position: absolute;
   left: 0;
-  top: 0;
+  bottom: 0;
   z-index: -2;
-`
-export const SwiperMiddleImg = styled.img`
-  width: 310px;
-  height: 270px;
-  position: absolute;
-  left: calc(50% - 155px);
-  top: -150px;
-  z-index: -1;
 `
 export const SwiperItem = styled.div`
   width: 100%;
@@ -239,13 +230,95 @@ export const MySposConWrap = styled.div`
   justify-content: space-evenly;
 `
 
-export const MySposDashboard = styled.div`
+export const MySposDashboardWrap = styled.div`
   width: 100%;
   height: 313px;
   margin: 0 auto;
   border-radius: 12px;
-  background: rgba(12,0,44,0.4900);
   border: 1px solid rgba(70,96,255,0.3200);
+  position: relative;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+`
+export const MySposDashboardList = styled.div`
+  max-width: 405px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  position: relative;
+`
+export const MySposDashboardItem = styled.div`
+  width: 197px;
+  height: 157px;
+  color:#fff;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  &.item1 {
+    background: url('/images/reward/mySposDashboardItem1.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  &.item2 {
+    background: url('/images/reward/mySposDashboardItem2.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  &.item3 {
+    background: url('/images/reward/mySposDashboardItem3.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  &.item4 {
+    background: url('/images/reward/mySposDashboardItem4.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+`
+export const MySposDashboardValue = styled.div`
+
+`
+export const MySposDashboardDes = styled.div`
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #ABB6FF;
+`
+export const MySposDashboardMiddleItem = styled.div`
+  height: 218px;
+  width: 218px;
+  position: absolute;
+  left: calc(50% - 109px);
+  top: calc(50% - 109px);
+  background: url('/images/reward/mySposDashboardMiddleItem.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+`
+export const MySposDashboardMiddleItemValue = styled.div`
+  text-align: center;
+  line-height: 218px;
+  font-size: 36px;
+  color: #fff;
+`
+export const MySposDashboardMiddleItemDes = styled.div`
+  width: 182px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 8px;
+  border: 1px solid #8a7ea5;
+  font-size: 13px;
+  color: #fff;
+  text-align: center;
+  position: absolute;
+  left: calc(50% - 91px);
+  top: calc(50% + 20px);
+  background-color: #8b5dfe;
 `
 export const MySposRewardWrap = styled.div`
   width: 100%;

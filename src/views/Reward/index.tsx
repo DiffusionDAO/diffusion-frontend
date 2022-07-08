@@ -8,11 +8,12 @@ import 'swiper/css/navigation';
 import { useTranslation } from 'contexts/Localization'
 import noop from 'lodash/noop';
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
-import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperMiddleImg, SwiperItem, SwiperItemImg, SwiperItemName, SwiperItemDes,
+import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperItem, SwiperItemImg, SwiperItemName, SwiperItemDes,
   DiffusionGoldWrap, DiffusionGoldBgImg, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
   Petal, RewardText, RewardValueDiv, ExtractBtn, 
   MySposWrap, MySposWrapBgImg, MySposHeader, MySposTitle, MySposDetailJump, MySposOveview, MySposOveviewItem, CoinImg,
-  MySposConWrap, MySposDashboard, MySposRewardWrap, MySposRewardBg,
+  MySposConWrap, MySposDashboardWrap, MySposDashboardList, MySposDashboardItem, MySposDashboardValue, MySposDashboardDes, 
+  MySposDashboardMiddleItem, MySposDashboardMiddleItemValue, MySposDashboardMiddleItemDes, MySposRewardWrap, MySposRewardBg,
   CardWrap, CardItem, DataCellWrap, BalanceWrap, MoneyInput, BtnWrap, StakeBtn, TakeOutBtn,
  } from './style'
  import DataCell from "./components/DataCell"
@@ -62,11 +63,12 @@ const Reward: FC = () => {
               modules={[Navigation]}
               className="rewardSwiper"
               spaceBetween={50}
-              slidesPerView={slidesPerView}
-              onSlideChange={() => console.log('slide change')}
+              initialSlide={4} // 初始索引设置
+              slidesPerView={slidesPerView} // 一次展示块的数量
               centeredSlides
               navigation
-              onSwiper={(swiper) => console.log(swiper)}
+              // onSwiper={(swiper) => console.log(swiper)}
+              // onSlideChange={() => console.log('slide change')}
             >
               {
                 swiperSlideData.map((item, index) => {
@@ -82,8 +84,6 @@ const Reward: FC = () => {
               }
             </Swiper>
             <SwiperWrapBgImg src="/images/reward/swiperWrapBg.png" />
-            <SwiperMiddleImg src="/images/reward/swiperMiddleImg.png" />
-            
           </SwiperWrap>
           <Grid container spacing={8}>
             <Grid item lg={4} md={4} sm={12} xs={12}>
@@ -121,7 +121,30 @@ const Reward: FC = () => {
                 {/* <MySposConWrap> */}
                 <Grid container spacing={2}>
                   <Grid item lg={7} md={7} sm={12} xs={12}>
-                    <MySposDashboard />
+                    <MySposDashboardWrap>
+                      <MySposDashboardList>
+                        <MySposDashboardItem className='item1'>
+                          <MySposDashboardValue>{rewardData.apy}</MySposDashboardValue>
+                          <MySposDashboardDes>{t('Are unlocked')}</MySposDashboardDes>
+                        </MySposDashboardItem>
+                        <MySposDashboardItem className='item2'>
+                          <MySposDashboardValue>{rewardData.apy}</MySposDashboardValue>
+                          <MySposDashboardDes>{t('Are unlocked')}</MySposDashboardDes>
+                        </MySposDashboardItem>
+                        <MySposDashboardItem className='item3'>
+                          <MySposDashboardValue>{rewardData.apy}</MySposDashboardValue>
+                          <MySposDashboardDes>{t('Are unlocked')}</MySposDashboardDes>
+                        </MySposDashboardItem>
+                        <MySposDashboardItem className='item4'>
+                          <MySposDashboardValue>{rewardData.apy}</MySposDashboardValue>
+                          <MySposDashboardDes>{t('Are unlocked')}</MySposDashboardDes>
+                        </MySposDashboardItem>
+                      </MySposDashboardList>
+                      <MySposDashboardMiddleItem>
+                        <MySposDashboardMiddleItemValue>{rewardData.interestRate}</MySposDashboardMiddleItemValue>
+                        <MySposDashboardMiddleItemDes>{t('The current interest rate')}</MySposDashboardMiddleItemDes>
+                      </MySposDashboardMiddleItem>
+                    </MySposDashboardWrap>
                   </Grid>
                   <Grid item lg={5} md={5} sm={12} xs={12}>
                     <MySposRewardWrap>

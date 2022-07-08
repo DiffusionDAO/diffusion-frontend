@@ -3,7 +3,7 @@ import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
-import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxCont, DrawBlindBoxImg, DrawBlindBoxHeader, DrawBlindBoxFooter, 
+import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImg, DrawBlindBoxHeader, DrawBlindBoxFooter, 
   DrawBlindBoxFooterBtn, DrawBlindBoxFooterBtnBorder, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
   OverviewCardItemContent, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
@@ -65,26 +65,22 @@ const Bond: FC = () => {
       <Grid container spacing={2}>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <DrawBlindBoxItem className='item1'>
-              <DrawBlindBoxCont>
-                <DrawBlindBoxImg src="images/bond/drawBlindBoxBg1.png" />
-                <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
-                <DrawBlindBoxFooter>
-                  <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-                  <DrawBlindBoxFooterBtnBorder onClick={drawBlind} className="purpleBtn">{t('Max')}</DrawBlindBoxFooterBtnBorder>
-                </DrawBlindBoxFooter>
-              </DrawBlindBoxCont>
+              <DrawBlindBoxImg src="images/bond/drawBlindBoxBg1.png" />
+              <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
+              <DrawBlindBoxFooter>
+                <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
+                <DrawBlindBoxFooterBtnBorder onClick={drawBlind} className="purpleBtn">{t('Max')}</DrawBlindBoxFooterBtnBorder>
+              </DrawBlindBoxFooter>
             </DrawBlindBoxItem>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <DrawBlindBoxItem className='item2'>
-            <DrawBlindBoxCont>
-              <DrawBlindBoxImg src="images/bond/drawBlindBoxBg2.png" />
-              <DrawBlindBoxHeader className='item2'>{t('Senior blind box')}</DrawBlindBoxHeader>
-              <DrawBlindBoxFooter>
-                <DrawBlindBoxFooterBtn className="orangeBtn"  style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-                <DrawBlindBoxFooterBtnBorder onClick={drawBlind} className="orangeBtn">{t('Max')}</DrawBlindBoxFooterBtnBorder>
-              </DrawBlindBoxFooter>
-            </DrawBlindBoxCont>
+            <DrawBlindBoxImg src="images/bond/drawBlindBoxBg2.png" />
+            <DrawBlindBoxHeader className='item2'>{t('Senior blind box')}</DrawBlindBoxHeader>
+            <DrawBlindBoxFooter>
+              <DrawBlindBoxFooterBtn className="orangeBtn"  style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
+              <DrawBlindBoxFooterBtnBorder onClick={drawBlind} className="orangeBtn">{t('Max')}</DrawBlindBoxFooterBtnBorder>
+            </DrawBlindBoxFooter>
           </DrawBlindBoxItem>
         </Grid>
       </Grid>

@@ -25,28 +25,11 @@ export const DrawBlindBoxItem = styled.div`
   border-radius: 16px;
   position: relative;
   &.item1 {
-    background: linear-gradient(135deg,rgba(60, 0, 255, 1), rgba(236, 110, 255, 1));
-    background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
+    border: 4px solid #EC6EFF;
   }
   &.item2 {
-    background: linear-gradient(135deg, rgba(255, 161, 110, 1), rgba(255, 112, 86, 1));
-    background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
+    border: 4px solid #FF7056;
   }
-`
-
-export const DrawBlindBoxCont = styled.div`
-  height: calc(100% - 8px);
-  border-radius: 14px;
-  width: calc(100% - 8px);
-  background-color: #fff;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
 `
 export const DrawBlindBoxImg = styled.img`
   width: 100%;
