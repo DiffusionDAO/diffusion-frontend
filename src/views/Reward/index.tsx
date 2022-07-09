@@ -16,7 +16,7 @@ import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperItem, SwiperItemImg,
   DiffusionGoldWrap, DiffusionGoldBgImg, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
   Petal, RewardText, RewardValueDiv, ExtractBtn, 
   MySposWrap, MySposWrapBgImg, MySposHeader, MySposTitle, MySposDetailJump, MySposOveview, MySposOveviewItem, CoinImg,
-  MySposConWrap, MySposDashboardWrap, MySposDashboardList, MySposDashboardItem, MySposDashboardValue, MySposDashboardDes, 
+  MySposConWrap, MySposDashboardWrap, MySposDashboardList, MySposDashboardItem, MySposDashboardItemImage, MySposDashboardValue, MySposDashboardDes, 
   MySposDashboardMiddleItem, MySposDashboardMiddleItemValue, MySposDashboardMiddleItemDes, MySposRewardWrap, MySposRewardBg,
   CardWrap, CardItem, DataCellWrap, BalanceWrap, MoneyInput, BtnWrap, StakeBtn, TakeOutBtn,
  } from './style'
@@ -131,19 +131,39 @@ const Reward: FC = () => {
                   <Grid item lg={7} md={7} sm={12} xs={12}>
                     <MySposDashboardWrap>
                       <MySposDashboardList>
-                        <MySposDashboardItem className={activeItem === 1 ? 'activeItem1' : 'item1'} onClick={()=>setActiveItem(1)}>
+                        <MySposDashboardItem onClick={()=>setActiveItem(1)}>
+                          {
+                            activeItem === 1 ? 
+                            <MySposDashboardItemImage src="/images/reward/mySposDashboardActiveItem1.png" />
+                            : <MySposDashboardItemImage src="/images/reward/mySposDashboardItem1.png" />
+                          }
                           <MySposDashboardValue className="alignLeft" style={{ color: '#00FFEE' }}>{rewardData.apy}</MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Are unlocked')}</MySposDashboardDes>
                         </MySposDashboardItem>
-                        <MySposDashboardItem className={activeItem === 2 ? 'activeItem2' : 'item2'} onClick={()=>setActiveItem(2)}>
+                        <MySposDashboardItem onClick={()=>setActiveItem(2)}>
+                          {
+                            activeItem === 2 ? 
+                            <MySposDashboardItemImage src="/images/reward/mySposDashboardActiveItem2.png" />
+                            : <MySposDashboardItemImage src="/images/reward/mySposDashboardItem2.png" />
+                          }
                           <MySposDashboardValue className="alignRight" style={{ color: 'grey' }}>{rewardData.apy}</MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Are unlocked')}</MySposDashboardDes>
                         </MySposDashboardItem>
-                        <MySposDashboardItem className={activeItem === 3 ? 'activeItem3' : 'item3'} onClick={()=>setActiveItem(3)}>
+                        <MySposDashboardItem onClick={()=>setActiveItem(3)}>
+                          {
+                            activeItem === 3 ? 
+                            <MySposDashboardItemImage src="/images/reward/mySposDashboardActiveItem3.png" />
+                            : <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
+                          }
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>{rewardData.apy}</MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Are unlocked')}</MySposDashboardDes>
                         </MySposDashboardItem>
-                        <MySposDashboardItem className={activeItem === 4 ? 'activeItem4' : 'item4'} onClick={()=>setActiveItem(4)}>
+                        <MySposDashboardItem onClick={()=>setActiveItem(4)}>
+                          {
+                            activeItem === 4 ? 
+                            <MySposDashboardItemImage src="/images/reward/mySposDashboardActiveItem4.png" />
+                            : <MySposDashboardItemImage src="/images/reward/mySposDashboardItem4.png" />
+                          }
                           <MySposDashboardValue className="alignRight" style={{ color: '#E7A4FF' }}>{rewardData.apy}</MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Are unlocked')}</MySposDashboardDes>
                         </MySposDashboardItem>

@@ -249,9 +249,9 @@ export const MySposDashboardList = styled.div`
   position: relative;
 `
 export const MySposDashboardItem = styled.div`
-  width: 190px;
-  height: 153px;
-  padding: 30px;
+  width: calc(50% - 8px);
+  height: calc(50% - 8px);
+  padding: 20px;
   color:#fff;
   display: flex;
   align-content: center;
@@ -259,47 +259,17 @@ export const MySposDashboardItem = styled.div`
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  &.item1 {
-    background: url('/images/reward/mySposDashboardItem1.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
-  &.item2 {
-    background: url('/images/reward/mySposDashboardItem2.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
-  &.item3 {
-    background: url('/images/reward/mySposDashboardItem3.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
-  &.item4 {
-    background: url('/images/reward/mySposDashboardItem4.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
-  &.activeItem1 {
-    background: url('/images/reward/mySposDashboardActiveItem1.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
-  &.activeItem2 {
-    background: url('/images/reward/mySposDashboardActiveItem2.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
-  &.activeItem3{
-    background: url('/images/reward/mySposDashboardActiveItem3.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
-  &.activeItem4 {
-    background: url('/images/reward/mySposDashboardActiveItem4.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
+  position: relative;
 `
+export const MySposDashboardItemImage = styled.img`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+`
+
 export const MySposDashboardValue = styled.div`
   width: 100%;
   &.alignLeft {
@@ -326,18 +296,30 @@ export const MySposDashboardDes = styled.div`
   }
 `
 export const MySposDashboardMiddleItem = styled.div`
-  height: 218px;
-  width: 218px;
+  max-width: 50%;
+  width: 50%;
+  height: 0;
+  padding-bottom: 50%;
   position: absolute;
-  left: calc(50% - 109px);
-  top: calc(50% - 109px);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
   background: url('/images/reward/mySposDashboardMiddleItem.png');
   background-repeat: no-repeat;
   background-size: 100%;
 `
 export const MySposDashboardMiddleItemValue = styled.div`
+  width: 100%;
+  height: 40px;
   text-align: center;
-  line-height: 218px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
   font-size: 36px;
   color: #fff;
 `
