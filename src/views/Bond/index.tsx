@@ -1,4 +1,6 @@
 import { FC, useState } from 'react'
+import { useWalletModal } from '@pancakeswap/uikit'
+import useAuth from 'hooks/useAuth'
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
@@ -18,6 +20,8 @@ const Bond: FC = () => {
   const { account } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
+  const { login, logout } = useAuth()
+  const { onPresentConnectModal } = useWalletModal(login, logout, t)
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false);
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
@@ -47,6 +51,10 @@ const Bond: FC = () => {
   }
   // 抽取盲盒
   const drawBlind = () => {
+    if (!account) {
+      onPresentConnectModal()
+      return
+    }
     if (balance <= 0) {
       setJumpModalVisible(true)
       return

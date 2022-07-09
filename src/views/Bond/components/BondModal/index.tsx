@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
+import useAuth from 'hooks/useAuth'
 import { useTranslation } from 'contexts/Localization'
-import { CloseIcon, CogIcon, InfoIcon } from '@pancakeswap/uikit'
+import { CloseIcon, CogIcon, InfoIcon, useWalletModal } from '@pancakeswap/uikit'
 import { StyledModal, ContentWrap, HeaderWrap, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
   TextColor, ImgWrap, FromImg, ToImg, BondName, BondTime, TipsWrap, TipsText,  BondListItemBtn, ListItem, ListLable, ListContent,
   TabList, TabItem, MoneyLable, MoneyInput, RecomandWrap, CheckBoxWrap, CheckBox, RecomandLable, RecomandInput } from './styles'
@@ -23,6 +24,8 @@ const BondModal: React.FC<BondModalProps> = ({
   openSettingModal
 }) => {
   const { t } = useTranslation();
+  const { login, logout } = useAuth()
+  const { onPresentConnectModal } = useWalletModal(login, logout, t)
   const [hasRecomand, sethasRecomand] = useState<boolean>(false);
   const [recomander, setRecomander] = useState<string>();
   const [money, setMoney] = useState<number>();
@@ -33,6 +36,10 @@ const BondModal: React.FC<BondModalProps> = ({
   }
   const clickTab = (key) => {
     setActiveTab(key)
+  }
+  const connectWallect = () => {
+    onClose()
+    onPresentConnectModal()
   }
 
   return (
@@ -122,7 +129,7 @@ const BondModal: React.FC<BondModalProps> = ({
                 <InfoIcon  width="20px" color="#ABB6FF" />
                 <TipsText>You need to connect the wallet to operate</TipsText>
               </TipsWrap>
-            <BondListItemBtn>Connection</BondListItemBtn>
+            <BondListItemBtn onClick={connectWallect}>Connection</BondListItemBtn>
           </>
         }
         <ListItem>

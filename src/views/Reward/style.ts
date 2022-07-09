@@ -235,7 +235,6 @@ export const MySposDashboardWrap = styled.div`
   height: 313px;
   margin: 0 auto;
   border-radius: 12px;
-  border: 1px solid rgba(70,96,255,0.3200);
   position: relative;
   display: flex;
   align-content: center;
@@ -245,19 +244,21 @@ export const MySposDashboardList = styled.div`
   max-width: 405px;
   display: flex;
   flex-wrap: wrap;
-  align-content: center;
-  justify-content: center;
+  align-content: space-between;
+  justify-content: space-between;
   position: relative;
 `
 export const MySposDashboardItem = styled.div`
-  width: 197px;
-  height: 157px;
+  width: 190px;
+  height: 153px;
+  padding: 30px;
   color:#fff;
   display: flex;
   align-content: center;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
   &.item1 {
     background: url('/images/reward/mySposDashboardItem1.png');
     background-repeat: no-repeat;
@@ -278,17 +279,51 @@ export const MySposDashboardItem = styled.div`
     background-repeat: no-repeat;
     background-size: 100%;
   }
+  &.activeItem1 {
+    background: url('/images/reward/mySposDashboardActiveItem1.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  &.activeItem2 {
+    background: url('/images/reward/mySposDashboardActiveItem2.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  &.activeItem3{
+    background: url('/images/reward/mySposDashboardActiveItem3.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  &.activeItem4 {
+    background: url('/images/reward/mySposDashboardActiveItem4.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
 `
 export const MySposDashboardValue = styled.div`
-
+  width: 100%;
+  &.alignLeft {
+    text-align: left;
+  }
+  &.alignRight {
+    text-align: right;
+  }
 `
 export const MySposDashboardDes = styled.div`
+  width: 100%;
   height: 20px;
   line-height: 20px;
   font-size: 12px;
   font-family: HelveticaNeue-Medium, HelveticaNeue;
   font-weight: 500;
   color: #ABB6FF;
+  text-align: left;
+  &.alignLeft {
+    text-align: left;
+  }
+  &.alignRight {
+    text-align: right;
+  }
 `
 export const MySposDashboardMiddleItem = styled.div`
   height: 218px;
@@ -350,7 +385,7 @@ export const CardWrap = styled.div`
 
 export const CardItem = styled.div`
   width: 100%;
-  height: 228px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

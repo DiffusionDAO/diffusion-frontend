@@ -1,7 +1,7 @@
 import { useTranslation } from 'contexts/Localization'
 import { NoConnectWrap, NoConnectConLeft, NoConnectConLeftTitle, NoConnectConLeftDes, NoConnectConLeftBtn,
   NoConnectConRight, NoConnectConRightImg, NoConnectConRightLine } from "./style"
-
+import { useMatchBreakpoints } from "../../../../../packages/uikit/src/hooks";
 
 interface NoPowerProps {
   title: string;
@@ -17,14 +17,15 @@ const NoPower: React.FC<NoPowerProps> = ({
   action
 }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints();
   return (
     <NoConnectWrap>
-      <NoConnectConLeft>
+      <NoConnectConLeft isMobile={isMobile}>
         <NoConnectConLeftTitle>{title}</NoConnectConLeftTitle>
         <NoConnectConLeftDes>{description}</NoConnectConLeftDes>
         <NoConnectConLeftBtn onClick={action}>{btnText}</NoConnectConLeftBtn>
       </NoConnectConLeft>
-      <NoConnectConRight>
+      <NoConnectConRight isMobile={isMobile}>
         <NoConnectConRightImg src="/images/reward/noPowerBg.png"/>
         <NoConnectConRightLine src="/images/reward/noPowerLine.png"/>
       </NoConnectConRight>

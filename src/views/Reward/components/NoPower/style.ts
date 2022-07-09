@@ -2,25 +2,34 @@ import styled, { css } from 'styled-components'
 
 export const NoConnectWrap = styled.div`
   width: 100%;
-  margin-top: 150px;
+  margin-top: 100px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
 `
 export const NoConnectConLeft = styled.div`
-  width: 50%;
   max-width: 524px;
   display: flex;
   flex-direction: column;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        width: 100%;
+      `;
+    }
+    return css`
+      width: 50%;
+    `;
+  }};
 `
 export const NoConnectConLeftTitle = styled.div`
   width: 100%;
-  height: 104px;
+  line-height: 50px;
+  margin-top: 40px;
   font-size: 44px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   color: #FFFFFF;
-  line-height: 53px;
   letter-spacing: 1px;
 `
 export const NoConnectConLeftDes = styled.div`
@@ -37,7 +46,7 @@ export const NoConnectConLeftDes = styled.div`
   -webkit-text-fill-color: transparent;
 `
 export const NoConnectConLeftBtn = styled.div`
-  width: 124px;
+  width: 184px;
   height: 40px;
   margin: 20px 0;
   border-radius: 8px;
@@ -53,6 +62,16 @@ export const NoConnectConRight = styled.div`
   max-width: 395px;
   display: flex;
   position: relative;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        display: none;
+      `;
+    }
+    return css`
+      width: 50%;
+    `;
+  }};
 `
 export const NoConnectConRightImg = styled.img`
   width: 100%;
