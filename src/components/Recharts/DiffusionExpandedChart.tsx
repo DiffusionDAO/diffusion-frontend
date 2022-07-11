@@ -39,9 +39,9 @@ function DiffusionExpandedChart({
         {/* 头部标题 */}
         <Box display="flex" alignItems="center">
           <Typography
-            variant="h5"
+            variant="h4"
             className="card-title-text"
-            style={{ fontWeight: 700, overflow: "hidden", color: "#6495f9" }}
+            style={{ fontWeight: 600, overflow: "hidden", color: "#6495f9", fontSize: "18px" }}
           >
             {headerText}
           </Typography>

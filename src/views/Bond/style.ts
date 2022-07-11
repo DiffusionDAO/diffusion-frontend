@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 const MARGIN = 20;
 const DRAW_BLIND_BOX_HEIGHT = 355
 const DRAW_BLIND_BOX_WIDTH = 556
+const PADDING_PERCENT = DRAW_BLIND_BOX_HEIGHT / (DRAW_BLIND_BOX_WIDTH * 100)
 
 
 export const BondPageWrap = styled.div`
@@ -11,40 +12,24 @@ export const BondPageWrap = styled.div`
   padding: 20px;
 `
 export const DrawBlindBoxList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  // display: flex;
+  // flex-wrap: wrap;
+  // justify-content: space-between;
+  margin-bottom: 20px;
 `
 
 export const DrawBlindBoxItem = styled.div`
-  width: ${DRAW_BLIND_BOX_WIDTH}px;
-  height: ${DRAW_BLIND_BOX_HEIGHT}px;
+  width: 100%;
+  height: 0;
+  padding-bottom: 64%;
   border-radius: 16px;
   position: relative;
-  margin-bottom: 20px;
   &.item1 {
-    background: linear-gradient(135deg,rgba(60, 0, 255, 1), rgba(236, 110, 255, 1));
-    background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
+    border: 4px solid #EC6EFF;
   }
   &.item2 {
-    background: linear-gradient(135deg, rgba(255, 161, 110, 1), rgba(255, 112, 86, 1));
-    background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
+    border: 4px solid #FF7056;
   }
-`
-
-export const DrawBlindBoxCont = styled.div`
-  height: calc(${DRAW_BLIND_BOX_HEIGHT}px - 8px);
-  border-radius: 14px;
-  width: calc(100% - 8px);
-  background-color: #fff;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
 `
 export const DrawBlindBoxImg = styled.img`
   width: 100%;
@@ -117,20 +102,18 @@ export const DrawBlindBoxFooterBtn = styled.div`
 
 export const DrawBlindBoxFooterBtnBorder = styled.div`
   width: 120px;
-  height: 40px;
+  line-height: 40px;
   border-radius: 8px;
   color: #fff;
-  line-height: 40px;
   text-align: center;
   cursor: pointer;
   position: relative;
-`
-export const DrawBlindBoxFooterBtnBorderImg = styled.img`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
+  &.purpleBtn {
+    border: 2px solid #EC6EFF;
+  }
+  &.orangeBtn {
+    border: 2px solid #FF7056;
+  }
 `
 
 export const OverviewCard = styled.div`

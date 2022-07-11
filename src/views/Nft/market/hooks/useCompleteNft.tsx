@@ -51,8 +51,10 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
   const { data: nft, mutate } = useSWR(
     collectionAddress && tokenId ? ['nft', collectionAddress, tokenId] : null,
     async () => {
+
       const metadata = await getNftApi(collectionAddress, tokenId)    
-      
+
+    
       if (metadata) {
         //add attr markeData
         const basicNft:NftToken = {
@@ -98,7 +100,7 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
     await refetchNftOwn()
   }, [mutate, refetchNftMarketData, refetchNftOwn])
   // move marketData { ...nft, marketData, location: nftOwn?.location ?? NftLocation.WALLET }
-  console.log('--------->',nft)
+ 
   return {
     combinedNft: nft ? { ...nft, marketData, location: nftOwn?.location ?? NftLocation.WALLET } : undefined,
     isOwn: nftOwn?.isOwn || false,

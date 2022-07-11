@@ -1,21 +1,86 @@
+import { Slider } from '@pancakeswap/uikit';
 import styled, { css } from 'styled-components'
 import { Input } from 'antd';
 
+const SLIDER_HEIGHT = 310
 export const RewardPageWrap = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 `
+export const SwiperWrap = styled.div`
+  width: 100%;
+  height: ${SLIDER_HEIGHT}px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  position: relative;
+  .swiper {
+    padding: 0 40px;
+    .swiper-slide {
+      opacity: 0.8
+    }
+    .swiper-slide-prev {
+      transform: scale(1.2);
+    }
+    .swiper-slide-active {
+      transform: scale(1.6);
+      opacity: 1
+    }
+    .swiper-slide-next {
+      transform: scale(1.2);
+    }
+  }
+`
+export const SwiperWrapBgImg = styled.img`
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: -2;
+`
+export const SwiperItem = styled.div`
+  width: 100%;
+  height: ${SLIDER_HEIGHT}px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
+export const SwiperItemImg = styled.img`
+  width: 100px;
+`
+export const SwiperItemName = styled.div`
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  font-weight: bold;
+  color: #FFFFFF;
+`
+export const SwiperItemDes = styled.div`
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 12px;
+  font-family: HelveticaNeue;
+  color: #ABB6FF;
+`
 
 export const DiffusionGoldWrap = styled.div`
   width: 100%;
-  height: 400px;
-  padding: 0 24px;
-  position: relative;
+  height: 480px;
+  border: 2px solid #8836ff;
+  border-radius: 16px;
+  padding: 24px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `
 export const DiffusionGoldBgImg = styled.img`
   width: 100%;
@@ -28,8 +93,8 @@ export const DiffusionGoldBgImg = styled.img`
 export const DiffusionGoldHeader = styled.div`
   width: 100%;
   padding: 24px;
-  height: 50px;
-  line-height: 50px;
+  height: 30px;
+  line-height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -74,11 +139,11 @@ export const RewardValueDiv = styled.div`
   color: #FFFFFF;
   line-height: 50px;
   text-shadow: 0px 2px 27px rgba(255, 255, 255, 0.5);
-  margin-bottom: 40px;
 `
 export const ExtractBtn  = styled.div`
   width: 124px;
   height: 40px;
+  margin: 20px 0;
   border-radius: 8px;
   color: #fff;
   line-height: 40px;
@@ -91,8 +156,15 @@ export const ExtractBtn  = styled.div`
 
 export const MySposWrap = styled.div`
   width: 100%;
-  height: 400px;
-  padding: 0 24px;
+  padding: 24px;
+  min-height: 480px;
+  border: 2px solid #e972ff;
+  border-radius: 16px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   position: relative;
 `
 export const MySposWrapBgImg = styled.img`
@@ -105,11 +177,15 @@ export const MySposWrapBgImg = styled.img`
 `
 export const  MySposHeader = styled.div`
   width: 100%;
-  height: 50px;
-  line-height: 50px;
+  padding: 24px;
+  height: 30px;
+  line-height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
 `
 export const  MySposTitle = styled.div`
   font-size: 16px;
@@ -125,6 +201,163 @@ export const MySposDetailJump = styled.div`
   color: #fff;
   cursor: pointer;
 `
+export const MySposOveview =  styled.div`
+  width: 100%;
+  position: relative;
+  padding: 0px 20px;
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+`
+export const MySposOveviewItem =  styled.div`
+  margin-right: 10px;
+`
+export const CoinImg = styled.img`
+  width: 56px;
+  height: 56px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+`
+export const MySposConWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+`
+
+export const MySposDashboardWrap = styled.div`
+  width: 100%;
+  height: 313px;
+  margin: 0 auto;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+`
+export const MySposDashboardList = styled.div`
+  max-width: 405px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  justify-content: space-between;
+  position: relative;
+`
+export const MySposDashboardItem = styled.div`
+  width: calc(50% - 8px);
+  height: calc(50% - 8px);
+  padding: 20px;
+  color:#fff;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+`
+export const MySposDashboardItemImage = styled.img`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+`
+
+export const MySposDashboardValue = styled.div`
+  width: 100%;
+  &.alignLeft {
+    text-align: left;
+  }
+  &.alignRight {
+    text-align: right;
+  }
+`
+export const MySposDashboardDes = styled.div`
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #ABB6FF;
+  text-align: left;
+  &.alignLeft {
+    text-align: left;
+  }
+  &.alignRight {
+    text-align: right;
+  }
+`
+export const MySposDashboardMiddleItem = styled.div`
+  max-width: 50%;
+  width: 50%;
+  height: 0;
+  padding-bottom: 50%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  background: url('/images/reward/mySposDashboardMiddleItem.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+`
+export const MySposDashboardMiddleItemValue = styled.div`
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  font-size: 36px;
+  color: #fff;
+`
+export const MySposDashboardMiddleItemDes = styled.div`
+  width: 182px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 8px;
+  border: 1px solid #8a7ea5;
+  font-size: 13px;
+  color: #fff;
+  text-align: center;
+  position: absolute;
+  left: calc(50% - 91px);
+  top: calc(50% + 20px);
+  background-color: #8b5dfe;
+`
+export const MySposRewardWrap = styled.div`
+  width: 100%;
+  height: 313px;
+  margin: 0 auto;
+  background: rgba(12,0,44,0.4900);
+  border-radius: 12px;
+  border: 1px solid rgba(70,96,255,0.3200);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
+export const MySposRewardBg = styled.img`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+`
+
 export const CardWrap = styled.div`
   padding: 24px;
   background: rgba(171,182,255,0.05);
@@ -134,7 +367,7 @@ export const CardWrap = styled.div`
 
 export const CardItem = styled.div`
   width: 100%;
-  height: 228px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -199,4 +432,13 @@ export const StakeBtn = styled.div`
   background: linear-gradient(90deg, #3C00FF, #EC6EFF);
   background-size: 400% 400%;
   animation: gradient 5s ease infinite;
+`
+export const TakeOutBtn = styled.div`
+  width: calc(50% - 5px);
+  border-radius: 8px;
+  color: #fff;
+  line-height: 36px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid #EC6EFF;
 `
