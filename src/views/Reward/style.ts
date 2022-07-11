@@ -29,6 +29,26 @@ export const SwiperWrap = styled.div`
     .swiper-slide-next {
       transform: scale(1.2);
     }
+    .swiper-button-prev:after{
+      display: none;
+    }
+    .swiper-button-next:after{
+      display: none;
+    }
+    .swiper-button-prev{
+      width: 40px;
+      height: 40px;
+      background: url('/images/reward/left-arrow.png') no-repeat;
+      background-size: contain;
+    }
+    .swiper-button-next{
+      width: 40px;
+      height: 40px;
+      background:url('/images/reward/right-arrow.png') no-repeat;
+      background-size: contain;
+    }
+
+
   }
 `
 export const SwiperWrapBgImg = styled.img`

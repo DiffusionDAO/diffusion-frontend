@@ -2,15 +2,14 @@
 import {
   MenuItemsType,
   DropdownMenuItemType,
-  SwapIcon,
-  SwapFillIcon,
+  WalletIcon,
+  WalletFilledIcon,
+  TicketIcon,
+  TicketFillIcon,
   EarnFillIcon,
   EarnIcon,
-  TrophyIcon,
-  TrophyFillIcon,
   NftIcon,
   NftFillIcon,
-  MoreIcon,
 } from '@pancakeswap/uikit'
 import { ContextApi } from 'contexts/Localization/types'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
@@ -26,16 +25,16 @@ export type ConfigMenuItemsType = MenuItemsType & { hideSubNav?: boolean }
 const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType[] = (t, languageCode) => [
   {
     label: t('Dashboard'),
-    icon: EarnIcon,
-    fillIcon: EarnFillIcon,
+    icon: WalletIcon,
+    fillIcon: WalletFilledIcon,
     href: '/dashboard',
     showItemsOnMobile: false,
     items: [],
   },
   {
     label: t('Mint'),
-    icon: EarnIcon,
-    fillIcon: EarnFillIcon,
+    icon: TicketIcon,
+    fillIcon: TicketFillIcon,
     href: '/mint',
     showItemsOnMobile: false,
     items: [],

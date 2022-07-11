@@ -284,7 +284,7 @@ function NftProfilePage() {
         <BackgroundText>
           <BackgroundTitle>
             <Typed
-              strings={['DiffusionDAO']}
+              strings={['Diffusion DAO']}
               typeSpeed={50}
               cursorChar=""
             />
