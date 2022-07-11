@@ -51,9 +51,12 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
   const { data: nft, mutate } = useSWR(
     collectionAddress && tokenId ? ['nft', collectionAddress, tokenId] : null,
     async () => {
-      const metadata = await getNftApi(collectionAddress, tokenId)
+      const metadata = await getNftApi(collectionAddress, tokenId)    
+      
       if (metadata) {
-        const basicNft: NftToken = {
+        //add attr markeData
+        const basicNft:NftToken = {
+         // marketData: metadata.marketData,
           tokenId,
           collectionAddress,
           collectionName: metadata.collection.name,
@@ -61,12 +64,14 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
           description: metadata.description,
           image: metadata.image,
           attributes: metadata.attributes,
-        }
+         
+        }        
         return basicNft
-      }
+      }     
       return null
     },
   )
+  
 
   const { data: marketData, mutate: refetchNftMarketData } = useSWR(
     collectionAddress && tokenId ? ['nft', 'marketData', collectionAddress, tokenId] : null,
@@ -76,7 +81,7 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
         getNftsMarketData({ collection: collectionAddress.toLowerCase(), tokenId }, 1),
       ])
       const onChainMarketData = onChainMarketDatas[0]
-
+      console.log('markData:',onChainMarketDatas,marketDatas)
       if (!marketDatas[0] && !onChainMarketData) return null
 
       if (!onChainMarketData) return marketDatas[0]
@@ -92,7 +97,8 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
     await refetchNftMarketData()
     await refetchNftOwn()
   }, [mutate, refetchNftMarketData, refetchNftOwn])
-
+  // move marketData { ...nft, marketData, location: nftOwn?.location ?? NftLocation.WALLET }
+  console.log('--------->',nft)
   return {
     combinedNft: nft ? { ...nft, marketData, location: nftOwn?.location ?? NftLocation.WALLET } : undefined,
     isOwn: nftOwn?.isOwn || false,

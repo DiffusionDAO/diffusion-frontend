@@ -184,9 +184,11 @@ export const getNftApi = async (
   tokenId: string,
 ): Promise<ApiResponseSpecificToken['data']> => {
   const url = `${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}`
-  const res = await fetch(url)
-  if (res.ok) {
-    const json = await res.json()
+  console.log('uri:::::',url)
+  const res = await fetch(url)  
+  //res.ok
+  if (res.ok) {    
+    const json = await res.json()       
     return json
   }
 
@@ -231,6 +233,8 @@ export const getNftsFromDifferentCollectionsApi = async (
  */
 export const getCollectionSg = async (collectionAddress: string): Promise<CollectionMarketDataBaseFields> => {
   try {
+    console.log('GRAPH_API_NFTMARKET+++++++++++++++++++++',GRAPH_API_NFTMARKET)
+
     const res = await request(
       GRAPH_API_NFTMARKET,
       gql`
@@ -502,6 +506,8 @@ export const getNftsMarketData = async (
   skip = 0,
 ): Promise<TokenMarketData[]> => {
   try {
+   
+
     const res = await request(
       GRAPH_API_NFTMARKET,
       gql`
