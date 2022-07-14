@@ -20,7 +20,7 @@ import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperItem, SwiperItemImg,
   MySposDashboardMiddleItem, MySposDashboardMiddleItemValue, MySposDashboardMiddleItemDes, MySposRewardWrap, MySposRewardBg,
   CardWrap, CardItem, DataCellWrap, BalanceWrap, MoneyInput, BtnWrap, StakeBtn, TakeOutBtn,
  } from './style'
- import DataCell from "./components/DataCell"
+ import DataCell from "../../components/ListDataCell"
  import DetailModal from "./components/DetailModal"
  import NoPower from "./components/NoPower"
  import { data } from "./MockData"
@@ -244,7 +244,7 @@ const Reward: FC = () => {
           title={t('You cannot view this page at present')}
           description={t('Unless you go and buy a $1,000 bond first')}
           btnText={t('To buy bonds')} 
-          action={() => router.push(`/mint`)}
+          action={() => router.push(`/bond`)}
         />
       }
     </RewardPageWrap>)

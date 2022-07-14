@@ -32,6 +32,14 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     items: [],
   },
   {
+    label: t('Bond'),
+    icon: TicketIcon,
+    fillIcon: TicketFillIcon,
+    href: '/bond',
+    showItemsOnMobile: false,
+    items: [],
+  },
+  {
     label: t('Mint'),
     icon: TicketIcon,
     fillIcon: TicketFillIcon,
