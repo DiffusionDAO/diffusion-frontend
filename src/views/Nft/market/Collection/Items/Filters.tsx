@@ -86,8 +86,9 @@ const ScrollableFlexContainer = styled(Flex)`
 `
 
 const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
+  console.log("Filters")
   const dispatch = useAppDispatch()
-  const { data } = useGetCollectionDistribution(address)
+  // const { data } = useGetCollectionDistribution(address)
   const { t } = useTranslation()
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(address)
   const [activeButtonIndex, setActiveButtonIndex] = useState(showOnlyNftsOnSale ? 1 : 0)
@@ -132,7 +133,8 @@ const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
           const attrs = attrsByType[traitType]
           const items: Item[] = attrs.map((attr) => ({
             label: capitalize(attr.value as string),
-            count: data && data[traitType] ? data[traitType][attr.value] : undefined,
+            // count: data && data[traitType] ? data[traitType][attr.value] : undefined,
+            count: undefined,
             attr,
           }))
 

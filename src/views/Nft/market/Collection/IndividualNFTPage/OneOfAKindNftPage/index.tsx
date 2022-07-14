@@ -37,7 +37,7 @@ export const PageWrap = styled.div`
 
 const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress, tokenId }) => {
   const collection = useGetCollection(collectionAddress)
-  const { data: distributionData, isFetching: isFetchingDistribution } = useGetCollectionDistribution(collectionAddress)
+  // const { data: distributionData, isFetching: isFetchingDistribution } = useGetCollectionDistribution(collectionAddress)
   const {
     combinedNft: nft,
     isOwn: isOwnNft,
@@ -48,21 +48,21 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
 
   const properties = nft?.attributes || null
 
-  const attributesRarity = useMemo(() => {
-    if (distributionData && !isFetchingDistribution && properties) {
-      return Object.keys(distributionData).reduce((rarityMap, traitType) => {
-        const total = sum(Object.values(distributionData[traitType]))
-        const nftAttributeValue = properties.find((attribute) => attribute.traitType === traitType)?.value
-        const count = distributionData[traitType][nftAttributeValue]
-        const rarity = (count / total) * 100
-        return {
-          ...rarityMap,
-          [traitType]: rarity,
-        }
-      }, {})
-    }
-    return {}
-  }, [properties, isFetchingDistribution, distributionData])
+  // const attributesRarity = useMemo(() => {
+  //   if (distributionData  && properties) {
+  //     return Object.keys(distributionData).reduce((rarityMap, traitType) => {
+  //       const total = sum(Object.values(distributionData[traitType]))
+  //       const nftAttributeValue = properties.find((attribute) => attribute.traitType === traitType)?.value
+  //       const count = distributionData[traitType][nftAttributeValue]
+  //       const rarity = (count / total) * 100
+  //       return {
+  //         ...rarityMap,
+  //         [traitType]: rarity,
+  //       }
+  //     }, {})
+  //   }
+  //   return {}
+  // }, [properties, isFetchingDistribution, distributionData])
 
   if (!nft || !collection) {
     // Normally we already show a 404 page here if no nft, just put this checking here for safety.

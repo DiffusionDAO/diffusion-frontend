@@ -4,20 +4,20 @@ import PancakeBunniesTraits from './PancakeBunniesTraits'
 import { pancakeBunniesAddress } from '../../constants'
 import CollectionTraits from './CollectionTraits'
 
-const Traits = () => {
-  const collectionAddress = useRouter().query.collectionAddress as string
+// const Traits = () => {
+//   const collectionAddress = useRouter().query.collectionAddress as string
 
-  return (
-    <>
-      <Container py="40px">
-        {collectionAddress === pancakeBunniesAddress ? (
-          <PancakeBunniesTraits collectionAddress={collectionAddress} />
-        ) : (
-          <CollectionTraits collectionAddress={collectionAddress} />
-        )}
-      </Container>
-    </>
-  )
-}
+//   return (
+//     <>
+//       <Container py="40px">
+//         {collectionAddress === pancakeBunniesAddress ? (
+//           <PancakeBunniesTraits collectionAddress={collectionAddress} />
+//         ) : (
+//           <CollectionTraits collectionAddress={collectionAddress} />
+//         )}
+//       </Container>
+//     </>
+//   )
+// }
 
-export default Traits
+// export default Traits

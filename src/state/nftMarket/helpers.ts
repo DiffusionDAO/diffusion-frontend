@@ -1196,7 +1196,6 @@ export const getCompleteAccountNftData = async (
  * @returns
  */
 export const getCollectionDistributionApi = async <T>(collectionAddress: string): Promise<T> => {
-  console.log("getCollectionDistributionApi")
   // const res = await fetch(`${API_NFT}/collections/${collectionAddress}/distribution`)
   const res: any = {}
 
