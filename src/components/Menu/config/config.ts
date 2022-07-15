@@ -1,15 +1,16 @@
 
 import {
   MenuItemsType,
-  DropdownMenuItemType,
-  WalletIcon,
-  WalletFilledIcon,
-  TicketIcon,
-  TicketFillIcon,
-  EarnFillIcon,
-  EarnIcon,
-  NftIcon,
-  NftFillIcon,
+  BondIcon,
+  BondFillIcon,
+  DashboardIcon,
+  DashboardFillIcon,
+  RewardFillIcon,
+  RewardIcon,
+  NftMarketIcon,
+  NftMarketFillIcon,
+  MintIcon,
+  MintFillIcon,
 } from '@pancakeswap/uikit'
 import { ContextApi } from 'contexts/Localization/types'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
@@ -25,32 +26,32 @@ export type ConfigMenuItemsType = MenuItemsType & { hideSubNav?: boolean }
 const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType[] = (t, languageCode) => [
   {
     label: t('Dashboard'),
-    icon: WalletIcon,
-    fillIcon: WalletFilledIcon,
+    icon: DashboardIcon,
+    fillIcon: DashboardFillIcon,
     href: '/dashboard',
     showItemsOnMobile: false,
     items: [],
   },
   {
     label: t('Bond'),
-    icon: TicketIcon,
-    fillIcon: TicketFillIcon,
+    icon: BondIcon,
+    fillIcon: BondFillIcon,
     href: '/bond',
     showItemsOnMobile: false,
     items: [],
   },
   {
     label: t('Mint'),
-    icon: TicketIcon,
-    fillIcon: TicketFillIcon,
+    icon: MintIcon,
+    fillIcon: MintFillIcon,
     href: '/mint',
     showItemsOnMobile: false,
     items: [],
   },
   {
     label: t('Reward'),
-    icon: EarnIcon,
-    fillIcon: EarnFillIcon,
+    icon: RewardIcon,
+    fillIcon: RewardFillIcon,
     href: '/reward',
     showItemsOnMobile: false,
     items: [],
@@ -65,8 +66,8 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
   // },
   {
     label: t('NFT'),
-    icon: NftIcon,
-    fillIcon: NftFillIcon,
+    icon: NftMarketIcon,
+    fillIcon: NftMarketFillIcon,
     href: `${nftsBaseUrl}`,
     showItemsOnMobile: false,
     items: [

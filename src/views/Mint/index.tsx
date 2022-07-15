@@ -22,7 +22,8 @@ const Bond: FC = () => {
   const [blindBoxModalVisible, setBlindBoxModalVisible] = useState<boolean>(false);
   const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false);
   const [balance,setBalance] = useState(1);
-  const [count, setCount] = useState<number>();
+  const [seniorCount, setSeniorCount] = useState<number>(0);
+  const [ordinaryCount, setOrdinaryCount] = useState<number>(0);
 
   // 抽取盲盒
   const drawBlind = () => {
@@ -59,16 +60,16 @@ const Bond: FC = () => {
               <AvailableCount>{t('Available count:')}{mintDatasMock[0].availableCount}</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
-                  <DrawBlindBoxTextBtn className='orangeBtn'>-</DrawBlindBoxTextBtn>
-                  <CountInput value={count} isMobile={isMobile} />
-                  <DrawBlindBoxTextBtn className='orangeBtn'>+</DrawBlindBoxTextBtn>
-                  <DrawBlindBoxTextBtn className='orangeBtn'>{t('Max')}</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => {if(seniorCount>0)setSeniorCount(seniorCount-1)}}>-</DrawBlindBoxTextBtn>
+                  <CountInput value={seniorCount} isMobile={isMobile} />
+                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => {setSeniorCount(seniorCount+1)}}>+</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={drawBlind}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
                   <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px'}}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
                 </ActionRight>
               </ActionWrap>
-              <DrawBlindBoxPrimaryBtn className='orangeBtn'>{t('Single')}</DrawBlindBoxPrimaryBtn>
+              <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={drawBlind}>{t('Single')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
           </DrawBlindBoxItem>
         </Grid>
@@ -77,7 +78,7 @@ const Bond: FC = () => {
             <DrawBlindBoxImgWrap className='item2' />
             <ContentWrap>
               <DalaCardList>
-                <DalaCardListTitle>{t('Senior blind box')}</DalaCardListTitle>
+                <DalaCardListTitle>{t('Ordinary blind box')}</DalaCardListTitle>
                 <DataCell label={t('Time to next generate revenue')} value={mintDatasMock[0].price} valueDivStyle={{ fontSize: "16px" }} position="horizontal"/>
                 <DataCell label={t('Time to next generate revenue')} value={mintDatasMock[0].contains} valueDivStyle={{ fontSize: "16px" }} position="horizontal"/>
                 <DataCell label={t('Time to next generate revenue')} value={mintDatasMock[0].probability} valueDivStyle={{ fontSize: "16px" }} position="horizontal"/>
@@ -85,16 +86,16 @@ const Bond: FC = () => {
               <AvailableCount>{t('Available count:')}{mintDatasMock[0].availableCount}</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
-                  <DrawBlindBoxTextBtn className='purpleBtn'>-</DrawBlindBoxTextBtn>
-                  <CountInput value={count} isMobile={isMobile} />
-                  <DrawBlindBoxTextBtn className='purpleBtn'>+</DrawBlindBoxTextBtn>
-                  <DrawBlindBoxTextBtn className='purpleBtn'>{t('Max')}</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => {if(ordinaryCount>0)setOrdinaryCount(ordinaryCount-1)}}>-</DrawBlindBoxTextBtn>
+                  <CountInput value={ordinaryCount} isMobile={isMobile} />
+                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => {setOrdinaryCount(ordinaryCount+1)}}>+</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={drawBlind}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
                   <DrawBlindBoxPrimaryBtn className='purpleBtn' style={{ width: '80px'}}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
                 </ActionRight>
               </ActionWrap>
-              <DrawBlindBoxPrimaryBtn className='purpleBtn'>{t('Single')}</DrawBlindBoxPrimaryBtn>
+              <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={drawBlind}>{t('Single')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
           </DrawBlindBoxItem>
         </Grid>
