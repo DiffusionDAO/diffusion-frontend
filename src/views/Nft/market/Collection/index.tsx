@@ -9,12 +9,12 @@ import Header from './Header'
 import Items from './Items'
 import {combineCollectionData} from 'state/nftMarket/helpers'
 
-const Traits = dynamic(() => import('./Traits'), {
-  loading: () => <PageLoader />,
-})
-const Activity = dynamic(() => import('./Activity'), {
-  loading: () => <PageLoader />,
-})
+// const Traits = dynamic(() => import('./Traits'), {
+//   loading: () => <PageLoader />,
+// })
+// const Activity = dynamic(() => import('./Activity'), {
+//   loading: () => <PageLoader />,
+// })
 
 const getHashFromRouter = (router: NextRouter) => router.asPath.match(/#([a-z0-9]+)/gi)
 
