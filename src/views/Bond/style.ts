@@ -8,7 +8,7 @@ const PADDING_PERCENT = DRAW_BLIND_BOX_HEIGHT / (DRAW_BLIND_BOX_WIDTH * 100)
 
 export const BondPageWrap = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 40px auto;
   padding: 20px;
 `
 export const BondPageHeader = styled.div`
@@ -104,7 +104,7 @@ export const OverviewCardItemContent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 32px;
+  font-size: 28px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   color: #FFFFFF;
@@ -173,18 +173,18 @@ export const ImgWrap = styled.div`
   position: relative;
 `
 export const FromImg = styled.img`
-  width: 58px;
-  height: 58px;
+  width: 48px;
+  height: 48px;
   border-radius: 20px;
   position: absolute;
-  left: -15px;
+  left: -10px;
 `
 export const ToImg = styled.img`
-  width: 58px;
-  height: 58px;
+  width: 48px;
+  height: 48px;
   border-radius: 20px;
   position: absolute;
-  right: -15px;
+  right: -10px;
   z-index: 1;
 `
 export const BondHeaderName = styled.div`

@@ -38,10 +38,10 @@ export const SelectedCountWrap = styled.span`
 `
 
 export const SelectWrap = styled.div`
-.ant-select-selector {
-  background: rgba(171, 182, 255, 0.2);
-  border-radius: 8px;
-}
+  .ant-select-selector {
+    background: rgba(171, 182, 255, 0.2);
+    border-radius: 8px;
+  }
 `
 interface CompoundBtnWrapProps {
   isSelected: boolean;
@@ -79,7 +79,7 @@ export const SyntheticBtn = styled.img`
 `
 export const AccountNftWrap = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 40px auto;
   padding: 20px;
   position: relative;
 `

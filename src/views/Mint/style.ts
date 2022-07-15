@@ -2,12 +2,9 @@ import styled, { css } from 'styled-components'
 import { Input } from 'antd';
 
 
-const DRAW_BLIND_BOX_HEIGHT = 355
-const DRAW_BLIND_BOX_WIDTH = 556
-
 export const BondPageWrap = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 40px auto;
   padding: 20px;
 `
 export const DrawBlindBoxList = styled.div`
@@ -63,6 +60,29 @@ export const DalaCardListTitle = styled.div`
   font-weight: normal;
   color: #FFFFFF;
   text-shadow: 0px 2px 19px rgba(255,255,255,0.5000);
+`
+export const DalaCardCellWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+export const DalaCardLabelDiv = styled.div`
+  font-size: 12px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #ABB6FF;
+  line-height: 30px;
+`
+export const DalaCardValueDiv = styled.div`
+  font-size: 14px;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  font-weight: bold;
+  color: #FFFFFF;
+  line-height: 40px;
+`
+export const ColorFont = styled.span`
 `
 export const AvailableCount = styled.div`
   width: 100%;

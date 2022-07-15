@@ -67,7 +67,7 @@ export const ThreeGraph = () => {
             <Typography
               variant="h6"
               className="card-sub-title-fixation-text"
-              style={{ fontWeight: 400, color: "rgba(171, 182, 255, 0.05)", fontSize: "14px" }}
+              style={{ fontWeight: 400, color: "rgb(171, 182, 255)", fontSize: "14px" }}
             >
               {item}
             </Typography>
@@ -135,7 +135,6 @@ export const FiveGraph = () => {
       bulletpointColors={bulletpoints.five}
       itemNames={tooltipItems.five}
       itemType=""
-      margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().five}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       minHeight={150}
@@ -157,7 +156,6 @@ export const SixGraph = () => {
       bulletpointColors={bulletpoints.six}
       itemNames={tooltipItems.six}
       itemType=""
-      margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().six}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       minHeight={150}
@@ -179,7 +177,6 @@ export const SevenGraph = () => {
       bulletpointColors={bulletpoints.seven}
       itemNames={tooltipItems.seven}
       itemType=""
-      margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().seven}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       minHeight={150}
@@ -197,7 +194,7 @@ export const EightGraph = () => {
             <Typography
               variant="h6"
               className="card-sub-title-fixation-text"
-              style={{ fontWeight: 400, color: "rgba(171, 182, 255, 0.05)", fontSize: "14px" }}
+              style={{ fontWeight: 400, color: "rgb(171, 182, 255)", fontSize: "14px" }}
             >
               {item}
             </Typography>
@@ -252,7 +249,7 @@ export const NineGraph = () => {
         <Typography
           variant="h6"
           className="card-sub-title-fixation-text"
-          style={{ fontWeight: 400, color: "rgba(171, 182, 255, 0.05)", fontSize: "14px" }}
+          style={{ fontWeight: 400, color: "rgb(171, 182, 255)", fontSize: "14px" }}
         >
           Today
         </Typography>
@@ -300,7 +297,6 @@ export const TenGraph = () => {
       bulletpointColors={bulletpoints.ten}
       itemNames={tooltipItems.ten}
       itemType=""
-      margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().ten}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
@@ -419,7 +415,6 @@ export const RunwayAvailableGraph = () => {
       type="line"
       data={dashboardData}
       dataKey={dataKey().runway}
-      color={theme.palette.text.primary}
       stroke={["#5d91f9"]}
       headerText={headerText().runway}
       headerSubText={`${data && trim(data[0].runwayCurrent, 1)} Days`}
@@ -427,7 +422,6 @@ export const RunwayAvailableGraph = () => {
       bulletpointColors={bulletpoints.runway}
       itemNames={tooltipItems.runway}
       itemType=""
-      margin={{ left: 30 }}
       infoTooltipMessage={tooltipInfoMessages().runway}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />

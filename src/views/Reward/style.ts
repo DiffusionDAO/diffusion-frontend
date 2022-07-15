@@ -5,7 +5,7 @@ import { Input } from 'antd';
 const SLIDER_HEIGHT = 310
 export const RewardPageWrap = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 40px auto;
   padding: 20px;
 `
 export const SwiperWrap = styled.div`

@@ -271,7 +271,7 @@ function DiffusionChart({
     top: 0,
     right: 0,
     bottom: 0,
-    left: 0,
+    left: 10,
   },
   menuItemData,
   lineType = "monotone", // 折线的类型，圆弧或者直线折叠
