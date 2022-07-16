@@ -184,14 +184,13 @@ export const getNftApi = async (
   tokenId: string,
 ): Promise<ApiResponseSpecificToken['data']> => {
   const url = `${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}`
-  console.log('uri:::::',url)
   const res = await fetch(url)  
   //res.ok
   if (res.ok) {    
     const json = await res.json()       
     return json
   }
-
+  console.log('dry::::API Can not fetch Nft')
   console.error(`API: Can't fetch NFT token ${tokenId} in ${collectionAddress}`, res.status)
   return null
 }
@@ -233,8 +232,7 @@ export const getNftsFromDifferentCollectionsApi = async (
  */
 export const getCollectionSg = async (collectionAddress: string): Promise<CollectionMarketDataBaseFields> => {
   try {
-    console.log('GRAPH_API_NFTMARKET+++++++++++++++++++++',GRAPH_API_NFTMARKET)
-
+  
     const res = await request(
       GRAPH_API_NFTMARKET,
       gql`

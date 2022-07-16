@@ -10,7 +10,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useTranslation } from 'contexts/Localization'
 import { ContextApi } from 'contexts/Localization/types'
 import { isAddress } from 'utils'
-import { useErc721CollectionContract, useNftMarketContract } from 'hooks/useContract'
+import { useErc721CollectionContract, useNftMarketContract,useERC721 } from 'hooks/useContract'
 import { NftToken } from 'state/nftMarket/types'
 import { useGetLowestPriceFromNft } from 'views/Nft/market/hooks/useGetLowestPrice'
 import SellStage from './SellStage'
@@ -101,6 +101,9 @@ const SellModal: React.FC<SellModalProps> = ({
     nftToSell.collectionAddress,
   )
   const nftMarketContract = useNftMarketContract()
+  //dry remark
+  // add 721collectionContract for setApprovalForAll  
+  const nft721Contract = useERC721(nftToSell.collectionAddress) 
 
   const isInvalidTransferAddress = transferAddress.length > 0 && !isAddress(transferAddress)
 
@@ -175,7 +178,7 @@ const SellModal: React.FC<SellModalProps> = ({
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
-      console.log('onRequiresApproval')
+    
       try {
         const approvedForContract = await collectionContractReader.isApprovedForAll(account, nftMarketContract.address)
         return !approvedForContract
@@ -184,9 +187,9 @@ const SellModal: React.FC<SellModalProps> = ({
       }
     },
     onApprove: () => {
-     
+     console.log('nftContract:_____====',nftMarketContract)
     // return callWithGasPrice(collectionContractSigner, 'setApprovalForAll', [nftMarketContract.address, true])
-     return callWithGasPrice(nftMarketContract, 'setApprovalForAll', [nftMarketContract.address, true])
+     return callWithGasPrice(nft721Contract, 'setApprovalForAll', [nftMarketContract.address, true])
      
     },
     onApproveSuccess: async ({ receipt }) => {

@@ -121,7 +121,9 @@ const ReviewStage: React.FC<ReviewStageProps> = ({
       <Flex px="24px" pb="24px" flexDirection="column">
         <Button
           onClick={continueToNextStage}
-          disabled={walletFetchStatus !== FetchStatus.Fetched || notEnoughBnbForPurchase}
+
+          //notEnoughBnbForPurchase
+         // disabled={walletFetchStatus !== FetchStatus.Fetched || notEnoughBnbForPurchase}
           mb="8px"
         >
           {t('Checkout')}

@@ -48,17 +48,16 @@ const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: Toke
 }
 
 export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
+  
   const { data: nft, mutate } = useSWR(
     collectionAddress && tokenId ? ['nft', collectionAddress, tokenId] : null,
     async () => {
-
-      const metadata = await getNftApi(collectionAddress, tokenId)    
-
-    
+      const metadata = await getNftApi(collectionAddress, tokenId)   
+      console.log('metadata--->',metadata)
       if (metadata) {
         //add attr markeData
         const basicNft:NftToken = {
-         // marketData: metadata.marketData,
+          marketData: metadata.marketData,
           tokenId,
           collectionAddress,
           collectionName: metadata.collection.name,
@@ -68,6 +67,7 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
           attributes: metadata.attributes,
          
         }        
+        console.log('basickNft',basicNft)
         return basicNft
       }     
       return null

@@ -79,8 +79,9 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
   const { t } = useTranslation()
   const bnbBusdPrice = useBNBBusdPrice()
 
-  const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ? parseFloat(nft.marketData?.currentAskPrice) : 0
- // let currentAskPriceAsNumber = 0.1
+  let currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ? parseFloat(nft.marketData?.currentAskPrice) : 0
+  // test add     currentAskPriceAsNumber =1  
+  currentAskPriceAsNumber = 1
   const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, currentAskPriceAsNumber)
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
@@ -100,6 +101,8 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
       >
         {nft.marketData?.isTradable ? t('Adjust price') : t('List for sale')}
       </Button>
+
+      {/* !nft.marketData?.isTradable */}
       {!nft.marketData?.isTradable && (
         <Button
           minWidth="168px"
@@ -164,12 +167,13 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
                 </Text>
               )}
               
+              {/* disabled={!nft.marketData?.isTradable} */}
               <div style={{marginTop:'97px'}}>
               {isOwnNft && ownerButtons}
               {!isOwnNft && (
                 <BtnB                 
                   minWidth="168px"
-                  disabled={!nft.marketData?.isTradable}
+                  disabled={!!nft.marketData?.isTradable}
                   mr="16px"
                   width={['100%', null, 'max-content']}
                   mt="24px"

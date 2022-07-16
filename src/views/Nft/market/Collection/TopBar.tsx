@@ -22,7 +22,7 @@ const TopBar: React.FC = () => {
         {t('All Collections')}
       </BackLink>
       <Box>
-        <SearchBar />
+        {/* <SearchBar /> */}
       </Box>
     </Flex>
   )

@@ -179,7 +179,7 @@ export const BackgroundWrap = styled.div`
 `
 export const BackgroundText = styled.div`
   max-width: 500px;
-  height: 100%;
+  height: 70%;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -23,11 +23,11 @@ export const StatBoxItem: React.FC<StatBoxItemProps> = ({ title, stat, ...props 
 
 const StatBox = styled(Flex)`
   align-items: center;
-  background: ${({ theme }) => theme.colors.invertedContrast};
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  border-radius: ${({ theme }) => theme.radii.card};
+  // background: ${({ theme }) => theme.colors.invertedContrast};
+  // border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  // border-radius: ${({ theme }) => theme.radii.card};
   justify-content: space-around;
-  padding: 8px;
+  //padding: 8px;
   width: 100%;
 `
 

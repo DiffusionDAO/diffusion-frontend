@@ -13,9 +13,10 @@ interface HotCollectionCardProps {
 }
 
 export const CollectionAvatar = styled(ProfileAvatar)`
-  left: 0;
+  left: 50%;
+  transform: translateX(-48px);
   position: absolute;
-  top: -32px;
+  top: -48px;
   border: 4px white solid;
 `
 
@@ -41,9 +42,17 @@ const StyledHotCollectionCard = styled(Card)<{ disabled?: boolean }>`
           `}
   }
 `
+const FlexWrap = styled.div`
+border:1px solid rgba(70, 96, 255, 0.4000);
+border-top:none;
+border-bottom-left-radius:16px;
+border-bottom-right-radius:16px;
+overflow:visible !important;
+`
 
 const StyledImage = styled(Image)`
-  border-radius: 4px;
+border-top-left-radius: 16px;
+border-top-right-radius: 16px;
 `
 
 const CollectionCard: React.FC<HotCollectionCardProps> = ({
@@ -56,21 +65,32 @@ const CollectionCard: React.FC<HotCollectionCardProps> = ({
 }) => {
   const renderBody = () => (
     <CardBody p="8px">
-      <StyledImage src={bgSrc} height={125} width={375} />
+      <StyledImage src={bgSrc} height={164} width={556} />
+      <FlexWrap>
       <Flex
         position="relative"
         height="65px"
         justifyContent="center"
-        alignItems="flex-end"
+        alignItems="center"
         py="8px"
         flexDirection="column"
       >
         <CollectionAvatar src={avatarSrc} width={96} height={96} />
-        <Heading color={disabled ? 'textDisabled' : 'body'} as="h3" mb={children ? '8px' : '0'}>
+       
+      </Flex>
+      <Flex 
+        flexDirection="column"
+        height="65px"
+        justifyContent="center"
+        alignItems="center">
+         <Heading  style={{color:'#ffffff'}} color={disabled ? 'textDisabled' : 'body'} as="h3" mb={children ? '8px' : '0'}>
           {collectionName}
         </Heading>
+
         {children}
+
       </Flex>
+      </FlexWrap>
     </CardBody>
   )
 
