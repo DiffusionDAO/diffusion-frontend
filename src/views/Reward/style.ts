@@ -5,17 +5,35 @@ import { Input } from 'antd';
 const SLIDER_HEIGHT = 310
 export const RewardPageWrap = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 40px auto;
   padding: 20px;
 `
 export const SwiperWrap = styled.div`
   width: 100%;
   height: ${SLIDER_HEIGHT}px;
-  padding: 0 20px;
   margin-bottom: 20px;
   position: relative;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        padding: 0;
+      `;
+    }
+    return css`
+      padding: 0 20px;
+    `;
+  }};
   .swiper {
-    padding: 0 40px;
+    ${({ isMobile }: { isMobile: boolean }) => {
+      if (isMobile) {
+        return css`
+          padding: 0;
+        `;
+      }
+      return css`
+        padding: 0 40px;
+      `;
+    }};
     .swiper-slide {
       opacity: 0.8
     }
@@ -29,14 +47,46 @@ export const SwiperWrap = styled.div`
     .swiper-slide-next {
       transform: scale(1.2);
     }
+    .swiper-button-prev:after{
+      display: none;
+    }
+    .swiper-button-next:after{
+      display: none;
+    }
+    .swiper-button-prev{
+      width: 40px;
+      height: 40px;
+      background: url('/images/reward/left-arrow.png') no-repeat;
+      background-size: contain;
+    }
+    .swiper-button-next{
+      width: 40px;
+      height: 40px;
+      background:url('/images/reward/right-arrow.png') no-repeat;
+      background-size: contain;
+    }
   }
 `
 export const SwiperWrapBgImg = styled.img`
-  width: 100%;
   position: absolute;
   left: 0;
   bottom: 0;
   z-index: -2;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        width: calc(100% + 40px);
+        max-width: 200%;
+        left: -20px;
+        bottom: 0;
+      `;
+    }
+    return css`
+      width: 100%;
+      left: 0;
+      bottom: 0;
+    `;
+  }};
 `
 export const SwiperItem = styled.div`
   width: 100%;
@@ -72,7 +122,6 @@ export const SwiperItemDes = styled.div`
 
 export const DiffusionGoldWrap = styled.div`
   width: 100%;
-  height: 480px;
   border: 2px solid #8836ff;
   border-radius: 16px;
   padding: 24px;
@@ -81,14 +130,16 @@ export const DiffusionGoldWrap = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-`
-export const DiffusionGoldBgImg = styled.img`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        height: 240px;
+      `;
+    }
+    return css`
+      height: 480px;
+    `;
+  }};
 `
 export const DiffusionGoldHeader = styled.div`
   width: 100%;
@@ -121,7 +172,18 @@ export const DiffusionGoldDetailJump = styled.div`
 export const Petal = styled.img`
   width: 85px;
   height: 85px;
-  margin-bottom: 40px;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        position: absolute;
+        left: 10px;
+        top: 60px;
+      `;
+    }
+    return css`
+      margin-bottom: 40px;
+    `;
+  }};
 `
 export const RewardText = styled.div`
   height: 21px;
@@ -166,14 +228,6 @@ export const MySposWrap = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-`
-export const MySposWrapBgImg = styled.img`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
 `
 export const  MySposHeader = styled.div`
   width: 100%;
@@ -221,15 +275,8 @@ export const CoinImg = styled.img`
   height: 56px;
   position: absolute;
   right: 10px;
-  top: 10px;
+  bottom: 10px;
 `
-export const MySposConWrap = styled.div`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-`
-
 export const MySposDashboardWrap = styled.div`
   width: 100%;
   height: 313px;
@@ -390,9 +437,6 @@ export const DataCellWrap = styled.div`
   padding-bottom: 24px;
   margin-bottom: 24px;
   border-bottom: 1px solid rgba(70, 96, 255, 0.2);
-`
-export const BalanceWrap = styled.div`
-  display: flex;
 `
 export const MoneyInput = styled(Input)`
   height: 40px;

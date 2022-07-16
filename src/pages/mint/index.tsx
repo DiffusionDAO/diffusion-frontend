@@ -1,3 +1,3 @@
-import Bond from 'views/Bond'
+import Mint from 'views/Mint'
 
-export default Bond
+export default Mint

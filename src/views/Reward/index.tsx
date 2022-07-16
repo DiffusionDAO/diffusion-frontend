@@ -3,7 +3,6 @@ import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useWalletModal } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
 import useAuth from 'hooks/useAuth'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
@@ -13,14 +12,14 @@ import { useTranslation } from 'contexts/Localization'
 import noop from 'lodash/noop';
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperItem, SwiperItemImg, SwiperItemName, SwiperItemDes,
-  DiffusionGoldWrap, DiffusionGoldBgImg, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
+  DiffusionGoldWrap, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
   Petal, RewardText, RewardValueDiv, ExtractBtn, 
-  MySposWrap, MySposWrapBgImg, MySposHeader, MySposTitle, MySposDetailJump, MySposOveview, MySposOveviewItem, CoinImg,
-  MySposConWrap, MySposDashboardWrap, MySposDashboardList, MySposDashboardItem, MySposDashboardItemImage, MySposDashboardValue, MySposDashboardDes, 
+  MySposWrap, MySposHeader, MySposTitle, MySposDetailJump, MySposOveview, MySposOveviewItem, CoinImg,
+  MySposDashboardWrap, MySposDashboardList, MySposDashboardItem, MySposDashboardItemImage, MySposDashboardValue, MySposDashboardDes, 
   MySposDashboardMiddleItem, MySposDashboardMiddleItemValue, MySposDashboardMiddleItemDes, MySposRewardWrap, MySposRewardBg,
-  CardWrap, CardItem, DataCellWrap, BalanceWrap, MoneyInput, BtnWrap, StakeBtn, TakeOutBtn,
+  CardWrap, CardItem, DataCellWrap, MoneyInput, BtnWrap, StakeBtn, TakeOutBtn,
  } from './style'
- import DataCell from "./components/DataCell"
+ import DataCell from "../../components/ListDataCell"
  import DetailModal from "./components/DetailModal"
  import NoPower from "./components/NoPower"
  import { data } from "./MockData"
@@ -40,7 +39,7 @@ const Reward: FC = () => {
   const { login, logout } = useAuth()
   const { onPresentConnectModal } = useWalletModal(login, logout, t)
   const slidesPerView = isMobile ? 1 : 5;
-  
+  const swiperWrapBgImgUrl = isMobile ? '/images/reward/swiperWrapBgMobile.png':'/images/reward/swiperWrapBg.png'
   const swiperSlideData = [
     { name: 'No Bonus1', description:'No bonus for now' },
     { name: 'No Bonus2', description:'No bonus for now' },
@@ -66,7 +65,7 @@ const Reward: FC = () => {
       {
         account && access && 
         <>
-          <SwiperWrap>
+          <SwiperWrap isMobile={isMobile}>
             <Swiper
               modules={[Navigation]}
               className="rewardSwiper"
@@ -82,7 +81,6 @@ const Reward: FC = () => {
                 swiperSlideData.map((item, index) => {
                   return <SwiperSlide>
                     <SwiperItem>
-                      {/* <SwiperItemImg src="/images/reward/headPortrait1.png" /> */}
                       <SwiperItemImg src={`/images/reward/headPortrait${index + 1}.png`} />
                       <SwiperItemName>{item.name}</SwiperItemName>
                       <SwiperItemDes>{item.description}</SwiperItemDes>
@@ -91,17 +89,16 @@ const Reward: FC = () => {
                 })
               }
             </Swiper>
-            <SwiperWrapBgImg src="/images/reward/swiperWrapBg.png" />
+            <SwiperWrapBgImg src={swiperWrapBgImgUrl} isMobile={isMobile} />
           </SwiperWrap>
           <Grid container spacing={8}>
             <Grid item lg={4} md={4} sm={12} xs={12}>
-              <DiffusionGoldWrap>
-                {/* <DiffusionGoldBgImg src="images/reward/diffusionGoldBg.png" /> */}
+              <DiffusionGoldWrap isMobile={isMobile}>
                 <DiffusionGoldHeader>
                   <DiffusionGoldTitle>{t('My diffusion gold')}</DiffusionGoldTitle>
                   <DiffusionGoldDetailJump onClick={openDetailModal}>{t('Check details >')}</DiffusionGoldDetailJump>
                 </DiffusionGoldHeader>
-                <Petal src="/images/reward/petal.png" />
+                <Petal src="/images/reward/petal.png" isMobile={isMobile} />
                 <RewardText>{t('reward')}</RewardText>
                 <RewardValueDiv>{rewardValue}</RewardValueDiv>
                 <ExtractBtn>{t('Extract')}</ExtractBtn>
@@ -109,7 +106,6 @@ const Reward: FC = () => {
             </Grid>
             <Grid item lg={8} md={8} sm={12} xs={12}>
               <MySposWrap>
-                {/* <MySposWrapBgImg src="images/reward/mySposBg.png" /> */}
                 <MySposHeader>
                   <MySposTitle>{t('My diffusion gold')}</MySposTitle>
                   <MySposDetailJump onClick={openDetailModal}>{t('Check details >')}</MySposDetailJump>
@@ -126,7 +122,6 @@ const Reward: FC = () => {
                   </MySposOveviewItem>
                   <CoinImg src="/images/reward/coin.png" />
                 </MySposOveview>
-                {/* <MySposConWrap> */}
                 <Grid container spacing={2}>
                   <Grid item lg={7} md={7} sm={12} xs={12}>
                     <MySposDashboardWrap>
@@ -183,7 +178,6 @@ const Reward: FC = () => {
                     </MySposRewardWrap>
                     </Grid>
                   </Grid>
-                {/* </MySposConWrap> */}
               </MySposWrap>
             </Grid>
           </Grid>
@@ -244,7 +238,7 @@ const Reward: FC = () => {
           title={t('You cannot view this page at present')}
           description={t('Unless you go and buy a $1,000 bond first')}
           btnText={t('To buy bonds')} 
-          action={() => router.push(`/mint`)}
+          action={() => router.push(`/bond`)}
         />
       }
     </RewardPageWrap>)

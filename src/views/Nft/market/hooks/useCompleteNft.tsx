@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core'
 import { FetchStatus } from 'config/constants/types'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useErc721CollectionContract } from 'hooks/useContract'
 import { getNftApi, getNftsMarketData, getNftsOnChainMarketData } from 'state/nftMarket/helpers'
 import { NftLocation, NftToken, TokenMarketData } from 'state/nftMarket/types'
@@ -46,65 +46,64 @@ const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: Toke
     },
   )
 }
-
 export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
-  
+  console.log("useCompleteNft")
+  const { account } = useWeb3React()
+
   const { data: nft, mutate } = useSWR(
     collectionAddress && tokenId ? ['nft', collectionAddress, tokenId] : null,
     async () => {
-      const metadata = await getNftApi(collectionAddress, tokenId)   
-      console.log('metadata--->',metadata)
+      const metadata = await getNftApi(collectionAddress, tokenId) as any
+      console.log("metadata:",metadata)
       if (metadata) {
-        //add attr markeData
-        const basicNft:NftToken = {
-          marketData: metadata.marketData,
-          tokenId,
-          collectionAddress,
-          collectionName: metadata.collection.name,
-          name: metadata.name,
-          description: metadata.description,
-          image: metadata.image,
-          attributes: metadata.attributes,
-         
-        }        
-        console.log('basickNft',basicNft)
-        return basicNft
-      }     
+        return metadata
+        // const basicNft: NftToken = {
+        //   marketData: metadata.marketData,
+        //   tokenId,
+        //   collectionAddress,
+        //   collectionName: metadata.collection.name,
+        //   name: metadata.name,
+        //   description: metadata.description,
+        //   image: metadata.image,
+        //   attributes: metadata.attributes,
+        // }
+        // return basicNft
+      }
       return null
     },
   )
-  
+  // const { data: marketData, mutate: refetchNftMarketData } = useSWR(
+  //   collectionAddress && tokenId ? ['nft', 'marketData', collectionAddress, tokenId] : null,
+  //   async () => {
+  //     const [onChainMarketDatas, marketDatas] = await Promise.all([
+  //       getNftsOnChainMarketData(collectionAddress.toLowerCase(), [tokenId]),
+  //       getNftsMarketData({ collection: collectionAddress.toLowerCase(), tokenId }, 1),
+  //     ])
+  //     const onChainMarketData = onChainMarketDatas[0]
 
-  const { data: marketData, mutate: refetchNftMarketData } = useSWR(
-    collectionAddress && tokenId ? ['nft', 'marketData', collectionAddress, tokenId] : null,
-    async () => {
-      const [onChainMarketDatas, marketDatas] = await Promise.all([
-        getNftsOnChainMarketData(collectionAddress.toLowerCase(), [tokenId]),
-        getNftsMarketData({ collection: collectionAddress.toLowerCase(), tokenId }, 1),
-      ])
-      const onChainMarketData = onChainMarketDatas[0]
-      console.log('markData:',onChainMarketDatas,marketDatas)
-      if (!marketDatas[0] && !onChainMarketData) return null
+  //     if (!marketDatas[0] && !onChainMarketData) return null
 
-      if (!onChainMarketData) return marketDatas[0]
+  //     if (!onChainMarketData) return marketDatas[0]
 
-      return { ...marketDatas[0], ...onChainMarketData }
-    },
-  )
+  //     return { ...marketDatas[0], ...onChainMarketData }
+  //   },
+  // )
 
-  const { data: nftOwn, mutate: refetchNftOwn, status } = useNftOwn(collectionAddress, tokenId, marketData)
+  // const { data: nftOwn, mutate: refetchNftOwn, status } = useNftOwn(collectionAddress, tokenId, metadata.marketData)
 
   const refetch = useCallback(async () => {
     await mutate()
-    await refetchNftMarketData()
-    await refetchNftOwn()
-  }, [mutate, refetchNftMarketData, refetchNftOwn])
-  // move marketData { ...nft, marketData, location: nftOwn?.location ?? NftLocation.WALLET }
- 
+  }, [mutate])
+  // const refetch = useCallback(async () => {
+  //   await mutate()
+  //   await refetchNftMarketData()
+  //   await refetchNftOwn()
+  // }, [mutate, refetchNftMarketData, refetchNftOwn])
+  console.log(account, nft?.marketData?.currentSeller)
   return {
-    combinedNft: nft ? { ...nft, marketData, location: nftOwn?.location ?? NftLocation.WALLET } : undefined,
-    isOwn: nftOwn?.isOwn || false,
-    isProfilePic: nftOwn?.nftIsProfilePic || false,
+    combinedNft: nft ? { ...nft, marketData:nft.marketData, location: nft?.location ?? NftLocation.WALLET } : undefined,
+    isOwn: nft?.marketData?.currentSeller == account?.toLowerCase() || false,
+    isProfilePic: nft?.location ==  NftLocation.PROFILE || false,
     isLoading: status !== FetchStatus.Fetched,
     refetch,
   }

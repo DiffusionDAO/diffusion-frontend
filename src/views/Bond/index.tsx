@@ -1,33 +1,24 @@
 import { FC, useState } from 'react'
-import { useWalletModal } from '@pancakeswap/uikit'
-import useAuth from 'hooks/useAuth'
+import Typed from 'react-typed';
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
-import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
-import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImg, DrawBlindBoxHeader, DrawBlindBoxFooter, 
-  DrawBlindBoxFooterBtn, DrawBlindBoxFooterBtnBorder, OverviewCard, Horizontal, OverviewCardItem, OverviewCardItemTitle, 
+import { BondPageWrap, BondPageHeader, SculptureWrap, HeaderTitle, HeaderDes, 
+  OverviewWrap, OverviewCard, OverviewPromptList, OverviewPromptItem, OverviewPromptWrap, OverviewPromptLine, OverviewPromptTitle,  Horizontal, OverviewCardItem, OverviewCardItemTitle, 
   OverviewCardItemContent, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
-  TextColor, BondListItemBtn, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
+  TextColor, BondListItemBtn, BondListItemBtnClosed, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
 import bondDatasMock from './MockBondData'
 import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
-import BlindBoxModal from './components/BlindBoxModal'
-import JumpModal from './components/JumpModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 
 const Bond: FC = () => {
   const { account } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
-  const { login, logout } = useAuth()
-  const { onPresentConnectModal } = useWalletModal(login, logout, t)
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false);
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
-  const [blindBoxModalVisible, setBlindBoxModalVisible] = useState<boolean>(false);
-  const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false);
-  const [balance,setBalance] = useState(1);
 
   const [isApprove, setIsApprove] = useState<boolean>(false);
   const [bondItem, setBondItem] = useState<any>(null);
@@ -49,83 +40,60 @@ const Bond: FC = () => {
   const getApprove = () => {
     setIsApprove(true)
   }
-  // 抽取盲盒
-  const drawBlind = () => {
-    if (!account) {
-      onPresentConnectModal()
-      return
-    }
-    if (balance <= 0) {
-      setJumpModalVisible(true)
-      return
-    }
-    setBlindBoxModalVisible(true)
-  }
-  const closeBlindBoxModal = () => {
-    setBlindBoxModalVisible(false)
-  }
-  const closeJumpModal = () => {
-    setJumpModalVisible(false)
-  }
-
   return (<BondPageWrap>
-    <DrawBlindBoxList>
-      <Grid container spacing={2}>
-        <Grid item lg={6} md={6} sm={12} xs={12}>
-          <DrawBlindBoxItem className='item1'>
-              <DrawBlindBoxImg src="images/bond/drawBlindBoxBg1.png" />
-              <DrawBlindBoxHeader className='item1'>{t('Based blind box')}</DrawBlindBoxHeader>
-              <DrawBlindBoxFooter>
-                <DrawBlindBoxFooterBtn className="purpleBtn" style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-                <DrawBlindBoxFooterBtnBorder onClick={drawBlind} className="purpleBtn">{t('Max')}</DrawBlindBoxFooterBtnBorder>
-              </DrawBlindBoxFooter>
-            </DrawBlindBoxItem>
-        </Grid>
-        <Grid item lg={6} md={6} sm={12} xs={12}>
-          <DrawBlindBoxItem className='item2'>
-            <DrawBlindBoxImg src="images/bond/drawBlindBoxBg2.png" />
-            <DrawBlindBoxHeader className='item2'>{t('Senior blind box')}</DrawBlindBoxHeader>
-            <DrawBlindBoxFooter>
-              <DrawBlindBoxFooterBtn className="orangeBtn"  style={{ marginRight: '10px' }} onClick={drawBlind}>{t('A Single')}</DrawBlindBoxFooterBtn>
-              <DrawBlindBoxFooterBtnBorder onClick={drawBlind} className="orangeBtn">{t('Max')}</DrawBlindBoxFooterBtnBorder>
-            </DrawBlindBoxFooter>
-          </DrawBlindBoxItem>
-        </Grid>
-      </Grid>
-    </DrawBlindBoxList>
+    <BondPageHeader>
+      <SculptureWrap src="/images/bond/bondSculpture.png" isMobile={isMobile} />
+      <HeaderTitle>
+        <Typed
+          strings={['Bond']}
+          typeSpeed={50}
+          cursorChar=""
+        />
+      </HeaderTitle>
+      <HeaderDes>{t('Digtal market palce for crypto collectionbles and non-fungible tokens nfts')}</HeaderDes>
+    </BondPageHeader>
 
-    <OverviewCard>
-        <OverviewCardItem>
+    <OverviewWrap>
+      <OverviewCard isMobile={isMobile}>
+        <OverviewCardItem isMobile={isMobile}>
           <OverviewCardItemTitle>The Treasury balance</OverviewCardItemTitle>
           <OverviewCardItemContent>
             $123.22
           </OverviewCardItemContent>
         </OverviewCardItem>
-        {
-          isMobile ? <Horizontal /> : null
-        }
-        <OverviewCardItem>
+        <OverviewCardItem isMobile={isMobile}>
           <OverviewCardItemTitle>The price of DFS</OverviewCardItemTitle>
           <OverviewCardItemContent>
             $123.22M
           </OverviewCardItemContent>
         </OverviewCardItem>
-        {
-          isMobile ? <Horizontal /> : null
-        }
-        <OverviewCardItem>
-          <OverviewCardItemTitle>Straight driving performance</OverviewCardItemTitle>
-          <OverviewCardItemContent>
-            1000000U
-          </OverviewCardItemContent>
-        </OverviewCardItem>
       </OverviewCard>
+      <OverviewPromptWrap>
+        {
+          isMobile ? <>
+              <OverviewPromptLine style={{width: 'calc(50% - 25px)'}} />
+              <OverviewPromptTitle>{t('prompt')}</OverviewPromptTitle>
+              <OverviewPromptLine style={{width: 'calc(50% - 25px)'}}/>
+          </>:
+          <>
+            <OverviewPromptTitle>{t('prompt')}</OverviewPromptTitle>
+            <OverviewPromptLine style={{width: 'calc(100% - 50px)'}}/>
+          </>
+        }
+      </OverviewPromptWrap>
+      <OverviewPromptList>
+        <OverviewPromptItem>{t('Investing in bonds gives you DFS at a discount')}</OverviewPromptItem>
+        <OverviewPromptItem>{t('All funds invested in bonds will be added to the liquidity pool')}</OverviewPromptItem>
+        <OverviewPromptItem>{t('The DFS obtained by investing in bonds will arrive in full after 5 days')}</OverviewPromptItem>
+        <OverviewPromptItem>{t('Investment bonds can draw social NFT blind box when DFS is not in the account')}</OverviewPromptItem>
+      </OverviewPromptList>
+    </OverviewWrap>
 
 
     <Grid container spacing={2}>
       {
         bonData.map(item => (
-          <Grid item lg={12} md={12} sm={12} xs={12} key={item.key}>
+          <Grid item lg={4} md={4} sm={12} xs={12} key={item.key}>
             <BondListItem>
               <BondListItemHeader isMobile={isMobile}>
                 <ImgWrap>
@@ -148,7 +116,12 @@ const Bond: FC = () => {
                   <CellText>{item.duration}days</CellText>
                 </ContentCell>
               </BondListItemContent>
-              <BondListItemBtn onClick={()=> openBondModal(item)} isMobile={isMobile}>Bond</BondListItemBtn>
+              {
+                item.status === 'opened' ? 
+                <BondListItemBtn onClick={()=> openBondModal(item)}>{t('Bond')}</BondListItemBtn>
+                : 
+                <BondListItemBtnClosed onClick={()=> openBondModal(item)}>{t('Not opened')}</BondListItemBtnClosed>
+              }
             </BondListItem>
           </Grid>
         ))
@@ -163,16 +136,6 @@ const Bond: FC = () => {
     {/* bond设置弹窗 */}
     {
       settingModalVisible ? <SettingModal account={account}  bondData={bondItem} onClose={closeSettingModal} /> 
-      : null
-    }
-    {/* 盲盒成功的弹窗 */}
-    {
-      blindBoxModalVisible ? <BlindBoxModal nftData={nftDatasMock} onClose={closeBlindBoxModal} />
-      : null
-    }
-    {/* 跳转选项的弹窗 */}
-    {
-      jumpModalVisible ? <JumpModal onClose={closeJumpModal} />
       : null
     }
   </BondPageWrap>)

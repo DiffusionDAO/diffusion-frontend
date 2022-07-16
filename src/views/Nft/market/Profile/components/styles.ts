@@ -30,19 +30,18 @@ export const SelectedCountBox = styled.div`
   color: #fff;
 `
 export const SelectedCountWrap = styled.span`
-  padding: 2px 20px;
-  width: 39px;
+  padding: 2px 10px;
   height: 27px;
   background: rgba(255,255,255,0.1);
   border-radius: 13px;
-  margin-left: 20px;
+  margin-left: 5px;
 `
 
 export const SelectWrap = styled.div`
-.ant-select-selector {
-  background: rgba(171, 182, 255, 0.2);
-  border-radius: 8px;
-}
+  .ant-select-selector {
+    background: rgba(171, 182, 255, 0.2);
+    border-radius: 8px;
+  }
 `
 interface CompoundBtnWrapProps {
   isSelected: boolean;
@@ -80,7 +79,7 @@ export const SyntheticBtn = styled.img`
 `
 export const AccountNftWrap = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 40px auto;
   padding: 20px;
   position: relative;
 `
@@ -96,7 +95,7 @@ export const NftSculptureWrap = styled.div`
         height: 400px;
         width: 400px;
         position: absolute;
-        right: 10px;
+        right: 0px;
       `;
     }
     return css`
@@ -164,15 +163,16 @@ export const NftBallImg = styled.img`
   }};
 `
 export const BackgroundWrap = styled.div`
-  height: 500px;
   position: relative;
   ${({ isMobile }: { isMobile: boolean }) => {
     if (isMobile) {
       return css`
-        margin-top: 300px;
+        height: 300px;
+        margin-top: 400px;
       `;
     }
     return css`
+      height: 500px;
       margin-top: 0px;
     `;
   }};

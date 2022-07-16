@@ -8,123 +8,71 @@ const PADDING_PERCENT = DRAW_BLIND_BOX_HEIGHT / (DRAW_BLIND_BOX_WIDTH * 100)
 
 export const BondPageWrap = styled.div`
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 40px auto;
   padding: 20px;
 `
-export const DrawBlindBoxList = styled.div`
-  // display: flex;
-  // flex-wrap: wrap;
-  // justify-content: space-between;
-  margin-bottom: 20px;
-`
-
-export const DrawBlindBoxItem = styled.div`
+export const BondPageHeader = styled.div`
   width: 100%;
-  height: 0;
-  padding-bottom: 64%;
-  border-radius: 16px;
+  margin: 40px 0 20px 0;
   position: relative;
-  &.item1 {
-    border: 4px solid #EC6EFF;
-  }
-  &.item2 {
-    border: 4px solid #FF7056;
-  }
 `
-export const DrawBlindBoxImg = styled.img`
-  width: 100%;
-  height: 100%;
+export const  SculptureWrap = styled.img`
   position: absolute;
-  top: 0;
-  left: 0;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        width: 240px;
+        height: 240px;
+        right: -40px;
+        top: -40px;
+      `;
+    }
+    return css`
+      right: 0;
+      top: -80px;
+      width: 400px;
+      height: 400px;
+    `;
+  }};
 `
-export const DrawBlindBoxHeader  = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 50px;
-  width: 100%;
-  text-indent: 10px;
-  border-radius: 16px;
-  color: #fff;
-  overflow: hidden;
-  font-size: 24px;
-  font-family: HelveticaNeue-BoldItalic, HelveticaNeue;
-  font-weight: normal;
+export const HeaderTitle = styled.div`
+  width: 50%;
+  line-height: 100px;
+  font-size: 56px;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  font-weight: bold;
   color: #FFFFFF;
-  line-height: 50px;
-  text-shadow: 0px 2px 19px rgba(255, 255, 255, 0.5);
-  &.item1 {
-    background: url('/images/bond/drawBlindBoxHeaderBg1.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-  &.item2 {
-    background: url('/images/bond/drawBlindBoxHeaderBg2.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
+  letter-spacing: 2px;
 `
-
-export const DrawBlindBoxFooter = styled.div`
-  height: 90px;
-  width: 100%;
-  border-radius: 14px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+export const HeaderDes = styled.div`
+  width: 50%;
+  font-size: 18px;
+  font-family: HelveticaNeue;
+  color: #ABB6FF;
+  line-height: 30px;
 `
-
-export const DrawBlindBoxFooterBtn = styled.div`
-  width: 120px;
-  height: 40px;
-  border-radius: 8px;
-  color: #fff;
-  line-height: 40px;
-  text-align: center;
-  cursor: pointer;
-  &.purpleBtn {
-    background: linear-gradient(90deg, #3C00FF, #EC6EFF);
-    background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
-  }
-  &.orangeBtn {
-    background: linear-gradient(90deg, #FFA16E, #FF7056);
-    background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
-  }
-`
-
-export const DrawBlindBoxFooterBtnBorder = styled.div`
-  width: 120px;
-  line-height: 40px;
-  border-radius: 8px;
-  color: #fff;
-  text-align: center;
-  cursor: pointer;
-  position: relative;
-  &.purpleBtn {
-    border: 2px solid #EC6EFF;
-  }
-  &.orangeBtn {
-    border: 2px solid #FF7056;
-  }
-`
-
-export const OverviewCard = styled.div`
-  padding: 36px;
+export const OverviewWrap = styled.div`
+  margin: 20px 0;
+  padding: 20px;
   border-radius: 16px;
   background: rgba(171, 182, 255, 0.05);
   border: 1px solid rgba(70, 96, 255, 0.32);
+`
+
+export const OverviewCard = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 20px 0;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+      `;
+    }
+    return css`
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    `;
+  }};
 `
 export const Horizontal = styled.div`
   height: 1px;
@@ -133,12 +81,21 @@ export const Horizontal = styled.div`
   background-color: rgba(255, 255, 255, 0.1);
 `
 export const OverviewCardItem = styled.div`
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+      `;
+    }
+    return css`
+      margin-right: 100px;
+    `;
+  }};
 `
 export const OverviewCardItemTitle = styled.div`
   height: 16px;
   font-size: 14px;
   font-family: HelveticaNeue;
-  color: #FFFFFF;
+  color: #ABB6FF;
   line-height: 16px;
   margin-bottom: 20px;
 `
@@ -147,65 +104,90 @@ export const OverviewCardItemContent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 32px;
+  font-size: 28px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   color: #FFFFFF;
   line-height: 40px;
   text-shadow: 0px 2px 34px rgba(255, 255, 255, 0.5);
 `
+export const OverviewPromptWrap= styled.div`
+  margin: 20px 0;
+  display: flex;
+`
+export const OverviewPromptLine= styled.div`
+  height: 1px;
+  margin-top: 19px;
+  background-color: rgba(255, 255, 255, 0.1);
+`
+export const OverviewPromptTitle = styled.div`
+  width: 50px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #FFFFFF;
+`
+export const OverviewPromptList = styled.div`
+  position: relative;
+`
+export const OverviewPromptItem = styled.div`
+  line-height: 30px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #FFFFFF;
+`
 export const BondListItem = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   border-radius: 15px;
   border: 1px solid rgba(70, 96, 255, 0.4);
   background: rgba(171, 182, 255, 0.08);
-  padding: 36px;
+  padding: 20px;
 `
 export const BondListItemHeader = styled.div`
+  width: 100%;
+  border-bottom: 1px solid rgba(70, 96, 255, 0.4);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   ${({ isMobile }: { isMobile: boolean }) => {
     if (isMobile) {
       return css`
-        width: 100%;
-        padding: 0 0 36px 0;
-        border-bottom: 1px solid rgba(70, 96, 255, 0.4);
+        padding: 0 0 10px 0;
+        justify-content: space-evenly;
       `;
     }
     return css`
-      padding: 0 36px 0 0;
-      border-right: 1px solid rgba(70, 96, 255, 0.4);
+      padding: 0 0 30px 0;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     `;
   }};
 `
 export const ImgWrap = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 58px;
+  height: 58px;
   position: relative;
 `
 export const FromImg = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 20px;
   position: absolute;
-  left: -15px;
+  left: -10px;
 `
 export const ToImg = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 20px;
   position: absolute;
-  right: -15px;
+  right: -10px;
   z-index: 1;
 `
 export const BondHeaderName = styled.div`
-  width: 100%;
   height: 30px;
   margin-top: 10px;
   font-size: 24px;
@@ -218,54 +200,52 @@ export const BondHeaderName = styled.div`
 `
 
 export const BondListItemContent = styled.div`
-  margin: 36px 0;
+  width: 100%;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
   ${({ isMobile }: { isMobile: boolean }) => {
     if (isMobile) {
       return css`
-        width: 100%;
+        margin: 10px 0;
+        flex-direction: column;
       `;
     }
     return css`
+      margin: 30px 0;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: center;
     `;
   }};
 `
 export const ContentCell = styled.div`
   display: flex;
-  flex-direction: column;
   ${({ isMobile }: { isMobile: boolean }) => {
     if (isMobile) {
       return css`
+        line-height: 40px;
+        flex-direction: row;
+        justify-content: space-between
       `;
     }
     return css`
-      margin: 0 38px;
+      line-height: 30px;
+      flex-direction: column;
     `;
   }};
 `
 export const CellTitle = styled.div`
-  width: 100%;
-  height: 15px;
   font-size: 13px;
   font-family: HelveticaNeue;
   color: #ABB6FF;
-  line-height: 15px;
-  margin-bottom: 10px;
   text-align: center;
   align-items: center;
 `
 export const CellText = styled.div`
-  width: 100%;
-  height: 24px;
   font-size: 20px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   color: #FFFFFF;
-  line-height: 25px;
   text-align: center;
 `
 export const TextColor = styled.div`
@@ -281,26 +261,29 @@ export const TextColor = styled.div`
   }};
 `
 export const BondListItemBtn = styled.div`
+  width: 100%;
+  font-size: 14px;
   height: 40px;
   line-height: 40px;
   color: #fff;
   text-align: center;
-  background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
   border-radius: 7px;
   cursor: pointer;
   background: linear-gradient(135deg,#3C00FF, #EC6EFF);
   background-size: 400% 400%;
   animation: gradient 5s ease infinite;
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
-      return css`
-        width: 100%;
-      `;
-    }
-    return css`
-      min-width: 150px;
-    `;
-  }};
+`
+
+export const BondListItemBtnClosed = styled.div`
+  width: 100%;
+  font-size: 14px;
+  height: 40px;
+  line-height: 40px;
+  color: rgba(210, 87, 255, 1);
+  text-align: center;
+  border-radius: 7px;
+  cursor: pointer;
+  background: rgba(210, 87, 255, 0.09);
 `
 
 

@@ -55,17 +55,17 @@ const MoreFromThisCollection: React.FC<MoreFromThisCollectionProps> = ({
 
   const isPBCollection = isAddress(collectionAddress) === pancakeBunniesAddress
 
-  useEffect(() => {
-    if (!isPBCollection && !collectionNfts) {
-      dispatch(
-        fetchNftsFromCollections({
-          collectionAddress: isAddress(collectionAddress) || collectionAddress,
-          page: 1,
-          size: 100,
-        }),
-      )
-    }
-  }, [collectionNfts, collectionAddress, dispatch, isPBCollection])
+  // useEffect(() => {
+  //   if (!isPBCollection && !collectionNfts) {
+  //     dispatch(
+  //       fetchNftsFromCollections({
+  //         collectionAddress: isAddress(collectionAddress) || collectionAddress,
+  //         page: 1,
+  //         size: 100,
+  //       }),
+  //     )
+  //   }
+  // }, [collectionNfts, collectionAddress, dispatch, isPBCollection])
 
   let nftsToShow = useMemo(() => {
     return shuffle(

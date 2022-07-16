@@ -35,11 +35,37 @@ nav {
   background-color: rgba(171, 182, 255, 0.2) !important;
   border-radius: 8px;
 }
-.ant-select-arrow {
+.ant-select .ant-select-arrow {
   color: #ABB6FF;
 }
 .ant-cascader-menus {
   background-color: rgba(171, 182, 255, 0.2);
+}
+.ant-select:hover .ant-select-clear {
+  color: #ABB6FF;
+  background: none;
+}
+.MuiMenu-list {
+  background-color: rgb(33 12 129 / 90%);
+  color: #fff;
+}
+.ant-select-dropdown {
+  background-color: rgb(33 12 129 / 90%);
+  color: #fff;
+}
+.ant-cascader-menu {
+  border-right: 1px solid rgb(240 240 240 / 10%);
+  background-color: rgb(33 12 129 / 90%);
+  color: #fff;
+}
+.ant-cascader-menu-item-active:not(.ant-cascader-menu-item-disabled), .ant-cascader-menu-item-active:not(.ant-cascader-menu-item-disabled):hover {
+  background-color: rgb(230 247 255 / 10%);
+}
+.ant-cascader-menu-item-expand .ant-cascader-menu-item-expand-icon {
+  color: #fff;
+}
+.ant-cascader-menu-item:hover {
+  background: rgb(245 245 245 / 10%);
 }
 
 // button样式覆盖
@@ -124,27 +150,5 @@ nav {
   .ant-modal-content {
     background-image: url('/images/nfts/star-bg.png');
     background-size: cover;
-  }
-}
-
-// 赏金页面Swiper样式覆盖
-.rewardSwiper {
-  .swiper-button-prev:after{
-    display: none;
-  }
-  .swiper-button-next:after{
-    display: none;
-  }
-  .swiper-button-prev{
-    width: 40px;
-    height: 40px;
-    background: url('/images/reward/left-arrow.png') no-repeat;
-    background-size: contain;
-  }
-  .swiper-button-next{
-    width: 40px;
-    height: 40px;
-    background:url('/images/reward/right-arrow.png') no-repeat;
-    background-size: contain;
   }
 }

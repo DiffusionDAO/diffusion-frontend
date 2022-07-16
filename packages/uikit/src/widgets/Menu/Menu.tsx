@@ -1,6 +1,6 @@
 import throttle from "lodash/throttle";
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import BottomNav from "../../components/BottomNav";
 import { Box } from "../../components/Box";
 import Flex from "../../components/Box/Flex";
@@ -21,10 +21,21 @@ const Wrapper = styled.div`
 `;
 const StyledNavWrap = styled.nav`
   max-width: 1200px;
+  height: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        padding: 0 20px;
+      `;
+    }
+    return css`
+      padding: 0px;
+    `;
+  }};
 `;
 const StyledNav = styled.nav`
   width: 100%;
@@ -131,7 +142,7 @@ const Menu: React.FC<NavProps> = ({
         <FixedContainer showMenu={showMenu} height={totalTopMenuHeight}>
           {banner && <TopBannerContainer height={topBannerHeight}>{banner}</TopBannerContainer>}
           <StyledNav>
-            <StyledNavWrap>
+            <StyledNavWrap isMobile={isMobile}>
               <Flex>
                 <Logo isDark={isDark} href={homeLink?.href ?? "/"} />
                 {!isMobile && <MenuItems items={links} activeItem={activeItem} activeSubItem={activeSubItem} ml="24px" />}
