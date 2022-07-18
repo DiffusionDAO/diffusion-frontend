@@ -177,14 +177,14 @@ export const FromImg = styled.img`
   height: 48px;
   border-radius: 20px;
   position: absolute;
-  left: -10px;
+  left: -17px;
 `
 export const ToImg = styled.img`
   width: 48px;
   height: 48px;
   border-radius: 20px;
   position: absolute;
-  right: -10px;
+  right: -17px;
   z-index: 1;
 `
 export const BondHeaderName = styled.div`

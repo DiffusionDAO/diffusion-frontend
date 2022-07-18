@@ -185,6 +185,7 @@ export const Petal = styled.img`
     `;
   }};
 `
+
 export const RewardText = styled.div`
   height: 21px;
   font-size: 18px;
@@ -386,16 +387,41 @@ export const MySposDashboardMiddleItemDes = styled.div`
 `
 export const MySposRewardWrap = styled.div`
   width: 100%;
-  height: 313px;
   margin: 0 auto;
   background: rgba(12,0,44,0.4900);
   border-radius: 12px;
   border: 1px solid rgba(70,96,255,0.3200);
   position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        height: 100px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+      `;
+    }
+    return css`
+      height: 313px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    `;
+  }};
+`
+
+export const RewardWrap = styled.div`
+${({ isMobile }: { isMobile: boolean }) => {
+  if (isMobile) {
+    return css`
+      text-align: left;
+    `;
+  }
+  return css`
+    text-align: center;
+  `;
+}};
 `
 export const MySposRewardBg = styled.img`
   width: 100%;
@@ -403,6 +429,7 @@ export const MySposRewardBg = styled.img`
   position: absolute;
   left: 0;
   top: 0;
+  z-index: -1;
 `
 
 export const CardWrap = styled.div`

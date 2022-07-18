@@ -13,7 +13,7 @@ import noop from 'lodash/noop';
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperItem, SwiperItemImg, SwiperItemName, SwiperItemDes,
   DiffusionGoldWrap, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
-  Petal, RewardText, RewardValueDiv, ExtractBtn, 
+  Petal, RewardWrap, RewardText, RewardValueDiv, ExtractBtn, 
   MySposWrap, MySposHeader, MySposTitle, MySposDetailJump, MySposOveview, MySposOveviewItem, CoinImg,
   MySposDashboardWrap, MySposDashboardList, MySposDashboardItem, MySposDashboardItemImage, MySposDashboardValue, MySposDashboardDes, 
   MySposDashboardMiddleItem, MySposDashboardMiddleItemValue, MySposDashboardMiddleItemDes, MySposRewardWrap, MySposRewardBg,
@@ -170,10 +170,12 @@ const Reward: FC = () => {
                     </MySposDashboardWrap>
                   </Grid>
                   <Grid item lg={5} md={5} sm={12} xs={12}>
-                    <MySposRewardWrap>
+                    <MySposRewardWrap isMobile={isMobile}>
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
-                      <RewardValueDiv>{rewardValue}</RewardValueDiv>
-                      <RewardText>{t('reward')}</RewardText>
+                      <RewardWrap isMobile={isMobile}>
+                        <RewardText>{t('reward')}</RewardText>
+                        <RewardValueDiv>{rewardValue}</RewardValueDiv>
+                      </RewardWrap>
                       <ExtractBtn>{t('Extract')}</ExtractBtn>
                     </MySposRewardWrap>
                     </Grid>
