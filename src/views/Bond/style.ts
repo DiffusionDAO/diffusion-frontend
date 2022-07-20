@@ -168,23 +168,23 @@ export const BondListItemHeader = styled.div`
   }};
 `
 export const ImgWrap = styled.div`
-  width: 58px;
-  height: 58px;
+  width: 50px;
+  height: 50px;
   position: relative;
 `
 export const FromImg = styled.img`
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
   border-radius: 20px;
   position: absolute;
-  left: -17px;
+  left: -12px;
 `
 export const ToImg = styled.img`
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
   border-radius: 20px;
   position: absolute;
-  right: -17px;
+  right: -12px;
   z-index: 1;
 `
 export const BondHeaderName = styled.div`

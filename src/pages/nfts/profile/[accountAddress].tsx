@@ -276,9 +276,7 @@ function NftProfilePage() {
   return (
     <AccountNftWrap>
       <NftSculptureWrap isMobile={isMobile}>
-        <NftSculptureGif isMobile={isMobile} src="/images/nfts/nft-sculpture.gif" alt="" />
-        <NftGearImg isMobile={isMobile} src="/images/gear.png" alt="" />
-        <NftBallImg isMobile={isMobile} src="/images/ball.png" alt="" />
+        <NftSculptureGif isMobile={isMobile} src="/images/nfts/nft-sculpture.png" alt="" />
       </NftSculptureWrap>
       <BackgroundWrap isMobile={isMobile}>
         <BackgroundText>

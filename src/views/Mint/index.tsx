@@ -5,7 +5,7 @@ import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
-import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, ContentWrap, DalaCardList, DalaCardListTitle, 
+import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, BoxLeftAskImg, BoxRightAskImg, ContentWrap, DalaCardList, DalaCardListTitle, 
   DalaCardCellWrap, DalaCardLabelDiv, DalaCardValueDiv, ColorFont,
   AvailableCount, ActionWrap, ActionLeft, ActionRight, CountInput, DrawBlindBoxTextBtn, DrawBlindBoxPrimaryBtn } from './style'
 import mintDatasMock from './MockMintData'
@@ -52,7 +52,10 @@ const Bond: FC = () => {
       <Grid container spacing={2}>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <DrawBlindBoxItem className='item1'>
-            <DrawBlindBoxImgWrap className='item1' />
+            <DrawBlindBoxImgWrap className='item1'>
+              <BoxLeftAskImg src="/images/mint/orangeLeftAsk.png" />
+              <BoxRightAskImg src="/images/mint/orangeRightAsk.png" />
+            </DrawBlindBoxImgWrap>
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Senior blind box')}</DalaCardListTitle>
@@ -84,7 +87,10 @@ const Bond: FC = () => {
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <DrawBlindBoxItem className='item2'>
-            <DrawBlindBoxImgWrap className='item2' />
+            <DrawBlindBoxImgWrap className='item2'>
+              <BoxLeftAskImg src="/images/mint/purpleLeftAsk.png" />
+              <BoxRightAskImg src="/images/mint/purpleRightAsk.png" />
+            </DrawBlindBoxImgWrap>
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Ordinary blind box')}</DalaCardListTitle>
