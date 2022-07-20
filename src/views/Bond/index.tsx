@@ -45,24 +45,24 @@ const Bond: FC = () => {
       <SculptureWrap src="/images/bond/bondSculpture.png" isMobile={isMobile} />
       <HeaderTitle>
         <Typed
-          strings={['Bond']}
+          strings={[t('Bonds')]}
           typeSpeed={50}
           cursorChar=""
         />
       </HeaderTitle>
-      <HeaderDes>{t('Digtal market palce for crypto collectionbles and non-fungible tokens nfts')}</HeaderDes>
+      <HeaderDes>{t('Sales of bonds is the only way for DFS to be minted, through the sales of bonds to accumulate large asset volume, the central financial agreement will have but not limited to USDT, ETH, BNB and equivalent type of assets. This type of asset will become the core foundation supporting the value of DFS.')}</HeaderDes>
     </BondPageHeader>
 
     <OverviewWrap>
       <OverviewCard isMobile={isMobile}>
         <OverviewCardItem isMobile={isMobile}>
-          <OverviewCardItemTitle>The Treasury balance</OverviewCardItemTitle>
+          <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
           <OverviewCardItemContent>
             $123.22
           </OverviewCardItemContent>
         </OverviewCardItem>
         <OverviewCardItem isMobile={isMobile}>
-          <OverviewCardItemTitle>The price of DFS</OverviewCardItemTitle>
+          <OverviewCardItemTitle>{t('Price of DFS')}</OverviewCardItemTitle>
           <OverviewCardItemContent>
             $123.22M
           </OverviewCardItemContent>
@@ -72,20 +72,20 @@ const Bond: FC = () => {
         {
           isMobile ? <>
               <OverviewPromptLine style={{width: 'calc(50% - 25px)'}} />
-              <OverviewPromptTitle>{t('prompt')}</OverviewPromptTitle>
+              <OverviewPromptTitle>{t('Reminder')}</OverviewPromptTitle>
               <OverviewPromptLine style={{width: 'calc(50% - 25px)'}}/>
           </>:
           <>
-            <OverviewPromptTitle>{t('prompt')}</OverviewPromptTitle>
+            <OverviewPromptTitle>{t('Reminder')}</OverviewPromptTitle>
             <OverviewPromptLine style={{width: 'calc(100% - 50px)'}}/>
           </>
         }
       </OverviewPromptWrap>
       <OverviewPromptList>
-        <OverviewPromptItem>{t('Investing in bonds gives you DFS at a discount')}</OverviewPromptItem>
-        <OverviewPromptItem>{t('All funds invested in bonds will be added to the liquidity pool')}</OverviewPromptItem>
-        <OverviewPromptItem>{t('The DFS obtained by investing in bonds will arrive in full after 5 days')}</OverviewPromptItem>
-        <OverviewPromptItem>{t('Investment bonds can draw social NFT blind box when DFS is not in the account')}</OverviewPromptItem>
+        <OverviewPromptItem>{t('Invest in bonds and get DFS at a discounted price')}</OverviewPromptItem>
+        <OverviewPromptItem>{t('All funds invested in bonds will be added to the treasury')}</OverviewPromptItem>
+        <OverviewPromptItem>{t('DFS will be fully credited in 5 days after bonds purchase')}</OverviewPromptItem>
+        <OverviewPromptItem>{t('Participate in NFT Gachapon even before the actual DFS has been credited into your account after your bonds purchase')}</OverviewPromptItem>
       </OverviewPromptList>
     </OverviewWrap>
 
@@ -104,21 +104,21 @@ const Bond: FC = () => {
               </BondListItemHeader>
               <BondListItemContent isMobile={isMobile}>
                 <ContentCell isMobile={isMobile}>
-                  <CellTitle>Price</CellTitle>
+                  <CellTitle>{t('Price')}</CellTitle>
                   <CellText >${item.price}</CellText>
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
-                  <CellTitle>Discount</CellTitle>
+                  <CellTitle>{t('Discount')}</CellTitle>
                   <CellText><TextColor isRise={item.discount>0}>{item.discount}%</TextColor></CellText>
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
-                  <CellTitle>Duration</CellTitle>
+                  <CellTitle>{t('Duration')}</CellTitle>
                   <CellText>{item.duration}days</CellText>
                 </ContentCell>
               </BondListItemContent>
               {
                 item.status === 'opened' ? 
-                <BondListItemBtn onClick={()=> openBondModal(item)}>{t('Bond')}</BondListItemBtn>
+                <BondListItemBtn onClick={()=> openBondModal(item)}>{t('Bonds')}</BondListItemBtn>
                 : 
                 <BondListItemBtnClosed onClick={()=> openBondModal(item)}>{t('Not opened')}</BondListItemBtnClosed>
               }

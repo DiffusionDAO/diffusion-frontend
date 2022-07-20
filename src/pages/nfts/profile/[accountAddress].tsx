@@ -225,7 +225,7 @@ function NftProfilePage() {
     setSelectedNfts(selected)
     if (!selected.length) {
       setNoteContent({
-        title: t('Important note'),
+        title: t('Important notice'),
         description: t('Please select one NFT at least'),
         visible: true,
       })
@@ -235,7 +235,7 @@ function NftProfilePage() {
       if (selected.length % 2 !== 0 || !selected.length) {
         setNoteContent({
           title: t('Important note'),
-          description: t('The NFTs you selected is across levels, please select the same color at the same level for composition'),
+          description: t('Your selection of NFTs are from different levels of the hierarchy, please select the same level of NFTs to combine'),
           visible: true,
         });
         return
@@ -287,7 +287,7 @@ function NftProfilePage() {
               cursorChar=""
             />
           </BackgroundTitle>
-          <BackgroundDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BackgroundDes>
+          <BackgroundDes>{t('This is your digital asset treasure silo, stake or combine NFTs to explore more possibilities where you can obtain more fulfilling rewards')}</BackgroundDes>
         </BackgroundText>
       </BackgroundWrap>
       <ConentWrap>
@@ -297,7 +297,7 @@ function NftProfilePage() {
               key="WithoutStake"
               tab={
                 <span>
-                  {`${t('Without the stake')}`}
+                  {`${t('Not Staked')}`}
                   <SelectedCountWrap>{selectedNfts?.length}</SelectedCountWrap>
                 </span>
               }
@@ -306,7 +306,7 @@ function NftProfilePage() {
               key="Stake"
               tab={
                 <span>
-                  {`${t('Has staked')}`}
+                  {`${t('Staked')}`}
                   <SelectedCountWrap>{selectedNfts?.length}</SelectedCountWrap>
                 </span>
               }

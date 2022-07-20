@@ -33,7 +33,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     items: [],
   },
   {
-    label: t('Bond'),
+    label: t('Bonds'),
     icon: BondIcon,
     fillIcon: BondFillIcon,
     href: '/bond',
@@ -41,7 +41,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     items: [],
   },
   {
-    label: t('Mint'),
+    label: t('NFT Mystery Boxes'),
     icon: MintIcon,
     fillIcon: MintFillIcon,
     href: '/mint',
@@ -49,21 +49,13 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     items: [],
   },
   {
-    label: t('Reward'),
+    label: t('Rewards'),
     icon: RewardIcon,
     fillIcon: RewardFillIcon,
     href: '/reward',
     showItemsOnMobile: false,
     items: [],
   },
-  // {
-  //   label: t('IDO'),
-  //   icon: EarnIcon,
-  //   fillIcon: EarnFillIcon,
-  //   href: '/ido',
-  //   showItemsOnMobile: false,
-  //   items: [],
-  // },
   {
     label: t('NFT'),
     icon: NftMarketIcon,

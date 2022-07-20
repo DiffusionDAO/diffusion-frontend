@@ -14,19 +14,19 @@ const DetailModal: React.FC<DetailModalProps> = ({
   const { t } = useTranslation()
   const columns = [
     {
-      title: 'Contributors',
+      title: t('Contributors'),
       dataIndex: 'contributors',
       key: 'contributors',
     },
     {
-      title: 'Results',
+      title: t('Contribution value'),
       dataIndex: 'results',
       key: 'results',
     },
   ];
   return (
     <StyledModal
-      title="Detail"
+      title={t('Detail')}
       width={528}
       onCancel={onClose}
       visible

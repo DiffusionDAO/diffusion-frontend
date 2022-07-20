@@ -8,7 +8,6 @@ import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
 import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, BoxLeftAskImg, BoxRightAskImg, ContentWrap, DalaCardList, DalaCardListTitle, 
   DalaCardCellWrap, DalaCardLabelDiv, DalaCardValueDiv, ColorFont,
   AvailableCount, ActionWrap, ActionLeft, ActionRight, CountInput, DrawBlindBoxTextBtn, DrawBlindBoxPrimaryBtn } from './style'
-import mintDatasMock from './MockMintData'
 import DataCell from "../../components/ListDataCell"
 import BlindBoxModal from './components/BlindBoxModal'
 import JumpModal from './components/JumpModal'
@@ -58,14 +57,15 @@ const Bond: FC = () => {
             </DrawBlindBoxImgWrap>
             <ContentWrap>
               <DalaCardList>
-                <DalaCardListTitle>{t('Senior blind box')}</DalaCardListTitle>
-                <DataCell label={t('The price')} value={mintDatasMock[0].price} valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
-                <DataCell label={t('The blind box contains')} value={mintDatasMock[0].contains} valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DalaCardListTitle>{t('Premier Mystery Boxes')}</DalaCardListTitle>
+                <DataCell label={t('Price')} value='0 USDT' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
                 <DalaCardCellWrap>
-                  <DalaCardLabelDiv>{t('Advanced Blind Box probability')}</DalaCardLabelDiv>
+                  <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
                   <DalaCardValueDiv>
-                    <ColorFont style={{color:'#FF7056'}}> 98% </ColorFont>{t('wise men')}
-                    <ColorFont style={{color:'#FF7056'}}> 2% </ColorFont>{t('Golden Generals')}
+                    <ColorFont style={{color:'#FF7056'}}> 98% </ColorFont>{t('Wiseman')}
+                    { isMobile ? <br/> : null}
+                    <ColorFont style={{color:'#FF7056'}}> 2% </ColorFont>{t('General Aureate')}
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
@@ -81,7 +81,7 @@ const Bond: FC = () => {
                   <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px'}}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
                 </ActionRight>
               </ActionWrap>
-              <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={drawBlind}>{t('Single')}</DrawBlindBoxPrimaryBtn>
+              <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={drawBlind}>{t('Play')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
           </DrawBlindBoxItem>
         </Grid>
@@ -93,14 +93,14 @@ const Bond: FC = () => {
             </DrawBlindBoxImgWrap>
             <ContentWrap>
               <DalaCardList>
-                <DalaCardListTitle>{t('Ordinary blind box')}</DalaCardListTitle>
-                <DataCell label={t('The price')} value={mintDatasMock[0].price} valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
-                <DataCell label={t('The blind box contains')} value={mintDatasMock[0].contains} valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DalaCardListTitle>{t('Deluxe Mystery Boxes')}</DalaCardListTitle>
+                <DataCell label={t('Price')} value='0 USDT' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
                 <DalaCardCellWrap>
-                  <DalaCardLabelDiv>{t('Advanced Blind Box probability')}</DalaCardLabelDiv>
+                  <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
                   <DalaCardValueDiv>
-                    <ColorFont style={{color: '#EC6EFF'}}> 98% </ColorFont>{t('wise shard')}
-                    <ColorFont style={{color: '#EC6EFF'}}> 2% </ColorFont>{t('wise')}
+                    <ColorFont style={{color: '#EC6EFF'}}> 98% </ColorFont>{t('Wiseman Silver')}
+                    <ColorFont style={{color: '#EC6EFF'}}> 2% </ColorFont>{t('Wiseman NFT')}
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
@@ -116,7 +116,7 @@ const Bond: FC = () => {
                   <DrawBlindBoxPrimaryBtn className='purpleBtn' style={{ width: '80px'}}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
                 </ActionRight>
               </ActionWrap>
-              <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={drawBlind}>{t('Single')}</DrawBlindBoxPrimaryBtn>
+              <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={drawBlind}>{t('Play')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
           </DrawBlindBoxItem>
         </Grid>
