@@ -96,7 +96,7 @@ const Reward: FC = () => {
               <DiffusionGoldWrap isMobile={isMobile}>
                 <DiffusionGoldHeader>
                   <DiffusionGoldTitle>{t('My social networking rewards')}</DiffusionGoldTitle>
-                  <DiffusionGoldDetailJump onClick={openDetailModal}>{t('Detail >')}</DiffusionGoldDetailJump>
+                  <DiffusionGoldDetailJump onClick={openDetailModal}>{`${t('Detail')}  >`}</DiffusionGoldDetailJump>
                 </DiffusionGoldHeader>
                 <Petal src="/images/reward/petal.png" isMobile={isMobile} />
                 <RewardText>{t('Rewards')}</RewardText>
@@ -108,7 +108,7 @@ const Reward: FC = () => {
               <MySposWrap>
                 <MySposHeader>
                   <MySposTitle>{t('My SPOS value')}</MySposTitle>
-                  <MySposDetailJump onClick={openDetailModal}>{t('Detail >')}</MySposDetailJump>
+                  <MySposDetailJump onClick={openDetailModal}>{`${t('Detail')}  >`}</MySposDetailJump>
                 </MySposHeader>
                 <MySposOveview>
                   <MySposOveviewItem>

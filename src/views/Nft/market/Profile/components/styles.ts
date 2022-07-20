@@ -172,7 +172,7 @@ export const BackgroundWrap = styled.div`
       `;
     }
     return css`
-      height: 500px;
+      height: 400px;
       margin-top: 0px;
     `;
   }};
