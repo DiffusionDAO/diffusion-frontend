@@ -65,7 +65,7 @@ export const OverviewCard = styled.div`
     if (isMobile) {
       return css`
         flex-wrap: wrap;
-        justify-content: space-evenly;
+        justify-content: flex-start;
       `;
     }
     return css`
@@ -97,7 +97,16 @@ export const OverviewCardItemTitle = styled.div`
   font-family: HelveticaNeue;
   color: #ABB6FF;
   line-height: 16px;
-  margin-bottom: 20px;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        margin-bottom: 10px;
+      `;
+    }
+    return css`
+      margin-bottom: 20px;
+    `;
+  }};
 `
 export const OverviewCardItemContent = styled.div`
   height: 40px;
@@ -110,6 +119,15 @@ export const OverviewCardItemContent = styled.div`
   color: #FFFFFF;
   line-height: 40px;
   text-shadow: 0px 2px 34px rgba(255, 255, 255, 0.5);
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        margin-bottom: 20px;
+      `;
+    }
+    return css`
+    `;
+  }};
 `
 export const OverviewPromptWrap= styled.div`
   margin: 20px 0;

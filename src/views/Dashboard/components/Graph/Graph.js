@@ -102,7 +102,7 @@ export const ThreeGraph = () => {
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().three}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
-      HeaderSuElement={<HeaderSuElement />}
+      // HeaderSuElement={<HeaderSuElement />}
     />
   );
 };
@@ -235,7 +235,7 @@ export const EightGraph = () => {
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().eight}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
-      HeaderSuElement={<HeaderSuElement />}
+      // HeaderSuElement={<HeaderSuElement />}
     />
   );
 };

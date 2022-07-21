@@ -11,6 +11,7 @@ import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, 
 import DataCell from "../../components/ListDataCell"
 import BlindBoxModal from './components/BlindBoxModal'
 import JumpModal from './components/JumpModal'
+import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 
 const Bond: FC = () => {
@@ -21,6 +22,8 @@ const Bond: FC = () => {
   const { onPresentConnectModal } = useWalletModal(login, logout, t)
   const [blindBoxModalVisible, setBlindBoxModalVisible] = useState<boolean>(false);
   const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false);
+  const [playBindBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false);
+  const [gifUrl, setGifUrl] = useState<string>('/images/mint/purplePlay.gif');
   const [balance,setBalance] = useState(1);
   const [seniorCount, setSeniorCount] = useState<number>(0);
   const [maxSenior, setMaxSenior] = useState<number>(10);
@@ -28,7 +31,7 @@ const Bond: FC = () => {
   const [maxOrdinary, setMaxOrdinary] = useState<number>(10);
 
   // 抽取盲盒
-  const drawBlind = () => {
+  const drawBlind = (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
@@ -37,13 +40,22 @@ const Bond: FC = () => {
       setJumpModalVisible(true)
       return
     }
-    setBlindBoxModalVisible(true)
+    setPlayBindBoxModalVisible(true)
+    setGifUrl(`/images/mint/${type}.gif`)
+    setTimeout(() =>{
+      setPlayBindBoxModalVisible(false)
+      setBlindBoxModalVisible(true)
+    }, 3000)
+
   }
   const closeBlindBoxModal = () => {
     setBlindBoxModalVisible(false)
   }
   const closeJumpModal = () => {
     setJumpModalVisible(false)
+  }
+  const closePlayBindBoxModal = () => {
+    setPlayBindBoxModalVisible(false)
   }
 
   return (<BondPageWrap>
@@ -59,7 +71,7 @@ const Bond: FC = () => {
               <DalaCardList>
                 <DalaCardListTitle>{t('Premier Mystery Boxes')}</DalaCardListTitle>
                 <DataCell label={t('Price')} value='0 USDT' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
-                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal"/>
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
                   <DalaCardValueDiv>
@@ -81,7 +93,7 @@ const Bond: FC = () => {
                   <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px'}}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
                 </ActionRight>
               </ActionWrap>
-              <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={drawBlind}>{t('Play')}</DrawBlindBoxPrimaryBtn>
+              <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={() => drawBlind('senior')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
           </DrawBlindBoxItem>
         </Grid>
@@ -95,11 +107,12 @@ const Bond: FC = () => {
               <DalaCardList>
                 <DalaCardListTitle>{t('Deluxe Mystery Boxes')}</DalaCardListTitle>
                 <DataCell label={t('Price')} value='0 USDT' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
-                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal"/>
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
                   <DalaCardValueDiv>
                     <ColorFont style={{color: '#EC6EFF'}}> 98% </ColorFont>{t('Wiseman Silver')}
+                    { isMobile ? <br/> : null}
                     <ColorFont style={{color: '#EC6EFF'}}> 2% </ColorFont>{t('Wiseman NFT')}
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
@@ -116,12 +129,17 @@ const Bond: FC = () => {
                   <DrawBlindBoxPrimaryBtn className='purpleBtn' style={{ width: '80px'}}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
                 </ActionRight>
               </ActionWrap>
-              <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={drawBlind}>{t('Play')}</DrawBlindBoxPrimaryBtn>
+              <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={() => drawBlind('ordinary')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
           </DrawBlindBoxItem>
         </Grid>
       </Grid>
     </DrawBlindBoxList>
+    {/* 盲盒加载中的弹窗 */}
+    {
+      playBindBoxModalVisible ? <PlayBindBoxModal onClose={closePlayBindBoxModal} gifUrl={gifUrl} />
+      : null
+    }
 
     {/* 盲盒成功的弹窗 */}
     {
