@@ -17,7 +17,7 @@ import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperItem, SwiperItemImg,
   MySposWrap, MySposHeader, MySposTitle, MySposDetailJump, MySposOveview, MySposOveviewItem, CoinImg,
   MySposDashboardWrap, MySposDashboardList, MySposDashboardItem, MySposDashboardItemImage, MySposDashboardValue, MySposDashboardDes, 
   MySposDashboardMiddleItem, MySposDashboardMiddleItemValue, MySposDashboardMiddleItemDes, MySposRewardWrap, MySposRewardBg,
-  CardWrap, CardItem, DataCellWrap, MoneyInput, BtnWrap, StakeBtn, TakeOutBtn,
+  CardWrap, CardTitle, CardItem, DataCellWrap, MoneyInput, BtnWrap, StakeBtn, TakeOutBtn,
  } from './style'
  import DataCell from "../../components/ListDataCell"
  import DetailModal from "./components/DetailModal"
@@ -82,8 +82,8 @@ const Reward: FC = () => {
                   return <SwiperSlide>
                     <SwiperItem>
                       <SwiperItemImg src={`/images/reward/headPortrait${index + 1}.png`} />
-                      <SwiperItemName>{item.name}</SwiperItemName>
-                      <SwiperItemDes>{item.description}</SwiperItemDes>
+                      {/* <SwiperItemName>{item.name}</SwiperItemName>
+                      <SwiperItemDes>{item.description}</SwiperItemDes> */}
                     </SwiperItem>
                   </SwiperSlide>
                 })
@@ -184,6 +184,7 @@ const Reward: FC = () => {
             </Grid>
           </Grid>
           <CardWrap>
+            <CardTitle>{t('Coin Jar')}</CardTitle>
             <Grid container spacing={2}>
               <Grid item lg={4} md={4} sm={12} xs={12}>
                 <CardItem isMobile={isMobile}>

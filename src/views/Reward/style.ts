@@ -263,6 +263,8 @@ export const MySposOveview =  styled.div`
   margin: 20px 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
   border-radius: 12px;
   background: linear-gradient(90deg, #3C00FF, #EC6EFF);
   background-size: 400% 400%;
@@ -274,9 +276,6 @@ export const MySposOveviewItem =  styled.div`
 export const CoinImg = styled.img`
   width: 56px;
   height: 56px;
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
 `
 export const MySposDashboardWrap = styled.div`
   width: 100%;
@@ -437,6 +436,11 @@ export const CardWrap = styled.div`
   background: rgba(171,182,255,0.05);
   border-radius: 16px;
   margin-top: 24px;
+`
+export const CardTitle = styled.div`
+  font-size: 24px;
+  color: #ABB6FF;
+  margin-bottom: 20px;
 `
 
 export const CardItem = styled.div`

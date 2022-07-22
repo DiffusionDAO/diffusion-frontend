@@ -302,7 +302,7 @@ export const headerText = () => {
     three: `Savings reserve`,
     four: `Total circulation`,
     five: `Factors of attention`,
-    six: `Total circulation`,
+    six: `Diffusion index`,
     seven: `Call factor`,
     eight: `Single currency reserves`,
     nine: `Current inflation rate target`,
