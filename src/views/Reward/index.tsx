@@ -13,11 +13,11 @@ import noop from 'lodash/noop';
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperItem, SwiperItemImg, SwiperItemName, SwiperItemDes,
   DiffusionGoldWrap, DiffusionGoldHeader, DiffusionGoldTitle, DiffusionGoldDetailJump,
-  Petal, RewardText, RewardValueDiv, ExtractBtn, 
+  Petal, RewardWrap, RewardText, RewardValueDiv, ExtractBtn, 
   MySposWrap, MySposHeader, MySposTitle, MySposDetailJump, MySposOveview, MySposOveviewItem, CoinImg,
   MySposDashboardWrap, MySposDashboardList, MySposDashboardItem, MySposDashboardItemImage, MySposDashboardValue, MySposDashboardDes, 
   MySposDashboardMiddleItem, MySposDashboardMiddleItemValue, MySposDashboardMiddleItemDes, MySposRewardWrap, MySposRewardBg,
-  CardWrap, CardItem, DataCellWrap, MoneyInput, BtnWrap, StakeBtn, TakeOutBtn,
+  CardWrap, CardTitle, CardItem, DataCellWrap, MoneyInput, BtnWrap, StakeBtn, TakeOutBtn,
  } from './style'
  import DataCell from "../../components/ListDataCell"
  import DetailModal from "./components/DetailModal"
@@ -82,8 +82,8 @@ const Reward: FC = () => {
                   return <SwiperSlide>
                     <SwiperItem>
                       <SwiperItemImg src={`/images/reward/headPortrait${index + 1}.png`} />
-                      <SwiperItemName>{item.name}</SwiperItemName>
-                      <SwiperItemDes>{item.description}</SwiperItemDes>
+                      {/* <SwiperItemName>{item.name}</SwiperItemName>
+                      <SwiperItemDes>{item.description}</SwiperItemDes> */}
                     </SwiperItem>
                   </SwiperSlide>
                 })
@@ -95,30 +95,30 @@ const Reward: FC = () => {
             <Grid item lg={4} md={4} sm={12} xs={12}>
               <DiffusionGoldWrap isMobile={isMobile}>
                 <DiffusionGoldHeader>
-                  <DiffusionGoldTitle>{t('My diffusion gold')}</DiffusionGoldTitle>
-                  <DiffusionGoldDetailJump onClick={openDetailModal}>{t('Check details >')}</DiffusionGoldDetailJump>
+                  <DiffusionGoldTitle>{t('My social networking rewards')}</DiffusionGoldTitle>
+                  <DiffusionGoldDetailJump onClick={openDetailModal}>{`${t('Detail')}  >`}</DiffusionGoldDetailJump>
                 </DiffusionGoldHeader>
                 <Petal src="/images/reward/petal.png" isMobile={isMobile} />
-                <RewardText>{t('reward')}</RewardText>
+                <RewardText>{t('Rewards')}</RewardText>
                 <RewardValueDiv>{rewardValue}</RewardValueDiv>
-                <ExtractBtn>{t('Extract')}</ExtractBtn>
+                <ExtractBtn>{t('Withdraw')}</ExtractBtn>
               </DiffusionGoldWrap>
             </Grid>
             <Grid item lg={8} md={8} sm={12} xs={12}>
               <MySposWrap>
                 <MySposHeader>
-                  <MySposTitle>{t('My diffusion gold')}</MySposTitle>
-                  <MySposDetailJump onClick={openDetailModal}>{t('Check details >')}</MySposDetailJump>
+                  <MySposTitle>{t('My SPOS value')}</MySposTitle>
+                  <MySposDetailJump onClick={openDetailModal}>{`${t('Detail')}  >`}</MySposDetailJump>
                 </MySposHeader>
                 <MySposOveview>
                   <MySposOveviewItem>
-                    <DataCell label={t('Time to next generate revenue')} value={rewardData.nextBaseChange} valueDivStyle={{ fontSize: "16px" }} />
+                    <DataCell label={t('Next payout')} value={rewardData.nextBaseChange} valueDivStyle={{ fontSize: "16px" }} />
                   </MySposOveviewItem>
                   <MySposOveviewItem>
-                    <DataCell label={t('Next reward revenue')} value={rewardData.NextRewardRevenue} valueDivStyle={{ fontSize: "16px" }} />
+                    <DataCell label={t('Next reward')} value={rewardData.NextRewardRevenue} valueDivStyle={{ fontSize: "16px" }} />
                   </MySposOveviewItem>
                   <MySposOveviewItem>
-                    <DataCell label='The current interest rate' value={rewardData.interestRate} valueDivStyle={{ fontSize: "16px" }} />
+                    <DataCell label={t('Current interest')} value={rewardData.interestRate} valueDivStyle={{ fontSize: "16px" }} />
                   </MySposOveviewItem>
                   <CoinImg src="/images/reward/coin.png" />
                 </MySposOveview>
@@ -133,7 +133,7 @@ const Reward: FC = () => {
                             : <MySposDashboardItemImage src="/images/reward/mySposDashboardItem1.png" />
                           }
                           <MySposDashboardValue className="alignLeft" style={{ color: '#00FFEE' }}>{rewardData.apy}</MySposDashboardValue>
-                          <MySposDashboardDes className="alignLeft">{t('Are unlocked')}</MySposDashboardDes>
+                          <MySposDashboardDes className="alignLeft">{t('Unlocked SPOS value')}</MySposDashboardDes>
                         </MySposDashboardItem>
                         <MySposDashboardItem onClick={()=>setActiveItem(2)}>
                           {
@@ -142,7 +142,7 @@ const Reward: FC = () => {
                             : <MySposDashboardItemImage src="/images/reward/mySposDashboardItem2.png" />
                           }
                           <MySposDashboardValue className="alignRight" style={{ color: 'grey' }}>{rewardData.apy}</MySposDashboardValue>
-                          <MySposDashboardDes className="alignRight">{t('Are unlocked')}</MySposDashboardDes>
+                          <MySposDashboardDes className="alignRight">{t('Locked SPOS value')}</MySposDashboardDes>
                         </MySposDashboardItem>
                         <MySposDashboardItem onClick={()=>setActiveItem(3)}>
                           {
@@ -151,7 +151,7 @@ const Reward: FC = () => {
                             : <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
                           }
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>{rewardData.apy}</MySposDashboardValue>
-                          <MySposDashboardDes className="alignLeft">{t('Are unlocked')}</MySposDashboardDes>
+                          <MySposDashboardDes className="alignLeft">{t('Networking unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
                         <MySposDashboardItem onClick={()=>setActiveItem(4)}>
                           {
@@ -160,21 +160,23 @@ const Reward: FC = () => {
                             : <MySposDashboardItemImage src="/images/reward/mySposDashboardItem4.png" />
                           }
                           <MySposDashboardValue className="alignRight" style={{ color: '#E7A4FF' }}>{rewardData.apy}</MySposDashboardValue>
-                          <MySposDashboardDes className="alignRight">{t('Are unlocked')}</MySposDashboardDes>
+                          <MySposDashboardDes className="alignRight">{t('Networking headcount')}</MySposDashboardDes>
                         </MySposDashboardItem>
                       </MySposDashboardList>
                       <MySposDashboardMiddleItem>
                         <MySposDashboardMiddleItemValue>{rewardData.interestRate}</MySposDashboardMiddleItemValue>
-                        <MySposDashboardMiddleItemDes>{t('The current interest rate')}</MySposDashboardMiddleItemDes>
+                        <MySposDashboardMiddleItemDes>{t('Valid SPOS value')}</MySposDashboardMiddleItemDes>
                       </MySposDashboardMiddleItem>
                     </MySposDashboardWrap>
                   </Grid>
                   <Grid item lg={5} md={5} sm={12} xs={12}>
-                    <MySposRewardWrap>
+                    <MySposRewardWrap isMobile={isMobile}>
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
-                      <RewardValueDiv>{rewardValue}</RewardValueDiv>
-                      <RewardText>{t('reward')}</RewardText>
-                      <ExtractBtn>{t('Extract')}</ExtractBtn>
+                      <RewardWrap isMobile={isMobile}>
+                        <RewardText>{t('Rewards')}</RewardText>
+                        <RewardValueDiv>{rewardValue}</RewardValueDiv>
+                      </RewardWrap>
+                      <ExtractBtn>{t('Withdraw')}</ExtractBtn>
                     </MySposRewardWrap>
                     </Grid>
                   </Grid>
@@ -182,13 +184,14 @@ const Reward: FC = () => {
             </Grid>
           </Grid>
           <CardWrap>
+            <CardTitle>{t('Coin Jar')}</CardTitle>
             <Grid container spacing={2}>
               <Grid item lg={4} md={4} sm={12} xs={12}>
                 <CardItem isMobile={isMobile}>
-                  <DataCell label='Next base change' value={rewardData.nextBaseChange} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
-                  <DataCell label='The next reward yield' value={rewardData.nextRewardYield} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
-                  <DataCell label='ROI (Return on Investment) (5 days)' value={rewardData.roi} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
-                  <DataCell label='Next bonus amount' value={rewardData.nextBonusAmount} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
+                  <DataCell label={t('Next payout timing')} value={rewardData.nextBaseChange} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
+                  <DataCell label={t('Next payout rate')} value={rewardData.nextRewardYield} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
+                  <DataCell label={t('ROI (5 days)')} value={rewardData.roi} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
+                  <DataCell label={t('Next reward value')} value={rewardData.nextBonusAmount} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
 
                   {/* <DataCell label='apy' value={rewardData.apy} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
                   <DataCell label='current index' value={rewardData.curIndex} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
@@ -198,16 +201,16 @@ const Reward: FC = () => {
               <Grid item lg={4} md={4} sm={12} xs={12}>
                 <CardItem isMobile={isMobile} className='hasBorder'>
                   <DataCellWrap>
-                    <DataCell label='Mortgaged balance' value={rewardData.mortgagedBalance} position="horizontal" />
+                    <DataCell label={t('Available limit')} value={rewardData.mortgagedBalance} position="horizontal" />
                   </DataCellWrap>
-                  <DataCell label='Mortgaged balance' value={rewardData.mortgagedBalance} position="horizontal" />
+                  <DataCell label={t('Staked limit')} value={rewardData.mortgagedBalance} position="horizontal" />
                 </CardItem>
               </Grid>
               <Grid item lg={4} md={4} sm={12} xs={12}>
                 <CardItem isMobile={isMobile} className='hasBorder'>
                   <MoneyInput prefix="￥" suffix="ALL" value={money} />
                   <BtnWrap>
-                    <TakeOutBtn style={{marginRight: '10px'}}>{t('Take out')}</TakeOutBtn>
+                    <TakeOutBtn style={{marginRight: '10px'}}>{t('Cancel Staking')}</TakeOutBtn>
                     <StakeBtn>{t('Stake')}</StakeBtn>
                   </BtnWrap>
                 </CardItem>
@@ -225,8 +228,8 @@ const Reward: FC = () => {
       {
         !account && 
         <NoPower 
-          title={t('You cannot view this page at present')}
-          description={t('Unless you connect to your wallet first')}
+          title={t('You cannot view this page right now')}
+          description={t('Please connect your wallet')}
           btnText={t('Connect')} 
           action={onPresentConnectModal}
         />
@@ -235,9 +238,9 @@ const Reward: FC = () => {
       {
         account && !access &&
         <NoPower 
-          title={t('You cannot view this page at present')}
-          description={t('Unless you go and buy a $1,000 bond first')}
-          btnText={t('To buy bonds')} 
+          title={t('You cannot view this page right now')}
+          description={t('Please check after bonds purchase')}
+          btnText={t('Buy Bonds')} 
           action={() => router.push(`/bond`)}
         />
       }

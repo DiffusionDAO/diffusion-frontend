@@ -17,15 +17,13 @@ export const CellWrap = styled.div`
 `
 
 export const LabelDiv = styled.div`
-  height: 30px;
   font-size: 12px;
   font-family: HelveticaNeue-Medium, HelveticaNeue;
   font-weight: 500;
   color: #ABB6FF;
-  line-height: 30px;
+  line-height: 40px;
 `
 export const ValueDiv = styled.div`
-  height: 40px;
   font-size: 22px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;

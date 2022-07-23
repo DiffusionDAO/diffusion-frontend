@@ -85,6 +85,7 @@ export const AccountNftWrap = styled.div`
 `
 export const NftSculptureWrap = styled.div`
   top: -50px;
+  right: 0px;
   background: url('/images/nfts/nft-sculpture-wrap.png');
   background-repeat: no-repeat;
   background-size: contain;
@@ -92,8 +93,8 @@ export const NftSculptureWrap = styled.div`
   ${({ isMobile }: { isMobile: boolean }) => {
     if (isMobile) {
       return css`
-        height: 400px;
-        width: 400px;
+        height: 360px;
+        width: 360px;
         position: absolute;
         right: -35px;
       `;
@@ -102,24 +103,24 @@ export const NftSculptureWrap = styled.div`
       height: 500px;
       width: 500px;
       position: absolute;
-      right: 0px;
     `;
   }};
 `
 export const NftSculptureGif = styled.img`
   position: absolute;
-  left: -0px;
-  bottom: -60px;
+  left: 0px;
   ${({ isMobile }: { isMobile: boolean }) => {
     if (isMobile) {
       return css`
-        height: 400px;
-        width: 400px;
+        height: 300px;
+        width: 300px;
+        bottom: -40px;
       `;
     }
     return css`
       height: 500px;
       width: 500px;
+      bottom: -60px;
     `;
   }};
 `
@@ -172,7 +173,7 @@ export const BackgroundWrap = styled.div`
       `;
     }
     return css`
-      height: 500px;
+      height: 400px;
       margin-top: 0px;
     `;
   }};

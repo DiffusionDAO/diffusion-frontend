@@ -1,4 +1,5 @@
 import { Box, LinearProgress, Typography } from "@material-ui/core";
+import { useTranslation } from 'contexts/Localization'
 import { makeStyles , useTheme } from "@material-ui/core/styles";
 import { formatCurrency, trim } from "../../../../helpers/dashboard";
 import DiffusionChart from "../../../../components/Recharts/DiffusionChart";
@@ -6,6 +7,7 @@ import DiffusionChart from "../../../../components/Recharts/DiffusionChart";
 import { bulletpoints, dataKey, headerText, itemType, tooltipInfoMessages, tooltipItems } from "../../dashboardData";
 import { data } from "../../MockData";
 
+// eslint-disable-next-line react/jsx-filename-extension
 export const Graph = ({ children }) => <>{children}</>;
 
 const { dashboardData } = data;
@@ -20,6 +22,7 @@ const menuItemData = [
 
 export const OneGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="bar"
@@ -28,7 +31,7 @@ export const OneGraph = () => {
       itemType={itemType.dollar}
       itemNames={tooltipItems.one}
       dataKey={dataKey().one}
-      headerText={headerText().one}
+      headerText={t(headerText().one)}
       stroke={["#0031FF"]}
       bulletpointColors={bulletpoints.one}
       infoTooltipMessage={tooltipInfoMessages().one}
@@ -39,6 +42,7 @@ export const OneGraph = () => {
 };
 export const TwoGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="area"
@@ -46,7 +50,7 @@ export const TwoGraph = () => {
       dataKey={dataKey().two}
       stopColor={[["#3D72FD", "#3D72FD"]]}
       stroke={["#3D72FD"]}
-      headerText={headerText().two}
+      headerText={t(headerText().two)}
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].two)}`}
       bulletpointColors={bulletpoints.two}
       itemNames={tooltipItems.two}
@@ -59,6 +63,7 @@ export const TwoGraph = () => {
 
 export const ThreeGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   const HeaderSuElement = () => {
     return (
       <Box display="flex">
@@ -69,7 +74,7 @@ export const ThreeGraph = () => {
               className="card-sub-title-fixation-text"
               style={{ fontWeight: 400, color: "rgb(171, 182, 255)", fontSize: "14px" }}
             >
-              {item}
+              {t(item)}
             </Typography>
             <Typography variant="h5" style={{ fontWeight: "bold", marginRight: 5, color: "#fff", fontSize: "20px" }}>
               {`${dashboardData && formatCurrency(dashboardData[0].one)}`}
@@ -90,19 +95,20 @@ export const ThreeGraph = () => {
         ["#F200FF", "#F200FF"],
       ]}
       stroke={["#3D72FD", "#F200FF"]}
-      headerText={headerText().three}
+      headerText={t(headerText().three)}
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].three1)}`}
       bulletpointColors={bulletpoints.three}
       itemNames={tooltipItems.three}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().three}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
-      HeaderSuElement={<HeaderSuElement />}
+      // HeaderSuElement={<HeaderSuElement />}
     />
   );
 };
 export const FourGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="bar"
@@ -111,7 +117,7 @@ export const FourGraph = () => {
       itemType={itemType.dollar}
       itemNames={tooltipItems.four}
       dataKey={dataKey().four}
-      headerText={headerText().four}
+      headerText={t(headerText().four)}
       stroke={["#D257FF"]}
       bulletpointColors={bulletpoints.four}
       infoTooltipMessage={tooltipInfoMessages().four}
@@ -123,13 +129,14 @@ export const FourGraph = () => {
 
 export const FiveGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="line"
       data={dashboardData}
       dataKey={dataKey().five}
       stroke={["#26E6C5"]}
-      headerText={headerText().five}
+      headerText={t(headerText().five)}
       headerSubText={`${dashboardData && trim(dashboardData[0].five, 1)} Days`}
       dataFormat="days"
       bulletpointColors={bulletpoints.five}
@@ -144,13 +151,14 @@ export const FiveGraph = () => {
 
 export const SixGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="line"
       data={dashboardData}
       dataKey={dataKey().six}
       stroke={["#EC6EFF"]}
-      headerText={headerText().six}
+      headerText={t(headerText().six)}
       headerSubText={`${dashboardData && trim(dashboardData[0].six, 1)} Days`}
       dataFormat="days"
       bulletpointColors={bulletpoints.six}
@@ -165,13 +173,14 @@ export const SixGraph = () => {
 
 export const SevenGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="line"
       data={dashboardData}
       dataKey={dataKey().seven}
       stroke={["#DF741A"]}
-      headerText={headerText().seven}
+      headerText={t(headerText().seven)}
       headerSubText={`${dashboardData && trim(dashboardData[0].seven, 1)}`}
       dataFormat="days"
       bulletpointColors={bulletpoints.seven}
@@ -186,6 +195,7 @@ export const SevenGraph = () => {
 
 export const EightGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   const HeaderSuElement = () => {
     return (
       <Box display="flex">
@@ -218,20 +228,21 @@ export const EightGraph = () => {
       ]}
       stroke={["#3D72FD", "#F200FF"]}
       lineType="linear"
-      headerText={headerText().eight}
+      headerText={t(headerText().eight)}
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].eight1)}`}
       bulletpointColors={bulletpoints.eight}
       itemNames={tooltipItems.eight}
       itemType={itemType.dollar}
       infoTooltipMessage={tooltipInfoMessages().eight}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
-      HeaderSuElement={<HeaderSuElement />}
+      // HeaderSuElement={<HeaderSuElement />}
     />
   );
 };
 // 第9个指标图
 export const NineGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   const useStyles = makeStyles({
     root: {
       height: 10,
@@ -269,7 +280,7 @@ export const NineGraph = () => {
       itemType={itemType.dollar}
       itemNames={tooltipItems.nine}
       dataKey={dataKey().nine}
-      headerText={headerText().nine}
+      headerText={t(headerText().nine)}
       stroke={["#00A1FF"]}
       bulletpointColors={bulletpoints.nine}
       infoTooltipMessage={tooltipInfoMessages().nine}
@@ -283,6 +294,7 @@ export const NineGraph = () => {
 // 第10个指标
 export const TenGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="line"
@@ -291,7 +303,7 @@ export const TenGraph = () => {
       dataKey={dataKey().ten}
       stroke={["#DF741A"]}
       lineType="linear"
-      headerText={headerText().ten}
+      headerText={t(headerText().ten)}
       headerSubText={`${dashboardData && trim(dashboardData[0].ten, 1)} Days`}
       dataFormat="days"
       bulletpointColors={bulletpoints.ten}
@@ -306,6 +318,7 @@ export const TenGraph = () => {
 // 第11个指标
 export const ElevenGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="area"
@@ -313,7 +326,7 @@ export const ElevenGraph = () => {
       dataKey={dataKey().eleven}
       stopColor={[["#FB0158", "#FB0158"]]}
       stroke={["#FB0158"]}
-      headerText={headerText().eleven}
+      headerText={t(headerText().eleven)}
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].eleven)}`}
       bulletpointColors={bulletpoints.eleven}
       itemNames={tooltipItems.eleven}
@@ -327,6 +340,7 @@ export const ElevenGraph = () => {
 // 第12个指标
 export const TwelveGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="area"
@@ -334,7 +348,7 @@ export const TwelveGraph = () => {
       dataKey={dataKey().twelve}
       stopColor={[["#DF741A", "#DF741A"]]}
       stroke={["#DF741A"]}
-      headerText={headerText().twelve}
+      headerText={t(headerText().twelve)}
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].twelve)}`}
       bulletpointColors={bulletpoints.twelve}
       itemNames={tooltipItems.twelve}
@@ -348,6 +362,7 @@ export const TwelveGraph = () => {
 // 第13个指标
 export const ThirteenGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="area"
@@ -355,7 +370,7 @@ export const ThirteenGraph = () => {
       dataKey={dataKey().thirteen}
       stopColor={[["#1C6CFF", "#1C6CFF"]]}
       stroke={["#1C6CFF"]}
-      headerText={headerText().thirteen}
+      headerText={t(headerText().thirteen)}
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].thirteen)}`}
       bulletpointColors={bulletpoints.thirteen}
       itemNames={tooltipItems.thirteen}
@@ -368,6 +383,7 @@ export const ThirteenGraph = () => {
 
 export const MarketValueGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="area"
@@ -378,7 +394,7 @@ export const MarketValueGraph = () => {
         ["#bdd2fd", "#bdd2fd"],
       ]}
       stroke={["#c2efdb", "#bdd2fd"]}
-      headerText={headerText().coin}
+      headerText={t(headerText().coin)}
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].treasuryDaiMarketValue)}`}
       bulletpointColors={bulletpoints.coin}
       itemNames={tooltipItems.coin}
@@ -391,13 +407,14 @@ export const MarketValueGraph = () => {
 
 export const AreaGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="area"
       data={dashboardData}
       dataKey={dataKey().coin}
       stopColor={[["#c2efdb", "#c2efdb"]]}
-      headerText={headerText().coin}
+      headerText={t(headerText().coin)}
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].treasuryDaiMarketValue)}`}
       bulletpointColors={bulletpoints.coin}
       itemNames={tooltipItems.coin}
@@ -410,13 +427,14 @@ export const AreaGraph = () => {
 
 export const RunwayAvailableGraph = () => {
   const theme = useTheme();
+  const { t } = useTranslation()
   return (
     <DiffusionChart
       type="line"
       data={dashboardData}
       dataKey={dataKey().runway}
       stroke={["#5d91f9"]}
-      headerText={headerText().runway}
+      headerText={t(headerText().runway)}
       headerSubText={`${data && trim(data[0].runwayCurrent, 1)} Days`}
       dataFormat="days"
       bulletpointColors={bulletpoints.runway}

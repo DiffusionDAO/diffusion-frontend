@@ -1,6 +1,8 @@
 import { Grid, Typography, CircularProgress } from "@material-ui/core";
+import { useTranslation } from 'contexts/Localization'
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
+import useSWR from 'swr';
 import { Paper } from "./style";
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { DataCell } from "./components/DataCell/DataCell";
@@ -20,7 +22,6 @@ import {
   TwoGraph,
 } from "./components/Graph/Graph";
 import { data } from "./MockData";
-import useSWR from 'swr'
 
 const useStyles = makeStyles(theme => ({
   hasRLBorder: {
@@ -34,6 +35,8 @@ const useStyles = makeStyles(theme => ({
 const { one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen } = data.OverviewData
 
 const Dashboard = () => {
+  const { t } = useTranslation()
+
   // xs, extra-small: 0px or larger
   // sm, small: 600px or larger
   // md, medium: 960px or larger
@@ -46,30 +49,31 @@ const Dashboard = () => {
     setActiveTab(tab);
   };
   const { data } = useSWR("dashboard", async () => {
-    var response = await fetch("https://middle.diffusiondao.org/api/v0/dashboard")
-    var data = await response.json()
+    const response = await fetch("https://middle.diffusiondao.org/api/v0/dashboard")
+    const data = await response.json()
     return data
   })
   const conentractions = Object.keys(data?.concentration?? {}).map(key => data?.concentration[key])
+  // eslint-disable-next-line no-return-assign, no-param-reassign
   const avgConentraction = conentractions.reduce((acc, cur) => acc += cur, 0) / conentractions.length 
 
   return (
     <div className="dashboard-view">
       <Typography variant="h4" style={{ fontWeight: 700, overflow: "hidden", color: "#fff" }}>
-        Dashboard
+        {t('Dashboard')}
       </Typography>
       {isMobile ? (
         <div className="dashboard-tab">
           <div aria-hidden="true" className={`${activeTab === "Overview" && "active"}`} onClick={() => clickTab("Overview")}>
-            Overview
+            {t('Overview')}
           </div>
           <div aria-hidden="true" className={`${activeTab === "Chart" && "active"}`} onClick={() => clickTab("Chart")}>
-            Chart
+            {t('Chart')}
           </div>
         </div>
       ) : (
         <div style={{ fontWeight: 500, fontSize: "15px", overflow: "hidden", lineHeight: "40px", color: "#fff" }}>
-          Overview
+          {t('Overview')}
           <span style={{ color: "grey", fontSize: "12px", fontWeight: 400, marginLeft: "16px" }}>
             2020/09/09 22:22:22
           </span>
@@ -85,20 +89,20 @@ const Dashboard = () => {
                     <Grid container spacing={0}>
                       <Grid item lg={4} md={4} sm={12} xs={12}>
                         <div className="cell-sub-item">
-                          <DataCell title="TVL" data={`$${one}M`} style={{ fontSize: "32px" }} />
+                          <DataCell title={t('TVL')} data={`$${one}M`} style={{ fontSize: "32px" }} />
                           <DataCell title="" data="" imgUrl="/images/dashboard/tvl.svg" />
                         </div>
                       </Grid>
                       <Grid item lg={4} md={4} sm={12} xs={12}>
                         <div className={`${classes.hasRLBorder} cell-sub-item`}>
-                          <DataCell title="Total circulation" data={`$${two}M`} />
-                          <DataCell title="Single currency internal savings fund" data={`$${three}M`} />
+                          <DataCell title={t('Total circulation')} data={`$${two}M`} />
+                          <DataCell title={t('Internal Reserves')} data={`$${three}M`} />
                         </div>
                       </Grid>
                       <Grid item lg={4} md={4} sm={12} xs={12}>
                         <div className="cell-sub-item">
-                          <DataCell title="Reserve fund" data={`$${four}M`} imgUrl="/images/dashboard/rf.svg" />
-                          <DataCell title="Reserve fund" data={`$${five}M`} imgUrl="/images/dashboard/rm.svg" />
+                          <DataCell title={t('Current circulation volume')} data={`$${four}M`} imgUrl="/images/dashboard/rf.svg" />
+                          <DataCell title={t('Reserve Fund')} data={`$${five}M`} imgUrl="/images/dashboard/rm.svg" />
                         </div>
                       </Grid>
                     </Grid>
@@ -123,7 +127,7 @@ const Dashboard = () => {
                         />
                         <div className="ctir-data">{six}</div>
                       </div>
-                      <div className="ctir-title">Current target inflation rate</div>
+                      <div className="ctir-title">{t('Current inflation rate target')}</div>
                     </div>
                   </div>
                 </Grid>
@@ -136,7 +140,7 @@ const Dashboard = () => {
                           style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.05)" }}
                         >
                           <DataCell
-                            title="Household savings rate"
+                            title={t('Household savings rate')}
                             data={`${seven}%`}
                             progressColor="#f200ff"
                           />
@@ -148,7 +152,7 @@ const Dashboard = () => {
                           style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.05)" }}
                         >
                           <DataCell
-                            title="The fit of the DSGE"
+                            title={t('DSGE suitability')}
                             data={`${eight}%`}
                             progressColor="#01ffed"
                           />
@@ -157,7 +161,7 @@ const Dashboard = () => {
                       <Grid item lg={6} md={6} sm={12} xs={12}>
                         <div className="cell-sub-item">
                           <DataCell
-                            title="The rate of inflation"
+                            title={t('Inflation')}
                             data={`${nine}%`}
                             progressColor="#f5d700"
                           />
@@ -166,7 +170,7 @@ const Dashboard = () => {
                       <Grid item lg={6} md={6} sm={12} xs={12}>
                         <div className="cell-sub-item">
                           <DataCell
-                            title="Debt ratio"
+                            title={t('Debt ratio')}
                             data={`${ten}%`}
                             progressColor="#0131ff"
                           />
@@ -191,11 +195,11 @@ const Dashboard = () => {
                       <div className="disvg">
                         <img src="/images/dashboard/di.png" style={{ width: "56px", height: "52px" }} alt="" />
                       </div>
-                      <div className="di-font">Diffusion index</div>
+                      <div className="di-font">{t('Diffusion index')}</div>
                       {/* {/* <h3 className="di-content">{eleven}</h3> */}
-                      <DataCell title="Factors of attention" data={conentractions.length ? avgConentraction?.toString(): "0"} titleStyle={{ color: "#ABB6FF" }} />
+                      <DataCell title={t('Factors of attention')} data={conentractions.length ? avgConentraction?.toString(): "0"} titleStyle={{ color: "#ABB6FF" }} />
                       <DataCell
-                        title="Call fator"
+                        title="Call factor"
                         data={thirteen}
                         imgUrl="/images/dashboard/cf.png"
                         titleStyle={{ color: "#ABB6FF" }}
@@ -207,7 +211,7 @@ const Dashboard = () => {
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                   <div className="cell-box cell-item5">
                     <div className="cell-sub-item">
-                      <DataCell title="Reserve fund" data={`$${fourteen}M`} imgUrl="/images/dashboard/rz.svg" />
+                      <DataCell title={t('Reserve Fund')} data={`$${fourteen}M`} imgUrl="/images/dashboard/rz.svg" />
                     </div>
                   </div>
                 </Grid>

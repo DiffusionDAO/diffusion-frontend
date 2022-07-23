@@ -26,6 +26,7 @@ export const DrawBlindBoxImgWrap = styled.div`
   height: 0;
   padding-bottom: 64%;
   border-radius: 16px;
+  position: relative;
   &.item1 {
     border-bottom: 2px solid #FF7056;
     background: url('images/mint/drawBlindBoxBg1.png');
@@ -37,9 +38,23 @@ export const DrawBlindBoxImgWrap = styled.div`
     background: url('images/mint/drawBlindBoxBg2.png');
     background-repeat: no-repeat;
     background-size: cover;
-
   }
 `
+export const BoxLeftAskImg = styled.img`
+  width: 20%;
+  position: absolute;
+  top: 0px;
+  left: 20%;
+  animation: ball 3s ease-in-out infinite;
+`
+export const BoxRightAskImg = styled.img`
+  width: 30%;
+  position: absolute;
+  bottom: 0px;
+  left: 40%;
+  animation: ball 3s ease-in-out infinite;
+`
+
 
 export const DrawBlindBoxImg = styled.img`
   width: 100%;
@@ -69,13 +84,15 @@ export const DalaCardCellWrap = styled.div`
 `
 
 export const DalaCardLabelDiv = styled.div`
+  text-align: left;
   font-size: 12px;
   font-family: HelveticaNeue-Medium, HelveticaNeue;
   font-weight: 500;
   color: #ABB6FF;
-  line-height: 30px;
+  line-height: 40px;
 `
 export const DalaCardValueDiv = styled.div`
+  text-align: right;
   font-size: 14px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
