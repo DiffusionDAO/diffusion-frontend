@@ -14,7 +14,8 @@ export const StyledMenuItemContainer = styled.div<StyledMenuItemProps>`
         bottom: 0;
         height: 4px;
         width: 100%;
-        background-color: ${theme.colors.primary};
+        background-image: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+       // background-color: ${theme.colors.primary};
         border-radius: 2px 2px 0 0;
       }
     `};

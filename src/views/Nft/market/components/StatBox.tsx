@@ -22,6 +22,7 @@ export const StatBoxItem: React.FC<StatBoxItemProps> = ({ title, stat, ...props 
 )
 
 const StatBox = styled(Flex)`
+
   align-items: center;
   // background: ${({ theme }) => theme.colors.invertedContrast};
   // border: 1px solid ${({ theme }) => theme.colors.cardBorder};

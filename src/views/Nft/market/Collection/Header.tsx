@@ -75,7 +75,9 @@ const Header: React.FC<HeaderProps> = ({ collection }) => {
         </MarketWrap>
       </MarketPageHeader>
       <Container>
-        <BaseSubMenu items={itemsConfig} activeItem={router.asPath} mt="24px" mb="8px" />
+        <BaseSubMenu items={itemsConfig} activeItem={router.asPath} mt="24px" mb="8px" 
+        style={{justifyContent:'left'}}
+        />
       </Container>
     </>
   )

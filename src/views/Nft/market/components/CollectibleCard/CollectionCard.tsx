@@ -13,7 +13,7 @@ interface HotCollectionCardProps {
 }
 
 export const CollectionAvatar = styled(ProfileAvatar)`
-  left: 50%;
+  left: 42px;
   transform: translateX(-48px);
   position: absolute;
   top: -48px;
@@ -22,11 +22,14 @@ export const CollectionAvatar = styled(ProfileAvatar)`
 
 const StyledHotCollectionCard = styled(Card)<{ disabled?: boolean }>`
   border-radius: 8px;
-  border-bottom-left-radius: 56px;
+  border-bottom-left-radius: 80px;
+  background: rgba(231, 227, 235,0.08);
   transition: opacity 200ms;
-
+  overflow: visible;
+  //border:8px solid;
+  padding: 1px 1px 3px;
   & > div {
-    border-radius: 8px;
+    border-radius: 4px;
     border-bottom-left-radius: 56px;
   }
 
@@ -43,16 +46,20 @@ const StyledHotCollectionCard = styled(Card)<{ disabled?: boolean }>`
   }
 `
 const FlexWrap = styled.div`
-border:1px solid rgba(70, 96, 255, 0.4000);
-border-top:none;
-border-bottom-left-radius:16px;
-border-bottom-right-radius:16px;
-overflow:visible !important;
+//border:1px solid rgba(70, 96, 255, 0.4000);
+//border-radius:16px;
+//border-bottom-left-radius:60px;
+border-bottom-right-radius:8px;
+//background:rgba(171, 182, 255, 0.200);
+padding:8px;
+
 `
 
 const StyledImage = styled(Image)`
-border-top-left-radius: 16px;
-border-top-right-radius: 16px;
+// border-top-left-radius: 8x;
+// border-top-right-radius: 8px;
+   border-radius:4px;
+   padding:8px;
 `
 
 const CollectionCard: React.FC<HotCollectionCardProps> = ({
@@ -64,31 +71,48 @@ const CollectionCard: React.FC<HotCollectionCardProps> = ({
   children,
 }) => {
   const renderBody = () => (
+    // <CardBody>
+    //   <StyledImage src={bgSrc} height={168} width={556} />
+    //   <FlexWrap>
+    //   <Flex
+    //     position="relative"
+    //     height="65px"
+    //     justifyContent="center"
+    //     alignItems="center"
+    //     flexDirection="column"
+    //   >
+    //     <CollectionAvatar src={avatarSrc} width={96} height={96} />
+       
+    //   </Flex>
+    //   <Flex 
+    //     flexDirection="column"
+    //     height="65px"
+    //     justifyContent="center"
+    //     alignItems="center">
+    //      <Heading  style={{color:'#ffffff'}} color={disabled ? 'textDisabled' : 'body'} as="h3" mb={children ? '8px' : '0'}>
+    //       {collectionName}
+    //     </Heading>
+
+    //     {children}
+
+    //   </Flex>
+    //   </FlexWrap>
+    // </CardBody>
     <CardBody p="8px">
-      <StyledImage src={bgSrc} height={164} width={556} />
+      <StyledImage src={bgSrc} height={180} width={556} />
       <FlexWrap>
       <Flex
         position="relative"
-        height="65px"
+        height="54px"
         justifyContent="center"
-        alignItems="center"
-        py="8px"
+        alignItems="flex-end"
         flexDirection="column"
       >
         <CollectionAvatar src={avatarSrc} width={96} height={96} />
-       
-      </Flex>
-      <Flex 
-        flexDirection="column"
-        height="65px"
-        justifyContent="center"
-        alignItems="center">
-         <Heading  style={{color:'#ffffff'}} color={disabled ? 'textDisabled' : 'body'} as="h3" mb={children ? '8px' : '0'}>
+        <Heading style={{color:'#ffffff'}} color={disabled ? 'textDisabled' : 'body'} as="h3" mb={children ? '6px' : '0'}>
           {collectionName}
         </Heading>
-
         {children}
-
       </Flex>
       </FlexWrap>
     </CardBody>

@@ -54,13 +54,11 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   const wbnbContractReader = useERC20(wbnbAddress, false)
   const wbnbContractApprover = useERC20(wbnbAddress)
   const nftMarketContract = useNftMarketContract()
-
   const { toastSuccess } = useToast()
   
   const nftPriceWei = parseUnits(nftToBuy?.marketData?.currentAskPrice, 'ether')
- 
+  console.log('--->>',nftPriceWei)
   const nftPrice = parseFloat(nftToBuy?.marketData?.currentAskPrice)
-  
 
   // BNB - returns ethers.BigNumber
   const { balance: bnbBalance, fetchStatus: bnbFetchStatus } = useGetBnbBalance()
@@ -76,7 +74,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
     paymentCurrency === PaymentCurrency.BNB
       ? bnbBalance.lt(nftPriceWei)
       : wbnbBalance.lt(ethersToBigNumber(nftPriceWei))
-
+  console.log('bnb------->',bnbBalance,nftPriceWei)
   useEffect(() => {
     if (bnbBalance.lt(nftPriceWei) && wbnbBalance.gte(ethersToBigNumber(nftPriceWei)) && !isPaymentCurrentInitialized) {
       setPaymentCurrency(PaymentCurrency.WBNB)

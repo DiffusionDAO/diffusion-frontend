@@ -66,7 +66,7 @@ const ApproveAndConfirmStage: React.FC<ApproveAndConfirmStageProps> = ({
                 2
               </Text>
             </StepIndicator>
-            <Text fontSize="20px" bold color={isApproved ? 'secondary' : 'textDisabled'}>
+            <Text fontSize="20px"  bold color={isApproved ? 'secondary' : 'textDisabled'}>
               {t('Confirm')}
             </Text>
           </Flex>

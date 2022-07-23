@@ -8,7 +8,20 @@ import { FetchStatus } from 'config/constants/types'
 import { Divider, RoundedImage } from '../shared/styles'
 import { BorderedBox, BnbAmountCell } from './styles'
 import { PaymentCurrency } from './types'
-
+import styled from 'styled-components'
+const BtnWrap = styled(Button)`
+width: 100%;
+font-size: 14px;
+height: 40px;
+line-height: 40px;
+color: #fff;
+text-align: center;
+border-radius: 7px;
+cursor: pointer;
+background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+background-size: 400% 400%;
+animation: gradient 5s ease infinite;
+`
 interface ReviewStageProps {
   nftToBuy: NftToken
   paymentCurrency: PaymentCurrency
@@ -43,10 +56,10 @@ const ReviewStage: React.FC<ReviewStageProps> = ({
             </Text>
             <Text bold>{nftToBuy.name}</Text>
             <Flex alignItems="center">
-              <Text fontSize="12px" color="textSubtle" p="0px" height="16px" mr="4px">
+              <Text fontSize="12px"  color="textSubtle" p="0px" height="16px" mr="4px">
                 {t('Token ID:')}
               </Text>
-              <Button
+              <Button   style={{color:'rgba(210, 87, 255, 1)'}}
                 as={Link}
                 scale="xs"
                 px="0px"
@@ -71,7 +84,7 @@ const ReviewStage: React.FC<ReviewStageProps> = ({
             variant="subtle"
           >
             <ButtonMenuItem>DFS</ButtonMenuItem>
-            <ButtonMenuItem>WBNB</ButtonMenuItem>
+            <ButtonMenuItem>BNB</ButtonMenuItem>
           </ButtonMenu>
           <Text small color="textSubtle">
             {t('Total payment')}
@@ -103,9 +116,9 @@ const ReviewStage: React.FC<ReviewStageProps> = ({
         )}
         <Flex alignItems="center">
           <Text my="16px" mr="4px">
-            {t('Convert between BNB and WBNB for free')}:
+            {t('Convert between DFS and BNB for free')}:
           </Text>
-          <Button
+          <Button   style={{color:'rgba(210, 87, 255, 1)'}}
             as={Link}
             p="0px"
             height="16px"
@@ -119,7 +132,7 @@ const ReviewStage: React.FC<ReviewStageProps> = ({
       </Flex>
       <Divider />
       <Flex px="24px" pb="24px" flexDirection="column">
-        <Button
+        <BtnWrap
           onClick={continueToNextStage}
 
           //notEnoughBnbForPurchase
@@ -127,10 +140,10 @@ const ReviewStage: React.FC<ReviewStageProps> = ({
           mb="8px"
         >
           {t('Checkout')}
-        </Button>
-        <Button as={Link} external style={{ width: '100%' }} href="/swap?outputCurrency=BNB" variant="secondary">
+        </BtnWrap>
+        {/* <Button  as={Link} external style={{ width: '100%', color:'rgba(210,87,255,1)'}} href="/swap?outputCurrency=BNB" variant="secondary">
           {t('Get %symbol1% or %symbol2%', { symbol1: 'BNB', symbol2: 'WBNB' })}
-        </Button>
+        </Button> */}
       </Flex>
     </>
   )

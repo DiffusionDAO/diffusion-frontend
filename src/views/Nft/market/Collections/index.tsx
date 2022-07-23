@@ -323,7 +323,7 @@ const Collectible = () => {
               >
                 {sortedCollections[0].data.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => {
                   return (
-                    <CollectionCard
+                    <CollectionCard  
                       key={collection.address}
                       bgSrc={collection.banner.small}
                       avatarSrc={collection.avatar}

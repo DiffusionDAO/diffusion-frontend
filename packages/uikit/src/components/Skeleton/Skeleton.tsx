@@ -64,14 +64,14 @@ const Pulse = styled(Root)`
   animation: ${pulse} 2s infinite ease-out;
   transform: translate3d(0, 0, 0);
 `;
-
+//243,243,243,0.5
 const Waves = styled(Root)`
   overflow: hidden;
   transform: translate3d(0, 0, 0);
   &:before {
     content: "";
     position: absolute;
-    background-image: linear-gradient(90deg, transparent, rgba(243, 243, 243, 0.5), transparent);
+    background-image: linear-gradient(90deg, transparent, rgba(0, 255, 238, 0.23), transparent);
     top: 0;
     left: -150px;
     height: 100%;

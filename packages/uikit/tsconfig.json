@@ -1,4 +1,4 @@
-{
+{  
   "compilerOptions": {
     "target": "ES5",
     "lib": ["dom", "DOM.Iterable", "ESNext"],

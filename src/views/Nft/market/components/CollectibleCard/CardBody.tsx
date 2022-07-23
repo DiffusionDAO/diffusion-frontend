@@ -9,15 +9,18 @@ import { useGetLowestPriceFromNft } from '../../hooks/useGetLowestPrice'
 import { pancakeBunniesAddress } from '../../constants'
 import NFTMedia from '../NFTMedia'
 
+
 const CollectibleCardBody: React.FC<CollectibleCardProps> = ({ nft, nftLocation, currentAskPrice, isUserNft }) => {
   const { t } = useTranslation()
+ 
   const { name } = nft
   const bnbBusdPrice = useBNBBusdPrice()
   const isPancakeBunny = nft.collectionAddress?.toLowerCase() === pancakeBunniesAddress.toLowerCase()
   const { isFetching, lowestPrice } = useGetLowestPriceFromNft(nft)
   var thumbnail = nft?.image?.thumbnail
-
+ 
   return (
+
     <CardBody p="8px">
       <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />
       <Flex alignItems="center" justifyContent="space-between">
@@ -28,10 +31,15 @@ const CollectibleCardBody: React.FC<CollectibleCardProps> = ({ nft, nftLocation,
         )}
         {nftLocation && <LocationTag nftLocation={nftLocation} />}
       </Flex>
-      <Text as="h4" fontWeight="600" mb="8px">
+      <div style={{display:'flex',justifyContent:'space-between',height:'8px',alignItems:'center'}}>
+      <Text as="h4" fontWeight="600" >
         {name}
       </Text>
-      <Box borderTop="1px solid" borderTopColor="cardBorder" pt="8px">
+      {nft.attributes[0].value && <img src={"/images/grade/"+nft.attributes[0].value+'.png'}/>}
+      
+      </div>
+      
+      <Box borderTop="1px solid rgba(171, 182, 255, 0.0200)" borderTopColor="cardBorder" pt="8px" mt="10px">
         {currentAskPrice && (
           <MetaRow title={isUserNft ? t('Your price') : t('Asking price')}>
             <CostLabel cost={currentAskPrice} bnbBusdPrice={bnbBusdPrice} />

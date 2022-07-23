@@ -47,7 +47,7 @@ const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: Toke
   )
 }
 export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
-  console.log("useCompleteNft")
+ 
   const { account } = useWeb3React()
 
   const { data: nft, mutate } = useSWR(
