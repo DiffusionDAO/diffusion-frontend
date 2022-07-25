@@ -12,6 +12,15 @@ import SellModal from '../../../components/BuySellModals/SellModal'
 import ProfileCell from '../../../components/ProfileCell'
 import { ButtonContainer, TableHeading } from '../shared/styles'
 
+const BtnWrap = styled(Button)`
+
+border-radius: 8px;
+color: #fff;
+line-height: 36px;
+text-align: center;
+cursor: pointer;
+border: 2px solid #EC6EFF;
+`
 const StyledCard = styled(Card)`
   width: 100%;
   & > div:first-child {
@@ -70,16 +79,18 @@ const OwnerCard: React.FC<OwnerCardProps> = ({ nft, isOwnNft, nftIsProfilePic, o
                 {t('Price')}
               </Text>
             </Flex>
+            <Flex alignItems="center">
             <Text textTransform="uppercase" color="textSubtle" bold fontSize="12px">
               {t('Owner')}
             </Text>
+            </Flex>
           </TableHeading>
           <OwnerRow>
             <Box pl="24px">
               {nft.marketData?.isTradable ? (
                 <>
                   <Flex justifySelf="flex-start" alignItems="center" width="max-content">
-                    <BinanceIcon width="24px" height="24px" mr="8px" />
+                    <BinanceIcon width="20px" height="20px" mr="8px" />
                     <Text bold>{formatNumber(parseFloat(nft?.marketData?.currentAskPrice), 0, 5)}</Text>
                   </Flex>
                   {bnbBusdPrice ? (
@@ -103,7 +114,7 @@ const OwnerCard: React.FC<OwnerCardProps> = ({ nft, isOwnNft, nftIsProfilePic, o
             </Box>
             <ButtonContainer>
               {isOwnNft ? (
-                <Button
+                <BtnWrap
                   disabled={nftIsProfilePic}
                   scale="sm"
                   variant="secondary"
@@ -111,9 +122,9 @@ const OwnerCard: React.FC<OwnerCardProps> = ({ nft, isOwnNft, nftIsProfilePic, o
                   onClick={onPresentAdjustPriceModal}
                 >
                   {nft.marketData?.isTradable ? t('Manage') : t('Sell')}
-                </Button>
+                </BtnWrap>
               ) : (
-                <Button
+                <BtnWrap
                   disabled={!nft.marketData?.isTradable}
                   scale="sm"
                   variant="secondary"
@@ -121,7 +132,7 @@ const OwnerCard: React.FC<OwnerCardProps> = ({ nft, isOwnNft, nftIsProfilePic, o
                   onClick={onPresentBuyModal}
                 >
                   {t('Buy')}
-                </Button>
+                </BtnWrap>
               )}
             </ButtonContainer>
           </OwnerRow>

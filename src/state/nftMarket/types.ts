@@ -75,6 +75,7 @@ export interface TokenMarketData {
 
 // Represents single NFT token, either Squad-like NFT or single PancakeBunny.
 export interface NftToken {
+  
   tokenId: string
   name: string
   description: string
@@ -217,8 +218,10 @@ export interface ApiResponseCollectionTokens {
 
 // Get specific token data
 // ${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}
+// add marketData dry
 export interface ApiResponseSpecificToken {
   data: {
+    marketData:TokenMarketData
     tokenId: string
     name: string
     description: string

@@ -113,18 +113,18 @@ const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
 
   return (
     <GridContainer>
-      <FilterByTitle textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
+      {/* <FilterByTitle textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
         {t('Filter by')}
-      </FilterByTitle>
+      </FilterByTitle> */}
       <FilterByControls>
         <ButtonMenu scale="sm" activeIndex={activeButtonIndex} onItemClick={onActiveButtonChange}>
           <ButtonMenuItem>{t('All')}</ButtonMenuItem>
           <ButtonMenuItem>{t('On Sale')}</ButtonMenuItem>
         </ButtonMenu>
       </FilterByControls>
-      <SortByTitle fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600} mb="4px">
+      {/* <SortByTitle fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600} mb="4px">
         {t('Sort By')}
-      </SortByTitle>
+      </SortByTitle> */}
       <SortByControls>
         <SortSelect collectionAddress={address} />
       </SortByControls>

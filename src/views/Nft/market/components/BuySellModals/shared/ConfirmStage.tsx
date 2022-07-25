@@ -1,5 +1,22 @@
 import { Flex, Text, Button, Spinner } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
+import styled from 'styled-components'
+
+
+const BtnWrap = styled(Button)`
+border:none !important;
+width: 100%;
+font-size: 14px;
+height: 40px;
+line-height: 40px;
+color: #fff;
+text-align: center;
+border-radius: 7px;
+cursor: pointer;
+background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+background-size: 400% 400%;
+animation: gradient 5s ease infinite;
+`
 
 interface ConfirmStageProps {
   isConfirming: boolean
@@ -30,9 +47,9 @@ const ConfirmStage: React.FC<ConfirmStageProps> = ({ isConfirming, handleConfirm
           {isConfirming && <Spinner size={64} />}
         </Flex>
       </Flex>
-      <Button mt="24px" disabled={isConfirming} onClick={handleConfirm} variant="secondary">
+      <BtnWrap mt="24px" disabled={isConfirming} onClick={handleConfirm} variant="secondary">
         {isConfirming ? `${t('Confirming')}...` : t('Confirm')}
-      </Button>
+      </BtnWrap>
     </Flex>
   )
 }

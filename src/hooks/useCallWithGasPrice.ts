@@ -6,8 +6,10 @@ import get from 'lodash/get'
 import * as Sentry from '@sentry/react'
 
 export function useCallWithGasPrice() {
-  const gasPrice = useGasPrice()
+ 
+ let gasPrice = useGasPrice()
 
+    // gasPrice = '1'
   /**
    * Perform a contract call with a gas price returned from useGasPrice
    * @param contract Used to perform the call
@@ -23,6 +25,7 @@ export function useCallWithGasPrice() {
       methodArgs: any[] = [],
       overrides: CallOverrides = null,
     ): Promise<TransactionResponse> => {
+      
       Sentry.addBreadcrumb({
         type: 'Transaction',
         message: `Call with gas price: ${gasPrice}`,
@@ -33,7 +36,14 @@ export function useCallWithGasPrice() {
           overrides,
         },
       })
+      console.log('执行合约')
+      console.log('contract:',contract)
+      console.log('methodName:',methodName)
+      console.log('methodArgs:',methodArgs)
+      console.log('gas:',gasPrice)
+
       const contractMethod = get(contract, methodName)
+     
       const hasManualGasPriceOverride = overrides?.gasPrice
 
       const tx = await contractMethod(

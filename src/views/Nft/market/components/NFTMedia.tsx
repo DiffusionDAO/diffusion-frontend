@@ -31,8 +31,9 @@ const NFTMedia: FC<
   const tryVideoNftMedia = useTryVideoNftMedia()
   const vidRef = useRef(null)
   const { observerRef, isIntersecting } = useIntersectionObserver()
-
+  
   useEffect(() => {
+  
     if (vidRef.current) {
       if (isIntersecting) {
         vidRef.current.play().catch((error) => {

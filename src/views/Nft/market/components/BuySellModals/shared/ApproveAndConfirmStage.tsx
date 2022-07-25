@@ -23,6 +23,8 @@ const ApproveAndConfirmStage: React.FC<ApproveAndConfirmStageProps> = ({
   handleApprove,
   handleConfirm,
 }) => {
+  
+  
   const { t } = useTranslation()
 
   return (
@@ -64,7 +66,7 @@ const ApproveAndConfirmStage: React.FC<ApproveAndConfirmStageProps> = ({
                 2
               </Text>
             </StepIndicator>
-            <Text fontSize="20px" bold color={isApproved ? 'secondary' : 'textDisabled'}>
+            <Text fontSize="20px"  bold color={isApproved ? 'secondary' : 'textDisabled'}>
               {t('Confirm')}
             </Text>
           </Flex>
@@ -76,7 +78,7 @@ const ApproveAndConfirmStage: React.FC<ApproveAndConfirmStageProps> = ({
           {isConfirming && <Spinner size={64} />}
         </Flex>
       </Flex>
-      <Button mt="16px" disabled={!isApproved || isConfirming} onClick={handleConfirm} variant="secondary">
+      <Button mt="16px"  disabled={!isApproved || isConfirming} onClick={handleConfirm} variant="secondary">
         {isConfirming ? t('Confirming') : t('Confirm')}
       </Button>
     </Flex>

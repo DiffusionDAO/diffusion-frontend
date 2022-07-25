@@ -10,7 +10,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useTranslation } from 'contexts/Localization'
 import { ContextApi } from 'contexts/Localization/types'
 import { isAddress } from 'utils'
-import { useErc721CollectionContract, useNftMarketContract } from 'hooks/useContract'
+import { useErc721CollectionContract, useNftMarketContract,useERC721 } from 'hooks/useContract'
 import { NftToken } from 'state/nftMarket/types'
 import { useGetLowestPriceFromNft } from 'views/Nft/market/hooks/useGetLowestPrice'
 import SellStage from './SellStage'
@@ -92,11 +92,18 @@ const SellModal: React.FC<SellModalProps> = ({
   const { theme } = useTheme()
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
+  
   const { toastSuccess } = useToast()
+  // const { reader: collectionContractReader, signer: collectionContractSigner } = useErc721CollectionContract(
+  // //   '0x88eBFd7841D131BCeab3e7149217aa8e36985a40',
+  // )
   const { reader: collectionContractReader, signer: collectionContractSigner } = useErc721CollectionContract(
     nftToSell.collectionAddress,
   )
   const nftMarketContract = useNftMarketContract()
+  //dry remark
+  // add 721collectionContract for setApprovalForAll  
+  const nft721Contract = useERC721(nftToSell.collectionAddress) 
 
   const isInvalidTransferAddress = transferAddress.length > 0 && !isAddress(transferAddress)
 
@@ -113,6 +120,7 @@ const SellModal: React.FC<SellModalProps> = ({
       case SellingStage.ADJUST_PRICE:
         setPrice(nftToSell?.marketData?.currentAskPrice)
         setStage(SellingStage.EDIT)
+
         break
       case SellingStage.CONFIRM_ADJUST_PRICE:
         setStage(SellingStage.ADJUST_PRICE)
@@ -141,6 +149,7 @@ const SellModal: React.FC<SellModalProps> = ({
         break
       case SellingStage.SET_PRICE:
         setStage(SellingStage.APPROVE_AND_CONFIRM_SELL)
+       
         break
       case SellingStage.EDIT:
         setStage(SellingStage.ADJUST_PRICE)
@@ -169,6 +178,7 @@ const SellModal: React.FC<SellModalProps> = ({
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
+    
       try {
         const approvedForContract = await collectionContractReader.isApprovedForAll(account, nftMarketContract.address)
         return !approvedForContract
@@ -177,15 +187,20 @@ const SellModal: React.FC<SellModalProps> = ({
       }
     },
     onApprove: () => {
-      return callWithGasPrice(collectionContractSigner, 'setApprovalForAll', [nftMarketContract.address, true])
+     console.log('nftContract:_____====',nftMarketContract)
+    // return callWithGasPrice(collectionContractSigner, 'setApprovalForAll', [nftMarketContract.address, true])
+     return callWithGasPrice(nft721Contract, 'setApprovalForAll', [nftMarketContract.address, true])
+     
     },
     onApproveSuccess: async ({ receipt }) => {
+      console.log('approve Success')
       toastSuccess(
         t('Contract approved - you can now put your NFT for sale!'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
       )
     },
     onConfirm: () => {
+      console.log('onconfirm ok')
       if (stage === SellingStage.CONFIRM_REMOVE_FROM_MARKET) {
         return callWithGasPrice(nftMarketContract, 'cancelAskOrder', [nftToSell.collectionAddress, nftToSell.tokenId])
       }
@@ -196,8 +211,10 @@ const SellModal: React.FC<SellModalProps> = ({
           nftToSell.tokenId,
         ])
       }
-      const methodName = variant === 'sell' ? 'createAskOrder' : 'modifyAskOrder'
+      //const methodName = variant === 'sell' ? 'createAskOrder' : 'modifyAskOrder'
+      const methodName = variant === 'sell' ? 'createMarketItemByERC20' : 'modifyAskOrder'
       const askPrice = parseUnits(price)
+    
       return callWithGasPrice(nftMarketContract, methodName, [nftToSell.collectionAddress, nftToSell.tokenId, askPrice])
     },
     onSuccess: async ({ receipt }) => {
@@ -207,6 +224,7 @@ const SellModal: React.FC<SellModalProps> = ({
       setStage(SellingStage.TX_CONFIRMED)
     },
   })
+  console.log('handleApprove-----',handleApprove)
 
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
 

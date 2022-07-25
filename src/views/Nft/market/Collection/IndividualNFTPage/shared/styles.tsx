@@ -13,7 +13,7 @@ export const TwoColumnsContainer = styled(Flex)`
     flex: 2;
   }
 `
-
+// object-fit: contain;
 export const RoundedImage = styled(Image)`
   height: max-content;
   border-radius: ${({ theme }) => theme.radii.default};
@@ -37,7 +37,7 @@ export const Container = styled(Flex)`
 export const CollectionLink = styled(NextLinkFromReactRouter)`
   color: ${({ theme }) => theme.colors.primary};
   display: block;
-  font-weight: 600;
+ // font-weight: 600;
   margin-top: 16px;
 
   ${({ theme }) => theme.mediaQueries.lg} {

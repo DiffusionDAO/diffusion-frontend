@@ -13,11 +13,16 @@ import BaseSubMenu from '../components/BaseSubMenu'
 import { nftsBaseUrl } from '../constants'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
+import styled from 'styled-components'
 
 interface HeaderProps {
   collection: Collection
 }
-
+const MarketWrap = styled.div`
+border:1px solid rgba(171, 182, 255, 0.5);
+border-radius:16px;
+  
+`
 const Header: React.FC<HeaderProps> = ({ collection }) => {
   const router = useRouter()
   const collectionAddress = router.query.collectionAddress as string
@@ -49,7 +54,9 @@ const Header: React.FC<HeaderProps> = ({ collection }) => {
   return (
     <>
       <MarketPageHeader>
-        <TopBar />
+      <TopBar />
+      <MarketWrap>
+      
         <BannerHeader bannerImage={banner.large} avatar={<AvatarImage src={avatar} />} />
         <MarketPageTitle
           title={collection.name}
@@ -65,9 +72,12 @@ const Header: React.FC<HeaderProps> = ({ collection }) => {
             <StatBoxItem title={t('Vol. (%symbol%)', { symbol: 'BNB' })} stat={volume} />
           </StatBox>
         </MarketPageTitle>
+        </MarketWrap>
       </MarketPageHeader>
       <Container>
-        <BaseSubMenu items={itemsConfig} activeItem={router.asPath} mt="24px" mb="8px" />
+        <BaseSubMenu items={itemsConfig} activeItem={router.asPath} mt="24px" mb="8px" 
+        style={{justifyContent:'left'}}
+        />
       </Container>
     </>
   )

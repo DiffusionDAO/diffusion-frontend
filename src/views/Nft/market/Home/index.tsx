@@ -1,5 +1,5 @@
-import styled from 'styled-components'
-import { Box, Button, Flex, Heading, LinkExternal } from '@pancakeswap/uikit'
+import styled, { css } from 'styled-components'
+import { Box, Button, Flex, Heading, LinkExternal, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { NextLinkFromReactRouter } from 'components/NextLink'
 import { useTranslation } from 'contexts/Localization'
@@ -17,6 +17,11 @@ import SearchBar from '../components/SearchBar'
 import Collections from './Collections'
 import Newest from './Newest'
 import config from './config'
+import Typed from 'react-typed';
+import {
+  BackgroundWrap, BackgroundTitle, BackgroundDes,
+  BackgroundText, NftSculptureWrap, NftSculptureGif
+} from '../../../Nft/market/Profile/components/styles'
 
 const Gradient = styled(Box)`
   background: ${({ theme }) => theme.colors.gradients.cardHeader};
@@ -51,8 +56,28 @@ const StyledHeaderInner = styled(Flex)`
     }
   }
 `
+export const MagiccubeWrap = styled.img`
+  position: absolute;
+  top: 28px;
+  bottom: -60px;
+  right:90px;
+  
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        height: 300px;
+        width: 300px;
+      `;
+    }
+    return css`
+      height: 420px;
+      width: 420px;
+    `;
+  }};
+`
 
 const Home = () => {
+  const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { theme } = useTheme()
@@ -71,7 +96,7 @@ const Home = () => {
   )
   console.log("newestCollections:",newestCollections)
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px'}}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto'}}>
       <PageMeta />
       {/* <StyledPageHeader>
         <StyledHeaderInner>
@@ -91,17 +116,33 @@ const Home = () => {
           <SearchBar />
         </StyledHeaderInner>
       </StyledPageHeader> */}
+
+     {/* remove background={theme.colors.background}   */}
       {status !== FetchStatus.Fetched ? (
         <PageLoader />
       ) : (
         <PageSection
           innerProps={{ style: { margin: '0', width: '100%' } }}
-          background={theme.colors.background}
           index={1}
           concaveDivider
           dividerPosition="top"
         >
-          <Collections
+      <NftSculptureWrap isMobile={isMobile}>
+        <MagiccubeWrap isMobile={isMobile} src="/images/nfts/magicCube.png" alt="" />
+      </NftSculptureWrap>
+      <BackgroundWrap isMobile={isMobile}>
+        <BackgroundText>
+          <BackgroundTitle>
+            <Typed
+              strings={['Discover Rare Collections Of Art NFTs.']}
+              typeSpeed={50}
+              cursorChar=""
+            />
+          </BackgroundTitle>
+          <BackgroundDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BackgroundDes>
+        </BackgroundText>
+      </BackgroundWrap>
+           <Collections
             key="newest-collections"
             title={t('Newest Collections')}
             testId="nfts-newest-collections"

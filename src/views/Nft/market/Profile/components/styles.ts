@@ -96,6 +96,7 @@ export const NftSculptureWrap = styled.div`
         height: 360px;
         width: 360px;
         position: absolute;
+        right: -35px;
       `;
     }
     return css`
@@ -168,7 +169,7 @@ export const BackgroundWrap = styled.div`
     if (isMobile) {
       return css`
         height: 300px;
-        margin-top: 300px;
+        margin-top: 440px;
       `;
     }
     return css`
@@ -179,7 +180,7 @@ export const BackgroundWrap = styled.div`
 `
 export const BackgroundText = styled.div`
   max-width: 500px;
-  height: 100%;
+  height: 70%;
   display: flex;
   flex-direction: column;
   justify-content: center;

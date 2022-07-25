@@ -38,7 +38,9 @@ const config = {
   },
   reactStrictMode: true,
   images: {
-    domains: ['localhost','middle.diffusiondao.org'],
+
+    domains: ['localhost','test.diffusiondao.org','154.210.13.181','45.77.241.62','middle.diffusiondao.org'],
+
   },
   async rewrites() {
     return [

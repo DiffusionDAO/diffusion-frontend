@@ -7,14 +7,19 @@ interface MarketPageTitleProps extends GridProps {
 }
 
 const MarketPageTitle: React.FC<MarketPageTitleProps> = ({ title, description, children, ...props }) => (
-  <Grid gridGap="16px" alignItems="center" gridTemplateColumns={['1fr', null, null, null, 'repeat(2, 1fr)']} {...props}>
+  <Grid gridGap="16px" alignItems="center" gridTemplateColumns={['1fr', null, null, null, '1fr']} {...props}>
     <Box>
-      <Heading as="h1" scale="xl" color="secondary" mb="16px">
+      <div style={{display:'flex'}}>
+      <Heading as="h1" scale="xl" color="#ffffff" mb="16px" ml='32px' mt='0px'>
         {title}
       </Heading>
+      <div style={{margin:'10px'}}>
       {description}
+      </div>
+      </div>
     </Box>
     <Box>{children}</Box>
+    
   </Grid>
 )
 

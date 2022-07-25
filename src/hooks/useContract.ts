@@ -73,6 +73,7 @@ export const useERC20 = (address: string, withSignerIfPossible = true) => {
     () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
     [withSignerIfPossible, library, account],
   )
+  
   return useMemo(() => getBep20Contract(address, signer), [address, signer])
 }
 
@@ -276,7 +277,9 @@ export const useFarmAuctionContract = (withSignerIfPossible = true) => {
 }
 
 export const useNftMarketContract = () => {
+  
   const { library } = useActiveWeb3React()
+  
   return useMemo(() => getNftMarketContract(library.getSigner()), [library])
 }
 

@@ -45,6 +45,8 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
     isLoading,
     refetch,
   } = useCompleteNft(collectionAddress, tokenId)
+ 
+
 
   const properties = nft?.attributes || null
 

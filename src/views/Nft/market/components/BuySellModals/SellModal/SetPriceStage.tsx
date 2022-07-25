@@ -88,7 +88,7 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
         <Flex>
           <Flex flex="1" alignItems="center">
             <BinanceIcon width={24} height={24} mr="4px" />
-            <Text bold>WBNB</Text>
+            <Text bold>DFS</Text>
           </Flex>
           <Flex flex="2">
             <RightAlignedInput
@@ -161,9 +161,9 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
           <Text small color="textSubtle">
             {t('The NFT will be removed from your wallet and put on sale at this price.')}
           </Text>
-          <Text small color="textSubtle">
+          {/* <Text small color="textSubtle">
             {t('Sales are in WBNB. You can swap WBNB to BNB 1:1 for free with DiffusionDAO.')}
-          </Text>
+          </Text> */}
         </Box>
       </Grid>
       <Divider />
