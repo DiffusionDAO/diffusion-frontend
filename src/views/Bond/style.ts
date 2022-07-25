@@ -81,15 +81,7 @@ export const Horizontal = styled.div`
   background-color: rgba(255, 255, 255, 0.1);
 `
 export const OverviewCardItem = styled.div`
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
-      return css`
-      `;
-    }
-    return css`
-      margin-right: 100px;
-    `;
-  }};
+  margin-right: 100px;
 `
 export const OverviewCardItemTitle = styled.div`
   height: 16px;
@@ -97,16 +89,7 @@ export const OverviewCardItemTitle = styled.div`
   font-family: HelveticaNeue;
   color: #ABB6FF;
   line-height: 16px;
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
-      return css`
-        margin-bottom: 10px;
-      `;
-    }
-    return css`
-      margin-bottom: 20px;
-    `;
-  }};
+  margin-bottom: 10px;
 `
 export const OverviewCardItemContent = styled.div`
   height: 40px;
