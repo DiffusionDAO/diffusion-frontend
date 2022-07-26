@@ -18,6 +18,13 @@
   "Play": "抽取",
   "Acquire any of the 2 types of NFT cards" : "随机获得2种NFT",
 
+  "Your balance is insufficient": "您的余额不足",
+  "There are several ways to receive DFS": "有几种方法可以获得DFS",
+  "Insufficient balance? Purchase bonds on this page >": "余额不足?在这个页面购买债券",
+  "Insufficient balance? Combine/stake NFT >": "余额不足?合成/质押NFT",
+  "Insufficient balance? Withdraw/stake DFS >": "余额不足?去提取/质押DFS",
+  "You should invite your friends to purchase bonds for DFS": "您也可以邀请您的朋友购买债券来获得DFS",
+
 
   "Sales of bonds is the only way for DFS to be minted, through the sales of bonds to accumulate large asset volume, the central financial agreement will have but not limited to USDT, ETH, BNB and equivalent type of assets. This type of asset will become the core foundation supporting the value of DFS.": "销售债券是铸造DFS的唯一途径，通过债券的销售将积累大量的价值资产，中央金融协议将拥有但不限于USDT、ETH、BNB等价值资产，该类资产将成为DFS内在价值的重要支撑",
   "Price of DFS": "DFS的价格",
@@ -30,6 +37,28 @@
   "Duration": "释放",
   "Discount": "折扣",
   "Not opened": "未开放",
+
+  "Bond price": "债券价格",
+  "Market price": "市场价格",
+  "Your wallet has to be connected in order to perform this operation": "您需要连接钱包才能操作",
+  "Max You Can Buy": "你最多能买",
+  "You will receive": "你将得到",
+  "Your balance": "你的余额",
+  "Connection": "连接",
+  "Mint": "铸造",
+  "Redeem": "赎回",
+  "First time bonding a DFS-USDT LP? Please approve DiffusionDao to use your DFS-USDT LP for bonding": "第一次绑定DFS-USDT 交易对?请批准扩散道使用你的DFS-USDT交易对进行操作",
+  "Any Referrers ?": "是否有推荐人?",
+  "Please insert referrer’s wallet address": "请输入推荐人钱包地址",
+  "Purchase": "Purchase",
+  "Back": "返回",
+  "Slippage": "滑点",
+  "If the price changes beyond the slip number, the deal may fall through": "如果价格变化超过了滑点数，交易可能失败",
+  "Recipient wallet address": "接收的地址",
+  "Under current circumstances, this is your current login address": "缺省情况下，为当前登录地址",
+  "Confirm": "确认",
+
+
 
   "Detail": "详情",
   "My social networking rewards": "我的社交奖金",
@@ -91,5 +120,16 @@
   "Reserve fund size": "储备金额",
   "Single currency intertemporal inflation": "单币跨期通胀率",
   "Single currency reserves": "单币储备金",
-  "Liquidity capacity of agreement": "协议拥有流动性"
+  "Liquidity capacity of agreement": "协议拥有流动性",
+  "TVL is an encryption instruction, used for assessing the total asset value agreement stored in DiffusionDAO": "TVL是一种加密指标，用于评估在DiffusionDao中存放的资产的总价值协议",
+  "The ratio of the difference between the current market price and the intrinsic reserve price to the reserve fund": "当期市场价与内在储备金价格的差值于储备金的比值",
+  "Value digital asset support for redemption of DFS": "用于兑付DFS的价值数字资产支撑",
+  "DiffusionDao's attention factor statistics": "Diffusion Dao 的关注度统计",
+  "The total amount of DFS tokens issued by DiffusionDao": "Diffusion Dao 发行DFS代币的总量",
+  "Compound Growth Rate of Active Users": "有效用户的复合增长率",
+  "The number of times that DiffusionDao related contracts are called": "Diffusion Dao相关合约被调用的次数",
+  "Every DFS’ intrinsic price backing": "每一个DFS的内在价值支撑",
+  "The ratio of the difference between the current target market price and the intrinsic reserve price to the reserve fund": "当期目标市场价与内在储备金价格的差值于储备金的比值",
+  "The fit between the target inflation rate and the actual effect obtained by DSGE": "通过DSGE得到的目标通胀率与实际效果的之间的拟合度",
+  "The number of LPs supporting the value of the platform": "作为平台价值支撑的LP的数量"
 }

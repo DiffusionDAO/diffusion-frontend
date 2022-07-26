@@ -80,7 +80,7 @@ const Reward: FC = () => {
               {
                 swiperSlideData.map((item, index) => {
                   return <SwiperSlide>
-                    <SwiperItem>
+                    <SwiperItem isMobile={isMobile}>
                       <SwiperItemImg src={`/images/reward/headPortrait${index + 1}.png`} />
                       {/* <SwiperItemName>{item.name}</SwiperItemName>
                       <SwiperItemDes>{item.description}</SwiperItemDes> */}

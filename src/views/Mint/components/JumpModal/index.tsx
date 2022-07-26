@@ -27,19 +27,19 @@ const JumpModal: React.FC<JumpModalProps> = ({
     >
       <JumpWrap>
         <JumpTitle>{t('Your balance is insufficient')}</JumpTitle>
-        <JumpDes>{t('There are several ways to get DFS')}</JumpDes>
+        <JumpDes>{t('There are several ways to receive DFS')}</JumpDes>
         <TakeCardBtn onClick={onClose}>
-          <JumpBtnCont>{t('Insufficient balance? Buy bonds on this page >')}</JumpBtnCont>
+          <JumpBtnCont>{t('Insufficient balance? Purchase bonds on this page >')}</JumpBtnCont>
         </TakeCardBtn>
         <TakeCardBtn 
           onClick={() => router.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)}
         >
-          <JumpBtnCont>{t('Insufficient balance? To synthesize/pledge NFT >')}</JumpBtnCont>
+          <JumpBtnCont>{t('Insufficient balance? Combine/stake NFT >')}</JumpBtnCont>
         </TakeCardBtn>
         <TakeCardBtn onClick={onClose}>
-          <JumpBtnCont>{t('Insufficient balance? Go and extract/pledge DFS >')}</JumpBtnCont>
+          <JumpBtnCont>{t('Insufficient balance? Withdraw/stake DFS >')}</JumpBtnCont>
         </TakeCardBtn>
-        <JumpInvite href="">{t('You can also invite your friends to buy bonds to get DFS')}</JumpInvite>
+        <JumpInvite href="">{t('You should invite your friends to purchase bonds for DFS')}</JumpInvite>
       </JumpWrap>
     </StyledModal>
   )
