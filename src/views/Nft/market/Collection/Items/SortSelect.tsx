@@ -25,7 +25,7 @@ const SortSelect: React.FC<{ collectionAddress: string }> = ({ collectionAddress
   )
 
   return (
-    <Select
+    <Select  
       options={sortByItems}
       onOptionChange={handleChange}
       key={defaultOptionIndex !== -1 ? defaultOptionIndex : undefined}

@@ -7,9 +7,7 @@ import * as Sentry from '@sentry/react'
 
 export function useCallWithGasPrice() {
  
- let gasPrice = useGasPrice()
-
-    // gasPrice = '1'
+ const gasPrice = useGasPrice()
   /**
    * Perform a contract call with a gas price returned from useGasPrice
    * @param contract Used to perform the call
@@ -36,7 +34,7 @@ export function useCallWithGasPrice() {
           overrides,
         },
       })
-      console.log('执行合约')
+     
       console.log('contract:',contract)
       console.log('methodName:',methodName)
       console.log('methodArgs:',methodArgs)

@@ -139,7 +139,7 @@ const ReviewStage: React.FC<ReviewStageProps> = ({
          // disabled={walletFetchStatus !== FetchStatus.Fetched || notEnoughBnbForPurchase}
           mb="8px"
         >
-          {t('Checkout')}
+          {t('Approve')}
         </BtnWrap>
         {/* <Button  as={Link} external style={{ width: '100%', color:'rgba(210,87,255,1)'}} href="/swap?outputCurrency=BNB" variant="secondary">
           {t('Get %symbol1% or %symbol2%', { symbol1: 'BNB', symbol2: 'WBNB' })}

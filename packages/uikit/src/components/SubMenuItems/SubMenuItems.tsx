@@ -29,7 +29,8 @@ const SubMenuItems: React.FC<SubMenuItemsProps> = ({ items = [], activeItem, isM
             <Box key={label} mr="20px">
               <MenuItem href={href} isActive={href === activeItem} variant="subMenu" {...itemProps} {...linkProps}>
                 {Icon && <Icon color={href === activeItem ? "secondary" : "textSubtle"} mr="4px" />}
-                {label}
+                <span style={{color:'#FFFFFF'}}> {label}</span>
+               
                 {isExternalLink && (
                   <Box display={["none", null, "flex"]} style={{ alignItems: "center" }} ml="4px">
                     <OpenNewIcon color="textSubtle" />

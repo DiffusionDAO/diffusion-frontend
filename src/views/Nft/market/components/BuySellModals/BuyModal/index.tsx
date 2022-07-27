@@ -23,7 +23,29 @@ import ReviewStage from './ReviewStage'
 import ConfirmStage from '../shared/ConfirmStage'
 import ApproveAndConfirmStage from '../shared/ApproveAndConfirmStage'
 import { PaymentCurrency, BuyingStage } from './types'
+
 import TransactionConfirmed from '../shared/TransactionConfirmed'
+
+import { Contract } from '@ethersproject/contracts'
+import get from 'lodash/get'
+import { TransactionResponse } from '@ethersproject/providers'
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+
+// add getNFTItems function 
+const getNFTItems = async (
+  contract: Contract,
+  methodName: string,
+  methodArgs: any[] = [] 
+): Promise<Array<any>>  => {  
+    const contractMethod = get(contract, methodName)    
+    const nftItems = await contractMethod(
+      ...methodArgs
+    )
+
+    return nftItems
+}
+
+
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
@@ -37,7 +59,8 @@ interface BuyModalProps extends InjectedModalProps {
 }
 
 // NFT WBNB in testnet contract is different
-const wbnbAddress =
+const dfsAddress = '0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF'
+const wbnbAddress =                                             
   CHAIN_ID === String(ChainId.MAINNET) ? tokens.wbnb.address : '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 
 const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
@@ -53,11 +76,10 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   const { account } = useWeb3React()
   const wbnbContractReader = useERC20(wbnbAddress, false)
   const wbnbContractApprover = useERC20(wbnbAddress)
+  const dfsContractApprover = useERC20(dfsAddress)
   const nftMarketContract = useNftMarketContract()
   const { toastSuccess } = useToast()
-  
   const nftPriceWei = parseUnits(nftToBuy?.marketData?.currentAskPrice, 'ether')
-  console.log('--->>',nftPriceWei)
   const nftPrice = parseFloat(nftToBuy?.marketData?.currentAskPrice)
 
   // BNB - returns ethers.BigNumber
@@ -74,7 +96,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
     paymentCurrency === PaymentCurrency.BNB
       ? bnbBalance.lt(nftPriceWei)
       : wbnbBalance.lt(ethersToBigNumber(nftPriceWei))
-  console.log('bnb------->',bnbBalance,nftPriceWei)
+      
   useEffect(() => {
     if (bnbBalance.lt(nftPriceWei) && wbnbBalance.gte(ethersToBigNumber(nftPriceWei)) && !isPaymentCurrentInitialized) {
       setPaymentCurrency(PaymentCurrency.WBNB)
@@ -87,7 +109,8 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
       return requiresApproval(wbnbContractReader, account, nftMarketContract.address)
     },
     onApprove: () => {
-      return callWithGasPrice(wbnbContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
+      //return callWithGasPrice(wbnbContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
+      return callWithGasPrice(dfsContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
     },
     // why approve require gas 
     onApproveSuccess: async ({ receipt }) => {
@@ -97,13 +120,30 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
       )
     },
     // note this is buy NFT  confirm pay gas by BNB  remark by dry
-    onConfirm: () => {
+    onConfirm: async () => {
       const payAmount = Number.isNaN(nftPrice) ? Zero : parseUnits(nftToBuy?.marketData?.currentAskPrice)
+      
       if (paymentCurrency === PaymentCurrency.BNB) {
         // use ours contract  remark dry
         //callWithGasPrice(nftMarketContract, 'buyTokenUsingBNB', value: payAmount,
-        return callWithGasPrice(nftMarketContract, 'createMarketSaleByERC20', [nftToBuy.collectionAddress, nftToBuy.tokenId], {
-          value: payAmount,
+        //createMarketSaleByERC20
+        
+        const items = await getNFTItems(nftMarketContract,'fetchMarketItems')
+         
+        console.log('items->',items)
+        const newItem =  items.find((item)=>{
+           const bigToken =  BigNumber.from(nftToBuy.tokenId)
+          if (bigToken.eq(item['tokenId'])){
+             return true
+          } else {
+            return false
+          }
+        })
+        
+        const itemId = newItem['itemId']
+        console.log('itemok:',itemId)
+        return callWithGasPrice(nftMarketContract, 'createMarketSaleByERC20', [itemId], {
+         
         })
       }
       return callWithGasPrice(nftMarketContract, 'buyTokenUsingWBNB', [
@@ -123,7 +163,8 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   })
 
   const continueToNextStage = () => {
-    if (paymentCurrency === PaymentCurrency.WBNB && !isApproved) {
+    //paymentCurrency === PaymentCurrency.WBNB
+    if (paymentCurrency === PaymentCurrency.BNB && !isApproved) {
       setStage(BuyingStage.APPROVE_AND_CONFIRM)
     } else {
       setStage(BuyingStage.CONFIRM)

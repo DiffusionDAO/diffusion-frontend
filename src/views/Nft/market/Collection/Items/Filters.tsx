@@ -125,7 +125,7 @@ const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
       {/* <SortByTitle fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600} mb="4px">
         {t('Sort By')}
       </SortByTitle> */}
-      <SortByControls>
+      <SortByControls >
         <SortSelect collectionAddress={address} />
       </SortByControls>
       <ScrollableFlexContainer>

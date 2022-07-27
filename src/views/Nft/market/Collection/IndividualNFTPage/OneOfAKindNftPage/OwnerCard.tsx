@@ -109,7 +109,7 @@ const OwnerCard: React.FC<OwnerCardProps> = ({ nft, isOwnNft, nftIsProfilePic, o
             </Box>
             <Box>
               <Flex width="max-content" alignItems="center">
-                <ProfileCell accountAddress={owner.toLowerCase()} />
+                <ProfileCell accountAddress={owner.toLowerCase()}  />
               </Flex>
             </Box>
             <ButtonContainer>
