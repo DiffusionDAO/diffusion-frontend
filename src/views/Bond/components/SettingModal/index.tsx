@@ -35,21 +35,21 @@ const SettingModal: React.FC<BondModalProps> = ({
         </HeaderWrap>
         {/* 中间内容 */}
         <SettingItem>
-          <SettingLabel>Slippage</SettingLabel>
+          <SettingLabel>{t('Slippage')}</SettingLabel>
           <SettingCont>
             <SettingInput className="noBorder" suffix="%" />
-            <SettingTips>If the price changes beyond the slip number, trading may resume</SettingTips>
+            <SettingTips>{t('If the price changes beyond the slip number, the deal may fall through')}</SettingTips>
           </SettingCont>
         </SettingItem>
         <SettingItem>
-          <SettingLabel>Receive the address</SettingLabel>
+          <SettingLabel>{t('Recipient wallet address')}</SettingLabel>
           <SettingCont>
             <SettingInput className="noBorder"  value={addressValue} />
-            <SettingTips>By default, it is the current login address</SettingTips>
+            <SettingTips>{t('Under current circumstances, this is your current login address')}</SettingTips>
           </SettingCont>
         </SettingItem>
         {/* 按钮 */}
-        <BondListItemBtn>Confirm</BondListItemBtn>
+        <BondListItemBtn>{t('Confirm')}</BondListItemBtn>
       </ContentWrap>
     </StyledModal>
   )

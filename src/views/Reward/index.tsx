@@ -80,8 +80,8 @@ const Reward: FC = () => {
               {
                 swiperSlideData.map((item, index) => {
                   return <SwiperSlide>
-                    <SwiperItem>
-                      <SwiperItemImg src={`/images/reward/headPortrait${index + 1}.png`} />
+                    <SwiperItem isMobile={isMobile}>
+                      <SwiperItemImg src={`/images/reward/headPortrait${index}.png`} />
                       {/* <SwiperItemName>{item.name}</SwiperItemName>
                       <SwiperItemDes>{item.description}</SwiperItemDes> */}
                     </SwiperItem>
@@ -91,7 +91,7 @@ const Reward: FC = () => {
             </Swiper>
             <SwiperWrapBgImg src={swiperWrapBgImgUrl} isMobile={isMobile} />
           </SwiperWrap>
-          <Grid container spacing={8}>
+          <Grid container spacing={2}>
             <Grid item lg={4} md={4} sm={12} xs={12}>
               <DiffusionGoldWrap isMobile={isMobile}>
                 <DiffusionGoldHeader>

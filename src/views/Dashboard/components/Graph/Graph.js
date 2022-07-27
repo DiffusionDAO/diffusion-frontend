@@ -34,7 +34,7 @@ export const OneGraph = () => {
       headerText={t(headerText().one)}
       stroke={["#0031FF"]}
       bulletpointColors={bulletpoints.one}
-      infoTooltipMessage={tooltipInfoMessages().one}
+      infoTooltipMessage={t(tooltipInfoMessages().one)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].one)}`}
     />
@@ -55,7 +55,7 @@ export const TwoGraph = () => {
       bulletpointColors={bulletpoints.two}
       itemNames={tooltipItems.two}
       itemType={itemType.dollar}
-      infoTooltipMessage={tooltipInfoMessages().two}
+      infoTooltipMessage={t(tooltipInfoMessages().two)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
@@ -100,7 +100,7 @@ export const ThreeGraph = () => {
       bulletpointColors={bulletpoints.three}
       itemNames={tooltipItems.three}
       itemType={itemType.dollar}
-      infoTooltipMessage={tooltipInfoMessages().three}
+      infoTooltipMessage={t(tooltipInfoMessages().three)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       // HeaderSuElement={<HeaderSuElement />}
     />
@@ -120,7 +120,7 @@ export const FourGraph = () => {
       headerText={t(headerText().four)}
       stroke={["#D257FF"]}
       bulletpointColors={bulletpoints.four}
-      infoTooltipMessage={tooltipInfoMessages().four}
+      infoTooltipMessage={t(tooltipInfoMessages().four)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].four)}`}
     />
@@ -142,7 +142,7 @@ export const FiveGraph = () => {
       bulletpointColors={bulletpoints.five}
       itemNames={tooltipItems.five}
       itemType=""
-      infoTooltipMessage={tooltipInfoMessages().five}
+      infoTooltipMessage={t(tooltipInfoMessages().five)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       minHeight={150}
     />
@@ -164,7 +164,7 @@ export const SixGraph = () => {
       bulletpointColors={bulletpoints.six}
       itemNames={tooltipItems.six}
       itemType=""
-      infoTooltipMessage={tooltipInfoMessages().six}
+      infoTooltipMessage={t(tooltipInfoMessages().six)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       minHeight={150}
     />
@@ -186,7 +186,7 @@ export const SevenGraph = () => {
       bulletpointColors={bulletpoints.seven}
       itemNames={tooltipItems.seven}
       itemType=""
-      infoTooltipMessage={tooltipInfoMessages().seven}
+      infoTooltipMessage={t(tooltipInfoMessages().seven)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       minHeight={150}
     />
@@ -233,7 +233,7 @@ export const EightGraph = () => {
       bulletpointColors={bulletpoints.eight}
       itemNames={tooltipItems.eight}
       itemType={itemType.dollar}
-      infoTooltipMessage={tooltipInfoMessages().eight}
+      infoTooltipMessage={t(tooltipInfoMessages().eight)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       // HeaderSuElement={<HeaderSuElement />}
     />
@@ -283,7 +283,7 @@ export const NineGraph = () => {
       headerText={t(headerText().nine)}
       stroke={["#00A1FF"]}
       bulletpointColors={bulletpoints.nine}
-      infoTooltipMessage={tooltipInfoMessages().nine}
+      infoTooltipMessage={t(tooltipInfoMessages().nine)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].nine)}`}
       HeaderSuElement={<HeaderSuElement />}
@@ -309,7 +309,7 @@ export const TenGraph = () => {
       bulletpointColors={bulletpoints.ten}
       itemNames={tooltipItems.ten}
       itemType=""
-      infoTooltipMessage={tooltipInfoMessages().ten}
+      infoTooltipMessage={t(tooltipInfoMessages().ten)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
@@ -331,7 +331,7 @@ export const ElevenGraph = () => {
       bulletpointColors={bulletpoints.eleven}
       itemNames={tooltipItems.eleven}
       itemType={itemType.dollar}
-      infoTooltipMessage={tooltipInfoMessages().eleven}
+      infoTooltipMessage={t(tooltipInfoMessages().eleven)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
@@ -353,7 +353,7 @@ export const TwelveGraph = () => {
       bulletpointColors={bulletpoints.twelve}
       itemNames={tooltipItems.twelve}
       itemType={itemType.dollar}
-      infoTooltipMessage={tooltipInfoMessages().twelve}
+      infoTooltipMessage={t(tooltipInfoMessages().twelve)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
@@ -375,7 +375,7 @@ export const ThirteenGraph = () => {
       bulletpointColors={bulletpoints.thirteen}
       itemNames={tooltipItems.thirteen}
       itemType={itemType.dollar}
-      infoTooltipMessage={tooltipInfoMessages().thirteen}
+      infoTooltipMessage={t(tooltipInfoMessages().thirteen)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
@@ -399,7 +399,7 @@ export const MarketValueGraph = () => {
       bulletpointColors={bulletpoints.coin}
       itemNames={tooltipItems.coin}
       itemType={itemType.dollar}
-      infoTooltipMessage={tooltipInfoMessages().mvt}
+      infoTooltipMessage={t(tooltipInfoMessages().mvt)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
@@ -419,7 +419,7 @@ export const AreaGraph = () => {
       bulletpointColors={bulletpoints.coin}
       itemNames={tooltipItems.coin}
       itemType={itemType.dollar}
-      infoTooltipMessage={tooltipInfoMessages().mvt}
+      infoTooltipMessage={t(tooltipInfoMessages().mvt)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );
@@ -440,7 +440,7 @@ export const RunwayAvailableGraph = () => {
       bulletpointColors={bulletpoints.runway}
       itemNames={tooltipItems.runway}
       itemType=""
-      infoTooltipMessage={tooltipInfoMessages().runway}
+      infoTooltipMessage={t(tooltipInfoMessages().runway)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
     />
   );

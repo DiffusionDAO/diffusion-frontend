@@ -17,6 +17,13 @@
   "Approve": "Approve",
   "Play": "Play",
   "Acquire any of the 2 types of NFT cards" : "Acquire any of the 2 types of NFT cards",
+  
+  "Your balance is insufficient": "Your balance is insufficient",
+  "There are several ways to receive DFS": "There are several ways to receive DFS",
+  "Insufficient balance? Purchase bonds on this page >": "Insufficient balance? Purchase bonds on this page >",
+  "Insufficient balance? Combine/stake NFT >": "Insufficient balance? Combine/stake NFT >",
+  "Insufficient balance? Withdraw/stake DFS >": "Insufficient balance? Withdraw/stake DFS >",
+  "You should invite your friends to purchase bonds for DFS": "You should invite your friends to purchase bonds for DFS",
 
   "Sales of bonds is the only way for DFS to be minted, through the sales of bonds to accumulate large asset volume, the central financial agreement will have but not limited to USDT, ETH, BNB and equivalent type of assets. This type of asset will become the core foundation supporting the value of DFS.": "Sales of bonds is the only way for DFS to be minted, through the sales of bonds to accumulate large asset volume, the central financial agreement will have but not limited to USDT, ETH, BNB and equivalent type of assets. This type of asset will become the core foundation supporting the value of DFS.",
   "Price of DFS": "Price of DFS",
@@ -29,6 +36,27 @@
   "Duration": "Duration",
   "Discount": "Discount",
   "Not opened": "Not opened",
+
+  "Bond price": "Bond price",
+  "Market price": "Market price",
+  "Your wallet has to be connected in order to perform this operation": "Your wallet has to be connected in order to perform this operation",
+  "Max You Can Buy": "Max You Can Buy",
+  "You will receive": "You will receive",
+  "Your balance": "Your balance",
+  "Connection": "Connection",
+  "Mint": "Mint",
+  "Redeem": "Redeem",
+  "First time bonding a DFS-USDT LP? Please approve DiffusionDao to use your DFS-USDT LP for bonding": "First time bonding a DFS-USDT LP? Please approve DiffusionDao to use your DFS-USDT LP for bonding",
+  "Any Referrers ?": "Any Referrers?",
+  "Please insert referrer’s wallet address": "Please insert referrer’s wallet address",
+  "Purchase": "Purchase",
+  
+  "Back": "Back",
+  "Slippage": "Slippage",
+  "If the price changes beyond the slip number, the deal may fall through": "If the price changes beyond the slip number, the deal may fall through",
+  "Recipient wallet address": "Recipient wallet address",
+  "Under current circumstances, this is your current login address": "Under current circumstances, this is your current login address",
+  "Confirm": "Confirm",
 
   "Detail": "Detail",
   "My social networking rewards": "My social networking rewards",
@@ -90,6 +118,16 @@
   "Reserve fund size": "Reserve fund size",
   "Single currency intertemporal inflation": "Single currency intertemporal inflation",
   "Single currency reserves": "Single currency reserves",
-  "Liquidity capacity of agreement": "Liquidity capacity of agreement"
-
+  "Liquidity capacity of agreement": "Liquidity capacity of agreement",
+  "TVL is an encryption instruction, used for assessing the total asset value agreement stored in DiffusionDAO": "TVL is an encryption instruction, used for assessing the total asset value agreement stored in DiffusionDAO",
+  "The ratio of the difference between the current market price and the intrinsic reserve price to the reserve fund": "The ratio of the difference between the current market price and the intrinsic reserve price to the reserve fund",
+  "Value digital asset support for redemption of DFS": "Value digital asset support for redemption of DFS",
+  "DiffusionDao's attention factor statistics": "DiffusionDao's attention factor statistics",
+  "The total amount of DFS tokens issued by DiffusionDao": "The total amount of DFS tokens issued by DiffusionDao",
+  "Compound Growth Rate of Active Users": "Compound Growth Rate of Active Users",
+  "The number of times that DiffusionDao related contracts are called": "The number of times that DiffusionDao related contracts are called",
+  "Every DFS’ intrinsic price backing": "Every DFS’ intrinsic price backing",
+  "The ratio of the difference between the current target market price and the intrinsic reserve price to the reserve fund": "The ratio of the difference between the current target market price and the intrinsic reserve price to the reserve fund",
+  "The fit between the target inflation rate and the actual effect obtained by DSGE": "The fit between the target inflation rate and the actual effect obtained by DSGE",
+  "The number of LPs supporting the value of the platform": "The number of LPs supporting the value of the platform"
 }

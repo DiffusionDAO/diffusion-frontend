@@ -55,14 +55,14 @@ const Bond: FC = () => {
 
     <OverviewWrap>
       <OverviewCard isMobile={isMobile}>
-        <OverviewCardItem isMobile={isMobile}>
-          <OverviewCardItemTitle isMobile={isMobile}>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
+        <OverviewCardItem>
+          <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
           <OverviewCardItemContent isMobile={isMobile}>
             $123.22
           </OverviewCardItemContent>
         </OverviewCardItem>
-        <OverviewCardItem isMobile={isMobile}>
-          <OverviewCardItemTitle isMobile={isMobile}>{t('Price of DFS')}</OverviewCardItemTitle>
+        <OverviewCardItem>
+          <OverviewCardItemTitle>{t('Price of DFS')}</OverviewCardItemTitle>
           <OverviewCardItemContent isMobile={isMobile}>
             $123.22M
           </OverviewCardItemContent>

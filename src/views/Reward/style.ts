@@ -10,17 +10,18 @@ export const RewardPageWrap = styled.div`
 `
 export const SwiperWrap = styled.div`
   width: 100%;
-  height: ${SLIDER_HEIGHT}px;
   margin-bottom: 20px;
   position: relative;
   ${({ isMobile }: { isMobile: boolean }) => {
     if (isMobile) {
       return css`
         padding: 0;
+        height: 240px;
       `;
     }
     return css`
       padding: 0 20px;
+      height: ${SLIDER_HEIGHT}px;
     `;
   }};
   .swiper {
@@ -90,11 +91,20 @@ export const SwiperWrapBgImg = styled.img`
 `
 export const SwiperItem = styled.div`
   width: 100%;
-  height: ${SLIDER_HEIGHT}px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        height: 240px;
+      `;
+    }
+    return css`
+      height: ${SLIDER_HEIGHT}px;
+    `;
+  }};
 `
 export const SwiperItemImg = styled.img`
   width: 100px;

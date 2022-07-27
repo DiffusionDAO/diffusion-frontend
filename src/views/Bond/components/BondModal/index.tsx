@@ -70,11 +70,11 @@ const BondModal: React.FC<BondModalProps> = ({
         </BondListItemHeader>
         <BondListItemContent>
           <ContentCell>
-            <CellTitle>Bond Price</CellTitle>
+            <CellTitle>{t('Bond price')}</CellTitle>
             <CellText >${bondData.price}</CellText>
           </ContentCell>
           <ContentCell>
-            <CellTitle>Market Price</CellTitle>
+            <CellTitle>{t('Market price')}</CellTitle>
             <CellText >${bondData.price}</CellText>
           </ContentCell>
         </BondListItemContent>
@@ -84,16 +84,16 @@ const BondModal: React.FC<BondModalProps> = ({
         account && 
         <TabList>
           <TabItem className={`${activeTab === "mint" && "active"}`} onClick={() => clickTab("mint")}>
-            {t('mint')}
+            {t('Mint')}
           </TabItem>
           <TabItem className={`${activeTab === "redeem" && "active"}`} onClick={() => clickTab("redeem")}>
-            {t('redeem')}
+            {t('Redeem')}
           </TabItem>
         </TabList>
       }
       { account && isApprove && activeTab === "mint" &&
           <>
-            <MoneyLable>Money</MoneyLable>
+            {/* <MoneyLable>Money</MoneyLable> */}
             <MoneyInput prefix="￥" suffix="ALL" value={money} />
             <RecomandWrap>
               <CheckBoxWrap onClick={changeRecomand}>
@@ -101,12 +101,12 @@ const BondModal: React.FC<BondModalProps> = ({
                   hasRecomand ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: "4px" }} /> : <CheckBox />
                 }
               </CheckBoxWrap>
-              <RecomandLable onClick={changeRecomand}>Does anyone recommend</RecomandLable>
+              <RecomandLable onClick={changeRecomand}>{t('Any Referrers ?')}</RecomandLable>
               {
-                hasRecomand ? <RecomandInput value={recomander} placeholder="Please enter references" /> : null
+                hasRecomand ? <RecomandInput value={recomander} placeholder={t('Please insert referrer’s wallet address')} /> : null
               }
             </RecomandWrap>
-            <BondListItemBtn>{t('Buy')}</BondListItemBtn>
+            <BondListItemBtn>{t('Purchase')}</BondListItemBtn>
           </>
         }
         {
@@ -117,39 +117,39 @@ const BondModal: React.FC<BondModalProps> = ({
           <>
             <TipsWrap>
               <InfoIcon  width="20px" color="#ABB6FF" />
-              <TipsText>First time bonding LUSD-OHM LP?Please approve Olympus Dao to useyourLUSD-OHMLP for bonding</TipsText>
+              <TipsText>{t('First time bonding a DFS-USDT LP? Please approve DiffusionDao to use your DFS-USDT LP for bonding')}</TipsText>
             </TipsWrap>
-            <BondListItemBtn onClick={getApprove}>Approve</BondListItemBtn>
+            <BondListItemBtn onClick={getApprove}>{t('Approve')}</BondListItemBtn>
           </>
         }
 
         { !account && 
           <>
             <TipsWrap>
-                <InfoIcon  width="20px" color="#ABB6FF" />
-                <TipsText>You need to connect the wallet to operate</TipsText>
-              </TipsWrap>
-            <BondListItemBtn onClick={connectWallect}>Connection</BondListItemBtn>
+              <InfoIcon  width="20px" color="#ABB6FF" />
+              <TipsText>{t('Your wallet has to be connected in order to perform this operation')}</TipsText>
+            </TipsWrap>
+            <BondListItemBtn onClick={connectWallect}>{t('Connection')}</BondListItemBtn>
           </>
         }
         <ListItem>
-          <ListLable>Your Balance</ListLable>
+          <ListLable>{t('Your balance')}</ListLable>
           <ListContent>{bondData.balance}</ListContent>
         </ListItem>
         <ListItem>
-          <ListLable>Your Will Get</ListLable>
+          <ListLable>{t('You will receive')}</ListLable>
           <ListContent>{bondData.getFee}</ListContent>
         </ListItem>
         <ListItem>
-          <ListLable>Max You Can Buy</ListLable>
+          <ListLable>{t('Max You Can Buy')}</ListLable>
           <ListContent>{bondData.maxFee}</ListContent>
         </ListItem>
         <ListItem>
-          <ListLable>Your Balance</ListLable>
+          <ListLable>{t('Your balance')}</ListLable>
           <ListContent><TextColor isRise={bondData.discount>0}>{bondData.discount}</TextColor></ListContent>
         </ListItem>
         <ListItem>
-          <ListLable>Duration</ListLable>
+          <ListLable>{t('Duration')}</ListLable>
           <ListContent>{bondData.duration}days</ListContent>
         </ListItem>
       </ContentWrap>
