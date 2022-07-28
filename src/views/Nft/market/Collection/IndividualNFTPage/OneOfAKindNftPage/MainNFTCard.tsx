@@ -12,8 +12,6 @@ import SellModal from '../../../components/BuySellModals/SellModal'
 import { nftsBaseUrl } from '../../../constants'
 import { CollectionLink, Container } from '../shared/styles'
 import { useMatchBreakpoints } from "../../../../../../../packages/uikit/src/hooks"
-
-
 const NftBg = styled.div`
 width: 280px;
 height: 280px;
@@ -194,7 +192,6 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
               <Text fontSize="32px" bold mt="12px">
                 {nft.name}
               </Text>    
-             
               {/* {nft.description && <Text mt={['16px', '16px', '48px']}>{t(nft.description)}</Text>} */}
               <Text color="textSubtle" mt={['16px', '16px', '48px']}>
                 {t('Price')}

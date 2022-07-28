@@ -139,7 +139,6 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
             return false
           }
         })
-        
         const itemId = newItem['itemId']
         console.log('itemok:',itemId)
         return callWithGasPrice(nftMarketContract, 'createMarketSaleByERC20', [itemId], {

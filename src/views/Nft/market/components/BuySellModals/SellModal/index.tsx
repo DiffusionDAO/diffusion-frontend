@@ -24,6 +24,27 @@ import ConfirmStage from '../shared/ConfirmStage'
 import RemoveStage from './RemoveStage'
 import TransferStage from './TransferStage'
 
+
+import { Contract } from '@ethersproject/contracts'
+import get from 'lodash/get'
+import { TransactionResponse } from '@ethersproject/providers'
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+
+// add getNFTItems function 
+const getNFTItems = async (
+  contract: Contract,
+  methodName: string,
+  methodArgs: any[] = [] 
+): Promise<Array<any>>  => {  
+    const contractMethod = get(contract, methodName)    
+    const nftItems = await contractMethod(
+      ...methodArgs
+    )
+
+    return nftItems
+}
+
+
 export const modalTitles = (stage: SellingStage, t: ContextApi['t']) => {
   switch (stage) {
     // Sell flow
@@ -187,7 +208,7 @@ const SellModal: React.FC<SellModalProps> = ({
       }
     },
     onApprove: () => {
-     console.log('nftContract:_____====',nftMarketContract)
+     console.log('nftContract,onApprove:====',nftMarketContract)
     // return callWithGasPrice(collectionContractSigner, 'setApprovalForAll', [nftMarketContract.address, true])
      return callWithGasPrice(nft721Contract, 'setApprovalForAll', [nftMarketContract.address, true])
      
@@ -199,10 +220,31 @@ const SellModal: React.FC<SellModalProps> = ({
         <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
       )
     },
-    onConfirm: () => {
-      console.log('onconfirm ok')
+    onConfirm: async () => {
+      const items = await getNFTItems(nftMarketContract,'fetchMarketItems')
+         
+      console.log('items sell->',items)
+      const newItem =  items.find((item)=>{
+         
+         const bigToken =  BigNumber.from(nftToSell.tokenId)
+        if (bigToken.eq(item['tokenId'])){
+           return true
+        } else {
+          return false
+        }
+      })
+      console.log(newItem)
+      const itemId = newItem['itemId']
+      console.log('itemid for sell:',itemId)
+      console.log('onconfirm ok:',stage)
+      const askPrice = parseUnits(price)
+      //add CONFIRM_ADJUST_PRICE
+      if (stage === SellingStage.CONFIRM_ADJUST_PRICE) {
+        return callWithGasPrice(nftMarketContract, 'adjustPrice', [itemId, askPrice])
+      }
       if (stage === SellingStage.CONFIRM_REMOVE_FROM_MARKET) {
-        return callWithGasPrice(nftMarketContract, 'cancelAskOrder', [nftToSell.collectionAddress, nftToSell.tokenId])
+        //return callWithGasPrice(nftMarketContract, 'cancelAskOrder', [nftToSell.collectionAddress, nftToSell.tokenId])
+        return callWithGasPrice(nftMarketContract, 'offshelf', [itemId])
       }
       if (stage === SellingStage.CONFIRM_TRANSFER) {
         return callWithGasPrice(collectionContractSigner, 'safeTransferFrom(address,address,uint256)', [
@@ -213,7 +255,6 @@ const SellModal: React.FC<SellModalProps> = ({
       }
       //const methodName = variant === 'sell' ? 'createAskOrder' : 'modifyAskOrder'
       const methodName = variant === 'sell' ? 'createMarketItemByERC20' : 'modifyAskOrder'
-      const askPrice = parseUnits(price)
     
       return callWithGasPrice(nftMarketContract, methodName, [nftToSell.collectionAddress, nftToSell.tokenId, askPrice])
     },
@@ -224,8 +265,6 @@ const SellModal: React.FC<SellModalProps> = ({
       setStage(SellingStage.TX_CONFIRMED)
     },
   })
-  console.log('handleApprove-----',handleApprove)
-
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
 
   return (

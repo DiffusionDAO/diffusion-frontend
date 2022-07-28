@@ -72,7 +72,7 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
       if (adjustedPriceIsTheSame || priceIsValid) {
         return t('Input New Sale Price')
       }
-      return t('Confirm')
+      return t('Approve')
     }
     return t('Enable Listing')
   }

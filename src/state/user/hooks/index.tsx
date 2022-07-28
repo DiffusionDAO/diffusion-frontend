@@ -388,7 +388,6 @@ export function useRemoveUserAddedToken(): (chainId: number, address: string) =>
 
 export function useGasPrice(): string {
   const chainId = CHAIN_ID
-  console.log('chainId:',chainId)
   const userGas = useSelector<AppState, AppState['user']['gasPrice']>((state) => state.user.gasPrice)
   //return chainId === ChainId.TESTNET.toString() ? userGas : GAS_PRICE_GWEI.testnet
   return chainId === ChainId.MAINNET.toString() ? userGas : GAS_PRICE_GWEI.testnet
