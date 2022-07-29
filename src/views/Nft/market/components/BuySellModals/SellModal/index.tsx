@@ -28,6 +28,7 @@ import { Contract } from '@ethersproject/contracts'
 import get from 'lodash/get'
 import { TransactionResponse } from '@ethersproject/providers'
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+import { constants } from 'fs'
 
 // add getNFTItems function 
 const getNFTItems = async (
@@ -112,8 +113,9 @@ const SellModal: React.FC<SellModalProps> = ({
   const { theme } = useTheme()
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
-  
   const { toastSuccess } = useToast()
+
+  console.log('adjust price onDismiss::',onDismiss)
   // const { reader: collectionContractReader, signer: collectionContractSigner } = useErc721CollectionContract(
   // //   '0x88eBFd7841D131BCeab3e7149217aa8e36985a40',
   // )
@@ -165,9 +167,11 @@ const SellModal: React.FC<SellModalProps> = ({
   const continueToNextStage = () => {
     switch (stage) {
       case SellingStage.SELL:
+       
         setStage(SellingStage.SET_PRICE)
         break
       case SellingStage.SET_PRICE:
+       
         setStage(SellingStage.APPROVE_AND_CONFIRM_SELL)
        
         break
@@ -198,7 +202,6 @@ const SellModal: React.FC<SellModalProps> = ({
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
-    
       try {
         const approvedForContract = await collectionContractReader.isApprovedForAll(account, nftMarketContract.address)
         return !approvedForContract
@@ -208,6 +211,7 @@ const SellModal: React.FC<SellModalProps> = ({
     },
     onApprove: () => {
      console.log('nftContract,onApprove:====',nftMarketContract)
+    
     // return callWithGasPrice(collectionContractSigner, 'setApprovalForAll', [nftMarketContract.address, true])
      return callWithGasPrice(nft721Contract, 'approve', [nftMarketContract.address, nftToSell.tokenId])
      
@@ -223,7 +227,6 @@ const SellModal: React.FC<SellModalProps> = ({
       const items = await getNFTItems(nftMarketContract,'fetchMarketItems')
       console.log('items sell->',items)
       const newItem =  items.find((item)=>{
-         
          const bigToken =  BigNumber.from(nftToSell.tokenId)
         if (bigToken.eq(item['tokenId'])){
            return true
@@ -231,17 +234,17 @@ const SellModal: React.FC<SellModalProps> = ({
           return false
         }
       })
-      console.log(newItem)
       let itemId = ''
       if(newItem){
         itemId = newItem['itemId']      
       }
-     
-      console.log('onconfirm ok:',stage)
-      const askPrice = parseUnits(price)
+      
+      //const askPrice = parseUnits(price)
+      const askPrice = BigNumber.from(price)
+      console.log('=====askprice====:',askPrice)
       //add CONFIRM_ADJUST_PRICE
       if (stage === SellingStage.CONFIRM_ADJUST_PRICE) {
-        console.log('adjust price::',price)
+       
         return callWithGasPrice(nftMarketContract, 'adjustPrice', [itemId, askPrice])
       }
       if (stage === SellingStage.CONFIRM_REMOVE_FROM_MARKET) {

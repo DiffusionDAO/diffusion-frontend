@@ -52,7 +52,7 @@ export const BnbAmountCell: React.FC<BnbAmountCellProps> = ({ bnbAmount, isLoadi
   return (
     <Flex justifySelf="flex-end" flexDirection="column">
       <Flex justifyContent="flex-end">
-        <BinanceIcon height={16} width={16} mr="4px" />
+        <BinanceIcon height={16} width={26} mr="4px" />
         <Text bold color={isInsufficient ? 'failure' : 'text'}>{`${bnbAmount.toLocaleString(undefined, {
           minimumFractionDigits: 3,
           maximumFractionDigits: 5,

@@ -81,14 +81,16 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
   
   const { t } = useTranslation()
   const bnbBusdPrice = useBNBBusdPrice()
+  
   const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ? parseFloat(nft.marketData?.currentAskPrice) : 0
-  console.log('nft:',nft)
+ 
   const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, currentAskPriceAsNumber)
+  
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
     <SellModal variant={nft.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
-  const [onEditProfileModal] = useModal(<EditProfileModal />, false)
+ // const [onEditProfileModal] = useModal(<EditProfileModal />, false)
   const { isMobile } = useMatchBreakpoints()
   const ownerButtons = (
     <Flex flexDirection={['column', 'column', 'row']}>
@@ -104,7 +106,7 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
       </BtnB>
 
       {/* !nft.marketData?.isTradable */}
-      {!nft.marketData?.isTradable && (
+      {/* {!nft.marketData?.isTradable && (
         <BtnB
           minWidth="168px"
           variant="secondary"
@@ -114,7 +116,7 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
         >
           {nftIsProfilePic ? t('Change Profile Pic') : t('Set as Profile Pic')}
         </BtnB>
-      )}
+      )} */}
     </Flex>
   )
   
@@ -123,7 +125,6 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
       <CardBody>
         <Container flexDirection={['column-reverse', null, 'row']}>
           <Flex flex="2">
-
             { !isMobile ? (<Box style={{marginLeft:'48px'}}>
               <TitleRow>
               <div style={{marginRight:'120px'}}>
@@ -145,14 +146,14 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
                   <Text fontSize="32px" bold mr="5px">
                     {formatNumber(currentAskPriceAsNumber, 0, 5)}
                   </Text>
-                  {bnbBusdPrice ? (
+                  {/* {bnbBusdPrice ? (
                     <Text color="textSubtle">{`(~${priceInUsd.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })} USD)`}  </Text>
                   ) : (
                     <Skeleton width="64px" /> 
-                  )}
+                  )} */}
                 </Flex>
               ) : (
                 <Text fontSize="32px">{t('Not for sale')}</Text>
@@ -185,6 +186,7 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
               </div>
             </Box>) :(<Box style={{marginTop:'248px'}}>
               <TitleRow>
+                
               <div style={{display:'flex',flexDirection:'column'}}>
               <CollectionLink  style={{color:'#ffffff'}} to={`${nftsBaseUrl}/collections/${nft.collectionAddress}`}>
                 {nft?.collectionName}
@@ -236,12 +238,12 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
                   onClick={onPresentBuyModal}
                 >
                   {t('Buy')}
-                 
                 </BtnB>
               )}
               
             </Box>) }
           </Flex>
+
           <Flex style={{position:'relative'}} flex="2" justifyContent={['center', null, 'flex-start']} alignItems="center" maxWidth={440}>
            
              { !isMobile ? <NftBg/> : <NftBgMobile/> }              

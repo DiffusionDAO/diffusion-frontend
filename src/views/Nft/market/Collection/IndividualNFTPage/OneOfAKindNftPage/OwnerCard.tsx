@@ -93,13 +93,13 @@ const OwnerCard: React.FC<OwnerCardProps> = ({ nft, isOwnNft, nftIsProfilePic, o
                     <BinanceIcon width="20px" height="20px" mr="8px" />
                     <Text bold>{formatNumber(parseFloat(nft?.marketData?.currentAskPrice), 0, 5)}</Text>
                   </Flex>
-                  {bnbBusdPrice ? (
+                  {/* {bnbBusdPrice ? (
                     <Text fontSize="12px" color="textSubtle">
                       {`(~${formatNumber(priceInUsd, 2, 2)} USD)`}
                     </Text>
                   ) : (
                     <Skeleton width="86px" height="12px" mt="4px" />
-                  )}
+                  )} */}
                 </>
               ) : (
                 <Flex alignItems="center" height="100%">

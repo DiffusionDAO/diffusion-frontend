@@ -73,12 +73,12 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
     return <PageLoader />
   }
   const { isMobile } = useMatchBreakpoints()
-  let bgImg = isMobile ? "url('/images/nfts/smx1.png')": "url('/images/nfts/smxl.png')"
-  
+  let bgImg = isMobile ? "url('/images/nfts/mretc.png')": "url('/images/nfts/smxl.png')"
+  let bgOffset = !isMobile ? '40px' : '80px'
   return (
     <PageWrap>
       <div style={{backgroundImage:`${bgImg}`,backgroundRepeat:'no-repeat',
-      backgroundPosition: '4px'
+      backgroundPosition: `4px ${bgOffset}`
     }}>
          <MainNFTCard 
          nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={isProfilePic} onSuccess={refetch} />

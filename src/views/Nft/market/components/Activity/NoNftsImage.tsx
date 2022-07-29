@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const NoNftsImage = styled.div`
-  background: url('/images/nfts/no-profile-md.png');
+  background: url('/images/nfts/no-profile-md1.png');
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 50%;
