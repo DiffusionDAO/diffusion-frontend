@@ -24,7 +24,6 @@ import ConfirmStage from '../shared/ConfirmStage'
 import RemoveStage from './RemoveStage'
 import TransferStage from './TransferStage'
 
-
 import { Contract } from '@ethersproject/contracts'
 import get from 'lodash/get'
 import { TransactionResponse } from '@ethersproject/providers'
@@ -210,7 +209,7 @@ const SellModal: React.FC<SellModalProps> = ({
     onApprove: () => {
      console.log('nftContract,onApprove:====',nftMarketContract)
     // return callWithGasPrice(collectionContractSigner, 'setApprovalForAll', [nftMarketContract.address, true])
-     return callWithGasPrice(nft721Contract, 'setApprovalForAll', [nftMarketContract.address, true])
+     return callWithGasPrice(nft721Contract, 'approve', [nftMarketContract.address, nftToSell.tokenId])
      
     },
     onApproveSuccess: async ({ receipt }) => {
@@ -222,7 +221,6 @@ const SellModal: React.FC<SellModalProps> = ({
     },
     onConfirm: async () => {
       const items = await getNFTItems(nftMarketContract,'fetchMarketItems')
-         
       console.log('items sell->',items)
       const newItem =  items.find((item)=>{
          
@@ -234,15 +232,20 @@ const SellModal: React.FC<SellModalProps> = ({
         }
       })
       console.log(newItem)
-      const itemId = newItem['itemId']
-      console.log('itemid for sell:',itemId)
+      let itemId = ''
+      if(newItem){
+        itemId = newItem['itemId']      
+      }
+     
       console.log('onconfirm ok:',stage)
       const askPrice = parseUnits(price)
       //add CONFIRM_ADJUST_PRICE
       if (stage === SellingStage.CONFIRM_ADJUST_PRICE) {
+        console.log('adjust price::',price)
         return callWithGasPrice(nftMarketContract, 'adjustPrice', [itemId, askPrice])
       }
       if (stage === SellingStage.CONFIRM_REMOVE_FROM_MARKET) {
+        console.log('offshelf')
         //return callWithGasPrice(nftMarketContract, 'cancelAskOrder', [nftToSell.collectionAddress, nftToSell.tokenId])
         return callWithGasPrice(nftMarketContract, 'offshelf', [itemId])
       }
@@ -255,7 +258,7 @@ const SellModal: React.FC<SellModalProps> = ({
       }
       //const methodName = variant === 'sell' ? 'createAskOrder' : 'modifyAskOrder'
       const methodName = variant === 'sell' ? 'createMarketItemByERC20' : 'modifyAskOrder'
-    
+      console.log('method->',methodName)                         
       return callWithGasPrice(nftMarketContract, methodName, [nftToSell.collectionAddress, nftToSell.tokenId, askPrice])
     },
     onSuccess: async ({ receipt }) => {
