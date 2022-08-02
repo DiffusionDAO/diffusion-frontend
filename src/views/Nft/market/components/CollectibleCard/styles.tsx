@@ -36,6 +36,9 @@ export const BNBAmountLabel: React.FC<BNBAmountLabelProps> = ({ amount, ...props
         maximumFractionDigits: 5,
       })}
     </Text>
+    {!amount && (<Text fontWeight="600">
+      .00
+    </Text>)}
   </Flex>
 )
 

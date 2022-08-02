@@ -114,7 +114,6 @@ const SellModal: React.FC<SellModalProps> = ({
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
-
   console.log('adjust price onDismiss::',onDismiss)
   // const { reader: collectionContractReader, signer: collectionContractSigner } = useErc721CollectionContract(
   // //   '0x88eBFd7841D131BCeab3e7149217aa8e36985a40',
@@ -210,8 +209,7 @@ const SellModal: React.FC<SellModalProps> = ({
       }
     },
     onApprove: () => {
-     console.log('nftContract,onApprove:====',nftMarketContract)
-    
+     console.log('nftContract,onApprove:====',nftMarketContract)    
     // return callWithGasPrice(collectionContractSigner, 'setApprovalForAll', [nftMarketContract.address, true])
      return callWithGasPrice(nft721Contract, 'approve', [nftMarketContract.address, nftToSell.tokenId])
      
@@ -224,8 +222,8 @@ const SellModal: React.FC<SellModalProps> = ({
       )
     },
     onConfirm: async () => {
-      const items = await getNFTItems(nftMarketContract,'fetchMarketItems')
-      console.log('items sell->',items)
+      
+      const items = await getNFTItems(nftMarketContract,'fetchMarketItems')      
       const newItem =  items.find((item)=>{
          const bigToken =  BigNumber.from(nftToSell.tokenId)
         if (bigToken.eq(item['tokenId'])){
@@ -238,10 +236,13 @@ const SellModal: React.FC<SellModalProps> = ({
       if(newItem){
         itemId = newItem['itemId']      
       }
+      let askPrice:any = 0
+      if(price) {
+         askPrice = parseUnits(price)
+      }
       
-      //const askPrice = parseUnits(price)
-      const askPrice = BigNumber.from(price)
-      console.log('=====askprice====:',askPrice)
+      //const askPrice = BigNumber.from(price)
+      console.log('TRANSFER-》',stage,SellingStage.CONFIRM_TRANSFER)
       //add CONFIRM_ADJUST_PRICE
       if (stage === SellingStage.CONFIRM_ADJUST_PRICE) {
        
@@ -253,15 +254,22 @@ const SellModal: React.FC<SellModalProps> = ({
         return callWithGasPrice(nftMarketContract, 'offshelf', [itemId])
       }
       if (stage === SellingStage.CONFIRM_TRANSFER) {
-        return callWithGasPrice(collectionContractSigner, 'safeTransferFrom(address,address,uint256)', [
+        // return callWithGasPrice(collectionContractSigner, 'safeTransferFrom(address,address,uint256)', [
+        //   account,
+        //   transferAddress,
+        //   nftToSell.tokenId,
+        // ])
+       
+        
+        return callWithGasPrice(collectionContractSigner, 'transferFrom(address,address,uint256)', [
           account,
           transferAddress,
           nftToSell.tokenId,
         ])
-      }
+    }
       //const methodName = variant === 'sell' ? 'createAskOrder' : 'modifyAskOrder'
       const methodName = variant === 'sell' ? 'createMarketItemByERC20' : 'modifyAskOrder'
-      console.log('method->',methodName)                         
+      
       return callWithGasPrice(nftMarketContract, methodName, [nftToSell.collectionAddress, nftToSell.tokenId, askPrice])
     },
     onSuccess: async ({ receipt }) => {

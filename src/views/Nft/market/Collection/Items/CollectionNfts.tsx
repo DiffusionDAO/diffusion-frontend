@@ -6,7 +6,8 @@ import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard } from '../../components/CollectibleCard'
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
 import { getDFSNFTAddress } from 'utils/addressHelpers'
-
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+import { formatUnits } from '@ethersproject/units'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -47,7 +48,13 @@ const CollectionNfts: React.FC<CollectionNftsProps> = ({ collection }) => {
             alignItems="start"
           >
             {nfts.map((nft) => {
-              const currentAskPriceAsNumber = nft.marketData && parseFloat(nft?.marketData?.currentAskPrice)
+              let currentAskPriceAsNumber:any = nft.marketData && parseFloat(nft?.marketData?.currentAskPrice)
+               console.log(typeof currentAskPriceAsNumber)
+              if(!isNaN(currentAskPriceAsNumber) ){
+                console.log('currentAskPric++++',currentAskPriceAsNumber)
+              currentAskPriceAsNumber = BigNumber.from(String(currentAskPriceAsNumber))
+              currentAskPriceAsNumber = formatUnits(currentAskPriceAsNumber,18)
+              }
                
               return (
                 <CollectibleLinkCard

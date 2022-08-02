@@ -12,6 +12,9 @@ import SellModal from '../../../components/BuySellModals/SellModal'
 import { nftsBaseUrl } from '../../../constants'
 import { CollectionLink, Container } from '../shared/styles'
 import { useMatchBreakpoints } from "../../../../../../../packages/uikit/src/hooks"
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+import { combinedTokenMapFromUnsupportedUrlsSelector } from 'state/lists/hooks'
+import { formatUnits } from '@ethersproject/units'
 const NftBg = styled.div`
 width: 280px;
 height: 280px;
@@ -82,15 +85,19 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
   const { t } = useTranslation()
   const bnbBusdPrice = useBNBBusdPrice()
   
-  const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ? parseFloat(nft.marketData?.currentAskPrice) : 0
+  let currentAskPriceAsNumber:any = nft?.marketData?.currentAskPrice ? parseFloat(nft.marketData?.currentAskPrice) : 0
+  console.log(currentAskPriceAsNumber)
+  currentAskPriceAsNumber = BigNumber.from(String(currentAskPriceAsNumber))
  
+  currentAskPriceAsNumber = formatUnits(currentAskPriceAsNumber,18)
+  console.log(currentAskPriceAsNumber)
   const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, currentAskPriceAsNumber)
   
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
     <SellModal variant={nft.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
- // const [onEditProfileModal] = useModal(<EditProfileModal />, false)
+  const [onEditProfileModal] = useModal(<EditProfileModal />, false)
   const { isMobile } = useMatchBreakpoints()
   const ownerButtons = (
     <Flex flexDirection={['column', 'column', 'row']}>
@@ -106,7 +113,7 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
       </BtnB>
 
       {/* !nft.marketData?.isTradable */}
-      {/* {!nft.marketData?.isTradable && (
+      {!nft.marketData?.isTradable && (
         <BtnB
           minWidth="168px"
           variant="secondary"
@@ -114,9 +121,10 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
           mt="24px"
           onClick={onEditProfileModal}
         >
-          {nftIsProfilePic ? t('Change Profile Pic') : t('Set as Profile Pic')}
+          {/* {nftIsProfilePic ? t('Change Profile Pic') : t('Set as Profile Pic')} */}
+          { t('Pledge')}
         </BtnB>
-      )} */}
+      )}
     </Flex>
   )
   

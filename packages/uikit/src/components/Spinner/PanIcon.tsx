@@ -4,7 +4,7 @@ import { SvgProps } from "../Svg/types";
 
 const Icon: React.FC<SvgProps> = (props) => {
   return (
-    <div style={{color:'#FFFFFF',fontSize:'24px'}}>Loading ...</div>
+    <div style={{color:'#FFFFFF',fontSize:'18px'}}>Loading ...</div>
     // <Svg viewBox="0 0 256 256" {...props}>
     //   <path
     //     fillRule="evenodd"

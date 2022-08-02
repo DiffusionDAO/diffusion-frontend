@@ -41,11 +41,8 @@ const getNFTItems = async (
     const nftItems = await contractMethod(
       ...methodArgs
     )
-
     return nftItems
 }
-
-
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),

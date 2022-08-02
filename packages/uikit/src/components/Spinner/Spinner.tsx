@@ -32,7 +32,7 @@ const Container = styled.div`
 const RotatingPancakeIcon = styled(PancakeIcon)`
   position: absolute;
   top: 0;
-  left: 0;
+  left: 20;
   animation: ${rotate} 2s linear infinite;
   transform: translate3d(0, 0, 0);
 `;
@@ -45,7 +45,7 @@ const FloatingPanIcon = styled(PanIcon)`
 const Spinner: React.FC<SpinnerProps> = ({ size = 128 }) => {
   return (
     <Container>
-      <RotatingPancakeIcon width={`${size * 3}px`} />
+      <RotatingPancakeIcon width={`${size * 2}px`} />
       <FloatingPanIcon width={`${size}px`} />
     </Container>
   );

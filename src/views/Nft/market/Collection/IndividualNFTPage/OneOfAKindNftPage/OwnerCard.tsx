@@ -11,7 +11,8 @@ import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
 import ProfileCell from '../../../components/ProfileCell'
 import { ButtonContainer, TableHeading } from '../shared/styles'
-
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+import { formatUnits } from '@ethersproject/units'
 const BtnWrap = styled(Button)`
 
 border-radius: 8px;
@@ -58,6 +59,10 @@ const OwnerCard: React.FC<OwnerCardProps> = ({ nft, isOwnNft, nftIsProfilePic, o
     <SellModal variant={nft.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
 
+  let askprice:any = nft?.marketData?.currentAskPrice
+  if (askprice) {
+      askprice =  formatUnits(askprice,18)
+  }
   return (
     <StyledCard>
       <Grid
@@ -91,7 +96,10 @@ const OwnerCard: React.FC<OwnerCardProps> = ({ nft, isOwnNft, nftIsProfilePic, o
                 <>
                   <Flex justifySelf="flex-start" alignItems="center" width="max-content">
                     <BinanceIcon width="20px" height="20px" mr="8px" />
-                    <Text bold>{formatNumber(parseFloat(nft?.marketData?.currentAskPrice), 0, 5)}</Text>
+                    <Text bold>{
+                    askprice
+                    
+                    }</Text>
                   </Flex>
                   {/* {bnbBusdPrice ? (
                     <Text fontSize="12px" color="textSubtle">

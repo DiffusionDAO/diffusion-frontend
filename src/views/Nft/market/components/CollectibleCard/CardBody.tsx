@@ -45,6 +45,11 @@ const CollectibleCardBody: React.FC<CollectibleCardProps> = ({ nft, nftLocation,
             <CostLabel cost={currentAskPrice} bnbBusdPrice={bnbBusdPrice} />
           </MetaRow>
         )}
+         {!currentAskPrice && (
+          <MetaRow title={isUserNft ? t('Your price') : t('Asking price')}>
+            <CostLabel cost={0.00} bnbBusdPrice={bnbBusdPrice} />
+          </MetaRow>
+        )}
       </Box>
     </CardBody>
   )
