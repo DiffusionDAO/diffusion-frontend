@@ -110,7 +110,7 @@ const BondModal: React.FC<BondModalProps> = ({
           </>
         }
         {
-          account && isApprove && activeTab === "redeem"  && <BondListItemBtn>{t('Claim')}</BondListItemBtn>
+          account && isApprove && activeTab === "redeem"  && <BondListItemBtn>{t('Withdraw')}</BondListItemBtn>
         }
         {
           account && !isApprove && 
@@ -141,7 +141,7 @@ const BondModal: React.FC<BondModalProps> = ({
           <ListContent>{bondData.getFee}</ListContent>
         </ListItem>
         <ListItem>
-          <ListLable>{t('Max You Can Buy')}</ListLable>
+          <ListLable>{t('Max You Can Withdraw')}</ListLable>
           <ListContent>{bondData.maxFee}</ListContent>
         </ListItem>
         <ListItem>

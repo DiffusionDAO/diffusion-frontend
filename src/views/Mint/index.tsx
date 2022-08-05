@@ -70,7 +70,7 @@ const Bond: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Premier Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value='0 USDT' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DataCell label={t('Price')} value='0 DFS' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal"/>
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
@@ -81,7 +81,7 @@ const Bond: FC = () => {
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Available count:')}{maxSenior}</AvailableCount>
+              <AvailableCount>{t('Available count')}: {maxSenior}DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
                   <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => {if(seniorCount>0)setSeniorCount(seniorCount-1)}}>-</DrawBlindBoxTextBtn>
@@ -106,7 +106,7 @@ const Bond: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Deluxe Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value='0 USDT' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DataCell label={t('Price')} value='0 DFS' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal"/>
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
@@ -117,7 +117,7 @@ const Bond: FC = () => {
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Available count:')}{maxOrdinary}</AvailableCount>
+              <AvailableCount>{t('Available count')}: {maxOrdinary}DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
                   <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => {if(ordinaryCount>0)setOrdinaryCount(ordinaryCount-1)}}>-</DrawBlindBoxTextBtn>
