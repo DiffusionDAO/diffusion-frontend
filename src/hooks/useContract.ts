@@ -288,6 +288,11 @@ export const useNftComposeContract = () => {
   return useMemo(() => getNftComposeContract(library.getSigner()), [library])
 }
 
+export const useNftDrawContract = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getNftDrawContract(library.getSigner()), [library])
+}
+
 export const useDFSNftContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getDFSNFTContract(library.getSigner()), [library])

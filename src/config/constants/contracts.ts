@@ -107,7 +107,7 @@ export default {
     56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',
     97: '0x5d91BCC038142cBD7a972A74305Fcd8A6a8A1dC2',
   },
-  drawNFT:{
+  nftDraw:{
     56:"",
     97:"0x4F21c1837b5F0C16c0fF56A2dEf8529E1d8b2Ca5",
   },
