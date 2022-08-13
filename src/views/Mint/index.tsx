@@ -16,6 +16,7 @@ import JumpModal from './components/JumpModal'
 import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { useFetchBalance } from "./hook/useFetchBalance"
+import { formatUnits } from '@ethersproject/units';
 
 const Mint: FC = () => {
   const { account } = useWeb3React();
@@ -32,13 +33,12 @@ const Mint: FC = () => {
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
   const [maxOrdinary, setMaxOrdinary] = useState<number>(10);
   const { balance } = useFetchBalance()
-
   const drawBlind = (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
     }
-    if (balance.toNumber() <= 0) {
+    if (balance?.toNumber() <= 0) {
       setJumpModalVisible(true)
       return
     }
@@ -83,7 +83,7 @@ const Mint: FC = () => {
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Balance')}: {balance}DFS</AvailableCount>
+              <AvailableCount>{t('Balance')}: {balance? formatUnits(balance,"ether") : 0}DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
                   <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { if (seniorCount > 0) setSeniorCount(seniorCount - 1) }}>-</DrawBlindBoxTextBtn>
@@ -119,7 +119,7 @@ const Mint: FC = () => {
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Balance')}: {maxOrdinary}DFS</AvailableCount>
+              <AvailableCount>{t('Balance')}: {balance? formatUnits(balance,"ether") : 0}DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
                   <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount > 0) setOrdinaryCount(ordinaryCount - 1) }}>-</DrawBlindBoxTextBtn>
