@@ -28,17 +28,29 @@ const Mint: FC = () => {
   const [playBindBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false);
   const [gifUrl, setGifUrl] = useState<string>('/images/mint/purplePlay.gif');
   const [seniorCount, setSeniorCount] = useState<number>(1);
-  const [maxSenior, setMaxSenior] = useState<number>(10);
+  const [maxSenior, setMaxSenior] = useState<number>(1);
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
-  const [maxOrdinary, setMaxOrdinary] = useState<number>(10);
+  const [maxOrdinary, setMaxOrdinary] = useState<number>(1);
   const { balance } = useFetchBalance()
+
+  const ordinaryPrice = 10
+  const seniorPrice = 60
+
+  useEffect(() => {
+    if (balance) {
+      const maxOrd = balance / ordinaryPrice
+      const maxSen = balance / seniorPrice
+      setMaxOrdinary(Math.max(maxOrd,1))
+      setMaxSenior(Math.max(maxSen,1))
+    }
+  },[balance])
 
   const drawBlind = (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
     }
-    if (balance.toNumber() <= 0) {
+    if (balance <= 0) {
       setJumpModalVisible(true)
       return
     }
@@ -72,7 +84,7 @@ const Mint: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Premier Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value='60 DFS' valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
+                <DataCell label={t('Price')} value={`${seniorPrice} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
@@ -108,7 +120,7 @@ const Mint: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Deluxe Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value='10 DFS' valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
+                <DataCell label={t('Price')} value={`${ordinaryPrice} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
@@ -119,7 +131,7 @@ const Mint: FC = () => {
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Balance')}: {maxOrdinary}DFS</AvailableCount>
+              <AvailableCount>{t('Balance')}: {balance}DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
                   <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount > 0) setOrdinaryCount(ordinaryCount - 1) }}>-</DrawBlindBoxTextBtn>

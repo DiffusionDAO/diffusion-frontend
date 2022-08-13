@@ -14,5 +14,5 @@ export const useFetchBalance = () => {
     console.log('balance:', val)
     return val
   })
-  return { balance: data }
+  return { balance: data ? parseInt(formatUnits(data,"ether")):0 }
 }
