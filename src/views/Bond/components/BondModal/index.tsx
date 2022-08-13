@@ -142,7 +142,7 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem>
         <ListItem>
           <ListLable>{t('Max You Can Withdraw')}</ListLable>
-          <ListContent>{bondData.maxFee}</ListContent>
+          <ListContent>{bondData.maxFee}DFS</ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('Your balance')}</ListLable>

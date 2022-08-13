@@ -9,7 +9,7 @@ const bondDatasMock = [
     discount: 3.23,
     duration: 1,
     balance: 0,
-    maxFee: '32415OHM',
+    maxFee: '32415',
     getFee: '0Dao',
   },
   {
@@ -22,7 +22,7 @@ const bondDatasMock = [
     discount: -3.23,
     duration: 1,
     balance: 0,
-    maxFee: '32415OHM',
+    maxFee: '32415',
     getFee: '0Dao',
   },
   {
@@ -35,7 +35,7 @@ const bondDatasMock = [
     discount: -3.23,
     duration: 1,
     balance: 0,
-    maxFee: '32415OHM',
+    maxFee: '32415',
     getFee: '0Dao',
   },
   {
@@ -48,7 +48,7 @@ const bondDatasMock = [
     discount: -3.23,
     duration: 1,
     balance: 0,
-    maxFee: '32415OHM',
+    maxFee: '32415',
     getFee: '0Dao',
   },
   {
@@ -61,7 +61,7 @@ const bondDatasMock = [
     discount: -3.23,
     duration: 1,
     balance: 0,
-    maxFee: '32415OHM',
+    maxFee: '32415',
     getFee: '0Dao',
   },
 ]
