@@ -4,7 +4,6 @@ import useAuth from 'hooks/useAuth'
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
-import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
 import {
   BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, BoxLeftAskImg, BoxRightAskImg, ContentWrap, DalaCardList, DalaCardListTitle,
   DalaCardCellWrap, DalaCardLabelDiv, DalaCardValueDiv, ColorFont,
@@ -16,6 +15,7 @@ import JumpModal from './components/JumpModal'
 import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { useFetchBalance } from "./hook/useFetchBalance"
+import { mintDatasMock } from './MockMintData'
 
 const Mint: FC = () => {
   const { account } = useWeb3React();
@@ -145,7 +145,7 @@ const Mint: FC = () => {
 
     {/* 盲盒成功的弹窗 */}
     {
-      blindBoxModalVisible ? <BlindBoxModal nftData={nftDatasMock} onClose={closeBlindBoxModal} />
+      blindBoxModalVisible ? <BlindBoxModal data={mintDatasMock} onClose={closeBlindBoxModal} />
         : null
     }
     {/* 跳转选项的弹窗 */}

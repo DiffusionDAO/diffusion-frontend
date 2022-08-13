@@ -18,6 +18,13 @@ export const CardImg = styled.img`
   width: 100%;
   border-radius: 11px;
 `
+
+export const CardText = styled.div`
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
+`
 export const BtnWrap = styled.div`
   width: 228px;
 `
