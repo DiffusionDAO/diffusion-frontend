@@ -19,6 +19,7 @@ import BigNumber from 'bignumber.js';
 import { useTokenContract } from 'hooks/useContract';
 import { useSWRContract } from 'hooks/useSWRContract';
 import useSWR from 'swr';
+import { formatUnits } from '@ethersproject/units';
 
 const Mint: FC = () => {
   const { account } = useWeb3React();
@@ -43,7 +44,7 @@ const Mint: FC = () => {
     return balance
   })
   if (data) {
-    console.log(data.toNumber())
+    console.log(formatUnits(data,"ether"))
     // setBalance(data)
   }
   const drawBlind = (type: string) => {
