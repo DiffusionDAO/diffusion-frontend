@@ -13,8 +13,11 @@ import BlindBoxModal from './components/BlindBoxModal'
 import JumpModal from './components/JumpModal'
 import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
+import { useTokenContract } from 'hooks/useContract';
+import BigNumber from 'bignumber.js';
+import { useSWRContract } from 'hooks/useSWRContract';
 
-const Bond: FC = () => {
+const Mint: FC = () => {
   const { account } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
@@ -24,19 +27,22 @@ const Bond: FC = () => {
   const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false);
   const [playBindBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false);
   const [gifUrl, setGifUrl] = useState<string>('/images/mint/purplePlay.gif');
-  const [balance,setBalance] = useState(1);
-  const [seniorCount, setSeniorCount] = useState<number>(0);
+  const [balance,setBalance] = useState<BigNumber>(new BigNumber(0));
+  const [seniorCount, setSeniorCount] = useState<number>(1);
   const [maxSenior, setMaxSenior] = useState<number>(10);
-  const [ordinaryCount, setOrdinaryCount] = useState<number>(0);
+  const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
   const [maxOrdinary, setMaxOrdinary] = useState<number>(10);
-
-  // 抽取盲盒
+  const tokenContract = useTokenContract("0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF")
+  console.log("account:",account)
+  const {data} = useSWRContract([tokenContract, 'balanceOf', [account]])
+  console.log(data)
+  // setBalance(data)
   const drawBlind = (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
     }
-    if (balance <= 0) {
+    if (balance.toNumber() <= 0) {
       setJumpModalVisible(true)
       return
     }
@@ -70,7 +76,7 @@ const Bond: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Premier Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value='0 DFS' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DataCell label={t('Price')} value='60 DFS' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal"/>
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
@@ -81,7 +87,7 @@ const Bond: FC = () => {
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Available count')}: {maxSenior}DFS</AvailableCount>
+              <AvailableCount>{t('Balance')}: {balance}DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
                   <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => {if(seniorCount>0)setSeniorCount(seniorCount-1)}}>-</DrawBlindBoxTextBtn>
@@ -106,7 +112,7 @@ const Bond: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Deluxe Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value='0 DFS' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
+                <DataCell label={t('Price')} value='10 DFS' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal"/>
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
@@ -117,7 +123,7 @@ const Bond: FC = () => {
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Available count')}: {maxOrdinary}DFS</AvailableCount>
+              <AvailableCount>{t('Balance')}: {maxOrdinary}DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
                   <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => {if(ordinaryCount>0)setOrdinaryCount(ordinaryCount-1)}}>-</DrawBlindBoxTextBtn>
@@ -153,4 +159,4 @@ const Bond: FC = () => {
     }
   </BondPageWrap>)
 }
-export default Bond;
+export default Mint;
