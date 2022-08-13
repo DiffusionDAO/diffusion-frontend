@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useWalletModal } from '@pancakeswap/uikit'
 import useAuth from 'hooks/useAuth'
 import { Grid } from "@material-ui/core";
@@ -15,11 +15,7 @@ import BlindBoxModal from './components/BlindBoxModal'
 import JumpModal from './components/JumpModal'
 import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
-import BigNumber from 'bignumber.js';
-import { useTokenContract } from 'hooks/useContract';
-import { useSWRContract } from 'hooks/useSWRContract';
-import useSWR from 'swr';
-import { formatUnits } from '@ethersproject/units';
+import { useFetchBalance } from "./hook/useFetchBalance"
 
 const Mint: FC = () => {
   const { account } = useWeb3React();
@@ -31,22 +27,12 @@ const Mint: FC = () => {
   const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false);
   const [playBindBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false);
   const [gifUrl, setGifUrl] = useState<string>('/images/mint/purplePlay.gif');
-  const [balance, setBalance] = useState<BigNumber>();
   const [seniorCount, setSeniorCount] = useState<number>(1);
   const [maxSenior, setMaxSenior] = useState<number>(10);
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
   const [maxOrdinary, setMaxOrdinary] = useState<number>(10);
-  console.log("account:", account)
-  const tokenContract = useTokenContract("0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF")
-  console.log("tokenContract:", tokenContract)
-  const { data } = useSWR("dfsBalance", async () => {
-    const balance = await tokenContract.balanceOf(account)
-    return balance
-  })
-  if (data) {
-    console.log(formatUnits(data,"ether"))
-    // setBalance(data)
-  }
+  const { balance } = useFetchBalance()
+
   const drawBlind = (type: string) => {
     if (!account) {
       onPresentConnectModal()
