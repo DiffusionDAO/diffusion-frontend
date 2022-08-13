@@ -31,6 +31,7 @@ import {
   getAnniversaryAchievementContract,
   getNftMarketContract,
   getNftComposeContract,
+  getNftDrawContract,
   getDFSNFTContract,
   getNftSaleContract,
   getPancakeSquadContract,
