@@ -15,6 +15,17 @@ export const useFetchBalance = () => {
     const val = await tokenContract.balanceOf(account)
     return val
   })
-  return { balance: data ? parseInt(formatUnits(data,"ether")):0 }
+  return { balance: data ? formatUnits(data,"ether"):0 }
 }
 
+export const useFetchAllowance = (spender) => {
+  var address = getDFSAddress()
+  const tokenContract = useTokenContract(address)
+  const { account } = useWeb3React();
+
+  const { data } = useSWR("dfsAllowance", async () => {
+    const val = await tokenContract.allowance(account,spender)
+    return val
+  })
+  return { allowance: data ? formatUnits(data,"ether"):0 }
+}

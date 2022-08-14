@@ -15,15 +15,17 @@ import BlindBoxModal from './components/BlindBoxModal'
 import JumpModal from './components/JumpModal'
 import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
-import { useFetchBalance } from "./hook/useFetchBalance"
+import { useFetchAllowance, useFetchBalance } from "./hook/useFetchBalance"
 import { mintDatasMock } from './MockMintData'
 import { getDFSAddress, getNftDrawAddress } from 'utils/addressHelpers';
 import { MaxUint256 } from '@ethersproject/constants';
 import BigNumber from 'bignumber.js'
 import { getDFSNFTContract } from 'utils/contractHelpers';
+import useTokenAllowance from 'hooks/useTokenAllowance';
+import { useToken } from 'hooks/Tokens';
 
 const Mint: FC = () => {
-  const { account,library } = useWeb3React();
+  const { account, library } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
   const { login, logout } = useAuth()
@@ -44,7 +46,8 @@ const Mint: FC = () => {
 
   var address = getDFSAddress()
   const DFS = useTokenContract(address)
-
+  const { allowance } = useFetchAllowance(nftDrawAddress)
+  console.log(allowance)
   useEffect(() => {
     if (balance) {
       const maxOrd = balance / ordinaryPrice
@@ -67,11 +70,19 @@ const Mint: FC = () => {
     setGifUrl(`/images/mint/${type}.gif`)
     const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
     const recipient = await res.wait()
-    const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
-    var tokenId = id.toString()
+    const events = recipient.events
+    var levels = []
     const dfsNFT = getDFSNFTContract(library.getSigner())
-    const level = await dfsNFT.getItems(tokenId)
-    console.log("level:",level)
+
+    for (var i = 1; i <= events.length; i++) {
+      if (i % 3 == 0) {
+        const id = new BigNumber(events[i - 1].topics[3])
+        var tokenId = id.toString()
+        const level = await dfsNFT.getItems(tokenId)
+        levels.push(level.toString())
+      }
+    }
+    console.log("level:", levels)
     setPlayBindBoxModalVisible(false)
     setBlindBoxModalVisible(true)
   }
@@ -117,7 +128,7 @@ const Mint: FC = () => {
                   <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { setSeniorCount(maxSenior) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
-                  <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px' }} onClick={async () => { const receipt = await DFS.approve(nftDrawAddress, MaxUint256) }} >{t('Approve')}</DrawBlindBoxPrimaryBtn>
+                  {allowance=="0" ? <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px' }} onClick={async () => { const receipt = await DFS.approve(nftDrawAddress, MaxUint256) }} >{t('Approve')}</DrawBlindBoxPrimaryBtn> : <></>}
                 </ActionRight>
               </ActionWrap>
               <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={() => drawBlind('senior')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
@@ -153,8 +164,9 @@ const Mint: FC = () => {
                   <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { setOrdinaryCount(maxOrdinary) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
-                  <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={async () => { const receipt = await DFS.approve(nftDrawAddress, MaxUint256) }} style={{ width: '80px' }}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
+                  {allowance=="0" ? <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={async () => { const receipt = await DFS.approve(nftDrawAddress, MaxUint256) }} style={{ width: '80px' }}>{t('Approve')}</DrawBlindBoxPrimaryBtn> : <></>}
                 </ActionRight>
+
               </ActionWrap>
               <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={() => drawBlind('ordinary')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
