@@ -48,6 +48,7 @@ const Mint: FC = () => {
 
   const address = getDFSAddress()
   const DFS = useTokenContract(address)
+
   useEffect(() => {
     if (balance) {
       const maxOrd = balance.div(ordinaryPrice)
@@ -56,6 +57,7 @@ const Mint: FC = () => {
       setMaxSenior(maxSen)
     }
   }, [balance])
+  const NftDraw = useNftDrawContract()
 
   const drawBlind = async (type: string) => {
     if (!account) {
@@ -69,7 +71,6 @@ const Mint: FC = () => {
     setPlayBindBoxModalVisible(true)
     setGifUrl(`/images/mint/${type}.gif`)
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const NftDraw = useNftDrawContract()
     const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
     const recipient = await res.wait()
     const {events} = recipient
