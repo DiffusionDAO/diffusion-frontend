@@ -11,7 +11,6 @@ export const useFetchBalance = () => {
 
   const { data } = useSWR("dfsBalance", async () => {
     const val = await tokenContract.balanceOf(account)
-    console.log('balance:', val)
     return val
   })
   return { balance: data ? parseInt(formatUnits(data,"ether")):0 }

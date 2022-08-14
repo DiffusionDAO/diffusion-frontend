@@ -4,6 +4,7 @@ import useAuth from 'hooks/useAuth'
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
+import { useNftDrawContract } from 'hooks/useContract'
 import {
   BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, BoxLeftAskImg, BoxRightAskImg, ContentWrap, DalaCardList, DalaCardListTitle,
   DalaCardCellWrap, DalaCardLabelDiv, DalaCardValueDiv, ColorFont,
@@ -32,6 +33,7 @@ const Mint: FC = () => {
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
   const [maxOrdinary, setMaxOrdinary] = useState<number>(1);
   const { balance } = useFetchBalance()
+  const NftDraw = useNftDrawContract()
 
   const ordinaryPrice = 10
   const seniorPrice = 60
@@ -45,22 +47,21 @@ const Mint: FC = () => {
     }
   },[balance])
 
-  const drawBlind = (type: string) => {
+  const drawBlind = async (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
     }
-    if (balance <= 0) {
+    if ((type === 'senior' && balance < seniorPrice*seniorCount) || (type === 'ordinary' && balance < ordinaryPrice*ordinaryCount)) {
       setJumpModalVisible(true)
       return
     }
     setPlayBindBoxModalVisible(true)
     setGifUrl(`/images/mint/${type}.gif`)
-    setTimeout(() => {
-      setPlayBindBoxModalVisible(false)
-      setBlindBoxModalVisible(true)
-    }, 3000)
-
+    const res = type === 'ordinary' ? await NftDraw.mintOne() : await NftDraw.mintTwo()
+    console.log('NftDraw:', res)
+    setPlayBindBoxModalVisible(false)
+    setBlindBoxModalVisible(true)
   }
   const closeBlindBoxModal = () => {
     setBlindBoxModalVisible(false)
@@ -98,8 +99,8 @@ const Mint: FC = () => {
               <AvailableCount>{t('Balance')}: {balance}DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
-                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { if (seniorCount > 0) setSeniorCount(seniorCount - 1) }}>-</DrawBlindBoxTextBtn>
-                  <CountInput value={seniorCount} isMobile={isMobile} onChange={e => setSeniorCount(parseInt(e.target.value))} />
+                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { if (seniorCount > 1) setSeniorCount(seniorCount - 1) }}>-</DrawBlindBoxTextBtn>
+                  <CountInput value={seniorCount} isMobile={isMobile} min={1} controls={false} onChange={val => setSeniorCount(Number(val))} />
                   <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { if (seniorCount < maxSenior) setSeniorCount(seniorCount + 1) }}>+</DrawBlindBoxTextBtn>
                   <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { setSeniorCount(maxSenior) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
@@ -134,8 +135,8 @@ const Mint: FC = () => {
               <AvailableCount>{t('Balance')}: {balance}DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
-                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount > 0) setOrdinaryCount(ordinaryCount - 1) }}>-</DrawBlindBoxTextBtn>
-                  <CountInput value={ordinaryCount} isMobile={isMobile} onChange={e => setOrdinaryCount(parseInt(e.target.value))} />
+                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount > 1) setOrdinaryCount(ordinaryCount - 1) }}>-</DrawBlindBoxTextBtn>
+                  <CountInput value={ordinaryCount} isMobile={isMobile} min={1} controls={false} onChange={val => setOrdinaryCount(Number(val))} />
                   <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount < maxOrdinary) setOrdinaryCount(ordinaryCount + 1) }}>+</DrawBlindBoxTextBtn>
                   <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { setOrdinaryCount(maxOrdinary) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>

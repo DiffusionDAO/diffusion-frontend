@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { Input } from 'antd';
+import { InputNumber } from 'antd';
 
 
 export const BondPageWrap = styled.div`
@@ -157,7 +157,7 @@ export const DrawBlindBoxPrimaryBtn = styled.div`
     animation: gradient 5s ease infinite;
   }
 ` 
-export const CountInput = styled(Input)`
+export const CountInput = styled(InputNumber)`
   height: 40px;
   margin-right: 5px;
   color: #fff;
@@ -168,15 +168,13 @@ export const CountInput = styled(Input)`
   :focus {
     box-shadow: none !important;
   }
-  input.ant-input {
+  input.ant-input-number-input {
+    height: 40px;
     background: none;
     color: #fff;
     :focus {
       box-shadow: none;
     }
-  }
-  .ant-input-suffix {
-    color: rgba(210, 87, 255, 1);
   }
   ${({ isMobile }: { isMobile: boolean }) => {
     if (isMobile) {
