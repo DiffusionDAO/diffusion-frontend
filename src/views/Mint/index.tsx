@@ -4,7 +4,7 @@ import useAuth from 'hooks/useAuth'
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
-import { useNftDrawContract, useTokenContract } from 'hooks/useContract'
+import { useDFSNftContract, useNftDrawContract, useTokenContract } from 'hooks/useContract'
 import {
   BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, BoxLeftAskImg, BoxRightAskImg, ContentWrap, DalaCardList, DalaCardListTitle,
   DalaCardCellWrap, DalaCardLabelDiv, DalaCardValueDiv, ColorFont,
@@ -19,9 +19,11 @@ import { useFetchBalance } from "./hook/useFetchBalance"
 import { mintDatasMock } from './MockMintData'
 import { getDFSAddress, getNftDrawAddress } from 'utils/addressHelpers';
 import { MaxUint256 } from '@ethersproject/constants';
+import BigNumber from 'bignumber.js'
+import { getDFSNFTContract } from 'utils/contractHelpers';
 
 const Mint: FC = () => {
-  const { account } = useWeb3React();
+  const { account,library } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
   const { login, logout } = useAuth()
@@ -63,8 +65,13 @@ const Mint: FC = () => {
     }
     setPlayBindBoxModalVisible(true)
     setGifUrl(`/images/mint/${type}.gif`)
-    const res = type === 'ordinary' ? await NftDraw.mintOne(2) : await NftDraw.mintTwo(1)
-    console.log('NftDraw:', res)
+    const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
+    const recipient = await res.wait()
+    const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
+    var tokenId = id.toString()
+    const dfsNFT = getDFSNFTContract(library.getSigner())
+    const level = await dfsNFT.getItems(tokenId)
+    console.log("level:",level)
     setPlayBindBoxModalVisible(false)
     setBlindBoxModalVisible(true)
   }
