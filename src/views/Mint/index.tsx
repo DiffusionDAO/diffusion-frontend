@@ -19,10 +19,11 @@ import { useFetchAllowance, useFetchBalance } from "./hook/useFetchBalance"
 import { mintDatasMock } from './MockMintData'
 import { getDFSAddress, getNftDrawAddress } from 'utils/addressHelpers';
 import { MaxUint256 } from '@ethersproject/constants';
-import BigNumber from 'bignumber.js'
+import { BigNumber } from '@ethersproject/bignumber';
 import { getDFSNFTContract } from 'utils/contractHelpers';
 import useTokenAllowance from 'hooks/useTokenAllowance';
 import { useToken } from 'hooks/Tokens';
+import { formatUnits } from '@ethersproject/units';
 
 const Mint: FC = () => {
   const { account, library } = useWeb3React();
@@ -35,25 +36,24 @@ const Mint: FC = () => {
   const [playBindBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false);
   const [gifUrl, setGifUrl] = useState<string>('/images/mint/purplePlay.gif');
   const [seniorCount, setSeniorCount] = useState<number>(1);
-  const [maxSenior, setMaxSenior] = useState<number>(1);
+  const [maxSenior, setMaxSenior] = useState<BigNumber>(BigNumber.from(1));
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
-  const [maxOrdinary, setMaxOrdinary] = useState<number>(1);
+  const [maxOrdinary, setMaxOrdinary] = useState<BigNumber>(BigNumber.from(1));
   const { balance } = useFetchBalance()
-  const NftDraw = useNftDrawContract()
   const nftDrawAddress = getNftDrawAddress()
-  const ordinaryPrice = 10
-  const seniorPrice = 60
+  const { allowance } = useFetchAllowance(nftDrawAddress)
+
+  const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
+  const seniorPrice = BigNumber.from(10).pow(18).mul(60)
 
   var address = getDFSAddress()
   const DFS = useTokenContract(address)
-  const { allowance } = useFetchAllowance(nftDrawAddress)
-  console.log(allowance)
   useEffect(() => {
     if (balance) {
-      const maxOrd = balance / ordinaryPrice
-      const maxSen = balance / seniorPrice
-      setMaxOrdinary(Math.max(maxOrd, 1))
-      setMaxSenior(Math.max(maxSen, 1))
+      const maxOrd = balance.div(ordinaryPrice)
+      const maxSen = balance.div(seniorPrice)
+      setMaxOrdinary(maxOrd)
+      setMaxSenior(maxSen)
     }
   }, [balance])
 
@@ -62,12 +62,13 @@ const Mint: FC = () => {
       onPresentConnectModal()
       return
     }
-    if ((type === 'senior' && balance < seniorPrice * seniorCount) || (type === 'ordinary' && balance < ordinaryPrice * ordinaryCount)) {
+    if ((type === 'senior' && balance.lt(seniorPrice.mul(seniorCount) )) || (type === 'ordinary' && balance.lt(ordinaryPrice.mul(ordinaryCount)))) {
       setJumpModalVisible(true)
       return
     }
     setPlayBindBoxModalVisible(true)
     setGifUrl(`/images/mint/${type}.gif`)
+    const NftDraw = useNftDrawContract()
     const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
     const recipient = await res.wait()
     const events = recipient.events
@@ -76,7 +77,7 @@ const Mint: FC = () => {
 
     for (var i = 1; i <= events.length; i++) {
       if (i % 3 == 0) {
-        const id = new BigNumber(events[i - 1].topics[3])
+        const id = BigNumber.from(events[i - 1].topics[3])
         var tokenId = id.toString()
         const level = await dfsNFT.getItems(tokenId)
         levels.push(level.toString())
@@ -95,7 +96,7 @@ const Mint: FC = () => {
   const closePlayBindBoxModal = () => {
     setPlayBindBoxModalVisible(false)
   }
-
+  const zero = BigNumber.from(0)
   return (<BondPageWrap>
     <DrawBlindBoxList>
       <Grid container spacing={2}>
@@ -119,16 +120,16 @@ const Mint: FC = () => {
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Balance')}: {balance}DFS</AvailableCount>
+              <AvailableCount>{t('Balance')}: {balance ? formatUnits(balance, "ether") : 0} DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
                   <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { if (seniorCount > 1) setSeniorCount(seniorCount - 1) }}>-</DrawBlindBoxTextBtn>
                   <CountInput value={seniorCount} isMobile={isMobile} min={1} controls={false} onChange={val => setSeniorCount(Number(val))} />
-                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { if (seniorCount < maxSenior) setSeniorCount(seniorCount + 1) }}>+</DrawBlindBoxTextBtn>
-                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { setSeniorCount(maxSenior) }}>{t('Max')}</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { if (seniorCount < maxSenior.toNumber()) setSeniorCount(seniorCount + 1) }}>+</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { setSeniorCount(maxSenior.toNumber()) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
-                  {allowance=="0" ? <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px' }} onClick={async () => { const receipt = await DFS.approve(nftDrawAddress, MaxUint256) }} >{t('Approve')}</DrawBlindBoxPrimaryBtn> : <></>}
+                  {allowance.eq(0) ? <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px' }} onClick={async () => { await DFS.approve(nftDrawAddress, MaxUint256) }} >{t('Approve')}</DrawBlindBoxPrimaryBtn> : <></>}
                 </ActionRight>
               </ActionWrap>
               <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={() => drawBlind('senior')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
@@ -155,16 +156,16 @@ const Mint: FC = () => {
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Balance')}: {balance}DFS</AvailableCount>
+              <AvailableCount>{t('Balance')}: {balance ? formatUnits(balance, "ether") : 0} DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
                   <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount > 1) setOrdinaryCount(ordinaryCount - 1) }}>-</DrawBlindBoxTextBtn>
                   <CountInput value={ordinaryCount} isMobile={isMobile} min={1} controls={false} onChange={val => setOrdinaryCount(Number(val))} />
-                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount < maxOrdinary) setOrdinaryCount(ordinaryCount + 1) }}>+</DrawBlindBoxTextBtn>
-                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { setOrdinaryCount(maxOrdinary) }}>{t('Max')}</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount < maxOrdinary.toNumber()) setOrdinaryCount(ordinaryCount + 1) }}>+</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { setOrdinaryCount(maxOrdinary.toNumber()) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
-                  {allowance=="0" ? <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={async () => { const receipt = await DFS.approve(nftDrawAddress, MaxUint256) }} style={{ width: '80px' }}>{t('Approve')}</DrawBlindBoxPrimaryBtn> : <></>}
+                  {allowance.eq(0) ? <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={async () => { await DFS.approve(nftDrawAddress, MaxUint256) }} style={{ width: '80px' }}>{t('Approve')}</DrawBlindBoxPrimaryBtn> : <></>}
                 </ActionRight>
 
               </ActionWrap>
