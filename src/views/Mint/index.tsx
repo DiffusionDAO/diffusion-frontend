@@ -4,7 +4,7 @@ import useAuth from 'hooks/useAuth'
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
-import { useNftDrawContract } from 'hooks/useContract'
+import { useNftDrawContract, useTokenContract } from 'hooks/useContract'
 import {
   BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, BoxLeftAskImg, BoxRightAskImg, ContentWrap, DalaCardList, DalaCardListTitle,
   DalaCardCellWrap, DalaCardLabelDiv, DalaCardValueDiv, ColorFont,
@@ -17,6 +17,8 @@ import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { useFetchBalance } from "./hook/useFetchBalance"
 import { mintDatasMock } from './MockMintData'
+import { getDFSAddress, getNftDrawAddress } from 'utils/addressHelpers';
+import { MaxUint256 } from '@ethersproject/constants';
 
 const Mint: FC = () => {
   const { account } = useWeb3React();
@@ -34,31 +36,34 @@ const Mint: FC = () => {
   const [maxOrdinary, setMaxOrdinary] = useState<number>(1);
   const { balance } = useFetchBalance()
   const NftDraw = useNftDrawContract()
-
+  const nftDrawAddress = getNftDrawAddress()
   const ordinaryPrice = 10
   const seniorPrice = 60
+
+  var address = getDFSAddress()
+  const DFS = useTokenContract(address)
 
   useEffect(() => {
     if (balance) {
       const maxOrd = balance / ordinaryPrice
       const maxSen = balance / seniorPrice
-      setMaxOrdinary(Math.max(maxOrd,1))
-      setMaxSenior(Math.max(maxSen,1))
+      setMaxOrdinary(Math.max(maxOrd, 1))
+      setMaxSenior(Math.max(maxSen, 1))
     }
-  },[balance])
+  }, [balance])
 
   const drawBlind = async (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
     }
-    if ((type === 'senior' && balance < seniorPrice*seniorCount) || (type === 'ordinary' && balance < ordinaryPrice*ordinaryCount)) {
+    if ((type === 'senior' && balance < seniorPrice * seniorCount) || (type === 'ordinary' && balance < ordinaryPrice * ordinaryCount)) {
       setJumpModalVisible(true)
       return
     }
     setPlayBindBoxModalVisible(true)
     setGifUrl(`/images/mint/${type}.gif`)
-    const res = type === 'ordinary' ? await NftDraw.mintOne() : await NftDraw.mintTwo()
+    const res = type === 'ordinary' ? await NftDraw.mintOne(2) : await NftDraw.mintTwo(1)
     console.log('NftDraw:', res)
     setPlayBindBoxModalVisible(false)
     setBlindBoxModalVisible(true)
@@ -105,7 +110,7 @@ const Mint: FC = () => {
                   <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { setSeniorCount(maxSenior) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
-                  <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px' }}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
+                  <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px' }} onClick={async () => { const receipt = await DFS.approve(nftDrawAddress, MaxUint256) }} >{t('Approve')}</DrawBlindBoxPrimaryBtn>
                 </ActionRight>
               </ActionWrap>
               <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={() => drawBlind('senior')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
@@ -141,7 +146,7 @@ const Mint: FC = () => {
                   <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { setOrdinaryCount(maxOrdinary) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
-                  <DrawBlindBoxPrimaryBtn className='purpleBtn' style={{ width: '80px' }}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
+                  <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={async () => { const receipt = await DFS.approve(nftDrawAddress, MaxUint256) }} style={{ width: '80px' }}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
                 </ActionRight>
               </ActionWrap>
               <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={() => drawBlind('ordinary')}>{t('Play')}</DrawBlindBoxPrimaryBtn>

@@ -3,10 +3,12 @@ import { useTokenContract } from 'hooks/useContract';
 import useSWR from 'swr';
 import { formatUnits } from '@ethersproject/units';
 import { useWeb3React } from '@web3-react/core'
+import { getDFSAddress } from 'utils/addressHelpers';
 
 
 export const useFetchBalance = () => {
-  const tokenContract = useTokenContract("0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF")
+  var address = getDFSAddress()
+  const tokenContract = useTokenContract(address)
   const { account } = useWeb3React();
 
   const { data } = useSWR("dfsBalance", async () => {
@@ -15,3 +17,4 @@ export const useFetchBalance = () => {
   })
   return { balance: data ? parseInt(formatUnits(data,"ether")):0 }
 }
+
