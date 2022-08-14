@@ -5,6 +5,13 @@ import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import { useDFSNftContract, useNftDrawContract, useTokenContract } from 'hooks/useContract'
+import { getDFSAddress, getNftDrawAddress } from 'utils/addressHelpers';
+import { MaxUint256 } from '@ethersproject/constants';
+import { BigNumber } from '@ethersproject/bignumber';
+import { getDFSNFTContract } from 'utils/contractHelpers';
+import useTokenAllowance from 'hooks/useTokenAllowance';
+import { useToken } from 'hooks/Tokens';
+import { formatUnits } from '@ethersproject/units';
 import {
   BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, BoxLeftAskImg, BoxRightAskImg, ContentWrap, DalaCardList, DalaCardListTitle,
   DalaCardCellWrap, DalaCardLabelDiv, DalaCardValueDiv, ColorFont,
@@ -17,13 +24,6 @@ import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { useFetchAllowance, useFetchBalance } from "./hook/useFetchBalance"
 import { mintDatasMock } from './MockMintData'
-import { getDFSAddress, getNftDrawAddress } from 'utils/addressHelpers';
-import { MaxUint256 } from '@ethersproject/constants';
-import { BigNumber } from '@ethersproject/bignumber';
-import { getDFSNFTContract } from 'utils/contractHelpers';
-import useTokenAllowance from 'hooks/useTokenAllowance';
-import { useToken } from 'hooks/Tokens';
-import { formatUnits } from '@ethersproject/units';
 
 const Mint: FC = () => {
   const { account, library } = useWeb3React();
@@ -46,7 +46,7 @@ const Mint: FC = () => {
   const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
   const seniorPrice = BigNumber.from(10).pow(18).mul(60)
 
-  var address = getDFSAddress()
+  const address = getDFSAddress()
   const DFS = useTokenContract(address)
   useEffect(() => {
     if (balance) {
@@ -68,17 +68,19 @@ const Mint: FC = () => {
     }
     setPlayBindBoxModalVisible(true)
     setGifUrl(`/images/mint/${type}.gif`)
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const NftDraw = useNftDrawContract()
     const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
     const recipient = await res.wait()
-    const events = recipient.events
-    var levels = []
+    const {events} = recipient
+    const levels = []
     const dfsNFT = getDFSNFTContract(library.getSigner())
 
-    for (var i = 1; i <= events.length; i++) {
-      if (i % 3 == 0) {
+    for (let i = 1; i <= events.length; i++) {
+      if (i % 3 === 0) {
         const id = BigNumber.from(events[i - 1].topics[3])
-        var tokenId = id.toString()
+        const tokenId = id.toString()
+        // eslint-disable-next-line no-await-in-loop
         const level = await dfsNFT.getItems(tokenId)
         levels.push(level.toString())
       }
