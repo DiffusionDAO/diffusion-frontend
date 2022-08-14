@@ -109,7 +109,7 @@ const Mint: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Premier Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value={`${seniorPrice} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
+                <DataCell label={t('Price')} value={`${formatUnits(seniorPrice,"ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
@@ -145,7 +145,7 @@ const Mint: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Deluxe Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value={`${ordinaryPrice} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
+                <DataCell label={t('Price')} value={`${formatUnits(ordinaryPrice,"ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
