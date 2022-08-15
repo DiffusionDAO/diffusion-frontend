@@ -40,7 +40,7 @@ const BlindBoxModal: React.FC<BondModalProps> = ({
           }
         </Grid>
         <BtnWrap>
-          <TakeCardBtn>{t('Continue to take card')}</TakeCardBtn>
+          <TakeCardBtn onClick={onClose}>{t('Continue to take card')}</TakeCardBtn>
           <TakeCardBtn 
             onClick={() => router.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)}
             >

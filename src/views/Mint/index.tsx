@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { FC, useEffect, useState } from 'react'
 import { useWalletModal } from '@pancakeswap/uikit'
 import useAuth from 'hooks/useAuth'
@@ -23,7 +24,6 @@ import JumpModal from './components/JumpModal'
 import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { useFetchAllowance, useFetchBalance } from "./hook/useFetchBalance"
-import { mintDatasMock } from './MockMintData'
 
 const Mint: FC = () => {
   const { account, library } = useWeb3React();
@@ -39,15 +39,16 @@ const Mint: FC = () => {
   const [maxSenior, setMaxSenior] = useState<BigNumber>(BigNumber.from(1));
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
   const [maxOrdinary, setMaxOrdinary] = useState<BigNumber>(BigNumber.from(1));
-  const { balance } = useFetchBalance()
+  const [drawBindData,setDrawBindData] = useState<any>([]);
   const nftDrawAddress = getNftDrawAddress()
+  const { balance } = useFetchBalance()
   const { allowance } = useFetchAllowance(nftDrawAddress)
+  const address = getDFSAddress()
 
   const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
   const seniorPrice = BigNumber.from(10).pow(18).mul(60)
-
-  const address = getDFSAddress()
   const DFS = useTokenContract(address)
+  const NftDraw = useNftDrawContract()
 
   useEffect(() => {
     if (balance) {
@@ -57,7 +58,6 @@ const Mint: FC = () => {
       setMaxSenior(maxSen)
     }
   }, [balance])
-  const NftDraw = useNftDrawContract()
 
   const drawBlind = async (type: string) => {
     if (!account) {
@@ -68,8 +68,8 @@ const Mint: FC = () => {
       setJumpModalVisible(true)
       return
     }
-    setPlayBindBoxModalVisible(true)
     setGifUrl(`/images/mint/${type}.gif`)
+    setPlayBindBoxModalVisible(true)
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
     const recipient = await res.wait()
@@ -87,11 +87,32 @@ const Mint: FC = () => {
       }
     }
     console.log("level:", levels)
+    setDrawBindData(formatLevel(levels))
     setPlayBindBoxModalVisible(false)
     setBlindBoxModalVisible(true)
   }
+  const formatLevel = (data) => {
+    const objItem = data.reduce((allNames:any, name:any) => {
+        if (name in allNames) {
+          allNames[name]++;
+        } else {
+          allNames[name] = 1;
+        }
+        return allNames;
+    }, {});
+    const newData = []
+    Object.keys(objItem).forEach(key => {
+      newData.push({
+        id: key,
+        type: key,
+        count: objItem[key]
+      })
+    })
+    return newData
+  }
   const closeBlindBoxModal = () => {
     setBlindBoxModalVisible(false)
+    setDrawBindData([])
   }
   const closeJumpModal = () => {
     setJumpModalVisible(false)
@@ -186,7 +207,7 @@ const Mint: FC = () => {
 
     {/* 盲盒成功的弹窗 */}
     {
-      blindBoxModalVisible ? <BlindBoxModal data={mintDatasMock} onClose={closeBlindBoxModal} />
+      blindBoxModalVisible ? <BlindBoxModal data={drawBindData} onClose={closeBlindBoxModal} />
         : null
     }
     {/* 跳转选项的弹窗 */}
