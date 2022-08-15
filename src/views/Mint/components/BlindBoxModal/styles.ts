@@ -10,6 +10,9 @@ export const ContentWrap = styled.div`
   margin: 40px;
   flex-direction: column;
   align-items: center;
+  > div {
+    justify-content: center;
+  }
 `
 export const CardItem = styled.div`
   width: 100%;
