@@ -262,10 +262,26 @@ function NftProfilePage() {
       return obj
     })
     if (level === '0') {
+      if (data.length < 6) {
+        setNoteContent({
+          title: t('Important note'),
+          description: t('need 6 pieces'),
+          visible: true,
+        });
+        return;
+      }
       const datas = data.slice(0, 6)
       setSelectedNfts(datas)
       setSelectedCount(datas.filter(item => item.selected).length)
     } else {
+      if (level === '6'){
+        setNoteContent({
+          title: t('Important note'),
+          description: t('Unable to compose highest level NFT'),
+          visible: true,
+        });
+        return;
+      }
       const datas = data.slice(0, 2)
       setSelectedNfts(datas)
       setSelectedCount(datas.filter(item => item.selected).length)

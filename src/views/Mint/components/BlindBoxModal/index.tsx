@@ -3,16 +3,15 @@ import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import { Grid } from "@material-ui/core";
-import { NftToken } from 'state/nftMarket/types'
-import { StyledModal, ContentWrap, CardItem, CardImg, BtnWrap, TakeCardBtn, JumpBtnCont } from './styles'
+import { StyledModal, ContentWrap, CardItem, CardImg, CardText, BtnWrap, TakeCardBtn, JumpBtnCont } from './styles'
 
 interface BondModalProps {
-  nftData: NftToken[];
+  data: any[];
   onClose: () => void;
 }
 
 const BlindBoxModal: React.FC<BondModalProps> = ({
-  nftData,
+  data,
   onClose,
 }) => {
   const { t } = useTranslation()
@@ -30,17 +29,18 @@ const BlindBoxModal: React.FC<BondModalProps> = ({
       <ContentWrap>
         <Grid container spacing={2}>
           {
-            nftData.length && nftData.map((nft) => (
-              <Grid item lg={6} md={6} sm={6} xs={6} key={nft.tokenId}>
-                  <CardItem key={`${nft?.tokenId}-${nft?.collectionName}`}>
-                    <CardImg src={nft?.image.thumbnail} />
-                  </CardItem>
-              </Grid>
+            data.length && data.map((card) => (
+              card.count ? <Grid item lg={6} md={6} sm={6} xs={6} key={card.id}>
+                <CardItem key={card.id}>
+                  <CardImg src={`/images/nfts/${card.type}`} />
+                  <CardText>{t('Count')}: {card.count}</CardText>
+                </CardItem>
+              </Grid> : null
             ))
           }
         </Grid>
         <BtnWrap>
-          <TakeCardBtn>{t('Continue to take card')}</TakeCardBtn>
+          <TakeCardBtn onClick={onClose}>{t('Continue to take card')}</TakeCardBtn>
           <TakeCardBtn 
             onClick={() => router.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)}
             >

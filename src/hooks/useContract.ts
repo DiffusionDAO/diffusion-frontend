@@ -31,6 +31,7 @@ import {
   getAnniversaryAchievementContract,
   getNftMarketContract,
   getNftComposeContract,
+  getNftDrawContract,
   getDFSNFTContract,
   getNftSaleContract,
   getPancakeSquadContract,
@@ -286,6 +287,11 @@ export const useNftMarketContract = () => {
 export const useNftComposeContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getNftComposeContract(library.getSigner()), [library])
+}
+
+export const useNftDrawContract = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getNftDrawContract(library.getSigner()), [library])
 }
 
 export const useDFSNftContract = () => {

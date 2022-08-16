@@ -28,6 +28,7 @@ import {
   getFarmAuctionAddress,
   getAnniversaryAchievement,
   getNFTComposeAddress,
+  getNftDrawAddress,
   getNftMarketAddress,
   getNftSaleAddress,
   getPancakeSquadAddress,
@@ -76,6 +77,7 @@ import anniversaryAchievementAbi from 'config/abi/anniversaryAchievement.json'
 import galaxyNFTClaimingAbi from 'config/abi/galaxyNFTClaiming.json'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftComposeAbi from 'config/abi/nftComposeAbi.json'
+import nftDrawAbi from 'config/abi/nftDrawAbi.json'
 import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
 
 import nftSaleAbi from 'config/abi/nftSale.json'
@@ -247,6 +249,12 @@ export const getGalaxyNTFClaimingContract = (signer?: Signer | Provider) => {
 export const getNftComposeContract =  (signer?: Signer | Provider) => {
   return getContract(nftComposeAbi, getNFTComposeAddress(), signer) 
 }
+
+
+export const getNftDrawContract =  (signer?: Signer | Provider) => {
+  return getContract(nftDrawAbi, getNftDrawAddress(), signer) 
+}
+
 export const getNftMarketContract = (signer?: Signer | Provider) => {
   return getContract(nftMarketAbi, getNftMarketAddress(), signer) 
 }

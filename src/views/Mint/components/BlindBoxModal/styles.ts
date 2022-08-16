@@ -10,6 +10,9 @@ export const ContentWrap = styled.div`
   margin: 40px;
   flex-direction: column;
   align-items: center;
+  > div {
+    justify-content: center;
+  }
 `
 export const CardItem = styled.div`
   width: 100%;
@@ -17,6 +20,13 @@ export const CardItem = styled.div`
 export const CardImg = styled.img`
   width: 100%;
   border-radius: 11px;
+`
+
+export const CardText = styled.div`
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
 `
 export const BtnWrap = styled.div`
   width: 228px;

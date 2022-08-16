@@ -1,21 +1,32 @@
-import { FC, useState } from 'react'
+/* eslint-disable no-param-reassign */
+import { FC, useEffect, useState } from 'react'
 import { useWalletModal } from '@pancakeswap/uikit'
 import useAuth from 'hooks/useAuth'
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
-import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas';
-import { BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, BoxLeftAskImg, BoxRightAskImg, ContentWrap, DalaCardList, DalaCardListTitle, 
+import { useDFSNftContract, useNftDrawContract, useTokenContract } from 'hooks/useContract'
+import { getDFSAddress, getNftDrawAddress } from 'utils/addressHelpers';
+import { MaxUint256 } from '@ethersproject/constants';
+import { BigNumber } from '@ethersproject/bignumber';
+import { getDFSNFTContract } from 'utils/contractHelpers';
+import useTokenAllowance from 'hooks/useTokenAllowance';
+import { useToken } from 'hooks/Tokens';
+import { formatUnits } from '@ethersproject/units';
+import {
+  BondPageWrap, DrawBlindBoxList, DrawBlindBoxItem, DrawBlindBoxImgWrap, BoxLeftAskImg, BoxRightAskImg, ContentWrap, DalaCardList, DalaCardListTitle,
   DalaCardCellWrap, DalaCardLabelDiv, DalaCardValueDiv, ColorFont,
-  AvailableCount, ActionWrap, ActionLeft, ActionRight, CountInput, DrawBlindBoxTextBtn, DrawBlindBoxPrimaryBtn } from './style'
+  AvailableCount, ActionWrap, ActionLeft, ActionRight, CountInput, DrawBlindBoxTextBtn, DrawBlindBoxPrimaryBtn
+} from './style'
 import DataCell from "../../components/ListDataCell"
 import BlindBoxModal from './components/BlindBoxModal'
 import JumpModal from './components/JumpModal'
 import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
+import { useFetchAllowance, useFetchBalance } from "./hook/useFetchBalance"
 
-const Bond: FC = () => {
-  const { account } = useWeb3React();
+const Mint: FC = () => {
+  const { account, library } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
   const { login, logout } = useAuth()
@@ -24,32 +35,84 @@ const Bond: FC = () => {
   const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false);
   const [playBindBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false);
   const [gifUrl, setGifUrl] = useState<string>('/images/mint/purplePlay.gif');
-  const [balance,setBalance] = useState(1);
-  const [seniorCount, setSeniorCount] = useState<number>(0);
-  const [maxSenior, setMaxSenior] = useState<number>(10);
-  const [ordinaryCount, setOrdinaryCount] = useState<number>(0);
-  const [maxOrdinary, setMaxOrdinary] = useState<number>(10);
+  const [seniorCount, setSeniorCount] = useState<number>(1);
+  const [maxSenior, setMaxSenior] = useState<BigNumber>(BigNumber.from(1));
+  const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
+  const [maxOrdinary, setMaxOrdinary] = useState<BigNumber>(BigNumber.from(1));
+  const [drawBindData,setDrawBindData] = useState<any>([]);
+  const nftDrawAddress = getNftDrawAddress()
+  const { balance } = useFetchBalance()
+  const { allowance } = useFetchAllowance(nftDrawAddress)
+  const address = getDFSAddress()
 
-  // 抽取盲盒
-  const drawBlind = (type: string) => {
+  const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
+  const seniorPrice = BigNumber.from(10).pow(18).mul(60)
+  const DFS = useTokenContract(address)
+  const NftDraw = useNftDrawContract()
+
+  useEffect(() => {
+    if (balance) {
+      const maxOrd = balance.div(ordinaryPrice)
+      const maxSen = balance.div(seniorPrice)
+      setMaxOrdinary(maxOrd)
+      setMaxSenior(maxSen)
+    }
+  }, [balance])
+
+  const drawBlind = async (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
     }
-    if (balance <= 0) {
+    if ((type === 'senior' && balance.lt(seniorPrice.mul(seniorCount) )) || (type === 'ordinary' && balance.lt(ordinaryPrice.mul(ordinaryCount)))) {
       setJumpModalVisible(true)
       return
     }
-    setPlayBindBoxModalVisible(true)
     setGifUrl(`/images/mint/${type}.gif`)
-    setTimeout(() =>{
-      setPlayBindBoxModalVisible(false)
-      setBlindBoxModalVisible(true)
-    }, 3000)
+    setPlayBindBoxModalVisible(true)
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
+    const recipient = await res.wait()
+    const {events} = recipient
+    const levels = []
+    const dfsNFT = getDFSNFTContract(library.getSigner())
 
+    for (let i = 1; i <= events.length; i++) {
+      if (i % 3 === 0) {
+        const id = BigNumber.from(events[i - 1].topics[3])
+        const tokenId = id.toString()
+        // eslint-disable-next-line no-await-in-loop
+        const level = await dfsNFT.getItems(tokenId)
+        levels.push(level.toString())
+      }
+    }
+    console.log("level:", levels)
+    setDrawBindData(formatLevel(levels))
+    setPlayBindBoxModalVisible(false)
+    setBlindBoxModalVisible(true)
+  }
+  const formatLevel = (data) => {
+    const objItem = data.reduce((allNames:any, name:any) => {
+        if (name in allNames) {
+          allNames[name]++;
+        } else {
+          allNames[name] = 1;
+        }
+        return allNames;
+    }, {});
+    const newData = []
+    Object.keys(objItem).forEach(key => {
+      newData.push({
+        id: key,
+        type: key,
+        count: objItem[key]
+      })
+    })
+    return newData
   }
   const closeBlindBoxModal = () => {
     setBlindBoxModalVisible(false)
+    setDrawBindData([])
   }
   const closeJumpModal = () => {
     setJumpModalVisible(false)
@@ -57,7 +120,7 @@ const Bond: FC = () => {
   const closePlayBindBoxModal = () => {
     setPlayBindBoxModalVisible(false)
   }
-
+  const zero = BigNumber.from(0)
   return (<BondPageWrap>
     <DrawBlindBoxList>
       <Grid container spacing={2}>
@@ -70,27 +133,27 @@ const Bond: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Premier Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value='0 USDT' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
-                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal"/>
+                <DataCell label={t('Price')} value={`${formatUnits(seniorPrice,"ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
+                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
                   <DalaCardValueDiv>
-                    <ColorFont style={{color:'#FF7056'}}> 98% </ColorFont>{t('Wiseman')}
-                    { isMobile ? <br/> : null}
-                    <ColorFont style={{color:'#FF7056'}}> 2% </ColorFont>{t('General Aureate')}
+                    <ColorFont style={{ color: '#FF7056' }}> 98% </ColorFont>{t('Wiseman')}
+                    {isMobile ? <br /> : null}
+                    <ColorFont style={{ color: '#FF7056' }}> 2% </ColorFont>{t('General Aureate')}
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Available count:')}{maxSenior}</AvailableCount>
+              <AvailableCount>{t('Balance')}: {balance ? formatUnits(balance, "ether") : 0} DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
-                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => {if(seniorCount>0)setSeniorCount(seniorCount-1)}}>-</DrawBlindBoxTextBtn>
-                  <CountInput value={seniorCount} isMobile={isMobile} onChange={e => setSeniorCount(parseInt(e.target.value))}/>
-                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => {if(seniorCount<maxSenior)setSeniorCount(seniorCount+1)}}>+</DrawBlindBoxTextBtn>
-                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => {setSeniorCount(maxSenior)}}>{t('Max')}</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { if (seniorCount > 1) setSeniorCount(seniorCount - 1) }}>-</DrawBlindBoxTextBtn>
+                  <CountInput value={seniorCount} isMobile={isMobile} min={1} controls={false} onChange={val => setSeniorCount(Number(val))} />
+                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { if (seniorCount < maxSenior.toNumber()) setSeniorCount(seniorCount + 1) }}>+</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='orangeBtn' onClick={() => { setSeniorCount(maxSenior.toNumber()) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
-                  <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px'}}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
+                  {allowance.eq(0) ? <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px' }} onClick={async () => { await DFS.approve(nftDrawAddress, MaxUint256) }} >{t('Approve')}</DrawBlindBoxPrimaryBtn> : <></>}
                 </ActionRight>
               </ActionWrap>
               <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={() => drawBlind('senior')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
@@ -106,28 +169,29 @@ const Bond: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Deluxe Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value='0 USDT' valueDivStyle={{ fontSize: "14px" }} position="horizontal"/>
-                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal"/>
+                <DataCell label={t('Price')} value={`${formatUnits(ordinaryPrice,"ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
+                <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
                   <DalaCardValueDiv>
-                    <ColorFont style={{color: '#EC6EFF'}}> 98% </ColorFont>{t('Wiseman Silver')}
-                    { isMobile ? <br/> : null}
-                    <ColorFont style={{color: '#EC6EFF'}}> 2% </ColorFont>{t('Wiseman NFT')}
+                    <ColorFont style={{ color: '#EC6EFF' }}> 98% </ColorFont>{t('Wiseman Silver')}
+                    {isMobile ? <br /> : null}
+                    <ColorFont style={{ color: '#EC6EFF' }}> 2% </ColorFont>{t('Wiseman NFT')}
                   </DalaCardValueDiv>
                 </DalaCardCellWrap>
               </DalaCardList>
-              <AvailableCount>{t('Available count:')}{maxOrdinary}</AvailableCount>
+              <AvailableCount>{t('Balance')}: {balance ? formatUnits(balance, "ether") : 0} DFS</AvailableCount>
               <ActionWrap>
                 <ActionLeft>
-                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => {if(ordinaryCount>0)setOrdinaryCount(ordinaryCount-1)}}>-</DrawBlindBoxTextBtn>
-                  <CountInput value={ordinaryCount} isMobile={isMobile} onChange={e => setOrdinaryCount(parseInt(e.target.value))} />
-                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => {if(ordinaryCount<maxOrdinary)setOrdinaryCount(ordinaryCount+1)}}>+</DrawBlindBoxTextBtn>
-                  <DrawBlindBoxTextBtn className='purpleBtn'onClick={() => {setOrdinaryCount(maxOrdinary)}}>{t('Max')}</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount > 1) setOrdinaryCount(ordinaryCount - 1) }}>-</DrawBlindBoxTextBtn>
+                  <CountInput value={ordinaryCount} isMobile={isMobile} min={1} controls={false} onChange={val => setOrdinaryCount(Number(val))} />
+                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { if (ordinaryCount < maxOrdinary.toNumber()) setOrdinaryCount(ordinaryCount + 1) }}>+</DrawBlindBoxTextBtn>
+                  <DrawBlindBoxTextBtn className='purpleBtn' onClick={() => { setOrdinaryCount(maxOrdinary.toNumber()) }}>{t('Max')}</DrawBlindBoxTextBtn>
                 </ActionLeft>
                 <ActionRight>
-                  <DrawBlindBoxPrimaryBtn className='purpleBtn' style={{ width: '80px'}}>{t('Approve')}</DrawBlindBoxPrimaryBtn>
+                  {allowance.eq(0) ? <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={async () => { await DFS.approve(nftDrawAddress, MaxUint256) }} style={{ width: '80px' }}>{t('Approve')}</DrawBlindBoxPrimaryBtn> : <></>}
                 </ActionRight>
+
               </ActionWrap>
               <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={() => drawBlind('ordinary')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
@@ -138,19 +202,19 @@ const Bond: FC = () => {
     {/* 盲盒加载中的弹窗 */}
     {
       playBindBoxModalVisible ? <PlayBindBoxModal onClose={closePlayBindBoxModal} gifUrl={gifUrl} />
-      : null
+        : null
     }
 
     {/* 盲盒成功的弹窗 */}
     {
-      blindBoxModalVisible ? <BlindBoxModal nftData={nftDatasMock} onClose={closeBlindBoxModal} />
-      : null
+      blindBoxModalVisible ? <BlindBoxModal data={drawBindData} onClose={closeBlindBoxModal} />
+        : null
     }
     {/* 跳转选项的弹窗 */}
     {
       jumpModalVisible ? <JumpModal onClose={closeJumpModal} />
-      : null
+        : null
     }
   </BondPageWrap>)
 }
-export default Bond;
+export default Mint;

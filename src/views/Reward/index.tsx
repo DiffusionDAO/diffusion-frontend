@@ -191,19 +191,19 @@ const Reward: FC = () => {
                   <DataCell label={t('Next payout timing')} value={rewardData.nextBaseChange} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
                   <DataCell label={t('Next payout rate')} value={rewardData.nextRewardYield} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
                   <DataCell label={t('ROI (5 days)')} value={rewardData.roi} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
-                  <DataCell label={t('Next reward value')} value={rewardData.nextBonusAmount} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
+                  <DataCell label={t('Next reward value')} value={`${rewardData.nextBonusAmount}DFS`} position="horizontal" valueDivStyle={{ fontSize: "14px" }} />
 
                   {/* <DataCell label='apy' value={rewardData.apy} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
-                  <DataCell label='current index' value={rewardData.curIndex} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
+                  <DataCell label='current index' value={`${rewardData.curIndex}DFS`} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
                   <DataCell label='total value deposited' value={rewardData.totalValueDeposited} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/> */}
                 </CardItem>
               </Grid>
               <Grid item lg={4} md={4} sm={12} xs={12}>
                 <CardItem isMobile={isMobile} className='hasBorder'>
                   <DataCellWrap>
-                    <DataCell label={t('Available limit')} value={rewardData.mortgagedBalance} position="horizontal" />
+                    <DataCell label={t('Available limit')} value={`${rewardData.mortgagedBalance}DFS`} position="horizontal" />
                   </DataCellWrap>
-                  <DataCell label={t('Staked limit')} value={rewardData.mortgagedBalance} position="horizontal" />
+                  <DataCell label={t('Staked limit')} value={`${rewardData.mortgagedBalance}DFS`} position="horizontal" />
                 </CardItem>
               </Grid>
               <Grid item lg={4} md={4} sm={12} xs={12}>

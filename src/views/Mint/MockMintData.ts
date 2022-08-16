@@ -1,18 +1,17 @@
-const mintDatasMock = [
+export const mintDatasMock = [
   {
-    key: '1',
-    price: '0 USDT',
-    contains: 'xxxxxxxxx',
-    probability: '90%',
-    availableCount: 10,
+    id: 1,
+    type: 1,
+    count: 2,
   },
   {
-    key: '2',
-    price: '0 USDT',
-    contains: 'xxxxxxxxx',
-    probability: '90%',
-    availableCount: 10,
+    id: 2,
+    type: 2,
+    count: 2,
   },
-]
-
-export default mintDatasMock;
+  {
+    id: 3,
+    type: 5,
+    count: 0,
+  },
+] 
