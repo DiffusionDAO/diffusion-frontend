@@ -242,7 +242,7 @@ const SellModal: React.FC<SellModalProps> = ({
       }
       
       //const askPrice = BigNumber.from(price)
-      console.log('TRANSFER-》',stage,SellingStage.CONFIRM_TRANSFER)
+    
       //add CONFIRM_ADJUST_PRICE
       if (stage === SellingStage.CONFIRM_ADJUST_PRICE) {
        
