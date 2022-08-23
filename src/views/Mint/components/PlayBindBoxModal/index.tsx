@@ -12,7 +12,6 @@ const PlayBindBoxModal: React.FC<PlayModalProps> = ({
   return (
     <StyledModal
       width={320}
-      className="no-header"
       onCancel={onClose}
       visible
       centered
