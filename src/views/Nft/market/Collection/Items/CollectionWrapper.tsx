@@ -11,6 +11,7 @@ interface CollectionWrapperProps {
 }
 
 const CollectionWrapper: React.FC<CollectionWrapperProps> = ({ collection }) => {
+  //Filters address={collection?.address || ''} attributes={collection?.attributes
   return (
     <Box py="32px">
       <Container px={[0, null, '24px']}>

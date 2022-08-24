@@ -92,12 +92,14 @@ const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
   const { t } = useTranslation()
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(address)
   const [activeButtonIndex, setActiveButtonIndex] = useState(showOnlyNftsOnSale ? 1 : 0)
+  console.log('activeButtonIndex',activeButtonIndex)
 
   useEffect(() => {
     setActiveButtonIndex(showOnlyNftsOnSale ? 1 : 0)
   }, [showOnlyNftsOnSale])
 
   const onActiveButtonChange = (newIndex: number) => {
+    //dispatch(setShowOnlyOnSale({ collection: address, showOnlyOnSale: newIndex === 1}))
     dispatch(setShowOnlyOnSale({ collection: address, showOnlyOnSale: newIndex === 1 }))
   }
 

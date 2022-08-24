@@ -30,7 +30,7 @@ import { Contract } from '@ethersproject/contracts'
 import get from 'lodash/get'
 import { TransactionResponse } from '@ethersproject/providers'
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
-
+import { formatUnits } from '@ethersproject/units'
 // add getNFTItems function 
 const getNFTItems = async (
   contract: Contract,
@@ -77,7 +77,10 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   const nftMarketContract = useNftMarketContract()
   const { toastSuccess } = useToast()
   const nftPriceWei = parseUnits(nftToBuy?.marketData?.currentAskPrice, 'ether')
-  const nftPrice = parseFloat(nftToBuy?.marketData?.currentAskPrice)
+  let nftPrice:any = parseFloat(nftToBuy?.marketData?.currentAskPrice)
+  
+  nftPrice = formatUnits(BigNumber.from(String(nftPrice)),18)
+  console.log(nftPriceWei,'-------',nftPrice,'----==')
 
   // BNB - returns ethers.BigNumber
   const { balance: bnbBalance, fetchStatus: bnbFetchStatus } = useGetBnbBalance()
@@ -103,11 +106,14 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
+      console.log('=====onrequireApprove====')
       return requiresApproval(wbnbContractReader, account, nftMarketContract.address)
     },
-    onApprove: () => {
+    onApprove: async () => {
+      return await dfsContractApprover.approve(nftMarketContract.address,MaxUint256)
       //return callWithGasPrice(wbnbContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
-      return callWithGasPrice(dfsContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
+      console.log('=====onApprove====')
+      // return callWithGasPrice(dfsContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
     },
     // why approve require gas 
     onApproveSuccess: async ({ receipt }) => {
@@ -126,10 +132,9 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
         //createMarketSaleByERC20
         
         const items = await getNFTItems(nftMarketContract,'fetchMarketItems')
-         
         console.log('items->',items)
         const newItem =  items.find((item)=>{
-           const bigToken =  BigNumber.from(nftToBuy.tokenId)
+        const bigToken =  BigNumber.from(nftToBuy.tokenId)
           if (bigToken.eq(item['tokenId'])){
              return true
           } else {
