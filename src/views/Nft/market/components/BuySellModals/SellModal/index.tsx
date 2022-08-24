@@ -23,7 +23,6 @@ import { SellingStage } from './types'
 import ConfirmStage from '../shared/ConfirmStage'
 import RemoveStage from './RemoveStage'
 import TransferStage from './TransferStage'
-
 import { Contract } from '@ethersproject/contracts'
 import get from 'lodash/get'
 import { TransactionResponse } from '@ethersproject/providers'
@@ -39,8 +38,7 @@ const getNFTItems = async (
     const contractMethod = get(contract, methodName)    
     const nftItems = await contractMethod(
       ...methodArgs
-    )
-
+)
     return nftItems
 }
 
@@ -209,7 +207,7 @@ const SellModal: React.FC<SellModalProps> = ({
       }
     },
     onApprove: () => {
-     console.log('nftContract,onApprove:====',nftMarketContract)    
+     console.log('nftonApprove+',nftMarketContract)    
     // return callWithGasPrice(collectionContractSigner, 'setApprovalForAll', [nftMarketContract.address, true])
      return callWithGasPrice(nft721Contract, 'approve', [nftMarketContract.address, nftToSell.tokenId])
      
@@ -222,10 +220,9 @@ const SellModal: React.FC<SellModalProps> = ({
       )
     },
     onConfirm: async () => {
-      
       const items = await getNFTItems(nftMarketContract,'fetchMarketItems')      
       const newItem =  items.find((item)=>{
-         const bigToken =  BigNumber.from(nftToSell.tokenId)
+      const bigToken =  BigNumber.from(nftToSell.tokenId)
         if (bigToken.eq(item['tokenId'])){
            return true
         } else {
@@ -242,7 +239,7 @@ const SellModal: React.FC<SellModalProps> = ({
       }
       
       //const askPrice = BigNumber.from(price)
-      console.log('TRANSFER-》',stage,SellingStage.CONFIRM_TRANSFER)
+    
       //add CONFIRM_ADJUST_PRICE
       if (stage === SellingStage.CONFIRM_ADJUST_PRICE) {
        
@@ -259,7 +256,7 @@ const SellModal: React.FC<SellModalProps> = ({
         //   transferAddress,
         //   nftToSell.tokenId,
         // ])
-       
+        console.log('CONFIRM_TRANSFER')
         
         return callWithGasPrice(collectionContractSigner, 'transferFrom(address,address,uint256)', [
           account,

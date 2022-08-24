@@ -134,12 +134,13 @@ const Home = () => {
         <BackgroundText>
           <BackgroundTitle>
             <Typed
-              strings={['Discover Rare Collections Of Art NFTs.']}
+              strings={['Discover more possibilities explore more art and digital rights space']}
               typeSpeed={50}
               cursorChar=""
+              style={{fontSize:40}}
             />
           </BackgroundTitle>
-          <BackgroundDes>Digtal market palce for crypto collectionbles and non-fungible tokens nfts</BackgroundDes>
+          <BackgroundDes>{t('This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth')}</BackgroundDes>
         </BackgroundText>
       </BackgroundWrap>
            <Collections

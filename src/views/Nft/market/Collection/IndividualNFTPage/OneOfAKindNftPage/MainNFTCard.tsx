@@ -88,7 +88,6 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
   let currentAskPriceAsNumber:any = nft?.marketData?.currentAskPrice ? parseFloat(nft.marketData?.currentAskPrice) : 0
   console.log(currentAskPriceAsNumber)
   currentAskPriceAsNumber = BigNumber.from(String(currentAskPriceAsNumber))
- 
   currentAskPriceAsNumber = formatUnits(currentAskPriceAsNumber,18)
   console.log(currentAskPriceAsNumber)
   const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, currentAskPriceAsNumber)
@@ -122,7 +121,7 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
           onClick={onEditProfileModal}
         >
           {/* {nftIsProfilePic ? t('Change Profile Pic') : t('Set as Profile Pic')} */}
-          { t('Pledge')}
+          { t('Stake')}
         </BtnB>
       )}
     </Flex>
@@ -233,8 +232,6 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
                   )}
                 </Text>
               )}
-              
-             
               {isOwnNft && ownerButtons}
               {!isOwnNft && (
                 <BtnB                 
@@ -253,7 +250,6 @@ const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePi
           </Flex>
 
           <Flex style={{position:'relative'}} flex="2" justifyContent={['center', null, 'flex-start']} alignItems="center" maxWidth={440}>
-           
              { !isMobile ? <NftBg/> : <NftBgMobile/> }              
               
              { !isMobile ? <div style={{position:'relative',left:'105px'}}><img width='334px' height='334px' src='/images/nfts/imgbg.png'/></div>

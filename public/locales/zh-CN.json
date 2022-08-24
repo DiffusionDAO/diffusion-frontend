@@ -135,5 +135,51 @@
   "Every DFS’ intrinsic price backing": "每一个DFS的内在价值支撑",
   "The ratio of the difference between the current target market price and the intrinsic reserve price to the reserve fund": "当期目标市场价与内在储备金价格的差值于储备金的比值",
   "The fit between the target inflation rate and the actual effect obtained by DSGE": "通过DSGE得到的目标通胀率与实际效果的之间的拟合度",
-  "The number of LPs supporting the value of the platform": "作为平台价值支撑的LP的数量"
+  "The number of LPs supporting the value of the platform": "作为平台价值支撑的LP的数量",
+  
+  "Discover more possibilities, explore more art and digital rights space":"发现更多可能性，探索更多艺术与数字权益空间",
+  "This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth":"这是一个全新的艺术数字空间，使用dfs来购买和销售NFT,你将获得无限的财富",
+  "Newest Collections":"最新系列",
+  "asking price":"售价",
+  "View All":"查看所有",
+  "buy": "购买",
+  "Total value":"总值",
+  "Items":"项目",
+  "Items listed":"项目列表",
+  "Price":"价格",
+  "Stake":"质押",
+  "Transfer":"转移",
+  "Publish":"上架",
+  "Edit Price":"修改价格",
+  "Unpublished":"下架",
+  "Cancel Staking":"取修质押",
+  "Owner":"所有者",
+  "Details":"细节",
+  "Manage Yours":"你的管理",
+  "No NFT market history found":"未找到NFT市场历史记录",
+  "All Collections":"所有收藏",
+  "Adjust price":"调整价格",
+  "Manage":"管理",
+  "Adjust Sale Price":"调整销售价格",
+  "Remove from Marker":"从市场移除",
+  "SET PRICE":"设置价格",
+  "The NFT will be removed from your wallet and put on sale at this priceE":"NFT将从您的钱包中删除，并按此价格出售",
+  "Removing this NFT from the marketplace will return it to your wallet":"从市场中删除此NFT会将其返回到您的钱包中",
+  "Continue":"继续",
+  "Please confirm the transaction in your wallet":"请确认您钱包中的交易",
+  "Confirm transaction":"确认交易",
+  "All":"所有",
+  "On Sale":"在售",
+  "Asking price":"要价"
+  
+
+
+  
+  
+
+  
+
+
+
+
 }
