@@ -40,7 +40,6 @@ import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } f
 import { ethers } from 'ethers'
 import starlightContract from 'abi/starlightContract.json'
 import { useWeb3React } from '@web3-react/core'
-import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
 import { simpleRpcProvider } from 'utils/providers'
 
 const toBuffer = require('it-to-buffer')

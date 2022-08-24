@@ -27,7 +27,6 @@ import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundCo
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import Typed from 'react-typed';
-import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
 import { useSWRContract } from 'hooks/useSWRContract'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { ethers } from 'ethers'
