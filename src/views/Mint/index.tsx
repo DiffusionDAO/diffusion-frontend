@@ -34,7 +34,7 @@ const Mint: FC = () => {
   const [blindBoxModalVisible, setBlindBoxModalVisible] = useState<boolean>(false);
   const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false);
   const [playBindBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false);
-  const [gifUrl, setGifUrl] = useState<string>('/images/mint/purplePlay.gif');
+  const [gifUrl, setGifUrl] = useState<string>('/images/mint/ordinary.gif');
   const [seniorCount, setSeniorCount] = useState<number>(1);
   const [maxSenior, setMaxSenior] = useState<BigNumber>(BigNumber.from(1));
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
