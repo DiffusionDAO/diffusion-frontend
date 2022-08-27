@@ -89,8 +89,6 @@ const useApproveConfirmTransaction = ({
   const handleApprove = useCallback(async () => {
     const receipt = await fetchWithCatchTxError(() => {
       dispatch({ type: 'approve_sending' })
-    
-      console.log(onApprove())
       return onApprove()
     })
     if (receipt?.status) {
