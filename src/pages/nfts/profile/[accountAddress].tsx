@@ -59,6 +59,7 @@ function NftProfilePage() {
 
   const accountAddress = query.accountAddress as string
   const [selectedNfts, setSelectedNfts] = useState<NftToken[]>([])
+  const [stakedNfts, setStakedNfts] = useState<NftToken[]>([])
   const [mynfts, setMynfts] = useState<NftToken[]>([])
 
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
@@ -322,7 +323,7 @@ function NftProfilePage() {
               tab={
                 <span>
                   {`${t('Staked')}`}
-                  <SelectedCountWrap>{selectedNfts?.length}</SelectedCountWrap>
+                  <SelectedCountWrap>{stakedNfts?.length}</SelectedCountWrap>
                 </span>
               }
             />
