@@ -4,7 +4,8 @@ import { nftsBaseUrl, pancakeBunniesAddress } from 'views/Nft/market/constants'
 import { NftToken } from 'state/nftMarket/types'
 import { getBscScanLinkForNft } from 'utils'
 import { Divider, HorizontalDivider, RoundedImage } from '../shared/styles'
-
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+import { formatUnits } from '@ethersproject/units'
 interface EditStageProps {
   nftToSell: NftToken
   lowestPrice: number
@@ -24,7 +25,6 @@ const EditStage: React.FC<EditStageProps> = ({
     nftToSell.collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase()
       ? nftToSell.attributes[0].value
       : nftToSell.tokenId
-
   return (
     <>
       <Flex p="16px">
@@ -51,7 +51,7 @@ const EditStage: React.FC<EditStageProps> = ({
           </Text>
           <Flex alignItems="center" justifyContent="flex-end">
             <BinanceIcon width={16} height={16} mr="4px" />
-            <Text small>{nftToSell?.marketData?.currentAskPrice}</Text>
+            <Text small>{formatUnits(BigNumber.from(nftToSell?.marketData?.currentAskPrice),18)}</Text>
           </Flex>
         </Grid>
       </Flex>

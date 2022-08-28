@@ -1,5 +1,4 @@
 import { Networks } from './blockchain'
-
 const BSC_MAINNET = {
   // jes 0x3E921a39b4D224596E4a130be690Da3c85bcF861
   // dai 0xa76cfDbEdF7883428B0e847AC354DeBA21B58CfC

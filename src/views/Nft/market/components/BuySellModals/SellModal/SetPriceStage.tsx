@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Flex, Grid, Box, Text, Button, BinanceIcon, ErrorIcon, useTooltip, Skeleton } from '@pancakeswap/uikit'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
@@ -7,7 +7,8 @@ import { NftToken } from 'state/nftMarket/types'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import { Divider } from '../shared/styles'
 import { GreyedOutContainer, BnbAmountCell, RightAlignedInput, FeeAmountCell } from './styles'
-
+import { formatUnits } from '@ethersproject/units'
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
 interface SetPriceStageProps {
   nftToSell: NftToken
   variant: 'set' | 'adjust'
@@ -32,6 +33,7 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
   setPrice,
   continueToNextStage,
 }) => {
+
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const adjustedPriceIsTheSame = variant === 'adjust' && parseFloat(currentPrice) === parseFloat(price)
@@ -45,6 +47,13 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
   const priceInUsd = multiplyPriceByAmount(bnbPrice, priceAsFloat)
 
   const priceIsOutOfRange = priceAsFloat > MAX_PRICE || priceAsFloat < MIN_PRICE
+  console.log('+++000pri++',price)
+ 
+  useEffect(()=>{
+     price = formatUnits(price,18)  
+     console.log('currentAskPriceAsNumber', price)
+  },[])
+
 
   const { tooltip, tooltipVisible, targetRef } = useTooltip(
     <>
@@ -61,6 +70,8 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
     { placement: 'auto' },
   )
 
+  
+
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
@@ -76,6 +87,7 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
     }
     return t('Enable Listing')
   }
+
   return (
     <>
       <Text fontSize="24px" bold p="16px">

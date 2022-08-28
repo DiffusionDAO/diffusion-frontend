@@ -56,7 +56,6 @@ const Header: React.FC<HeaderProps> = ({ collection }) => {
       <MarketPageHeader>
       <TopBar />
       <MarketWrap>
-      
         <BannerHeader bannerImage={banner.large} avatar={<AvatarImage src={avatar} />} />
         <MarketPageTitle
           title={collection.name}

@@ -6,7 +6,6 @@ import { getBscScanLinkForNft } from 'utils'
 import EditProfileModal from 'views/Nft/market/Profile/components/EditProfileModal'
 import { useProfile } from 'state/profile/hooks'
 import { Divider, HorizontalDivider, RoundedImage } from '../shared/styles'
-
 interface SellStageProps {
   nftToSell: NftToken
   lowestPrice: number
@@ -31,7 +30,7 @@ const SellStage: React.FC<SellStageProps> = ({
       : nftToSell.tokenId
 
   const [onEditProfileModal] = useModal(<EditProfileModal onSuccess={onSuccessEditProfile} />, false)
-
+   
   return (
     <>
       <Flex p="16px">

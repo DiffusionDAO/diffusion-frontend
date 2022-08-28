@@ -29,6 +29,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
 import { constants } from 'fs'
 
+import { formatUnits } from '@ethersproject/units'
 // add getNFTItems function 
 const getNFTItems = async (
   contract: Contract,
@@ -127,7 +128,8 @@ const SellModal: React.FC<SellModalProps> = ({
   const isInvalidTransferAddress = transferAddress.length > 0 && !isAddress(transferAddress)
 
   const { lowestPrice } = useGetLowestPriceFromNft(nftToSell)
-
+ 
+  
   const goBack = () => {
     switch (stage) {
       case SellingStage.SET_PRICE:
@@ -168,9 +170,7 @@ const SellModal: React.FC<SellModalProps> = ({
         setStage(SellingStage.SET_PRICE)
         break
       case SellingStage.SET_PRICE:
-       
         setStage(SellingStage.APPROVE_AND_CONFIRM_SELL)
-       
         break
       case SellingStage.EDIT:
         setStage(SellingStage.ADJUST_PRICE)
@@ -257,7 +257,6 @@ const SellModal: React.FC<SellModalProps> = ({
         //   nftToSell.tokenId,
         // ])
         console.log('CONFIRM_TRANSFER')
-        
         return callWithGasPrice(collectionContractSigner, 'transferFrom(address,address,uint256)', [
           account,
           transferAddress,
@@ -277,7 +276,7 @@ const SellModal: React.FC<SellModalProps> = ({
     },
   })
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
-
+  console.log('PPP->',price)
   return (
     <StyledModal
       title={modalTitles(stage, t)}
