@@ -208,7 +208,7 @@ const Reward: FC = () => {
               </Grid>
               <Grid item lg={4} md={4} sm={12} xs={12}>
                 <CardItem isMobile={isMobile} className='hasBorder'>
-                  <MoneyInput prefix="￥" suffix="ALL" value={money} />
+                  <MoneyInput prefix="$" suffix="ALL" value={money} />
                   <BtnWrap>
                     <TakeOutBtn style={{marginRight: '10px'}}>{t('Cancel Staking')}</TakeOutBtn>
                     <StakeBtn>{t('Stake')}</StakeBtn>

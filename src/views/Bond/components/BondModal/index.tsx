@@ -94,7 +94,7 @@ const BondModal: React.FC<BondModalProps> = ({
       { account && isApprove && activeTab === "mint" &&
           <>
             {/* <MoneyLable>Money</MoneyLable> */}
-            <MoneyInput prefix="￥" suffix="ALL" value={money} />
+            <MoneyInput prefix="$" suffix="ALL" value={money} />
             <RecomandWrap>
               <CheckBoxWrap onClick={changeRecomand}>
                 {

@@ -72,6 +72,7 @@ const getNewSortDirection = (oldSortField: string, newSortField: string, oldSort
 }
 
 const Collectible = () => {
+
   const { t } = useTranslation()
   const { data: shuffledCollections } = useGetShuffledCollections()
   const { isMobile } = useMatchBreakpoints()
@@ -144,7 +145,7 @@ const Collectible = () => {
     setMaxPage(Math.max(Math.floor(collections.length / ITEMS_PER_PAGE) + extraPages, 1))
   }, [collections])
 
-  const sortedCollections:any = useMemo(() => {
+  const sortedCollections: any = useMemo(() => {
     return orderBy(
       collections,
       (collection) => {
@@ -159,6 +160,9 @@ const Collectible = () => {
       sortDirection ? 'desc' : 'asc',
     )
   }, [collections, sortField, sortDirection])
+
+  console.log("sortedCollections:", sortedCollections)
+
   return (
     <>
       {/* <PageHeader>
@@ -271,9 +275,9 @@ const Collectible = () => {
                       .map((collection) => {
                         const volume = collection.totalVolumeBNB
                           ? parseFloat(collection.totalVolumeBNB).toLocaleString(undefined, {
-                              minimumFractionDigits: 3,
-                              maximumFractionDigits: 3,
-                            })
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3,
+                          })
                           : '0'
                         return (
                           <tr key={collection.address} data-test="nft-collection-row">
@@ -321,12 +325,14 @@ const Collectible = () => {
                 mb="32px"
                 data-test="nft-collection-row"
               >
-                {sortedCollections[0].data.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => {
+                {/* {sortedCollections[0].data.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => { */}
+                {sortedCollections.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => {
+                  console.log("collection:",collection)
                   return (
-                    <CollectionCard  
+                    <CollectionCard
                       key={collection.address}
-                      bgSrc={collection.banner.small}
-                      avatarSrc={collection.avatar}
+                      bgSrc={collection.data[0].banner.small}
+                      avatarSrc={collection.data[0].avatar}
                       collectionName={collection.name}
                       url={`${nftsBaseUrl}/collections/${collection.address}`}
                     >

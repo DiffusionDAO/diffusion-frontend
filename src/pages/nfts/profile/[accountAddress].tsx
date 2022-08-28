@@ -27,7 +27,6 @@ import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundCo
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import Typed from 'react-typed';
-import nftDatasMock from 'views/Nft/market/Profile/MockNftDatas'
 import { useSWRContract } from 'hooks/useSWRContract'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { ethers } from 'ethers'
@@ -60,6 +59,7 @@ function NftProfilePage() {
 
   const accountAddress = query.accountAddress as string
   const [selectedNfts, setSelectedNfts] = useState<NftToken[]>([])
+  const [stakedNfts, setStakedNfts] = useState<NftToken[]>([])
   const [mynfts, setMynfts] = useState<NftToken[]>([])
 
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
@@ -323,7 +323,7 @@ function NftProfilePage() {
               tab={
                 <span>
                   {`${t('Staked')}`}
-                  <SelectedCountWrap>{selectedNfts?.length}</SelectedCountWrap>
+                  <SelectedCountWrap>{stakedNfts?.length}</SelectedCountWrap>
                 </span>
               }
             />

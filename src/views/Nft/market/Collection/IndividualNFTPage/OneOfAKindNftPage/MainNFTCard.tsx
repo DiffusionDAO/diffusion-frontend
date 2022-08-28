@@ -81,7 +81,6 @@ const BondGearImg = styled.img`
 `
 
 const MainNFTCard: React.FC<MainNFTCardProps> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess }) => {
-  
   const { t } = useTranslation()
   const bnbBusdPrice = useBNBBusdPrice()
   

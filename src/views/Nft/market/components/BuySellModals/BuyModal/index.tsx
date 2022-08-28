@@ -29,9 +29,11 @@ import TransactionConfirmed from '../shared/TransactionConfirmed'
 import { Contract } from '@ethersproject/contracts'
 import get from 'lodash/get'
 import { TransactionResponse } from '@ethersproject/providers'
-import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber"
+import addresses from 'config/constants/contracts'
+import { getAddress } from 'utils/addressHelpers'
 import { formatUnits } from '@ethersproject/units'
-// add getNFTItems function 
+
 const getNFTItems = async (
   contract: Contract,
   methodName: string,
@@ -56,7 +58,7 @@ interface BuyModalProps extends InjectedModalProps {
 }
 
 // NFT WBNB in testnet contract is different
-const dfsAddress = '0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF'
+
 const wbnbAddress =                                             
   CHAIN_ID === String(ChainId.MAINNET) ? tokens.wbnb.address : '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 
@@ -73,7 +75,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   const { account } = useWeb3React()
   const wbnbContractReader = useERC20(wbnbAddress, false)
   const wbnbContractApprover = useERC20(wbnbAddress)
-  const dfsContractApprover = useERC20(dfsAddress)
+  const dfsContractApprover = useERC20(getAddress(addresses.dfs))
   const nftMarketContract = useNftMarketContract()
   const { toastSuccess } = useToast()
   const nftPriceWei = parseUnits(nftToBuy?.marketData?.currentAskPrice, 'ether')
@@ -109,10 +111,10 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
       console.log('=====onrequireApprove====')
       return requiresApproval(wbnbContractReader, account, nftMarketContract.address)
     },
-    onApprove: async () => {
-      return await dfsContractApprover.approve(nftMarketContract.address,MaxUint256)
+    onApprove: async() => {
+      return await dfsContractApprover.approve(nftMarketContract.address, MaxUint256)
       //return callWithGasPrice(wbnbContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
-      console.log('=====onApprove====')
+
       // return callWithGasPrice(dfsContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
     },
     // why approve require gas 

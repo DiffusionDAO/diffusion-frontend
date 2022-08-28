@@ -19,6 +19,7 @@ import ExpandableCard from '../shared/ExpandableCard'
 import SellModal from '../../../components/BuySellModals/SellModal'
 import ProfileNftModal from '../../../components/ProfileNftModal'
 import { SmallRoundedImage, CollectibleRowContainer } from '../shared/styles'
+import { formatUnits } from '@ethersproject/units'
 
 const LocationColors = {
   [NftLocation.FORSALE]: 'failure',
@@ -63,7 +64,7 @@ const CollectibleRow: React.FC<CollectibleRowProps> = ({ nft, onSuccess }) => {
             </Text>
             <Flex justifySelf="flex-end" width="max-content">
               <BinanceIcon width="16px" height="16px" mr="4px" />
-              <Text small>{nft?.marketData?.currentAskPrice}</Text>
+              <Text small>{formatUnits(nft?.marketData?.currentAskPrice,"ether")}</Text>
             </Flex>
           </>
         ) : (
