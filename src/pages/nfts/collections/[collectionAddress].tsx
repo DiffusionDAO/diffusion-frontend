@@ -14,7 +14,6 @@ const CollectionPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getSta
     </SWRConfig>
   )
 }
-
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     fallback: true,

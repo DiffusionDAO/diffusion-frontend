@@ -94,7 +94,9 @@ const Home = () => {
     (collection) => (collection.createdAt ? Date.parse(collection.createdAt) : 0),
     'desc',
   )
-  console.log("newestCollections:",newestCollections)
+  const transText:string = t('Discover more possibilities explore more art and digital rights space')
+  
+  console.log("newestCollections:",transText)
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto'}}>
       <PageMeta />
@@ -134,7 +136,7 @@ const Home = () => {
         <BackgroundText>
           <BackgroundTitle>
             <Typed
-              strings={['Discover more possibilities explore more art and digital rights space']}
+              strings={[transText]}
               typeSpeed={50}
               cursorChar=""
               style={{fontSize:40}}

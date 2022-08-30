@@ -118,13 +118,13 @@ const ManageNFTsCard: React.FC<ManageNFTsCardProps> = ({ nft, isLoading, isOwnNf
           <ConnectWalletButton />
         </Flex>
       )}
-      {account && isLoading && (
+      {/* {account && isLoading && (
         <Box px="16px" pb="8px">
           <Skeleton mb="8px" />
           <Skeleton mb="8px" />
           <Skeleton mb="8px" />
         </Box>
-      )}
+      )} */}
       {account && !isLoading && !hasThisNft && (
         <Text px="16px" pb="16px" color="textSubtle">
           {t('You don’t have this item.')}

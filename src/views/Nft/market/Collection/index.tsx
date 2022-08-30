@@ -8,6 +8,7 @@ import { getCollectionApi } from 'state/nftMarket/helpers'
 import Header from './Header'
 import Items from './Items'
 import {combineCollectionData} from 'state/nftMarket/helpers'
+import styled from 'styled-components'
 
 // const Traits = dynamic(() => import('./Traits'), {
 //   loading: () => <PageLoader />,
@@ -37,12 +38,19 @@ const Collection = () => {
   // if (hash === '#activity') {
   //   content = <Activity />
   // }
-
+  const CollecPageWrap = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+ 
+`
   return (
     <>
-      <PageMeta />
+    <CollecPageWrap>
+    <PageMeta />
       <Header collection={collection} />
       {content}
+    </CollecPageWrap>
+     
     </>
   )
 }
