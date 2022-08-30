@@ -91,6 +91,7 @@ const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
   // const { data } = useGetCollectionDistribution(address)
   const { t } = useTranslation()
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(address)
+  console.log("showOnlyNftsOnSale:",showOnlyNftsOnSale)
   const [activeButtonIndex, setActiveButtonIndex] = useState(showOnlyNftsOnSale ? 1 : 0)
   console.log('activeButtonIndex', activeButtonIndex)
 

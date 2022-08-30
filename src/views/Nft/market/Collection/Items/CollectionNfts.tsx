@@ -51,7 +51,6 @@ const CollectionNfts: React.FC<CollectionNftsProps> = ({ collection }) => {
               let currentAskPriceAsNumber:any = nft.marketData && parseFloat(nft?.marketData?.currentAskPrice)
                console.log(typeof currentAskPriceAsNumber)
               if(!isNaN(currentAskPriceAsNumber) ){
-                console.log('currentAskPric++++',currentAskPriceAsNumber)
               currentAskPriceAsNumber = BigNumber.from(String(currentAskPriceAsNumber))
               currentAskPriceAsNumber = formatUnits(currentAskPriceAsNumber,18)
               }
