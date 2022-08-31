@@ -103,6 +103,7 @@ const SellModal: React.FC<SellModalProps> = ({
   onSuccessSale,
   onSuccessEditProfile,
 }) => {
+  console.log("nftToSell:",nftToSell)
   const [stage, setStage] = useState(variant === 'sell' ? SellingStage.SELL : SellingStage.EDIT)
   const [price, setPrice] = useState(variant === 'sell' ? '' : formatUnits(nftToSell?.marketData?.currentAskPrice, "18"))
   const [transferAddress, setTransferAddress] = useState('')
@@ -112,10 +113,6 @@ const SellModal: React.FC<SellModalProps> = ({
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
-  // console.log('adjust price onDismiss::',onDismiss)
-  // const { reader: collectionContractReader, signer: collectionContractSigner } = useErc721CollectionContract(
-  // //   '0x88eBFd7841D131BCeab3e7149217aa8e36985a40',
-  // )
   const { reader: collectionContractReader, signer: collectionContractSigner } = useErc721CollectionContract(
     nftToSell.collectionAddress,
   )
@@ -278,7 +275,6 @@ const SellModal: React.FC<SellModalProps> = ({
     },
   })
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
-  console.log('PPP->',price)
   return (
     <StyledModal
       title={modalTitles(stage, t)}

@@ -47,13 +47,6 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
   const priceInUsd = multiplyPriceByAmount(bnbPrice, priceAsFloat)
 
   const priceIsOutOfRange = priceAsFloat > MAX_PRICE || priceAsFloat < MIN_PRICE
-  console.log('+++000pri++',price)
- 
-  useEffect(()=>{
-     price = formatUnits(price,18)  
-     console.log('currentAskPriceAsNumber', price)
-  },[])
-
 
   const { tooltip, tooltipVisible, targetRef } = useTooltip(
     <>
@@ -70,7 +63,7 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
     { placement: 'auto' },
   )
 
-  
+
 
   useEffect(() => {
     if (inputRef && inputRef.current) {

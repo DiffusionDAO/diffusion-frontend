@@ -109,7 +109,7 @@ export default {
   },
   dfsNFT: {
     56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',
-    97: '0xcEa33A6D686502791654809f14e2D6a7Da6605Bb',
+    97: '0xBA5854224405AeE924c2e84AcC52634B539926f7',
   },
   nftDraw:{
     56:"",
