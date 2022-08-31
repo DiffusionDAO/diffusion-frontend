@@ -328,20 +328,21 @@ const Collectible = () => {
                 {/* {sortedCollections[0].data.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => { */}
                 {sortedCollections.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => {
                   console.log("collection:",collection)
+                  var data = collection.data[0]
                   return (
                     <CollectionCard
-                      key={collection.address}
-                      bgSrc={collection.data[0].banner.small}
-                      avatarSrc={collection.data[0].avatar}
-                      collectionName={collection.name}
-                      url={`${nftsBaseUrl}/collections/${collection.address}`}
+                      key={data.address}
+                      bgSrc={data.banner.small}
+                      avatarSrc={data.avatar}
+                      collectionName={data.name}
+                      url={`${nftsBaseUrl}/collections/${data.address}`}
                     >
                       <Flex alignItems="center">
                         <Text fontSize="12px" color="textSubtle">
                           {t('Volume')}
                         </Text>
                         <BNBAmountLabel
-                          amount={collection.totalVolumeBNB ? parseFloat(collection.totalVolumeBNB) : 0}
+                          amount={data.totalVolumeBNB ? parseFloat(data.totalVolumeBNB) : 0}
                         />
                       </Flex>
                     </CollectionCard>
