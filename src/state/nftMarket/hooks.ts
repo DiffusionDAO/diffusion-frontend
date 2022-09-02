@@ -100,7 +100,8 @@ export const useGetNftOrdering = (collectionAddress: string) => {
 
 export const useGetNftShowOnlyOnSale = (collectionAddress: string) => {
   const collectionFilter: NftFilter = useSelector((state: State) => state.nftMarket.data.filters[collectionAddress])
-  return collectionFilter ? collectionFilter.showOnlyOnSale : true
+  console.log("collectionFilter:",collectionFilter)
+  return collectionFilter ? collectionFilter.showOnlyOnSale : false
 }
 
 export const useTryVideoNftMedia = () => {

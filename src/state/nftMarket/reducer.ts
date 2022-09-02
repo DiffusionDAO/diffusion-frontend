@@ -8,7 +8,7 @@ import { MarketEvent, NftActivityFilter, NftAttribute, NftFilter, NftToken, Stat
 const initialNftFilterState: NftFilter = {
   loadingState: FetchStatus.Idle,
   activeFilters: {},
-  showOnlyOnSale: true,
+  showOnlyOnSale: false,
   ordering: {
     field: 'currentAskPrice',
     direction: 'asc',
@@ -194,6 +194,7 @@ export const NftMarket = createSlice({
       }
     },
     setShowOnlyOnSale: (state, action: PayloadAction<{ collection: string; showOnlyOnSale: boolean }>) => {
+      console.log("state.data.filters[action.payload.collection]:",state.data.filters[action.payload.collection])
       if (state.data.filters[action.payload.collection]) {
         state.data.filters[action.payload.collection].showOnlyOnSale = action.payload.showOnlyOnSale
       } else {

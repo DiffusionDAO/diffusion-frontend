@@ -194,6 +194,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const collection = useGetCollection(collectionAddress)
   const { field, direction } = useGetNftOrdering(collectionAddress)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(collectionAddress)
+  console.log("showOnlyNftsOnSale:",showOnlyNftsOnSale)
   const nftFilters = useGetNftFilters(collectionAddress)
   const [itemListingSettings, setItemListingSettings] = useState<ItemListingSettings>({
     field,

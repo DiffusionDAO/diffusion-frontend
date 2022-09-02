@@ -18,10 +18,10 @@ const CollectionNfts: React.FC<CollectionNftsProps> = ({ collection }) => {
   const { t } = useTranslation()
   const { nfts, isFetchingNfts, page, setPage, resultSize, isLastPage } = useCollectionNfts(collectionAddress)
   const dfsNFTAddress = getDFSNFTAddress()
-  nfts.map(nft => {
-    if (nft.collectionAddress === dfsNFTAddress) {
-      nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
-    }
+  console.log("isLastPage:", isLastPage)
+  console.log("nfts:", nfts)
+  nfts.filter(nft => nft.collectionAddress === dfsNFTAddress).map(nft => {
+    nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
   })
   const handleLoadMore = useCallback(() => {
     setPage(page + 1)
@@ -48,13 +48,12 @@ const CollectionNfts: React.FC<CollectionNftsProps> = ({ collection }) => {
             alignItems="start"
           >
             {nfts.map((nft) => {
-              let currentAskPriceAsNumber:any = nft.marketData && parseFloat(nft?.marketData?.currentAskPrice)
-               console.log(typeof currentAskPriceAsNumber)
-              if(!isNaN(currentAskPriceAsNumber) ){
-              currentAskPriceAsNumber = BigNumber.from(String(currentAskPriceAsNumber))
-              currentAskPriceAsNumber = formatUnits(currentAskPriceAsNumber,18)
+              let currentAskPriceAsNumber: any = nft.marketData && parseFloat(nft?.marketData?.currentAskPrice)
+              if (!isNaN(currentAskPriceAsNumber)) {
+                currentAskPriceAsNumber = BigNumber.from(String(currentAskPriceAsNumber))
+                currentAskPriceAsNumber = formatUnits(currentAskPriceAsNumber, 18)
               }
-               
+
               return (
                 <CollectibleLinkCard
                   key={nft.tokenId}
