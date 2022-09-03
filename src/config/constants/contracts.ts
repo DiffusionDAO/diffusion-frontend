@@ -107,6 +107,10 @@ export default {
     56: '',
     97: '0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF',
   },
+  starlightNft:{
+    56: '',
+    97: '0x88eBFd7841D131BCeab3e7149217aa8e36985a40',
+  },
   dfsNFT: {
     56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',
     97: '0xBA5854224405AeE924c2e84AcC52634B539926f7',

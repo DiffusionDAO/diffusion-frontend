@@ -181,15 +181,13 @@ export const getNftsFromCollectionApi = async (
 export const getNftApi = async (
   collectionAddress: string,
   tokenId: string,
-): Promise<ApiResponseSpecificToken['data']> => {
+): Promise<any> => {
   const url = `${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}`
   const res = await fetch(url)  
-  //res.ok
   if (res.ok) {    
-    const json = await res.json()       
+    const json = await res.json()    
     return json
   }
-  console.log('dry::::API Can not fetch Nft')
   console.error(`API: Can't fetch NFT token ${tokenId} in ${collectionAddress}`, res.status)
   return null
 }
@@ -202,10 +200,9 @@ export const getNftApi = async (
 export const getNftsFromDifferentCollectionsApi = async (
   from: { collectionAddress: string; tokenId: string }[],
 ): Promise<NftToken[]> => {
+  console.log("getNftsFromDifferentCollectionsApi:",from)
   const promises = from.map((nft) => getNftApi(nft.collectionAddress, nft.tokenId))
   const responses = await Promise.all(promises)
-  // Sometimes API can't find some tokens (e.g. 404 response)
-  // at least return the ones that returned successfully
   return responses
     .filter((resp) => resp)
     .map((res, index) => ({
@@ -379,7 +376,7 @@ export const getMarketDataForTokenIds = async (
         where: { tokenId_in: existingTokenIds },
       },
     )
-    return res.collection.nfts
+    return res.collection?.nfts
   } catch (error) {
     console.error(`Failed to fetch market data for NFTs stored tokens`, error)
     return []
@@ -520,7 +517,7 @@ export const getNftsMarketData = async (
       { where, first, skip, orderBy, orderDirection },
     )
 
-    return res.nfts
+    return res?.nfts
   } catch (error) {
     console.error('Failed to fetch NFTs market data', error)
     return []

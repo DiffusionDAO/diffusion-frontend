@@ -46,6 +46,7 @@ export const getUsername = async (address: string): Promise<string> => {
 }
 
 export const getProfile = async (address: string): Promise<GetProfileResponse> => {
+  console.log("getProfile:",address)
   try {
     const profileCalls = ['hasRegistered', 'getUserProfile'].map((method) => {
       return { address: getPancakeProfileAddress(), name: method, params: [address] }

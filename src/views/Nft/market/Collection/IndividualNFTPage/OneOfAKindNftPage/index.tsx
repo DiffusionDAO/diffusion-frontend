@@ -36,6 +36,7 @@ export const PageWrap = styled.div`
 `
 
 const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress, tokenId }) => {
+  console.log("IndividualNFTPage:",tokenId)
   const collection = useGetCollection(collectionAddress)
   // const { data: distributionData, isFetching: isFetchingDistribution } = useGetCollectionDistribution(collectionAddress)
   const {
@@ -46,8 +47,6 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
     refetch,
   } = useCompleteNft(collectionAddress, tokenId)
  
-
-
   const properties = nft?.attributes || null
 
   // const attributesRarity = useMemo(() => {
@@ -67,9 +66,6 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
   // }, [properties, isFetchingDistribution, distributionData])
 
   if (!nft || !collection) {
-    // Normally we already show a 404 page here if no nft, just put this checking here for safety.
-
-    // For now this if is used to show loading spinner while we're getting the data
     return <PageLoader />
   }
   const { isMobile } = useMatchBreakpoints()

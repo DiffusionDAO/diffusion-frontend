@@ -35,7 +35,7 @@ const CollectibleCardBody: React.FC<CollectibleCardProps> = ({ nft, nftLocation,
       <Text as="h4" fontWeight="600" >
         {name}
       </Text>
-      {nft.attributes[0].value && <img src={"/images/grade/"+nft.attributes[0].value+'.png'}/>}
+      {nft?.attributes && nft?.attributes[0].value && <img src={"/images/grade/"+nft.attributes[0].value+'.png'}/>}
       
       </div>
       

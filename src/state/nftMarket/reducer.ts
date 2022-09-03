@@ -194,7 +194,6 @@ export const NftMarket = createSlice({
       }
     },
     setShowOnlyOnSale: (state, action: PayloadAction<{ collection: string; showOnlyOnSale: boolean }>) => {
-      console.log("state.data.filters[action.payload.collection]:",state.data.filters[action.payload.collection])
       if (state.data.filters[action.payload.collection]) {
         state.data.filters[action.payload.collection].showOnlyOnSale = action.payload.showOnlyOnSale
       } else {

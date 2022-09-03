@@ -38,6 +38,7 @@ import {
   getBunnySpecialXmasAddress,
   getGalaxyNFTClaimingAddress,
   getDFSNFTAddress,
+  getStarlightAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -79,6 +80,7 @@ import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftComposeAbi from 'config/abi/nftComposeAbi.json'
 import nftDrawAbi from 'config/abi/nftDrawAbi.json'
 import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
+import starlightAbi from "config/abi/starlight.json"
 
 import nftSaleAbi from 'config/abi/nftSale.json'
 import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
@@ -256,6 +258,9 @@ export const getNftDrawContract =  (signer?: Signer | Provider) => {
 
 export const getNftMarketContract = (signer?: Signer | Provider) => {
   return getContract(nftMarketAbi, getNftMarketAddress(), signer) 
+}
+export const getStarlightContract = (signer?: Signer | Provider) => {
+  return getContract(starlightAbi, getStarlightAddress(), signer) 
 }
 export const getDFSNFTContract = (signer?: Signer | Provider) => {
   return getContract(dfsNFTAbi, getDFSNFTAddress(), signer) 

@@ -50,7 +50,7 @@ export const useGetShuffledCollections = (): { data: Collection[]; status: Fetch
 
 export const useNftsFromCollection = (collectionAddress: string) => {
   const checksummedCollectionAddress = isAddress(collectionAddress) || ''
-  const nfts: NftToken[] = useSelector((state: State) => state.nftMarket.data.nfts[checksummedCollectionAddress])
+  const nfts: NftToken[] = useSelector((state: State) => state.nftMarket.data?.nfts[checksummedCollectionAddress])
   return nfts
 }
 

@@ -101,7 +101,6 @@ const Filters: React.FC<FiltersProps> = ({ address, attributes }) => {
   const onActiveButtonChange = (newIndex: number) => {
       dispatch(setShowOnlyOnSale({ collection: address, showOnlyOnSale: newIndex === 1 }))
   }
-  // "execution reverted:  from:0x0a24f5df83b3baa3982ace21d051f525f02c5de1 to:0x9a94b473db262f66bb61fd5c063fef41ca61ea2f"
   const nftFilters = useGetNftFilters(address)
   const attrsByType: Record<string, NftAttribute[]> = attributes?.reduce(
     (accum, attr) => ({
