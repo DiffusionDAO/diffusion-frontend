@@ -51,6 +51,9 @@ const Mint: FC = () => {
   const seniorPrice = BigNumber.from(10).pow(18).mul(60)
   const DFS = useTokenContract(address)
   const NftDraw = useNftDrawContract()
+  if (account) {
+    tokenContract.balanceOf(account).then((res) => { if (!res.eq(balance)) { setBalance(res) } })
+  }
 
   useEffect(() => {
     if (account) {
@@ -58,11 +61,8 @@ const Mint: FC = () => {
       const maxSen = balance.div(seniorPrice)
       setMaxOrdinary(maxOrd)
       setMaxSenior(maxSen)
-      if (balance.eq(0)) {
-        tokenContract.balanceOf(account).then((res) => { setBalance(res) })
-      }
     }
-  }, [balance,account])
+  }, [account, balance])
 
   const drawBlind = async (type: string) => {
     if (!account) {
