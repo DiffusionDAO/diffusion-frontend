@@ -39,11 +39,13 @@ const Mint: FC = () => {
   const [maxSenior, setMaxSenior] = useState<BigNumber>(BigNumber.from(1));
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1);
   const [maxOrdinary, setMaxOrdinary] = useState<BigNumber>(BigNumber.from(1));
-  const [drawBindData,setDrawBindData] = useState<any>([]);
+  const [drawBindData, setDrawBindData] = useState<any>([]);
   const nftDrawAddress = getNftDrawAddress()
-  const { balance } = useFetchBalance()
-  const { allowance } = useFetchAllowance(nftDrawAddress)
+  const [balance, setBalance] = useState(BigNumber.from(0))
+  // const { balance } = useFetchBalance()
   const address = getDFSAddress()
+  const tokenContract = useTokenContract(address)
+  const { allowance } = useFetchAllowance(nftDrawAddress)
 
   const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
   const seniorPrice = BigNumber.from(10).pow(18).mul(60)
@@ -51,20 +53,23 @@ const Mint: FC = () => {
   const NftDraw = useNftDrawContract()
 
   useEffect(() => {
-    if (balance) {
+    if (account) {
       const maxOrd = balance.div(ordinaryPrice)
       const maxSen = balance.div(seniorPrice)
       setMaxOrdinary(maxOrd)
       setMaxSenior(maxSen)
+      if (balance.eq(0)) {
+        tokenContract.balanceOf(account).then((res) => { setBalance(res) })
+      }
     }
-  }, [balance])
+  }, [balance,account])
 
   const drawBlind = async (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
     }
-    if ((type === 'senior' && balance.lt(seniorPrice.mul(seniorCount) )) || (type === 'ordinary' && balance.lt(ordinaryPrice.mul(ordinaryCount)))) {
+    if ((type === 'senior' && balance.lt(seniorPrice.mul(seniorCount))) || (type === 'ordinary' && balance.lt(ordinaryPrice.mul(ordinaryCount)))) {
       setJumpModalVisible(true)
       return
     }
@@ -73,7 +78,7 @@ const Mint: FC = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
     const recipient = await res.wait()
-    const {events} = recipient
+    const { events } = recipient
     const levels = []
     const dfsNFT = getDFSNFTContract(library.getSigner())
 
@@ -92,13 +97,13 @@ const Mint: FC = () => {
     setBlindBoxModalVisible(true)
   }
   const formatLevel = (data) => {
-    const objItem = data.reduce((allNames:any, name:any) => {
-        if (name in allNames) {
-          allNames[name]++;
-        } else {
-          allNames[name] = 1;
-        }
-        return allNames;
+    const objItem = data.reduce((allNames: any, name: any) => {
+      if (name in allNames) {
+        allNames[name]++;
+      } else {
+        allNames[name] = 1;
+      }
+      return allNames;
     }, {});
     const newData = []
     Object.keys(objItem).forEach(key => {
@@ -133,7 +138,7 @@ const Mint: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Premier Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value={`${formatUnits(seniorPrice,"ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
+                <DataCell label={t('Price')} value={`${formatUnits(seniorPrice, "ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
@@ -169,7 +174,7 @@ const Mint: FC = () => {
             <ContentWrap>
               <DalaCardList>
                 <DalaCardListTitle>{t('Deluxe Mystery Boxes')}</DalaCardListTitle>
-                <DataCell label={t('Price')} value={`${formatUnits(ordinaryPrice,"ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
+                <DataCell label={t('Price')} value={`${formatUnits(ordinaryPrice, "ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
                   <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
