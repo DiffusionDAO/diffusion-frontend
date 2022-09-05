@@ -42,10 +42,11 @@ const Mint: FC = () => {
   const [drawBindData, setDrawBindData] = useState<any>([]);
   const nftDrawAddress = getNftDrawAddress()
   const [balance, setBalance] = useState(BigNumber.from(0))
+  const [allowance, setAllowance] = useState(BigNumber.from(0))
   // const { balance } = useFetchBalance()
   const address = getDFSAddress()
   const tokenContract = useTokenContract(address)
-  const { allowance } = useFetchAllowance(nftDrawAddress)
+  // const { allowance } = useFetchAllowance(nftDrawAddress)
 
   const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
   const seniorPrice = BigNumber.from(10).pow(18).mul(60)
@@ -53,6 +54,7 @@ const Mint: FC = () => {
   const NftDraw = useNftDrawContract()
   if (account) {
     tokenContract.balanceOf(account).then((res) => { if (!res.eq(balance)) { setBalance(res) } })
+    tokenContract.allowance(account, nftDrawAddress).then((res) => {if (!res.eq(allowance)) setAllowance(res)})
   }
 
   useEffect(() => {
