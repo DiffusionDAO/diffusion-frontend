@@ -41,7 +41,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     items: [],
   },
   {
-    label: t('NFT Mystery Boxes'),
+    label: t('Boxes'),
     icon: MintIcon,
     fillIcon: MintFillIcon,
     href: '/mint',
