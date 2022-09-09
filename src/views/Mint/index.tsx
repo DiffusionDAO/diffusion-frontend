@@ -25,7 +25,7 @@ import PlayBindBoxModal from './components/PlayBindBoxModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 import { useFetchAllowance, useFetchBalance } from "./hook/useFetchBalance"
 
-const Mint: FC = () => {
+const Mint = () => {
   const { account, library } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()

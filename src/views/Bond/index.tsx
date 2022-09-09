@@ -12,7 +12,7 @@ import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
 
-const Bond: FC = () => {
+const Bond = () => {
   const { account } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()

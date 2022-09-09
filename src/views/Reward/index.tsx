@@ -26,7 +26,7 @@ import { RewardPageWrap, SwiperWrap, SwiperWrapBgImg, SwiperItem, SwiperItemImg,
  
  const { rewardData, detailData } = data
 
-const Reward: FC = () => {
+const Reward = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React();
   const router = useRouter()
