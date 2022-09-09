@@ -1,3 +1,7 @@
 import Bond from 'views/Bond'
 
-export default Bond
+const BondPage = () => {
+    return <Bond />
+}
+
+export default BondPage

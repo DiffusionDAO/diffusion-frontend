@@ -1,3 +1,7 @@
 import Mint from 'views/Mint'
 
-export default Mint
+const MintPage = () => {
+    return <Mint />
+}
+
+export default MintPage

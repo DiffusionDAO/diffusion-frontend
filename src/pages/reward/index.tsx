@@ -1,3 +1,6 @@
 import Reward from 'views/Reward'
 
-export default Reward
+const RewardPage = () => {
+    return <Reward />
+}
+export default RewardPage

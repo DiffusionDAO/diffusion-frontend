@@ -63,14 +63,6 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     href: `${nftsBaseUrl}`,
     showItemsOnMobile: false,
     items: [
-      // {
-      //   label: t('Overview'),
-      //   href: `${nftsBaseUrl}`,
-      // },
-      // {
-      //   label: t('Collections'),
-      //   href: `${nftsBaseUrl}/collections`,
-      // },
     ],
   },
 ]
