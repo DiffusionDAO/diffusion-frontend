@@ -60,8 +60,9 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) 
 
   const swap = async () => {
     const balancePdfs = await ido.balances(account)
-    const releasedPdfs = await ido.releaseInfo(account)
     const receipt = await ido.burn()
+    await receipt.wait()
+    const releasedPdfs = await ido.releaseInfo(account)
     const bondBalance = await bond.pendingPayoutFor(account)
     const amount = Math.min(balancePdfs-releasedPdfs.balance, bondBalance)
     await dfs.mint(2*amount)
