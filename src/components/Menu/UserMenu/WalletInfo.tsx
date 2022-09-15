@@ -44,7 +44,7 @@ interface WalletInfoProps {
 
 const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account,library } = useWeb3React()
   const { balance, fetchStatus } = useGetBnbBalance()
   const { balance: cakeBalance, fetchStatus: cakeFetchStatus } = useTokenBalance(tokens.cake.address)
   const { logout } = useAuth()
@@ -54,9 +54,9 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) 
     logout()
   }
 
-  const bond = getBondContract()
-  const dfs = getDFSContract()
-  const ido = getIDOContract()
+  const bond = getBondContract(library)
+  const dfs = getDFSContract(library)
+  const ido = getIDOContract(library)
 
   const swap = async () => {
     const balancePdfs = await ido.balances(account)
