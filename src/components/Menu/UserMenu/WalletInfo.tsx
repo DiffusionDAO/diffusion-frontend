@@ -54,9 +54,9 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) 
     logout()
   }
 
-  const bond = getBondContract(library)
-  const dfs = getDFSContract(library)
-  const ido = getIDOContract(library)
+  const bond = getBondContract(library.getSigner())
+  const dfs = getDFSContract(library.getSigner())
+  const ido = getIDOContract(library.getSigner())
 
   const swap = async () => {
     const balancePdfs = await ido.balances(account)
