@@ -5,4 +5,4 @@ export enum Networks {
   BSC_TESTNET = 97,
 }
 
-export const DEFAULT_NETWORK = Networks.BSC
+export const DEFAULT_NETWORK = Networks.BSC_TESTNET
