@@ -109,7 +109,7 @@ export default {
   },
   bond: {
     56: '',
-    97: '',
+    97: '0x3dE232826a58E54F55400EA6Fa2a5B1deAC6A21b',
   },
   dfs: {
     56: '',
