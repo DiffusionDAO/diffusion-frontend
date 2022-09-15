@@ -103,6 +103,14 @@ export default {
     56: '0x2D18f2d27D50C9b4013DEBA3D54f60996bD8847E',
     97: '',
   },
+  ido: {
+    56: '0x0e6dfbCe936ABe08cda0Caf576E3CfcF13A11830',
+    97: '0x2185E893d60Ffecd9b0EdCebCf9F9977575d53ee',
+  },
+  bond: {
+    56: '',
+    97: '',
+  },
   dfs: {
     56: '',
     97: '0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF',

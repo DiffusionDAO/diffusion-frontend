@@ -39,6 +39,9 @@ import {
   getGalaxyNFTClaimingAddress,
   getDFSNFTAddress,
   getStarlightAddress,
+  getIDOAddress,
+  getDFSAddress,
+  getBondAddress
 } from 'utils/addressHelpers'
 
 // ABI
@@ -81,6 +84,8 @@ import nftComposeAbi from 'config/abi/nftComposeAbi.json'
 import nftDrawAbi from 'config/abi/nftDrawAbi.json'
 import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
 import starlightAbi from "config/abi/starlight.json"
+import duffionIDOAbi from "config/abi/diffusionIDO.json"
+import bondAbi from "config/abi/bond.json"
 
 import nftSaleAbi from 'config/abi/nftSale.json'
 import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
@@ -125,6 +130,7 @@ import type {
   TradingCompetitionMobox,
   TradingCompetitionMoD,
 } from 'config/abi/types'
+import { ERC20_ABI } from 'config/abi/erc20'
 
 export const getContract = (abi: any, address: string, signer?: Signer | Provider) => {
   const signerOrProvider = signer ?? simpleRpcProvider
@@ -264,6 +270,16 @@ export const getStarlightContract = (signer?: Signer | Provider) => {
 }
 export const getDFSNFTContract = (signer?: Signer | Provider) => {
   return getContract(dfsNFTAbi, getDFSNFTAddress(), signer) 
+}
+export const getDFSContract = (signer?: Signer | Provider) => {
+  return getContract(ERC20_ABI, getDFSAddress(), signer) 
+}
+export const getBondContract = (signer?: Signer | Provider) => {
+  return getContract(bondAbi, getBondAddress(), signer) 
+}
+
+export const getIDOContract = (signer?: Signer | Provider) => {
+  return getContract(duffionIDOAbi, getIDOAddress(), signer) 
 }
 export const getNftSaleContract = (signer?: Signer | Provider) => {
   return getContract(nftSaleAbi, getNftSaleAddress(), signer) as NftSale

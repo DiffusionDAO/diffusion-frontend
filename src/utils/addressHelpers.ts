@@ -102,9 +102,14 @@ export const getNFTComposeAddress = () => {
 export const getDFSAddress =  () => {
   return getAddress(addresses.dfs)
 }
-
+export const getBondAddress =  () => {
+  return getAddress(addresses.bond)
+}
 export const getNftDrawAddress = () => {
   return getAddress(addresses.nftDraw)
+}
+export const getIDOAddress = () => {
+  return getAddress(addresses.ido)
 }
 export const getDFSNFTAddress = () => {
   return getAddress(addresses.dfsNFT)

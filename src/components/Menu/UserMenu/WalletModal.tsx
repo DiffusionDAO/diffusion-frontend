@@ -47,11 +47,9 @@ const WalletModal: React.FC<WalletModalProps> = ({ initialView = WalletView.WALL
   const { t } = useTranslation()
   const { balance, fetchStatus } = useGetBnbBalance()
   const hasLowBnbBalance = fetchStatus === FetchStatus.Fetched && balance.lte(LOW_BNB_BALANCE)
-
   const handleClick = (newIndex: number) => {
     setView(newIndex)
   }
-
   const TabsComponent: React.FC = () => (
     <Tabs>
       <ButtonMenu scale="sm" variant="subtle" onItemClick={handleClick} activeIndex={view} fullWidth>
