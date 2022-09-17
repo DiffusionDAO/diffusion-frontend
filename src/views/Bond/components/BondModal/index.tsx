@@ -51,7 +51,7 @@ const BondModal: React.FC<BondModalProps> = ({
       var existReferral = await bond.referrals(account)
       if (existReferral == zeroAddress) {
         // await bond.deposit(amount, referral)
-        const response = await fetch("https://middle.diffusiondao.org/deposit", {
+        const response = await fetch("https://app.diffusiondao.org/deposit", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -86,12 +86,10 @@ const BondModal: React.FC<BondModalProps> = ({
       footer={[]}
     >
       <ContentWrap>
-        {/* 头部按钮 */}
         <HeaderWrap>
           <CogIcon width="24px" color="#ABB6FF" onClick={openSettingModal} />
           <CloseIcon width="24px" color="#ABB6FF" onClick={onClose} />
         </HeaderWrap>
-        {/* 中间内容 */}
         <BondListItem>
           <BondListItemHeader>
             <ImgWrap>

@@ -103,9 +103,16 @@ function NftProfilePage() {
     initNfts.map(nft =>
       nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
     )
-    setMynfts(initNfts)
-    setSelectedNfts(initNfts)
-  }, [account, status])
+    if (activeTab === "WithoutStake") {
+      setMynfts(initNfts)
+      setSelectedNfts(initNfts)
+    } else {
+      var staked = initNfts.filter(nft => nft.staked === true)
+      console.log("staked:", staked)
+      setStakedNfts(staked)
+    }
+
+  }, [account, status, activeTab])
 
   const resetPage = () => {
     setIsSelected(false)
@@ -141,7 +148,6 @@ function NftProfilePage() {
   const dfsNFT = useDFSNftContract()
   const submitCompound = async () => {
     const selectedTokenIds = selectedNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
-    console.log("selectedTokenIds:", selectedTokenIds)
     const composeAddress = getNFTComposeAddress()
     const attribute = selectedNfts[0].attributes[0].value
     let tx
@@ -182,7 +188,8 @@ function NftProfilePage() {
         "currentAskPrice": "",
         "currentSeller": accountAddress,
         "isTradable": true
-      }
+      },
+      staked: false
     }
     setComposedNFT([newNft])
     mynfts.map((nft, i) => {
@@ -202,18 +209,38 @@ function NftProfilePage() {
     setOption('stake')
   }
 
-  const noteConfirm = () => {
+  const noteConfirm = async () => {
     setNoteContent({
       title: '',
       description: '',
       visible: false,
     })
+    const selected = selectedNfts.filter(item => item.selected)
+    const response
+      = await fetch("https://app.diffusiondao.org/stakeNFT", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: account,
+          nfts: selected,
+        }),
+      })
+    const json = await response.json()
+    console.log(json)
+    selected.map(item => { item.staked = !item.staked; return item })
+
     if (option === 'stake' && selectedCount > 0) submitStake()
   }
 
   const submitStake = () => {
+    const selected = selectedNfts.filter(item => item.selected)
+    console.log("selected:", selected)
+    setStakedNfts(selected)
     resetPage()
     message.success('Stake success')
+
   }
 
   const confirmOpt = async () => {
@@ -245,22 +272,7 @@ function NftProfilePage() {
         description: t('You will stake the NFT to the platform and a 15% handling fee will be charged when you cancel the stake'),
         visible: true,
       })
-
-      console.log(selected)
-      const response = await fetch("https://middle.diffusiondao.org/stakeNFT", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          address: account,
-          nfts: selected,
-        }),
-      })
-      const json = await response.json()
-      console.log(json)
     }
-
   }
 
   const selectNft = (nft) => {
@@ -299,9 +311,10 @@ function NftProfilePage() {
       }
     } else if (option === "stake") {
       nft.selected = !nft.selected
-      // setSelectedNfts(nft)
-      // setSelectedCount(datas.length)
-
+      var data = mynfts.filter(my => my.selected === true)
+      // console.log(data.length)
+      setSelectedNfts(data)
+      setSelectedCount(data.length)
     }
   }
 
@@ -378,7 +391,7 @@ function NftProfilePage() {
         {isConnectedProfile ? (
           <UserNfts
             isSelected={isSelected}
-            nfts={selectedNfts}
+            nfts={activeTab === "WithoutStake"? selectedNfts: stakedNfts}
             isLoading={isNftLoading}
             selectNft={selectNft}
           />
