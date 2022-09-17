@@ -107,7 +107,7 @@ function NftProfilePage() {
       setMynfts(initNfts)
       setSelectedNfts(initNfts)
     } else {
-      var staked = initNfts.filter(nft => nft.staked === true)
+      const staked = initNfts.filter(nft => nft.staked === true)
       console.log("staked:", staked)
       setStakedNfts(staked)
     }
@@ -311,8 +311,7 @@ function NftProfilePage() {
       }
     } else if (option === "stake") {
       nft.selected = !nft.selected
-      var data = mynfts.filter(my => my.selected === true)
-      // console.log(data.length)
+      const data = mynfts.filter(my => my.selected === true)
       setSelectedNfts(data)
       setSelectedCount(data.length)
     }
