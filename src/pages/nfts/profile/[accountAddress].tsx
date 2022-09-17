@@ -96,19 +96,16 @@ function NftProfilePage() {
   ]
 
   useEffect(() => {
-    // console.log("collections:", collections)
     const keys = Object.keys(collections)
-    // console.log("keys:", keys)
     const initNfts = keys.map(key => collections[key].tokens.filter(item =>
       item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
     )).flat()
     initNfts.map(nft =>
       nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
     )
-    // console.log("nfts:", nfts)
     setMynfts(initNfts)
     setSelectedNfts(initNfts)
-  }, [account,status])
+  }, [account, status])
 
   const resetPage = () => {
     setIsSelected(false)
@@ -156,7 +153,6 @@ function NftProfilePage() {
     const recipient = await tx.wait()
     const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
     const tokenId = id.toString()
-    console.log("tokenId:", tokenId)
     const level = await dfsNFT.getItems(tokenId)
     const newNft: NftToken = {
       "tokenId": tokenId,
@@ -220,7 +216,7 @@ function NftProfilePage() {
     message.success('Stake success')
   }
 
-  const confirmOpt = () => {
+  const confirmOpt = async () => {
     const selected = selectedNfts.filter(item => item.selected)
     setSelectedNfts(selected)
     if (!selected.length) {
@@ -248,45 +244,65 @@ function NftProfilePage() {
         title: t('Important note'),
         description: t('You will stake the NFT to the platform and a 15% handling fee will be charged when you cancel the stake'),
         visible: true,
-      });
+      })
+
+      console.log(selected)
+      const response = await fetch("https://middle.diffusiondao.org/stakeNFT", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: account,
+          nfts: selected,
+        }),
+      })
+      const json = await response.json()
+      console.log(json)
     }
 
   }
 
   const selectNft = (nft) => {
-    const level = nft.attributes[0].value
-    const data = cloneDeep(mynfts.filter(my => my.attributes[0].value === level))
-    data.map((item: NftToken) => {
-      const obj = item
-      if (obj.attributes[0].value === nft.attributes[0].value) { obj.selected = !obj.selected }
-      return obj
-    })
-    if (level === '0') {
-      if (data.length < 6) {
-        setNoteContent({
-          title: t('Important note'),
-          description: t('need 6 pieces'),
-          visible: true,
-        });
-        return;
+    if (option === "compose") {
+      const level = nft.attributes[0].value
+      const data = cloneDeep(mynfts.filter(my => my.attributes[0].value === level))
+      data.map((item: NftToken) => {
+        const obj = item
+        if (obj.attributes[0].value === nft.attributes[0].value) { obj.selected = !obj.selected }
+        return obj
+      })
+      if (level === '0') {
+        if (data.length < 6) {
+          setNoteContent({
+            title: t('Important note'),
+            description: t('need 6 pieces'),
+            visible: true,
+          });
+          return;
+        }
+        const datas = data.slice(0, 6)
+        setSelectedNfts(datas)
+        setSelectedCount(datas.filter(item => item.selected).length)
+      } else {
+        if (level === '6') {
+          setNoteContent({
+            title: t('Important note'),
+            description: t('Unable to compose highest level NFT'),
+            visible: true,
+          });
+          return;
+        }
+        const datas = data.slice(0, 2)
+        setSelectedNfts(datas)
+        setSelectedCount(datas.filter(item => item.selected).length)
       }
-      const datas = data.slice(0, 6)
-      setSelectedNfts(datas)
-      setSelectedCount(datas.filter(item => item.selected).length)
-    } else {
-      if (level === '6'){
-        setNoteContent({
-          title: t('Important note'),
-          description: t('Unable to compose highest level NFT'),
-          visible: true,
-        });
-        return;
-      }
-      const datas = data.slice(0, 2)
-      setSelectedNfts(datas)
-      setSelectedCount(datas.filter(item => item.selected).length)
-    }
+    } else if (option === "stake") {
+      nft.selected = !nft.selected
+      // setSelectedNfts(nft)
+      // setSelectedCount(datas.length)
 
+    }
   }
 
   return (

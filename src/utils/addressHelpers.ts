@@ -98,7 +98,9 @@ export const getNftMarketAddress = () => {
 export const getNFTComposeAddress = () => {
   return getAddress(addresses.nftCompose)
 }
-
+export const getUSDTAddress =  () => {
+  return getAddress(addresses.usdt)
+}
 export const getDFSAddress =  () => {
   return getAddress(addresses.dfs)
 }

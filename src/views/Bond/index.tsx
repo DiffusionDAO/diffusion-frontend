@@ -3,17 +3,23 @@ import Typed from 'react-typed';
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
-import { BondPageWrap, BondPageHeader, SculptureWrap, HeaderTitle, HeaderDes, 
-  OverviewWrap, OverviewCard, OverviewPromptList, OverviewPromptItem, OverviewPromptWrap, OverviewPromptLine, OverviewPromptTitle,  Horizontal, OverviewCardItem, OverviewCardItemTitle, 
-  OverviewCardItemContent, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText, 
-  TextColor, BondListItemBtn, BondListItemBtnClosed, ImgWrap, FromImg, ToImg, BondHeaderName } from './style'
+import {
+  BondPageWrap, BondPageHeader, SculptureWrap, HeaderTitle, HeaderDes,
+  OverviewWrap, OverviewCard, OverviewPromptList, OverviewPromptItem, OverviewPromptWrap, OverviewPromptLine, OverviewPromptTitle, Horizontal, OverviewCardItem, OverviewCardItemTitle,
+  OverviewCardItemContent, BondListItem, BondListItemHeader, BondListItemContent, ContentCell, CellTitle, CellText,
+  TextColor, BondListItemBtn, BondListItemBtnClosed, ImgWrap, FromImg, ToImg, BondHeaderName
+} from './style'
 import bondDatasMock from './MockBondData'
 import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
 import { useMatchBreakpoints } from "../../../packages/uikit/src/hooks";
+import { getContract } from 'utils'
+import { ERC20_ABI } from 'config/abi/erc20'
+import { getUSDTAddress, getBondAddress } from 'utils/addressHelpers'
+import { MaxUint256 } from '@ethersproject/constants';
 
 const Bond = () => {
-  const { account } = useWeb3React();
+  const { account, library } = useWeb3React();
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
   const [bonData, setBondData] = useState<any[]>(bondDatasMock);
@@ -37,8 +43,10 @@ const Bond = () => {
   const closeSettingModal = () => {
     setSettingModalVisible(false)
   }
+  const bondAddress = getBondAddress()
+  const usdt = getContract(getUSDTAddress(), ERC20_ABI, library?.getSigner())
   const getApprove = () => {
-    setIsApprove(true)
+    usdt.approve(bondAddress, MaxUint256).then(() => setIsApprove(true))
   }
   return (<BondPageWrap>
     <BondPageHeader>
@@ -71,14 +79,14 @@ const Bond = () => {
       <OverviewPromptWrap>
         {
           isMobile ? <>
-              <OverviewPromptLine style={{width: 'calc(50% - 25px)'}} />
-              <OverviewPromptTitle>{t('Reminder')}</OverviewPromptTitle>
-              <OverviewPromptLine style={{width: 'calc(50% - 25px)'}}/>
-          </>:
-          <>
+            <OverviewPromptLine style={{ width: 'calc(50% - 25px)' }} />
             <OverviewPromptTitle>{t('Reminder')}</OverviewPromptTitle>
-            <OverviewPromptLine style={{width: 'calc(100% - 50px)'}}/>
-          </>
+            <OverviewPromptLine style={{ width: 'calc(50% - 25px)' }} />
+          </> :
+            <>
+              <OverviewPromptTitle>{t('Reminder')}</OverviewPromptTitle>
+              <OverviewPromptLine style={{ width: 'calc(100% - 50px)' }} />
+            </>
         }
       </OverviewPromptWrap>
       <OverviewPromptList>
@@ -109,7 +117,7 @@ const Bond = () => {
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Discount')}</CellTitle>
-                  <CellText><TextColor isRise={item.discount>0}>{item.discount}%</TextColor></CellText>
+                  <CellText><TextColor isRise={item.discount > 0}>{item.discount}%</TextColor></CellText>
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Duration')}</CellTitle>
@@ -117,10 +125,10 @@ const Bond = () => {
                 </ContentCell>
               </BondListItemContent>
               {
-                item.status === 'opened' ? 
-                <BondListItemBtn onClick={()=> openBondModal(item)}>{t('Bonds')}</BondListItemBtn>
-                : 
-                <BondListItemBtnClosed onClick={()=> openBondModal(item)}>{t('Not opened')}</BondListItemBtnClosed>
+                item.status === 'opened' ?
+                  <BondListItemBtn onClick={() => openBondModal(item)}>{t('Bonds')}</BondListItemBtn>
+                  :
+                  <BondListItemBtnClosed onClick={() => openBondModal(item)}>{t('Not opened')}</BondListItemBtnClosed>
               }
             </BondListItem>
           </Grid>
@@ -129,14 +137,14 @@ const Bond = () => {
     </Grid>
     {/* bond的弹窗 */}
     {
-      bondModalVisible ? <BondModal bondData={bondItem} onClose={closeBondModal} openSettingModal={openSettingModal} 
-      account={account} isApprove={isApprove} getApprove={getApprove} /> 
-      : null
+      bondModalVisible ? <BondModal bondData={bondItem} onClose={closeBondModal} openSettingModal={openSettingModal}
+        account={account} isApprove={isApprove} getApprove={getApprove} />
+        : null
     }
     {/* bond设置弹窗 */}
     {
-      settingModalVisible ? <SettingModal account={account}  bondData={bondItem} onClose={closeSettingModal} /> 
-      : null
+      settingModalVisible ? <SettingModal account={account} bondData={bondItem} onClose={closeSettingModal} />
+        : null
     }
   </BondPageWrap>)
 }

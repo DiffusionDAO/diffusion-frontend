@@ -183,7 +183,7 @@ export const MoneyInput = styled(Input)`
     color: rgba(210, 87, 255, 1);
   }
 `
-export const RecomandWrap = styled.div`
+export const RecommandWrap = styled.div`
   width: 100%;
   height: 60px;
   display: flex;
@@ -208,8 +208,8 @@ export const CheckBox = styled.div`
   border-radius: 50%;
   background-color: antiquewhite;
 `
-export const RecomandLable = styled.div`
-  width: 200px;
+export const RecommandLable = styled.div`
+  width: 150px;
   margin: 0 5px;
   height: 40px;
   line-height: 40px;
@@ -219,8 +219,8 @@ export const RecomandLable = styled.div`
   color: #ABB6FF;
   cursor: pointer;
 `
-export const RecomandInput = styled(Input)`
-  width: 220px;
+export const RecommandInput = styled(Input)`
+  width: 100%;
   height: 32px;
   margin-bottom: 10px;
   color: #fff;
@@ -228,6 +228,7 @@ export const RecomandInput = styled(Input)`
   background: rgba(171, 182, 255, 0.1);
   border-radius: 12px;
   border: 1px solid rgba(171, 182, 255, 0.1);
+  font-size: 10px;
   :focus {
     box-shadow: none !important;
   }
@@ -238,7 +239,7 @@ export const RecomandInput = styled(Input)`
       box-shadow: none;
     }
     &::placeholder {
-      font-size: 12px;
+      font-size: 10px;
       font-family: PingFangSC-Regular, PingFang SC;
       color: #ABB6FF;
       line-height: 20px;
