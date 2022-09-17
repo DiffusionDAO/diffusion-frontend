@@ -165,11 +165,11 @@ const BondModal: React.FC<BondModalProps> = ({
         }
         <ListItem>
           <ListLable>{t('Your balance')}</ListLable>
-          <ListContent>{bondData.balance}</ListContent>
+          <ListContent>{bondData.balance} DFS</ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('You will receive')}</ListLable>
-          <ListContent>{bondData.getFee}</ListContent>
+          <ListContent>{bondData.getFee} DFS</ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('Max You Can Withdraw')}</ListLable>
