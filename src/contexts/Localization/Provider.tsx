@@ -65,7 +65,6 @@ export const LanguageProvider: React.FC = ({ children }) => {
       const locale = await fetchLocale(language.locale)
       if (locale) {
         const enLocale = languageMap.get(EN.locale)
-        // Merge the EN locale to ensure that any locale fetched has all the keys
         languageMap.set(language.locale, { ...enLocale, ...locale })
       }
 
@@ -84,6 +83,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
         currentLanguage: language,
       }))
     }
+    window.location.reload()
   }, [])
 
   const translate: TranslateFunction = useCallback(

@@ -96,7 +96,6 @@ const Home = () => {
   )
   const transText:string = t('Discover more possibilities explore more art and digital rights space')
   
-  console.log("newestCollections:",transText)
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto'}}>
       <PageMeta />
