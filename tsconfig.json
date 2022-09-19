@@ -2,6 +2,9 @@
   "compilerOptions": {
     "baseUrl": "src",
     "target": "es5",
+    "paths": {
+      "@pancakeswap/hooks": ["../packages/hooks/src/index.ts"]
+    },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,

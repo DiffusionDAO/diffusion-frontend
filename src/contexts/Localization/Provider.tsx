@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import { Language } from '@pancakeswap/uikit'
+import { useLastUpdated } from '@pancakeswap/hooks'
 import memoize from 'lodash/memoize'
 import { EN, languages } from 'config/localization/languages'
 import translations from 'config/localization/translations.json'
@@ -17,6 +18,10 @@ const translatedTextIncludesVariable = memoize((translatedText: string): boolean
   return !!translatedText?.match(includesVariableRegex)
 })
 
+const getRegExpForDataKey = memoize((dataKey: string): RegExp => {
+  return new RegExp(`%${dataKey}%`, 'g')
+})
+
 // Export the translations directly
 export const languageMap = new Map<Language['locale'], Record<string, string>>()
 languageMap.set(EN.locale, translations)
@@ -24,6 +29,7 @@ languageMap.set(EN.locale, translations)
 export const LanguageContext = createContext<ContextApi>(undefined)
 
 export const LanguageProvider: React.FC = ({ children }) => {
+  const { lastUpdated, setLastUpdated: refresh } = useLastUpdated()
   const [state, setState] = useState<ProviderState>(() => {
     const codeFromStorage = getLanguageCodeFromLS()
 
@@ -88,25 +94,26 @@ export const LanguageProvider: React.FC = ({ children }) => {
 
   const translate: TranslateFunction = useCallback(
     (key, data) => {
-      const translationSet = languageMap.get(currentLanguage.locale) ?? languageMap.get(EN.locale)
-      const translatedText = translationSet[key] || key
+      const translationSet = languageMap.get(currentLanguage.locale) ?? {}
+      const translatedText = translationSet?.[key] || key
 
-      // Check the existence of at least one combination of %%, separated by 1 or more non space characters
-      const includesVariable = translatedTextIncludesVariable(translatedText)
+      if (data) {
+        // Check the existence of at least one combination of %%, separated by 1 or more non space characters
+        const includesVariable = translatedTextIncludesVariable(key)
+        if (includesVariable) {
+          let interpolatedText = translatedText
+          Object.keys(data).forEach((dataKey) => {
+            interpolatedText = interpolatedText.replace(getRegExpForDataKey(dataKey), data[dataKey].toString())
+          })
 
-      if (includesVariable && data) {
-        let interpolatedText = translatedText
-        Object.keys(data).forEach((dataKey) => {
-          const templateKey = new RegExp(`%${dataKey}%`, 'g')
-          interpolatedText = interpolatedText.replace(templateKey, data[dataKey].toString())
-        })
-
-        return interpolatedText
+          return interpolatedText
+        }
       }
 
       return translatedText
     },
-    [currentLanguage],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentLanguage, lastUpdated],
   )
 
   return <LanguageContext.Provider value={{ ...state, setLanguage, t: translate }}>{children}</LanguageContext.Provider>
