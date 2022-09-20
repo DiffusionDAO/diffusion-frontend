@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { Box, Button, Flex, Heading, LinkExternal, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Button, Flex, Heading, Language, LinkExternal, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { NextLinkFromReactRouter } from 'components/NextLink'
 import { useTranslation } from 'contexts/Localization'
@@ -22,6 +22,8 @@ import {
   BackgroundWrap, BackgroundTitle, BackgroundDes,
   BackgroundText, NftSculptureWrap, NftSculptureGif
 } from '../../../Nft/market/Profile/components/styles'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { EN, ZHCN } from 'config/localization/languages'
 
 const Gradient = styled(Box)`
   background: ${({ theme }) => theme.colors.gradients.cardHeader};
@@ -75,10 +77,17 @@ export const MagiccubeWrap = styled.img`
     `;
   }};
 `
+const NFTTyped = (props) => {
+  const { t } = props
+
+  return (
+    <Typed strings={[t('Discover more possibilities'), t('Explore more art and digital rights space')]} style={{ fontSize: 40 }} typeSpeed={30} onComplete={(self)=>self.reset()}/>
+  )
+}
 
 const Home = () => {
   const { isMobile } = useMatchBreakpoints();
-  const { t } = useTranslation()
+  const { t, currentLanguage } = useTranslation()
   const { account } = useWeb3React()
   const { theme } = useTheme()
   const { data: collections, status } = useGetCollections()
@@ -94,10 +103,9 @@ const Home = () => {
     (collection) => (collection.createdAt ? Date.parse(collection.createdAt) : 0),
     'desc',
   )
-  const transText:string = t('Discover more possibilities explore more art and digital rights space')
-  
+
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto'}}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <PageMeta />
       {/* <StyledPageHeader>
         <StyledHeaderInner>
@@ -118,7 +126,7 @@ const Home = () => {
         </StyledHeaderInner>
       </StyledPageHeader> */}
 
-     {/* remove background={theme.colors.background}   */}
+      {/* remove background={theme.colors.background}   */}
       {status !== FetchStatus.Fetched ? (
         <PageLoader />
       ) : (
@@ -128,23 +136,23 @@ const Home = () => {
           concaveDivider
           dividerPosition="top"
         >
-      <NftSculptureWrap isMobile={isMobile}>
-        <MagiccubeWrap isMobile={isMobile} src="/images/nfts/magicCube.png" alt="" />
-      </NftSculptureWrap>
-      <BackgroundWrap isMobile={isMobile}>
-        <BackgroundText>
-          <BackgroundTitle>
-            <Typed
-              strings={[transText]}
-              typeSpeed={50}
-              cursorChar=""
-              style={{fontSize:40}}
-            />
-          </BackgroundTitle>
-          <BackgroundDes>{t('This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth')}</BackgroundDes>
-        </BackgroundText>
-      </BackgroundWrap>
-           <Collections
+          <NftSculptureWrap isMobile={isMobile}>
+            <MagiccubeWrap isMobile={isMobile} src="/images/nfts/magicCube.png" alt="" />
+          </NftSculptureWrap>
+          <BackgroundWrap isMobile={isMobile}>
+            <BackgroundText>
+              <BackgroundTitle>
+                <Typed
+                  strings={[t('Discover more possibilities') , t('Explore more art and digital rights space') ]}
+                  typeSpeed={30}
+                  style={{ fontSize: 30 }}
+                  onComplete={(self)=>self.reset()}
+                />
+              </BackgroundTitle>
+              <BackgroundDes>{t('This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth')}</BackgroundDes>
+            </BackgroundText>
+          </BackgroundWrap>
+          <Collections
             key="newest-collections"
             title={t('Newest Collections')}
             testId="nfts-newest-collections"

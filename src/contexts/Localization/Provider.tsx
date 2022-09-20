@@ -89,7 +89,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
         currentLanguage: language,
       }))
     }
-    window.location.reload()
+    // window.location.reload()
   }, [])
 
   const translate: TranslateFunction = useCallback(
