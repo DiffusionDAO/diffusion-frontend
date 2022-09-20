@@ -143,7 +143,7 @@ const Home = () => {
             <BackgroundText>
               <BackgroundTitle>
                 <Typed
-                  strings={[t('Discover more possibilities') , t('Explore more art and digital rights space') ]}
+                  strings={[t('Discover more possibilities') + "^1000" , t('Explore more art and digital rights space') + "^1000" ]}
                   typeSpeed={30}
                   style={{ fontSize: 30 }}
                   onComplete={(self)=>self.reset()}
