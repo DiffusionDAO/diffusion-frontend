@@ -77,13 +77,6 @@ export const MagiccubeWrap = styled.img`
     `;
   }};
 `
-const NFTTyped = (props) => {
-  const { t } = props
-
-  return (
-    <Typed strings={[t('Discover more possibilities'), t('Explore more art and digital rights space')]} style={{ fontSize: 40 }} typeSpeed={30} onComplete={(self)=>self.reset()}/>
-  )
-}
 
 const Home = () => {
   const { isMobile } = useMatchBreakpoints();
@@ -145,7 +138,7 @@ const Home = () => {
                 <Typed
                   strings={[t('Discover more possibilities') + "^1000" , t('Explore more art and digital rights space') + "^1000" ]}
                   typeSpeed={30}
-                  style={{ fontSize: 30 }}
+                  style={{ fontSize: 35 }}
                   onComplete={(self)=>self.reset()}
                 />
               </BackgroundTitle>
