@@ -28,10 +28,10 @@ import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSu
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import Typed from 'react-typed';
 import { useSWRContract } from 'hooks/useSWRContract'
-import { getNftMarketContract } from 'utils/contractHelpers'
+import { getDFSNFTContract, getMineContract, getNftMarketContract } from 'utils/contractHelpers'
 import { ethers } from 'ethers'
 import { useGetCollections } from 'state/nftMarket/hooks'
-import { getDFSNFTAddress, getNFTComposeAddress } from 'utils/addressHelpers'
+import { getDFSNFTAddress, getMineAddress, getNFTComposeAddress } from 'utils/addressHelpers'
 import { useDFSNftContract, useNftComposeContract } from 'hooks/useContract'
 import { useSWRConfig } from 'swr'
 import BigNumber from 'bignumber.js'
@@ -51,7 +51,7 @@ const greeceNumber = { 0: "I", 1: "II", 2: "III", 3: "IV", 4: "V", 5: "VI", 6: "
 function NftProfilePage() {
   const { data: collections, status } = useGetCollections() as any
 
-  const { account } = useWeb3React()
+  const { account, library } = useWeb3React()
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation()
   const { route } = useRouter()
@@ -95,11 +95,14 @@ function NftProfilePage() {
     { label: t('Congressman'), value: 'Congressman', children: [{ label: t('silver'), value: 'silver' }, { label: t('golden'), value: 'golden' }] },
   ]
 
+  const composeNFT = useNftComposeContract()
+  const dfsNFT = useDFSNftContract()
   useEffect(() => {
     const keys = Object.keys(collections)
     const initNfts = keys.map(key => collections[key].tokens.filter(item =>
-      item.marketData.currentSeller === accountAddress && item.collectionAddress === dfsNFTAddress
+      item?.marketData.currentSeller === accountAddress && item?.collectionAddress === dfsNFTAddress && item?.staked === false
     )).flat()
+    console.log("initNfts:",initNfts)
     initNfts.map(nft =>
       nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
     )
@@ -144,8 +147,7 @@ function NftProfilePage() {
     resetPage()
   }
 
-  const composeNFT = useNftComposeContract()
-  const dfsNFT = useDFSNftContract()
+
   const submitCompound = async () => {
     const selectedTokenIds = selectedNfts.filter(nft => nft.selected).map(nft => nft.tokenId)
     const composeAddress = getNFTComposeAddress()
@@ -204,7 +206,7 @@ function NftProfilePage() {
     setSuccessModalVisible(true)
   }
 
-  const startStake = () => {
+  const startStake = async () => {
     setIsSelected(true)
     setOption('stake')
   }
@@ -215,7 +217,22 @@ function NftProfilePage() {
       description: '',
       visible: false,
     })
+
     const selected = selectedNfts.filter(item => item.selected)
+    setSelectedNfts(selected)
+    setSelectedCount(selected.length)
+    const mine = getMineContract(library.getSigner())
+    const mineAddress = getMineAddress()
+    const tokenIds = selected.map(item => item.tokenId)
+    const approved = await dfsNFT.isApprovedForAll(account, mineAddress)
+    let receipt;
+    if (!approved) {
+      receipt = await dfsNFT.setApprovalForAll(mineAddress, true)
+      await receipt.wait()
+    }
+
+    receipt = await mine.stakeNFT(tokenIds)
+    await receipt.wait()
     const response
       = await fetch("https://app.diffusiondao.org/stakeNFT", {
         method: 'POST',
@@ -311,9 +328,7 @@ function NftProfilePage() {
       }
     } else if (option === "stake") {
       nft.selected = !nft.selected
-      const data = mynfts.filter(my => my.selected === true)
-      setSelectedNfts(data)
-      setSelectedCount(data.length)
+
     }
   }
 
@@ -390,7 +405,7 @@ function NftProfilePage() {
         {isConnectedProfile ? (
           <UserNfts
             isSelected={isSelected}
-            nfts={activeTab === "WithoutStake"? selectedNfts: stakedNfts}
+            nfts={activeTab === "WithoutStake" ? selectedNfts : stakedNfts}
             isLoading={isNftLoading}
             selectNft={selectNft}
           />

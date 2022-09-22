@@ -119,17 +119,21 @@ export default {
     56: '',
     97: '0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF',
   },
-  starlightNft:{
+  starlightNft: {
     56: '',
     97: '0x88eBFd7841D131BCeab3e7149217aa8e36985a40',
+  },
+  dfsMine: {
+    56: '',
+    97: '0x73c76B6D0ff5Cd1144d0ff664c4d7Cf0E90Bf895',
   },
   dfsNFT: {
     56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',
     97: '0xBA5854224405AeE924c2e84AcC52634B539926f7',
   },
-  nftDraw:{
-    56:"",
-    97:"0xF7b4a92e19e84A7B1423c0015F39eBbb300Cb723",
+  nftDraw: {
+    56: '',
+    97: '0xF7b4a92e19e84A7B1423c0015F39eBbb300Cb723',
   },
   nftCompose: {
     56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',

@@ -41,7 +41,8 @@ import {
   getStarlightAddress,
   getIDOAddress,
   getDFSAddress,
-  getBondAddress
+  getBondAddress,
+  getMineAddress
 } from 'utils/addressHelpers'
 
 // ABI
@@ -86,6 +87,7 @@ import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
 import starlightAbi from "config/abi/starlight.json"
 import duffionIDOAbi from "config/abi/diffusionIDO.json"
 import bondAbi from "config/abi/bond.json"
+import mineAbi from "config/abi/dfsMine.json"
 
 import nftSaleAbi from 'config/abi/nftSale.json'
 import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
@@ -276,6 +278,9 @@ export const getDFSContract = (signer?: Signer | Provider) => {
 }
 export const getBondContract = (signer?: Signer | Provider) => {
   return getContract(bondAbi, getBondAddress(), signer) 
+}
+export const getMineContract = (signer?: Signer | Provider) => {
+  return getContract(mineAbi, getMineAddress(), signer) 
 }
 
 export const getIDOContract = (signer?: Signer | Provider) => {

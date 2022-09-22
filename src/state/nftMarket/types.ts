@@ -75,7 +75,6 @@ export interface TokenMarketData {
 
 // Represents single NFT token, either Squad-like NFT or single PancakeBunny.
 export interface NftToken {
-  
   tokenId: string
   name: string
   description: string

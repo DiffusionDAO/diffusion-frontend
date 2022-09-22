@@ -139,7 +139,7 @@ const Mint = () => {
             </DrawBlindBoxImgWrap>
             <ContentWrap>
               <DalaCardList>
-                <DalaCardListTitle>{t('Premier Mystery Boxes')}</DalaCardListTitle>
+                <DalaCardListTitle>{t('Advanced Mint')}</DalaCardListTitle>
                 <DataCell label={t('Price')} value={`${formatUnits(seniorPrice, "ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
@@ -175,7 +175,7 @@ const Mint = () => {
             </DrawBlindBoxImgWrap>
             <ContentWrap>
               <DalaCardList>
-                <DalaCardListTitle>{t('Deluxe Mystery Boxes')}</DalaCardListTitle>
+                <DalaCardListTitle>{t('Basic Mint')}</DalaCardListTitle>
                 <DataCell label={t('Price')} value={`${formatUnits(ordinaryPrice, "ether")} DFS`} valueDivStyle={{ fontSize: "14px" }} position="horizontal" />
                 <DataCell label={t('Description')} value={t('Acquire any of the 2 types of NFT cards')} valueDivStyle={{ fontSize: "14px", textAlign: "right" }} position="horizontal" />
                 <DalaCardCellWrap>
@@ -206,13 +206,13 @@ const Mint = () => {
         </Grid>
       </Grid>
     </DrawBlindBoxList>
-    {/* 盲盒加载中的弹窗 */}
+    {/* 铸造加载中的弹窗 */}
     {
       playBindBoxModalVisible ? <PlayBindBoxModal onClose={closePlayBindBoxModal} gifUrl={gifUrl} />
         : null
     }
 
-    {/* 盲盒成功的弹窗 */}
+    {/* 铸造成功的弹窗 */}
     {
       blindBoxModalVisible ? <BlindBoxModal data={drawBindData} onClose={closeBlindBoxModal} />
         : null

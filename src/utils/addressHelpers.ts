@@ -107,6 +107,9 @@ export const getDFSAddress =  () => {
 export const getBondAddress =  () => {
   return getAddress(addresses.bond)
 }
+export const getMineAddress =  () => {
+  return getAddress(addresses.dfsMine)
+}
 export const getNftDrawAddress = () => {
   return getAddress(addresses.nftDraw)
 }

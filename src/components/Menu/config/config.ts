@@ -41,7 +41,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     items: [],
   },
   {
-    label: t('Boxes'),
+    label: t('Mint'),
     icon: MintIcon,
     fillIcon: MintFillIcon,
     href: '/mint',

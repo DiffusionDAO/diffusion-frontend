@@ -1,12 +1,12 @@
 {
   "Bonds": "Bonds",
-  "Boxes": "Boxes",
+  "Mint": "Mint",
   "Rewards": "Rewards",
   "NFT": "NFT",
   "Dashboard": "Dashboard",
 
-  "Deluxe Mystery Boxes": "Deluxe Mystery Boxes",
-  "Premier Mystery Boxes": "Premier Mystery Boxes",
+  "Basic Mint": "Basic Mint",
+  "Advanced Mint": "Advanced Mint",
   "Price": "Price",
   "Description": "Description",
   "Rewards probability": "Rewards probability",
