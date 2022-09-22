@@ -163,7 +163,7 @@ const Mint = () => {
                   {allowance.eq(0) ? <DrawBlindBoxPrimaryBtn className='orangeBtn' style={{ width: '80px' }} onClick={async () => { await DFS.approve(nftDrawAddress, MaxUint256) }} >{t('Approve')}</DrawBlindBoxPrimaryBtn> : <></>}
                 </ActionRight>
               </ActionWrap>
-              <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={() => drawBlind('senior')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
+              <DrawBlindBoxPrimaryBtn className='orangeBtn' onClick={() => drawBlind('senior')}>{t('Mint')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
           </DrawBlindBoxItem>
         </Grid>
@@ -200,7 +200,7 @@ const Mint = () => {
                 </ActionRight>
 
               </ActionWrap>
-              <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={() => drawBlind('ordinary')}>{t('Play')}</DrawBlindBoxPrimaryBtn>
+              <DrawBlindBoxPrimaryBtn className='purpleBtn' onClick={() => drawBlind('ordinary')}>{t('Mint')}</DrawBlindBoxPrimaryBtn>
             </ContentWrap>
           </DrawBlindBoxItem>
         </Grid>

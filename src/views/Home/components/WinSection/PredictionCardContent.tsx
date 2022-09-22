@@ -71,7 +71,7 @@ const PredictionCardContent = () => {
         <StyledLink to="/prediction" id="homepage-prediction-cta">
           <Button width="100%">
             <Text bold color="invertedContrast">
-              {t('Play')}
+              {t('Mint')}
             </Text>
             <ArrowForwardIcon ml="4px" color="invertedContrast" />
           </Button>
