@@ -19,7 +19,6 @@ interface ActivityCardProps {
 const MAX_PER_PAGE = 5
 
 const ActivityCard: React.FC<ActivityCardProps> = ({ nft }) => {
-  console.log("ActivityCard")
   const dispatch = useAppDispatch()
   const { theme } = useTheme()
   const { t } = useTranslation()

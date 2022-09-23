@@ -99,10 +99,10 @@ function NftProfilePage() {
   const dfsNFT = useDFSNftContract()
   useEffect(() => {
     const keys = Object.keys(collections)
-    const initNfts = keys.map(key => collections[key].tokens.filter(item =>
+    const flatten: NftToken[] = keys.map(key =>Object.values(collections[key].tokens)).flat() as NftToken[]
+    const initNfts = flatten.filter(item =>
       item?.marketData.currentSeller === accountAddress && item?.collectionAddress === dfsNFTAddress && item?.staked === false
-    )).flat()
-    console.log("initNfts:",initNfts)
+    )
     initNfts.map(nft =>
       nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
     )
