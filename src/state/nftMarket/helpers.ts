@@ -94,7 +94,7 @@ export const getCollections = async (): Promise<Record<string, any>> => {
     var collections = await getCollectionsApi()
     return collections
   } catch (error) {
-    console.error('Unable to fetch data:', error)
+    console.error('getCollections Unable to fetch data:', error)
     return null
   }
 }
@@ -110,7 +110,7 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
     return collectionData
     // return combineCollectionData([collectionApiDataCombinedOnChain], [])
   } catch (error) {
-    console.error('Unable to fetch data:', error)
+    console.error('getCollection Unable to fetch data:', error)
     return null
   }
 }

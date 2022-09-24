@@ -36,6 +36,7 @@ import { useSWRConfig } from 'swr'
 // import BigNumber from 'bignumber.js'
 import { BigNumber } from 'ethers'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
+import { isStaked } from 'utils/cakePool'
 
 const { TabPane } = Tabs;
 interface noteProps {
@@ -99,7 +100,6 @@ function NftProfilePage() {
   const mine = useDFSMineContract()
   let stakedTokenIds = []
 
-
   useEffect(() => {
     const keys = Object.keys(collections)
     const flatten: NftToken[] = keys.map(key => Object.values(collections[key].tokens)).flat() as NftToken[]
@@ -116,7 +116,6 @@ function NftProfilePage() {
     )
     if (activeTab === "WithoutStake") {
       setMynfts(untsaked)
-      setSelectedNfts(untsaked)
     }
   }, [account, status, activeTab])
 
@@ -134,6 +133,8 @@ function NftProfilePage() {
   const dfsNFTAddress = getDFSNFTAddress()
   const startCompound = () => {
     setIsSelected(true)
+    setSelectedNfts(mynfts)
+
     setOption('compose')
     const dfsnft = mynfts.filter(item => item.collectionAddress === dfsNFTAddress)
     setSelectedNfts(dfsnft)
@@ -211,6 +212,7 @@ function NftProfilePage() {
 
   const startStake = async () => {
     setIsSelected(true)
+    setSelectedNfts(mynfts)
     setOption('stake')
   }
 
@@ -232,12 +234,15 @@ function NftProfilePage() {
       receipt = await dfsNFT.setApprovalForAll(mineAddress, true)
       await receipt.wait()
     }
-    console.log("staking:", tokenIds)
     receipt = await mine.stakeNFT(tokenIds)
     await receipt.wait()
     const staked = await mine.getAllStaked()
     selected.map(item => item.staked = !item.staked)
+    selected.map(item => item.selected = !item.selected)
     setStakedNfts(staked)
+    setIsSelected(false)
+    setSelectedNfts([])
+
     const response
       = await fetch("https://middle.diffusiondao.org/stakeNFT", {
         method: 'POST',
@@ -257,7 +262,6 @@ function NftProfilePage() {
 
   const submitStake = () => {
     const selected = selectedNfts.filter(item => item.selected)
-    console.log("selected:", selected)
     setStakedNfts(selected)
     resetPage()
     message.success('Stake success')
@@ -332,7 +336,7 @@ function NftProfilePage() {
       }
     } else if (option === "stake") {
       nft.selected = !nft.selected
-
+      setSelectedCount(selectedCount + 1)
     }
   }
 
@@ -361,7 +365,7 @@ function NftProfilePage() {
               tab={
                 <span>
                   {`${t('Not Staked')}`}
-                  <SelectedCountWrap>{selectedNfts?.length}</SelectedCountWrap>
+                  <SelectedCountWrap>{mynfts?.length}</SelectedCountWrap>
                 </span>
               }
             />
@@ -409,7 +413,7 @@ function NftProfilePage() {
         {isConnectedProfile ? (
           <UserNfts
             isSelected={isSelected}
-            nfts={activeTab === "WithoutStake" ? selectedNfts : stakedNfts}
+            nfts={activeTab === "WithoutStake" ? (isSelected ? selectedNfts : mynfts) : stakedNfts}
             isLoading={isNftLoading}
             selectNft={selectNft}
           />
