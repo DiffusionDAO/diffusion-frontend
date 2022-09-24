@@ -29,13 +29,12 @@ import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import Typed from 'react-typed';
 import { useSWRContract } from 'hooks/useSWRContract'
 import { getDFSNFTContract, getMineContract, getNftMarketContract } from 'utils/contractHelpers'
-import { ethers } from 'ethers'
 import { useGetCollections } from 'state/nftMarket/hooks'
 import { getDFSNFTAddress, getMineAddress, getNFTComposeAddress } from 'utils/addressHelpers'
-import { useDFSNftContract, useNftComposeContract } from 'hooks/useContract'
+import { useDFSMineContract, useDFSNftContract, useNftComposeContract } from 'hooks/useContract'
 import { useSWRConfig } from 'swr'
-import BigNumber from 'bignumber.js'
-import { sleep } from 'helpers'
+// import BigNumber from 'bignumber.js'
+import { BigNumber } from 'ethers'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
 
 const { TabPane } = Tabs;
@@ -97,24 +96,28 @@ function NftProfilePage() {
 
   const composeNFT = useNftComposeContract()
   const dfsNFT = useDFSNftContract()
+  const mine = useDFSMineContract()
+  let stakedTokenIds = []
+
+
   useEffect(() => {
     const keys = Object.keys(collections)
-    const flatten: NftToken[] = keys.map(key =>Object.values(collections[key].tokens)).flat() as NftToken[]
-    const initNfts = flatten.filter(item =>
-      item?.marketData.currentSeller === accountAddress && item?.collectionAddress === dfsNFTAddress && item?.staked === false
-    )
-    initNfts.map(nft =>
+    const flatten: NftToken[] = keys.map(key => Object.values(collections[key].tokens)).flat() as NftToken[]
+    flatten.filter(item => item.collectionName === "DFSNFT").map(nft =>
       nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`
     )
-    if (activeTab === "WithoutStake") {
-      setMynfts(initNfts)
-      setSelectedNfts(initNfts)
-    } else {
-      const staked = initNfts.filter(nft => nft.staked === true)
-      console.log("staked:", staked)
+    mine.getAllStaked().then((res) => {
+      stakedTokenIds = res.map(item => item.toString())
+      const staked = flatten.filter(item => item.collectionName === "DFSNFT" && res.map(item => item.toString()).includes(item.tokenId))
       setStakedNfts(staked)
+    })
+    const untsaked = flatten.filter(item =>
+      item?.marketData.currentSeller === accountAddress && item?.collectionAddress === dfsNFTAddress && !stakedTokenIds.includes(item?.tokenId)
+    )
+    if (activeTab === "WithoutStake") {
+      setMynfts(untsaked)
+      setSelectedNfts(untsaked)
     }
-
   }, [account, status, activeTab])
 
   const resetPage = () => {
@@ -159,7 +162,7 @@ function NftProfilePage() {
       tx = await composeNFT.ComposeLvX(selectedTokenIds, attribute)
     }
     const recipient = await tx.wait()
-    const id = new BigNumber(recipient.events.slice(-1)[0].topics[3])
+    const id = BigNumber.from(recipient.events.slice(-1)[0].topics[3])
     const tokenId = id.toString()
     const level = await dfsNFT.getItems(tokenId)
     const newNft: NftToken = {
@@ -221,7 +224,6 @@ function NftProfilePage() {
     const selected = selectedNfts.filter(item => item.selected)
     setSelectedNfts(selected)
     setSelectedCount(selected.length)
-    const mine = getMineContract(library.getSigner())
     const mineAddress = getMineAddress()
     const tokenIds = selected.map(item => item.tokenId)
     const approved = await dfsNFT.isApprovedForAll(account, mineAddress)
@@ -230,11 +232,14 @@ function NftProfilePage() {
       receipt = await dfsNFT.setApprovalForAll(mineAddress, true)
       await receipt.wait()
     }
-
+    console.log("staking:", tokenIds)
     receipt = await mine.stakeNFT(tokenIds)
     await receipt.wait()
+    const staked = await mine.getAllStaked()
+    selected.map(item => item.staked = !item.staked)
+    setStakedNfts(staked)
     const response
-      = await fetch("https://app.diffusiondao.org/stakeNFT", {
+      = await fetch("https://middle.diffusiondao.org/stakeNFT", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -246,7 +251,6 @@ function NftProfilePage() {
       })
     const json = await response.json()
     console.log(json)
-    selected.map(item => { item.staked = !item.staked; return item })
 
     if (option === 'stake' && selectedCount > 0) submitStake()
   }
@@ -366,7 +370,7 @@ function NftProfilePage() {
               tab={
                 <span>
                   {`${t('Staked')}`}
-                  <SelectedCountWrap>{stakedNfts?.length}</SelectedCountWrap>
+                  <SelectedCountWrap>{stakedNfts.length}</SelectedCountWrap>
                 </span>
               }
             />

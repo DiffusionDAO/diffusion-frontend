@@ -38,6 +38,7 @@ import {
   getErc721CollectionContract,
   getBunnySpecialXmasContract,
   getGalaxyNTFClaimingContract,
+  getMineContract,
 } from 'utils/contractHelpers'
 import { getMulticallAddress } from 'utils/addressHelpers'
 import { Erc20, Erc20Bytes32, Multicall, Weth, Cake, Erc721collection, CakeVaultV2 } from 'config/abi/types'
@@ -298,7 +299,10 @@ export const useDFSNftContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getDFSNFTContract(library.getSigner()), [library])
 }
-
+export const useDFSMineContract = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getMineContract(library.getSigner()), [library])
+}
 export const useErc721CollectionContract = (
   collectionAddress: string,
 ): { reader: Erc721collection; signer: Erc721collection } => {

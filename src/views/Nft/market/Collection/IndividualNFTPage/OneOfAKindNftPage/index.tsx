@@ -49,22 +49,6 @@ const IndividualNFTPage: React.FC<IndividualNFTPageProps> = ({ collectionAddress
  
   const properties = nft?.attributes || null
 
-  // const attributesRarity = useMemo(() => {
-  //   if (distributionData  && properties) {
-  //     return Object.keys(distributionData).reduce((rarityMap, traitType) => {
-  //       const total = sum(Object.values(distributionData[traitType]))
-  //       const nftAttributeValue = properties.find((attribute) => attribute.traitType === traitType)?.value
-  //       const count = distributionData[traitType][nftAttributeValue]
-  //       const rarity = (count / total) * 100
-  //       return {
-  //         ...rarityMap,
-  //         [traitType]: rarity,
-  //       }
-  //     }, {})
-  //   }
-  //   return {}
-  // }, [properties, isFetchingDistribution, distributionData])
-
   if (!nft || !collection) {
     return <PageLoader />
   }

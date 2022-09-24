@@ -20,7 +20,7 @@ const EMPTY_OBJECT = {}
 
 export const useGetCollections = (): { data: ApiCollections; status: FetchStatus; mutate: KeyedMutator<any> } => {
   const { data, status, mutate } = useSWR(['nftMarket', 'collections'], async () => getCollections())
-  const collections: any = data ?? {} 
+  const collections: any = data ?? {}
   return { data: collections, status, mutate }
 }
 
@@ -29,7 +29,10 @@ export const useGetCollection = (collectionAddress: string): Collection | undefi
   if (checksummedCollectionAddress) {
     const { data } = useSWR(
       checksummedCollectionAddress ? ['nftMarket', 'collections', checksummedCollectionAddress.toLowerCase()] : null,
-      async () => getCollection(checksummedCollectionAddress),
+      async () => {
+        const collection = getCollection(checksummedCollectionAddress)
+        return  {[collectionAddress] : collection[collectionAddress].data[0]}
+      },
     )
     const collectionObject = data ?? {}
     return collectionObject[checksummedCollectionAddress]
@@ -100,7 +103,7 @@ export const useGetNftOrdering = (collectionAddress: string) => {
 
 export const useGetNftShowOnlyOnSale = (collectionAddress: string) => {
   const collectionFilter: NftFilter = useSelector((state: State) => state.nftMarket.data.filters[collectionAddress])
-  console.log("collectionFilter:",collectionFilter)
+  console.log('collectionFilter:', collectionFilter)
   return collectionFilter ? collectionFilter.showOnlyOnSale : false
 }
 

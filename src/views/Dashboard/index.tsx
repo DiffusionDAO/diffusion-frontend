@@ -49,7 +49,7 @@ const Dashboard = () => {
     setActiveTab(tab);
   };
   const { data } = useSWR("dashboard", async () => {
-    const response = await fetch("https://middle.diffusiondao.org/api/v0/dashboard")
+    const response = await fetch("https://middle.diffusiondao.org/dashboard")
     const data = await response.json()
     return data
   })

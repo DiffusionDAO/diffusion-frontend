@@ -44,59 +44,6 @@ const fetchTokenIdsFromFilter = async (address: string, settings: ItemListingSet
   return attrFilters ? Object.values(attrFilters.data).map((apiToken) => apiToken.tokenId) : null
 }
 
-const fetchMarketDataNfts = async (
-  collection: Collection,
-  settings: ItemListingSettings,
-  page: number,
-  tokenIdsFromFilter: string[],
-): Promise<NftToken[]> => {
-
-  // const nftMarketContract = getNftMarketContract()
-  // const marketItems = await nftMarketContract.fetchMarketItems()
-  const starlightAddress = await getStarlightAddress()
-  const dfsAddress = await getDFSNFTAddress()
-  let totalSupply = 0;
-  switch (collection.address) {
-    case starlightAddress:
-      const starlight = await getStarlightContract()
-      totalSupply = await starlight.totalSupply()
-      break
-    case dfsAddress:
-      const dfsNFT = await getDFSNFTContract()
-      totalSupply = await dfsNFT.totalSupply()
-      break
-  }
-  totalSupply = BigNumber.from(totalSupply).toNumber()
-  var tokens = [...Array(totalSupply).keys()]
-  console.log("tokens:", tokens)
-  const apiRequestPromises = tokens
-    .map(async (tokenId) => {
-      const url = `${API_NFT}/collections/${collection.address}/tokens/${tokenId.toString()}`
-      const res = await fetch(url)
-      if (res.ok) {
-        const json = await res.json()
-        return json
-      }
-    })
-  const apiResponses = await Promise.all(apiRequestPromises)
-  // console.log("apiResponses:", apiResponses)
-  // const newNfts: NftToken[] = apiResponses.reduce((acc, apiNft) => {
-  //   console.log("apiNft:",apiNft)
-  //   const marketData = apiResponses.find((marketNft) => marketNft?.tokenId === apiNft?.tokenId)
-  //   console.log("marketData:",marketData)
-  //   if (apiNft) {
-  //     acc.push({
-  //       ...apiNft,
-  //       collectionAddress: collection.address,
-  //       collectionName: apiNft.collection.name,
-  //       marketData: marketData,
-  //     })
-  //   }
-  //   return acc
-  // }, [] as NftToken[])
-  // console.log("newNfts:", newNfts)
-  return apiResponses
-}
 
 const tokenIdsFromFallback = (
   collection: Collection,
@@ -263,7 +210,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
       console.log("showOnlyNftsOnSale:",settings.showOnlyNftsOnSale)
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
-      let newNfts: NftToken[] = []
+      let newNfts: NftToken[]
       if (settings.showOnlyNftsOnSale) {
         const nftMarketContract = getNftMarketContract()
         const marketItems = await nftMarketContract.fetchMarketItems()
@@ -284,7 +231,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
         const res = await fetch(url)
         if (res.ok) {
           const json = await res.json()
-          newNfts = json[collection.address].tokens
+          newNfts = Object.values(json[collection.address].tokens)
         }
         // const {
         //   nfts: allNewNfts,

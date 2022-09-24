@@ -217,9 +217,7 @@ export interface ApiResponseCollectionTokens {
   data: Record<string, ApiSingleTokenData>
 }
 
-// Get specific token data
-// ${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}
-// add marketData dry
+
 export interface ApiResponseSpecificToken {
   data: {
     marketData:TokenMarketData

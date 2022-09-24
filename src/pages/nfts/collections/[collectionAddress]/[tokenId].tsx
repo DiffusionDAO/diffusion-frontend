@@ -1,6 +1,6 @@
 import IndividualNFT from 'views/Nft/market/Collection/IndividualNFTPage'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
-import { getCollection, getNftApi } from 'state/nftMarket/helpers'
+import { getCollection, getNftApi,getCollectionApi,getNfts } from 'state/nftMarket/helpers'
 import { NftToken } from 'state/nftMarket/types'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
@@ -32,9 +32,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       notFound: true,
     }
   }
-  console.log("tokenId:",tokenId)
-  const metadata:any = await getNftApi(collectionAddress, tokenId)
-  const collection = await getCollection(collectionAddress)
+  const nfts = getNfts()
+  let collectionWithToken
+  if (!nfts) {
+    collectionWithToken = await getCollectionApi(collectionAddress)
+  } else {
+    collectionWithToken = nfts[collectionAddress]
+  }
+  const collection = {[collectionAddress] : collectionWithToken[collectionAddress].data[0]}
+  const metadata:any = collectionWithToken[collectionAddress]["tokens"][tokenId]
+  console.log("metadata:",metadata)
   if (!metadata) {
     return {
       notFound: true,

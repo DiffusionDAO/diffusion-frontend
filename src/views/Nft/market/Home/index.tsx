@@ -97,6 +97,11 @@ const Home = () => {
     'desc',
   )
 
+  useEffect(() => {
+    console.log(collections)
+    localStorage?.setItem("nfts", JSON.stringify(collections))
+  }, [collections])
+
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <PageMeta />
@@ -136,10 +141,10 @@ const Home = () => {
             <BackgroundText>
               <BackgroundTitle>
                 <Typed
-                  strings={[t('Discover more possibilities') + "^1000" , t('Explore more art and digital rights space') + "^1000" ]}
+                  strings={[t('Discover more possibilities') + "^1000", t('Explore more art and digital rights space') + "^1000"]}
                   typeSpeed={30}
                   style={{ fontSize: 35 }}
-                  onComplete={(self)=>self.reset()}
+                  onComplete={(self) => self.reset()}
                 />
               </BackgroundTitle>
               <BackgroundDes>{t('This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth')}</BackgroundDes>
