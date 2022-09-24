@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import Typed from 'react-typed';
 import { Grid } from "@material-ui/core";
 import { useWeb3React } from '@web3-react/core'
@@ -17,6 +17,7 @@ import { getContract } from 'utils'
 import { ERC20_ABI } from 'config/abi/erc20'
 import { getUSDTAddress, getBondAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants';
+import { BigNumber } from '@ethersproject/bignumber';
 
 const Bond = () => {
   const { account, library } = useWeb3React();
@@ -48,6 +49,11 @@ const Bond = () => {
   const getApprove = () => {
     usdt.approve(bondAddress, MaxUint256).then(() => setIsApprove(true))
   }
+  useEffect(() => {
+    if (account) {
+      usdt.allowance(account, bondAddress).then((res) => { if (res != BigNumber.from(0)) setIsApprove(true) })
+    }
+  })
   return (<BondPageWrap>
     <BondPageHeader>
       <SculptureWrap src="/images/bond/bondSculpture.png" isMobile={isMobile} />
