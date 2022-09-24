@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
-import { getCollection ,getNfts} from 'state/nftMarket/helpers'
+import { getCollection } from 'state/nftMarket/helpers'
 import CollectionPageRouter from 'views/Nft/market/Collection/CollectionPageRouter'
 
 const CollectionPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -31,13 +31,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
   
   try {
-    const nfts = getNfts()
-    let collectionData
-    if (!nfts) {
-      collectionData = await getCollection(collectionAddress)
-    } else {
-      collectionData = nfts[collectionAddress]
-    }
+    const collectionData = await getCollection(collectionAddress)
+    console.log("CollectionPage:", collectionData)
 
     if (collectionData) {
       return {
