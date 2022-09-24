@@ -36,7 +36,6 @@ import { useSWRConfig } from 'swr'
 // import BigNumber from 'bignumber.js'
 import { BigNumber } from 'ethers'
 import { useMatchBreakpoints } from "../../../../packages/uikit/src/hooks";
-import { isStaked } from 'utils/cakePool'
 
 const { TabPane } = Tabs;
 interface noteProps {
