@@ -40,7 +40,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     collectionWithToken = nfts[collectionAddress]
   }
   const collection = {[collectionAddress] : collectionWithToken[collectionAddress].data[0]}
-  const metadata:any = collectionWithToken[collectionAddress]["tokens"][tokenId]
+  const metadata:any = collectionWithToken[collectionAddress].tokens[tokenId]
   console.log("metadata:",metadata)
   if (!metadata) {
     return {
