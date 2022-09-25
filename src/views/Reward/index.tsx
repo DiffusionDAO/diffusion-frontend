@@ -1,14 +1,15 @@
 import { FC, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useWallet, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useRouter } from 'next/router'
-import useAuth from 'hooks/useAuth'
+import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useWallet } from 'hooks/useWallet'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { useTranslation } from '@pancakeswap/localization'
+import { useRouter } from 'next/router'
+
 import {
   RewardPageWrap,
   SwiperWrap,
@@ -299,9 +300,7 @@ const Reward = () => {
           </CardWrap>
         </>
       )}
-      {/* 详情的弹窗 */}
       {detailModalVisible ? <DetailModal detailData={detailData} onClose={closeDetailModal} /> : null}
-      {/* 没有连接钱包 */}
       {!account && (
         <NoPower
           title={t('You cannot view this page right now')}
@@ -310,7 +309,6 @@ const Reward = () => {
           action={onPresentConnectModal}
         />
       )}
-      {/* 没有权限 */}
       {account && !access && (
         <NoPower
           title={t('You cannot view this page right now')}
