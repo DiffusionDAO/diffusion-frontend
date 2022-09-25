@@ -72,7 +72,7 @@ const Home = () => {
   return (
     <>
       <PageMeta />
-      <StyledPageHeader>
+      {/* <StyledPageHeader>
         <StyledHeaderInner>
           <div>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
@@ -89,7 +89,7 @@ const Home = () => {
           </div>
           <SearchBar />
         </StyledHeaderInner>
-      </StyledPageHeader>
+      </StyledPageHeader> */}
       {status !== FetchStatus.Fetched ? (
         <PageLoader />
       ) : (
@@ -106,21 +106,15 @@ const Home = () => {
             testId="nfts-newest-collections"
             collections={newestCollections}
           />
-          <Collections
+          {/* <Collections
             key="hot-collections"
             title={t('Hot Collections')}
             testId="nfts-hot-collections"
             collections={hotCollections}
-          />
-          <Newest />
+          /> */}
+          {/* <Newest /> */}
         </PageSection>
       )}
-      <Gradient p="64px 0">
-        <SectionsWithFoldableText header={t('FAQs')} config={config(t)} m="auto" />
-        <LinkExternal href="https://docs.pancakeswap.finance/contact-us/nft-market-applications" mx="auto" mt="16px">
-          {t('Apply to NFT Marketplace!')}
-        </LinkExternal>
-      </Gradient>
     </>
   )
 }

@@ -93,9 +93,6 @@ export const getAnniversaryAchievement = () => {
   return getAddress(addresses.AnniversaryAchievement)
 }
 
-export const getNftMarketAddress = () => {
-  return getAddress(addresses.nftMarket)
-}
 export const getNftSaleAddress = () => {
   return getAddress(addresses.nftSale)
 }
@@ -119,4 +116,35 @@ export const getBCakeFarmBoosterAddress = () => {
 
 export const getBCakeFarmBoosterProxyFactoryAddress = () => {
   return getAddress(addresses.bCakeFarmBoosterProxyFactory)
+}
+
+export const getNftMarketAddress = () => {
+  return getAddress(addresses.nftMarket)
+}
+export const getNFTComposeAddress = () => {
+  return getAddress(addresses.nftCompose)
+}
+export const getUSDTAddress = () => {
+  return getAddress(addresses.usdt)
+}
+export const getDFSAddress = () => {
+  return getAddress(addresses.dfs)
+}
+export const getBondAddress = () => {
+  return getAddress(addresses.bond)
+}
+export const getMineAddress = () => {
+  return getAddress(addresses.dfsMine)
+}
+export const getNftDrawAddress = () => {
+  return getAddress(addresses.nftDraw)
+}
+export const getIDOAddress = () => {
+  return getAddress(addresses.ido)
+}
+export const getDFSNFTAddress = () => {
+  return getAddress(addresses.dfsNFT)
+}
+export const getStarlightAddress = () => {
+  return getAddress(addresses.starlightNft)
 }

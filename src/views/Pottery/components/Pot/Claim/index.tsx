@@ -40,7 +40,7 @@ const Claim: React.FC<React.PropsWithChildren> = () => {
       {account ? (
         <Container>
           <GreyCard>
-            <SubgraphHealthIndicator inline subgraphName="pancakeswap/pottery" />
+            {/* <SubgraphHealthIndicator inline subgraphName="pancakeswap/pottery" /> */}
             <Flex justifyContent="space-between" mb="20px">
               <YourDeposit depositBalance={allDeposit} />
             </Flex>

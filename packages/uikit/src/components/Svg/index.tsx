@@ -158,4 +158,15 @@ export { default as RocketIcon } from "./Icons/RocketIcon";
 export { default as Svg } from "./Svg";
 export { default as BraveIcon } from "./Icons/Brave";
 export { default as BloctoIcon } from "./Icons/Blocto";
+export { default as DashboardIcon } from "./Icons/Dashboard";
+export { default as DashboardFillIcon } from "./Icons/DashboardFill";
+export { default as BondIcon } from "./Icons/Bond";
+export { default as BondFillIcon } from "./Icons/BondFill";
+export { default as MintFillIcon } from "./Icons/MintFill";
+export { default as MintIcon } from "./Icons/Mint";
+export { default as RewardFillIcon } from "./Icons/RewardFill";
+export { default as RewardIcon } from "./Icons/Reward";
+export { default as NftMarketFillIcon } from "./Icons/NftMarketFill";
+export { default as NftMarketIcon } from "./Icons/NftMarket";
+
 export type { SvgProps } from "./types";

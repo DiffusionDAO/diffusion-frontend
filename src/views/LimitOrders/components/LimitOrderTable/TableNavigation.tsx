@@ -85,9 +85,9 @@ const TableNavigation: React.FC<TableNavigationProps> = ({
             <ArrowForwardIcon color={currentPage === maxPage ? 'textDisabled' : 'primary'} />
           </Arrow>
         </Flex>
-        <Flex width="100%" justifyContent={['center', null, null, null, 'flex-end']}>
+        {/* <Flex width="100%" justifyContent={['center', null, null, null, 'flex-end']}>
           <SubgraphHealthIndicator subgraphName="gelatodigital/limit-orders-bsc" inline />
-        </Flex>
+        </Flex> */}
       </Grid>
     </>
   )

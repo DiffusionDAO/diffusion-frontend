@@ -123,14 +123,14 @@ const TeamRanksWithParticipants: React.FC<React.PropsWithChildren<TeamRanksWithP
         </TotalParticipantsWrapper>
       </StyledPodiumWrapper>
       <StyledTopTradersWrapper>
-        <TopTradersCard
+        {/* <TopTradersCard
           team1LeaderboardInformation={team1LeaderboardInformation}
           team2LeaderboardInformation={team2LeaderboardInformation}
           team3LeaderboardInformation={team3LeaderboardInformation}
           globalLeaderboardInformation={globalLeaderboardInformation}
           isGlobalLeaderboardDataComplete={isGlobalLeaderboardDataComplete}
           subgraphName={subgraphName}
-        />
+        /> */}
       </StyledTopTradersWrapper>
     </Wrapper>
   )

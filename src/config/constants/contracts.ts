@@ -148,4 +148,40 @@ export default {
     56: '0x2C36221bF724c60E9FEE3dd44e2da8017a8EF3BA',
     97: '',
   },
+  ido: {
+    56: '0x0e6dfbCe936ABe08cda0Caf576E3CfcF13A11830',
+    97: '0x2185E893d60Ffecd9b0EdCebCf9F9977575d53ee',
+  },
+  bond: {
+    56: '',
+    97: '0x3dE232826a58E54F55400EA6Fa2a5B1deAC6A21b',
+  },
+  usdt: {
+    56: '0x55d398326f99059fF775485246999027B3197955',
+    97: '0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF',
+  },
+  dfs: {
+    56: '',
+    97: '0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF',
+  },
+  starlightNft: {
+    56: '',
+    97: '0x88eBFd7841D131BCeab3e7149217aa8e36985a40',
+  },
+  dfsMine: {
+    56: '',
+    97: '0x73c76B6D0ff5Cd1144d0ff664c4d7Cf0E90Bf895',
+  },
+  dfsNFT: {
+    56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',
+    97: '0xBA5854224405AeE924c2e84AcC52634B539926f7',
+  },
+  nftDraw: {
+    56: '',
+    97: '0xF7b4a92e19e84A7B1423c0015F39eBbb300Cb723',
+  },
+  nftCompose: {
+    56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',
+    97: '0xDfe8bA1066040F75D91f49f43BB2817885336612',
+  },
 }
