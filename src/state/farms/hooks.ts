@@ -1,13 +1,17 @@
 import BigNumber from 'bignumber.js'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { SLOW_INTERVAL } from 'config/constants'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import useSWRImmutable from 'swr/immutable'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { useBCakeProxyContractAddress } from 'views/Farms/hooks/useBCakeProxyContractAddress'
+import useSWR from 'swr'
+import { NO_PROXY_CONTRACT, SLOW_INTERVAL } from 'config/constants'
+import { useBCakeFarmBoosterContract } from 'hooks/useContract'
+import { FetchStatus } from 'config/constants/types'
+import { bCakeSupportedChainId } from '@pancakeswap/farms/src/index'
+
 import { getMasterchefContract } from 'utils/contractHelpers'
 import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
 import { featureFarmApiAtom, useFeatureFlag } from 'hooks/useFeatureFlag'
@@ -29,6 +33,22 @@ export function useFarmsLength() {
     const mc = getMasterchefContract(undefined, chainId)
     return (await mc.poolLength()).toNumber()
   })
+}
+
+export const useBCakeProxyContractAddress = (account?: string, chainId?: number) => {
+  const bCakeFarmBoosterContract = useBCakeFarmBoosterContract()
+  const isSupportedChain = bCakeSupportedChainId.includes(chainId)
+  const { data, status, mutate } = useSWR(account && isSupportedChain && ['proxyAddress', account], async () =>
+    bCakeFarmBoosterContract.proxyContract(account),
+  )
+  const isLoading = isSupportedChain ? status !== FetchStatus.Fetched : false
+
+  return {
+    proxyAddress: data,
+    isLoading,
+    proxyCreated: data && data !== NO_PROXY_CONTRACT,
+    refreshProxyAddress: mutate,
+  }
 }
 
 export const usePollFarmsWithUserData = () => {

@@ -61,10 +61,6 @@ const UserMenu = () => {
     return (
       <>
         <WalletUserMenuItem isWrongNetwork={isWrongNetwork} onPresentWalletModal={onClickWalletMenu} />
-        <UserMenuItem as="button" disabled={isWrongNetwork} onClick={onPresentTransactionModal}>
-          {t('Recent Transactions')}
-          {hasPendingTransactions && <RefreshIcon spin />}
-        </UserMenuItem>
         <UserMenuDivider />
         <NextLink href={`/profile/${account?.toLowerCase()}`} passHref>
           <UserMenuItem as="a" disabled={isWrongNetwork || chainId !== ChainId.BSC}>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1136px" height="92px" viewBox="0 0 1136 92" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>矩形</title>
+    <defs>
+        <linearGradient x1="100%" y1="35.0600734%" x2="0%" y2="35.0600734%" id="linearGradient-1">
+            <stop stop-color="#5CEBFF" stop-opacity="0.864865603" offset="0%"></stop>
+            <stop stop-color="#00AAFF" stop-opacity="0.982025787" offset="16.504594%"></stop>
+            <stop stop-color="#0151FF" offset="28.365702%"></stop>
+            <stop stop-color="#6100FF" stop-opacity="0" offset="41.543794%"></stop>
+            <stop stop-color="#AF00FF" stop-opacity="0" offset="57.4370048%"></stop>
+            <stop stop-color="#FF8FD8" offset="71.1707746%"></stop>
+            <stop stop-color="#FC8ADA" offset="82.692149%"></stop>
+            <stop stop-color="#D705FE" offset="91.0960882%"></stop>
+            <stop stop-color="#D600FF" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="0" y="24" width="1136" height="92" rx="12"></rect>
+        <mask id="mask-3" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1136" height="92" fill="white">
+            <use xlink:href="#path-2"></use>
+        </mask>
+    </defs>
+    <g id="NFT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-dasharray="4,4">
+        <g id="w-NFT2" transform="translate(-24.000000, -619.000000)" fill-rule="nonzero" stroke="url(#linearGradient-1)" stroke-width="4">
+            <g id="编组-13" transform="translate(24.000000, 595.000000)">
+                <use id="矩形" mask="url(#mask-3)" xlink:href="#path-2"></use>
+            </g>
+        </g>
+    </g>
+</svg>

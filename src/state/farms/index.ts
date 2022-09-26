@@ -18,7 +18,10 @@ import { getMasterChefAddress } from 'utils/addressHelpers'
 import { getBalanceAmount } from 'utils/formatBalance'
 import multicall, { multicallv2 } from 'utils/multicall'
 import { chains } from 'utils/wagmi'
-import splitProxyFarms from 'views/Farms/components/YieldBooster/helpers/splitProxyFarms'
+import { SerializedFarmConfig } from 'config/constants/types'
+import groupBy from 'lodash/groupBy'
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+
 import { resetUserState } from '../global/actions'
 import { SerializedFarm, SerializedFarmsState } from '../types'
 import fetchFarms from './fetchFarms'
@@ -31,9 +34,19 @@ import {
 import { fetchMasterChefFarmPoolLength } from './fetchMasterChefData'
 import getFarmsPrices from './getFarmsPrices'
 
-/**
- * @deprecated
- */
+interface SplitProxyFarmsResponse {
+  normalFarms: SerializedFarmConfig[]
+  farmsWithProxy: SerializedFarmConfig[]
+}
+
+function splitProxyFarms(farms: SerializedFarmConfig[]): SplitProxyFarmsResponse {
+  const { false: normalFarms, true: farmsWithProxy } = groupBy(farms, (farm) =>
+    isUndefinedOrNull(farm.boosted) ? false : farm.boosted,
+  )
+
+  return { normalFarms, farmsWithProxy }
+}
+
 const fetchFetchPublicDataOld = async ({ pids, chainId }): Promise<[SerializedFarm[], number, number]> => {
   const [poolLength, [cakePerBlockRaw]] = await Promise.all([
     fetchMasterChefFarmPoolLength(chainId),

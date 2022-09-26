@@ -1,0 +1,274 @@
+.dashboard-view {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 100%;
+  min-width: 300px;
+  overflow-y: auto;
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+
+  .dashboard-tab {
+    width: 100%;
+    height: 44px;
+    padding: 0 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+    > div {
+      width: 50%;
+      height: 36px;
+      line-height: 36px;
+      color: #fff;
+      border-radius: 8px;
+      text-align: center;
+      height: 36px;
+      cursor: pointer;
+    }
+    .active {
+      // background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+      background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+      background-size: 400% 400%;
+      animation: gradient 5s ease infinite;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+  // 主要数据指标卡片
+  .cell-box {
+    width: 100%;
+    margin: auto;
+    padding: 16px;
+    border-radius: 16px;
+    display: flex;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 1px solid rgba(70, 96, 255, 0.32);
+    &.cell-item1 {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      border: none;
+      background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+      background-size: 400% 400%;
+      animation: gradient 5s ease infinite;
+      .cell-sub-item {
+        flex: 1;
+        height: 200px;
+        text-align: left;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+    }
+    &.cell-item2 {
+      // background-image: url("/images/dashboard/cell-bg2.svg");
+      .cell-sub-item {
+        width: 100%;
+        height: 200px;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        .ctir-image {
+          // background-image: url("/images/dashboard/ctir.svg");
+          width: 120px;
+          height: 120px;
+          margin: auto;
+          font-size: 22px;
+          position: relative;
+          .ctir-data {
+            height: 100%;
+            width: 100%;
+            line-height: 120px;
+            color: #fff;
+            text-align: center;
+            font-family: HelveticaNeue-Bold, HelveticaNeue;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top:0;
+          }
+        }
+        .ctir-title {
+          width: 100%;
+          font-size: 14px;
+          font-family: HelveticaNeue;
+          color: #ABB6FF;
+          line-height: 16px;
+          text-align: center;
+        }
+      }
+    }
+    &.cell-item3 {
+      // background-image: url("/images/dashboard/cell-bg3.svg");
+      .cell-sub-item {
+        width: 100%;
+        height: 100px;
+      }
+    }
+    &.cell-item4 {
+      .cell-sub-item {
+        width: 100%;
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        > div {
+          flex: 1;
+        }
+        .di-font {
+          width: 100%;
+          height: 26px;
+          font-size: 22px;
+          font-family: HelveticaNeue-CondensedBold, HelveticaNeue;
+          font-weight: normal;
+          color: #ABB6FF;
+          line-height: 26px;
+          background: linear-gradient(91deg, #E861FA 0%, #FFA9D3 51%, #DB55FF 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .di-content {
+          margin: 0px;
+          width: 100%;
+          height: 38px;
+          font-size: 32px;
+          font-family: HelveticaNeue-Bold, HelveticaNeue;
+          font-weight: bold;
+          color: #FFFFFF;
+          line-height: 39px;
+          text-shadow: 0px 2px 34px rgba(255, 255, 255, 0.5);
+        }
+        .data-box {
+          height: auto;
+        }
+      }
+    }
+    &.cell-item5 {
+      background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+      background-size: 400% 400%;
+      animation: gradient 5s ease infinite;
+      .cell-sub-item {
+        width: 100%;
+        height: 100px;
+      }
+    }
+    .data-box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      > div {
+        flex: 1;
+        width: 50%;
+        display: flex;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      } 
+      .data-cell-title {
+        font-size: 14px;
+        font-family: HelveticaNeue;
+        color: #FFFFFF;
+        line-height: 16px;
+      }
+      .data-cell-content {
+        line-height: 30px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #fff;
+      }
+      .data-cell-img {
+        height: 100%;
+        position: relative;
+        > img {
+          width: 100px;
+          height: 100px;
+          margin: auto;
+        }
+      }
+    }
+  }
+
+  .ohm-card {
+    max-width: unset !important;
+    width: 100%;
+    margin: auto;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(70, 96, 255, 0.32);
+    .card-header {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+    &.ohm-chart-card {
+      .chart-card-header {
+        min-width: 300px;
+      }
+      height: 357px;
+    }
+
+    & .multifarm-widget-card {
+      background: transparent;
+      border-color: transparent;
+      padding: 0 1.25rem;
+    }
+
+    & .multifarm-widget-card__header {
+      margin-top: 3px;
+      margin-bottom: 2.5rem;
+    }
+
+    & .multifarm-widget-card__title {
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 1rem;
+      color: #a3a3a3;
+      text-overflow: ellipsis;
+    }
+
+    & .recharts-surface {
+      overflow: visible;
+    }
+
+    & .multifarm-widget-line-chart .recharts-responsive-container,
+    & .multifarm-widget-line-chart .recharts-wrapper {
+      height: 260px !important;
+    }
+
+    & .multifarm-widget-line-chart .recharts-text {
+      fill: #666 !important;
+      font-size: 0.75rem !important;
+    }
+  }
+  .data-grid {
+    overflow: hidden;
+  }
+}
+
+// 渐变动画效果
+@keyframes gradient {
+  0% {
+      background-position: 0% 50%;
+  }
+
+  50% {
+      background-position: 100% 50%;
+  }
+
+  100% {
+      background-position: 0% 50%;
+  }
+}

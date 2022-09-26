@@ -42,7 +42,6 @@ import {
   getLotteryV2Contract,
   getMasterchefContract,
   getMasterchefV1Contract,
-  getNftMarketContract,
   getNftSaleContract,
   getPancakeBunniesContract,
   getPancakeSquadContract,
@@ -57,6 +56,12 @@ import {
   getTradingCompetitionContractFanToken,
   getTradingCompetitionContractMobox,
   getTradingCompetitionContractMoD,
+  getNftMarketContract,
+  getNftComposeContract,
+  getNftDrawContract,
+  getDFSNFTContract,
+  getMineContract,
+  getBondContract,
 } from 'utils/contractHelpers'
 import { useSigner } from 'wagmi'
 
@@ -363,4 +368,28 @@ export function useBCakeProxyContract(proxyContractAddress: string, withSignerIf
     () => proxyContractAddress && getBCakeProxyContract(proxyContractAddress, providerOrSigner),
     [providerOrSigner, proxyContractAddress],
   )
+}
+
+export const useNftComposeContract = () => {
+  const { data: signer } = useSigner()
+  return useMemo(() => getNftComposeContract(signer), [signer])
+}
+
+export const useNftDrawContract = () => {
+  const { data: signer } = useSigner()
+  return useMemo(() => getNftDrawContract(signer), [signer])
+}
+
+export const useDFSNftContract = () => {
+  const { data: signer } = useSigner()
+  return useMemo(() => getDFSNFTContract(signer), [signer])
+}
+export const useDFSMineContract = () => {
+  const { data: signer } = useSigner()
+  return useMemo(() => getMineContract(signer), [signer])
+}
+
+export const useBondContract = () => {
+  const { data: signer } = useSigner()
+  return useMemo(() => getBondContract(signer), [signer])
 }

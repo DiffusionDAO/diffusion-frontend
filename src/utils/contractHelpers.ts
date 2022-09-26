@@ -27,7 +27,6 @@ import {
   getBunnySpecialLotteryAddress,
   getFarmAuctionAddress,
   getAnniversaryAchievement,
-  getNftMarketAddress,
   getNftSaleAddress,
   getPancakeSquadAddress,
   getTradingCompetitionAddressFanToken,
@@ -41,6 +40,15 @@ import {
   getPredictionsV1Address,
   getBCakeFarmBoosterAddress,
   getBCakeFarmBoosterProxyFactoryAddress,
+  getNFTComposeAddress,
+  getNftDrawAddress,
+  getNftMarketAddress,
+  getDFSNFTAddress,
+  getStarlightAddress,
+  getIDOAddress,
+  getDFSAddress,
+  getBondAddress,
+  getMineAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -79,7 +87,6 @@ import bunnySpecialLotteryAbi from 'config/abi/bunnySpecialLottery.json'
 import bunnySpecialXmasAbi from 'config/abi/bunnySpecialXmas.json'
 import farmAuctionAbi from 'config/abi/farmAuction.json'
 import anniversaryAchievementAbi from 'config/abi/anniversaryAchievement.json'
-import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftSaleAbi from 'config/abi/nftSale.json'
 import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
 import erc721CollectionAbi from 'config/abi/erc721collection.json'
@@ -93,6 +100,15 @@ import bCakeFarmBoosterAbi from 'config/abi/bCakeFarmBooster.json'
 import bCakeFarmBoosterProxyFactoryAbi from 'config/abi/bCakeFarmBoosterProxyFactory.json'
 import bCakeProxyAbi from 'config/abi/bCakeProxy.json'
 
+import nftMarketAbi from 'config/abi/nftMarket.json'
+import nftComposeAbi from 'config/abi/nftComposeAbi.json'
+import nftDrawAbi from 'config/abi/nftDrawAbi.json'
+import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
+import starlightAbi from 'config/abi/starlight.json'
+import duffionIDOAbi from 'config/abi/diffusionIDO.json'
+import bondAbi from 'config/abi/bond.json'
+import mineAbi from 'config/abi/dfsMine.json'
+import { ERC20_ABI } from 'config/abi/erc20'
 // Types
 import type {
   ChainlinkOracle,
@@ -318,9 +334,6 @@ export const getAnniversaryAchievementContract = (signer?: Signer | Provider) =>
   }) as AnniversaryAchievement
 }
 
-export const getNftMarketContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: nftMarketAbi, address: getNftMarketAddress(), signer }) as NftMarket
-}
 export const getNftSaleContract = (signer?: Signer | Provider) => {
   return getContract({ abi: nftSaleAbi, address: getNftSaleAddress(), signer }) as NftSale
 }
@@ -361,4 +374,34 @@ export const getBCakeFarmBoosterProxyFactoryContract = (signer?: Signer | Provid
 
 export const getBCakeProxyContract = (proxyContractAddress: string, signer?: Signer | Provider) => {
   return getContract({ abi: bCakeProxyAbi, address: proxyContractAddress, signer }) as BCakeProxy
+}
+
+export const getNftComposeContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: nftComposeAbi, address: getNFTComposeAddress(), signer })
+}
+
+export const getNftDrawContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: nftDrawAbi, address: getNftDrawAddress(), signer })
+}
+
+export const getNftMarketContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: nftMarketAbi, address: getNftMarketAddress(), signer })
+}
+export const getStarlightContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: starlightAbi, address: getStarlightAddress(), signer })
+}
+export const getDFSNFTContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: dfsNFTAbi, address: getDFSNFTAddress(), signer })
+}
+export const getDFSContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: ERC20_ABI, address: getDFSAddress(), signer })
+}
+export const getBondContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: bondAbi, address: getBondAddress(), signer })
+}
+export const getMineContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: mineAbi, address: getMineAddress(), signer })
+}
+export const getIDOContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: duffionIDOAbi, address: getIDOAddress(), signer })
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="846px" height="264px" viewBox="0 0 846 264" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>矩形</title>
+    <defs>
+        <linearGradient x1="100%" y1="93.1998698%" x2="0%" y2="93.1998698%" id="linearGradient-1">
+            <stop stop-color="#F576FF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#3900FF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="35.0600734%" x2="0.529938811%" y2="35.0600734%" id="linearGradient-2">
+            <stop stop-color="#C510FF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#D656FF" offset="55.4195804%"></stop>
+            <stop stop-color="#036FFA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Dashboard" transform="translate(-280.000000, -158.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero" stroke="url(#linearGradient-2)" stroke-width="0.5">
+            <g id="容器1" transform="translate(280.000000, 158.000000)">
+                <rect id="矩形" x="0.25" y="0.25" width="845.5" height="263.5" rx="16"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -75,51 +75,25 @@ const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promis
   return []
 }
 
-/**
- * Fetch all collections data by combining data from the API (static metadata) and the Subgraph (dynamic market data)
- */
-export const getCollections = async (): Promise<Record<string, Collection>> => {
+export const getCollections = async (): Promise<Record<string, any>> => {
   try {
-    const [collections, collectionsMarket] = await Promise.all([getCollectionsApi(), getCollectionsSg()])
-    const collectionApiData: ApiCollection[] = collections?.data ?? []
-    const collectionsTotalSupply = await fetchCollectionsTotalSupply(collectionApiData)
-    const collectionApiDataCombinedOnChain = collectionApiData.map((collection, index) => {
-      const totalSupplyFromApi = Number(collection?.totalSupply) || 0
-      const totalSupplyFromOnChain = collectionsTotalSupply[index]
-      return {
-        ...collection,
-        totalSupply: Math.max(totalSupplyFromApi, totalSupplyFromOnChain).toString(),
-      }
-    })
-
-    return combineCollectionData(collectionApiDataCombinedOnChain, collectionsMarket)
+    const collections = await getCollectionsApi()
+    return collections
   } catch (error) {
-    console.error('Unable to fetch data:', error)
+    console.error('getCollections Unable to fetch data:', error)
     return null
   }
 }
 
-/**
- * Fetch collection data by combining data from the API (static metadata) and the Subgraph (dynamic market data)
- */
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
-    const [collection, collectionMarket] = await Promise.all([
-      getCollectionApi(collectionAddress),
-      getCollectionSg(collectionAddress),
-    ])
+    const collection = (await getCollectionApi(collectionAddress)) as any
+    console.log(collection)
 
-    const collectionsTotalSupply = await fetchCollectionsTotalSupply([collection])
-    const totalSupplyFromApi = Number(collection?.totalSupply) || 0
-    const totalSupplyFromOnChain = collectionsTotalSupply[0]
-    const collectionApiDataCombinedOnChain = {
-      ...collection,
-      totalSupply: Math.max(totalSupplyFromApi, totalSupplyFromOnChain).toString(),
-    }
-
-    return combineCollectionData([collectionApiDataCombinedOnChain], [collectionMarket])
+    const collectionData = { [collectionAddress]: collection[collectionAddress].data[0] }
+    return collectionData
   } catch (error) {
-    console.error('Unable to fetch data:', error)
+    console.error('getCollection Unable to fetch data:', error)
     return null
   }
 }
