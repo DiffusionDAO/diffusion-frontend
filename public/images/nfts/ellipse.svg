@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="362px" height="63px" viewBox="0 0 362 63" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>椭圆形</title>
+    <defs>
+        <linearGradient x1="53.645727%" y1="19.747311%" x2="53.645727%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#3C00FF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#EC6EFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="NFT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="w-NFT3合成成功4" transform="translate(-352.000000, -507.000000)" stroke="url(#linearGradient-1)" stroke-width="2">
+            <g id="编组-17" transform="translate(269.000000, 236.000000)">
+                <g id="编组-14" transform="translate(82.000000, 258.000000)">
+                    <ellipse id="椭圆形" transform="translate(182.000000, 43.391336) rotate(-6.000000) translate(-182.000000, -43.391336) " cx="182" cy="43.3913358" rx="180.409741" ry="24.6685196"></ellipse>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

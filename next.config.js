@@ -38,12 +38,6 @@ const config = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'static-nft.pancakeswap.com',
-      },
-    ],
     domains: ['middle.diffusiondao.org'],
   },
   async rewrites() {

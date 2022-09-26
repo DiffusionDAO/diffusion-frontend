@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="529px" height="456px" viewBox="0 0 529 456" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 18</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="528" height="455"></rect>
+        <radialGradient cx="48.4518769%" cy="50%" fx="48.4518769%" fy="50%" r="111.723096%" gradientTransform="translate(0.484519,0.500000),scale(0.433678,1.000000),rotate(-180.000000),scale(1.000000,0.425296),translate(-0.484519,-0.500000)" id="radialGradient-3">
+            <stop stop-color="#0058FF" offset="0%"></stop>
+            <stop stop-color="#2200D3" stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="48.4518769%" cy="50%" fx="48.4518769%" fy="50%" r="82.6277669%" gradientTransform="translate(0.484519,0.500000),scale(0.586387,1.000000),rotate(180.000000),scale(1.000000,0.605360),translate(-0.484519,-0.500000)" id="radialGradient-4">
+            <stop stop-color="#CA00D3" offset="0%"></stop>
+            <stop stop-color="#2200D3" stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="NFT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="w-NFT3合成成功4" transform="translate(-269.000000, -325.000000)">
+            <g id="编组-17" transform="translate(269.000000, 236.000000)">
+                <g id="编组-18" transform="translate(0.133774, 89.899980)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="矩形" fill-opacity="0" fill="#D8D8D8" xlink:href="#path-1"></use>
+                    <g id="编组-17" mask="url(#mask-2)">
+                        <g transform="translate(-153.000000, 69.541858)" id="编组-9">
+                            <g opacity="0.738122275" transform="translate(0.000000, 0.458142)">
+                                <ellipse id="椭圆形" fill="url(#radialGradient-3)" fill-rule="nonzero" transform="translate(338.803539, 179.000000) rotate(-7.000000) translate(-338.803539, -179.000000) " cx="338.803539" cy="179" rx="324.090406" ry="140.550961"></ellipse>
+                            </g>
+                            <g opacity="0.547738009" transform="translate(319.436219, 0.000000)">
+                                <ellipse id="椭圆形" fill="url(#radialGradient-4)" fill-rule="nonzero" transform="translate(229.174924, 151.608696) rotate(-7.000000) translate(-229.174924, -151.608696) " cx="229.174924" cy="151.608696" rx="215.388186" ry="126.300907"></ellipse>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

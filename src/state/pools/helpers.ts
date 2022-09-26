@@ -10,7 +10,27 @@ import {
 } from 'state/types'
 import { deserializeToken } from '@pancakeswap/tokens'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { convertSharesToCake } from 'views/Pools/helpers'
+import { getBalanceNumber, getFullDisplayBalance, getDecimalAmount } from 'utils/formatBalance'
+
+// min deposit and withdraw amount
+export const MIN_LOCK_AMOUNT = new BigNumber(10000000000000)
+
+export const ENABLE_EXTEND_LOCK_AMOUNT = new BigNumber(100000000000000)
+
+export const convertSharesToCake = (
+  shares: BigNumber,
+  cakePerFullShare: BigNumber,
+  decimals = 18,
+  decimalsToRound = 3,
+  fee?: BigNumber,
+) => {
+  const sharePriceNumber = getBalanceNumber(cakePerFullShare, decimals)
+  const amountInCake = new BigNumber(shares.multipliedBy(sharePriceNumber)).minus(fee || BIG_ZERO)
+  const cakeAsNumberBalance = getBalanceNumber(amountInCake, decimals)
+  const cakeAsBigNumber = getDecimalAmount(new BigNumber(cakeAsNumberBalance), decimals)
+  const cakeAsDisplayBalance = getFullDisplayBalance(amountInCake, decimals, decimalsToRound)
+  return { cakeAsNumberBalance, cakeAsBigNumber, cakeAsDisplayBalance }
+}
 
 type UserData =
   | DeserializedPool['userData']

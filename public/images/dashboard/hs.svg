@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="44px" viewBox="0 0 44 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>切片</title>
+    <defs>
+        <path d="M22,39.5 C17.1675084,39.5 12.7925084,37.5412458 9.62563133,34.3743687 C6.45875422,31.2074916 4.5,26.8324916 4.5,22 C4.5,17.1675084 6.45875422,12.7925084 9.62563133,9.62563133 C12.7925084,6.45875422 17.1675084,4.5 22,4.5 C26.8324916,4.5 31.2074916,6.45875422 34.3743687,9.62563133 C37.5412458,12.7925084 39.5,17.1675084 39.5,22" id="path-1"></path>
+        <filter x="-47.1%" y="-47.1%" width="194.3%" height="194.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="4.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="0" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feMorphology radius="4.5" operator="erode" in="SourceAlpha" result="shadowInner"></feMorphology>
+            <feOffset dx="0" dy="0" in="shadowInner" result="shadowInner"></feOffset>
+            <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"></feComposite>
+            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.949019608   0 0 0 0 0   0 0 0 0 1  0 0 0 0.64576049 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="w-Dashboard" transform="translate(-780.000000, -490.000000)" fill-rule="nonzero">
+            <g id="编组-9" transform="translate(570.000000, 446.000000)">
+                <g id="编组-11" transform="translate(32.000000, 39.000000)">
+                    <g id="图表/1粉" transform="translate(178.000000, 5.000000)">
+                        <path d="M22,0 C9.8497355,0 0,9.8497355 0,22 C0,34.1502645 9.8497355,44 22,44 C34.1502645,44 44,34.1502645 44,22 C44,9.8497355 34.1502645,0 22,0 Z M22,9 C29.1797017,9 35,14.8202983 35,22 C35,29.1797017 29.1797017,35 22,35 C14.8202983,35 9,29.1797017 9,22 C9,14.8202983 14.8202983,9 22,9 Z" id="路径" fill="#747BFF" opacity="0.05"></path>
+                        <g id="路径" stroke-linecap="round">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                            <use stroke="#F200FF" stroke-width="9" xlink:href="#path-1"></use>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

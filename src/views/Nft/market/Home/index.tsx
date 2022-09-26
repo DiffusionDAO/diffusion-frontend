@@ -71,25 +71,6 @@ const Home = () => {
 
   return (
     <>
-      <PageMeta />
-      {/* <StyledPageHeader>
-        <StyledHeaderInner>
-          <div>
-            <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('NFT Marketplace')}
-            </Heading>
-            <Heading scale="lg" color="text">
-              {t('Buy and Sell NFTs on BNB Smart Chain')}
-            </Heading>
-            {account && (
-              <Button as={NextLinkFromReactRouter} to={`/profile/${account.toLowerCase()}`} mt="32px">
-                {t('Manage/Sell')}
-              </Button>
-            )}
-          </div>
-          <SearchBar />
-        </StyledHeaderInner>
-      </StyledPageHeader> */}
       {status !== FetchStatus.Fetched ? (
         <PageLoader />
       ) : (

@@ -99,6 +99,7 @@ import cakePredictionsAbi from 'config/abi/cakePredictions.json'
 import bCakeFarmBoosterAbi from 'config/abi/bCakeFarmBooster.json'
 import bCakeFarmBoosterProxyFactoryAbi from 'config/abi/bCakeFarmBoosterProxyFactory.json'
 import bCakeProxyAbi from 'config/abi/bCakeProxy.json'
+
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftComposeAbi from 'config/abi/nftComposeAbi.json'
 import nftDrawAbi from 'config/abi/nftDrawAbi.json'
