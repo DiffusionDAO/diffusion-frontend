@@ -2,6 +2,8 @@ import { useRouter } from 'next/router'
 import { Menu as UikitMenu } from '@pancakeswap/uikit'
 import { languageList, useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
+import { useMemo } from 'react'
+
 import UserMenu from './UserMenu'
 import { useMenuItems } from './hooks/useMenuItems'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
@@ -13,19 +15,18 @@ const Menu = (props) => {
   const { pathname } = useRouter()
 
   const menuItems = useMenuItems()
-  console.log('menuItems:', menuItems)
   const activeMenuItem = getActiveMenuItem({ menuConfig: menuItems, pathname })
   const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
 
-  // const toggleTheme = useMemo(() => {
-  //   return () => setTheme(isDark ? 'light' : 'dark')
-  // }, [setTheme, isDark])
+  const toggleTheme = useMemo(() => {
+    return () => setTheme(isDark ? 'light' : 'dark')
+  }, [setTheme, isDark])
 
   return (
     <UikitMenu
       userMenu={<UserMenu />}
       isDark={isDark}
-      // toggleTheme={toggleTheme}
+      toggleTheme={toggleTheme}
       currentLang={currentLanguage.code}
       langs={languageList}
       setLang={setLanguage}

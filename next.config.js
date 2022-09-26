@@ -44,6 +44,7 @@ const config = {
         hostname: 'static-nft.pancakeswap.com',
       },
     ],
+    domains: ['middle.diffusiondao.org'],
   },
   async rewrites() {
     return [
