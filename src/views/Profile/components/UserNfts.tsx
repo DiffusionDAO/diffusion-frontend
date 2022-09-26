@@ -45,19 +45,6 @@ const UserNfts: React.FC<
   const { t } = useTranslation()
 
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
-    switch (location) {
-      case NftLocation.PROFILE:
-        setClickedProfileNft({ nft, location })
-        break
-      case NftLocation.WALLET:
-        setClickedSellNft({ nft, location, variant: 'sell' })
-        break
-      case NftLocation.FORSALE:
-        setClickedSellNft({ nft, location, variant: 'edit' })
-        break
-      default:
-        break
-    }
     if (isSelected) {
       selectNft(nft)
     }

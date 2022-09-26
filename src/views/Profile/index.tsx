@@ -55,17 +55,6 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   if (invalidAddress) {
     return (
       <>
-        <MarketPageHeader position="relative">
-          <ProfileHeader
-            accountPath={accountAddress}
-            profile={null}
-            achievements={null}
-            nftCollected={null}
-            isAchievementsLoading={false}
-            isNftLoading={false}
-            isProfileLoading={false}
-          />
-        </MarketPageHeader>
         <Page style={{ minHeight: 'auto' }}>
           <Flex p="24px" flexDirection="column" alignItems="center">
             <NoNftsImage />
@@ -80,21 +69,6 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
 
   return (
     <>
-      <MarketPageHeader position="relative">
-        <ProfileHeader
-          accountPath={accountAddress}
-          profile={profile}
-          achievements={achievements}
-          nftCollected={userNfts.length}
-          isProfileLoading={isProfileFetching}
-          isNftLoading={isNftLoading}
-          isAchievementsLoading={isAchievementsFetching}
-          onSuccess={onSuccess}
-        />
-        <TabMenuWrapper>
-          <TabMenu />
-        </TabMenuWrapper>
-      </MarketPageHeader>
       <Page style={{ minHeight: 'auto' }}>{children}</Page>
     </>
   )
