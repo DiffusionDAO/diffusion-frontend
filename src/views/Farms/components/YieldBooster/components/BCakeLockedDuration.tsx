@@ -62,7 +62,7 @@ const LockDurationField: React.FC<React.PropsWithChildren<LockDurationFieldProps
                 pr="12px"
                 scale="sm"
                 disabled={weekSeconds > maxAvailableDuration}
-                variant={weekSeconds === duration ? 'subtle' : 'dark'}
+                variant={weekSeconds === duration ? 'subtle' : 'light'}
               >
                 {week}W
               </Button>

@@ -138,6 +138,29 @@ export const StyledCollectibleCard = styled(Card)`
     }
   }
 `
+
+export const CheckBoxWrap = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  z-index: 1;
+  background: linear-gradient(135deg, #3c00ff, #ec6eff);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+`
+export const CheckBox = styled.div`
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: antiquewhite;
+`
+
 interface LowestPriceMetaRowProps {
   lowestPrice: number
   isFetching: boolean

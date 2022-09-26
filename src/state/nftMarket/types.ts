@@ -77,6 +77,8 @@ export interface NftToken {
   marketData?: TokenMarketData
   location?: NftLocation
   meta?: Record<string, string | number>
+  selected?: boolean
+  staked?: boolean
 }
 
 export interface NftFilter {

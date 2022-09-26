@@ -21,12 +21,14 @@ interface SellNftProps {
 
 const UserNfts: React.FC<
   React.PropsWithChildren<{
+    isSelected: boolean
     nfts: NftToken[]
     isLoading: boolean
-    onSuccessSale: () => void
-    onSuccessEditProfile: () => void
+    selectNft: (param: NftToken) => void
+    onSuccessSale?: () => void
+    onSuccessEditProfile?: () => void
   }>
-> = ({ nfts, isLoading, onSuccessSale, onSuccessEditProfile }) => {
+> = ({ isSelected, nfts, isLoading, selectNft, onSuccessSale, onSuccessEditProfile }) => {
   const [clickedProfileNft, setClickedProfileNft] = useState<ProfileNftProps>({ nft: null, location: null })
   const [clickedSellNft, setClickedSellNft] = useState<SellNftProps>({ nft: null, location: null, variant: null })
   const [onPresentProfileNftModal] = useModal(
@@ -55,6 +57,9 @@ const UserNfts: React.FC<
         break
       default:
         break
+    }
+    if (isSelected) {
+      selectNft(nft)
     }
   }
 
