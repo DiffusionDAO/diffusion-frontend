@@ -81,7 +81,7 @@ const TeamRanks: React.FC<React.PropsWithChildren<TeamRanksProps>> = ({
           <Image src={image} width={200} height={205} />
         </BunnyImageWrapper>
       </StyledPodiumWrapper>
-      <StyledTopTradersWrapper>
+      {/* <StyledTopTradersWrapper>
         <TopTradersCard
           team1LeaderboardInformation={team1LeaderboardInformation}
           team2LeaderboardInformation={team2LeaderboardInformation}
@@ -89,7 +89,7 @@ const TeamRanks: React.FC<React.PropsWithChildren<TeamRanksProps>> = ({
           globalLeaderboardInformation={globalLeaderboardInformation}
           isGlobalLeaderboardDataComplete={isGlobalLeaderboardDataComplete}
         />
-      </StyledTopTradersWrapper>
+      </StyledTopTradersWrapper> */}
     </Wrapper>
   )
 }

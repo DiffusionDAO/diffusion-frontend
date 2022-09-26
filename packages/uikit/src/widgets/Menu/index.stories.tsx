@@ -235,7 +235,7 @@ export const WithoutConnectButton: React.FC<React.PropsWithChildren> = () => {
         footerLinks={footerLinks}
         subLinks={links[0].items as SubMenuItemsType[]}
         activeItem="/swap"
-        activeSubItem="https://exchange.pancakeswap.finance"
+        activeSubItem=""
         buyCakeLabel="Buy DFS"
       >
         <div>

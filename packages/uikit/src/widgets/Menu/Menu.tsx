@@ -68,17 +68,14 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
   banner,
   rightSide,
   isDark,
-  toggleTheme,
   currentLang,
   setLang,
   cakePriceUsd,
   links,
   subLinks,
-  footerLinks,
   activeItem,
   activeSubItem,
   langs,
-  buyCakeLabel,
   children,
 }) => {
   const { isMobile, isMd } = useMatchBreakpoints();
@@ -94,17 +91,12 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
       const currentOffset = window.pageYOffset;
       const isBottomOfPage = window.document.body.clientHeight === currentOffset + window.innerHeight;
       const isTopOfPage = currentOffset === 0;
-      // Always show the menu when user reach the top
       if (isTopOfPage) {
         setShowMenu(true);
-      }
-      // Avoid triggering anything at the bottom because of layout shift
-      else if (!isBottomOfPage) {
+      } else if (!isBottomOfPage) {
         if (currentOffset < refPrevOffset.current || currentOffset <= totalTopMenuHeight) {
-          // Has scroll up
           setShowMenu(true);
         } else {
-          // Has scroll down
           setShowMenu(false);
         }
       }

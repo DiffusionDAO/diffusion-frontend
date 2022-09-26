@@ -3239,7 +3239,7 @@ exports[`renders correctly 1`] = `
                   scale="sm"
                   target="_blank"
                 >
-                  Buy CAKE
+                  Buy DFS
                   <svg
                     class="c93"
                     color="backgroundAlt"

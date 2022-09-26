@@ -136,7 +136,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       </ShowMenu>
       <EasterEgg iterations={2} />
       <ToastListener />
-      <FixedSubgraphHealthIndicator />
       <NetworkModal pageSupportedChains={Component.chains} />
     </ProductionErrorBoundary>
   )

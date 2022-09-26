@@ -98,12 +98,10 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
   }
 }
 
-/**
- * Fetch static data from a collection using the API
- * @returns
- */
 export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}`)
+  const url = `${API_NFT}/collections/${collectionAddress}`
+  console.log(url)
+  const res = await fetch(url)
   if (res.ok) {
     const json = await res.json()
     return json.data

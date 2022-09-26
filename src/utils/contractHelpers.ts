@@ -109,6 +109,7 @@ import duffionIDOAbi from 'config/abi/diffusionIDO.json'
 import bondAbi from 'config/abi/bond.json'
 import mineAbi from 'config/abi/dfsMine.json'
 import { ERC20_ABI } from 'config/abi/erc20'
+
 // Types
 import type {
   ChainlinkOracle,
