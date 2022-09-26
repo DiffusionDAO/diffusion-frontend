@@ -8,9 +8,10 @@ export const THEME_DOMAIN = '.pancakeswap.finance'
 
 const useTheme = () => {
   const { resolvedTheme, setTheme } = useNextTheme()
+  console.log('resolvedTheme:', resolvedTheme)
   const theme = useContext(StyledThemeContext)
 
-  const handleSwitchTheme = (themeValue: 'light' | 'dark') => {
+  const handleSwitchTheme = (themeValue: 'dark') => {
     try {
       setTheme(themeValue)
       Cookie.set(COOKIE_THEME_KEY, themeValue, { domain: THEME_DOMAIN })

@@ -137,7 +137,7 @@ export const ListTraitFilter: React.FC<React.PropsWithChildren<ListTraitFilterPr
           component={
             <TriggerButton
               onClick={handleMenuClick}
-              variant={isTraitSelected ? 'subtle' : 'light'}
+              variant={isTraitSelected ? 'subtle' : 'dark'}
               scale="sm"
               hasItem={isTraitSelected}
             >
@@ -200,7 +200,7 @@ export const ListTraitFilter: React.FC<React.PropsWithChildren<ListTraitFilterPr
         </InlineMenu>
       </Box>
       {isTraitSelected && (
-        <CloseButton variant={isTraitSelected ? 'subtle' : 'light'} scale="sm" onClick={handleClearItem}>
+        <CloseButton variant={isTraitSelected ? 'subtle' : 'dark'} scale="sm" onClick={handleClearItem}>
           <CloseIcon color="currentColor" width="18px" />
         </CloseButton>
       )}

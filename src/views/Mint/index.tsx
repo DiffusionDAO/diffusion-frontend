@@ -55,7 +55,9 @@ const Mint = () => {
   const nftDrawAddress = getNftDrawAddress()
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
-  const tokenContract = useERC20(getDFSAddress())
+  const dfsAddress = getDFSAddress()
+  console.log(dfsAddress)
+  const tokenContract = useERC20(dfsAddress)
 
   const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
   const seniorPrice = BigNumber.from(10).pow(18).mul(60)
@@ -82,7 +84,7 @@ const Mint = () => {
 
   const dfsNFT = useDFSNftContract()
   const DFS = useERC20(getDFSAddress())
-  const drawBlind = async (type: string) => {
+  const mint = async (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
@@ -234,7 +236,7 @@ const Mint = () => {
                     )}
                   </ActionRight>
                 </ActionWrap>
-                <DrawBlindBoxPrimaryBtn className="orangeBtn" onClick={() => drawBlind('senior')}>
+                <DrawBlindBoxPrimaryBtn className="orangeBtn" onClick={() => mint('senior')}>
                   {t('Mint')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>
@@ -325,7 +327,7 @@ const Mint = () => {
                     )}
                   </ActionRight>
                 </ActionWrap>
-                <DrawBlindBoxPrimaryBtn className="purpleBtn" onClick={() => drawBlind('ordinary')}>
+                <DrawBlindBoxPrimaryBtn className="purpleBtn" onClick={() => mint('ordinary')}>
                   {t('Mint')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>

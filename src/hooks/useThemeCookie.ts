@@ -5,7 +5,7 @@ import { COOKIE_THEME_KEY, THEME_DOMAIN } from 'hooks/useTheme'
 
 const useThemeCookie = () => {
   const theme = useContext(StyledThemeContext)
-  const themeValue = theme.isDark ? 'dark' : 'light'
+  const themeValue = 'dark'
 
   useEffect(() => {
     const getThemeCookie = Cookie.get(COOKIE_THEME_KEY, { domain: THEME_DOMAIN })

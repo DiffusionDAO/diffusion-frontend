@@ -66,7 +66,7 @@ export const ActivityFilter: React.FC<React.PropsWithChildren<ActivityFilterProp
       <Box>
         <TriggerButton
           onClick={handleMenuClick}
-          variant={isEventSelected ? 'subtle' : 'light'}
+          variant={isEventSelected ? 'subtle' : 'dark'}
           scale="sm"
           hasItem={isEventSelected}
         >
@@ -74,7 +74,7 @@ export const ActivityFilter: React.FC<React.PropsWithChildren<ActivityFilterProp
         </TriggerButton>
       </Box>
       {isEventSelected && (
-        <CloseButton variant={isEventSelected ? 'subtle' : 'light'} scale="sm" onClick={handleClearItem}>
+        <CloseButton variant={isEventSelected ? 'subtle' : 'dark'} scale="sm" onClick={handleClearItem}>
           <CloseIcon color="currentColor" width="18px" />
         </CloseButton>
       )}

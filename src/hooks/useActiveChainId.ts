@@ -23,7 +23,6 @@ export function useLocalNetworkChain() {
   const [sessionChainId] = useSessionChainId()
   // useRouter is kind of slow, we only get this query chainId once
   const queryChainId = useAtomValue(queryChainIdAtom)
-  console.log('queryChainId:', queryChainId)
   const { query } = useRouter()
 
   const chainId = +(sessionChainId || query.chainId || queryChainId)
@@ -40,7 +39,7 @@ export const useActiveChainId = () => {
   const queryChainId = useAtomValue(queryChainIdAtom)
 
   const { chain } = useNetwork()
-  const chainId = localChainId ?? chain?.id ?? (queryChainId >= 0 ? ChainId.BSC : undefined)
+  const chainId = localChainId ?? chain?.id ?? (queryChainId >= 0 ? ChainId.BSC_TESTNET : undefined)
 
   const isNotMatched = useDeferredValue(chain && localChainId && chain.id !== localChainId)
 
