@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="176px" height="176px" viewBox="0 0 176 176" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>矩形</title>
+    <defs>
+        <linearGradient x1="100%" y1="4.63541667%" x2="0%" y2="93.1998698%" id="linearGradient-1">
+            <stop stop-color="#F576FF" offset="0%"></stop>
+            <stop stop-color="#7200FF" offset="49.7872709%"></stop>
+            <stop stop-color="#3900FF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="NFT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-opacity="0.371394231">
+        <g id="w-NFT3准备合成1" transform="translate(-446.000000, -271.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero" stroke="#FFFFFF" stroke-width="0.5">
+            <g id="编组-14" transform="translate(269.000000, 204.899980)">
+                <g id="编组-16" transform="translate(176.066034, 64.064652)">
+                    <g id="容器" transform="translate(89.381813, 90.393713) rotate(7.000000) translate(-89.381813, -90.393713) translate(9.176707, 10.188607)">
+                        <rect id="矩形" x="0.25" y="0.25" width="159.910211" height="159.910211" rx="16"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

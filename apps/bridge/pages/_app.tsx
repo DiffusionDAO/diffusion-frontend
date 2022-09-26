@@ -15,7 +15,7 @@ declare module 'styled-components' {
 const StyledThemeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const { resolvedTheme } = useNextTheme()
   return (
-    <ThemeProvider theme={resolvedTheme === 'dark' ? dark : light} {...props}>
+    <ThemeProvider theme={dark} {...props}>
       {props.children}
     </ThemeProvider>
   )

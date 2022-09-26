@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="3242px" height="2613px" viewBox="0 0 3242 2613" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 24</title>
+    <defs>
+        <radialGradient cx="48.4518769%" cy="50%" fx="48.4518769%" fy="50%" r="48.4518769%" id="radialGradient-1">
+            <stop stop-color="#2200D3" offset="0%"></stop>
+            <stop stop-color="#2200D3" stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="48.4518769%" cy="50%" fx="48.4518769%" fy="50%" r="48.4518769%" id="radialGradient-2">
+            <stop stop-color="#0700D3" offset="0%"></stop>
+            <stop stop-color="#5600D3" stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="48.4518769%" cy="50%" fx="48.4518769%" fy="50%" r="48.4518769%" id="radialGradient-3">
+            <stop stop-color="#6A00D3" offset="0%"></stop>
+            <stop stop-color="#2200D3" stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="NFT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="w-NFT2-1" transform="translate(1208.000000, -455.000000)" fill-rule="nonzero">
+            <g id="编组-3" transform="translate(-1208.000000, -729.000000)">
+                <g id="编组-24" transform="translate(0.000000, 1184.000000)">
+                    <circle id="椭圆形" fill="url(#radialGradient-1)" cx="850" cy="850" r="850"></circle>
+                    <circle id="椭圆形" fill="url(#radialGradient-1)" cx="714" cy="1917" r="696"></circle>
+                    <circle id="椭圆形" fill="url(#radialGradient-2)" opacity="0.687477289" cx="2392" cy="1355" r="850"></circle>
+                    <circle id="椭圆形" fill="url(#radialGradient-3)" opacity="0.469567587" cx="2010" cy="1700" r="667"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

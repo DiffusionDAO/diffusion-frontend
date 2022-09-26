@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="868px" height="532px" viewBox="0 0 868 532" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 11</title>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="50%" id="radialGradient-1">
+            <stop stop-color="#0017FF" offset="0.956075175%"></stop>
+            <stop stop-color="#0017FF" stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="50%" id="radialGradient-2">
+            <stop stop-color="#C64CFF" offset="0%"></stop>
+            <stop stop-color="#C64CFF" stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="NFT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.45">
+        <g id="w-NFT3准备合成1" transform="translate(-108.000000, -97.000000)">
+            <g id="编组-14" transform="translate(269.000000, 204.899980)">
+                <g id="编组-16" transform="translate(176.066034, 64.064652)">
+                    <g id="容器" transform="translate(97.023467, 94.035368) rotate(11.000000) translate(-97.023467, -94.035368) translate(16.818362, 13.830262)">
+                        <g id="编组-11" transform="translate(-324.000000, -111.794894)">
+                            <circle id="椭圆形" fill="url(#radialGradient-1)" cx="192" cy="192" r="192"></circle>
+                            <circle id="椭圆形" fill="url(#radialGradient-2)" cx="616.410211" cy="192" r="192"></circle>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -71,25 +71,6 @@ const Home = () => {
 
   return (
     <>
-      <PageMeta />
-      <StyledPageHeader>
-        <StyledHeaderInner>
-          <div>
-            <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('NFT Marketplace')}
-            </Heading>
-            <Heading scale="lg" color="text">
-              {t('Buy and Sell NFTs on BNB Smart Chain')}
-            </Heading>
-            {account && (
-              <Button as={NextLinkFromReactRouter} to={`/profile/${account.toLowerCase()}`} mt="32px">
-                {t('Manage/Sell')}
-              </Button>
-            )}
-          </div>
-          <SearchBar />
-        </StyledHeaderInner>
-      </StyledPageHeader>
       {status !== FetchStatus.Fetched ? (
         <PageLoader />
       ) : (
@@ -106,21 +87,15 @@ const Home = () => {
             testId="nfts-newest-collections"
             collections={newestCollections}
           />
-          <Collections
+          {/* <Collections
             key="hot-collections"
             title={t('Hot Collections')}
             testId="nfts-hot-collections"
             collections={hotCollections}
-          />
-          <Newest />
+          /> */}
+          {/* <Newest /> */}
         </PageSection>
       )}
-      <Gradient p="64px 0">
-        <SectionsWithFoldableText header={t('FAQs')} config={config(t)} m="auto" />
-        <LinkExternal href="https://docs.pancakeswap.finance/contact-us/nft-market-applications" mx="auto" mt="16px">
-          {t('Apply to NFT Marketplace!')}
-        </LinkExternal>
-      </Gradient>
     </>
   )
 }
