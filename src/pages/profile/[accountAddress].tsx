@@ -211,7 +211,7 @@ function NftProfilePage() {
     const tokenId = id.toString()
     const level = await dfsNFT.getItems(tokenId)
     const newNft: NftToken = {
-      tokenId: tokenId,
+      tokenId,
       name: greeceNumber[level],
       description: dfsName[level],
       collectionName: dfsName[level],
@@ -231,7 +231,7 @@ function NftProfilePage() {
       updatedAt: '',
       location: NftLocation.FORSALE,
       marketData: {
-        tokenId: tokenId,
+        tokenId,
         collection: {
           id: tokenId,
         },

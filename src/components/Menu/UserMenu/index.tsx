@@ -63,9 +63,7 @@ const UserMenu = () => {
         <WalletUserMenuItem isWrongNetwork={isWrongNetwork} onPresentWalletModal={onClickWalletMenu} />
         <UserMenuDivider />
         <NextLink href={`/profile/${account?.toLowerCase()}`} passHref>
-          <UserMenuItem as="a" disabled={isWrongNetwork || chainId !== ChainId.BSC}>
-            {t('Your NFTs')}
-          </UserMenuItem>
+          <UserMenuItem as="a">{t('Your NFTs')}</UserMenuItem>
         </NextLink>
         <UserMenuDivider />
         <UserMenuItem as="button" onClick={logout}>
