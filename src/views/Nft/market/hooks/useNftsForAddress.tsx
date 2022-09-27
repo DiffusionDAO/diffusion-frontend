@@ -50,7 +50,6 @@ export const useCollectionsNftsForAddress = (
     //   !isProfileFetching && !isEmpty(collections) && isAddress(account) ? [account, 'userNfts'] : null,
     //   async () => getCompleteAccountNftData(account, collections, profileNftWithCollectionAddress),
     //   { use: [laggyMiddleware] },
-
   // resetLaggyRef.current = resetLaggy
 
   // return { nfts: data ?? [], isLoading: status !== FetchStatus.Fetched, refresh: mutate }
