@@ -44,7 +44,7 @@ import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
 
 const Bond = () => {
-  const { account, connector } = useWeb3React()
+  const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const [bonData, setBondData] = useState<any[]>(bondDatasMock)
@@ -57,6 +57,7 @@ const Bond = () => {
   const openBondModal = (item) => {
     setBondItem(item)
     setBondModalVisible(true)
+    console.log('openBondModal', bondModalVisible)
   }
   const closeBondModal = () => {
     setBondModalVisible(false)
@@ -166,7 +167,6 @@ const Bond = () => {
           </Grid>
         ))}
       </Grid>
-      {/* bond的弹窗 */}
       {bondModalVisible ? (
         <BondModal
           bondData={bondItem}
@@ -177,7 +177,6 @@ const Bond = () => {
           getApprove={getApprove}
         />
       ) : null}
-      {/* bond设置弹窗 */}
       {settingModalVisible ? <SettingModal account={account} bondData={bondItem} onClose={closeSettingModal} /> : null}
     </BondPageWrap>
   )

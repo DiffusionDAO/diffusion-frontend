@@ -61,7 +61,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [referral, setReferral] = useState<string>()
   const [amount, setAmount] = useState<string>()
   const [activeTab, setActiveTab] = useState<string>('mint')
-  const changeRecommand = () => {
+  const changeReferral = () => {
     setReferral('')
     sethasRecommand(!hasRecommand)
   }
@@ -98,7 +98,7 @@ const BondModal: React.FC<BondModalProps> = ({
   }
 
   return (
-    <StyledModal width={500} className="no-header" onCancel={onClose} visible centered maskClosable={false} footer={[]}>
+    <StyledModal width={500} className="no-header" onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <ContentWrap>
         <HeaderWrap>
           <CogIcon width="24px" color="#ABB6FF" onClick={openSettingModal} />
@@ -107,24 +107,23 @@ const BondModal: React.FC<BondModalProps> = ({
         <BondListItem>
           <BondListItemHeader>
             <ImgWrap>
-              <FromImg src={bondData.from} />
-              <ToImg src={bondData.to} />
+              <FromImg src={bondData?.from} />
+              <ToImg src={bondData?.to} />
             </ImgWrap>
-            <BondName>{bondData.name}</BondName>
-            <BondTime>{bondData.duration}days</BondTime>
+            <BondName>{bondData?.name}</BondName>
+            <BondTime>{bondData?.duration}days</BondTime>
           </BondListItemHeader>
           <BondListItemContent>
             <ContentCell>
               <CellTitle>{t('Bond price')}</CellTitle>
-              <CellText>${bondData.price}</CellText>
+              <CellText>${bondData?.price}</CellText>
             </ContentCell>
             <ContentCell>
               <CellTitle>{t('Market price')}</CellTitle>
-              <CellText>${bondData.price}</CellText>
+              <CellText>${bondData?.price}</CellText>
             </ContentCell>
           </BondListItemContent>
         </BondListItem>
-        {/* mint or redeem choice */}
         {account && (
           <TabList>
             <TabItem className={`${activeTab === 'mint' && 'active'}`} onClick={() => clickTab('mint')}>
@@ -137,7 +136,6 @@ const BondModal: React.FC<BondModalProps> = ({
         )}
         {account && isApprove && activeTab === 'mint' && (
           <>
-            {/* <MoneyLable>Money</MoneyLable> */}
             <MoneyInput
               prefix="$"
               suffix="ALL"
@@ -147,10 +145,10 @@ const BondModal: React.FC<BondModalProps> = ({
               }}
             />
             <RecommandWrap>
-              <CheckBoxWrap onClick={changeRecommand}>
+              <CheckBoxWrap onClick={changeReferral}>
                 {hasRecommand ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: '4px' }} /> : <CheckBox />}
               </CheckBoxWrap>
-              <RecommandLable onClick={changeRecommand}>{t('Any Referrals?')}</RecommandLable>
+              <RecommandLable onClick={changeReferral}>{t('Any Referrals?')}</RecommandLable>
               {hasRecommand ? (
                 <RecommandInput
                   value={referral}
@@ -188,25 +186,25 @@ const BondModal: React.FC<BondModalProps> = ({
         )}
         <ListItem>
           <ListLable>{t('Your balance')}</ListLable>
-          <ListContent>{bondData.balance} DFS</ListContent>
+          <ListContent>{bondData?.balance} DFS</ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('You will receive')}</ListLable>
-          <ListContent>{bondData.getFee} DFS</ListContent>
+          <ListContent>{bondData?.getFee} DFS</ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('Max You Can Withdraw')}</ListLable>
-          <ListContent>{bondData.maxFee} DFS</ListContent>
+          <ListContent>{bondData?.maxFee} DFS</ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('Your balance')}</ListLable>
           <ListContent>
-            <TextColor isRise={bondData.discount > 0}>{bondData.discount}</TextColor>
+            <TextColor isRise={bondData?.discount > 0}>{bondData?.discount}</TextColor>
           </ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('Duration')}</ListLable>
-          <ListContent>{bondData.duration} Days</ListContent>
+          <ListContent>{bondData?.duration} Days</ListContent>
         </ListItem>
       </ContentWrap>
     </StyledModal>
