@@ -36,8 +36,6 @@ const UserNfts: React.FC<{
             const { marketData, location } = nft
             return (
               <CollectibleLinkCard
-                isSelected={isSelected}
-                isUserNft
                 onClick={() => handleCollectibleClick(nft, location)}
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
                 nft={nft}

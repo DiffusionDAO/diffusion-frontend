@@ -29,46 +29,14 @@ const UserNfts: React.FC<
     onSuccessEditProfile?: () => void
   }>
 > = ({ isSelected, nfts, isLoading, selectNft, onSuccessSale, onSuccessEditProfile }) => {
-  const [clickedProfileNft, setClickedProfileNft] = useState<ProfileNftProps>({ nft: null, location: null })
-  const [clickedSellNft, setClickedSellNft] = useState<SellNftProps>({ nft: null, location: null, variant: null })
-  const [onPresentProfileNftModal] = useModal(
-    <ProfileNftModal nft={clickedProfileNft.nft} onSuccess={onSuccessEditProfile} />,
-  )
-  const [onPresentSellModal] = useModal(
-    <SellModal
-      variant={clickedSellNft.variant}
-      nftToSell={clickedSellNft.nft}
-      onSuccessSale={onSuccessSale}
-      onSuccessEditProfile={onSuccessEditProfile}
-    />,
-  )
   const { t } = useTranslation()
-
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
     if (isSelected) {
       selectNft(nft)
     }
   }
-
-  useEffect(() => {
-    if (clickedProfileNft.nft) {
-      onPresentProfileNftModal()
-    }
-    // exhaustive deps disabled as the useModal dep causes re-render loop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clickedProfileNft])
-
-  useEffect(() => {
-    if (clickedSellNft.nft) {
-      onPresentSellModal()
-    }
-    // exhaustive deps disabled as the useModal dep causes re-render loop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clickedSellNft])
-
   return (
     <>
-      {/* User has no NFTs */}
       {nfts.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />
@@ -76,8 +44,7 @@ const UserNfts: React.FC<
             {t('No NFTs found')}
           </Text>
         </Flex>
-      ) : // User has NFTs and data has been fetched
-      nfts.length > 0 ? (
+      ) : nfts.length > 0 ? (
         <Grid
           gridGap="16px"
           gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
@@ -88,6 +55,7 @@ const UserNfts: React.FC<
 
             return (
               <CollectibleActionCard
+                isSelected={isSelected}
                 isUserNft
                 onClick={() => handleCollectibleClick(nft, location)}
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
@@ -101,7 +69,6 @@ const UserNfts: React.FC<
           })}
         </Grid>
       ) : (
-        // User NFT data hasn't been fetched
         <GridPlaceholder />
       )}
     </>

@@ -32,16 +32,24 @@ const CollectibleCardBody: React.FC<React.PropsWithChildren<CollectibleCardProps
         )}
         {nftLocation && <LocationTag nftLocation={nftLocation} />}
       </Flex>
-      <Text as="h4" fontWeight="600" mb="8px">
-        {name}
-      </Text>
-      <Box borderTop="1px solid" borderTopColor="cardBorder" pt="8px">
-        {isPancakeBunny && (
-          <LowestPriceMetaRow lowestPrice={lowestPrice} isFetching={isFetching} bnbBusdPrice={bnbBusdPrice} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', height: '8px', alignItems: 'center' }}>
+        <Text as="h4" fontWeight="600">
+          {name}
+        </Text>
+        {nft?.attributes && nft?.attributes[0].value && (
+          <img alt="" src={`/images/grade/${nft.attributes[0].value}.png`} />
         )}
+      </div>
+
+      <Box borderTop="1px solid rgba(171, 182, 255, 0.0200)" borderTopColor="cardBorder" pt="8px" mt="10px">
         {currentAskPrice && (
           <MetaRow title={isUserNft ? t('Your price') : t('Asking price')}>
             <CostLabel cost={currentAskPrice} bnbBusdPrice={bnbBusdPrice} />
+          </MetaRow>
+        )}
+        {!currentAskPrice && (
+          <MetaRow title={isUserNft ? t('Your price') : t('Asking price')}>
+            <CostLabel cost={0.0} bnbBusdPrice={bnbBusdPrice} />
           </MetaRow>
         )}
       </Box>

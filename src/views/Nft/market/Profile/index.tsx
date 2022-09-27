@@ -40,12 +40,6 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
   })
-  const { achievements, isFetching: isAchievementsFetching } = useAchievementsForAddress(accountAddress)
-  const {
-    nfts: userNfts,
-    isLoading: isNftLoading,
-    // refresh: refreshUserNfts,
-  } = useNftsForAddress(accountAddress, profile, isProfileValidating)
 
   if (invalidAddress) {
     return (

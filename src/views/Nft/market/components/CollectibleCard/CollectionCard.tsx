@@ -54,6 +54,8 @@ const CollectionCard: React.FC<React.PropsWithChildren<HotCollectionCardProps>> 
   disabled,
   children,
 }) => {
+  console.log('CollectionCard:')
+
   const renderBody = () => (
     <CardBody p="8px">
       <StyledImage src={bgSrc} height={125} width={375} />

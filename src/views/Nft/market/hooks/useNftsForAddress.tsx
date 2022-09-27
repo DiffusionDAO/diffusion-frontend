@@ -45,13 +45,14 @@ export const useCollectionsNftsForAddress = (
   }, [profileNftTokenId, profileNftCollectionAddress, hasProfileNft])
 
   // @ts-ignore
-  const { status, data, mutate, resetLaggy } = useSWR(
-    !isProfileFetching && !isEmpty(collections) && isAddress(account) ? [account, 'userNfts'] : null,
-    async () => getCompleteAccountNftData(account, collections, profileNftWithCollectionAddress),
-    { use: [laggyMiddleware] },
-  )
+  const { status, data, mutate, resetLaggy } =
+    useSWR()
+    //   !isProfileFetching && !isEmpty(collections) && isAddress(account) ? [account, 'userNfts'] : null,
+    //   async () => getCompleteAccountNftData(account, collections, profileNftWithCollectionAddress),
+    //   { use: [laggyMiddleware] },
 
-  resetLaggyRef.current = resetLaggy
+  // resetLaggyRef.current = resetLaggy
 
-  return { nfts: data ?? [], isLoading: status !== FetchStatus.Fetched, refresh: mutate }
+  // return { nfts: data ?? [], isLoading: status !== FetchStatus.Fetched, refresh: mutate }
+  return { nfts: [], isLoading: false, refresh: mutate }
 }

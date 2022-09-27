@@ -37,6 +37,7 @@ const LowestPriceCell: React.FC<React.PropsWithChildren<{ bunnyId: string }>> = 
 }
 
 const PancakeBunniesTraits: React.FC<React.PropsWithChildren<PancakeBunniesTraitsProps>> = ({ collectionAddress }) => {
+  console.log('PancakeBunniesTraits')
   const [raritySort, setRaritySort] = useState<SortType>('asc')
   const collection = useGetCollection(collectionAddress)
   const totalBunnyCount = Number(collection?.totalSupply)

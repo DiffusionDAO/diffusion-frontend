@@ -25,6 +25,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   nftIsProfilePic,
   onSuccess,
 }) => {
+  console.log('MainNFTCard:')
   const { t } = useTranslation()
   const bnbBusdPrice = useBNBBusdPrice()
 

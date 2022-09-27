@@ -14,6 +14,7 @@ import { formatBigNumber } from 'utils/formatBalance'
 import { getNftMarketAddress } from 'utils/addressHelpers'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import fromPairs from 'lodash/fromPairs'
+import { useSWRContract } from 'hooks/useSWRContract'
 import {
   ApiCollection,
   ApiCollections,
@@ -38,14 +39,6 @@ import {
 } from './types'
 import { baseNftFields, collectionBaseFields, baseTransactionFields } from './queries'
 
-/**
- * API HELPERS
- */
-
-/**
- * Fetch static data from all collections using the API
- * @returns
- */
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const res = await fetch(`${API_NFT}/collections`)
   if (res.ok) {
@@ -110,13 +103,6 @@ export const getCollectionApi = async (collectionAddress: string): Promise<ApiCo
   return null
 }
 
-/**
- * Fetch static data for all nfts in a collection using the API
- * @param collectionAddress
- * @param size
- * @param page
- * @returns
- */
 export const getNftsFromCollectionApi = async (
   collectionAddress: string,
   size = 100,
@@ -151,12 +137,6 @@ export const getNftsFromCollectionApi = async (
   }
 }
 
-/**
- * Fetch a single NFT using the API
- * @param collectionAddress
- * @param tokenId
- * @returns NFT from API
- */
 export const getNftApi = async (
   collectionAddress: string,
   tokenId: string,
@@ -171,18 +151,11 @@ export const getNftApi = async (
   return null
 }
 
-/**
- * Fetch a list of NFT from different collections
- * @param from Array of { collectionAddress: string; tokenId: string }
- * @returns Array of NFT from API
- */
 export const getNftsFromDifferentCollectionsApi = async (
   from: { collectionAddress: string; tokenId: string }[],
 ): Promise<NftToken[]> => {
   const promises = from.map((nft) => getNftApi(nft.collectionAddress, nft.tokenId))
   const responses = await Promise.all(promises)
-  // Sometimes API can't find some tokens (e.g. 404 response)
-  // at least return the ones that returned successfully
   return responses
     .filter((resp) => resp)
     .map((res, index) => ({
@@ -198,14 +171,6 @@ export const getNftsFromDifferentCollectionsApi = async (
     }))
 }
 
-/**
- * SUBGRAPH HELPERS
- */
-
-/**
- * Fetch market data from a collection using the Subgraph
- * @returns
- */
 export const getCollectionSg = async (collectionAddress: string): Promise<CollectionMarketDataBaseFields> => {
   try {
     const res = await request(
@@ -226,10 +191,6 @@ export const getCollectionSg = async (collectionAddress: string): Promise<Collec
   }
 }
 
-/**
- * Fetch market data from all collections using the Subgraph
- * @returns
- */
 export const getCollectionsSg = async (): Promise<CollectionMarketDataBaseFields[]> => {
   try {
     const res = await request(
@@ -249,19 +210,11 @@ export const getCollectionsSg = async (): Promise<CollectionMarketDataBaseFields
   }
 }
 
-/**
- * Fetch market data for nfts in a collection using the Subgraph
- * @param collectionAddress
- * @param first
- * @param skip
- * @returns
- */
 export const getNftsFromCollectionSg = async (
   collectionAddress: string,
   first = 1000,
   skip = 0,
 ): Promise<TokenMarketData[]> => {
-  // Squad to be sorted by tokenId as this matches the order of the paginated API return. For PBs - get the most recent,
   const isPBCollection = collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase()
 
   try {
@@ -286,12 +239,6 @@ export const getNftsFromCollectionSg = async (
   }
 }
 
-/**
- * Fetch market data for PancakeBunnies NFTs by bunny id using the Subgraph
- * @param bunnyId - bunny id to query
- * @param existingTokenIds - tokens that are already loaded into redux
- * @returns
- */
 export const getNftsByBunnyIdSg = async (
   bunnyId: string,
   existingTokenIds: string[],
@@ -324,12 +271,6 @@ export const getNftsByBunnyIdSg = async (
   }
 }
 
-/**
- * Fetch market data for PancakeBunnies NFTs by bunny id using the Subgraph
- * @param bunnyId - bunny id to query
- * @param existingTokenIds - tokens that are already loaded into redux
- * @returns
- */
 export const getMarketDataForTokenIds = async (
   collectionAddress: string,
   existingTokenIds: string[],
@@ -368,9 +309,9 @@ export const getNftsOnChainMarketData = async (
 ): Promise<TokenMarketData[]> => {
   try {
     const nftMarketContract = getNftMarketContract()
-    const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
-    const askInfo = response?.askInfo
-
+    const askInfo = await nftMarketContract.fetchMarketItems()
+    // const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
+    // const askInfo = response?.askInfo
     if (!askInfo) return []
 
     return askInfo
