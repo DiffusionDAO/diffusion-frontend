@@ -34,7 +34,7 @@ module.exports = {
     "react/no-unused-prop-types": 0,
     // Typescript
     "@typescript-eslint/no-unused-vars": [
-      "warn",
+      "off",
       {
         argsIgnorePattern: "^_",
         varsIgnorePattern: "^_",
