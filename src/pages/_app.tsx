@@ -21,7 +21,6 @@ import { usePollBlockNumber } from 'state/block/hooks'
 import { usePollCoreFarmData } from 'state/farms/hooks'
 import { Blocklist, Updaters } from '..'
 import { SentryErrorBoundary } from '../components/ErrorBoundary'
-// eslint-disable-next-line import/extensions
 import Halo from '../components/Halo'
 import Menu from '../components/Menu'
 import Providers from '../Providers'
