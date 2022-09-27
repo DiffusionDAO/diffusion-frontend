@@ -200,7 +200,7 @@ const Dashboard = () => {
                         <div className="di-font">{t('Diffusion index')}</div>
                         {/* {/* <h3 className="di-content">{eleven}</h3> */}
                         <DataCell
-                          title={t('Factors of attention')}
+                          title={t('Attention Factor')}
                           data={conentractions.length ? avgConentraction?.toString() : '0'}
                           titleStyle={{ color: '#ABB6FF' }}
                         />

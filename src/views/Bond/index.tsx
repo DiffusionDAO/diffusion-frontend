@@ -57,7 +57,6 @@ const Bond = () => {
   const openBondModal = (item) => {
     setBondItem(item)
     setBondModalVisible(true)
-    console.log('openBondModal', bondModalVisible)
   }
   const closeBondModal = () => {
     setBondModalVisible(false)

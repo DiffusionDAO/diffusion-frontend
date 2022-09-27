@@ -301,7 +301,7 @@ export const headerText = () => {
     two: `Single currency intertemporal inflation`,
     three: `Savings reserve`,
     four: `Total circulation`,
-    five: `Factors of attention`,
+    five: `Attention Factor`,
     six: `Diffusion index`,
     seven: `Call factor`,
     eight: `Single currency reserves`,
