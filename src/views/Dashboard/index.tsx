@@ -23,6 +23,7 @@ import {
 } from './components/Graph/Graph'
 import { dashboardMock } from './MockData'
 
+console.log(dashboardMock.OverviewData)
 const useStyles = makeStyles((theme) => ({
   hasRLBorder: {
     [theme.breakpoints.up(981)]: {
@@ -57,7 +58,7 @@ const Dashboard = () => {
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign
   const avgConentraction = conentractions.reduce((acc, cur) => (acc += cur), 0) / conentractions.length
-
+  const time = new Date()
   return (
     <div className="dashboard-view">
       <Typography variant="h4" style={{ fontWeight: 700, overflow: 'hidden', color: '#fff' }}>
@@ -80,7 +81,7 @@ const Dashboard = () => {
         <div style={{ fontWeight: 500, fontSize: '15px', overflow: 'hidden', lineHeight: '40px', color: '#fff' }}>
           {t('Overview')}
           <span style={{ color: 'grey', fontSize: '12px', fontWeight: 400, marginLeft: '16px' }}>
-            2020/09/09 22:22:22
+            {`${time.toLocaleDateString().replace(/\//g, '-')} ${time.toTimeString().slice(0, 8)}`}
           </span>
         </div>
       )}
@@ -200,12 +201,17 @@ const Dashboard = () => {
                         <div className="di-font">{t('Diffusion index')}</div>
                         {/* {/* <h3 className="di-content">{eleven}</h3> */}
                         <DataCell
+                          title={t('Diffusion Coefficient')}
+                          data={conentractions.length ? avgConentraction?.toString() : '0'}
+                          titleStyle={{ color: '#ABB6FF' }}
+                        />
+                        <DataCell
                           title={t('Attention Factor')}
                           data={conentractions.length ? avgConentraction?.toString() : '0'}
                           titleStyle={{ color: '#ABB6FF' }}
                         />
                         <DataCell
-                          title="Call factor"
+                          title="Call Factor"
                           data={thirteen}
                           imgUrl="/images/dashboard/cf.png"
                           titleStyle={{ color: '#ABB6FF' }}
@@ -291,9 +297,7 @@ const Dashboard = () => {
                   </Paper>
                 </Grid>
                 <Grid item lg={5} md={5} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
-                    <NineGraph />
-                  </Paper>
+                  <Paper className="ohm-card ohm-chart-card">{/* <NineGraph /> */}</Paper>
                 </Grid>
               </Grid>
             </Grid>

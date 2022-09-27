@@ -53,7 +53,6 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const { account } = useWeb3React()
   const { data: signer } = useSigner()
   const { balance, fetchStatus } = useGetBnbBalance()
-  const { balance: cakeBalance, fetchStatus: cakeFetchStatus } = useTokenBalance(bscTestnetTokens.cake.address)
   const { logout } = useAuth()
 
   const handleLogout = () => {

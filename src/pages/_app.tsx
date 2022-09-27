@@ -22,6 +22,7 @@ import { usePollCoreFarmData } from 'state/farms/hooks'
 import { Blocklist, Updaters } from '..'
 import { SentryErrorBoundary } from '../components/ErrorBoundary'
 import Menu from '../components/Menu'
+import Halo from '../components/Halo'
 import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import 'antd/dist/antd.css'
@@ -34,7 +35,6 @@ import './Dashboard.scss'
 
 const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
 
-// This config is required for number formatting
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
   DECIMAL_PLACES: 80,
@@ -141,7 +141,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
           <Component {...pageProps} />
         </Layout>
       </ShowMenu>
-      <EasterEgg iterations={2} />
+      <Halo />
       <ToastListener />
       <NetworkModal pageSupportedChains={Component.chains} />
     </ProductionErrorBoundary>
