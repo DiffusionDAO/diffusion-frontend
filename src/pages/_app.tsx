@@ -21,8 +21,8 @@ import { usePollBlockNumber } from 'state/block/hooks'
 import { usePollCoreFarmData } from 'state/farms/hooks'
 import { Blocklist, Updaters } from '..'
 import { SentryErrorBoundary } from '../components/ErrorBoundary'
-import Menu from '../components/Menu'
 import Halo from '../components/Halo'
+import Menu from '../components/Menu'
 import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import 'antd/dist/antd.css'
@@ -33,17 +33,15 @@ import './cover.scss'
 import './DiffusionChart.scss'
 import './Dashboard.scss'
 
-const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
-
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
   DECIMAL_PLACES: 80,
 })
 
 function GlobalHooks() {
-  usePollBlockNumber()
+  // usePollBlockNumber()
   useEagerConnect()
-  usePollCoreFarmData()
+  // usePollCoreFarmData()
   useUserAgent()
   useAccountEventListener()
   useSentryUser()
@@ -52,9 +50,9 @@ function GlobalHooks() {
 }
 
 function MPGlobalHooks() {
-  usePollBlockNumber()
+  // usePollBlockNumber()
   useEagerConnectMP()
-  usePollCoreFarmData()
+  // usePollCoreFarmData()
   useUserAgent()
   useAccountEventListener()
   useSentryUser()
@@ -72,18 +70,8 @@ function MyApp(props: AppProps<{ initialReduxState: any }>) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1, viewport-fit=cover"
         />
-        <meta
-          name="description"
-          content="Cheaper and faster than Uniswap? Discover PancakeSwap, the leading DEX on BNB Smart Chain (BSC) with the best farms in DeFi and a lottery for CAKE."
-        />
-        <meta name="theme-color" content="#1FC7D4" />
-        <meta name="twitter:image" content="https://app.diffusiondao.org/images/hero.png" />
-        <meta
-          name="twitter:description"
-          content="The most popular AMM on BSC! Earn CAKE through yield farming or win it in the Lottery, then stake it in Syrup Pools to earn more tokens! Initial Farm Offerings (new token launch model pioneered by PancakeSwap), NFTs, and more, on a platform you can trust."
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="🥞 PancakeSwap - A next evolution DeFi exchange on BNB Smart Chain (BSC)" />
+        <meta name="description" content="Diffusion" />
+
         <title>Diffusion</title>
         {(Component as NextPageWithLayout).mp && (
           // eslint-disable-next-line @next/next/no-sync-scripts
