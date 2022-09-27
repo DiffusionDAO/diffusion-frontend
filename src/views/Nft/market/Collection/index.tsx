@@ -39,7 +39,6 @@ const Collection = () => {
 
   return (
     <>
-      <PageMeta />
       <Header collection={collection} />
       {content}
     </>

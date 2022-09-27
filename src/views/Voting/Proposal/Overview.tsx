@@ -51,7 +51,6 @@ const Overview = () => {
 
   return (
     <Container py="40px">
-      <PageMeta />
       <Box mb="40px">
         <Link href="/voting" passHref>
           <Button as="a" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">

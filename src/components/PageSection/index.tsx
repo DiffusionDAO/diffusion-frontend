@@ -80,7 +80,7 @@ const PageSection: React.FC<React.PropsWithChildren<PageSectionProps>> = ({
 
   return (
     <Box {...containerProps}>
-      {hasCurvedDivider && dividerPosition === 'top' && (
+      {/* {hasCurvedDivider && dividerPosition === 'top' && (
         <CurvedDivider
           svgFill={svgFill}
           index={index}
@@ -90,11 +90,11 @@ const PageSection: React.FC<React.PropsWithChildren<PageSectionProps>> = ({
           clipFill={clipFill}
           dividerFill={dividerFill}
         />
-      )}
+      )} */}
       <BackgroundColor index={index} padding={padding} {...props}>
         <ChildrenWrapper {...innerProps}>{children}</ChildrenWrapper>
       </BackgroundColor>
-      {hasCurvedDivider && dividerPosition === 'bottom' && (
+      {/* {hasCurvedDivider && dividerPosition === 'bottom' && (
         <CurvedDivider
           svgFill={svgFill}
           index={index}
@@ -104,7 +104,7 @@ const PageSection: React.FC<React.PropsWithChildren<PageSectionProps>> = ({
           clipFill={clipFill}
           dividerFill={dividerFill}
         />
-      )}
+      )} */}
     </Box>
   )
 }

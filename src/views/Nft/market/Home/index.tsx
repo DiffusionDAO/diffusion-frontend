@@ -1,5 +1,5 @@
-import styled from 'styled-components'
-import { Box, Button, Flex, Heading, LinkExternal } from '@pancakeswap/uikit'
+import styled, { css } from 'styled-components'
+import { Box, Button, Flex, Heading, LinkExternal, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { NextLinkFromReactRouter } from 'components/NextLink'
 import { useTranslation } from '@pancakeswap/localization'
@@ -12,10 +12,16 @@ import { FetchStatus } from 'config/constants/types'
 import PageLoader from 'components/Loader/PageLoader'
 import useTheme from 'hooks/useTheme'
 import orderBy from 'lodash/orderBy'
-import SearchBar from '../components/SearchBar'
+import Typed from 'react-typed'
 import Collections from './Collections'
-import Newest from './Newest'
-import config from './config'
+import {
+  BackgroundWrap,
+  BackgroundTitle,
+  BackgroundDes,
+  BackgroundText,
+  NftSculptureWrap,
+  NftSculptureGif,
+} from '../Profile/components/styles'
 
 const Gradient = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientCardHeader};
@@ -50,8 +56,28 @@ const StyledHeaderInner = styled(Flex)`
     }
   }
 `
+export const MagiccubeWrap = styled.img`
+  position: absolute;
+  top: 28px;
+  bottom: -60px;
+  right: 90px;
+
+  ${({ isMobile }: { isMobile: boolean }) => {
+    if (isMobile) {
+      return css`
+        height: 300px;
+        width: 300px;
+      `
+    }
+    return css`
+      height: 420px;
+      width: 420px;
+    `
+  }};
+`
 
 const Home = () => {
+  const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { theme } = useTheme()
@@ -76,24 +102,39 @@ const Home = () => {
       ) : (
         <PageSection
           innerProps={{ style: { margin: '0', width: '100%' } }}
-          background={theme.colors.background}
           index={1}
           concaveDivider
           dividerPosition="top"
         >
+          <NftSculptureWrap isMobile={isMobile}>
+            <MagiccubeWrap isMobile={isMobile} src="/images/nfts/magicCube.png" alt="" />
+          </NftSculptureWrap>
+          <BackgroundWrap isMobile={isMobile}>
+            <BackgroundText>
+              <BackgroundTitle>
+                <Typed
+                  strings={[
+                    `${t('Discover more possibilities')}^1000`,
+                    `${t('Explore more art and digital rights space')}^1000`,
+                  ]}
+                  typeSpeed={30}
+                  style={{ fontSize: 35 }}
+                  onComplete={(self) => self.reset()}
+                />
+              </BackgroundTitle>
+              <BackgroundDes>
+                {t(
+                  'This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth',
+                )}
+              </BackgroundDes>
+            </BackgroundText>
+          </BackgroundWrap>
           <Collections
             key="newest-collections"
             title={t('Newest Collections')}
             testId="nfts-newest-collections"
             collections={newestCollections}
           />
-          {/* <Collections
-            key="hot-collections"
-            title={t('Hot Collections')}
-            testId="nfts-hot-collections"
-            collections={hotCollections}
-          /> */}
-          {/* <Newest /> */}
         </PageSection>
       )}
     </>

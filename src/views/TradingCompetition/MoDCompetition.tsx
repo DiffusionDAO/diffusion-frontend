@@ -153,7 +153,6 @@ const MoDCompetition = () => {
 
   return (
     <>
-      <PageMeta />
       <CompetitionPage id="pcs-competition-page">
         <PageSection
           style={{ paddingTop: '0px' }}

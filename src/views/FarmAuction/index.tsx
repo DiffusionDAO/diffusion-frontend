@@ -77,7 +77,6 @@ const FarmAuction = () => {
 
   return (
     <>
-      <PageMeta />
       <StyledHeader>
         <Breadcrumbs>
           <NextLink href="/" passHref>

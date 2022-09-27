@@ -164,7 +164,6 @@ const CreateProposal = () => {
 
   return (
     <Container py="40px">
-      <PageMeta />
       <Box mb="48px">
         <Breadcrumbs>
           <Link href="/">{t('Home')}</Link>

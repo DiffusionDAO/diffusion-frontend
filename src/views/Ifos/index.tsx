@@ -14,7 +14,6 @@ export const IfoPageLayout = ({ children }) => {
 
   return (
     <IfoProvider>
-      <PageMeta />
       <SubMenuItems
         items={[
           {

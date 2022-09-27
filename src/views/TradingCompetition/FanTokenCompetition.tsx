@@ -164,7 +164,6 @@ const FanTokenCompetition = () => {
 
   return (
     <>
-      <PageMeta />
       <CompetitionPage>
         <PageSection
           style={{ paddingTop: '0px' }}

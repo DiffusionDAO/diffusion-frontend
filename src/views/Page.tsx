@@ -49,7 +49,6 @@ const Page: React.FC<
 }) => {
   return (
     <>
-      <PageMeta />
       <StyledPage $removePadding={removePadding} $noMinHeight={noMinHeight} {...props}>
         {children}
         <Flex flexGrow={1} />

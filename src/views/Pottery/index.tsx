@@ -25,7 +25,6 @@ const Pottery: React.FC<React.PropsWithChildren> = () => {
 
   return (
     <Box position="relative">
-      <PageMeta />
       <Banner handleScroll={handleScroll} />
       <Box ref={potWrapperEl}>
         <Pot />

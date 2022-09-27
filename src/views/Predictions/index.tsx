@@ -69,7 +69,6 @@ const Predictions = () => {
 
   return (
     <>
-      <PageMeta />
       <Warnings />
       <RiskDisclaimer />
       <SwiperProvider>
