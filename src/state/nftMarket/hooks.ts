@@ -87,7 +87,7 @@ export const useGetNftOrdering = (collectionAddress: string) => {
 
 export const useGetNftShowOnlyOnSale = (collectionAddress: string) => {
   const [nftMarketFilters] = useAtom(nftMarketFiltersAtom)
-  return nftMarketFilters[collectionAddress]?.showOnlyOnSale ?? true
+  return nftMarketFilters[collectionAddress]?.showOnlyOnSale ?? false
 }
 
 export const useTryVideoNftMedia = () => {

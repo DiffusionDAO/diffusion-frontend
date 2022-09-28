@@ -21,6 +21,7 @@ import uniqBy from 'lodash/uniqBy'
 import fromPairs from 'lodash/fromPairs'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
+import { useNftMarketContract } from 'hooks/useContract'
 import { REQUEST_SIZE } from '../Collection/config'
 
 interface ItemListingSettings {
@@ -218,6 +219,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
     isLastPage.current = false
   }, [field, direction, showOnlyNftsOnSale, filtersJson])
 
+  const nftMarketContract = useNftMarketContract()
   const {
     data: nfts,
     status,
@@ -230,10 +232,8 @@ export const useCollectionNfts = (collectionAddress: string) => {
     },
     async (address, settingsJson, page) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
-      const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
-        const nftMarketContract = getNftMarketContract()
         const marketItems = await nftMarketContract.fetchMarketItems()
         const marketTokenIds = marketItems.filter((item) => item[4] === collectionAddress).map((item) => item[5])
         newNfts = await marketTokenIds.map(async (tokenId) => {
@@ -261,7 +261,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
     },
     { revalidateAll: true },
   )
-
+  console.log(nfts)
   const uniqueNftList: NftToken[] = useMemo(() => (nfts ? uniqBy(nfts.flat(), 'tokenId') : []), [nfts])
   fetchedNfts.current = uniqueNftList
 
