@@ -13,6 +13,8 @@ import PageLoader from 'components/Loader/PageLoader'
 import useTheme from 'hooks/useTheme'
 import orderBy from 'lodash/orderBy'
 import Typed from 'react-typed'
+import { useEffect } from 'react'
+
 import Collections from './Collections'
 import {
   BackgroundWrap,
@@ -83,17 +85,16 @@ const Home = () => {
   const { theme } = useTheme()
   const { data: collections, status } = useGetCollections()
 
-  const hotCollections = orderBy(
-    collections,
-    (collection) => (collection.totalVolumeBNB ? parseFloat(collection.totalVolumeBNB) : 0),
-    'desc',
-  )
-
   const newestCollections = orderBy(
     collections,
     (collection) => (collection.createdAt ? Date.parse(collection.createdAt) : 0),
     'desc',
   )
+  useEffect(() => {
+    if (collections) {
+      localStorage?.setItem('nfts', JSON.stringify(collections))
+    }
+  })
 
   return (
     <>

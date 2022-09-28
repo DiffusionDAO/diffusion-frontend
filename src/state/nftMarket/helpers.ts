@@ -14,7 +14,7 @@ import { formatBigNumber } from 'utils/formatBalance'
 import { getNftMarketAddress } from 'utils/addressHelpers'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import fromPairs from 'lodash/fromPairs'
-import { useSWRContract } from 'hooks/useSWRContract'
+
 import {
   ApiCollection,
   ApiCollections,
@@ -38,6 +38,7 @@ import {
   UserActivity,
 } from './types'
 import { baseNftFields, collectionBaseFields, baseTransactionFields } from './queries'
+import { useNftStorage } from './storage'
 
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const res = await fetch(`${API_NFT}/collections`)
@@ -308,6 +309,7 @@ export const getNftsOnChainMarketData = async (
   try {
     const nftMarketContract = getNftMarketContract()
     const askInfo = await nftMarketContract.fetchMarketItems()
+    console.log(askInfo)
     // const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
     // const askInfo = response?.askInfo
     if (!askInfo) return []

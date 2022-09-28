@@ -22,6 +22,7 @@ import fromPairs from 'lodash/fromPairs'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
 import { useNftMarketContract } from 'hooks/useContract'
+import { BigNumber } from '@ethersproject/bignumber'
 import { REQUEST_SIZE } from '../Collection/config'
 
 interface ItemListingSettings {
@@ -184,7 +185,12 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const fallbackMode = useRef(false)
   const fallbackModePage = useRef(0)
   const isLastPage = useRef(false)
-  const collection = useGetCollection(collectionAddress)
+  // const collection = useGetCollection(collectionAddress)
+  const cachedNfts = localStorage?.getItem('nfts')
+  const collections = JSON.parse(cachedNfts)
+  const collection = collections[collectionAddress].data[0]
+  const tokens = Object.values(collections[collectionAddress].tokens) as NftToken[]
+
   const { field, direction } = useGetNftOrdering(collectionAddress)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(collectionAddress)
   const nftFilters = useGetNftFilters(collectionAddress)
@@ -234,25 +240,25 @@ export const useCollectionNfts = (collectionAddress: string) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
-        const marketItems = await nftMarketContract.fetchMarketItems()
-        const marketTokenIds = marketItems.filter((item) => item[4] === collectionAddress).map((item) => item[5])
-        newNfts = await marketTokenIds.map(async (tokenId) => {
-          const url = `${API_NFT}/collections/${collection.address}/tokens/${tokenId.toString()}`
-          const res = await fetch(url)
-          if (res.ok) {
-            const json = await res.json()
-            return json
-          }
-          return null
-        })
-        newNfts = await Promise.all(newNfts)
+        newNfts = tokens.filter((token) => token?.marketData?.currentAskPrice !== '0')
       } else {
-        const url = `${API_NFT}/collections/${collection.address}`
-        const res = await fetch(url)
-        if (res.ok) {
-          const json = await res.json()
-          newNfts = Object.values(json[collection.address].tokens)
-        }
+        newNfts = tokens
+        // const {
+        //   nfts: allNewNfts,
+        //   fallbackMode: newFallbackMode,
+        //   fallbackPage: newFallbackPage,
+        // } = await fetchAllNfts(
+        //   collection,
+        //   settings,
+        //   page,
+        //   [],
+        //   fetchedNfts.current,
+        //   fallbackMode.current,
+        //   fallbackModePage.current,
+        // )
+        // newNfts = allNewNfts
+        // fallbackMode.current = newFallbackMode
+        // fallbackModePage.current = newFallbackPage
       }
       if (newNfts.length < REQUEST_SIZE) {
         isLastPage.current = true
@@ -261,7 +267,6 @@ export const useCollectionNfts = (collectionAddress: string) => {
     },
     { revalidateAll: true },
   )
-  console.log(nfts)
   const uniqueNftList: NftToken[] = useMemo(() => (nfts ? uniqBy(nfts.flat(), 'tokenId') : []), [nfts])
   fetchedNfts.current = uniqueNftList
 

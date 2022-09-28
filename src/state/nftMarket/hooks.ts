@@ -12,7 +12,7 @@ import shuffle from 'lodash/shuffle'
 
 import fromPairs from 'lodash/fromPairs'
 import { ApiCollections, NftToken, Collection, NftAttribute, MarketEvent } from './types'
-import { getCollection, getCollectionApi, getCollections } from './helpers'
+import { getCollection, getCollections } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 
 const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'asc' | 'desc' }
@@ -29,10 +29,7 @@ export const useGetCollection = (collectionAddress: string): Collection | undefi
   const checksummedCollectionAddress = isAddress(collectionAddress) || ''
   const { data } = useSWR(
     checksummedCollectionAddress ? ['nftMarket', 'collections', checksummedCollectionAddress.toLowerCase()] : null,
-    async () => {
-      const collection = getCollectionApi(checksummedCollectionAddress)
-      return { [collectionAddress]: collection[collectionAddress].data[0] }
-    },
+    async () => getCollection(checksummedCollectionAddress),
   )
   const collectionObject = data ?? {}
   return collectionObject[checksummedCollectionAddress]

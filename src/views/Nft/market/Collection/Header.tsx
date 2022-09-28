@@ -50,10 +50,10 @@ const Header: React.FC<React.PropsWithChildren<HeaderProps>> = ({ collection }) 
     <>
       <MarketPageHeader>
         <TopBar />
-        <BannerHeader bannerImage={banner.large} avatar={<AvatarImage src={avatar} />} />
+        <BannerHeader bannerImage={banner?.large} avatar={<AvatarImage src={avatar} />} />
         <MarketPageTitle
-          title={collection.name}
-          description={collection.description ? <Text color="textSubtle">{t(collection.description)}</Text> : null}
+          title={collection?.name}
+          description={collection?.description ? <Text color="textSubtle">{t(collection?.description)}</Text> : null}
         >
           <StatBox>
             <StatBoxItem title={t('Items')} stat={formatNumber(Number(totalSupply), 0, 0)} />
@@ -61,7 +61,7 @@ const Header: React.FC<React.PropsWithChildren<HeaderProps>> = ({ collection }) 
               title={t('Items listed')}
               stat={numberTokensListed ? formatNumber(Number(numberTokensListed), 0, 0) : '0'}
             />
-            <LowestPriceStatBoxItem collectionAddress={collection.address} />
+            <LowestPriceStatBoxItem collectionAddress={collection?.address} />
             <StatBoxItem title={t('Vol. (%symbol%)', { symbol: 'BNB' })} stat={volume} />
           </StatBox>
         </MarketPageTitle>

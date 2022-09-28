@@ -3,6 +3,8 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { SWRConfig, unstable_serialize } from 'swr'
 import { getCollection, getCollectionApi } from 'state/nftMarket/helpers'
 import CollectionPageRouter from 'views/Nft/market/Collection/CollectionPageRouter'
+import { useNftStorage } from 'state/nftMarket/storage'
+import Collection from 'views/Nft/market/Collection'
 
 const CollectionPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -33,6 +35,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   try {
     const collectionData = await getCollection(collectionAddress)
+    console.log('collectionData:', collectionData)
+
     if (collectionData) {
       return {
         props: {

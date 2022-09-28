@@ -1,7 +1,12 @@
 import { NftFilter, NftActivityFilter, MarketEvent, NftAttribute } from 'state/nftMarket/types'
 import { useAtom } from 'jotai'
 import cloneDeep from 'lodash/cloneDeep'
-import { nftMarketFiltersAtom, nftMarketActivityFiltersAtom, tryVideoNftMediaAtom } from 'state/nftMarket/atoms'
+import {
+  nftMarketFiltersAtom,
+  nftMarketActivityFiltersAtom,
+  tryVideoNftMediaAtom,
+  nftMarketCollectionAtom,
+} from 'state/nftMarket/atoms'
 import { useCallback } from 'react'
 
 const initialNftFilterState: NftFilter = {
@@ -21,7 +26,16 @@ const initialNftActivityFilterState: NftActivityFilter = {
 export function useNftStorage() {
   const [nftMarketFilters, setNftMarketFilters] = useAtom(nftMarketFiltersAtom)
   const [nftMarketActivityFilters, setNftMarketActivityFilters] = useAtom(nftMarketActivityFiltersAtom)
+  const [nftMarketCollection, setNftMarketCollection] = useAtom(nftMarketCollectionAtom)
   const [tryVideoNftMedia, setTryVideoNftMedia] = useAtom(tryVideoNftMediaAtom)
+
+  const addNftMarketCollection = useCallback(
+    ({ collection, data }: { collection: string; data: any }) => {
+      nftMarketCollection[collection] = data
+      setNftMarketCollection({ ...nftMarketCollection })
+    },
+    [setNftMarketCollection, nftMarketCollection],
+  )
 
   const addActivityTypeFilters = useCallback(
     ({ collection, field }: { collection: string; field: MarketEvent }) => {
@@ -155,7 +169,9 @@ export function useNftStorage() {
   return {
     nftMarketFilters,
     nftMarketActivityFilters,
+    nftMarketCollection,
     tryVideoNftMedia,
+    addNftMarketCollection,
     addActivityTypeFilters,
     addActivityCollectionFilters,
     removeActivityTypeFilters,

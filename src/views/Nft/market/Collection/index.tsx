@@ -2,7 +2,7 @@ import PageLoader from 'components/Loader/PageLoader'
 import { PageMeta } from 'components/Layout/Page'
 import dynamic from 'next/dynamic'
 import { NextRouter, useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import Header from './Header'
 import Items from './Items'
@@ -19,8 +19,11 @@ const getHashFromRouter = (router: NextRouter) => router.asPath.match(/#([a-z0-9
 const Collection = () => {
   const router = useRouter()
   const collectionAddress = router.query.collectionAddress as string
-  const collection = useGetCollection(collectionAddress)
 
+  const nfts = localStorage?.getItem('nfts')
+  const collections = JSON.parse(nfts)
+  const collection = collections[collectionAddress].data[0]
+  // const collection = useGetCollection(collectionAddress)
   const hash = useMemo(() => getHashFromRouter(router)?.[0], [router])
 
   if (!collection) {

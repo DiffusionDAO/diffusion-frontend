@@ -13,7 +13,11 @@ const Items = () => {
   const collectionAddress = useRouter().query.collectionAddress as string
   const [sortBy, setSortBy] = useState('updatedAt')
   const { t } = useTranslation()
-  const collection = useGetCollection(collectionAddress)
+  // const collection = useGetCollection(collectionAddress)
+  const nfts = localStorage?.getItem('nfts')
+  const collections = JSON.parse(nfts)
+  const collection = collections[collectionAddress].data[0]
+
   const isPBCollection = collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase()
 
   const sortByItems = [
