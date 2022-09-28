@@ -132,10 +132,10 @@ const IndividualPancakeBunnyPageBase: React.FC<React.PropsWithChildren<Individua
         </Flex>
         <ForSaleTableCard bunnyId={bunnyId} nftMetadata={nftMetadata} onSuccessSale={refreshCheapestNft} />
       </TwoColumnsContainer>
-      <MoreFromThisCollection
+      {/* <MoreFromThisCollection
         collectionAddress={pancakeBunniesAddress}
         currentTokenName={cheapestBunny?.name || nothingForSaleBunny?.name}
-      />
+      /> */}
     </Page>
   )
 }

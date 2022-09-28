@@ -43,6 +43,7 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const res = await fetch(`${API_NFT}/collections`)
   if (res.ok) {
     const json = await res.json()
+    console.log('getCollectionsApi:', json)
     return json
   }
   console.error('Failed to fetch NFT collections', res.statusText)
@@ -80,9 +81,7 @@ export const getCollections = async (): Promise<Record<string, any>> => {
 
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
-    const collection = (await getCollectionApi(collectionAddress)) as any
-    console.log('collection:', collection)
-
+    const collection = await getCollectionApi(collectionAddress)
     const collectionData = { [collectionAddress]: collection[collectionAddress].data[0] }
     return collectionData
   } catch (error) {
@@ -93,11 +92,10 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
 
 export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
   const url = `${API_NFT}/collections/${collectionAddress}`
-  console.log(url)
   const res = await fetch(url)
   if (res.ok) {
     const json = await res.json()
-    return json.data
+    return json
   }
   console.error(`API: Failed to fetch NFT collection ${collectionAddress}`, res.statusText)
   return null

@@ -73,7 +73,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
           <ActivityCard nft={nft} />
         </OwnerActivityContainer>
       </TwoColumnsContainer>
-      <MoreFromThisCollection collectionAddress={collectionAddress} currentTokenName={nft.name} />
+      {/* <MoreFromThisCollection collectionAddress={collectionAddress} currentTokenName={nft.name} /> */}
     </Page>
   )
 }

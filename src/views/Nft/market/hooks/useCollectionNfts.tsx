@@ -19,6 +19,8 @@ import useSWRInfinite from 'swr/infinite'
 import isEmpty from 'lodash/isEmpty'
 import uniqBy from 'lodash/uniqBy'
 import fromPairs from 'lodash/fromPairs'
+import { getNftMarketContract } from 'utils/contractHelpers'
+import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
 import { REQUEST_SIZE } from '../Collection/config'
 
 interface ItemListingSettings {
@@ -231,24 +233,26 @@ export const useCollectionNfts = (collectionAddress: string) => {
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
-        newNfts = await fetchMarketDataNfts(collection, settings, page, tokenIdsFromFilter)
+        const nftMarketContract = getNftMarketContract()
+        const marketItems = await nftMarketContract.fetchMarketItems()
+        const marketTokenIds = marketItems.filter((item) => item[4] === collectionAddress).map((item) => item[5])
+        newNfts = await marketTokenIds.map(async (tokenId) => {
+          const url = `${API_NFT}/collections/${collection.address}/tokens/${tokenId.toString()}`
+          const res = await fetch(url)
+          if (res.ok) {
+            const json = await res.json()
+            return json
+          }
+          return null
+        })
+        newNfts = await Promise.all(newNfts)
       } else {
-        const {
-          nfts: allNewNfts,
-          fallbackMode: newFallbackMode,
-          fallbackPage: newFallbackPage,
-        } = await fetchAllNfts(
-          collection,
-          settings,
-          page,
-          tokenIdsFromFilter,
-          fetchedNfts.current,
-          fallbackMode.current,
-          fallbackModePage.current,
-        )
-        newNfts = allNewNfts
-        fallbackMode.current = newFallbackMode
-        fallbackModePage.current = newFallbackPage
+        const url = `${API_NFT}/collections/${collection.address}`
+        const res = await fetch(url)
+        if (res.ok) {
+          const json = await res.json()
+          newNfts = Object.values(json[collection.address].tokens)
+        }
       }
       if (newNfts.length < REQUEST_SIZE) {
         isLastPage.current = true
