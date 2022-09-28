@@ -13,7 +13,7 @@ import PrizeFunds from './components/PrizeFunds'
 import FAQ from './components/FAQ'
 
 const Pottery: React.FC<React.PropsWithChildren> = () => {
-  usePotteryFetch()
+  // usePotteryFetch()
   const potWrapperEl = useRef<HTMLDivElement>(null)
 
   const handleScroll = () => {

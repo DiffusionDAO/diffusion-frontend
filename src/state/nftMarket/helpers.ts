@@ -81,7 +81,7 @@ export const getCollections = async (): Promise<Record<string, any>> => {
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
     const collection = (await getCollectionApi(collectionAddress)) as any
-    console.log(collection)
+    console.log('collection:', collection)
 
     const collectionData = { [collectionAddress]: collection[collectionAddress].data[0] }
     return collectionData

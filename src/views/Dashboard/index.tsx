@@ -310,16 +310,16 @@ const Dashboard = () => {
 
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <Grid container spacing={2}>
-                {/* <Grid item lg={4} md={4} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                <ElevenGraph />
-              </Paper>
-            </Grid>
-            <Grid item lg={4} md={4} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
-                <TwelveGraph />
-              </Paper>
-            </Grid> */}
+                <Grid item lg={4} md={4} sm={12} xs={12}>
+                  <Paper className="ohm-card ohm-chart-card">
+                    <ElevenGraph />
+                  </Paper>
+                </Grid>
+                <Grid item lg={4} md={4} sm={12} xs={12}>
+                  <Paper className="ohm-card ohm-chart-card">
+                    <TwelveGraph />
+                  </Paper>
+                </Grid>
                 <Grid item lg={4} md={4} sm={12} xs={12}>
                   <Paper className="ohm-card ohm-chart-card">
                     <ThirteenGraph />
