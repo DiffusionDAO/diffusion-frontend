@@ -70,7 +70,6 @@ const BondModal: React.FC<BondModalProps> = ({
   const buy = async () => {
     if (referral && account && referral !== account) {
       const existReferral = await bond.referrals(account)
-      console.log('existReferral:', existReferral)
       if (existReferral === zeroAddress) {
         // await bond.deposit(amount, referral)
         const response = await fetch('https://middle.diffusiondao.org/deposit', {
@@ -85,7 +84,6 @@ const BondModal: React.FC<BondModalProps> = ({
           }),
         })
         const json = await response.json()
-        console.log(json)
       }
     }
   }

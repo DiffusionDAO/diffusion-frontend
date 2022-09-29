@@ -1,9 +1,10 @@
 import { BinanceIcon, Box, Button, Card, CardBody, Flex, Skeleton, Text, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
-
+import { formatUnits, parseUnits } from '@ethersproject/units'
+import { BigNumber } from '@ethersproject/bignumber'
 import { NftToken } from 'state/nftMarket/types'
-import { multiplyPriceByAmount } from 'utils/prices'
+
 import { formatNumber } from 'utils/formatBalance'
 import NFTMedia from 'views/Nft/market/components/NFTMedia'
 import EditProfileModal from 'views/Profile/components/EditProfileModal'
@@ -25,12 +26,11 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   nftIsProfilePic,
   onSuccess,
 }) => {
-  console.log('MainNFTCard:')
   const { t } = useTranslation()
   const bnbBusdPrice = useBNBBusdPrice()
 
-  const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ? parseFloat(nft.marketData?.currentAskPrice) : 0
-  const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, currentAskPriceAsNumber)
+  const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ?? '0'
+  // const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, currentAskPriceAsNumber)
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
     <SellModal variant={nft.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
@@ -79,20 +79,20 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
               <Text color="textSubtle" mt={['16px', '16px', '48px']}>
                 {t('Price')}
               </Text>
-              {currentAskPriceAsNumber > 0 ? (
+              {currentAskPriceAsNumber !== '0' ? (
                 <Flex alignItems="center" mt="8px">
                   <BinanceIcon width={18} height={18} mr="4px" />
                   <Text fontSize="24px" bold mr="4px">
-                    {formatNumber(currentAskPriceAsNumber, 0, 5)}
+                    {formatUnits(BigNumber.from(currentAskPriceAsNumber))}
                   </Text>
-                  {bnbBusdPrice ? (
+                  {/* {bnbBusdPrice ? (
                     <Text color="textSubtle">{`(~${priceInUsd.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })} USD)`}</Text>
                   ) : (
                     <Skeleton width="64px" />
-                  )}
+                  )} */}
                 </Flex>
               ) : (
                 <Text>{t('Not for sale')}</Text>

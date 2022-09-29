@@ -22,8 +22,6 @@ const MainPancakeBunnyCard: React.FC<React.PropsWithChildren<MainPancakeBunnyCar
   nothingForSaleBunny,
   onSuccessSale,
 }) => {
-  console.log('MainPancakeBunnyCard:')
-
   const { t } = useTranslation()
   const bnbBusdPrice = useBNBBusdPrice()
   const { account } = useWeb3React()

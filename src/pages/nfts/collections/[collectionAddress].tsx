@@ -35,7 +35,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   try {
     const collectionData = await getCollection(collectionAddress)
-    console.log('collectionData:', collectionData)
 
     if (collectionData) {
       return {

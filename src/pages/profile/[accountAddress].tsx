@@ -298,7 +298,6 @@ function NftProfilePage() {
       }),
     })
     const json = await response.json()
-    console.log(json)
 
     if (option === 'stake' && selectedCount > 0) submitStake()
   }

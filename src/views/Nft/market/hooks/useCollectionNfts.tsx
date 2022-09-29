@@ -6,10 +6,18 @@ import {
   NftToken,
   Collection,
 } from 'state/nftMarket/types'
-import { useGetNftFilters, useGetNftOrdering, useGetNftShowOnlyOnSale, useGetCollection } from 'state/nftMarket/hooks'
+import {
+  useGetNftFilters,
+  useGetNftOrdering,
+  useGetNftShowOnlyOnSale,
+  useGetCollection,
+  useGetCollections,
+} from 'state/nftMarket/hooks'
 import { FetchStatus } from 'config/constants/types'
 import {
   fetchNftsFiltered,
+  getCollectionApi,
+  getCollectionsApi,
   getMarketDataForTokenIds,
   getNftApi,
   getNftsFromCollectionApi,
@@ -186,11 +194,15 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const fallbackModePage = useRef(0)
   const isLastPage = useRef(false)
   // const collection = useGetCollection(collectionAddress)
-  const cachedNfts = localStorage?.getItem('nfts')
-  const collections = JSON.parse(cachedNfts)
+  const parsed = JSON.parse(localStorage?.getItem('nfts'))
+  const collections = Object.keys(parsed).length
+    ? parsed
+    : getCollectionsApi().then((res: any) => {
+        localStorage?.setItem('nfts', JSON.stringify(res))
+      })
   const collection = collections[collectionAddress].data[0]
-  const tokens = Object.values(collections[collectionAddress].tokens) as NftToken[]
 
+  const tokens = Object.values(collections[collectionAddress]?.tokens) as NftToken[]
   const { field, direction } = useGetNftOrdering(collectionAddress)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(collectionAddress)
   const nftFilters = useGetNftFilters(collectionAddress)
@@ -238,11 +250,25 @@ export const useCollectionNfts = (collectionAddress: string) => {
     },
     async (address, settingsJson, page) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
+      const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
-        newNfts = tokens.filter((token) => token?.marketData?.currentAskPrice !== '0')
+        const marketItems = await nftMarketContract.fetchMarketItems()
+        const marketTokenIds = marketItems.filter((item) => item[4] === collectionAddress).map((item) => item[5])
+        newNfts = await marketTokenIds.map(async (tokenId) => {
+          const url = `${API_NFT}/collections/${collection.address}/tokens/${tokenId.toString()}`
+          const res = await fetch(url)
+          if (res.ok) {
+            const json = await res.json()
+            return json
+          }
+          return {}
+        })
+        newNfts = await Promise.all(newNfts)
+        // eslint-disable-next-line no-return-assign, no-param-reassign
+        newNfts.map((item) => (collections[collection.address].tokens[item.tokenId] = item))
+        localStorage?.setItem('nfts', JSON.stringify(collections))
       } else {
-        newNfts = tokens
         // const {
         //   nfts: allNewNfts,
         //   fallbackMode: newFallbackMode,
@@ -259,6 +285,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
         // newNfts = allNewNfts
         // fallbackMode.current = newFallbackMode
         // fallbackModePage.current = newFallbackPage
+        newNfts = tokens.slice(page * REQUEST_SIZE, (page + 1) * REQUEST_SIZE)
       }
       if (newNfts.length < REQUEST_SIZE) {
         isLastPage.current = true

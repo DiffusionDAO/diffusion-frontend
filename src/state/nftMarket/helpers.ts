@@ -44,7 +44,6 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const res = await fetch(`${API_NFT}/collections`)
   if (res.ok) {
     const json = await res.json()
-    console.log('getCollectionsApi:', json)
     return json
   }
   console.error('Failed to fetch NFT collections', res.statusText)
@@ -309,7 +308,6 @@ export const getNftsOnChainMarketData = async (
   try {
     const nftMarketContract = getNftMarketContract()
     const askInfo = await nftMarketContract.fetchMarketItems()
-    console.log(askInfo)
     // const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
     // const askInfo = response?.askInfo
     if (!askInfo) return []

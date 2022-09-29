@@ -31,21 +31,6 @@ const Header: React.FC<React.PropsWithChildren<HeaderProps>> = ({ collection }) 
       })
     : '0'
 
-  const itemsConfig = [
-    {
-      label: t('Items'),
-      href: `${nftsBaseUrl}/collections/${collectionAddress}`,
-    },
-    {
-      label: t('Traits'),
-      href: `${nftsBaseUrl}/collections/${collectionAddress}#traits`,
-    },
-    {
-      label: t('Activity'),
-      href: `${nftsBaseUrl}/collections/${collectionAddress}#activity`,
-    },
-  ]
-
   return (
     <>
       <MarketPageHeader>
@@ -66,9 +51,6 @@ const Header: React.FC<React.PropsWithChildren<HeaderProps>> = ({ collection }) 
           </StatBox>
         </MarketPageTitle>
       </MarketPageHeader>
-      <Container>
-        <BaseSubMenu items={itemsConfig} activeItem={router.asPath} mt="24px" mb="8px" />
-      </Container>
     </>
   )
 }

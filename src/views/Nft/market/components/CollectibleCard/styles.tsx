@@ -49,12 +49,12 @@ export const CostLabel: React.FC<React.PropsWithChildren<CostLabelProps>> = ({ c
 
   return (
     <Flex alignItems="center" {...props}>
-      {priceInUsd > 0 && (
+      {/* {priceInUsd > 0 && (
         <Text fontSize="12px" color="textSubtle">{`($${priceInUsd.toLocaleString(undefined, {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         })})`}</Text>
-      )}
+      )} */}
       <BNBAmountLabel amount={cost} />
     </Flex>
   )

@@ -56,7 +56,6 @@ const Mint = () => {
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
   const dfsAddress = getDFSAddress()
-  console.log(dfsAddress)
   const tokenContract = useERC20(dfsAddress)
 
   const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)

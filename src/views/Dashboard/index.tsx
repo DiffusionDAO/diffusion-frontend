@@ -23,7 +23,6 @@ import {
 } from './components/Graph/Graph'
 import { dashboardMock } from './MockData'
 
-console.log(dashboardMock.OverviewData)
 const useStyles = makeStyles((theme) => ({
   hasRLBorder: {
     [theme.breakpoints.up(981)]: {
