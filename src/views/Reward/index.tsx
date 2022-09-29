@@ -124,7 +124,7 @@ const Reward = () => {
   ] = [...(data ?? [])]
   const time = new Date((savingInterestTime?.toNumber() + 8 * 3600) * 1000)
   const nextSavingInterestChange = `${time.toLocaleDateString().replace(/\//g, '-')} ${time.toTimeString().slice(0, 8)}`
-  const fiveDayROI = ((1 + savingsPerSecond?.toNumber()) ** 15 - 1).toString()
+  const fiveDayROI = ((1 + savingsPerSecond?.toNumber()) ** 15 - 1)?.toString()
   const savingInterest = ((8 * 3600) / savingVestingSeconds) * 100
   useEffect(() => {
     if (account) {
@@ -180,7 +180,7 @@ const Reward = () => {
                 </DiffusionGoldHeader>
                 <Petal src="/images/reward/petal.png" isMobile={isMobile} />
                 <RewardText>{t('Rewards')}</RewardText>
-                <RewardValueDiv>{BigNumber.from(me.dfs ?? 0).toString()}</RewardValueDiv>
+                <RewardValueDiv>{BigNumber.from(me.dfs ?? BigNumber.from(0))?.toString()}</RewardValueDiv>
                 <ExtractBtn
                   onClick={async () => {
                     await dfsMineContract.withdrawSocialReward()
@@ -223,7 +223,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem1.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#00FFEE' }}>
-                            {BigNumber.from(me?.power ?? 0).toString()}
+                            {BigNumber.from(me?.power ?? BigNumber.from(0))?.toString()}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Unlocked SPOS value')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -236,8 +236,8 @@ const Reward = () => {
                           <MySposDashboardValue className="alignRight" style={{ color: 'grey' }}>
                             {BigNumber.from(me?.power ?? 0)
                               .mul(2)
-                              .sub(BigNumber.from(me?.totalUnlockedPower ?? 0))
-                              .toString()}
+                              .sub(BigNumber.from(me?.totalUnlockedPower ?? BigNumber.from(0)))
+                              ?.toString()}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Locked SPOS value')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -248,7 +248,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>
-                            {BigNumber.from(me?.totalUnlockedPower ?? 0).toString()}
+                            {BigNumber.from(me?.totalUnlockedPower ?? BigNumber.from(0))?.toString()}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Networking unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -267,8 +267,8 @@ const Reward = () => {
                       <MySposDashboardMiddleItem>
                         <MySposDashboardMiddleItemValue>
                           {BigNumber.from(me?.power ?? 0)
-                            .add(BigNumber.from(me?.totalUnlockedPower ?? 0))
-                            .toString()}
+                            .add(BigNumber.from(me?.totalUnlockedPower ?? BigNumber.from(0)))
+                            ?.toString()}
                         </MySposDashboardMiddleItemValue>
                         <MySposDashboardMiddleItemDes>{t('Valid SPOS value')}</MySposDashboardMiddleItemDes>
                       </MySposDashboardMiddleItem>
@@ -351,7 +351,7 @@ const Reward = () => {
                   <MoneyInput
                     prefix="$"
                     suffix="ALL"
-                    value={stakeAmount.toString()}
+                    value={stakeAmount?.toString()}
                     onInput={(e: any) => setStakeAmount(e.target.value)}
                   />
                   <BtnWrap>
