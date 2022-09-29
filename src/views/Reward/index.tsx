@@ -351,7 +351,7 @@ const Reward = () => {
                   <MoneyInput
                     prefix="$"
                     suffix="ALL"
-                    value={stakeAmount}
+                    value={stakeAmount.toString()}
                     onInput={(e: any) => setStakeAmount(e.target.value)}
                   />
                   <BtnWrap>
@@ -383,7 +383,7 @@ const Reward = () => {
           </CardWrap>
         </>
       )}
-      {detailModalVisible ? <DetailModal detailData={} onClose={closeDetailModal} /> : null}
+      {detailModalVisible ? <DetailModal detailData={me.unlockedPower} onClose={closeDetailModal} /> : null}
       {!account && (
         <NoPower
           title={t('You cannot view this page right now')}
