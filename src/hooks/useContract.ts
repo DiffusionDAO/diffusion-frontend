@@ -62,6 +62,7 @@ import {
   getDFSNFTContract,
   getMineContract,
   getBondContract,
+  getDFSContract,
 } from 'utils/contractHelpers'
 import { useSigner } from 'wagmi'
 
@@ -388,7 +389,10 @@ export const useDFSMineContract = () => {
   const { data: signer } = useSigner()
   return useMemo(() => getMineContract(signer), [signer])
 }
-
+export const useDFSContract = () => {
+  const { data: signer } = useSigner()
+  return useMemo(() => getDFSContract(signer), [signer])
+}
 export const useBondContract = () => {
   const { data: signer } = useSigner()
   return useMemo(() => getBondContract(signer), [signer])

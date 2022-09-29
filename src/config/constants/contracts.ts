@@ -162,15 +162,15 @@ export default {
   },
   dfs: {
     56: '',
-    97: '0xd49f9D8F0aB1C2F056e1F0232d5b9989F8a12CeF',
+    97: '0x35fC4EB5fAc6625fD4B8EaE35212a9789321C42b',
   },
   starlightNft: {
     56: '',
     97: '0x88eBFd7841D131BCeab3e7149217aa8e36985a40',
   },
   dfsMine: {
-    56: '',
-    97: '0x73c76B6D0ff5Cd1144d0ff664c4d7Cf0E90Bf895',
+    56: '0x66936c9a16C37D437BCDa9307b71B3a710591c03',
+    97: '0x66936c9a16C37D437BCDa9307b71B3a710591c03',
   },
   dfsNFT: {
     56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',

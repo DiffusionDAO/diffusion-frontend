@@ -130,6 +130,7 @@ export const getUSDTAddress = () => {
 export const getDFSAddress = () => {
   return getAddress(addresses.dfs)
 }
+
 export const getBondAddress = () => {
   return getAddress(addresses.bond)
 }

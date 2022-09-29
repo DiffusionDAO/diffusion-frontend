@@ -1,5 +1,28 @@
 [
   {
+    "inputs": [],
+    "name": "claim",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_dfs",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_nft",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -36,13 +59,6 @@
     ],
     "name": "OwnershipTransferred",
     "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "claim",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
   },
   {
     "inputs": [],
@@ -103,27 +119,19 @@
             "internalType": "uint256",
             "name": "power",
             "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bondReward",
+            "type": "uint256"
           }
         ],
-        "internalType": "struct DFSMine.PowerInfo[]",
+        "internalType": "struct DFSMine.Update[]",
         "name": "all",
         "type": "tuple[]"
       }
     ],
     "name": "setPower",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_days",
-        "type": "uint256"
-      }
-    ],
-    "name": "setReleaseDay",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -183,6 +191,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "stakeSavings",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "newOwner",
         "type": "address"
@@ -201,7 +222,20 @@
         "type": "uint256"
       }
     ],
-    "name": "unStakeNFT",
+    "name": "unstakeNFT",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "unstakeSavings",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -214,20 +248,18 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_dfsToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_dfsNFT",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
+    "name": "withdrawBondReward",
+    "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "constructor"
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawSocialReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -263,10 +295,10 @@
   },
   {
     "inputs": [],
-    "name": "dfsNFT",
+    "name": "Dfs",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IERC20",
         "name": "",
         "type": "address"
       }
@@ -276,23 +308,10 @@
   },
   {
     "inputs": [],
-    "name": "dfsPerSecond",
+    "name": "DfsNft",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "dfsToken",
-    "outputs": [
-      {
-        "internalType": "address",
+        "internalType": "contract IERC721",
         "name": "",
         "type": "address"
       }
@@ -335,6 +354,25 @@
       }
     ],
     "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getReward",
+    "outputs": [
+      {
+        "internalType": "uint256[9]",
+        "name": "",
+        "type": "uint256[9]"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -390,7 +428,7 @@
   },
   {
     "inputs": [],
-    "name": "lastRewardTime",
+    "name": "lastTime",
     "outputs": [
       {
         "internalType": "uint256",
@@ -435,7 +473,26 @@
         "type": "address"
       }
     ],
-    "name": "pendingDfs",
+    "name": "pendingReward",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "pendingSavings",
     "outputs": [
       {
         "internalType": "uint256",
@@ -448,7 +505,46 @@
   },
   {
     "inputs": [],
-    "name": "releaseDays",
+    "name": "rewardPerSecond",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "savingInterestTime",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "savingsPerSecond",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "savingVestingSeconds",
     "outputs": [
       {
         "internalType": "uint256",
@@ -462,6 +558,32 @@
   {
     "inputs": [],
     "name": "totalPower",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalSavings",
     "outputs": [
       {
         "internalType": "uint256",
@@ -526,12 +648,27 @@
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "power",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "power",
+        "name": "socialReward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "bondReward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "savings",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stakedSavings",
         "type": "uint256"
       }
     ],

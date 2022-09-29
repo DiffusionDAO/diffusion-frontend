@@ -44,8 +44,8 @@ export const formatNumber = (number: number, minPrecision = 2, maxPrecision = 2)
  * Note: does NOT round
  */
 export const formatBigNumber = (number: EthersBigNumber, displayDecimals = 18, decimals = 18) => {
-  const remainder = number.mod(EthersBigNumber.from(10).pow(decimals - displayDecimals))
-  return formatUnits(number.sub(remainder), decimals)
+  const remainder = number?.mod(EthersBigNumber.from(10).pow(decimals - displayDecimals))
+  return formatUnits(number?.sub(remainder), decimals)
 }
 
 /**

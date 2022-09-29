@@ -1,8 +1,8 @@
 {
-  "short_name": "PancakeSwap",
-  "name": "PancakeSwap",
-  "description": "Farm CAKE with Pancake LP Tokens",
-  "homepage_url": "https://pancakeswap.finance",
+  "short_name": "Diffusion",
+  "name": "Diffusion",
+  "description": "Farm DFS with LP Tokens",
+  "homepage_url": "https://app.diffusiondao.org",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#1FC7D4",
@@ -17,8 +17,8 @@
     {
       "src": "logo.png",
       "type": "image/png",
-      "sizes": "256x256"
+      "sizes": ""
     }
   ],
-  "iconPath": "/images/cake.svg"
+  "iconPath": "/images/logo.svg"
 }
