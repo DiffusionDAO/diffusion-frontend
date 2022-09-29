@@ -130,9 +130,9 @@ const Reward = () => {
     if (account) {
       // eslint-disable-next-line @typescript-eslint/no-shadow
       fetch('https://middle.diffusiondao.org/referrals').then((res) =>
-        res.json().then((res) => {
-          setReferrals(res)
-          setMe(res[account])
+        res.json().then((response) => {
+          setReferrals(response)
+          setMe(response[account])
         }),
       )
       // dfsMineContract.getReward(account).then(res => {
@@ -198,10 +198,10 @@ const Reward = () => {
                 </MySposHeader>
                 <MySposOveview>
                   <MySposOveviewItem>
-                    <DataCell label={t('Next payout')} value={0} valueDivStyle={{ fontSize: '16px' }} />
+                    <DataCell label={t('Next payout')} value="0" valueDivStyle={{ fontSize: '16px' }} />
                   </MySposOveviewItem>
                   <MySposOveviewItem>
-                    <DataCell label={t('Next reward')} value={0} valueDivStyle={{ fontSize: '16px' }} />
+                    <DataCell label={t('Next reward')} value="0" valueDivStyle={{ fontSize: '16px' }} />
                   </MySposOveviewItem>
                   <MySposOveviewItem>
                     <DataCell
@@ -280,7 +280,7 @@ const Reward = () => {
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Rewards')}</RewardText>
                         {/* <RewardValueDiv>{pendingReward?.toString()}</RewardValueDiv> */}
-                        <RewardValueDiv>{0}</RewardValueDiv>
+                        <RewardValueDiv>0</RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
