@@ -32,6 +32,8 @@ import {
   CountInput,
   DrawBlindBoxTextBtn,
   DrawBlindBoxPrimaryBtn,
+  UnWithdrawCount,
+  CountWrap,
 } from './style'
 import DataCell from '../../components/ListDataCell'
 import BlindBoxModal from './components/BlindBoxModal'
@@ -182,9 +184,14 @@ const Mint = () => {
                     </DalaCardValueDiv>
                   </DalaCardCellWrap>
                 </DalaCardList>
-                <AvailableCount>
-                  {t('Balance')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
-                </AvailableCount>
+                <CountWrap>
+                  <AvailableCount>
+                    {t('Balance')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
+                  </AvailableCount>
+                  <UnWithdrawCount>
+                    {t('未提取额度')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
+                  </UnWithdrawCount>
+                </CountWrap>
                 <ActionWrap>
                   <ActionLeft>
                     <DrawBlindBoxTextBtn
@@ -236,7 +243,14 @@ const Mint = () => {
                   </ActionRight>
                 </ActionWrap>
                 <DrawBlindBoxPrimaryBtn className="orangeBtn" onClick={() => mint('senior')}>
-                  {t('Mint')}
+                  {t('可用额度铸造')}
+                </DrawBlindBoxPrimaryBtn>
+                <DrawBlindBoxPrimaryBtn
+                  className="orangeBtn"
+                  onClick={() => mint('senior')}
+                  style={{ marginTop: '20px' }}
+                >
+                  {t('未提取额度铸造')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>
             </DrawBlindBoxItem>
@@ -273,9 +287,14 @@ const Mint = () => {
                     </DalaCardValueDiv>
                   </DalaCardCellWrap>
                 </DalaCardList>
-                <AvailableCount>
-                  {t('Balance')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
-                </AvailableCount>
+                <CountWrap>
+                  <AvailableCount>
+                    {t('Balance')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
+                  </AvailableCount>
+                  <UnWithdrawCount>
+                    {t('未提取额度')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
+                  </UnWithdrawCount>
+                </CountWrap>
                 <ActionWrap>
                   <ActionLeft>
                     <DrawBlindBoxTextBtn
@@ -327,7 +346,14 @@ const Mint = () => {
                   </ActionRight>
                 </ActionWrap>
                 <DrawBlindBoxPrimaryBtn className="purpleBtn" onClick={() => mint('ordinary')}>
-                  {t('Mint')}
+                  {t('可用额度铸造')}
+                </DrawBlindBoxPrimaryBtn>
+                <DrawBlindBoxPrimaryBtn
+                  className="purpleBtn"
+                  onClick={() => mint('ordinary')}
+                  style={{ marginTop: '20px' }}
+                >
+                  {t('未提取额度铸造')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>
             </DrawBlindBoxItem>

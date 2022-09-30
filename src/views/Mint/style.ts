@@ -98,7 +98,20 @@ export const DalaCardValueDiv = styled.div`
   line-height: 40px;
 `
 export const ColorFont = styled.span``
+export const CountWrap = styled.div`
+  display: flex;
+`
 export const AvailableCount = styled.div`
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ffffff;
+`
+export const UnWithdrawCount = styled.div`
+  text-align: right;
   width: 100%;
   height: 30px;
   line-height: 30px;

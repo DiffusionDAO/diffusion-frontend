@@ -115,6 +115,11 @@ nav {
   border-image: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%) 4 4;
   opacity: 0.6;
 }
+.ant-modal-confirm-body {
+  .ant-modal-confirm-title {
+    color: #fff;
+  }
+}
 
 .ant-modal-content {
   background: #141529;
