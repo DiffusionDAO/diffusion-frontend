@@ -169,10 +169,13 @@ const Reward = () => {
   const bondRewardDetailKeys = Object.keys(me?.dfsBondRewardDetail ?? {})
   const unlockedPowerDetailKeys = Object.keys(me?.unlockedPowerDetail ?? {})
   const bondRewardDetailData = bondRewardDetailKeys.map((key) => {
-    return { contributors: key, results: me?.dfsBondRewardDetail[key] }
+    return { contributors: key, results: formatBigNumber(BigNumber.from(me?.dfsBondRewardDetail[key]), 5) }
   })
   const socialRewardDetailData = unlockedPowerDetailKeys.map((key) => {
-    return { contributors: key, results: Object.values(me?.unlockedPowerDetail[key]) }
+    return {
+      contributors: key,
+      results: formatBigNumber(BigNumber.from(Object.values(me?.unlockedPowerDetail[key])[0]), 5),
+    }
   })
   useEffect(() => {
     if (account) {
