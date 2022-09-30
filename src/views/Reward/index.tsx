@@ -113,7 +113,7 @@ const Reward = () => {
   }
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [reward, setReward] = useState([])
-  // const { data: epoch } = useSWRContract([dfsMineContract, 'epoch'])
+  const { data: pendingBondReward } = useSWRContract([dfsMineContract, 'pendingBondReward', [account ?? zeroAddress]])
   const { data } = useSWRContract([dfsMineContract, 'getReward', [account ?? zeroAddress]])
 
   const [
@@ -131,8 +131,22 @@ const Reward = () => {
     socialReward,
     bondReward,
   ] = [...(data ?? [])]
-  // console.log(pendingReward, DfsBalance, bondReward, socialReward, stakedSavings,
-  //   nextSavingsStakingPayoutTime, epochLength, rewardPerSecond, savingsPerSecond, savingVestingSeconds, rewardVestingSeconds, rewardVestingSeconds, totalSavings, totalRewards)
+  console.log(
+    pendingReward,
+    DfsBalance,
+    bondReward.toString(),
+    socialReward.toString(),
+    stakedSavings,
+    nextSavingsStakingPayoutTime,
+    epochLength,
+    rewardPerSecond,
+    savingsPerSecond,
+    savingVestingSeconds,
+    rewardVestingSeconds,
+    rewardVestingSeconds,
+    totalSavings,
+    totalRewards,
+  )
   const nextTime = nextSavingsStakingPayoutTime ? new Date(nextSavingsStakingPayoutTime?.toNumber() * 1000) : 0
   const nextSavingInterestChange =
     nextTime !== 0
@@ -160,7 +174,8 @@ const Reward = () => {
   const greenPower = formatBigNumber(BigNumber.from(me?.power ?? 0), 3)
   const totalUnlockedPower = formatBigNumber(BigNumber.from(me?.totalUnlockedPower ?? 0), 3)
   const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 9)
-  const dfsFromBondReward = formatBigNumber(BigNumber.from(me?.dfsFromBondReward ?? BigNumber.from(0)), 3)
+  console.log('pendingBondReward:', pendingBondReward)
+  const dfsFromBondReward = formatBigNumber(BigNumber.from(pendingBondReward ?? BigNumber.from(0)), 9)
   const nextRewardSavingNumber = Number.isNaN(savingInterest) ? 0 : totalSavings * savingInterest
   const nextRewardSaving = formatBigNumber(
     BigNumber.from(Number.isNaN(nextRewardSavingNumber) ? '0' : nextRewardSavingNumber.toString()),
@@ -231,7 +246,7 @@ const Reward = () => {
                 <RewardValueDiv>{dfsFromBondReward ?? '0'}</RewardValueDiv>
                 <ExtractBtn
                   onClick={async () => {
-                    if (me.dfsFromBondReward !== 0) {
+                    if (dfsFromBondReward !== '0') {
                       await dfsMineContract.withdrawBondReward()
                     } else {
                       alert('No bond reward')
