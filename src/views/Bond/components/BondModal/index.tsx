@@ -1,6 +1,9 @@
 import { FC, useState } from 'react'
+import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
 import { CloseIcon, CogIcon, InfoIcon, useWalletModal } from '@pancakeswap/uikit'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { Modal } from 'antd'
 import { parseUnits } from '@ethersproject/units'
 import { useWallet } from 'hooks/useWallet'
 import { useBondContract } from 'hooks/useContract'
@@ -38,6 +41,8 @@ import {
   RecommandInput,
 } from './styles'
 
+const { confirm } = Modal
+
 interface BondModalProps {
   bondData: any
   isApprove: boolean
@@ -57,6 +62,7 @@ const BondModal: React.FC<BondModalProps> = ({
 }) => {
   const { t } = useTranslation()
   const { onPresentConnectModal } = useWallet()
+  const router = useRouter()
   const [hasRecommand, sethasRecommand] = useState<boolean>(false)
   const [referral, setReferral] = useState<string>()
   const [amount, setAmount] = useState<string>()
@@ -67,7 +73,27 @@ const BondModal: React.FC<BondModalProps> = ({
   }
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const bond = useBondContract()
-  const buy = async () => {
+  const buy = () => {
+    if (!hasRecommand) {
+      confirm({
+        title: t('在下次购买时将无法添加推荐人'),
+        icon: <ExclamationCircleOutlined />,
+        okText: '确认',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+          buySubmit()
+        },
+        onCancel() {
+          console.log('Cancel')
+        },
+      })
+    } else {
+      buySubmit()
+    }
+  }
+
+  const buySubmit = async () => {
     if (referral && account && referral !== account) {
       const existReferral = await bond.referrals(account)
       console.log('existReferral:', existReferral)
@@ -88,6 +114,21 @@ const BondModal: React.FC<BondModalProps> = ({
         console.log(json)
       }
     }
+  }
+  const withdraw = () => {
+    confirm({
+      title: t('您使用未提取的dfs进行抽卡的话，可获得更大的收益'),
+      icon: <ExclamationCircleOutlined />,
+      okText: '依然提取',
+      okType: 'danger',
+      cancelText: '去抽卡',
+      onOk() {
+        console.log('OK')
+      },
+      onCancel() {
+        router.push(`/mint`)
+      },
+    })
   }
   const clickTab = (key) => {
     setActiveTab(key)
@@ -162,7 +203,9 @@ const BondModal: React.FC<BondModalProps> = ({
             <BondListItemBtn onClick={buy}>{t('Buy')}</BondListItemBtn>
           </>
         )}
-        {account && isApprove && activeTab === 'redeem' && <BondListItemBtn>{t('Withdraw')}</BondListItemBtn>}
+        {account && isApprove && activeTab === 'redeem' && (
+          <BondListItemBtn onClick={withdraw}>{t('Withdraw')}</BondListItemBtn>
+        )}
         {account && !isApprove && (
           <>
             <TipsWrap>
