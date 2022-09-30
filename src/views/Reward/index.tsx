@@ -131,22 +131,7 @@ const Reward = () => {
     socialReward,
     bondReward,
   ] = [...(data ?? [])]
-  console.log(
-    pendingReward,
-    DfsBalance,
-    bondReward.toString(),
-    socialReward.toString(),
-    stakedSavings,
-    nextSavingsStakingPayoutTime,
-    epochLength,
-    rewardPerSecond,
-    savingsPerSecond,
-    savingVestingSeconds,
-    rewardVestingSeconds,
-    rewardVestingSeconds,
-    totalSavings,
-    totalRewards,
-  )
+
   const nextTime = nextSavingsStakingPayoutTime ? new Date(nextSavingsStakingPayoutTime?.toNumber() * 1000) : 0
   const nextSavingInterestChange =
     nextTime !== 0
@@ -339,7 +324,6 @@ const Reward = () => {
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Rewards')}</RewardText>
-                        {/* <RewardValueDiv>{pendingReward?.toString()}</RewardValueDiv> */}
                         <RewardValueDiv>{pendingRewardString ?? '0'}</RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
