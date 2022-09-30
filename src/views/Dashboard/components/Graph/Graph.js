@@ -24,7 +24,7 @@ export const OneGraph = () => {
   return (
     <DiffusionChart
       type="bar"
-      dashboardData={dashboardData}
+      data={dashboardData}
       menuItemData={menuItemData}
       itemType={itemType.dollar}
       itemNames={tooltipItems.one}
@@ -44,7 +44,7 @@ export const TwoGraph = () => {
   return (
     <DiffusionChart
       type="area"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().two}
       stopColor={[['#3D72FD', '#3D72FD']]}
       stroke={['#3D72FD']}
@@ -85,7 +85,7 @@ export const ThreeGraph = () => {
   return (
     <DiffusionChart
       type="area"
-      dashboardData={dashboardData}
+      data={dashboardData}
       menuItemData={menuItemData}
       dataKey={dataKey().three}
       stopColor={[
@@ -110,7 +110,7 @@ export const FourGraph = () => {
   return (
     <DiffusionChart
       type="bar"
-      dashboardData={dashboardData}
+      data={dashboardData}
       menuItemData={menuItemData}
       itemType={itemType.dollar}
       itemNames={tooltipItems.four}
@@ -131,7 +131,7 @@ export const FiveGraph = () => {
   return (
     <DiffusionChart
       type="line"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().five}
       stroke={['#26E6C5']}
       headerText={t(headerText().five)}
@@ -153,7 +153,7 @@ export const SixGraph = () => {
   return (
     <DiffusionChart
       type="line"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().six}
       stroke={['#EC6EFF']}
       headerText={t(headerText().six)}
@@ -175,7 +175,7 @@ export const SevenGraph = () => {
   return (
     <DiffusionChart
       type="line"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().seven}
       stroke={['#DF741A']}
       headerText={t(headerText().seven)}
@@ -217,7 +217,7 @@ export const EightGraph = () => {
   return (
     <DiffusionChart
       type="area"
-      dashboardData={dashboardData}
+      data={dashboardData}
       menuItemData={menuItemData}
       dataKey={dataKey().eight}
       stopColor={[
@@ -295,7 +295,7 @@ export const TenGraph = () => {
   return (
     <DiffusionChart
       type="line"
-      dashboardData={dashboardData}
+      data={dashboardData}
       menuItemData={menuItemData}
       dataKey={dataKey().ten}
       stroke={['#DF741A']}
@@ -318,7 +318,7 @@ export const ElevenGraph = () => {
   return (
     <DiffusionChart
       type="area"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().eleven}
       stopColor={[['#FB0158', '#FB0158']]}
       stroke={['#FB0158']}
@@ -340,7 +340,7 @@ export const TwelveGraph = () => {
   return (
     <DiffusionChart
       type="area"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().twelve}
       stopColor={[['#DF741A', '#DF741A']]}
       stroke={['#DF741A']}
@@ -362,7 +362,7 @@ export const ThirteenGraph = () => {
   return (
     <DiffusionChart
       type="area"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().thirteen}
       stopColor={[['#1C6CFF', '#1C6CFF']]}
       stroke={['#1C6CFF']}
@@ -383,7 +383,7 @@ export const MarketValueGraph = () => {
   return (
     <DiffusionChart
       type="area"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().coin}
       stopColor={[
         ['#c2efdb', '#c2efdb'],
@@ -407,7 +407,7 @@ export const AreaGraph = () => {
   return (
     <DiffusionChart
       type="area"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().coin}
       stopColor={[['#c2efdb', '#c2efdb']]}
       headerText={t(headerText().coin)}
@@ -427,7 +427,7 @@ export const RunwayAvailableGraph = () => {
   return (
     <DiffusionChart
       type="line"
-      dashboardData={dashboardData}
+      data={dashboardData}
       dataKey={dataKey().runway}
       stroke={['#5d91f9']}
       headerText={t(headerText().runway)}
