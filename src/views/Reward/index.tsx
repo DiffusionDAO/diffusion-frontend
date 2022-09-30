@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useState, useEffect, useMemo } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
@@ -18,7 +18,7 @@ import { getDFSContract, getMineContract } from 'utils/contractHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { getMineAddress } from 'utils/addressHelpers'
 import { formatUnits } from '@ethersproject/units'
-import { formatBigNumber, formatBigNumberToFixed } from 'utils/formatBalance'
+import { formatBigNumber, formatBigNumberToFixed, formatNumber } from 'utils/formatBalance'
 
 import {
   RewardPageWrap,
@@ -67,9 +67,6 @@ import {
 import DataCell from '../../components/ListDataCell'
 import DetailModal from './components/DetailModal'
 import NoPower from './components/NoPower'
-// import { data } from './MockData'
-
-// const { rewardData, detailData } = data
 
 const Reward = () => {
   const { t } = useTranslation()
@@ -78,7 +75,8 @@ const Reward = () => {
   const [access, setAccess] = useState<boolean>(true)
   const [stakeAmount, setStakeAmount] = useState<BigNumber>()
   const [activeItem, setActiveItem] = useState<number>(0)
-  const [detailModalVisible, setBlindBoxModalVisible] = useState<boolean>(false)
+  const [bondRewardDetailModalVisible, setBondRewardDetailModalVisible] = useState<boolean>(false)
+  const [socialRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
   const [referrals, setReferrals] = useState({})
   const [me, setMe] = useState<any>({})
 
@@ -102,30 +100,80 @@ const Reward = () => {
   ]
 
   const openDetailModal = () => {
-    setBlindBoxModalVisible(true)
+    setBondRewardDetailModalVisible(true)
   }
-
+  const openUnlockedDetailModal = () => {
+    setSocialRewardDetailModalVisible(true)
+  }
+  const closeUnlockedDetailModal = () => {
+    setSocialRewardDetailModalVisible(false)
+  }
   const closeDetailModal = () => {
-    setBlindBoxModalVisible(false)
+    setBondRewardDetailModalVisible(false)
   }
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [reward, setReward] = useState([])
+  // const { data: epoch } = useSWRContract([dfsMineContract, 'epoch'])
   const { data } = useSWRContract([dfsMineContract, 'getReward', [account ?? zeroAddress]])
+
   const [
+    pendingReward,
+    DfsBalance,
     totalRewards,
     totalSavings,
-    vestingSeconds,
+    rewardVestingSeconds,
     savingVestingSeconds,
     rewardPerSecond,
     savingsPerSecond,
-    savingInterestTime,
+    nextSavingsStakingPayoutTime,
+    epochLength,
     stakedSavings,
-    DfsBalance,
+    socialReward,
+    bondReward,
   ] = [...(data ?? [])]
-  const time = new Date((savingInterestTime?.toNumber() + 8 * 3600) * 1000)
-  const nextSavingInterestChange = `${time.toLocaleDateString().replace(/\//g, '-')} ${time.toTimeString().slice(0, 8)}`
-  const fiveDayROI = ((1 + savingsPerSecond?.toNumber()) ** 15 - 1)?.toString()
-  const savingInterest = ((8 * 3600) / savingVestingSeconds) * 100
+  // console.log(pendingReward, DfsBalance, bondReward, socialReward, stakedSavings,
+  //   nextSavingsStakingPayoutTime, epochLength, rewardPerSecond, savingsPerSecond, savingVestingSeconds, rewardVestingSeconds, rewardVestingSeconds, totalSavings, totalRewards)
+  const nextTime = nextSavingsStakingPayoutTime ? new Date(nextSavingsStakingPayoutTime?.toNumber() * 1000) : 0
+  const nextSavingInterestChange =
+    nextTime !== 0
+      ? `${nextTime?.toLocaleDateString().replace(/\//g, '-')} ${nextTime?.toTimeString().slice(0, 8)}`
+      : '0'
+  const rewardInterest = Number.isNaN(epochLength / rewardVestingSeconds)
+    ? 0
+    : (epochLength / rewardVestingSeconds) * 100
+  const savingInterest = Number.isNaN(epochLength / savingVestingSeconds)
+    ? 0
+    : (epochLength / savingVestingSeconds) * 100
+  const fiveDayROI = Number.isNaN(savingInterest) ? '0' : ((1 + savingInterest) ** 15 - 1)?.toString()
+  const lockedPower = useMemo(() => {
+    return formatBigNumber(
+      BigNumber.from(me?.power ?? 0)
+        .mul(2)
+        .sub(BigNumber.from(me?.totalUnlockedPower ?? 0)),
+      3,
+    )
+  }, [me])
+  const totalPowerOfUser = formatBigNumber(
+    BigNumber.from(me?.power ?? 0).add(BigNumber.from(me?.totalUnlockedPower ?? 0)),
+    3,
+  )
+  const greenPower = formatBigNumber(BigNumber.from(me?.power ?? 0), 3)
+  const totalUnlockedPower = formatBigNumber(BigNumber.from(me?.totalUnlockedPower ?? 0), 3)
+  const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 9)
+  const dfsFromBondReward = formatBigNumber(BigNumber.from(me?.dfsFromBondReward ?? BigNumber.from(0)), 3)
+  const nextRewardSavingNumber = Number.isNaN(savingInterest) ? 0 : totalSavings * savingInterest
+  const nextRewardSaving = formatBigNumber(
+    BigNumber.from(Number.isNaN(nextRewardSavingNumber) ? '0' : nextRewardSavingNumber.toString()),
+    3,
+  )
+  const bondRewardDetailKeys = Object.keys(me?.dfsBondRewardDetail ?? {})
+  const unlockedPowerDetailKeys = Object.keys(me?.unlockedPowerDetail ?? {})
+  const bondRewardDetailData = bondRewardDetailKeys.map((key) => {
+    return { contributors: key, results: me?.dfsBondRewardDetail[key] }
+  })
+  const socialRewardDetailData = unlockedPowerDetailKeys.map((key) => {
+    return { contributors: key, results: Object.values(me?.unlockedPowerDetail[key]) }
+  })
   useEffect(() => {
     if (account) {
       // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -180,10 +228,14 @@ const Reward = () => {
                 </DiffusionGoldHeader>
                 <Petal src="/images/reward/petal.png" isMobile={isMobile} />
                 <RewardText>{t('Rewards')}</RewardText>
-                <RewardValueDiv>{BigNumber.from(me.dfs ?? BigNumber.from(0))?.toString()}</RewardValueDiv>
+                <RewardValueDiv>{dfsFromBondReward ?? '0'}</RewardValueDiv>
                 <ExtractBtn
                   onClick={async () => {
-                    await dfsMineContract.withdrawSocialReward()
+                    if (me.dfsFromBondReward !== 0) {
+                      await dfsMineContract.withdrawBondReward()
+                    } else {
+                      alert('No bond reward')
+                    }
                   }}
                 >
                   {t('Withdraw')}
@@ -194,7 +246,7 @@ const Reward = () => {
               <MySposWrap>
                 <MySposHeader>
                   <MySposTitle>{t('My SPOS value')}</MySposTitle>
-                  <MySposDetailJump onClick={openDetailModal}>{`${t('Detail')}  >`}</MySposDetailJump>
+                  <MySposDetailJump onClick={openUnlockedDetailModal}>{`${t('Detail')}  >`}</MySposDetailJump>
                 </MySposHeader>
                 <MySposOveview>
                   <MySposOveviewItem>
@@ -206,7 +258,7 @@ const Reward = () => {
                   <MySposOveviewItem>
                     <DataCell
                       label={t('Current interest')}
-                      value={rewardPerSecond?.toString()}
+                      value={`${rewardInterest}%`}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>
@@ -223,7 +275,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem1.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#00FFEE' }}>
-                            {BigNumber.from(me?.power ?? BigNumber.from(0))?.toString()}
+                            {greenPower ?? '0'}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Unlocked SPOS value')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -234,10 +286,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem2.png" />
                           )}
                           <MySposDashboardValue className="alignRight" style={{ color: 'grey' }}>
-                            {BigNumber.from(me?.power ?? 0)
-                              .mul(2)
-                              .sub(BigNumber.from(me?.totalUnlockedPower ?? BigNumber.from(0)))
-                              ?.toString()}
+                            {lockedPower ?? '0'}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Locked SPOS value')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -248,7 +297,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>
-                            {BigNumber.from(me?.totalUnlockedPower ?? BigNumber.from(0))?.toString()}
+                            {totalUnlockedPower ?? '0'}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Networking unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -265,11 +314,7 @@ const Reward = () => {
                         </MySposDashboardItem>
                       </MySposDashboardList>
                       <MySposDashboardMiddleItem>
-                        <MySposDashboardMiddleItemValue>
-                          {BigNumber.from(me?.power ?? 0)
-                            .add(BigNumber.from(me?.totalUnlockedPower ?? BigNumber.from(0)))
-                            ?.toString()}
-                        </MySposDashboardMiddleItemValue>
+                        <MySposDashboardMiddleItemValue>{totalPowerOfUser ?? '0'}</MySposDashboardMiddleItemValue>
                         <MySposDashboardMiddleItemDes>{t('Valid SPOS value')}</MySposDashboardMiddleItemDes>
                       </MySposDashboardMiddleItem>
                     </MySposDashboardWrap>
@@ -280,11 +325,15 @@ const Reward = () => {
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Rewards')}</RewardText>
                         {/* <RewardValueDiv>{pendingReward?.toString()}</RewardValueDiv> */}
-                        <RewardValueDiv>0</RewardValueDiv>
+                        <RewardValueDiv>{pendingRewardString ?? '0'}</RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
-                          await dfsMineContract.withdrawSocialReward()
+                          if (socialReward !== 0) {
+                            await dfsMineContract.claim()
+                          } else {
+                            alert('No social reward')
+                          }
                         }}
                       >
                         {t('Withdraw')}
@@ -314,13 +363,13 @@ const Reward = () => {
                   />
                   <DataCell
                     label={t('ROI (5 days)')}
-                    value={fiveDayROI}
+                    value={`${fiveDayROI}%`}
                     position="horizontal"
                     valueDivStyle={{ fontSize: '14px' }}
                   />
                   <DataCell
                     label={t('Next reward value')}
-                    value={`${totalSavings * savingInterest} DFS`}
+                    value={`${nextRewardSaving} DFS`}
                     position="horizontal"
                     valueDivStyle={{ fontSize: '14px' }}
                   />
@@ -341,7 +390,7 @@ const Reward = () => {
                   </DataCellWrap>
                   <DataCell
                     label={t('Staked limit')}
-                    value={`${stakedSavings?.toString()} DFS`}
+                    value={`${formatBigNumber(stakedSavings ?? BigNumber.from(0), 2)} DFS`}
                     position="horizontal"
                   />
                 </CardItem>
@@ -383,7 +432,12 @@ const Reward = () => {
           </CardWrap>
         </>
       )}
-      {detailModalVisible ? <DetailModal detailData={me.unlockedPower} onClose={closeDetailModal} /> : null}
+      {bondRewardDetailModalVisible ? (
+        <DetailModal detailData={bondRewardDetailData} onClose={closeDetailModal} />
+      ) : null}
+      {socialRewardDetailModalVisible ? (
+        <DetailModal detailData={socialRewardDetailData} onClose={closeUnlockedDetailModal} />
+      ) : null}
       {!account && (
         <NoPower
           title={t('You cannot view this page right now')}

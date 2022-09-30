@@ -31,7 +31,15 @@ import { getNftMarketContract } from 'utils/contractHelpers'
 import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
 import { useNftMarketContract } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
+import { useAccount, useSigner } from 'wagmi'
+import { getNftMarketAddress } from 'utils/addressHelpers'
+import { Contract } from '@ethersproject/contracts'
+import nftMarketAbi from 'config/abi/nftMarket.json'
+import { useSWRContract } from 'hooks/useSWRContract'
+
 import { REQUEST_SIZE } from '../Collection/config'
+import { useWeb3React } from '../../../../../packages/wagmi/src/useWeb3React'
+import { useWeb3LibraryContext } from '../../../../../packages/wagmi/src/provider'
 
 interface ItemListingSettings {
   field: string
@@ -192,7 +200,10 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const fetchedNfts = useRef<NftToken[]>([])
   const fallbackMode = useRef(false)
   const fallbackModePage = useRef(0)
+  const library = useWeb3LibraryContext()
+  const { connector } = useAccount()
   const isLastPage = useRef(false)
+  const { data: signer } = useSigner()
   // const collection = useGetCollection(collectionAddress)
   const parsed = JSON.parse(localStorage?.getItem('nfts'))
   const collections = Object.keys(parsed).length
@@ -238,6 +249,8 @@ export const useCollectionNfts = (collectionAddress: string) => {
   }, [field, direction, showOnlyNftsOnSale, filtersJson])
 
   const nftMarketContract = useNftMarketContract()
+  // const nftMarketAddress = getNftMarketAddress()
+  // const nftMarketContract = new Contract(nftMarketAddress, nftMarketAbi, signer)
   const {
     data: nfts,
     status,

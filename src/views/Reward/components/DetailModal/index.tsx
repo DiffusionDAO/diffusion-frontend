@@ -21,7 +21,7 @@ const DetailModal: React.FC<DetailModalProps> = ({ detailData, onClose }) => {
     },
   ]
   return (
-    <StyledModal title={t('Detail')} width={528} onCancel={onClose} visible centered maskClosable={false} footer={[]}>
+    <StyledModal title={t('Detail')} width={600} onCancel={onClose} visible centered maskClosable={false} footer={[]}>
       <ContentWrap>
         {/* {detail} */}
         <DetailTable dataSource={detailData} columns={columns} pagination={false} />
