@@ -197,6 +197,7 @@ const fetchAllNfts = async (
 }
 
 export const useCollectionNfts = (collectionAddress: string) => {
+  console.log('useCollectionNfts:')
   const fetchedNfts = useRef<NftToken[]>([])
   const fallbackMode = useRef(false)
   const fallbackModePage = useRef(0)

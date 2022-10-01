@@ -15,6 +15,7 @@ import { getNftMarketAddress } from 'utils/addressHelpers'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import fromPairs from 'lodash/fromPairs'
 import { useSWRContract } from 'hooks/useSWRContract'
+import { useSigner } from 'wagmi'
 
 import {
   ApiCollection,
@@ -39,7 +40,6 @@ import {
   UserActivity,
 } from './types'
 import { baseNftFields, collectionBaseFields, baseTransactionFields } from './queries'
-import { useNftStorage } from './storage'
 
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const res = await fetch(`${API_NFT}/collections`)
@@ -305,14 +305,25 @@ export const getMarketDataForTokenIds = async (
 export const getNftsOnChainMarketData = async (
   collectionAddress: string,
   tokenIds: string[],
+  signer?: any,
 ): Promise<TokenMarketData[]> => {
   try {
-    const nftMarketContract = getNftMarketContract()
-    const askInfo = await nftMarketContract.fetchMarketItems()
+    const nftMarketContract = getNftMarketContract(signer)
+    // const askInfo = await nftMarketContract.fetchMarketItems()
+    console.log('multicallv2')
+    const askInfo = await multicallv2({
+      abi: nftMarketAbi,
+      calls: [
+        {
+          address: nftMarketContract.address,
+          name: 'fetchMarketItems',
+        },
+      ],
+      options: { requireSuccess: true },
+    })
+    console.log('askInfo:', askInfo)
     // const {data:askInfo} = useSWRContract([nftMarketContract,'fetchMarketItems'])
 
-    // const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
-    // const askInfo = response?.askInfo
     if (!askInfo) return []
 
     return askInfo
@@ -1029,27 +1040,24 @@ export const combineNftMarketAndMetadata = (
 const fetchWalletMarketData = async (walletNftsByCollection: {
   [collectionAddress: string]: TokenIdWithCollectionAddress[]
 }): Promise<TokenMarketData[]> => {
+  console.log('fetchWalletMarketData:')
+
   const walletMarketDataRequests = Object.entries(walletNftsByCollection).map(
     async ([collectionAddress, tokenIdsWithCollectionAddress]) => {
       const tokenIdIn = tokenIdsWithCollectionAddress.map((walletNft) => walletNft.tokenId)
-      const [nftsOnChainMarketData, nftsMarketData] = await Promise.all([
+      const [nftsOnChainMarketData] = await Promise.all([
         getNftsOnChainMarketData(collectionAddress.toLowerCase(), tokenIdIn),
-        getNftsMarketData({
-          tokenId_in: tokenIdIn,
-          collection: collectionAddress.toLowerCase(),
-        }),
       ])
 
       return tokenIdIn
         .map((tokenId) => {
-          const nftMarketData = nftsMarketData.find((tokenMarketData) => tokenMarketData.tokenId === tokenId)
           const onChainMarketData = nftsOnChainMarketData.find(
             (onChainTokenMarketData) => onChainTokenMarketData.tokenId === tokenId,
           )
 
-          if (!nftMarketData && !onChainMarketData) return null
+          if (!onChainMarketData) return null
 
-          return { ...nftMarketData, ...onChainMarketData }
+          return { ...onChainMarketData }
         })
         .filter(Boolean)
     },
@@ -1066,61 +1074,61 @@ const fetchWalletMarketData = async (walletNftsByCollection: {
  * @param profileNftWithCollectionAddress
  * @returns Promise<NftToken[]>
  */
-export const getCompleteAccountNftData = async (
-  account: string,
-  collections: ApiCollections,
-  profileNftWithCollectionAddress?: TokenIdWithCollectionAddress,
-): Promise<NftToken[]> => {
-  // Add delist collections to allow user reclaim their NFTs
-  const collectionsWithDelist = { ...collections, ...DELIST_COLLECTIONS }
+// export const getCompleteAccountNftData = async (
+//   account: string,
+//   collections: ApiCollections,
+//   profileNftWithCollectionAddress?: TokenIdWithCollectionAddress,
+// ): Promise<NftToken[]> => {
+//   // Add delist collections to allow user reclaim their NFTs
+//   const collectionsWithDelist = { ...collections, ...DELIST_COLLECTIONS }
 
-  const [walletNftIdsWithCollectionAddress, onChainForSaleNfts] = await Promise.all([
-    fetchWalletTokenIdsForCollections(account, collectionsWithDelist),
-    getAccountNftsOnChainMarketData(collectionsWithDelist, account),
-  ])
+//   const [walletNftIdsWithCollectionAddress, onChainForSaleNfts] = await Promise.all([
+//     fetchWalletTokenIdsForCollections(account, collectionsWithDelist),
+//     getAccountNftsOnChainMarketData(collectionsWithDelist, account),
+//   ])
 
-  if (profileNftWithCollectionAddress?.tokenId) {
-    walletNftIdsWithCollectionAddress.unshift(profileNftWithCollectionAddress)
-  }
+//   if (profileNftWithCollectionAddress?.tokenId) {
+//     walletNftIdsWithCollectionAddress.unshift(profileNftWithCollectionAddress)
+//   }
 
-  const walletNftsByCollection = groupBy(
-    walletNftIdsWithCollectionAddress,
-    (walletNftId) => walletNftId.collectionAddress,
-  )
+//   const walletNftsByCollection = groupBy(
+//     walletNftIdsWithCollectionAddress,
+//     (walletNftId) => walletNftId.collectionAddress,
+//   )
 
-  const walletMarketData = await fetchWalletMarketData(walletNftsByCollection)
+//   const walletMarketData = await fetchWalletMarketData(walletNftsByCollection)
 
-  const walletNftsWithMarketData = attachMarketDataToWalletNfts(walletNftIdsWithCollectionAddress, walletMarketData)
+//   const walletNftsWithMarketData = attachMarketDataToWalletNfts(walletNftIdsWithCollectionAddress, walletMarketData)
 
-  const walletTokenIds = walletNftIdsWithCollectionAddress
-    .filter((walletNft) => {
-      // Profile Pic NFT is no longer wanted in this array, hence the filter
-      return profileNftWithCollectionAddress?.tokenId !== walletNft.tokenId
-    })
-    .map((nft) => nft.tokenId)
+//   const walletTokenIds = walletNftIdsWithCollectionAddress
+//     .filter((walletNft) => {
+//       // Profile Pic NFT is no longer wanted in this array, hence the filter
+//       return profileNftWithCollectionAddress?.tokenId !== walletNft.tokenId
+//     })
+//     .map((nft) => nft.tokenId)
 
-  const tokenIdsForSale = onChainForSaleNfts.map((nft) => nft.tokenId)
+//   const tokenIdsForSale = onChainForSaleNfts.map((nft) => nft.tokenId)
 
-  const forSaleNftIds = onChainForSaleNfts.map((nft) => {
-    return { collectionAddress: nft.collection.id, tokenId: nft.tokenId }
-  })
+//   const forSaleNftIds = onChainForSaleNfts.map((nft) => {
+//     return { collectionAddress: nft.collection.id, tokenId: nft.tokenId }
+//   })
 
-  const metadataForAllNfts = await getNftsFromDifferentCollectionsApi([
-    ...forSaleNftIds,
-    ...walletNftIdsWithCollectionAddress,
-  ])
+//   const metadataForAllNfts = await getNftsFromDifferentCollectionsApi([
+//     ...forSaleNftIds,
+//     ...walletNftIdsWithCollectionAddress,
+//   ])
 
-  const completeNftData = combineNftMarketAndMetadata(
-    metadataForAllNfts,
-    onChainForSaleNfts,
-    walletNftsWithMarketData,
-    walletTokenIds,
-    tokenIdsForSale,
-    profileNftWithCollectionAddress?.tokenId,
-  )
+//   const completeNftData = combineNftMarketAndMetadata(
+//     metadataForAllNfts,
+//     onChainForSaleNfts,
+//     walletNftsWithMarketData,
+//     walletTokenIds,
+//     tokenIdsForSale,
+//     profileNftWithCollectionAddress?.tokenId,
+//   )
 
-  return completeNftData
-}
+//   return completeNftData
+// }
 
 /**
  * Fetch distribution information for a collection

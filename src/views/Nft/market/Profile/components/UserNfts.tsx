@@ -11,6 +11,7 @@ const UserNfts: React.FC<{
   isLoading: boolean
   selectNft: (param: NftToken) => void
 }> = ({ isSelected, nfts, isLoading, selectNft }) => {
+  console.log('UserNfts:')
   const { t } = useTranslation()
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
     if (isSelected) {

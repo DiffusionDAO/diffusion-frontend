@@ -79,16 +79,17 @@ function NftProfilePage() {
   const [mynfts, setMynfts] = useState<NftToken[]>([])
 
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
-  const {
-    profile,
-    isValidating: isProfileFetching,
-    refresh: refreshProfile,
-  } = useProfileForAddress(accountAddress, {
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  })
-  const { nfts, isLoading: isNftLoading } = useNftsForAddress(accountAddress, profile, isProfileFetching)
+  console.log('isConnectedProfile:', isConnectedProfile)
+  // const {
+  //   profile,
+  //   isValidating: isProfileFetching,
+  //   refresh: refreshProfile,
+  // } = useProfileForAddress(accountAddress, {
+  //   revalidateIfStale: true,
+  //   revalidateOnFocus: true,
+  //   revalidateOnReconnect: true,
+  // })
+  // const { nfts, isLoading: isNftLoading } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
   const [isSelected, setIsSelected] = useState<boolean>(false)
   const [option, setOption] = useState<string>('')
@@ -462,11 +463,14 @@ function NftProfilePage() {
           <UserNfts
             isSelected={isSelected}
             nfts={activeTab === 'WithoutStake' ? (isSelected ? selectedNfts : mynfts) : stakedNfts}
-            isLoading={isNftLoading}
+            isLoading={false}
             selectNft={selectNft}
           />
         ) : (
-          <UnconnectedProfileNfts nfts={nfts} isLoading={isNftLoading} />
+          <UnconnectedProfileNfts
+            nfts={activeTab === 'WithoutStake' ? (isSelected ? selectedNfts : mynfts) : stakedNfts}
+            isLoading={false}
+          />
         )}
       </ConentWrap>
       {noteContent.visible ? (

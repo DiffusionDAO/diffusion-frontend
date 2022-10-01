@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Grid, useModal, Text, Flex } from '@pancakeswap/uikit'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { CollectibleActionCard } from '../../Nft/market/components/CollectibleCard'
+import { CollectibleActionCard, CollectibleLinkCard } from '../../Nft/market/components/CollectibleCard'
 import GridPlaceholder from '../../Nft/market/components/GridPlaceholder'
 import ProfileNftModal from '../../Nft/market/components/ProfileNftModal'
 import NoNftsImage from '../../Nft/market/components/Activity/NoNftsImage'
@@ -29,6 +29,7 @@ const UserNfts: React.FC<
     onSuccessEditProfile?: () => void
   }>
 > = ({ isSelected, nfts, isLoading, selectNft, onSuccessSale, onSuccessEditProfile }) => {
+  console.log('UserNfts:', isSelected)
   const { t } = useTranslation()
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
     if (isSelected) {
@@ -54,7 +55,7 @@ const UserNfts: React.FC<
             const { marketData, location } = nft
 
             return (
-              <CollectibleActionCard
+              <CollectibleLinkCard
                 isSelected={isSelected}
                 isUserNft
                 onClick={() => handleCollectibleClick(nft, location)}

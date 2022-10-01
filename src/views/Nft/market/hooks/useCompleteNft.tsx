@@ -7,6 +7,7 @@ import { NftLocation, NftToken, TokenMarketData } from 'state/nftMarket/types'
 import { useProfile } from 'state/profile/hooks'
 import useSWR from 'swr'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
+import { useSigner } from 'wagmi'
 
 const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: TokenMarketData) => {
   const { account } = useWeb3React()
@@ -50,6 +51,8 @@ const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: Toke
 }
 
 export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
+  console.log('useCompleteNft:')
+  const { data: signer } = useSigner()
   const { data: nft, mutate } = useSWR(
     collectionAddress && tokenId ? ['nft', collectionAddress, tokenId] : null,
     async () => {
@@ -73,17 +76,12 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
   const { data: marketData, mutate: refetchNftMarketData } = useSWR(
     collectionAddress && tokenId ? ['nft', 'marketData', collectionAddress, tokenId] : null,
     async () => {
-      const [onChainMarketDatas, marketDatas] = await Promise.all([
-        getNftsOnChainMarketData(collectionAddress.toLowerCase(), [tokenId]),
-        getNftsMarketData({ collection: collectionAddress.toLowerCase(), tokenId }, 1),
+      const [onChainMarketDatas] = await Promise.all([
+        getNftsOnChainMarketData(collectionAddress.toLowerCase(), [tokenId], signer),
       ])
       const onChainMarketData = onChainMarketDatas[0]
 
-      if (!marketDatas[0] && !onChainMarketData) return null
-
-      if (!onChainMarketData) return marketDatas[0]
-
-      return { ...marketDatas[0], ...onChainMarketData }
+      return { ...onChainMarketData }
     },
   )
 

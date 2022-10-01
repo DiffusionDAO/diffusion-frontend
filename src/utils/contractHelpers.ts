@@ -386,7 +386,9 @@ export const getNftDrawContract = (signer?: Signer | Provider) => {
 }
 
 export const getNftMarketContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: nftMarketAbi, address: getNftMarketAddress(), signer })
+  const address = getNftMarketAddress()
+  console.log(address, signer)
+  return getContract({ abi: nftMarketAbi, address, signer })
 }
 export const getStarlightContract = (signer?: Signer | Provider) => {
   return getContract({ abi: starlightAbi, address: getStarlightAddress(), signer })

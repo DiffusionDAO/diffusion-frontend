@@ -11,10 +11,7 @@ const CollectibleLinkCard: React.FC<React.PropsWithChildren<CollectibleCardProps
   currentAskPrice,
   ...props
 }) => {
-  const urlId =
-    nft?.collectionAddress?.toLowerCase() === pancakeBunniesAddress.toLowerCase()
-      ? nft?.attributes[0].value
-      : nft.tokenId
+  const urlId = nft.tokenId
   return (
     <StyledCollectibleCard {...props}>
       {isSelected ? (
