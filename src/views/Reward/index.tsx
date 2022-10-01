@@ -160,8 +160,8 @@ const Reward = () => {
   )
   const greenPower = formatBigNumber(BigNumber.from(me?.power ?? 0), 3)
   const totalUnlockedPower = formatBigNumber(BigNumber.from(me?.totalUnlockedPower ?? 0), 3)
-  const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 6)
-  const dfsFromBondReward = formatBigNumber(BigNumber.from(pendingBondReward ?? BigNumber.from(0)), 6)
+  const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 5)
+  const dfsFromBondReward = formatBigNumber(BigNumber.from(pendingBondReward ?? BigNumber.from(0)), 5)
   const nextRewardSavingNumber = Number.isNaN(savingInterest) ? 0 : totalSavings * savingInterest
   const nextRewardSaving = formatBigNumber(
     BigNumber.from(Number.isNaN(nextRewardSavingNumber) ? '0' : nextRewardSavingNumber.toString()),
