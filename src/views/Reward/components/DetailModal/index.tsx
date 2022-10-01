@@ -10,14 +10,14 @@ const DetailModal: React.FC<DetailModalProps> = ({ detailData, onClose }) => {
   const { t } = useTranslation()
   const columns = [
     {
-      title: t('Contributors'),
-      dataIndex: 'contributors',
-      key: 'contributors',
+      title: t('Address'),
+      dataIndex: 'address',
+      key: 'address',
     },
     {
-      title: t('Contribution value'),
-      dataIndex: 'results',
-      key: 'results',
+      title: t('Value'),
+      dataIndex: 'value',
+      key: 'value',
     },
   ]
   return (

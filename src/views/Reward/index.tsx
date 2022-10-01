@@ -19,6 +19,7 @@ import { MaxUint256 } from '@ethersproject/constants'
 import { getMineAddress } from 'utils/addressHelpers'
 import { formatUnits } from '@ethersproject/units'
 import { formatBigNumber, formatBigNumberToFixed, formatNumber } from 'utils/formatBalance'
+import { shorten } from 'helpers'
 
 import {
   RewardPageWrap,
@@ -137,13 +138,14 @@ const Reward = () => {
     nextTime !== 0
       ? `${nextTime?.toLocaleDateString().replace(/\//g, '-')} ${nextTime?.toTimeString().slice(0, 8)}`
       : '0'
-  const rewardInterest = Number.isNaN(epochLength / rewardVestingSeconds)
-    ? 0
-    : (epochLength / rewardVestingSeconds) * 100
+  const rewardInterest = formatNumber(
+    Number.isNaN(epochLength / rewardVestingSeconds) ? 0 : (epochLength / rewardVestingSeconds) * 100,
+    2,
+  )
   const savingInterest = Number.isNaN(epochLength / savingVestingSeconds)
     ? 0
     : (epochLength / savingVestingSeconds) * 100
-  const fiveDayROI = Number.isNaN(savingInterest) ? '0' : ((1 + savingInterest) ** 15 - 1)?.toString()
+  const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : (1 + savingInterest) ** 15 - 1, 2)
   const lockedPower = useMemo(() => {
     return formatBigNumber(
       BigNumber.from(me?.power ?? 0)
@@ -158,9 +160,8 @@ const Reward = () => {
   )
   const greenPower = formatBigNumber(BigNumber.from(me?.power ?? 0), 3)
   const totalUnlockedPower = formatBigNumber(BigNumber.from(me?.totalUnlockedPower ?? 0), 3)
-  const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 9)
-  console.log('pendingBondReward:', pendingBondReward)
-  const dfsFromBondReward = formatBigNumber(BigNumber.from(pendingBondReward ?? BigNumber.from(0)), 9)
+  const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 6)
+  const dfsFromBondReward = formatBigNumber(BigNumber.from(pendingBondReward ?? BigNumber.from(0)), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest) ? 0 : totalSavings * savingInterest
   const nextRewardSaving = formatBigNumber(
     BigNumber.from(Number.isNaN(nextRewardSavingNumber) ? '0' : nextRewardSavingNumber.toString()),
@@ -169,12 +170,15 @@ const Reward = () => {
   const bondRewardDetailKeys = Object.keys(me?.dfsBondRewardDetail ?? {})
   const unlockedPowerDetailKeys = Object.keys(me?.unlockedPowerDetail ?? {})
   const bondRewardDetailData = bondRewardDetailKeys.map((key) => {
-    return { contributors: key, results: formatBigNumber(BigNumber.from(me?.dfsBondRewardDetail[key]), 5) }
+    return {
+      address: isMobile ? shorten(key) : key,
+      value: formatBigNumber(BigNumber.from(me?.dfsBondRewardDetail[key]), 5),
+    }
   })
   const socialRewardDetailData = unlockedPowerDetailKeys.map((key) => {
     return {
-      contributors: key,
-      results: formatBigNumber(BigNumber.from(Object.values(me?.unlockedPowerDetail[key])[0]), 5),
+      address: isMobile ? shorten(key) : key,
+      value: formatBigNumber(BigNumber.from(Object.values(me?.unlockedPowerDetail[key])[0]), 5),
     }
   })
   useEffect(() => {
