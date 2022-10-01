@@ -23,14 +23,12 @@ const SettingModal: React.FC<BondModalProps> = ({ bondData, account, onClose }) 
   const { t } = useTranslation()
   const [addressValue, setAddressValue] = useState<string>(account)
   return (
-    <StyledModal width={500} className="no-header" onCancel={onClose} visible centered maskClosable={false} footer={[]}>
+    <StyledModal width={500} className="no-header" onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <ContentWrap>
-        {/* 头部按钮 */}
         <HeaderWrap>
           <ChevronLeftIcon width="24px" color="#ABB6FF" onClick={onClose} />
           <CloseIcon width="24px" color="#ABB6FF" onClick={onClose} />
         </HeaderWrap>
-        {/* 中间内容 */}
         <SettingItem>
           <SettingLabel>{t('Slippage')}</SettingLabel>
           <SettingCont>
@@ -45,7 +43,6 @@ const SettingModal: React.FC<BondModalProps> = ({ bondData, account, onClose }) 
             <SettingTips>{t('Under current circumstances, this is your current login address')}</SettingTips>
           </SettingCont>
         </SettingItem>
-        {/* 按钮 */}
         <BondListItemBtn>{t('Confirm')}</BondListItemBtn>
       </ContentWrap>
     </StyledModal>

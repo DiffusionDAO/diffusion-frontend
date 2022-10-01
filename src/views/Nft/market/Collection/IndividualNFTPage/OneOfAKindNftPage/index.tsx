@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
-import { Flex } from '@pancakeswap/uikit'
+import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import sum from 'lodash/sum'
 import noop from 'lodash/noop'
 import Page from 'components/Layout/Page'
@@ -23,17 +23,33 @@ interface IndividualNFTPageProps {
   tokenId: string
 }
 
+const BorderWrap = styled.div`
+  backgroundcolor: rgba(70, 96, 255, 0.4);
+  border: 2px solid rgba(70, 96, 255, 0.2);
+  border-radius: 16px;
+`
 const OwnerActivityContainer = styled(Flex)`
   gap: 22px;
+`
+export const PageWrap = styled.div`
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+  padding: 20px;
 `
 
 const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps>> = ({
   collectionAddress,
   tokenId,
 }) => {
+  const { isMobile } = useMatchBreakpoints()
+  const bgImg = isMobile ? "url('/images/nfts/mretc.png')" : "url('/images/nfts/smxl.png')"
+  const bgOffset = !isMobile ? '40px' : '80px'
   const collection = useGetCollection(collectionAddress)
-  const { data: distributionData, isFetching: isFetchingDistribution } = useGetCollectionDistribution(collectionAddress)
-  const { combinedNft: nft, isOwn: isOwnNft, isProfilePic, refetch } = useCompleteNft(collectionAddress, tokenId)
+  // const { data: distributionData, isFetching: isFetchingDistribution } = useGetCollectionDistribution(collectionAddress)
+  const { data: distributionData, isFetching: isFetchingDistribution } = {} as any
+  const collections = JSON.parse(localStorage?.getItem('nfts'))
+  const nft = collections[collectionAddress].tokens[tokenId]
+  // const { combinedNft: nft, isOwn: true, isProfilePic, refetch } = useCompleteNft(collectionAddress, tokenId)
 
   const properties = nft?.attributes
 
@@ -50,31 +66,36 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
       )
     }
     return {}
-  }, [properties, isFetchingDistribution, distributionData])
-
+  }, [properties, distributionData, isFetchingDistribution])
+  console.log(nft, collection)
   if (!nft || !collection) {
-    // Normally we already show a 404 page here if no nft, just put this checking here for safety.
-
-    // For now this if is used to show loading spinner while we're getting the data
     return <PageLoader />
   }
-
+  const isOwnNft = true
+  const nftIsProfilePic = false
   return (
-    <Page>
-      <MainNFTCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={isProfilePic} onSuccess={refetch} />
-      <TwoColumnsContainer flexDirection={['column', 'column', 'column', 'column', 'row']}>
-        <Flex flexDirection="column" width="100%">
-          <ManageNFTsCard collection={collection} tokenId={tokenId} onSuccess={isOwnNft ? refetch : noop} />
-          <PropertiesCard properties={properties} rarity={attributesRarity} />
-          <DetailsCard contractAddress={collectionAddress} ipfsJson={nft?.marketData?.metadataUrl} />
-        </Flex>
-        <OwnerActivityContainer flexDirection="column" width="100%">
-          <OwnerCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={isProfilePic} onSuccess={refetch} />
-          <ActivityCard nft={nft} />
-        </OwnerActivityContainer>
-      </TwoColumnsContainer>
-      {/* <MoreFromThisCollection collectionAddress={collectionAddress} currentTokenName={nft.name} /> */}
-    </Page>
+    <PageWrap>
+      <div
+        style={{
+          backgroundImage: `${bgImg}`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: `4px ${bgOffset}`,
+        }}
+      >
+        <MainNFTCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={nftIsProfilePic} onSuccess={noop} />
+        <TwoColumnsContainer flexDirection={['column', 'column', 'column', 'column', 'row']}>
+          <Flex flexDirection="column" width="100%">
+            <ManageNFTsCard collection={collection} tokenId={tokenId} onSuccess={noop} />
+            <PropertiesCard properties={properties} rarity={attributesRarity} />
+            <DetailsCard contractAddress={collectionAddress} ipfsJson={nft?.marketData?.metadataUrl} />
+          </Flex>
+          <OwnerActivityContainer flexDirection="column" width="100%">
+            <OwnerCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={nftIsProfilePic} onSuccess={noop} />
+            <ActivityCard nft={nft} />
+          </OwnerActivityContainer>
+        </TwoColumnsContainer>
+      </div>
+    </PageWrap>
   )
 }
 

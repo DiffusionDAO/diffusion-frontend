@@ -15,7 +15,7 @@ const BlindBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
   const { account } = useWeb3React()
   const router = useRouter()
   return (
-    <StyledModal width={528} onCancel={onClose} visible centered maskClosable={false} footer={[]}>
+    <StyledModal width={528} onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <ContentWrap>
         <Grid container spacing={2}>
           {data.length &&

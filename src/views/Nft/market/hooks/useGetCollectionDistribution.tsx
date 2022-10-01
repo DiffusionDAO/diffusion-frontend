@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getCollectionDistributionApi, getNftsFromCollectionApi } from 'state/nftMarket/helpers'
+import { getNftsFromCollectionApi } from 'state/nftMarket/helpers'
 import { ApiCollectionDistribution, ApiResponseCollectionTokens, ApiSingleTokenData } from 'state/nftMarket/types'
 import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 import { multicallv2 } from 'utils/multicall'
@@ -10,14 +10,15 @@ import fromPairs from 'lodash/fromPairs'
 import { pancakeBunniesAddress } from '../constants'
 
 const useGetCollectionDistribution = (collectionAddress: string) => {
-  const { data, status } = useSWRImmutable(
-    collectionAddress ? ['distribution', collectionAddress] : null,
-    async () => (await getCollectionDistributionApi<ApiCollectionDistribution>(collectionAddress)).data,
-  )
+  // const { data, status } = useSWRImmutable(
+  //   collectionAddress ? ['distribution', collectionAddress] : null,
+  //   // async () => (await getCollectionDistributionApi<ApiCollectionDistribution>(collectionAddress)).data,
+  //   async () => {},
+  // )
 
   return {
-    data,
-    isFetching: status !== FetchStatus.Fetched,
+    // data,
+    // isFetching: status !== FetchStatus.Fetched,
   }
 }
 

@@ -79,17 +79,6 @@ function NftProfilePage() {
   const [mynfts, setMynfts] = useState<NftToken[]>([])
 
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
-  console.log('isConnectedProfile:', isConnectedProfile)
-  // const {
-  //   profile,
-  //   isValidating: isProfileFetching,
-  //   refresh: refreshProfile,
-  // } = useProfileForAddress(accountAddress, {
-  //   revalidateIfStale: true,
-  //   revalidateOnFocus: true,
-  //   revalidateOnReconnect: true,
-  // })
-  // const { nfts, isLoading: isNftLoading } = useNftsForAddress(accountAddress, profile, isProfileFetching)
 
   const [isSelected, setIsSelected] = useState<boolean>(false)
   const [option, setOption] = useState<string>('')

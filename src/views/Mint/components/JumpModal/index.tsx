@@ -14,7 +14,7 @@ const JumpModal: React.FC<JumpModalProps> = ({ onClose }) => {
   const { account } = useWeb3React()
   const router = useRouter()
   return (
-    <StyledModal width={500} onCancel={onClose} visible centered maskClosable={false} footer={[]}>
+    <StyledModal width={500} onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <JumpWrap>
         <JumpTitle>{t('Your balance is insufficient')}</JumpTitle>
         <JumpDes>{t('There are several ways to receive DFS')}</JumpDes>

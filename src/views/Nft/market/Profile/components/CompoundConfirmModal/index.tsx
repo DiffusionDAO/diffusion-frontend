@@ -26,7 +26,7 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({ onDismiss, 
   const { t } = useTranslation()
 
   return (
-    <StyledModal title={t('Compose')} onCancel={onDismiss} visible centered maskClosable={false} footer={[]}>
+    <StyledModal title={t('Compose')} onCancel={onDismiss} open centered maskClosable={false} footer={[]}>
       <ContentWrap>
         <AchievWrap>
           <AchievCard>

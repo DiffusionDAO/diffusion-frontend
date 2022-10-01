@@ -7,13 +7,14 @@ import { NOT_ON_SALE_SELLER } from 'config/constants'
 import useSWR from 'swr'
 
 const useNftOwner = (nft: NftToken, isOwnNft = false) => {
+  const zeroAddress = '0x0000000000000000000000000000000000000000'
   const { account } = useWeb3React()
   const [owner, setOwner] = useState(null)
   const [isLoadingOwner, setIsLoadingOwner] = useState(true)
-  const { reader: collectionContract } = useErc721CollectionContract(nft.collectionAddress)
-  const currentSeller = nft.marketData?.currentSeller
+  const { reader: collectionContract } = useErc721CollectionContract(nft?.collectionAddress ?? zeroAddress)
+  const currentSeller = nft?.marketData?.currentSeller
   const pancakeProfileAddress = getPancakeProfileAddress()
-  const { collectionAddress, tokenId } = nft
+  const { collectionAddress, tokenId } = nft ?? {}
   const { data: tokenOwner } = useSWR(
     collectionContract ? ['nft', 'ownerOf', collectionAddress, tokenId] : null,
     async () => collectionContract.ownerOf(tokenId),

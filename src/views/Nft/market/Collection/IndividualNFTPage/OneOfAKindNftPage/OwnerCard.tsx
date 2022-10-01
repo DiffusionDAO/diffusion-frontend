@@ -51,7 +51,7 @@ const OwnerCard: React.FC<React.PropsWithChildren<OwnerCardProps>> = ({
 
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentAdjustPriceModal] = useModal(
-    <SellModal variant={nft.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
+    <SellModal variant={nft?.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
 
   return (
@@ -81,7 +81,7 @@ const OwnerCard: React.FC<React.PropsWithChildren<OwnerCardProps>> = ({
           </TableHeading>
           <OwnerRow>
             <Box pl="24px">
-              {nft.marketData?.isTradable ? (
+              {nft?.marketData?.isTradable ? (
                 <>
                   <Flex justifySelf="flex-start" alignItems="center" width="max-content">
                     <BinanceIcon width="24px" height="24px" mr="8px" />

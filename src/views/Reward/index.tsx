@@ -17,7 +17,7 @@ import dfsMineAbi from 'config/abi/dfsMine.json'
 import { getDFSContract, getMineContract } from 'utils/contractHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { getMineAddress } from 'utils/addressHelpers'
-import { formatUnits } from '@ethersproject/units'
+import { formatUnits, parseUnits } from '@ethersproject/units'
 import { formatBigNumber, formatBigNumberToFixed, formatNumber } from 'utils/formatBalance'
 import { shorten } from 'helpers'
 
@@ -74,12 +74,13 @@ const Reward = () => {
   const { account } = useWeb3React()
   const router = useRouter()
   const [access, setAccess] = useState<boolean>(true)
-  const [stakeAmount, setStakeAmount] = useState<BigNumber>()
+  const [amount, setAmount] = useState('')
   const [activeItem, setActiveItem] = useState<number>(0)
   const [bondRewardDetailModalVisible, setBondRewardDetailModalVisible] = useState<boolean>(false)
   const [socialRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
   const [referrals, setReferrals] = useState({})
   const [me, setMe] = useState<any>({})
+  const [refresh, setRefresh] = useState<any>({})
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -161,7 +162,8 @@ const Reward = () => {
   const greenPower = formatBigNumber(BigNumber.from(me?.power ?? 0), 3)
   const totalUnlockedPower = formatBigNumber(BigNumber.from(me?.totalUnlockedPower ?? 0), 3)
   const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 5)
-  const dfsFromBondReward = formatBigNumber(BigNumber.from(pendingBondReward ?? BigNumber.from(0)), 5)
+  console.log('pendingBondReward:', pendingBondReward)
+  const dfsFromBondReward = formatBigNumber(BigNumber.from(pendingBondReward ?? BigNumber.from(0)), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest) ? 0 : totalSavings * savingInterest
   const nextRewardSaving = formatBigNumber(
     BigNumber.from(Number.isNaN(nextRewardSavingNumber) ? '0' : nextRewardSavingNumber.toString()),
@@ -181,6 +183,7 @@ const Reward = () => {
       value: formatBigNumber(BigNumber.from(Object.values(me?.unlockedPowerDetail[key])[0]), 5),
     }
   })
+  console.log(me)
   useEffect(() => {
     if (account) {
       // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -190,12 +193,8 @@ const Reward = () => {
           setMe(response[account])
         }),
       )
-      // dfsMineContract.getReward(account).then(res => {
-      //   console.log(res)
-      //   setReward(res)
-      // })
     }
-  }, [account])
+  }, [account, refresh])
   return (
     <RewardPageWrap>
       {account && access && (
@@ -217,8 +216,6 @@ const Reward = () => {
                   <SwiperSlide key={item.name}>
                     <SwiperItem isMobile={isMobile}>
                       <SwiperItemImg src={`/images/reward/headPortrait${index}.png`} />
-                      {/* <SwiperItemName>{item.name}</SwiperItemName>
-                      <SwiperItemDes>{item.description}</SwiperItemDes> */}
                     </SwiperItem>
                   </SwiperSlide>
                 )
@@ -396,7 +393,7 @@ const Reward = () => {
                   </DataCellWrap>
                   <DataCell
                     label={t('Staked limit')}
-                    value={`${formatBigNumber(stakedSavings ?? BigNumber.from(0), 2)} DFS`}
+                    value={`${formatBigNumber(BigNumber.from(me?.stakedSavings ?? 0), 2)} DFS`}
                     position="horizontal"
                   />
                 </CardItem>
@@ -406,26 +403,56 @@ const Reward = () => {
                   <MoneyInput
                     prefix="$"
                     suffix="ALL"
-                    value={stakeAmount?.toString()}
-                    onInput={(e: any) => setStakeAmount(e.target.value)}
+                    value={amount?.toString()}
+                    onInput={(e: any) => setAmount(e.target.value)}
                   />
                   <BtnWrap>
                     <TakeOutBtn
                       style={{ marginRight: '10px' }}
                       onClick={async () => {
-                        await dfsMineContract.unstakeSavings(stakeAmount)
+                        const parsedAmount = parseUnits(amount, 'ether')
+                        const receipt = await dfsMineContract.unstakeSavings(parsedAmount)
+                        await receipt.wait()
+                        const response = await fetch('https://middle.diffusiondao.org/unstakeSavings', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                            address: account,
+                            amount: parsedAmount.toString(),
+                          }),
+                        })
+                        const json = await response.json()
+                        setMe(json[account])
                       }}
                     >
                       {t('Unstake')}
                     </TakeOutBtn>
                     <StakeBtn
                       onClick={async () => {
-                        if (stakeAmount) {
+                        if (amount) {
                           const allowance = await dfsContract.allowance(account, dfsMineAddress)
                           if (allowance.eq(0)) {
                             await dfsContract.approve(dfsMineAddress, MaxUint256)
                           }
-                          await dfsMineContract.stakeSavings(stakeAmount)
+                          const parsedAmount = parseUnits(amount, 'ether')
+                          console.log(parsedAmount.toString())
+                          let receipt = await dfsMineContract.stakeSavings(parsedAmount)
+                          receipt = await receipt.wait()
+                          console.log(receipt)
+                          const response = await fetch('https://middle.diffusiondao.org/stakeSavings', {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                              address: account,
+                              amount: parsedAmount.toString(),
+                            }),
+                          })
+                          const json = await response.json()
+                          setMe(json[account])
                         }
                       }}
                     >

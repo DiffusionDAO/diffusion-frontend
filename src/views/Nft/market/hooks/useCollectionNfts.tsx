@@ -267,7 +267,10 @@ export const useCollectionNfts = (collectionAddress: string) => {
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
-        const marketItems = await nftMarketContract.fetchMarketItems()
+        const response = await fetch('https://middle.diffusiondao.org/fetchMarketItems')
+        const marketItems = await response.json()
+        console.log(marketItems)
+        // const marketItems = await nftMarketContract.fetchMarketItems()
         const marketTokenIds = marketItems.filter((item) => item[4] === collectionAddress).map((item) => item[5])
         newNfts = await marketTokenIds.map(async (tokenId) => {
           const url = `${API_NFT}/collections/${collection.address}/tokens/${tokenId.toString()}`

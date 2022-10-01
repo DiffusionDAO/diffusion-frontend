@@ -41,7 +41,7 @@ const PropertiesCard: React.FC<React.PropsWithChildren<PropertiesCardProps>> = (
   const { t } = useTranslation()
   const content = (
     <Box p="24px">
-      {properties.map((property) => (
+      {properties?.map((property) => (
         <SingleProperty
           key={property.traitType}
           title={property.traitType}

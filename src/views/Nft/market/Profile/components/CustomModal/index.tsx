@@ -23,7 +23,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   const { t } = useTranslation()
 
   return (
-    <StyledModal width={500} className="no-header" onCancel={onClose} visible centered maskClosable={false} footer={[]}>
+    <StyledModal width={500} className="no-header" onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <ContentWrap>
         <TitleText>{title}</TitleText>
         <DesText>{description}</DesText>

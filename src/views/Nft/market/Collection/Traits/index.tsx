@@ -9,13 +9,13 @@ const Traits = () => {
 
   return (
     <>
-      <Container py="40px">
+      {/* <Container py="40px">
         {collectionAddress === pancakeBunniesAddress ? (
           <PancakeBunniesTraits collectionAddress={collectionAddress} />
         ) : (
           <CollectionTraits collectionAddress={collectionAddress} />
         )}
-      </Container>
+      </Container> */}
     </>
   )
 }

@@ -7,7 +7,7 @@ interface PlayModalProps {
 
 const PlayBindBoxModal: React.FC<PlayModalProps> = ({ onClose, gifUrl }) => {
   return (
-    <StyledModal width={320} onCancel={onClose} visible centered maskClosable={false} footer={[]}>
+    <StyledModal width={320} onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <PlayImage src={gifUrl} />
     </StyledModal>
   )

@@ -308,20 +308,23 @@ export const getNftsOnChainMarketData = async (
   signer?: any,
 ): Promise<TokenMarketData[]> => {
   try {
-    const nftMarketContract = getNftMarketContract(signer)
+    // const nftMarketContract = getNftMarketContract(signer)
+    const response = await fetch('https://middle.diffusiondao.org/fetchMarketItems')
+    const askInfo = await response.json()
+    console.log('getNftsOnChainMarketData:', askInfo)
+
     // const askInfo = await nftMarketContract.fetchMarketItems()
-    console.log('multicallv2')
-    const askInfo = await multicallv2({
-      abi: nftMarketAbi,
-      calls: [
-        {
-          address: nftMarketContract.address,
-          name: 'fetchMarketItems',
-        },
-      ],
-      options: { requireSuccess: true },
-    })
-    console.log('askInfo:', askInfo)
+    // const askInfo = await multicallv2({
+    //   abi: nftMarketAbi,
+    //   calls: [
+    //     {
+    //       address: nftMarketContract.address,
+    //       name: 'fetchMarketItems',
+    //     },
+    //   ],
+    //   options: { requireSuccess: true },
+    // })
+    // console.log('askInfo:', askInfo)
     // const {data:askInfo} = useSWRContract([nftMarketContract,'fetchMarketItems'])
 
     if (!askInfo) return []
@@ -331,7 +334,7 @@ export const getNftsOnChainMarketData = async (
         if (!tokenAskInfo.seller || !tokenAskInfo.price) return null
         const currentSeller = tokenAskInfo.seller
         const isTradable = currentSeller.toLowerCase() !== NOT_ON_SALE_SELLER
-        const currentAskPrice = tokenAskInfo.price && formatBigNumber(tokenAskInfo.price)
+        const currentAskPrice = tokenAskInfo.price && BigNumber.from(tokenAskInfo.price)
 
         return {
           collection: { id: collectionAddress.toLowerCase() },
@@ -1016,7 +1019,6 @@ export const combineNftMarketAndMetadata = (
   profileNftId?: string,
 ): NftToken[] => {
   const completeNftData = nftsWithMetadata.map<NftToken>((nft) => {
-    // Get metadata object
     let marketData = nftsForSale.find(
       (forSaleNft) =>
         forSaleNft.tokenId === nft.tokenId &&
@@ -1037,35 +1039,35 @@ export const combineNftMarketAndMetadata = (
   return completeNftData
 }
 
-const fetchWalletMarketData = async (walletNftsByCollection: {
-  [collectionAddress: string]: TokenIdWithCollectionAddress[]
-}): Promise<TokenMarketData[]> => {
-  console.log('fetchWalletMarketData:')
+// const fetchWalletMarketData = async (walletNftsByCollection: {
+//   [collectionAddress: string]: TokenIdWithCollectionAddress[]
+// }): Promise<TokenMarketData[]> => {
+//   console.log('fetchWalletMarketData:')
 
-  const walletMarketDataRequests = Object.entries(walletNftsByCollection).map(
-    async ([collectionAddress, tokenIdsWithCollectionAddress]) => {
-      const tokenIdIn = tokenIdsWithCollectionAddress.map((walletNft) => walletNft.tokenId)
-      const [nftsOnChainMarketData] = await Promise.all([
-        getNftsOnChainMarketData(collectionAddress.toLowerCase(), tokenIdIn),
-      ])
+//   const walletMarketDataRequests = Object.entries(walletNftsByCollection).map(
+//     async ([collectionAddress, tokenIdsWithCollectionAddress]) => {
+//       const tokenIdIn = tokenIdsWithCollectionAddress.map((walletNft) => walletNft.tokenId)
+//       const [nftsOnChainMarketData] = await Promise.all([
+//         getNftsOnChainMarketData(collectionAddress.toLowerCase(), tokenIdIn),
+//       ])
 
-      return tokenIdIn
-        .map((tokenId) => {
-          const onChainMarketData = nftsOnChainMarketData.find(
-            (onChainTokenMarketData) => onChainTokenMarketData.tokenId === tokenId,
-          )
+//       return tokenIdIn
+//         .map((tokenId) => {
+//           const onChainMarketData = nftsOnChainMarketData.find(
+//             (onChainTokenMarketData) => onChainTokenMarketData.tokenId === tokenId,
+//           )
 
-          if (!onChainMarketData) return null
+//           if (!onChainMarketData) return null
 
-          return { ...onChainMarketData }
-        })
-        .filter(Boolean)
-    },
-  )
+//           return { ...onChainMarketData }
+//         })
+//         .filter(Boolean)
+//     },
+//   )
 
-  const walletMarketDataResponses = await Promise.all(walletMarketDataRequests)
-  return walletMarketDataResponses.flat()
-}
+//   const walletMarketDataResponses = await Promise.all(walletMarketDataRequests)
+//   return walletMarketDataResponses.flat()
+// }
 
 /**
  * Get in-wallet, on-sale & profile pic NFT metadata, complete with market data for a given account
@@ -1134,12 +1136,12 @@ const fetchWalletMarketData = async (walletNftsByCollection: {
  * Fetch distribution information for a collection
  * @returns
  */
-export const getCollectionDistributionApi = async <T>(collectionAddress: string): Promise<T> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}/distribution`)
-  if (res.ok) {
-    const data = await res.json()
-    return data
-  }
-  console.error(`API: Failed to fetch NFT collection ${collectionAddress} distribution`, res.statusText)
-  return null
-}
+// export const getCollectionDistributionApi = async <T>(collectionAddress: string): Promise<T> => {
+//   const res = await fetch(`${API_NFT}/collections/${collectionAddress}/distribution`)
+//   if (res.ok) {
+//     const data = await res.json()
+//     return data
+//   }
+//   console.error(`API: Failed to fetch NFT collection ${collectionAddress} distribution`, res.statusText)
+//   return null
+// }
