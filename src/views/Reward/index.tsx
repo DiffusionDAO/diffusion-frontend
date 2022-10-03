@@ -80,25 +80,25 @@ const Reward = () => {
   const [socialRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
   const [referrals, setReferrals] = useState({})
   const [me, setMe] = useState<any>({})
-  const [refresh, setRefresh] = useState<any>({})
+  const [activeIndex, setActiveIndex] = useState(1)
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
   const dfsMineContract = useDFSMineContract()
   const dfsContract = useDFSContract()
   const dfsMineAddress = getMineAddress()
-  const slidesPerView = isMobile ? 1 : 5
+  const slidesPerView = isMobile ? 1 : 3
   const swiperWrapBgImgUrl = isMobile ? '/images/reward/swiperWrapBgMobile.png' : '/images/reward/swiperWrapBg.png'
   const swiperSlideData = [
-    { name: 'No Bonus1', description: 'No bonus for now' },
-    { name: 'No Bonus2', description: 'No bonus for now' },
-    { name: 'No Bonus3', description: 'No bonus for now' },
-    { name: 'No Bonus4', description: 'No bonus for now' },
-    { name: 'No Bonus5', description: 'No bonus for now' },
-    { name: 'No Bonus6', description: 'No bonus for now' },
-    { name: 'No Bonus7', description: 'No bonus for now' },
-    { name: 'No Bonus8', description: 'No bonus for now' },
-    { name: 'No Bonus9', description: 'No bonus for now' },
+    { name: 'level1', description: 'level1' },
+    { name: 'level2', description: 'level2' },
+    { name: 'level3', description: 'level3' },
+    { name: 'level4', description: 'level4' },
+    { name: 'level5', description: 'level5' },
+    { name: 'level6', description: 'level6' },
+    { name: 'level7', description: 'level7' },
+    { name: 'level8', description: 'level8' },
+    { name: 'level9', description: 'level9' },
   ]
 
   const openDetailModal = () => {
@@ -115,7 +115,7 @@ const Reward = () => {
   }
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [reward, setReward] = useState([])
-  const { data: pendingBondReward } = useSWRContract([dfsMineContract, 'pendingBondReward', [account ?? zeroAddress]])
+  // const { data: bondRewardVestingSecondsFromContract } = useSWRContract([dfsMineContract, 'bondRewardVestingSeconds', []])
   const { data } = useSWRContract([dfsMineContract, 'getReward', [account ?? zeroAddress]])
 
   const [
@@ -124,6 +124,7 @@ const Reward = () => {
     totalRewards,
     totalSavings,
     rewardVestingSeconds,
+    bondRewardVestingSeconds,
     savingVestingSeconds,
     rewardPerSecond,
     savingsPerSecond,
@@ -133,7 +134,22 @@ const Reward = () => {
     socialReward,
     bondReward,
   ] = [...(data ?? [])]
-
+  console.log(
+    pendingReward,
+    DfsBalance,
+    totalRewards,
+    totalSavings,
+    rewardVestingSeconds,
+    bondRewardVestingSeconds?.toString(),
+    savingVestingSeconds,
+    rewardPerSecond?.toString(),
+    savingsPerSecond,
+    nextSavingsStakingPayoutTime,
+    epochLength,
+    stakedSavings,
+    socialReward?.toString(),
+    bondReward,
+  )
   const nextTime = nextSavingsStakingPayoutTime ? new Date(nextSavingsStakingPayoutTime?.toNumber() * 1000) : 0
   const nextSavingInterestChange =
     nextTime !== 0
@@ -143,6 +159,8 @@ const Reward = () => {
     Number.isNaN(epochLength / rewardVestingSeconds) ? 0 : (epochLength / rewardVestingSeconds) * 100,
     2,
   )
+  // 1000000000000000000
+  console.log('epochLength:', epochLength?.toString(), savingVestingSeconds?.toString())
   const savingInterest = Number.isNaN(epochLength / savingVestingSeconds)
     ? 0
     : (epochLength / savingVestingSeconds) * 100
@@ -161,14 +179,31 @@ const Reward = () => {
   )
   const greenPower = formatBigNumber(BigNumber.from(me?.power ?? 0), 3)
   const totalUnlockedPower = formatBigNumber(BigNumber.from(me?.totalUnlockedPower ?? 0), 3)
+  console.log('me:', me)
+
+  // const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 5)
+  const now = Math.floor(Date.now() / 1000)
+  // const socialRewardSeconds = me?.lastSocialRewardWithdraw ? (now - me?.lastSocialRewardWithdraw) : 0
+  // console.log("socialRewardSeconds:", socialRewardSeconds)
+  // const pendingRewardString = formatBigNumber(BigNumber.from(rewardPerSecond ? rewardPerSecond?.mul(socialRewardSeconds) : 0), 5)
   const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 5)
-  console.log('pendingBondReward:', pendingBondReward)
-  const dfsFromBondReward = formatBigNumber(BigNumber.from(pendingBondReward ?? BigNumber.from(0)), 6)
+
+  const bondRewardSeconds = me?.lastBondRewardWidthdraw ? now - me?.lastBondRewardWidthdraw : 0
+  const bondRewardLocked = me?.bondRewardLocked ?? 0
+  // const userPendingBondReward = bondRewardLocked * bondRewardSeconds / bondRewardVestingSeconds
+  // console.log("userPendingBondReward:", userPendingBondReward)
+  const dfsFromBondReward = formatBigNumber(
+    BigNumber.from(Number.isNaN(bondReward) ? BigNumber.from(0) : bondReward),
+    6,
+  )
   const nextRewardSavingNumber = Number.isNaN(savingInterest) ? 0 : totalSavings * savingInterest
   const nextRewardSaving = formatBigNumber(
-    BigNumber.from(Number.isNaN(nextRewardSavingNumber) ? '0' : nextRewardSavingNumber.toString()),
+    BigNumber.from(Number.isNaN(nextRewardSavingNumber) ? '0' : nextRewardSavingNumber?.toString()),
     3,
   )
+  // const dfsFromBondReward = '0'
+  // const pendingRewardString = "0"
+  // const nextRewardSaving = '0'
   const bondRewardDetailKeys = Object.keys(me?.dfsBondRewardDetail ?? {})
   const unlockedPowerDetailKeys = Object.keys(me?.unlockedPowerDetail ?? {})
   const bondRewardDetailData = bondRewardDetailKeys.map((key) => {
@@ -183,18 +218,18 @@ const Reward = () => {
       value: formatBigNumber(BigNumber.from(Object.values(me?.unlockedPowerDetail[key])[0]), 5),
     }
   })
-  console.log(me)
   useEffect(() => {
     if (account) {
       // eslint-disable-next-line @typescript-eslint/no-shadow
       fetch('https://middle.diffusiondao.org/referrals').then((res) =>
         res.json().then((response) => {
+          console.log('response:', response)
           setReferrals(response)
           setMe(response[account])
         }),
       )
     }
-  }, [account, refresh])
+  }, [account])
   return (
     <RewardPageWrap>
       {account && access && (
@@ -204,12 +239,12 @@ const Reward = () => {
               modules={[Navigation]}
               className="rewardSwiper"
               spaceBetween={50}
-              initialSlide={me?.level}
+              initialSlide={me?.level ?? 4}
               slidesPerView={slidesPerView}
               centeredSlides
               navigation
-              // onSwiper={(swiper) => console.log(swiper)}
-              // onSlideChange={() => console.log('slide change')}
+              onSwiper={(swiper) => console.log(swiper)}
+              onSlideChange={() => console.log('slide change')}
             >
               {swiperSlideData.map((item, index) => {
                 return (
@@ -236,7 +271,19 @@ const Reward = () => {
                 <ExtractBtn
                   onClick={async () => {
                     if (dfsFromBondReward !== '0') {
-                      await dfsMineContract.withdrawBondReward()
+                      const receipt = await dfsMineContract.withdrawBondReward()
+                      await receipt.wait()
+                      const response = await fetch('https://middle.diffusiondao.org/withdrawBondReward', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          address: account,
+                        }),
+                      })
+                      const json = await response.json()
+                      setMe(json[account])
                     } else {
                       alert('No bond reward')
                     }
@@ -333,7 +380,19 @@ const Reward = () => {
                       <ExtractBtn
                         onClick={async () => {
                           if (socialReward !== 0) {
-                            await dfsMineContract.claim()
+                            const receipt = await dfsMineContract.claim()
+                            await receipt.wait()
+                            const response = await fetch('https://middle.diffusiondao.org/withdrawSoicalReward', {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify({
+                                address: account,
+                              }),
+                            })
+                            const json = await response.json()
+                            setMe(json[account])
                           } else {
                             alert('No social reward')
                           }
