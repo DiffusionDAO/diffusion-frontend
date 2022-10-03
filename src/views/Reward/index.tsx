@@ -192,10 +192,7 @@ const Reward = () => {
   const bondRewardLocked = me?.bondRewardLocked ?? 0
   // const userPendingBondReward = bondRewardLocked * bondRewardSeconds / bondRewardVestingSeconds
   // console.log("userPendingBondReward:", userPendingBondReward)
-  const dfsFromBondReward = formatBigNumber(
-    BigNumber.from(Number.isNaN(bondReward) ? BigNumber.from(0) : bondReward),
-    6,
-  )
+  const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest) ? 0 : totalSavings * savingInterest
   const nextRewardSaving = formatBigNumber(
     BigNumber.from(Number.isNaN(nextRewardSavingNumber) ? '0' : nextRewardSavingNumber?.toString()),
