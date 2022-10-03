@@ -153,8 +153,8 @@ export default {
     97: '0x0e6dfbCe936ABe08cda0Caf576E3CfcF13A11830',
   },
   bond: {
-    56: '',
-    97: '0x3dE232826a58E54F55400EA6Fa2a5B1deAC6A21b',
+    56: '0x17e0FC36De7342353321F09e19327f30B5C76E82',
+    97: '0x17e0FC36De7342353321F09e19327f30B5C76E82',
   },
   usdt: {
     56: '0x55d398326f99059fF775485246999027B3197955',
@@ -162,7 +162,7 @@ export default {
   },
   dfs: {
     56: '',
-    97: '0x35fC4EB5fAc6625fD4B8EaE35212a9789321C42b',
+    97: '0x206723bD6CEf40D1d43E15aA0e95a7f0E6629308',
   },
   starlightNft: {
     56: '',
