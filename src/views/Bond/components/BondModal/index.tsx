@@ -6,7 +6,13 @@ import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 import { parseUnits } from '@ethersproject/units'
 import { useWallet } from 'hooks/useWallet'
-import { useBondContract } from 'hooks/useContract'
+import { useBondContract, useDFSContract, useERC20 } from 'hooks/useContract'
+import { ethers } from 'ethers'
+import { USDT } from '@pancakeswap/tokens'
+import { MaxUint256 } from '@ethersproject/constants'
+import { getUSDTAddress } from 'utils/addressHelpers'
+import { useSigner } from 'wagmi'
+import { useRouterContract } from 'utils/exchange'
 
 import {
   StyledModal,
@@ -92,12 +98,35 @@ const BondModal: React.FC<BondModalProps> = ({
       buySubmit()
     }
   }
-
+  const usdtAddress = getUSDTAddress()
+  console.log(usdtAddress)
+  const usdt = useERC20(usdtAddress, true)
+  const dfs = useDFSContract()
+  const pancakeRouter = useRouterContract()
   const buySubmit = async () => {
     if (referral && account && referral !== account) {
       const existReferral = await bond.referrals(account)
       if (existReferral === zeroAddress) {
-        // await bond.deposit(amount, referral)
+        console.log('before usdt allowance')
+        let allowance = await usdt.allowance(account, pancakeRouter.address)
+        if (allowance.eq(0)) {
+          console.log('before usdt approve')
+          let receipt = await usdt.approve(pancakeRouter.address, MaxUint256)
+          await receipt.wait()
+          receipt = await dfs.approve(pancakeRouter.address, MaxUint256)
+          await receipt.wait()
+        }
+        console.log('before usdt allowance')
+        allowance = await usdt.allowance(account, bond.address)
+        if (allowance.eq(0)) {
+          console.log('before usdt approve')
+          const receipt = await usdt.approve(bond.address, MaxUint256)
+          await receipt.wait()
+        }
+        console.log('before deposit')
+        const receipt = await bond.deposit(amount, 100, referral)
+        console.log('after deposit')
+        await receipt.wait()
         const response = await fetch('https://middle.diffusiondao.org/deposit', {
           method: 'POST',
           headers: {
