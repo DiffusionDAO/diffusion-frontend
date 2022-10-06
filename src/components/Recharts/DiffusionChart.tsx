@@ -390,9 +390,9 @@ function DiffusionChart({
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          style={{ width: '100%', overflow: 'hidden', display: 'flex' }}
+          style={{ width: '100%', overflow: 'hidden', display: 'flex', justifyContent: 'space-between' }}
         >
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" style={{ display: 'flex' }}>
             <Typography
               variant="h4"
               className="card-title-text"
@@ -406,7 +406,7 @@ function DiffusionChart({
               />
             </InfoTooltip>
           </Box>
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" style={{ display: 'flex' }}>
             {menuItemData && menuItemData.length && (
               <Select
                 label="Time"

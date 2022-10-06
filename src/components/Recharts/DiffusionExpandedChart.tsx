@@ -36,7 +36,7 @@ function DiffusionExpandedChart({
       }}
     >
       <div className="chart-card-header">
-        <Box display="flex" alignItems="center">
+        <Box display="flex" alignItems="center" style={{ display: 'flex' }}>
           <Typography
             variant="h4"
             className="card-title-text"
