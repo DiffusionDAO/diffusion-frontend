@@ -77,6 +77,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [bondPrice, setBondPrice] = useState<number>(0)
   const [marketPrice, setMarketPrice] = useState<number>(0)
   const [dfsBalance, setDfsBalance] = useState<string>()
+  const [minPrice, setMinPrice] = useState<number>(0)
   const changeReferral = () => {
     setReferral('')
     setHasReferral(!hasReferral)
@@ -93,6 +94,10 @@ const BondModal: React.FC<BondModalProps> = ({
     bond.bondPrice().then((res) => {
       setBondPrice(res.toNumber())
       setMarketPrice((res.toNumber() * discount) / 10)
+    })
+    bond.terms().then((res) => {
+      console.log(res)
+      setMinPrice(res[0])
     })
     if (account) {
       dfs.balanceOf(account).then((res) => {
@@ -137,7 +142,7 @@ const BondModal: React.FC<BondModalProps> = ({
           await receipt.wait()
         }
         try {
-          const receipt = await bond.deposit(parseUnits(amount, 'ether'), 1, referral)
+          const receipt = await bond.deposit(parseUnits(amount, 'ether'), minPrice, referral)
           await receipt.wait()
         } catch (error: any) {
           window.alert(error.reason ?? error.data?.message ?? error.message)
@@ -149,7 +154,7 @@ const BondModal: React.FC<BondModalProps> = ({
           },
           body: JSON.stringify({
             address: account,
-            amount: parseUnits(amount, 'ether').toString(),
+            amount: parseUnits(amount, 'ether'),
             referral,
           }),
         })
