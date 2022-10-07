@@ -6,7 +6,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { getUSDTAddress, getBondAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useERC20 } from 'hooks/useContract'
+import { useBondContract, useERC20 } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import {
   BondPageWrap,
@@ -51,8 +51,12 @@ const Bond = () => {
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false)
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false)
 
+  const [bondPrice, setBondPrice] = useState<number>(0)
+  const discount = 90
   const [isApprove, setIsApprove] = useState<boolean>(false)
   const [bondItem, setBondItem] = useState<any>(null)
+
+  const bond = useBondContract()
 
   const openBondModal = (item) => {
     setBondItem(item)
@@ -78,6 +82,7 @@ const Bond = () => {
         if (res !== BigNumber.from(0)) setIsApprove(true)
       })
     }
+    bond.bondPrice().then((res) => setBondPrice(res.toNumber()))
   })
   return (
     <BondPageWrap>
@@ -144,12 +149,12 @@ const Bond = () => {
               <BondListItemContent isMobile={isMobile}>
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Price')}</CellTitle>
-                  <CellText>${item.price}</CellText>
+                  <CellText>${bondPrice}</CellText>
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Discount')}</CellTitle>
                   <CellText>
-                    <TextColor isRise={item.discount > 0}>{item.discount}%</TextColor>
+                    <TextColor isRise={discount > 0}>{discount}%</TextColor>
                   </CellText>
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>

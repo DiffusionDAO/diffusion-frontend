@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
 import { CloseIcon, CogIcon, InfoIcon, useWalletModal } from '@pancakeswap/uikit'
@@ -13,6 +13,7 @@ import { MaxUint256 } from '@ethersproject/constants'
 import { getUSDTAddress } from 'utils/addressHelpers'
 import { useSigner } from 'wagmi'
 import { useRouterContract } from 'utils/exchange'
+import { formatBigNumber } from 'utils/formatBalance'
 
 import {
   StyledModal,
@@ -69,24 +70,44 @@ const BondModal: React.FC<BondModalProps> = ({
   const { t } = useTranslation()
   const { onPresentConnectModal } = useWallet()
   const router = useRouter()
-  const [hasRecommand, sethasRecommand] = useState<boolean>(false)
+  const [hasReferral, setHasReferral] = useState<boolean>(false)
   const [referral, setReferral] = useState<string>()
   const [amount, setAmount] = useState<string>()
   const [activeTab, setActiveTab] = useState<string>('mint')
+  const [bondPrice, setBondPrice] = useState<number>(0)
+  const [marketPrice, setMarketPrice] = useState<number>(0)
+  const [dfsBalance, setDfsBalance] = useState<string>()
   const changeReferral = () => {
     setReferral('')
-    sethasRecommand(!hasRecommand)
+    setHasReferral(!hasReferral)
   }
+  const discount = 11
+
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const bond = useBondContract()
+  const dfs = useDFSContract()
+  const usdtAddress = getUSDTAddress()
+  const usdt = useERC20(usdtAddress, true)
+  const pancakeRouter = useRouterContract()
+  useEffect(() => {
+    bond.bondPrice().then((res) => {
+      setBondPrice(res.toNumber())
+      setMarketPrice((res.toNumber() * discount) / 10)
+    })
+    if (account) {
+      dfs.balanceOf(account).then((res) => {
+        setDfsBalance(formatBigNumber(res, 2))
+      })
+    }
+  }, [])
   const buy = () => {
-    if (!hasRecommand) {
+    if (!hasReferral) {
       confirm({
-        title: t('在下次购买时将无法添加推荐人'),
+        title: t('You will not be able to add a referrer on your next purchase'),
         icon: <ExclamationCircleOutlined />,
-        okText: '确认',
+        okText: t('Confirm'),
         okType: 'danger',
-        cancelText: '取消',
+        cancelText: t('Cancel'),
         onOk() {
           buySubmit()
         },
@@ -98,35 +119,29 @@ const BondModal: React.FC<BondModalProps> = ({
       buySubmit()
     }
   }
-  const usdtAddress = getUSDTAddress()
-  console.log(usdtAddress)
-  const usdt = useERC20(usdtAddress, true)
-  const dfs = useDFSContract()
-  const pancakeRouter = useRouterContract()
+
   const buySubmit = async () => {
     if (referral && account && referral !== account) {
       const existReferral = await bond.referrals(account)
       if (existReferral === zeroAddress) {
-        console.log('before usdt allowance')
         let allowance = await usdt.allowance(account, pancakeRouter.address)
         if (allowance.eq(0)) {
-          console.log('before usdt approve')
           let receipt = await usdt.approve(pancakeRouter.address, MaxUint256)
           await receipt.wait()
           receipt = await dfs.approve(pancakeRouter.address, MaxUint256)
           await receipt.wait()
         }
-        console.log('before usdt allowance')
         allowance = await usdt.allowance(account, bond.address)
         if (allowance.eq(0)) {
-          console.log('before usdt approve')
           const receipt = await usdt.approve(bond.address, MaxUint256)
           await receipt.wait()
         }
-        console.log('before deposit')
-        const receipt = await bond.deposit(amount, 100, referral)
-        console.log('after deposit')
-        await receipt.wait()
+        try {
+          const receipt = await bond.deposit(parseUnits(amount, 'ether'), 1, referral)
+          await receipt.wait()
+        } catch (error: any) {
+          window.alert(error.reason ?? error.data?.message ?? error.message)
+        }
         const response = await fetch('https://middle.diffusiondao.org/deposit', {
           method: 'POST',
           headers: {
@@ -139,18 +154,21 @@ const BondModal: React.FC<BondModalProps> = ({
           }),
         })
         const json = await response.json()
+        console.log(json)
       }
+    } else {
+      window.alert('Cannot set yourself as referral')
     }
   }
   const withdraw = () => {
     confirm({
-      title: t('您使用未提取的dfs进行抽卡的话，可获得更大的收益'),
+      title: t('Get even bigger gains with undrawn DFS draws'),
       icon: <ExclamationCircleOutlined />,
-      okText: '依然提取',
+      okText: t('Continue'),
       okType: 'danger',
-      cancelText: '去抽卡',
+      cancelText: t('Cancel'),
       onOk() {
-        console.log('OK')
+        bond.redeem(account)
       },
       onCancel() {
         router.push(`/mint`)
@@ -184,11 +202,11 @@ const BondModal: React.FC<BondModalProps> = ({
           <BondListItemContent>
             <ContentCell>
               <CellTitle>{t('Bond price')}</CellTitle>
-              <CellText>${bondData?.price}</CellText>
+              <CellText>${bondPrice ?? 0}</CellText>
             </ContentCell>
             <ContentCell>
               <CellTitle>{t('Market price')}</CellTitle>
-              <CellText>${bondData?.price}</CellText>
+              <CellText>${marketPrice ?? 0}</CellText>
             </ContentCell>
           </BondListItemContent>
         </BondListItem>
@@ -214,10 +232,10 @@ const BondModal: React.FC<BondModalProps> = ({
             />
             <RecommandWrap>
               <CheckBoxWrap onClick={changeReferral}>
-                {hasRecommand ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: '4px' }} /> : <CheckBox />}
+                {hasReferral ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: '4px' }} /> : <CheckBox />}
               </CheckBoxWrap>
               <RecommandLable onClick={changeReferral}>{t('Any Referrals?')}</RecommandLable>
-              {hasRecommand ? (
+              {hasReferral ? (
                 <RecommandInput
                   value={referral}
                   placeholder={t('address')}
@@ -256,7 +274,7 @@ const BondModal: React.FC<BondModalProps> = ({
         )}
         <ListItem>
           <ListLable>{t('Your balance')}</ListLable>
-          <ListContent>{bondData?.balance} DFS</ListContent>
+          <ListContent>{dfsBalance ?? 0} DFS</ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('You will receive')}</ListLable>

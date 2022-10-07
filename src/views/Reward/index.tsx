@@ -238,12 +238,11 @@ const Reward = () => {
               spaceBetween={50}
               initialSlide={me?.level}
               defaultValue={me?.level}
-              onChange={() => console.log('swiper')}
               slidesPerView={slidesPerView}
               centeredSlides
               navigation
-              onSwiper={(swiper) => console.log('swiper')}
-              onSlideChange={() => console.log('slide change')}
+              onSwiper={(swiper) => swiper.slideTo(me?.level, 50)}
+              onSlideChange={(swiper) => swiper.slideTo(me?.level, 50)}
             >
               {swiperSlideData.map((item, index) => {
                 return (
