@@ -1,7 +1,8 @@
 import Bond from '../views/Bond'
+import Dashboard from '../views/Dashboard'
 
 const IndexPage = () => {
-  return <Bond />
+  return <Dashboard />
 }
 
 export default IndexPage

@@ -86,16 +86,20 @@ const Bond = () => {
     }
     const dfsUsdt = bondDatasMock[0]
     if (dfsUsdt.price === 0) {
-      // eslint-disable-next-line no-return-assign, no-param-reassign
-      bond.bondPrice().then((res) => {
-        dfsUsdt.price = res.toNumber()
-      })
-      bond.terms().then((res) => {
-        dfsUsdt.duration = res[2] / (24 * 3600)
-      })
-      setBondData([dfsUsdt, ...bondDatasMock.slice(1)])
+      try {
+        // eslint-disable-next-line no-return-assign, no-param-reassign
+        bond.bondPrice().then((res) => {
+          dfsUsdt.price = res.toNumber()
+        })
+        bond.terms().then((res) => {
+          dfsUsdt.duration = res[2] / (24 * 3600)
+        })
+        setBondData([dfsUsdt, ...bondDatasMock.slice(1)])
+        dfsContract.totalSupply().then((res) => setDfsTotalSupply(formatBigNumber(res.mul(dfsUsdt.price), 2)))
+      } catch (error: any) {
+        window.alert(error.reason ?? error.data?.message ?? error.message)
+      }
     }
-    dfsContract.totalSupply().then((res) => setDfsTotalSupply(formatBigNumber(res.mul(dfsUsdt.price), 2)))
   }, [])
   return (
     <BondPageWrap>
