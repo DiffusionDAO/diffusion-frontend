@@ -29,7 +29,6 @@ const UserNfts: React.FC<
     onSuccessEditProfile?: () => void
   }>
 > = ({ isSelected, nfts, isLoading, selectNft, onSuccessSale, onSuccessEditProfile }) => {
-  console.log('UserNfts:', isSelected)
   const { t } = useTranslation()
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
     if (isSelected) {

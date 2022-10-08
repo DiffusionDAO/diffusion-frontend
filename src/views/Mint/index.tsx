@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBondContract, useDFSNftContract, useERC20, useNftDrawContract, useTokenContract } from 'hooks/useContract'
-import { getDFSAddress, getNftDrawAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getNftMintAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
@@ -54,7 +54,7 @@ const Mint = () => {
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1)
   const [maxOrdinary, setMaxOrdinary] = useState<BigNumber>(BigNumber.from(1))
   const [drawBindData, setDrawBindData] = useState<any>([])
-  const nftDrawAddress = getNftDrawAddress()
+  const nftMintAddress = getNftMintAddress()
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
   const [pendingPayout, setPendingPayout] = useState('')
@@ -75,7 +75,7 @@ const Mint = () => {
           setBalance(res)
         }
       })
-      tokenContract.allowance(account, nftDrawAddress).then((res) => {
+      tokenContract.allowance(account, nftMintAddress).then((res) => {
         if (!res.eq(allowance)) setAllowance(res)
       })
       const maxOrd = balance.div(ordinaryPrice)
@@ -101,30 +101,36 @@ const Mint = () => {
     }
     setGifUrl(`/images/mint/${type}.gif`)
     setPlayBindBoxModalVisible(true)
-    if (useVestingBond) {
-      const receipt = await bond.redeem(account)
-      await receipt.wait()
-      const pending = await bond.pendingPayoutFor(account)
-      setPendingPayout(formatBigNumber(pending, 2))
-    }
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
-    const recipient = await res.wait()
-    const { events } = recipient
-    const levels = []
 
-    for (let i = 1; i <= events.length; i++) {
-      if (i % 3 === 0) {
-        const id = BigNumber.from(events[i - 1].topics[3])
-        const tokenId = id.toString()
-        // eslint-disable-next-line no-await-in-loop
-        const level = await dfsNFT.getItems(tokenId)
-        levels.push(level.toString())
+    try {
+      if (useVestingBond) {
+        const receipt = await bond.redeem(account)
+        await receipt.wait()
+        const pending = await bond.pendingPayoutFor(account)
+        setPendingPayout(formatBigNumber(pending, 2))
       }
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
+      const recipient = await res.wait()
+      const { events } = recipient
+      const levels = []
+
+      for (let i = 1; i <= events.length; i++) {
+        if (i % 3 === 0) {
+          const id = BigNumber.from(events[i - 1].topics[3])
+          const tokenId = id.toString()
+          // eslint-disable-next-line no-await-in-loop
+          const level = await dfsNFT.getItems(tokenId)
+          levels.push(level.toString())
+        }
+      }
+      setDrawBindData(formatLevel(levels))
+      setPlayBindBoxModalVisible(false)
+      setBlindBoxModalVisible(true)
+    } catch (error: any) {
+      window.alert(error.reason ?? error.data?.message ?? error.message)
+      setPlayBindBoxModalVisible(false)
     }
-    setDrawBindData(formatLevel(levels))
-    setPlayBindBoxModalVisible(false)
-    setBlindBoxModalVisible(true)
   }
   const formatLevel = (data) => {
     const objItem = data.reduce((allNames: any, name: any) => {
@@ -196,7 +202,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Vesting Bond Balance')}: {pendingPayout ?? 0} DFS
+                    {t('Vesting')}: {pendingPayout ?? 0} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -239,7 +245,7 @@ const Mint = () => {
                         className="orangeBtn"
                         style={{ width: '80px' }}
                         onClick={async () => {
-                          await DFS.approve(nftDrawAddress, MaxUint256)
+                          await DFS.approve(nftMintAddress, MaxUint256)
                         }}
                       >
                         {t('Approve')}
@@ -299,7 +305,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Vesting Bond Balance')}: {pendingPayout ?? 0} DFS
+                    {t('Vesting')}: {pendingPayout ?? 0} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -341,7 +347,7 @@ const Mint = () => {
                       <DrawBlindBoxPrimaryBtn
                         className="purpleBtn"
                         onClick={async () => {
-                          await DFS.approve(nftDrawAddress, MaxUint256)
+                          await DFS.approve(nftMintAddress, MaxUint256)
                         }}
                         style={{ width: '80px' }}
                       >

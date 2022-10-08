@@ -41,7 +41,7 @@ import {
   getBCakeFarmBoosterAddress,
   getBCakeFarmBoosterProxyFactoryAddress,
   getNFTComposeAddress,
-  getNftDrawAddress,
+  getNftMintAddress,
   getNftMarketAddress,
   getDFSNFTAddress,
   getStarlightAddress,
@@ -382,7 +382,7 @@ export const getNftComposeContract = (signer?: Signer | Provider) => {
 }
 
 export const getNftDrawContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: nftDrawAbi, address: getNftDrawAddress(), signer })
+  return getContract({ abi: nftDrawAbi, address: getNftMintAddress(), signer })
 }
 
 export const getNftMarketContract = (signer?: Signer | Provider) => {
