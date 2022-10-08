@@ -6,8 +6,10 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { getUSDTAddress, getBondAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useBondContract, useERC20 } from 'hooks/useContract'
+import { useBondContract, useDFSContract, useERC20 } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
+import { formatBigNumber } from 'utils/formatBalance'
+
 import {
   BondPageWrap,
   BondPageHeader,
@@ -47,17 +49,17 @@ const Bond = () => {
   const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
-  const [bonData, setBondData] = useState<any[]>(bondDatasMock)
+  const [bondData, setBondData] = useState<any[]>(bondDatasMock)
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false)
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false)
 
   const [bondPrice, setBondPrice] = useState<number>(0)
-  const discount = 90
   const [isApprove, setIsApprove] = useState<boolean>(false)
   const [bondItem, setBondItem] = useState<any>(null)
-
+  const [vestingTerms, setVestingTerms] = useState<number>(0)
+  const [dfsTotalSupply, setDfsTotalSupply] = useState<string>()
   const bond = useBondContract()
-
+  const dfsContract = useDFSContract()
   const openBondModal = (item) => {
     setBondItem(item)
     setBondModalVisible(true)
@@ -82,8 +84,19 @@ const Bond = () => {
         if (res !== BigNumber.from(0)) setIsApprove(true)
       })
     }
-    bond.bondPrice().then((res) => setBondPrice(res.toNumber()))
-  })
+    const dfsUsdt = bondDatasMock[0]
+    if (dfsUsdt.price === 0) {
+      // eslint-disable-next-line no-return-assign, no-param-reassign
+      bond.bondPrice().then((res) => {
+        dfsUsdt.price = res.toNumber()
+      })
+      bond.terms().then((res) => {
+        dfsUsdt.duration = res[2] / (24 * 3600)
+      })
+      setBondData([dfsUsdt, ...bondDatasMock.slice(1)])
+    }
+    dfsContract.totalSupply().then((res) => setDfsTotalSupply(formatBigNumber(res.mul(dfsUsdt.price), 2)))
+  }, [])
   return (
     <BondPageWrap>
       <BondPageHeader>
@@ -102,11 +115,11 @@ const Bond = () => {
         <OverviewCard isMobile={isMobile}>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
-            <OverviewCardItemContent isMobile={isMobile}>$89.45M</OverviewCardItemContent>
+            <OverviewCardItemContent isMobile={isMobile}>{dfsTotalSupply ?? 0}</OverviewCardItemContent>
           </OverviewCardItem>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Price of DFS')}</OverviewCardItemTitle>
-            <OverviewCardItemContent isMobile={isMobile}>$9.22</OverviewCardItemContent>
+            <OverviewCardItemContent isMobile={isMobile}>{bondData[0].price}</OverviewCardItemContent>
           </OverviewCardItem>
         </OverviewCard>
         <OverviewPromptWrap>
@@ -136,7 +149,7 @@ const Bond = () => {
       </OverviewWrap>
 
       <Grid container spacing={2}>
-        {bonData.map((item) => (
+        {bondData.map((item) => (
           <Grid item lg={4} md={4} sm={12} xs={12} key={item.key}>
             <BondListItem>
               <BondListItemHeader isMobile={isMobile}>
@@ -149,12 +162,12 @@ const Bond = () => {
               <BondListItemContent isMobile={isMobile}>
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Price')}</CellTitle>
-                  <CellText>${bondPrice}</CellText>
+                  <CellText>${item.price}</CellText>
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Discount')}</CellTitle>
                   <CellText>
-                    <TextColor isRise={discount > 0}>{discount}%</TextColor>
+                    <TextColor isRise={item.discount > 0}>{item.discount}%</TextColor>
                   </CellText>
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>

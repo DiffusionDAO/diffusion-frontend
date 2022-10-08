@@ -3,14 +3,14 @@ import { FC, useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
-import { useDFSNftContract, useERC20, useNftDrawContract, useTokenContract } from 'hooks/useContract'
+import { useBondContract, useDFSNftContract, useERC20, useNftDrawContract, useTokenContract } from 'hooks/useContract'
 import { getDFSAddress, getNftDrawAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
 import { useWallet } from 'hooks/useWallet'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
-
+import { formatBigNumber } from 'utils/formatBalance'
 import {
   BondPageWrap,
   DrawBlindBoxList,
@@ -57,25 +57,27 @@ const Mint = () => {
   const nftDrawAddress = getNftDrawAddress()
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
+  const [pendingPayout, setPendingPayout] = useState('')
+
   const dfsAddress = getDFSAddress()
   const tokenContract = useERC20(dfsAddress)
 
   const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
   const seniorPrice = BigNumber.from(10).pow(18).mul(60)
   const NftDraw = useNftDrawContract()
-  if (account) {
-    tokenContract.balanceOf(account).then((res) => {
-      if (!res.eq(balance)) {
-        setBalance(res)
-      }
-    })
-    tokenContract.allowance(account, nftDrawAddress).then((res) => {
-      if (!res.eq(allowance)) setAllowance(res)
-    })
-  }
+  const bond = useBondContract()
 
   useEffect(() => {
     if (account) {
+      bond.pendingPayoutFor(account).then((res) => setPendingPayout(formatBigNumber(res, 2)))
+      tokenContract.balanceOf(account).then((res) => {
+        if (!res.eq(balance)) {
+          setBalance(res)
+        }
+      })
+      tokenContract.allowance(account, nftDrawAddress).then((res) => {
+        if (!res.eq(allowance)) setAllowance(res)
+      })
       const maxOrd = balance.div(ordinaryPrice)
       const maxSen = balance.div(seniorPrice)
       setMaxOrdinary(maxOrd)
@@ -85,7 +87,7 @@ const Mint = () => {
 
   const dfsNFT = useDFSNftContract()
   const DFS = useERC20(getDFSAddress())
-  const mint = async (type: string) => {
+  const mint = async (type: string, useVestingBond = true) => {
     if (!account) {
       onPresentConnectModal()
       return
@@ -99,6 +101,12 @@ const Mint = () => {
     }
     setGifUrl(`/images/mint/${type}.gif`)
     setPlayBindBoxModalVisible(true)
+    if (useVestingBond) {
+      const receipt = await bond.redeem(account)
+      await receipt.wait()
+      const pending = await bond.pendingPayoutFor(account)
+      setPendingPayout(formatBigNumber(pending, 2))
+    }
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
     const recipient = await res.wait()
@@ -147,7 +155,6 @@ const Mint = () => {
   const closePlayBindBoxModal = () => {
     setPlayBindBoxModalVisible(false)
   }
-  const zero = BigNumber.from(0)
   return (
     <BondPageWrap>
       <DrawBlindBoxList>
@@ -186,10 +193,10 @@ const Mint = () => {
                 </DalaCardList>
                 <CountWrap>
                   <AvailableCount>
-                    {t('Balance')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
+                    {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('未提取额度')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
+                    {t('Vesting Bond Balance')}: {pendingPayout ?? 0} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -242,15 +249,15 @@ const Mint = () => {
                     )}
                   </ActionRight>
                 </ActionWrap>
-                <DrawBlindBoxPrimaryBtn className="orangeBtn" onClick={() => mint('senior')}>
-                  {t('可用额度铸造')}
+                <DrawBlindBoxPrimaryBtn className="orangeBtn" onClick={() => mint('senior', false)}>
+                  {t('Balance Mint')}
                 </DrawBlindBoxPrimaryBtn>
                 <DrawBlindBoxPrimaryBtn
                   className="orangeBtn"
                   onClick={() => mint('senior')}
                   style={{ marginTop: '20px' }}
                 >
-                  {t('未提取额度铸造')}
+                  {t('Vesting Balance Mint')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>
             </DrawBlindBoxItem>
@@ -266,7 +273,7 @@ const Mint = () => {
                   <DalaCardListTitle>{t('Basic Mint')}</DalaCardListTitle>
                   <DataCell
                     label={t('Price')}
-                    value={`${formatUnits(ordinaryPrice, 'ether')} DFS`}
+                    value={`${formatBigNumber(ordinaryPrice, 2)} DFS`}
                     valueDivStyle={{ fontSize: '14px' }}
                     position="horizontal"
                   />
@@ -289,10 +296,10 @@ const Mint = () => {
                 </DalaCardList>
                 <CountWrap>
                   <AvailableCount>
-                    {t('Balance')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
+                    {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('未提取额度')}: {balance ? formatUnits(balance, 'ether') : 0} DFS
+                    {t('Vesting Bond Balance')}: {pendingPayout ?? 0} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -345,15 +352,15 @@ const Mint = () => {
                     )}
                   </ActionRight>
                 </ActionWrap>
-                <DrawBlindBoxPrimaryBtn className="purpleBtn" onClick={() => mint('ordinary')}>
-                  {t('可用额度铸造')}
+                <DrawBlindBoxPrimaryBtn className="purpleBtn" onClick={() => mint('ordinary', false)}>
+                  {t('Balance Mint')}
                 </DrawBlindBoxPrimaryBtn>
                 <DrawBlindBoxPrimaryBtn
                   className="purpleBtn"
                   onClick={() => mint('ordinary')}
                   style={{ marginTop: '20px' }}
                 >
-                  {t('未提取额度铸造')}
+                  {t('Vesting Balance Mint')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>
             </DrawBlindBoxItem>

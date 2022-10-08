@@ -235,6 +235,7 @@ const Reward = () => {
             <Swiper
               modules={[Navigation]}
               className="rewardSwiper"
+              virtual
               spaceBetween={50}
               initialSlide={me?.level}
               defaultValue={me?.level}

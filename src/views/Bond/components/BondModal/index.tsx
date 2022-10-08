@@ -7,7 +7,7 @@ import { Modal } from 'antd'
 import { parseUnits } from '@ethersproject/units'
 import { useWallet } from 'hooks/useWallet'
 import { useBondContract, useDFSContract, useERC20 } from 'hooks/useContract'
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { USDT } from '@pancakeswap/tokens'
 import { MaxUint256 } from '@ethersproject/constants'
 import { getUSDTAddress } from 'utils/addressHelpers'
@@ -77,7 +77,11 @@ const BondModal: React.FC<BondModalProps> = ({
   const [bondPrice, setBondPrice] = useState<number>(0)
   const [marketPrice, setMarketPrice] = useState<number>(0)
   const [dfsBalance, setDfsBalance] = useState<string>()
-  const [minPrice, setMinPrice] = useState<number>(0)
+  const [minPrice, setMinPrice] = useState<BigNumber>()
+  const [vestingTerms, setVestingTerms] = useState<number>(0)
+  const [maxPayout, setMaxPayout] = useState<string>()
+  const [payout, setPayout] = useState<string>()
+
   const changeReferral = () => {
     setReferral('')
     setHasReferral(!hasReferral)
@@ -91,20 +95,25 @@ const BondModal: React.FC<BondModalProps> = ({
   const usdt = useERC20(usdtAddress, true)
   const pancakeRouter = useRouterContract()
   useEffect(() => {
+    bond.terms().then((res) => {
+      console.log('terms:', res)
+      setMinPrice(res[0])
+      setVestingTerms(res[2])
+    })
+    bond.maxPayout().then((res) => {
+      setMaxPayout(formatBigNumber(res, 2))
+    })
     bond.bondPrice().then((res) => {
       setBondPrice(res.toNumber())
       setMarketPrice((res.toNumber() * discount) / 10)
     })
-    bond.terms().then((res) => {
-      console.log(res)
-      setMinPrice(res[0])
-    })
     if (account) {
       dfs.balanceOf(account).then((res) => {
+        console.log('balanceOf:', res)
         setDfsBalance(formatBigNumber(res, 2))
       })
     }
-  }, [])
+  }, [account])
   const buy = () => {
     if (!hasReferral) {
       confirm({
@@ -231,8 +240,14 @@ const BondModal: React.FC<BondModalProps> = ({
               prefix="$"
               suffix="ALL"
               value={amount}
-              onInput={(e: any) => {
+              onInput={async (e: any) => {
                 setAmount(e.target.value)
+                try {
+                  const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
+                  setPayout(formatBigNumber(payout, 2))
+                } catch (error: any) {
+                  window.alert(error.reason ?? error.data?.message ?? error.message)
+                }
               }}
             />
             <RecommandWrap>
@@ -283,21 +298,21 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem>
         <ListItem>
           <ListLable>{t('You will receive')}</ListLable>
-          <ListContent>{bondData?.getFee} DFS</ListContent>
+          <ListContent>{payout ?? 0} DFS</ListContent>
         </ListItem>
         <ListItem>
-          <ListLable>{t('Max You Can Withdraw')}</ListLable>
-          <ListContent>{bondData?.maxFee} DFS</ListContent>
+          <ListLable>{t('Max You Can Buy')}</ListLable>
+          <ListContent>{maxPayout ?? 0} DFS</ListContent>
         </ListItem>
         <ListItem>
-          <ListLable>{t('Your balance')}</ListLable>
+          <ListLable>{t('Discount')}</ListLable>
           <ListContent>
-            <TextColor isRise={bondData?.discount > 0}>{bondData?.discount}</TextColor>
+            <TextColor isRise={discount > 0}>{10 / discount}</TextColor>
           </ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('Duration')}</ListLable>
-          <ListContent>{bondData?.duration} Days</ListContent>
+          <ListContent>{vestingTerms / (24 * 3600)} Days</ListContent>
         </ListItem>
       </ContentWrap>
     </StyledModal>
