@@ -72,7 +72,7 @@ const ActivityCard: React.FC<React.PropsWithChildren<ActivityCardProps>> = ({ nf
   }, [sortedTokenActivities, currentPage])
 
   return (
-    <Card>
+    <Card background="rgb(0 0 0 / 8%)">
       {sortedTokenActivities.length === 0 && activitiesSlice.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />

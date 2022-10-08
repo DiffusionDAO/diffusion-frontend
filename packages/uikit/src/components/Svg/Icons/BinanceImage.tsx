@@ -1,13 +1,10 @@
 import React from "react";
-// import Svg from "../Svg";
+import Svg from "../Svg";
 import { SvgProps } from "../types";
 
-const DfsIcon = (props: any) => {
-  return <img src="/images/nfts/dfs.png" alt="dfs" width={props.width} height={props.height} />;
-};
-const Icon: React.FC<React.PropsWithChildren<SvgProps>> = (props) => {
+const Icon1: React.FC<React.PropsWithChildren<SvgProps>> = (props) => {
   return (
-    <DfsIcon {...props} />
+    <img src="/images/nfts/dfs.png" alt="dfs" {...props} />
     // <Svg viewBox="0 0 96 96" {...props}>
     //   <circle cx="48" cy="48" r="48" fill="#F0B90B" />
     //   <path
@@ -18,4 +15,4 @@ const Icon: React.FC<React.PropsWithChildren<SvgProps>> = (props) => {
   );
 };
 
-export default Icon;
+export default Icon1;

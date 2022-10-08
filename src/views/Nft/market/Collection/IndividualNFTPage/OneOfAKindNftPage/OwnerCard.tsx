@@ -1,5 +1,17 @@
 import styled from 'styled-components'
-import { Flex, Card, Grid, SellIcon, Text, useModal, Box, BinanceIcon, Skeleton, Button } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Card,
+  Grid,
+  SellIcon,
+  Text,
+  useModal,
+  Box,
+  BinanceIcon,
+  BinanceImage,
+  Skeleton,
+  Button,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { NftToken } from 'state/nftMarket/types'
@@ -53,9 +65,8 @@ const OwnerCard: React.FC<React.PropsWithChildren<OwnerCardProps>> = ({
   const [onPresentAdjustPriceModal] = useModal(
     <SellModal variant={nft?.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
-
   return (
-    <StyledCard>
+    <StyledCard background="rgb(0 0 0 / 8%)">
       <Grid
         flex="0 1 auto"
         gridTemplateColumns="34px 1fr"
@@ -64,7 +75,7 @@ const OwnerCard: React.FC<React.PropsWithChildren<OwnerCardProps>> = ({
         px="24px"
         borderBottom={`1px solid ${theme.colors.cardBorder}`}
       >
-        <SellIcon width="24px" height="24px" />
+        {/* <SellIcon width="24px" height="24px" /> */}
         <Text bold>{t('Owner')}</Text>
       </Grid>
       {owner && (
@@ -84,7 +95,7 @@ const OwnerCard: React.FC<React.PropsWithChildren<OwnerCardProps>> = ({
               {nft?.marketData?.isTradable ? (
                 <>
                   <Flex justifySelf="flex-start" alignItems="center" width="max-content">
-                    <BinanceIcon width="24px" height="24px" mr="8px" />
+                    <BinanceImage width="24px" height="24px" mr="8px" />
                     <Text bold>{formatNumber(parseFloat(nft?.marketData?.currentAskPrice), 0, 5)}</Text>
                   </Flex>
                   {bnbBusdPrice ? (

@@ -20,7 +20,9 @@ const LongTextContainer = styled(Text)`
   white-space: nowrap;
   text-overflow: ellipsis;
 `
-
+const SpaceIcon = () => {
+  return <div style={{ width: '24px' }}>&nbsp;</div>
+}
 const DetailsCard: React.FC<React.PropsWithChildren<DetailsCardProps>> = ({
   contractAddress,
   ipfsJson,
@@ -68,7 +70,7 @@ const DetailsCard: React.FC<React.PropsWithChildren<DetailsCardProps>> = ({
       )}
     </Box>
   )
-  return <ExpandableCard title={t('Details')} icon={<SearchIcon width="24px" height="24px" />} content={content} />
+  return <ExpandableCard title={t('Details')} icon={<SpaceIcon />} content={content} />
 }
 
 export default DetailsCard

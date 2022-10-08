@@ -13,6 +13,10 @@ const KNOWN_TRAITS_TEXT = {
   bunnyId: 'Bunny ID',
 }
 
+const SpaceIcon = () => {
+  return <div style={{ width: '12px' }}>&nbsp;</div>
+}
+
 const SingleProperty: React.FC<React.PropsWithChildren<{ title: string; value: string | number; rarity: number }>> = ({
   title,
   value,
@@ -51,7 +55,7 @@ const PropertiesCard: React.FC<React.PropsWithChildren<PropertiesCardProps>> = (
       ))}
     </Box>
   )
-  return <ExpandableCard title={t('Properties')} icon={<NftIcon width="24px" height="24px" />} content={content} />
+  return <ExpandableCard title={t('Properties')} icon={<SpaceIcon />} content={content} />
 }
 
 export default PropertiesCard

@@ -46,12 +46,11 @@ const ExpandableCard: React.FC<React.PropsWithChildren<ExpandableCardProps>> = (
   const [expanded, setExpanded] = useState(true)
   const { theme } = useTheme()
   return (
-    <FullWidthCard>
+    <FullWidthCard background="rgb(0 0 0 / 8%)">
       <Grid
         gridTemplateColumns="1fr 8fr 1fr"
         alignItems="center"
         height="72px"
-        px="24px"
         borderBottom={`1px solid ${theme.colors.cardBorder}`}
       >
         {icon}

@@ -154,7 +154,9 @@ const getNftFilter = (location: NftLocation) => {
     )
   }
 }
-
+const SpaceIcon = () => {
+  return <div style={{ width: '24px' }}>&nbsp;</div>
+}
 const ManageNFTsCard: React.FC<React.PropsWithChildren<ManageNftsCardProps>> = ({
   collection,
   tokenId,
@@ -247,7 +249,7 @@ const ManageNFTsCard: React.FC<React.PropsWithChildren<ManageNftsCardProps>> = (
   return (
     <ExpandableCard
       title={`${tokenId ? t('Manage Yours') : t('Manage Yours in Collection')}${totalNftsText}`}
-      icon={<CogIcon width="24px" height="24px" />}
+      icon={<SpaceIcon />}
       content={content}
     />
   )

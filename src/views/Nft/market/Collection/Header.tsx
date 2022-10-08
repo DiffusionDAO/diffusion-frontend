@@ -40,7 +40,7 @@ const Header: React.FC<React.PropsWithChildren<HeaderProps>> = ({ collection }) 
           title={collection?.name}
           description={collection?.description ? <Text color="textSubtle">{t(collection?.description)}</Text> : null}
         >
-          <StatBox>
+          <StatBox style={{ background: 'none' }}>
             <StatBoxItem title={t('Items')} stat={formatNumber(Number(totalSupply), 0, 0)} />
             <StatBoxItem
               title={t('Items listed')}
