@@ -95,21 +95,23 @@ const BondModal: React.FC<BondModalProps> = ({
   const usdt = useERC20(usdtAddress, true)
   const pancakeRouter = useRouterContract()
   useEffect(() => {
-    bond.terms().then((res) => {
-      console.log('terms:', res)
-      setMinPrice(res[0])
-      setVestingTerms(res[2])
-    })
-    bond.maxPayout().then((res) => {
-      setMaxPayout(formatBigNumber(res, 2))
-    })
-    bond.bondPrice().then((res) => {
-      setBondPrice(res.toNumber())
-      setMarketPrice((res.toNumber() * discount) / 10)
-    })
+    try {
+      bond.terms().then((res) => {
+        setMinPrice(res[0])
+        setVestingTerms(res[2])
+      })
+      bond.maxPayout().then((res) => {
+        setMaxPayout(formatBigNumber(res, 2))
+      })
+      bond.bondPrice().then((res) => {
+        setBondPrice(res.toNumber())
+        setMarketPrice((res.toNumber() * discount) / 10)
+      })
+    } catch (error: any) {
+      window.alert(error.reason ?? error.data?.message ?? error.message)
+    }
     if (account) {
       dfs.balanceOf(account).then((res) => {
-        console.log('balanceOf:', res)
         setDfsBalance(formatBigNumber(res, 2))
       })
     }

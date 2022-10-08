@@ -57,6 +57,7 @@ const Dashboard = () => {
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign
   const avgConentraction = conentractions.reduce((acc, cur) => (acc += cur), 0) / conentractions.length
+  const coefficient = avgConentraction + thirteen
   const time = new Date()
   return (
     <div className="dashboard-view">
@@ -201,7 +202,7 @@ const Dashboard = () => {
                         {/* {/* <h3 className="di-content">{eleven}</h3> */}
                         <DataCell
                           title={t('Diffusion Coefficient')}
-                          data={conentractions.length ? avgConentraction?.toString() : '0'}
+                          data={Number.isNaN(coefficient) ? '0' : coefficient.toString()}
                           titleStyle={{ color: '#ABB6FF' }}
                         />
                         <DataCell
