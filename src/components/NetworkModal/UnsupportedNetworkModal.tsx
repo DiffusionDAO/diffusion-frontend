@@ -16,7 +16,7 @@ import Dots from '../Loader/Dots'
 export function UnsupportedNetworkModal() {
   const { switchNetworkAsync, isLoading, canSwitch } = useSwitchNetwork()
   const { chains } = useNetwork()
-  const chainId = useLocalNetworkChain() || ChainId.BSC
+  const chainId = useLocalNetworkChain() || ChainId.BSC_TESTNET
   const { isConnected } = useAccount()
   const { logout } = useAuth()
   const { t } = useTranslation()
@@ -30,7 +30,8 @@ export function UnsupportedNetworkModal() {
     return activeSubMenuItem?.label || activeMenuItem?.label
   }, [menuItems, pathname])
 
-  const supportedMainnetChains = useMemo(() => chains.filter((chain) => !chain.testnet), [chains])
+  // const supportedMainnetChains = useMemo(() => chains.filter((chain) => !chain.testnet), [chains])
+  const supportedMainnetChains = useMemo(() => chains, [chains])
 
   return (
     <Modal title={t('Check your network')} hideCloseButton headerBackground="gradientCardHeader">
