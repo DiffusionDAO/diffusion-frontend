@@ -69,7 +69,7 @@ const Mint = () => {
 
   useEffect(() => {
     if (account) {
-      bond.pendingPayoutFor(account).then((res) => setPendingPayout(formatBigNumber(res, 2)))
+      bond.bondInfo(account).then((res) => setPendingPayout(formatBigNumber(res[0], 2)))
       tokenContract.balanceOf(account).then((res) => {
         if (!res.eq(balance)) {
           setBalance(res)

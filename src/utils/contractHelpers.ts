@@ -102,7 +102,7 @@ import bCakeProxyAbi from 'config/abi/bCakeProxy.json'
 
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftComposeAbi from 'config/abi/nftComposeAbi.json'
-import nftDrawAbi from 'config/abi/nftDrawAbi.json'
+import nftMintAbi from 'config/abi/nftMintAbi.json'
 import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
 import starlightAbi from 'config/abi/starlight.json'
 import duffionIDOAbi from 'config/abi/diffusionIDO.json'
@@ -382,7 +382,7 @@ export const getNftComposeContract = (signer?: Signer | Provider) => {
 }
 
 export const getNftDrawContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: nftDrawAbi, address: getNftMintAddress(), signer })
+  return getContract({ abi: nftMintAbi, address: getNftMintAddress(), signer })
 }
 
 export const getNftMarketContract = (signer?: Signer | Provider) => {

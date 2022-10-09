@@ -28,6 +28,11 @@
       },
       {
         "internalType": "address",
+        "name": "_mintAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
         "name": "_pancakeswapV2Router",
         "type": "address"
       }
@@ -117,13 +122,6 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "claimOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -153,58 +151,6 @@
     ],
     "name": "ControlVariableAdjustment",
     "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_minPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "ref",
-        "type": "address"
-      }
-    ],
-    "name": "deposit",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_minimumPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_maxPayout",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_vestingTerm",
-        "type": "uint32"
-      }
-    ],
-    "name": "initializeBondTerms",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
   },
   {
     "anonymous": false,
@@ -294,88 +240,42 @@
     "type": "event"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "DAO",
+    "outputs": [
       {
         "internalType": "address",
-        "name": "_recipient",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "redeem",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "Dfs",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "_addressLP",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_addressDFS",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_addressUSDT",
+        "internalType": "contract IDFS",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "setAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_price",
-        "type": "uint256"
-      }
-    ],
-    "name": "setBondPrice",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+    "inputs": [],
+    "name": "DfsNFT",
+    "outputs": [
       {
         "internalType": "address",
-        "name": "_address",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "setlpReceiver",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "direct",
-        "type": "bool"
-      },
-      {
-        "internalType": "bool",
-        "name": "renounce",
-        "type": "bool"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -508,41 +408,38 @@
   },
   {
     "inputs": [],
-    "name": "DAO",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "claimOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "Dfs",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "contract IDFS",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "DfsNFT",
-    "outputs": [
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minPrice",
+        "type": "uint256"
+      },
       {
         "internalType": "address",
-        "name": "",
+        "name": "ref",
         "type": "address"
       }
     ],
-    "stateMutability": "view",
+    "name": "deposit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -610,6 +507,29 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_minimumPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxPayout",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_vestingTerm",
+        "type": "uint32"
+      }
+    ],
+    "name": "initializeBondTerms",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "lastDecay",
     "outputs": [
@@ -643,6 +563,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mintNFTAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -800,6 +733,19 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      }
+    ],
+    "name": "redeem",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -813,6 +759,55 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_addressLP",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_addressDFS",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_addressUSDT",
+        "type": "address"
+      }
+    ],
+    "name": "setAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_price",
+        "type": "uint256"
+      }
+    ],
+    "name": "setBondPrice",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "setlpReceiver",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -865,6 +860,29 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "direct",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "renounce",
+        "type": "bool"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "usdtAddress",
     "outputs": [
@@ -899,6 +917,24 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
