@@ -388,7 +388,8 @@ function NftProfilePage() {
       <BackgroundWrap isMobile={isMobile}>
         <BackgroundText>
           <BackgroundTitle>
-            <Typed strings={['Diffusion DAO']} typeSpeed={50} cursorChar="" />
+            Diffusion DAO
+            {/* <Typed strings={['Diffusion DAO']} typeSpeed={50} cursorChar="" /> */}
           </BackgroundTitle>
           <BackgroundDes>
             {t(
