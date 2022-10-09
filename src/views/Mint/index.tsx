@@ -87,7 +87,7 @@ const Mint = () => {
 
   const dfsNFT = useDFSNftContract()
   const DFS = useERC20(getDFSAddress())
-  const mint = async (type: string, useVestingBond = true) => {
+  const mint = async (type: string, useBond = false) => {
     if (!account) {
       onPresentConnectModal()
       return
@@ -103,14 +103,11 @@ const Mint = () => {
     setPlayBindBoxModalVisible(true)
 
     try {
-      if (useVestingBond) {
-        const receipt = await bond.redeem(account)
-        await receipt.wait()
-        const pending = await bond.pendingPayoutFor(account)
-        setPendingPayout(formatBigNumber(pending, 2))
-      }
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const res = type === 'ordinary' ? await NftDraw.mintOne(ordinaryCount) : await NftDraw.mintTwo(seniorCount)
+      const res =
+        type === 'ordinary'
+          ? await NftDraw.mintOne(ordinaryCount, useBond)
+          : await NftDraw.mintTwo(seniorCount, useBond)
       const recipient = await res.wait()
       const { events } = recipient
       const levels = []
@@ -255,12 +252,12 @@ const Mint = () => {
                     )}
                   </ActionRight>
                 </ActionWrap>
-                <DrawBlindBoxPrimaryBtn className="orangeBtn" onClick={() => mint('senior', false)}>
+                <DrawBlindBoxPrimaryBtn className="orangeBtn" onClick={() => mint('senior')}>
                   {t('Balance Mint')}
                 </DrawBlindBoxPrimaryBtn>
                 <DrawBlindBoxPrimaryBtn
                   className="orangeBtn"
-                  onClick={() => mint('senior')}
+                  onClick={() => mint('senior', true)}
                   style={{ marginTop: '20px' }}
                 >
                   {t('Payout Mint')}
@@ -358,12 +355,12 @@ const Mint = () => {
                     )}
                   </ActionRight>
                 </ActionWrap>
-                <DrawBlindBoxPrimaryBtn className="purpleBtn" onClick={() => mint('ordinary', false)}>
+                <DrawBlindBoxPrimaryBtn className="purpleBtn" onClick={() => mint('ordinary')}>
                   {t('Balance Mint')}
                 </DrawBlindBoxPrimaryBtn>
                 <DrawBlindBoxPrimaryBtn
                   className="purpleBtn"
-                  onClick={() => mint('ordinary')}
+                  onClick={() => mint('ordinary', true)}
                   style={{ marginTop: '20px' }}
                 >
                   {t('Payout Mint')}
