@@ -117,11 +117,13 @@ const Bond = () => {
         <HeaderTitle>
           <Typed strings={[t('Bonds')]} typeSpeed={50} cursorChar="" />
         </HeaderTitle>
-        <HeaderDes>
-          {t(
-            'Sales of bonds is the only way for DFS to be minted, through the sales of bonds to accumulate large asset volume, the central financial agreement will have but not limited to USDT, ETH, BNB and equivalent type of assets. This type of asset will become the core foundation supporting the value of DFS.',
-          )}
-        </HeaderDes>
+        {!isMobile && (
+          <HeaderDes>
+            {t(
+              'Sales of bonds is the only way for DFS to be minted, through the sales of bonds to accumulate large asset volume, the central financial agreement will have but not limited to USDT, ETH, BNB and equivalent type of assets. This type of asset will become the core foundation supporting the value of DFS.',
+            )}
+          </HeaderDes>
+        )}
       </BondPageHeader>
 
       <OverviewWrap>
@@ -135,30 +137,31 @@ const Bond = () => {
             <OverviewCardItemContent isMobile={isMobile}>{bondData[0].price}</OverviewCardItemContent>
           </OverviewCardItem>
         </OverviewCard>
-        <OverviewPromptWrap>
-          {isMobile ? (
-            <>
-              <OverviewPromptLine style={{ width: 'calc(50% - 25px)' }} />
+        {isMobile ? (
+          <>
+            {/* <OverviewPromptLine style={{ width: 'calc(50% - 25px)' }} />
               <OverviewPromptTitle>{t('Reminder')}</OverviewPromptTitle>
-              <OverviewPromptLine style={{ width: 'calc(50% - 25px)' }} />
-            </>
-          ) : (
-            <>
-              <OverviewPromptTitle>{t('Reminder')}</OverviewPromptTitle>
-              <OverviewPromptLine style={{ width: 'calc(100% - 50px)' }} />
-            </>
-          )}
-        </OverviewPromptWrap>
-        <OverviewPromptList>
-          <OverviewPromptItem>{t('Invest in bonds and get DFS at a discounted price')}</OverviewPromptItem>
-          <OverviewPromptItem>{t('All funds invested in bonds will be added to the treasury')}</OverviewPromptItem>
-          <OverviewPromptItem>{t('DFS will be fully credited in 5 days after bonds purchase')}</OverviewPromptItem>
-          <OverviewPromptItem>
-            {t(
-              'Participate in NFT Gachapon even before the actual DFS has been credited into your account after your bonds purchase',
-            )}
-          </OverviewPromptItem>
-        </OverviewPromptList>
+              <OverviewPromptLine style={{ width: 'calc(50% - 25px)' }} /> */}
+          </>
+        ) : (
+          <OverviewPromptWrap>
+            <OverviewPromptTitle>{t('Reminder')}</OverviewPromptTitle>
+            <OverviewPromptLine style={{ width: 'calc(100% - 50px)' }} />
+          </OverviewPromptWrap>
+        )}
+
+        {!isMobile && (
+          <OverviewPromptList>
+            <OverviewPromptItem>{t('Invest in bonds and get DFS at a discounted price')}</OverviewPromptItem>
+            <OverviewPromptItem>{t('All funds invested in bonds will be added to the treasury')}</OverviewPromptItem>
+            <OverviewPromptItem>{t('DFS will be fully credited in 5 days after bonds purchase')}</OverviewPromptItem>
+            <OverviewPromptItem>
+              {t(
+                'Participate in NFT Gachapon even before the actual DFS has been credited into your account after your bonds purchase',
+              )}
+            </OverviewPromptItem>
+          </OverviewPromptList>
+        )}
       </OverviewWrap>
 
       <Grid container spacing={2}>

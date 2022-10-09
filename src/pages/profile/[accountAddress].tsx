@@ -382,22 +382,27 @@ function NftProfilePage() {
 
   return (
     <AccountNftWrap>
-      <NftSculptureWrap isMobile={isMobile}>
-        <NftSculptureGif isMobile={isMobile} src="/images/nfts/nft-sculpture.png" alt="" />
-      </NftSculptureWrap>
-      <BackgroundWrap isMobile={isMobile}>
-        <BackgroundText>
-          <BackgroundTitle>
-            Diffusion DAO
-            {/* <Typed strings={['Diffusion DAO']} typeSpeed={50} cursorChar="" /> */}
-          </BackgroundTitle>
-          <BackgroundDes>
-            {t(
-              'This is your digital asset treasure silo, stake or combine NFTs to explore more possibilities where you can obtain more fulfilling rewards',
-            )}
-          </BackgroundDes>
-        </BackgroundText>
-      </BackgroundWrap>
+      {!isMobile && (
+        <NftSculptureWrap isMobile={isMobile}>
+          <NftSculptureGif isMobile={isMobile} src="/images/nfts/nft-sculpture.png" alt="" />
+        </NftSculptureWrap>
+      )}
+      {!isMobile && (
+        <BackgroundWrap isMobile={isMobile}>
+          <BackgroundText>
+            <BackgroundTitle>
+              Diffusion DAO
+              {/* <Typed strings={['Diffusion DAO']} typeSpeed={50} cursorChar="" /> */}
+            </BackgroundTitle>
+            <BackgroundDes>
+              {t(
+                'This is your digital asset treasure silo, stake or combine NFTs to explore more possibilities where you can obtain more fulfilling rewards',
+              )}
+            </BackgroundDes>
+          </BackgroundText>
+        </BackgroundWrap>
+      )}
+
       <ConentWrap>
         <SubMenuWrap>
           <Tabs defaultActiveKey={activeTab} onChange={changeTab}>

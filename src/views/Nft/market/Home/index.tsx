@@ -107,29 +107,33 @@ const Home = () => {
           concaveDivider
           dividerPosition="top"
         >
-          <NftSculptureWrap isMobile={isMobile}>
-            <MagiccubeWrap isMobile={isMobile} src="/images/nfts/magicCube.png" alt="" />
-          </NftSculptureWrap>
-          <BackgroundWrap isMobile={isMobile}>
-            <BackgroundText>
-              <BackgroundTitle>
-                <Typed
-                  strings={[
-                    `${t('Discover more possibilities')}^1000`,
-                    `${t('Explore more art and digital rights space')}^1000`,
-                  ]}
-                  typeSpeed={30}
-                  style={{ fontSize: 35 }}
-                  onComplete={(self) => self.reset()}
-                />
-              </BackgroundTitle>
-              <BackgroundDes>
-                {t(
-                  'This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth',
-                )}
-              </BackgroundDes>
-            </BackgroundText>
-          </BackgroundWrap>
+          {!isMobile && (
+            <NftSculptureWrap isMobile={isMobile}>
+              <MagiccubeWrap isMobile={isMobile} src="/images/nfts/magicCube.png" alt="" />
+            </NftSculptureWrap>
+          )}
+          {!isMobile && (
+            <BackgroundWrap isMobile={isMobile}>
+              <BackgroundText>
+                <BackgroundTitle>
+                  <Typed
+                    strings={[
+                      `${t('Discover more possibilities')}^1000`,
+                      `${t('Explore more art and digital rights space')}^1000`,
+                    ]}
+                    typeSpeed={30}
+                    style={{ fontSize: 35 }}
+                    onComplete={(self) => self.reset()}
+                  />
+                </BackgroundTitle>
+                <BackgroundDes>
+                  {t(
+                    'This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth',
+                  )}
+                </BackgroundDes>
+              </BackgroundText>
+            </BackgroundWrap>
+          )}
           <Collections
             key="newest-collections"
             title={t('Newest Collections')}

@@ -20,10 +20,9 @@ export const SculptureWrap = styled.img`
   ${({ isMobile }: { isMobile: boolean }) => {
     if (isMobile) {
       return css`
-        width: 240px;
-        height: 240px;
-        right: -40px;
-        top: -40px;
+        width: 130px;
+        right: 0px;
+        top: 0px;
       `
     }
     return css`
