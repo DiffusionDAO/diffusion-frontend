@@ -202,7 +202,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Vesting')}: {pendingPayout ?? 0} DFS
+                    {t('Payout')}: {pendingPayout ?? 0} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -263,7 +263,7 @@ const Mint = () => {
                   onClick={() => mint('senior')}
                   style={{ marginTop: '20px' }}
                 >
-                  {t('Vesting Balance Mint')}
+                  {t('Payout Mint')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>
             </DrawBlindBoxItem>
@@ -305,7 +305,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Vesting')}: {pendingPayout ?? 0} DFS
+                    {t('Payout')}: {pendingPayout ?? 0} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -366,7 +366,7 @@ const Mint = () => {
                   onClick={() => mint('ordinary')}
                   style={{ marginTop: '20px' }}
                 >
-                  {t('Vesting Balance Mint')}
+                  {t('Payout Mint')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>
             </DrawBlindBoxItem>
