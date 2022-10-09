@@ -133,7 +133,7 @@ function NftProfilePage() {
     flatten
       .filter((item) => item.collectionName === 'DFSNFT')
       .map((nft) => (nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`))
-    mine.getAllStaked().then((res) => {
+    mine.getStaked(account).then((res) => {
       stakedTokenIds = res.map((item) => item.toString())
       const staked = flatten.filter(
         (item) => item.collectionName === 'DFSNFT' && res.map((item) => item.toString()).includes(item.tokenId),
