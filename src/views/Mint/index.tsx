@@ -36,18 +36,18 @@ import {
   CountWrap,
 } from './style'
 import DataCell from '../../components/ListDataCell'
-import BlindBoxModal from './components/BlindBoxModal'
+import MintBoxModal from './components/MintBoxModal'
 import JumpModal from './components/JumpModal'
-import PlayBindBoxModal from './components/PlayBindBoxModal'
+import PlayBindBoxModal from './components/PlayMintBoxModal'
 
 const Mint = () => {
   const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const { onPresentConnectModal } = useWallet()
-  const [blindBoxModalVisible, setBlindBoxModalVisible] = useState<boolean>(false)
+  const [mintBoxModalVisible, setBlindBoxModalVisible] = useState<boolean>(false)
   const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false)
-  const [playBindBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false)
+  const [playMintBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false)
   const [gifUrl, setGifUrl] = useState<string>('/images/mint/ordinary.gif')
   const [seniorCount, setSeniorCount] = useState<number>(1)
   const [maxSenior, setMaxSenior] = useState<BigNumber>(BigNumber.from(1))
@@ -70,14 +70,25 @@ const Mint = () => {
   useEffect(() => {
     if (account) {
       bond.bondInfo(account).then((res) => setPendingPayout(formatBigNumber(res[0], 2)))
-      tokenContract.balanceOf(account).then((res) => {
-        if (!res.eq(balance)) {
-          setBalance(res)
-        }
-      })
-      tokenContract.allowance(account, nftMintAddress).then((res) => {
-        if (!res.eq(allowance)) setAllowance(res)
-      })
+      tokenContract
+        .balanceOf(account)
+        .then((res) => {
+          if (!res.eq(balance)) {
+            setBalance(res)
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      tokenContract
+        .allowance(account, nftMintAddress)
+        .then((res) => {
+          if (!res.eq(allowance)) setAllowance(res)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+
       const maxOrd = balance.div(ordinaryPrice)
       const maxSen = balance.div(seniorPrice)
       setMaxOrdinary(maxOrd)
@@ -109,18 +120,13 @@ const Mint = () => {
           ? await NftDraw.mintOne(ordinaryCount, useBond)
           : await NftDraw.mintTwo(seniorCount, useBond)
       const recipient = await res.wait()
-      const { events } = recipient
+      const { logs, events } = recipient
       const levels = []
-
-      for (let i = 1; i <= events.length; i++) {
-        if (i % 3 === 0) {
-          const id = BigNumber.from(events[i - 1].topics[3])
-          const tokenId = id.toString()
-          // eslint-disable-next-line no-await-in-loop
-          const level = await dfsNFT.getItems(tokenId)
-          levels.push(level.toString())
-        }
-      }
+      const id = BigNumber.from(events[events.length - 1].topics[3])
+      const tokenId = id.toString()
+      // eslint-disable-next-line no-await-in-loop
+      const level = await dfsNFT.getItems(tokenId)
+      levels.push(level.toString())
       setDrawBindData(formatLevel(levels))
       setPlayBindBoxModalVisible(false)
       setBlindBoxModalVisible(true)
@@ -370,12 +376,8 @@ const Mint = () => {
           </Grid>
         </Grid>
       </DrawBlindBoxList>
-      {/* 铸造加载中的弹窗 */}
-      {playBindBoxModalVisible ? <PlayBindBoxModal onClose={closePlayBindBoxModal} gifUrl={gifUrl} /> : null}
-
-      {/* 铸造成功的弹窗 */}
-      {blindBoxModalVisible ? <BlindBoxModal data={drawBindData} onClose={closeBlindBoxModal} /> : null}
-      {/* 跳转选项的弹窗 */}
+      {playMintBoxModalVisible ? <PlayBindBoxModal onClose={closePlayBindBoxModal} gifUrl={gifUrl} /> : null}
+      {mintBoxModalVisible ? <MintBoxModal data={drawBindData} onClose={closeBlindBoxModal} /> : null}
       {jumpModalVisible ? <JumpModal onClose={closeJumpModal} /> : null}
     </BondPageWrap>
   )

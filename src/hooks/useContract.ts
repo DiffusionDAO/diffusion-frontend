@@ -371,29 +371,29 @@ export function useBCakeProxyContract(proxyContractAddress: string, withSignerIf
   )
 }
 
-export const useNftComposeContract = () => {
-  const { data: signer } = useSigner()
-  return useMemo(() => getNftComposeContract(signer), [signer])
+export const useNftComposeContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getNftComposeContract(providerOrSigner), [providerOrSigner])
 }
 
-export const useNftDrawContract = () => {
-  const { data: signer } = useSigner()
-  return useMemo(() => getNftDrawContract(signer), [signer])
+export const useNftDrawContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getNftDrawContract(providerOrSigner), [providerOrSigner])
 }
 
-export const useDFSNftContract = () => {
-  const { data: signer } = useSigner()
-  return useMemo(() => getDFSNFTContract(signer), [signer])
+export const useDFSNftContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getDFSNFTContract(providerOrSigner), [providerOrSigner])
 }
-export const useDFSMineContract = () => {
-  const { data: signer } = useSigner()
-  return useMemo(() => getMineContract(signer), [signer])
+export const useDFSMineContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getMineContract(providerOrSigner), [providerOrSigner])
 }
-export const useDFSContract = () => {
-  const { data: signer } = useSigner()
-  return useMemo(() => getDFSContract(signer), [signer])
+export const useDFSContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getDFSContract(providerOrSigner), [providerOrSigner])
 }
-export const useBondContract = () => {
-  const { data: signer } = useSigner()
-  return useMemo(() => getBondContract(signer), [signer])
+export const useBondContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getBondContract(providerOrSigner), [providerOrSigner])
 }

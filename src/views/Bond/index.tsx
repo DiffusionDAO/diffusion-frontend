@@ -4,11 +4,11 @@ import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
-import { getUSDTAddress, getBondAddress } from 'utils/addressHelpers'
+import { getUSDTAddress, getBondAddress, getDFSAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useBondContract, useDFSContract, useERC20 } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
-import { formatBigNumber } from 'utils/formatBalance'
+import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 
 import {
   BondPageWrap,
@@ -59,7 +59,7 @@ const Bond = () => {
   const [vestingTerms, setVestingTerms] = useState<number>(0)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<string>()
   const bond = useBondContract()
-  const dfsContract = useDFSContract()
+  const dfsContract = useERC20(getDFSAddress())
   const openBondModal = (item) => {
     setBondItem(item)
     setBondModalVisible(true)
@@ -85,22 +85,31 @@ const Bond = () => {
       })
     }
     const dfsUsdt = bondDatasMock[0]
-    if (dfsUsdt.price === 0) {
-      try {
-        // eslint-disable-next-line no-return-assign, no-param-reassign
-        bond.bondPrice().then((res) => {
-          dfsUsdt.price = res.toNumber()
-        })
-        bond.terms().then((res) => {
-          dfsUsdt.duration = res[2] / (24 * 3600)
-        })
-        setBondData([dfsUsdt, ...bondDatasMock.slice(1)])
-        dfsContract.totalSupply().then((res) => setDfsTotalSupply(formatBigNumber(res.mul(dfsUsdt.price), 2)))
-      } catch (error: any) {
-        window.alert(error.reason ?? error.data?.message ?? error.message)
-      }
-    }
-  }, [])
+    // eslint-disable-next-line no-return-assign, no-param-reassign
+    bond
+      .bondPrice()
+      .then((res) => {
+        dfsUsdt.price = res.toNumber()
+      })
+      .catch((error) => {
+        console.log(error.reason ?? error.data?.message ?? error.message)
+      })
+    bond
+      .terms()
+      .then((res) => {
+        dfsUsdt.duration = res[2] / (24 * 3600)
+      })
+      .catch((error) => {
+        console.log(error.reason ?? error.data?.message ?? error.message)
+      })
+    setBondData([dfsUsdt, ...bondDatasMock.slice(1)])
+    dfsContract
+      .totalSupply()
+      .then((res) => setDfsTotalSupply(formatBigNumber(res.mul(dfsUsdt.price), 2)))
+      .catch((error) => {
+        console.log(error.reason ?? error.data?.message ?? error.message)
+      })
+  }, [account])
   return (
     <BondPageWrap>
       <BondPageHeader>
@@ -171,7 +180,7 @@ const Bond = () => {
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Discount')}</CellTitle>
                   <CellText>
-                    <TextColor isRise={item.discount > 0}>{item.discount}%</TextColor>
+                    <TextColor isRise={item.discount > 0}>{formatNumber(item.discount, 2)}%</TextColor>
                   </CellText>
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>

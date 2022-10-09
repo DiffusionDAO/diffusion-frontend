@@ -13,7 +13,7 @@ import { MaxUint256 } from '@ethersproject/constants'
 import { getUSDTAddress } from 'utils/addressHelpers'
 import { useSigner } from 'wagmi'
 import { useRouterContract } from 'utils/exchange'
-import { formatBigNumber } from 'utils/formatBalance'
+import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 
 import {
   StyledModal,
@@ -70,8 +70,8 @@ const BondModal: React.FC<BondModalProps> = ({
   const { t } = useTranslation()
   const { onPresentConnectModal } = useWallet()
   const router = useRouter()
-  const [hasReferral, setHasReferral] = useState<boolean>(false)
-  const [referral, setReferral] = useState<string>()
+  const [hasReferral, setHasReferral] = useState<boolean>(true)
+  const [referral, setReferral] = useState<string>('')
   const [amount, setAmount] = useState<string>()
   const [activeTab, setActiveTab] = useState<string>('mint')
   const [bondPrice, setBondPrice] = useState<number>(0)
@@ -80,20 +80,30 @@ const BondModal: React.FC<BondModalProps> = ({
   const [minPrice, setMinPrice] = useState<BigNumber>()
   const [vestingTerms, setVestingTerms] = useState<number>(0)
   const [maxPayout, setMaxPayout] = useState<string>()
-  const [payout, setPayout] = useState<string>()
+  const [payout, setPayout] = useState<string>('0')
+  const [pendingPayout, setPendingPayout] = useState<string>('0')
 
   const changeReferral = () => {
     setReferral('')
     setHasReferral(!hasReferral)
   }
-  const discount = 11
-
+  console.log(bondData.discount)
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const bond = useBondContract()
   const dfs = useDFSContract()
   const usdtAddress = getUSDTAddress()
   const usdt = useERC20(usdtAddress, true)
   const pancakeRouter = useRouterContract()
+  useEffect(() => {
+    try {
+      bond.bondPrice().then((res) => {
+        setBondPrice(res.toNumber())
+        setMarketPrice((res.toNumber() * 100) / bondData.discount)
+      })
+    } catch (error: any) {
+      window.alert(error.reason ?? error.data?.message ?? error.message)
+    }
+  })
   useEffect(() => {
     try {
       bond.terms().then((res) => {
@@ -103,10 +113,12 @@ const BondModal: React.FC<BondModalProps> = ({
       bond.maxPayout().then((res) => {
         setMaxPayout(formatBigNumber(res, 2))
       })
-      bond.bondPrice().then((res) => {
-        setBondPrice(res.toNumber())
-        setMarketPrice((res.toNumber() * discount) / 10)
+      bond.pendingPayoutFor(account).then((res) => {
+        setPendingPayout(formatBigNumber(res, 2))
       })
+      if (amount) {
+        bond.payoutFor(parseUnits(amount, 'ether')).then((payout) => setPayout(formatBigNumber(payout, 2)))
+      }
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }
@@ -115,7 +127,7 @@ const BondModal: React.FC<BondModalProps> = ({
         setDfsBalance(formatBigNumber(res, 2))
       })
     }
-  }, [account])
+  }, [account, bondPrice])
   const buy = () => {
     if (!hasReferral) {
       confirm({
@@ -171,6 +183,9 @@ const BondModal: React.FC<BondModalProps> = ({
         })
         const json = await response.json()
         console.log(json)
+        setAmount('')
+        setReferral('')
+        // onClose()
       }
     } else {
       window.alert('Cannot set yourself as referral')
@@ -244,28 +259,30 @@ const BondModal: React.FC<BondModalProps> = ({
               value={amount}
               onInput={async (e: any) => {
                 setAmount(e.target.value)
-                try {
-                  const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
-                  setPayout(formatBigNumber(payout, 2))
-                } catch (error: any) {
-                  window.alert(error.reason ?? error.data?.message ?? error.message)
+                if (e.target.value) {
+                  try {
+                    const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
+                    setPayout(formatBigNumber(payout, 2))
+                  } catch (error: any) {
+                    window.alert(error.reason ?? error.data?.message ?? error.message)
+                  }
+                } else {
+                  setPayout('0')
                 }
               }}
             />
             <RecommandWrap>
-              <CheckBoxWrap onClick={changeReferral}>
+              {/* <CheckBoxWrap onClick={changeReferral}>
                 {hasReferral ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: '4px' }} /> : <CheckBox />}
-              </CheckBoxWrap>
-              <RecommandLable onClick={changeReferral}>{t('Any Referrals?')}</RecommandLable>
-              {hasReferral ? (
-                <RecommandInput
-                  value={referral}
-                  placeholder={t('address')}
-                  onInput={(e: any) => {
-                    setReferral(e.target.value)
-                  }}
-                />
-              ) : null}
+              </CheckBoxWrap> */}
+              {/* <RecommandLable onClick={changeReferral}>{t('Any Referrals?')}</RecommandLable> */}
+              <RecommandInput
+                value={referral}
+                placeholder={t('Referral')}
+                onInput={(e: any) => {
+                  setReferral(e.target.value)
+                }}
+              />
             </RecommandWrap>
             <BondListItemBtn onClick={buy}>{t('Buy')}</BondListItemBtn>
           </>
@@ -300,7 +317,11 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem>
         <ListItem>
           <ListLable>{t('You will receive')}</ListLable>
-          <ListContent>{payout ?? 0} DFS</ListContent>
+          {activeTab === 'mint' ? (
+            <ListContent>{payout ?? 0} DFS</ListContent>
+          ) : (
+            <ListContent>{pendingPayout ?? 0} DFS</ListContent>
+          )}
         </ListItem>
         <ListItem>
           <ListLable>{t('Max You Can Buy')}</ListLable>
@@ -309,7 +330,7 @@ const BondModal: React.FC<BondModalProps> = ({
         <ListItem>
           <ListLable>{t('Discount')}</ListLable>
           <ListContent>
-            <TextColor isRise={discount > 0}>{10 / discount}</TextColor>
+            <TextColor isRise={bondData.discount > 0}>{formatNumber(bondData.discount, 2)}%</TextColor>
           </ListContent>
         </ListItem>
         <ListItem>
