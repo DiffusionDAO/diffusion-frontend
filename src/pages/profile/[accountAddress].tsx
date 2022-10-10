@@ -218,7 +218,7 @@ function NftProfilePage() {
         updatedAt: '',
         location: NftLocation.FORSALE,
         marketData: {
-          composedTokenId,
+          tokenId: composedTokenId,
           collection: {
             id: composedTokenId,
           },
