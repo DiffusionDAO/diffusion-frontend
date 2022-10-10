@@ -443,22 +443,24 @@ function DiffusionChart({
             HeaderSuElement={HeaderSuElement}
           />
         </Box>
-        {/* {loading ? (
-            <Skeleton variant="text" width={100} />
-          ) : HeaderSuElement || (
-            <Box display="flex" alignItems="center">
+        {loading ? (
+          <Skeleton variant="text" width={100} />
+        ) : (
+          HeaderSuElement || (
+            <Box style={{ display: 'flex' }}>
               <Typography
                 variant="h6"
                 className="card-sub-title-fixation-text"
-                style={{ fontWeight: 400, color: "#ABB6FF", fontSize: "14px" }}
+                style={{ fontWeight: 400, color: '#ABB6FF', fontSize: '14px' }}
               >
                 Today
               </Typography>
-              <Typography variant="h5" style={{ fontWeight: "bold", marginRight: 5, color: "#fff", fontSize: "20px" }}>
+              <Typography variant="h5" style={{ fontWeight: 'bold', marginRight: 5, color: '#fff', fontSize: '20px' }}>
                 {headerSubText}
               </Typography>
             </Box>
-          )} */}
+          )
+        )}
       </div>
       <Box width="100%" minWidth={310} className="ohm-chart">
         {loading || (data && data.length > 0) ? (

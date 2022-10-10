@@ -241,34 +241,34 @@ export const EightGraph = () => {
 export const NineGraph = () => {
   const theme = useTheme()
   const { t } = useTranslation()
-  const useStyles = makeStyles({
-    root: {
-      height: 10,
-      borderRadius: 5,
-    },
-    bar: {
-      borderRadius: 5,
-      background: `linear-gradient(228deg, #F576FF 0%, #7200FF 50%, #3900FF 100%)`,
-    },
-  })
-  const classes = useStyles()
-  const HeaderSuElement = () => {
-    return (
-      <Box display="flex" alignItems="center">
-        <Typography
-          variant="h6"
-          className="card-sub-title-fixation-text"
-          style={{ fontWeight: 400, color: 'rgb(171, 182, 255)', fontSize: '14px' }}
-        >
-          Today
-        </Typography>
-        <Box width="100%" marginRight="10px">
-          <LinearProgress variant="determinate" classes={{ root: classes.root, bar: classes.bar }} value={20} />
-        </Box>
-        <Typography variant="body2" color="textSecondary">{`${20}%`}</Typography>
-      </Box>
-    )
-  }
+  // const useStyles = makeStyles({
+  //   root: {
+  //     height: 10,
+  //     borderRadius: 5,
+  //   },
+  //   bar: {
+  //     borderRadius: 5,
+  //     background: `linear-gradient(228deg, #F576FF 0%, #7200FF 50%, #3900FF 100%)`,
+  //   },
+  // });
+  // const classes = useStyles();
+  // const HeaderSuElement = () => {
+  //   return (
+  //     <Box display="flex" alignItems="center">
+  //       <Typography
+  //         variant="h6"
+  //         className="card-sub-title-fixation-text"
+  //         style={{ fontWeight: 400, color: "rgb(171, 182, 255)", fontSize: "14px" }}
+  //       >
+  //         Today
+  //       </Typography>
+  //       <Box width="100%" marginRight="10px">
+  //         <LinearProgress variant="determinate" classes={{ root: classes.root, bar: classes.bar }} value={20} />
+  //       </Box>
+  //       <Typography variant="body2" color="textSecondary">{`${20}%`}</Typography>
+  //     </Box>
+  //   );
+  // };
   return (
     <DiffusionChart
       type="verticalBar"
@@ -284,7 +284,7 @@ export const NineGraph = () => {
       infoTooltipMessage={t(tooltipInfoMessages().nine)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
       headerSubText={`${dashboardData && formatCurrency(dashboardData[0].nine)}`}
-      HeaderSuElement={<HeaderSuElement />}
+      // HeaderSuElement={<HeaderSuElement />}
     />
   )
 }
