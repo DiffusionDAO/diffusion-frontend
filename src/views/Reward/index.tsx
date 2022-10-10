@@ -80,7 +80,6 @@ const Reward = () => {
   const [socialRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
   const [referrals, setReferrals] = useState({})
   const [me, setMe] = useState<any>({})
-  const [activeIndex, setActiveIndex] = useState(4)
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -90,15 +89,15 @@ const Reward = () => {
   const slidesPerView = isMobile ? 1 : 3
   const swiperWrapBgImgUrl = isMobile ? '/images/reward/swiperWrapBgMobile.png' : '/images/reward/swiperWrapBg.png'
   const swiperSlideData = [
-    { name: 'level1', description: 'level1' },
-    { name: 'level2', description: 'level2' },
-    { name: 'level3', description: 'level3' },
-    { name: 'level4', description: 'level4' },
-    { name: 'level5', description: 'level5' },
-    { name: 'level6', description: 'level6' },
-    { name: 'level7', description: 'level7' },
-    { name: 'level8', description: 'level8' },
-    { name: 'level9', description: 'level9' },
+    { name: '0', description: 'level1' },
+    { name: '1', description: 'level2' },
+    { name: '2', description: 'level3' },
+    { name: '3', description: 'level4' },
+    { name: '4', description: 'level5' },
+    { name: '5', description: 'level6' },
+    { name: '6', description: 'level7' },
+    { name: '7', description: 'level8' },
+    { name: '8', description: 'level9' },
   ]
 
   const openDetailModal = () => {
@@ -180,7 +179,6 @@ const Reward = () => {
   )
   const greenPower = formatBigNumber(BigNumber.from(me?.power ?? 0), 3)
   const totalUnlockedPower = formatBigNumber(BigNumber.from(me?.totalUnlockedPower ?? 0), 3)
-  console.log('me:', me)
 
   // const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 5)
   const now = Math.floor(Date.now() / 1000)
@@ -228,11 +226,7 @@ const Reward = () => {
       )
     }
   }, [account])
-  useEffect(() => {
-    if (me?.level) {
-      setActiveIndex(me?.level)
-    }
-  }, [me])
+
   return (
     <RewardPageWrap>
       {account && access && (
@@ -242,26 +236,34 @@ const Reward = () => {
               modules={[Navigation]}
               className="rewardSwiper"
               spaceBetween={50}
-              observer
-              initialSlide={activeIndex}
               slidesPerView={slidesPerView}
               centeredSlides
               navigation
-              // onSwiper={(swiper) => swiper.slideTo(me?.level, 50)}
-              // onSlideChange={(swiper) => swiper.slideTo(me?.level, 50)}
+              onSwiper={(swiper) => swiper.slideTo(me?.level, 50)}
+              onSlideChange={(swiper) => swiper.slideTo(me?.level, 50)}
+              onUpdate={(swiper) => {
+                swiper.slideTo(me?.level, 50)
+                console.log('update', me?.level)
+              }}
+              onActiveIndexChange={(swiper) => {
+                swiper.slideTo(me?.level, 50)
+                console.log('onActiveIndexChange', me?.level)
+              }}
             >
-              {swiperSlideData.map((item, index) => {
-                return (
-                  <SwiperSlide key={item.name}>
-                    <SwiperItem isMobile={isMobile}>
-                      <SwiperItemImg src={`/images/reward/headPortrait${index}.png`} />
-                    </SwiperItem>
-                  </SwiperSlide>
-                )
-              })}
+              {me?.level &&
+                swiperSlideData.map((item, index) => {
+                  return (
+                    <SwiperSlide key={item.name}>
+                      <SwiperItem isMobile={isMobile}>
+                        <SwiperItemImg src={`/images/reward/headPortrait${index}.png`} />
+                      </SwiperItem>
+                    </SwiperSlide>
+                  )
+                })}
             </Swiper>
             <SwiperWrapBgImg src={swiperWrapBgImgUrl} isMobile={isMobile} />
           </SwiperWrap>
+
           <Grid container spacing={2}>
             <Grid item lg={4} md={4} sm={12} xs={12}>
               <DiffusionGoldWrap isMobile={isMobile}>
