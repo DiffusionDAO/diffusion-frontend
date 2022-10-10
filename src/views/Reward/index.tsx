@@ -80,7 +80,7 @@ const Reward = () => {
   const [socialRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
   const [referrals, setReferrals] = useState({})
   const [me, setMe] = useState<any>({})
-  const [activeIndex, setActiveIndex] = useState(1)
+  const [activeIndex, setActiveIndex] = useState(4)
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -228,6 +228,11 @@ const Reward = () => {
       )
     }
   }, [account])
+  useEffect(() => {
+    if (me?.level) {
+      setActiveIndex(me?.level)
+    }
+  }, [me])
   return (
     <RewardPageWrap>
       {account && access && (
@@ -237,13 +242,13 @@ const Reward = () => {
               modules={[Navigation]}
               className="rewardSwiper"
               spaceBetween={50}
-              initialSlide={me?.level}
-              defaultValue={me?.level}
+              observer
+              initialSlide={activeIndex}
               slidesPerView={slidesPerView}
               centeredSlides
               navigation
-              onSwiper={(swiper) => swiper.slideTo(me?.level, 50)}
-              onSlideChange={(swiper) => swiper.slideTo(me?.level, 50)}
+              // onSwiper={(swiper) => swiper.slideTo(me?.level, 50)}
+              // onSlideChange={(swiper) => swiper.slideTo(me?.level, 50)}
             >
               {swiperSlideData.map((item, index) => {
                 return (
