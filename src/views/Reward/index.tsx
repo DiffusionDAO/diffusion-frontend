@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
@@ -9,12 +9,9 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { useTranslation } from '@pancakeswap/localization'
 import { useRouter } from 'next/router'
-import { useDFSContract, useDFSMineContract, useMulticallContract } from 'hooks/useContract'
+import { useDFSContract, useDFSMineContract } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useSWRContract, useSWRMulticall } from 'hooks/useSWRContract'
-import { useSingleCallResult } from 'state/multicall/hooks'
-import dfsMineAbi from 'config/abi/dfsMine.json'
-import { getDFSContract, getMineContract } from 'utils/contractHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { getMineAddress } from 'utils/addressHelpers'
 import { formatUnits, parseUnits } from '@ethersproject/units'
@@ -68,6 +65,7 @@ import {
 import DataCell from '../../components/ListDataCell'
 import DetailModal from './components/DetailModal'
 import NoPower from './components/NoPower'
+import useInterval from '../../../packages/hooks/src/useInterval'
 
 const Reward = () => {
   const { t } = useTranslation()
@@ -219,14 +217,28 @@ const Reward = () => {
       // eslint-disable-next-line @typescript-eslint/no-shadow
       fetch('https://middle.diffusiondao.org/referrals').then((res) =>
         res.json().then((response) => {
-          console.log('response:', response)
           setReferrals(response)
           setMe(response[account])
         }),
       )
     }
   }, [account])
-
+  const updateSwiper = useCallback(
+    (swiper) => {
+      if (me?.level) {
+        console.log('updateSwiper:', me?.level)
+        swiper?.slideTo(me?.level, 50, false)
+      }
+    },
+    [me?.level],
+  )
+  useInterval(() => {
+    if (me.level && me.level <= 7) {
+      me.level++
+      setMe(me)
+      console.log('me.level:', me.level)
+    }
+  }, 1000)
   return (
     <RewardPageWrap>
       {account && access && (
@@ -239,16 +251,10 @@ const Reward = () => {
               slidesPerView={slidesPerView}
               centeredSlides
               navigation
-              onSwiper={(swiper) => swiper.slideTo(me?.level, 50)}
-              onSlideChange={(swiper) => swiper.slideTo(me?.level, 50)}
-              onUpdate={(swiper) => {
-                swiper.slideTo(me?.level, 50)
-                console.log('update', me?.level)
-              }}
-              onActiveIndexChange={(swiper) => {
-                swiper.slideTo(me?.level, 50)
-                console.log('onActiveIndexChange', me?.level)
-              }}
+              // onSwiper={updateSwiper}
+              onSlideChange={updateSwiper}
+              onUpdate={updateSwiper}
+              // onActiveIndexChange={updateSwiper}
             >
               {me?.level &&
                 swiperSlideData.map((item, index) => {
@@ -365,7 +371,10 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem4.png" />
                           )}
                           <MySposDashboardValue className="alignRight" style={{ color: '#E7A4FF' }}>
-                            {Object.keys(referrals).length}
+                            {
+                              Object.values(referrals).filter((referral: any) => BigNumber.from(referral.power).gt(0))
+                                .length
+                            }
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Networking headcount')}</MySposDashboardDes>
                         </MySposDashboardItem>
