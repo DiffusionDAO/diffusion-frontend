@@ -40,7 +40,7 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
           {t('View All')}
         </Button>
       </Flex>
-      <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="64px">
+      <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)']} mb="64px">
         {addresses.map((address) => {
           const collection = collections[address].data[0]
           return (
