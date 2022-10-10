@@ -9,6 +9,7 @@ import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
 import isEmpty from 'lodash/isEmpty'
 import shuffle from 'lodash/shuffle'
+import { API_NFT } from 'config/constants/endpoints'
 
 import fromPairs from 'lodash/fromPairs'
 import { ApiCollections, NftToken, Collection, NftAttribute, MarketEvent } from './types'
@@ -22,6 +23,27 @@ const EMPTY_OBJECT = {}
 export const useGetCollections = (): { data: ApiCollections; status: FetchStatus } => {
   const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections())
   const collections = data ?? ({} as ApiCollections)
+  return { data: collections, status }
+}
+
+export const useGetMyNfts = (account: string): { data: NftToken[]; status: FetchStatus } => {
+  const { data, status } = useSWR(['nftMarket', 'myNfts'], async () => {
+    const res = await fetch(`https://middle.diffusiondao.org/myNfts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        account,
+      }),
+    })
+    if (res.ok) {
+      const json = await res.json()
+      return json
+    }
+    return null
+  })
+  const collections = data ?? ([] as NftToken[])
   return { data: collections, status }
 }
 

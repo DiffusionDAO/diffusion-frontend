@@ -42,7 +42,7 @@ import {
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
-import { useGetCollections } from 'state/nftMarket/hooks'
+import { useGetCollections, useGetMyNfts } from 'state/nftMarket/hooks'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
 import { getDFSNFTAddress, getMineAddress, getNFTComposeAddress } from 'utils/addressHelpers'
 import { useDFSMineContract, useDFSNftContract, useNftComposeContract } from 'hooks/useContract'
@@ -66,9 +66,8 @@ const dfsName = {
 const greeceNumber = { 0: 'I', 1: 'II', 2: 'III', 3: 'IV', 4: 'V', 5: 'VI', 6: 'VII' }
 
 function NftProfilePage() {
-  const { data: collections, status } = useGetCollections() as any
-
   const { account } = useWeb3React()
+  const { data: collections, status } = useGetMyNfts(account)
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const { query } = useRouter()
@@ -128,28 +127,26 @@ function NftProfilePage() {
   let stakedTokenIds = []
 
   useEffect(() => {
-    const keys = Object.keys(collections)
-    const flatten: NftToken[] = keys.map((key) => Object.values(collections[key].tokens)).flat() as NftToken[]
-    flatten
-      .filter((item) => item.collectionName === 'DFSNFT')
-      .map((nft) => (nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`))
-    mine.getStaked(account).then((res) => {
-      stakedTokenIds = res.map((item) => item.toString())
-      const staked = flatten.filter(
-        (item) => item.collectionName === 'DFSNFT' && res.map((item) => item.toString()).includes(item.tokenId),
+    console.log(collections.length)
+    // const keys = Object.keys(collections)
+    // const flatten: NftToken[] = keys.map((key) => Object.values(collections[key].tokens)).flat() as NftToken[]
+    collections
+      ?.filter((item) => item.collectionName === 'DFSNFT')
+      ?.map((nft) => (nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`))
+    mine.getStaked(account).then((tokenIds) => {
+      stakedTokenIds = tokenIds.map((tokenId) => tokenId.toString())
+      const staked = collections?.filter(
+        (item) => item.collectionName === 'DFSNFT' && stakedTokenIds.includes(item.tokenId),
       )
       setStakedNfts(staked)
     })
-    const untsaked = flatten.filter(
-      (item) =>
-        item?.owner === accountAddress &&
-        item?.collectionAddress === dfsNFTAddress &&
-        !stakedTokenIds.includes(item?.tokenId),
+    const untsaked = collections?.filter(
+      (item) => item?.collectionAddress === dfsNFTAddress && !stakedTokenIds.includes(item?.tokenId),
     )
     if (activeTab === 'WithoutStake') {
       setMynfts(untsaked)
     }
-  }, [account, status, activeTab])
+  }, [account, status, activeTab, collections])
 
   const resetPage = () => {
     setIsSelected(false)
@@ -221,9 +218,9 @@ function NftProfilePage() {
         updatedAt: '',
         location: NftLocation.FORSALE,
         marketData: {
-          tokenId,
+          composedTokenId,
           collection: {
-            id: tokenId,
+            id: composedTokenId,
           },
           currentAskPrice: '',
           currentSeller: accountAddress,

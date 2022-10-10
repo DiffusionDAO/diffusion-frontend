@@ -159,12 +159,13 @@ const Reward = () => {
     Number.isNaN(epochLength / rewardVestingSeconds) ? 0 : (epochLength / rewardVestingSeconds) * 100,
     2,
   )
-  // 1000000000000000000
   console.log('epochLength:', epochLength?.toString(), savingVestingSeconds?.toString())
   const savingInterest = Number.isNaN(epochLength / savingVestingSeconds)
     ? 0
     : (epochLength / savingVestingSeconds) * 100
-  const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : (1 + savingInterest) ** 15 - 1, 2)
+  console.log(savingInterest)
+  const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : (1 + savingInterest / 100) ** 15 - 1, 2)
+  console.log((1 + savingInterest / 100) ** 15 - 1)
   const lockedPower = useMemo(() => {
     return formatBigNumber(
       BigNumber.from(me?.power ?? 0)

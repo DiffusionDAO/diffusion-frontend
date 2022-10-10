@@ -16,8 +16,7 @@ import { bscTestnetTokens } from '@pancakeswap/tokens'
 import { Modal, Input } from 'antd'
 import styled, { css } from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { getDFSContract, getIDOContract, getBondContract } from 'utils/contractHelpers'
-
+import { useBondContract, useDFSContract, useIDOContract } from 'hooks/useContract'
 import CopyAddress from './CopyAddress'
 
 export const MoneyInput = styled(Input)`
@@ -51,7 +50,6 @@ interface WalletInfoProps {
 const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { data: signer } = useSigner()
   const { balance, fetchStatus } = useGetBnbBalance()
   const { logout } = useAuth()
 
@@ -60,9 +58,9 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
     logout()
   }
 
-  const bond = getBondContract(signer)
-  const dfs = getDFSContract(signer)
-  const ido = getIDOContract(signer)
+  const bond = useBondContract()
+  const dfs = useDFSContract()
+  const ido = useIDOContract()
 
   const swap = async () => {
     const balancePdfs = await ido.balances(account)
@@ -79,21 +77,30 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
 
   useEffect(() => {
     if (account) {
-      dfs.balanceOf(account).then((res) => {
-        if (!dfsBalance.eq(0)) {
-          setBalance(res)
-        }
-      })
-      ido.releaseStart().then((res) => {
-        if (start !== '') {
-          setStart(res)
-        }
-      })
-      ido.releaseEnd().then((res) => {
-        if (end !== '') {
-          setEnd(res)
-        }
-      })
+      dfs
+        .balanceOf(account)
+        .then((res) => {
+          if (!dfsBalance.eq(0)) {
+            setBalance(res)
+          }
+        })
+        .catch((error) => console.log(error))
+      ido
+        .releaseStart()
+        .then((res) => {
+          if (start !== '') {
+            setStart(res)
+          }
+        })
+        .catch((error) => console.log(error))
+      ido
+        .releaseEnd()
+        .then((res) => {
+          if (end !== '') {
+            setEnd(res)
+          }
+        })
+        .catch((error) => console.log(error))
     }
   }, [dfsBalance, account])
 

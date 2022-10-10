@@ -63,6 +63,7 @@ import {
   getMineContract,
   getBondContract,
   getDFSContract,
+  getIDOContract,
 } from 'utils/contractHelpers'
 import { useSigner } from 'wagmi'
 
@@ -396,4 +397,9 @@ export const useDFSContract = (withSignerIfPossible = true) => {
 export const useBondContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
   return useMemo(() => getBondContract(providerOrSigner), [providerOrSigner])
+}
+
+export const useIDOContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getIDOContract(providerOrSigner), [providerOrSigner])
 }
