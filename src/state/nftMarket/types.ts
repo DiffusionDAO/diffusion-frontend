@@ -79,6 +79,7 @@ export interface NftToken {
   meta?: Record<string, string | number>
   selected?: boolean
   staked?: boolean
+  owner?: string
 }
 
 export interface NftFilter {

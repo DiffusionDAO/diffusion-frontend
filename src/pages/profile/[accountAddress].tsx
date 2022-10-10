@@ -142,7 +142,7 @@ function NftProfilePage() {
     })
     const untsaked = flatten.filter(
       (item) =>
-        item?.marketData.currentSeller === accountAddress &&
+        item?.owner === accountAddress &&
         item?.collectionAddress === dfsNFTAddress &&
         !stakedTokenIds.includes(item?.tokenId),
     )
@@ -188,7 +188,6 @@ function NftProfilePage() {
 
   const submitCompose = async () => {
     const selectedTokenIds = selectedNfts.filter((nft) => nft.selected).map((nft) => nft.tokenId)
-    const composeAddress = getNFTComposeAddress()
     const attribute = selectedNfts[0].attributes[0].value
     let tx
     try {
@@ -199,10 +198,10 @@ function NftProfilePage() {
       }
       const recipient = await tx.wait()
       const id = BigNumber.from(recipient.events.slice(-1)[0].topics[3])
-      const tokenId = id.toString()
-      const level = await dfsNFT.getItems(tokenId)
+      const composedTokenId = id.toString()
+      const level = await dfsNFT.getItems(composedTokenId)
       const newNft: NftToken = {
-        tokenId,
+        tokenId: composedTokenId,
         name: greeceNumber[level],
         description: dfsName[level],
         collectionName: dfsName[level],
@@ -235,11 +234,25 @@ function NftProfilePage() {
       setComposedNFT([newNft])
       mynfts.map((nft, i) => {
         if (selectedTokenIds.includes(nft.tokenId)) {
+          console.log(i, nft.tokenId)
           mynfts.splice(i, 1)
         }
       })
-      mynfts.push(newNft)
-      setMynfts(mynfts)
+      const response = await fetch('https://middle.diffusiondao.org/composeNft', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          account,
+          collection: dfsNFTAddress,
+          selectedTokenIds,
+          composedTokenId,
+        }),
+      })
+      const json = await response.json()
+      json.push(newNft)
+      setMynfts(json)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
     } catch (error: any) {
@@ -379,7 +392,10 @@ function NftProfilePage() {
       setSelectedCount(selectedCount + 1)
     }
   }
-
+  const tabs = [
+    { key: 'WithoutStake', label: t('Not Staked'), children: mynfts?.length },
+    { key: 'Stake', label: t('Not Staked'), children: stakedNfts.length },
+  ]
   return (
     <AccountNftWrap>
       {!isMobile && (
@@ -405,26 +421,22 @@ function NftProfilePage() {
 
       <ConentWrap>
         <SubMenuWrap>
-          <Tabs defaultActiveKey={activeTab} onChange={changeTab}>
-            <TabPane
-              key="WithoutStake"
-              tab={
-                <span>
-                  {`${t('Not Staked')}`}
-                  <SelectedCountWrap>{mynfts?.length}</SelectedCountWrap>
-                </span>
+          <Tabs
+            defaultActiveKey={activeTab}
+            onChange={changeTab}
+            items={tabs.map((item) => {
+              return {
+                label: (
+                  <span>
+                    {item.label}
+                    <SelectedCountWrap>{item.children}</SelectedCountWrap>
+                  </span>
+                ),
+                key: item.key,
               }
-            />
-            <TabPane
-              key="Stake"
-              tab={
-                <span>
-                  {`${t('Staked')}`}
-                  <SelectedCountWrap>{stakedNfts.length}</SelectedCountWrap>
-                </span>
-              }
-            />
-          </Tabs>
+            })}
+          />
+
           <SubMenuRight>
             <SelectWrap>
               <Cascader options={sortByItems} style={{ width: '200px' }} />

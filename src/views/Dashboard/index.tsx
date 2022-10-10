@@ -25,7 +25,7 @@ import { dashboardMock } from './MockData'
 
 const useStyles = makeStyles((theme) => ({
   hasRLBorder: {
-    [theme.breakpoints.up(981)]: {
+    [theme?.breakpoints?.up(981)]: {
       borderRight: '1px solid rgba(255, 255, 255, 0.05)',
       borderLeft: '1px solid rgba(255, 255, 255, 0.05)',
     },

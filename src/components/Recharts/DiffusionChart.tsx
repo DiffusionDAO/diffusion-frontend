@@ -311,7 +311,7 @@ function DiffusionChart({
   }
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  const renderChart = (type: string, isExpanded: boolean) => {
+  const renderChart = (type: string, isExpanded = false) => {
     if (type === 'line')
       return renderMultiLineChart(
         data,
