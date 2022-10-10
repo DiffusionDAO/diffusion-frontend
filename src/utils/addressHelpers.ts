@@ -137,8 +137,8 @@ export const getBondAddress = () => {
 export const getMineAddress = () => {
   return getAddress(addresses.dfsMine)
 }
-export const getNftDrawAddress = () => {
-  return getAddress(addresses.nftDraw)
+export const getNftMintAddress = () => {
+  return getAddress(addresses.nftMint)
 }
 export const getIDOAddress = () => {
   return getAddress(addresses.ido)

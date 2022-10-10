@@ -19,10 +19,10 @@ import {
 interface CompoundConfirmModalProps {
   nfts: NftToken[]
   onDismiss: () => void
-  submitCompound: () => void
+  submitCompose: () => void
 }
 
-const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({ onDismiss, submitCompound, nfts }) => {
+const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({ onDismiss, submitCompose, nfts }) => {
   const { t } = useTranslation()
 
   return (
@@ -48,7 +48,7 @@ const CompoundConfirmModal: React.FC<CompoundConfirmModalProps> = ({ onDismiss, 
               )
             })}
         </CardListWrap>
-        <SyntheticBtn src="/images/nfts/synthetic-btn.svg" onClick={submitCompound} />
+        <SyntheticBtn src="/images/nfts/synthetic-btn.svg" onClick={submitCompose} />
       </ContentWrap>
     </StyledModal>
   )

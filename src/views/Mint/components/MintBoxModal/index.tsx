@@ -10,7 +10,7 @@ interface BondModalProps {
   onClose: () => void
 }
 
-const BlindBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
+const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const router = useRouter()
@@ -43,4 +43,4 @@ const BlindBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
   )
 }
 
-export default BlindBoxModal
+export default MintBoxModal

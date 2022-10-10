@@ -1,7 +1,8 @@
 {
+  "Referral": "推荐人",
   "Balance Mint": "可用额度铸造",
-  "Vesting Balance Mint": "未提取额度铸造",
-  "Vesting Bond Balance": "未提取额度",
+  "Payout Mint": "未提取额度铸造",
+  "Payout": "未提取额度",
   "You will not be able to add a referrer on your next purchase": "在下次购买时将无法添加推荐人",
   "Get even bigger gains with undrawn DFS draws": "使用未提取的DFS抽卡可获得更大的收益",
   "Your Wallet": "你的钱包",

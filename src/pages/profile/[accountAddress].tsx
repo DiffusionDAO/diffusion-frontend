@@ -133,7 +133,7 @@ function NftProfilePage() {
     flatten
       .filter((item) => item.collectionName === 'DFSNFT')
       .map((nft) => (nft.image.thumbnail = `/images/nfts/${nft.attributes[0].value}`))
-    mine.getAllStaked().then((res) => {
+    mine.getStaked(account).then((res) => {
       stakedTokenIds = res.map((item) => item.toString())
       const staked = flatten.filter(
         (item) => item.collectionName === 'DFSNFT' && res.map((item) => item.toString()).includes(item.tokenId),
@@ -186,62 +186,65 @@ function NftProfilePage() {
     resetPage()
   }
 
-  const submitCompound = async () => {
+  const submitCompose = async () => {
     const selectedTokenIds = selectedNfts.filter((nft) => nft.selected).map((nft) => nft.tokenId)
     const composeAddress = getNFTComposeAddress()
     const attribute = selectedNfts[0].attributes[0].value
     let tx
-    if (selectedTokenIds.length === 6) {
-      tx = await composeNFT.ComposeLv0(selectedTokenIds)
-    } else {
-      tx = await composeNFT.ComposeLvX(selectedTokenIds, attribute)
-    }
-    const recipient = await tx.wait()
-    const id = BigNumber.from(recipient.events.slice(-1)[0].topics[3])
-    const tokenId = id.toString()
-    const level = await dfsNFT.getItems(tokenId)
-    const newNft: NftToken = {
-      tokenId,
-      name: greeceNumber[level],
-      description: dfsName[level],
-      collectionName: dfsName[level],
-      collectionAddress: dfsNFTAddress,
-      image: {
-        original: 'string',
-        thumbnail: `/images/nfts/${level}`,
-      },
-      attributes: [
-        {
-          traitType: '',
-          value: level,
-          displayType: '',
-        },
-      ],
-      createdAt: '',
-      updatedAt: '',
-      location: NftLocation.FORSALE,
-      marketData: {
-        tokenId,
-        collection: {
-          id: tokenId,
-        },
-        currentAskPrice: '',
-        currentSeller: accountAddress,
-        isTradable: true,
-      },
-      staked: false,
-    }
-    setComposedNFT([newNft])
-    mynfts.map((nft, i) => {
-      if (selectedTokenIds.includes(nft.tokenId)) {
-        mynfts.splice(i, 1)
+    try {
+      if (selectedTokenIds.length === 6) {
+        tx = await composeNFT.ComposeLv0(selectedTokenIds)
+      } else {
+        tx = await composeNFT.ComposeLvX(selectedTokenIds, attribute)
       }
-    })
-    mynfts.push(newNft)
-    setMynfts(mynfts)
-
-    setConfirmModalVisible(false)
-    setSuccessModalVisible(true)
+      const recipient = await tx.wait()
+      const id = BigNumber.from(recipient.events.slice(-1)[0].topics[3])
+      const tokenId = id.toString()
+      const level = await dfsNFT.getItems(tokenId)
+      const newNft: NftToken = {
+        tokenId,
+        name: greeceNumber[level],
+        description: dfsName[level],
+        collectionName: dfsName[level],
+        collectionAddress: dfsNFTAddress,
+        image: {
+          original: 'string',
+          thumbnail: `/images/nfts/${level}`,
+        },
+        attributes: [
+          {
+            traitType: '',
+            value: level,
+            displayType: '',
+          },
+        ],
+        createdAt: '',
+        updatedAt: '',
+        location: NftLocation.FORSALE,
+        marketData: {
+          tokenId,
+          collection: {
+            id: tokenId,
+          },
+          currentAskPrice: '',
+          currentSeller: accountAddress,
+          isTradable: true,
+        },
+        staked: false,
+      }
+      setComposedNFT([newNft])
+      mynfts.map((nft, i) => {
+        if (selectedTokenIds.includes(nft.tokenId)) {
+          mynfts.splice(i, 1)
+        }
+      })
+      mynfts.push(newNft)
+      setMynfts(mynfts)
+      setConfirmModalVisible(false)
+      setSuccessModalVisible(true)
+    } catch (error: any) {
+      window.alert(error.reason ?? error.data?.message ?? error.message)
+    }
   }
 
   const startStake = async () => {
@@ -379,21 +382,27 @@ function NftProfilePage() {
 
   return (
     <AccountNftWrap>
-      <NftSculptureWrap isMobile={isMobile}>
-        <NftSculptureGif isMobile={isMobile} src="/images/nfts/nft-sculpture.png" alt="" />
-      </NftSculptureWrap>
-      <BackgroundWrap isMobile={isMobile}>
-        <BackgroundText>
-          <BackgroundTitle>
-            <Typed strings={['Diffusion DAO']} typeSpeed={50} cursorChar="" />
-          </BackgroundTitle>
-          <BackgroundDes>
-            {t(
-              'This is your digital asset treasure silo, stake or combine NFTs to explore more possibilities where you can obtain more fulfilling rewards',
-            )}
-          </BackgroundDes>
-        </BackgroundText>
-      </BackgroundWrap>
+      {!isMobile && (
+        <NftSculptureWrap isMobile={isMobile}>
+          <NftSculptureGif isMobile={isMobile} src="/images/nfts/nft-sculpture.png" alt="" />
+        </NftSculptureWrap>
+      )}
+      {!isMobile && (
+        <BackgroundWrap isMobile={isMobile}>
+          <BackgroundText>
+            <BackgroundTitle>
+              Diffusion DAO
+              {/* <Typed strings={['Diffusion DAO']} typeSpeed={50} cursorChar="" /> */}
+            </BackgroundTitle>
+            <BackgroundDes>
+              {t(
+                'This is your digital asset treasure silo, stake or combine NFTs to explore more possibilities where you can obtain more fulfilling rewards',
+              )}
+            </BackgroundDes>
+          </BackgroundText>
+        </BackgroundWrap>
+      )}
+
       <ConentWrap>
         <SubMenuWrap>
           <Tabs defaultActiveKey={activeTab} onChange={changeTab}>
@@ -474,7 +483,7 @@ function NftProfilePage() {
         <CompoundConfirmModal
           nfts={selectedNfts}
           onDismiss={() => setConfirmModalVisible(false)}
-          submitCompound={submitCompound}
+          submitCompose={submitCompose}
         />
       ) : null}
       {successModalVisible ? <CompoundSuccessModal nfts={composedNFT} onClose={closeCompoundSuccessModal} /> : null}
