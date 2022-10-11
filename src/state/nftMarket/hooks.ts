@@ -28,19 +28,22 @@ export const useGetCollections = (): { data: ApiCollections; status: FetchStatus
 
 export const useGetMyNfts = (account: string, collection: string): { data: NftToken[]; status: FetchStatus } => {
   const { data, status } = useSWR(['nftMarket', 'myNfts'], async () => {
-    const res = await fetch(`https://middle.diffusiondao.org/myNfts`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        account,
-        collection,
-      }),
-    })
-    if (res.ok) {
-      const json = await res.json()
-      return json
+    if (account) {
+      const res = await fetch(`https://middle.diffusiondao.org/myNfts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          account,
+          collection,
+        }),
+      })
+      if (res.ok) {
+        const json = await res.json()
+        return json
+      }
+      return null
     }
     return null
   })
