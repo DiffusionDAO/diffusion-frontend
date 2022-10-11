@@ -69,7 +69,8 @@ function NftProfilePage() {
   const { data: collections, status } = useGetCollections()
   localStorage?.setItem('nfts', JSON.stringify(collections))
   const dfsNFTAddress = getDFSNFTAddress()
-  const tokens = Object.values(collections[dfsNFTAddress].tokens).filter(
+  const collection: any = collections[dfsNFTAddress]
+  const tokens = Object.values(collection.tokens).filter(
     (token: any) => token.owner === account?.toLowerCase() && !token.staked,
   ) as NftToken[]
   // const { data: collections, status } = useGetMyNfts(account, getDFSNFTAddress())
