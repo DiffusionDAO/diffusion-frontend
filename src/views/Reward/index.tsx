@@ -255,6 +255,7 @@ const Reward = () => {
               modules={[Navigation]}
               className="rewardSwiper"
               spaceBetween={50}
+              initialSlide={4}
               slidesPerView={slidesPerView}
               centeredSlides
               navigation

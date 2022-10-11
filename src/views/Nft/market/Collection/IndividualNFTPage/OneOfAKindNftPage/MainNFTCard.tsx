@@ -124,7 +124,11 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
           width={['100%', null, 'max-content']}
           mt="24px"
           onClick={async () => {
-            await dfsMineContract.unstakeNFT(nft?.tokenId)
+            try {
+              await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
+            } catch (error: any) {
+              window.alert(error.reason ?? error.data?.message ?? error.message)
+            }
           }}
         >
           {t('Unstake')}

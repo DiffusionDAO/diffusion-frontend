@@ -129,13 +129,14 @@ function NftProfilePage() {
   if (DFSNFTCollection[0] && stakedNfts.length === 0) {
     mine.getAllStaked(DFSNFTCollection[0].collectionAddress).then((tokenIds) => {
       const stakedTokenIds = tokenIds.map((tokenId) => tokenId.toString())
-      console.log('stakedTokenIds:', stakedTokenIds)
-      console.log('DFSNFTCollection.length:', DFSNFTCollection.length, DFSNFTCollection[0])
+      // console.log('stakedTokenIds:', stakedTokenIds)
+      // console.log('DFSNFTCollection.length:', DFSNFTCollection.length, DFSNFTCollection[0])
       setStakedNfts(DFSNFTCollection.filter((nft) => stakedTokenIds.includes(nft.tokenId)))
     })
   }
+
   useEffect(() => {
-    if (account) {
+    if (account && mynfts.length === 0) {
       market
         .getTokensOnSaleByOwner(account)
         .then((res) => {
@@ -144,9 +145,11 @@ function NftProfilePage() {
         })
         .catch((error) => console.log(error))
     }
-    const untsaked = DFSNFTCollection?.filter((item) => !item.staked).concat(myMarketNFT)
-    setMynfts(untsaked)
-  }, [account])
+    if (DFSNFTCollection[0] && mynfts.length === 0) {
+      const unstaked = DFSNFTCollection?.filter((item) => !item.staked)
+      setMynfts(unstaked)
+    }
+  }, [account, DFSNFTCollection])
 
   const resetPage = () => {
     setIsSelected(false)
@@ -385,8 +388,8 @@ function NftProfilePage() {
     }
   }
   const tabs = [
-    { key: 'WithoutStake', label: t('Not Staked'), children: mynfts?.length },
-    { key: 'Stake', label: t('Staked'), children: stakedNfts.length },
+    { key: 'WithoutStake', label: t('Not Staked'), length: mynfts?.length },
+    { key: 'Stake', label: t('Staked'), length: stakedNfts?.length },
   ]
   return (
     <AccountNftWrap>
@@ -421,7 +424,7 @@ function NftProfilePage() {
                 label: (
                   <span>
                     {item.label}
-                    <SelectedCountWrap>{item.children}</SelectedCountWrap>
+                    <SelectedCountWrap>{item.length}</SelectedCountWrap>
                   </span>
                 ),
                 key: item.key,

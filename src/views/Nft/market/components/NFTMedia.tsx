@@ -49,7 +49,7 @@ const NFTMedia: FC<
     }
   }, [dispatch, isIntersecting, setTryVideoNftMedia])
 
-  if (tryVideoNftMedia && (nft?.image.webm || nft?.image.mp4)) {
+  if (tryVideoNftMedia && (nft?.image?.webm || nft?.image?.mp4)) {
     return (
       <AspectRatio ratio={width / height} {...props}>
         <div ref={observerRef} />
