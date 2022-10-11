@@ -275,9 +275,9 @@ export const useFarmAuctionContract = (withSignerIfPossible = true) => {
   return useMemo(() => getFarmAuctionContract(providerOrSigner), [providerOrSigner])
 }
 
-export const useNftMarketContract = () => {
-  const { data: signer } = useSigner()
-  return useMemo(() => getNftMarketContract(signer), [signer])
+export const useNftMarketContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getNftMarketContract(providerOrSigner), [providerOrSigner])
 }
 
 export const useErc721CollectionContract = (

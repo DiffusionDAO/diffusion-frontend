@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, useLayoutEffect } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
@@ -87,15 +87,15 @@ const Reward = () => {
   const slidesPerView = isMobile ? 1 : 3
   const swiperWrapBgImgUrl = isMobile ? '/images/reward/swiperWrapBgMobile.png' : '/images/reward/swiperWrapBg.png'
   const swiperSlideData = [
-    { name: '0', description: 'level1' },
-    { name: '1', description: 'level2' },
-    { name: '2', description: 'level3' },
-    { name: '3', description: 'level4' },
-    { name: '4', description: 'level5' },
-    { name: '5', description: 'level6' },
-    { name: '6', description: 'level7' },
-    { name: '7', description: 'level8' },
-    { name: '8', description: 'level9' },
+    { name: '0' },
+    { name: '1' },
+    { name: '2' },
+    { name: '3' },
+    { name: '4' },
+    { name: '5' },
+    { name: '6' },
+    { name: '7' },
+    { name: '8' },
   ]
 
   const openDetailModal = () => {
@@ -112,8 +112,7 @@ const Reward = () => {
   }
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [reward, setReward] = useState([])
-  // const { data: bondRewardVestingSecondsFromContract } = useSWRContract([dfsMineContract, 'bondRewardVestingSeconds', []])
-  const { data } = useSWRContract([dfsMineContract, 'getReward', [account ?? zeroAddress]])
+  // const { data:reward } = useSWRContract([dfsMineContract, 'getReward', [account ?? zeroAddress]])
 
   const [
     pendingReward,
@@ -130,7 +129,7 @@ const Reward = () => {
     stakedSavings,
     socialReward,
     bondReward,
-  ] = [...(data ?? [])]
+  ] = [...(reward ?? [])]
   console.log(
     pendingReward,
     DfsBalance,
@@ -145,7 +144,7 @@ const Reward = () => {
     epochLength,
     stakedSavings,
     socialReward?.toString(),
-    bondReward,
+    bondReward?.toString(),
   )
   const nextTime = nextSavingsStakingPayoutTime ? new Date(nextSavingsStakingPayoutTime?.toNumber() * 1000) : 0
   const nextSavingInterestChange =
@@ -223,6 +222,14 @@ const Reward = () => {
       )
     }
   }, [account])
+  useEffect(() => {
+    if (account) {
+      dfsMineContract
+        .getReward(account)
+        .then((res) => setReward(res))
+        .catch((error) => console.log(error))
+    }
+  }, [account, me])
   const updateSwiper = useCallback(
     (swiper) => {
       if (me?.level) {
@@ -232,13 +239,13 @@ const Reward = () => {
     },
     [me?.level],
   )
-  useInterval(() => {
-    if (me.level && me.level <= 7) {
-      me.level++
-      setMe(me)
-      console.log('me.level:', me.level)
-    }
-  }, 1000)
+  // useInterval(() => {
+  //   if (me.level && me.level <= 7) {
+  //     me.level++
+  //     setMe(me)
+  //     console.log('me.level:', me.level)
+  //   }
+  // }, 1000)
   return (
     <RewardPageWrap>
       {account && access && (
@@ -275,14 +282,14 @@ const Reward = () => {
               <DiffusionGoldWrap isMobile={isMobile}>
                 <DiffusionGoldHeader>
                   <DiffusionGoldTitle>{t('My social networking rewards')}</DiffusionGoldTitle>
-                  <DiffusionGoldDetailJump onClick={openDetailModal}>{`${t('Detail')}  >`}</DiffusionGoldDetailJump>
+                  <DiffusionGoldDetailJump onClick={openDetailModal}>{`${t('Detail')}>`}</DiffusionGoldDetailJump>
                 </DiffusionGoldHeader>
                 <Petal src="/images/reward/petal.png" isMobile={isMobile} />
                 <RewardText>{t('Rewards')}</RewardText>
-                <RewardValueDiv>{dfsFromBondReward ?? '0'}</RewardValueDiv>
+                <RewardValueDiv>{dfsFromBondReward}</RewardValueDiv>
                 <ExtractBtn
                   onClick={async () => {
-                    if (dfsFromBondReward !== '0') {
+                    if (dfsFromBondReward !== '0.0') {
                       const receipt = await dfsMineContract.withdrawBondReward()
                       await receipt.wait()
                       const response = await fetch('https://middle.diffusiondao.org/withdrawBondReward', {
@@ -309,7 +316,7 @@ const Reward = () => {
               <MySposWrap>
                 <MySposHeader>
                   <MySposTitle>{t('My SPOS value')}</MySposTitle>
-                  <MySposDetailJump onClick={openUnlockedDetailModal}>{`${t('Detail')}  >`}</MySposDetailJump>
+                  <MySposDetailJump onClick={openUnlockedDetailModal}>{`${t('Detail')}>`}</MySposDetailJump>
                 </MySposHeader>
                 <MySposOveview>
                   <MySposOveviewItem>
