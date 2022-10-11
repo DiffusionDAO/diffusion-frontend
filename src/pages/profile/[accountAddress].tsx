@@ -4,7 +4,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable array-callback-return */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRouter } from 'next/router'
 import { useProfileForAddress } from 'state/profile/hooks'
@@ -66,7 +66,14 @@ const greeceNumber = { 0: 'I', 1: 'II', 2: 'III', 3: 'IV', 4: 'V', 5: 'VI', 6: '
 
 function NftProfilePage() {
   const { account } = useWeb3React()
-  const { data: collections, status } = useGetMyNfts(account, getDFSNFTAddress())
+  const { data: collections, status } = useGetCollections()
+  localStorage?.setItem('nfts', JSON.stringify(collections))
+  const dfsNFTAddress = getDFSNFTAddress()
+  const tokens = Object.values(collections[dfsNFTAddress].tokens).filter(
+    (token: any) => token.owner === account?.toLowerCase() && !token.staked,
+  ) as NftToken[]
+  // const { data: collections, status } = useGetMyNfts(account, getDFSNFTAddress())
+
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const { query } = useRouter()
@@ -125,18 +132,30 @@ function NftProfilePage() {
   const dfsNFT = useDFSNftContract()
   const mine = useDFSMineContract()
   const market = useNftMarketContract()
-  const DFSNFTCollection = collections?.filter((item) => item?.collectionName === 'DFSNFT')
-  if (DFSNFTCollection[0] && stakedNfts.length === 0) {
-    mine.getAllStaked(DFSNFTCollection[0].collectionAddress).then((tokenIds) => {
-      const stakedTokenIds = tokenIds.map((tokenId) => tokenId.toString())
-      // console.log('stakedTokenIds:', stakedTokenIds)
-      // console.log('DFSNFTCollection.length:', DFSNFTCollection.length, DFSNFTCollection[0])
-      setStakedNfts(DFSNFTCollection.filter((nft) => stakedTokenIds.includes(nft.tokenId)))
-    })
-  }
+
+  const DFSNFTCollection = tokens?.filter((item) => item?.collectionName === 'DFSNFT')
+
+  useMemo(() => {
+    if (DFSNFTCollection && mynfts.length === 0) {
+      const unstaked = DFSNFTCollection?.filter((item) => !item.staked)
+      setMynfts(unstaked)
+    }
+  }, [account, status])
 
   useEffect(() => {
-    if (account && mynfts.length === 0) {
+    if (DFSNFTCollection[0] && stakedNfts.length === 0) {
+      mine.getAllStaked(DFSNFTCollection[0].collectionAddress).then((tokenIds) => {
+        const stakedTokenIds = tokenIds.map((tokenId) => tokenId.toString())
+        console.log('stakedTokenIds:', stakedTokenIds)
+        const staked = DFSNFTCollection.filter((nft) => stakedTokenIds.includes(nft.tokenId))
+        console.log('staked:', staked)
+        setStakedNfts(staked)
+      })
+    }
+  }, [account, status])
+
+  useEffect(() => {
+    if (account) {
       market
         .getTokensOnSaleByOwner(account)
         .then((res) => {
@@ -145,11 +164,7 @@ function NftProfilePage() {
         })
         .catch((error) => console.log(error))
     }
-    if (DFSNFTCollection[0] && mynfts.length === 0) {
-      const unstaked = DFSNFTCollection?.filter((item) => !item.staked)
-      setMynfts(unstaked)
-    }
-  }, [account, DFSNFTCollection])
+  }, [account, status])
 
   const resetPage = () => {
     setIsSelected(false)
@@ -165,7 +180,6 @@ function NftProfilePage() {
     resetPage()
     setActiveTab(key)
   }
-  const dfsNFTAddress = getDFSNFTAddress()
   const startCompound = () => {
     setIsSelected(true)
     setSelectedNfts(mynfts)
@@ -189,6 +203,7 @@ function NftProfilePage() {
   const submitCompose = async () => {
     const selectedTokenIds = selectedNfts.filter((nft) => nft.selected).map((nft) => nft.tokenId)
     const attribute = selectedNfts[0].attributes[0].value
+    const collection = selectedNfts[0].collectionAddress
     let tx
     try {
       if (selectedTokenIds.length === 6) {
@@ -233,6 +248,14 @@ function NftProfilePage() {
       }
       setComposedNFT([newNft])
       console.log('selectedTokenIds:', selectedTokenIds)
+
+      const collections = JSON.parse(localStorage?.getItem('nfts'))
+      selectedTokenIds.map((tokenId) => {
+        delete collections[collection].tokens[tokenId]
+      })
+      collections[collection].tokens[composedTokenId] = newNft
+      localStorage?.setItem('nfts', JSON.stringify(collections))
+
       const response = await fetch('https://middle.diffusiondao.org/composeNft', {
         method: 'POST',
         headers: {
@@ -245,8 +268,13 @@ function NftProfilePage() {
           composedTokenId,
         }),
       })
-      const json = await response.json()
-      json.push(newNft)
+      // let resp = await response.json() as NftToken[]
+      // console.log(resp.length)
+      // json.push(newNft)
+      const json = Object.values(collections[dfsNFTAddress]?.tokens).filter(
+        (token: any) => token.owner === account?.toLowerCase() && !token.staked,
+      ) as NftToken[]
+      console.log(json.length)
       setMynfts(json)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
@@ -279,14 +307,22 @@ function NftProfilePage() {
       receipt = await dfsNFT.setApprovalForAll(mineAddress, true)
       await receipt.wait()
     }
-    receipt = await mine.stakeNFT(selected[0].collectionAddress, tokenIds)
+    const collection = selected[0].collectionAddress
+    receipt = await mine.stakeNFT(collection, tokenIds)
     await receipt.wait()
-    const staked = await mine.getAllStaked(selected[0].collectionAddress)
     selected.map((item) => (item.staked = !item.staked))
     selected.map((item) => (item.selected = !item.selected))
+    const staked = await mine.getAllStaked(collection)
     setStakedNfts(staked)
     setIsSelected(false)
     setSelectedNfts([])
+
+    const collections = JSON.parse(localStorage?.getItem('nfts'))
+    selected.map((item) => {
+      collections[collection].tokens[item.tokenId].staked = true
+    })
+    console.log(selected, collections[collection].tokens[selected[0].tokenId].staked)
+    localStorage?.setItem('nfts', JSON.stringify(collections))
 
     const response = await fetch('https://middle.diffusiondao.org/stakeNFT', {
       method: 'POST',
@@ -295,10 +331,16 @@ function NftProfilePage() {
       },
       body: JSON.stringify({
         address: account,
+        collection,
         nfts: selected,
       }),
     })
-    const json = await response.json()
+    // const unstaked = await response.json()
+    const unstaked = Object.values(collections[dfsNFTAddress]?.tokens).filter(
+      (token: any) => token.owner === account?.toLowerCase() && !token.staked,
+    ) as NftToken[]
+    console.log(unstaked)
+    setMynfts(unstaked)
 
     if (option === 'stake' && selectedCount > 0) submitStake()
   }
@@ -349,13 +391,11 @@ function NftProfilePage() {
   const selectNft = (nft) => {
     if (option === 'compose') {
       const level = nft.attributes[0].value
-      const data = cloneDeep(mynfts.filter((my) => my.attributes[0].value === level))
+      const data = mynfts.filter((my) => my.attributes[0].value === level)
       data.map((item: NftToken) => {
-        const obj = item
-        if (obj.attributes[0].value === nft.attributes[0].value) {
-          obj.selected = !obj.selected
+        if (item.attributes[0].value === nft.attributes[0].value) {
+          item.selected = !item.selected
         }
-        return obj
       })
       if (level === '0') {
         if (data.length < 6) {

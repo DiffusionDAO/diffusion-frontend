@@ -48,7 +48,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   // const { data: distributionData, isFetching: isFetchingDistribution } = useGetCollectionDistribution(collectionAddress)
   const { data: distributionData, isFetching: isFetchingDistribution } = {} as any
   const collections = JSON.parse(localStorage?.getItem('nfts'))
-  const nft = collections[collectionAddress].tokens[tokenId]
+  const nft = collections[collectionAddress]?.tokens[tokenId]
   // const { combinedNft: nft, isOwn: true, isProfilePic, refetch } = useCompleteNft(collectionAddress, tokenId)
 
   const properties = nft?.attributes
@@ -67,7 +67,6 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
     }
     return {}
   }, [properties, distributionData, isFetchingDistribution])
-  console.log(nft, collection)
   if (!nft || !collection) {
     return <PageLoader />
   }

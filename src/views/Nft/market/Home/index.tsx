@@ -94,7 +94,7 @@ const Home = () => {
     if (collections) {
       localStorage?.setItem('nfts', JSON.stringify(collections))
     }
-  })
+  }, [account])
 
   return (
     <>

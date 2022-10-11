@@ -9,6 +9,8 @@ import {
   Text,
   useModal,
 } from '@pancakeswap/uikit'
+import { useWeb3React } from '@pancakeswap/wagmi'
+
 import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { formatUnits, parseUnits } from '@ethersproject/units'
@@ -93,7 +95,9 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   nftIsProfilePic,
   onSuccess,
 }) => {
+  console.log('MainNFTCard:', nft)
   const { t } = useTranslation()
+  const { account } = useWeb3React()
   const bnbBusdPrice = useBNBBusdPrice()
   const dfsMineContract = useDFSMineContract()
   const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ?? '0'
@@ -125,7 +129,28 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
           mt="24px"
           onClick={async () => {
             try {
-              await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
+              const receipt = await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
+              await receipt.wait()
+              // eslint-disable-next-line no-param-reassign
+              nft.staked = false
+              // eslint-disable-next-line no-param-reassign
+              nft.selected = false
+              const collections = JSON.parse(localStorage?.getItem('nfts'))
+              collections[nft?.collectionAddress].tokens[nft.tokenId].staked = false
+              localStorage?.setItem('nfts', JSON.stringify(collections))
+
+              const response = await fetch('https://middle.diffusiondao.org/unstakeNFT', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  address: account,
+                  nft,
+                }),
+              })
+              const unstaked = await response.json()
+              console.log(unstaked)
             } catch (error: any) {
               window.alert(error.reason ?? error.data?.message ?? error.message)
             }
