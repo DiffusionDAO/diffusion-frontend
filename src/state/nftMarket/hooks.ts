@@ -12,7 +12,7 @@ import shuffle from 'lodash/shuffle'
 import { API_NFT } from 'config/constants/endpoints'
 
 import fromPairs from 'lodash/fromPairs'
-import { ApiCollections, NftToken, Collection, NftAttribute, MarketEvent } from './types'
+import { ApiCollections, NftToken, Collection, NftAttribute, MarketEvent, ApiCollection } from './types'
 import { getCollection, getCollections } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 
@@ -20,9 +20,9 @@ const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'as
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
 const EMPTY_OBJECT = {}
 
-export const useGetCollections = (): { data: any; status: FetchStatus } => {
+export const useGetCollections = (): { data: ApiCollections; status: FetchStatus } => {
   const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections())
-  const collections = data
+  const collections = data ?? ({} as ApiCollections)
   return { data: collections, status }
 }
 

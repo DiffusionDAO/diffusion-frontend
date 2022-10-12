@@ -164,7 +164,8 @@ export interface ApiCollection {
     large: string
     small: string
   }
-  attributes?: NftAttribute[] // returned for specific collection but not for all collections
+  attributes?: NftAttribute[]
+  tokens?: NftToken[]
 }
 
 // Get all collections
