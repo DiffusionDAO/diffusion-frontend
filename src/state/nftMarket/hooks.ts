@@ -20,9 +20,9 @@ const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'as
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
 const EMPTY_OBJECT = {}
 
-export const useGetCollections = (): { data: ApiCollections; status: FetchStatus } => {
+export const useGetCollections = (): { data: any; status: FetchStatus } => {
   const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections())
-  const collections = data ?? ({} as ApiCollections)
+  const collections = data
   return { data: collections, status }
 }
 
