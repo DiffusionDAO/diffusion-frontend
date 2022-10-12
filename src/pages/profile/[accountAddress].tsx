@@ -84,7 +84,7 @@ function NftProfilePage() {
   const [selectedNFTs, setSelectedNFTs] = useState<NftToken[]>()
   const [stakedNFTs, setStakedNFTs] = useState<NftToken[]>()
   const [unstakedNFTs, setUnstakedNFTs] = useState<NftToken[]>()
-
+  console.log('status:', status)
   useMemo(() => {
     if (tokens) {
       setUnstakedNFTs(tokens?.unstaked)
