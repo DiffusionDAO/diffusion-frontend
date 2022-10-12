@@ -220,7 +220,7 @@ function NftProfilePage() {
     const collection = selectedNFTs[0].collectionAddress
     let tx
     try {
-      if (selectedTokenIds.length === 6) {
+      if (selectedTokenIds?.length === 6) {
         tx = await composeNFT.ComposeLv0(selectedTokenIds)
       } else {
         tx = await composeNFT.ComposeLvX(selectedTokenIds, attribute)
@@ -288,7 +288,7 @@ function NftProfilePage() {
       const json = Object.values(collections[dfsNFTAddress]?.tokens).filter(
         (token: any) => token.owner === account?.toLowerCase() && !token.staked,
       ) as NftToken[]
-      console.log(json.length)
+      console.log(json?.length)
       setUnstakedNFTs(json)
       setSelectedNFTs(json)
       setConfirmModalVisible(false)
@@ -313,7 +313,7 @@ function NftProfilePage() {
     })
     const selected = tokens?.unstaked.filter((item) => item.selected)
     setSelectedNFTs(selected)
-    setSelectedCount(selected.length)
+    setSelectedCount(selected?.length)
     if (option === 'stake' && selectedCount > 0) await submitStake(selected)
   }
 
@@ -350,7 +350,7 @@ function NftProfilePage() {
       }),
     })
     const myNfts = await response.json()
-    console.log('stakeNFT myNfts:', myNfts.unstaked.length)
+    console.log('stakeNFT myNfts:', myNfts?.unstaked?.length)
     setUnstakedNFTs(myNfts.unstaked)
     setSelectedNFTs(myNfts.unstaked)
     setStakedNFTs(myNfts.staked)
@@ -362,7 +362,7 @@ function NftProfilePage() {
     const selected = selectedNFTs.filter((item) => item.selected)
     console.log('Save:', selected)
     setSelectedNFTs(selected)
-    if (!selected.length) {
+    if (!selected?.length) {
       setNoteContent({
         title: t('Important notice'),
         description: t('Please select one NFT at least'),
@@ -371,7 +371,7 @@ function NftProfilePage() {
       return
     }
     if (option === 'compose') {
-      if (selected.length % 2 !== 0 || !selected.length) {
+      if (selected?.length % 2 !== 0 || !selected?.length) {
         setNoteContent({
           title: t('Important note'),
           description: t(
@@ -405,7 +405,7 @@ function NftProfilePage() {
         }
       })
       if (level === '0') {
-        if (data.length < 6) {
+        if (data?.length < 6) {
           setNoteContent({
             title: t('Important note'),
             description: t('need 6 pieces'),
@@ -415,7 +415,7 @@ function NftProfilePage() {
         }
         const datas = data.slice(0, 6)
         setSelectedNFTs(datas)
-        setSelectedCount(datas.filter((item) => item.selected).length)
+        setSelectedCount(datas.filter((item) => item.selected)?.length)
       } else {
         if (level === '6') {
           setNoteContent({
@@ -427,17 +427,17 @@ function NftProfilePage() {
         }
         const datas = data.slice(0, 2)
         setSelectedNFTs(datas)
-        setSelectedCount(datas.filter((item) => item.selected).length)
+        setSelectedCount(datas.filter((item) => item.selected)?.length)
       }
     } else if (option === 'stake') {
       nft.selected = !nft.selected
-      setSelectedCount(unstakedNFTs?.filter((item) => item.selected).length)
+      setSelectedCount(unstakedNFTs?.filter((item) => item.selected)?.length)
     }
   }
   const tabs = [
-    { key: 'WithoutStake', label: t('Not Staked'), length: unstakedNFTs?.length },
-    { key: 'Staked', label: t('Staked'), length: stakedNFTs?.length },
-    { key: 'OnSale', label: t('On Sale'), length: onSaleNFTs?.length },
+    { key: 'WithoutStake', label: t('Not Staked'), length: unstakedNFTs?.length ?? 0 },
+    { key: 'Staked', label: t('Staked'), length: stakedNFTs?.length ?? 0 },
+    { key: 'OnSale', label: t('On Sale'), length: onSaleNFTs?.length ?? 0 },
   ]
 
   return (
@@ -473,7 +473,7 @@ function NftProfilePage() {
                 label: (
                   <span>
                     {item.label}
-                    <SelectedCountWrap>{item.length}</SelectedCountWrap>
+                    <SelectedCountWrap>{item?.length}</SelectedCountWrap>
                   </span>
                 ),
                 key: item.key,
