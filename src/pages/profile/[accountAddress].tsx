@@ -67,22 +67,20 @@ const greeceNumber = { 0: 'I', 1: 'II', 2: 'III', 3: 'IV', 4: 'V', 5: 'VI', 6: '
 function NftProfilePage() {
   const { account } = useWeb3React()
   const dfsNFTAddress = getDFSNFTAddress()
-  // const { data: collections, status } = useGetCollections()
-  // localStorage?.setItem('nfts', JSON.stringify(collections))
-  // const collection: any = collections[dfsNFTAddress]
-  // const tokens = Object.values(collection?.tokens ?? {}).filter(
-  //   (token: any) => token.owner === account?.toLowerCase() && !token.staked,
-  // ) as NftToken[]
+
   const { data: tokens, status } = useGetMyNfts(account, dfsNFTAddress)
   console.log('tokens:', tokens)
   let collections = JSON.parse(localStorage?.getItem('nfts'))
-  Object.values(tokens)
-    .flat()
-    .map((token) => (collections[dfsNFTAddress].tokens[token.tokenId] = token))
+  if (collections) {
+    Object.values(tokens)
+      .flat()
+      .map((token) => (collections[dfsNFTAddress].tokens[token.tokenId] = token))
+  }
+
   localStorage?.setItem('nfts', JSON.stringify(collections))
 
-  const collection: NftToken[] = Object.values(collections[dfsNFTAddress].tokens)
-  const myTokens = collection.filter((token: NftToken) => token?.owner?.toLowerCase() === account?.toLowerCase())
+  // const collection: NftToken[] = Object.values(collections[dfsNFTAddress]?.tokens)
+  // const myTokens = collection.filter((token: NftToken) => token?.owner?.toLowerCase() === account?.toLowerCase())
   const [selectedNFTs, setSelectedNFTs] = useState<NftToken[]>()
   const [stakedNFTs, setStakedNFTs] = useState<NftToken[]>()
   const [unstakedNFTs, setUnstakedNFTs] = useState<NftToken[]>()
@@ -95,7 +93,6 @@ function NftProfilePage() {
     }
   }, [account, status])
 
-  // console.log("tokens:", tokens, unstakedNFTs)
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const { query } = useRouter()
@@ -269,8 +266,10 @@ function NftProfilePage() {
       selectedTokenIds.map((tokenId) => {
         delete collections[collection].tokens[tokenId]
       })
-      collections[collection].tokens[composedTokenId] = newNft
-      localStorage?.setItem('nfts', JSON.stringify(collections))
+      if (collections) {
+        collections[collection].tokens[composedTokenId] = newNft
+        localStorage?.setItem('nfts', JSON.stringify(collections))
+      }
 
       const response = await fetch('https://middle.diffusiondao.org/composeNft', {
         method: 'POST',
@@ -333,9 +332,12 @@ function NftProfilePage() {
     await receipt.wait()
 
     collections = JSON.parse(localStorage?.getItem('nfts'))
-    selected.map((item) => {
-      collections[collection].tokens[item.tokenId].staked = true
-    })
+    if (collections) {
+      selected.map((item) => {
+        collections[collection].tokens[item.tokenId].staked = true
+      })
+    }
+
     localStorage?.setItem('nfts', JSON.stringify(collections))
     selected.map((item) => (item.staked = !item.staked))
     selected.map((item) => (item.selected = !item.selected))
