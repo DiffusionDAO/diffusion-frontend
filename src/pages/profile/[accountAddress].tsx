@@ -72,13 +72,12 @@ function NftProfilePage() {
   console.log('tokens:', tokens)
   let collections = JSON.parse(localStorage?.getItem('nfts'))
   console.log('collections:', collections)
-  if (collections) {
+  if (Object.keys(collections).length > 0) {
     Object.values(tokens)
       .flat()
       .map((token) => (collections[dfsNFTAddress].tokens[token.tokenId] = token))
+    localStorage?.setItem('nfts', JSON.stringify(collections))
   }
-
-  localStorage?.setItem('nfts', JSON.stringify(collections))
 
   // const collection: NftToken[] = Object.values(collections[dfsNFTAddress]?.tokens)
   // const myTokens = collection.filter((token: NftToken) => token?.owner?.toLowerCase() === account?.toLowerCase())
