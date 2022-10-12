@@ -350,11 +350,10 @@ function NftProfilePage() {
       }),
     })
     const myNfts = await response.json()
-    tokens = myNfts
-    console.log('stakeNFT myNfts:', tokens.unstaked.length)
-    setUnstakedNFTs(tokens.unstaked)
-    setSelectedNFTs(tokens.unstaked)
-    setStakedNFTs(tokens.staked)
+    console.log('stakeNFT myNfts:', myNfts.unstaked.length)
+    setUnstakedNFTs(myNfts.unstaked)
+    setSelectedNFTs(myNfts.unstaked)
+    setStakedNFTs(myNfts.staked)
     resetPage()
     message.success('Stake success')
   }
