@@ -72,7 +72,7 @@ function NftProfilePage() {
   console.log('tokens:', tokens)
   let collections = JSON.parse(localStorage?.getItem('nfts'))
   console.log('collections:', collections)
-  if (Object.keys(collections).length > 0) {
+  if (Object.keys(collections).length !== 0) {
     Object.values(tokens)
       .flat()
       .map((token) => (collections[dfsNFTAddress].tokens[token.tokenId] = token))
@@ -266,7 +266,7 @@ function NftProfilePage() {
       selectedTokenIds.map((tokenId) => {
         delete collections[collection].tokens[tokenId]
       })
-      if (collections) {
+      if (Object.keys(collections).length !== 0) {
         collections[collection].tokens[composedTokenId] = newNft
         localStorage?.setItem('nfts', JSON.stringify(collections))
       }
@@ -332,7 +332,7 @@ function NftProfilePage() {
     await receipt.wait()
 
     collections = JSON.parse(localStorage?.getItem('nfts'))
-    if (collections) {
+    if (Object.keys(collections).length !== 0) {
       selected.map((item) => {
         collections[collection].tokens[item.tokenId].staked = true
       })

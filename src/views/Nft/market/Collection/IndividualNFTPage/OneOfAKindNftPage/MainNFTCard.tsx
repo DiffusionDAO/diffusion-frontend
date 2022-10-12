@@ -135,7 +135,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
               // eslint-disable-next-line no-param-reassign
               nft.selected = false
               const collections = JSON.parse(localStorage?.getItem('nfts'))
-              if (collections.length > 0) {
+              if (Object.keys(collections).length !== 0) {
                 collections[nft?.collectionAddress].tokens[nft.tokenId].staked = false
                 localStorage?.setItem('nfts', JSON.stringify(collections))
               }

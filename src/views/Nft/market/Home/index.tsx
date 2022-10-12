@@ -91,7 +91,7 @@ const Home = () => {
     'desc',
   )
   useEffect(() => {
-    if (collections) {
+    if (Object.keys(collections).length !== 0) {
       localStorage?.setItem('nfts', JSON.stringify(collections))
     }
   }, [account])
