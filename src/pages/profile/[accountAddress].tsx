@@ -71,6 +71,7 @@ function NftProfilePage() {
   const { data: tokens, status } = useGetMyNfts(account, dfsNFTAddress)
   console.log('tokens:', tokens)
   let collections = JSON.parse(localStorage?.getItem('nfts'))
+  console.log('collections:', collections)
   if (collections) {
     Object.values(tokens)
       .flat()
