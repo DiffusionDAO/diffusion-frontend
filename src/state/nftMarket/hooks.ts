@@ -26,7 +26,10 @@ export const useGetCollections = (): { data: ApiCollections; status: FetchStatus
   return { data: collections, status }
 }
 
-export const useGetMyNfts = (account: string, collection: string): { data: NftToken[]; status: FetchStatus } => {
+export const useGetMyNfts = (
+  account: string,
+  collection: string,
+): { data: Record<string, NftToken[]>; status: FetchStatus } => {
   const { data, status } = useSWR(['nftMarket', 'myNfts'], async () => {
     if (account) {
       const res = await fetch(`https://middle.diffusiondao.org/myNfts`, {

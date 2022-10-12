@@ -16,7 +16,7 @@ const Collection = () => {
     localStorage?.setItem('nfts', JSON.stringify(res))
     collections = res
   })
-  const collection = collections[collectionAddress].data[0]
+  const collection = collections[collectionAddress]?.data[0]
   // const collection = useGetCollection(collectionAddress)
   // const hash = useMemo(() => getHashFromRouter(router)?.[0], [router])
 

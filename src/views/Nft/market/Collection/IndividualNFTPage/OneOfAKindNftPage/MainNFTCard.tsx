@@ -95,7 +95,6 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   nftIsProfilePic,
   onSuccess,
 }) => {
-  console.log('MainNFTCard:', nft)
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const bnbBusdPrice = useBNBBusdPrice()
@@ -136,8 +135,10 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
               // eslint-disable-next-line no-param-reassign
               nft.selected = false
               const collections = JSON.parse(localStorage?.getItem('nfts'))
-              collections[nft?.collectionAddress].tokens[nft.tokenId].staked = false
-              localStorage?.setItem('nfts', JSON.stringify(collections))
+              if (collections.length > 0) {
+                collections[nft?.collectionAddress].tokens[nft.tokenId].staked = false
+                localStorage?.setItem('nfts', JSON.stringify(collections))
+              }
 
               const response = await fetch('https://middle.diffusiondao.org/unstakeNFT', {
                 method: 'POST',

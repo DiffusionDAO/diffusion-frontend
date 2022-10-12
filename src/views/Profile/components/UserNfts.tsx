@@ -37,20 +37,20 @@ const UserNfts: React.FC<
   }
   return (
     <>
-      {nfts.length === 0 && !isLoading ? (
+      {nfts?.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />
           <Text pt="8px" bold>
             {t('No NFTs found')}
           </Text>
         </Flex>
-      ) : nfts.length > 0 ? (
+      ) : nfts?.length > 0 ? (
         <Grid
           gridGap="16px"
           gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
           alignItems="start"
         >
-          {nfts.map((nft) => {
+          {nfts?.map((nft) => {
             const { marketData, location } = nft
 
             return (
