@@ -88,9 +88,11 @@ function NftProfilePage() {
   const [unstakedNFTs, setUnstakedNFTs] = useState<NftToken[]>()
 
   useMemo(() => {
-    setUnstakedNFTs(tokens?.unstaked)
-    setSelectedNFTs(tokens?.unstaked)
-    setStakedNFTs(tokens?.staked)
+    if (tokens) {
+      setUnstakedNFTs(tokens?.unstaked)
+      setSelectedNFTs(tokens?.unstaked)
+      setStakedNFTs(tokens?.staked)
+    }
   }, [account, status])
 
   // console.log("tokens:", tokens, unstakedNFTs)
@@ -351,9 +353,9 @@ function NftProfilePage() {
     })
     const myNfts = await response.json()
     console.log('stakeNFT myNfts:', myNfts?.unstaked?.length)
-    setUnstakedNFTs(myNfts.unstaked)
-    setSelectedNFTs(myNfts.unstaked)
-    setStakedNFTs(myNfts.staked)
+    setUnstakedNFTs(myNfts?.unstaked)
+    setSelectedNFTs(myNfts?.unstaked)
+    setStakedNFTs(myNfts?.staked)
     resetPage()
     message.success('Stake success')
   }
@@ -536,8 +538,8 @@ function NftProfilePage() {
                 : activeTab === 'WithoutStake'
                 ? unstakedNFTs
                 : activeTab === 'Staked'
-                ? tokens?.staked
-                : tokens?.onSale
+                ? stakedNFTs
+                : onSaleNFTs
             }
             isLoading={false}
           />
