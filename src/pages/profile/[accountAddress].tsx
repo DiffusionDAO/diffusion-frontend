@@ -68,10 +68,11 @@ function NftProfilePage() {
   const { account } = useWeb3React()
   const dfsNFTAddress = getDFSNFTAddress()
 
+  const { data } = useGetCollections()
+  localStorage?.setItem('nfts', JSON.stringify(data))
   const { data: tokens, status } = useGetMyNfts(account, dfsNFTAddress)
   console.log('tokens:', tokens)
   let collections = JSON.parse(localStorage?.getItem('nfts'))
-  console.log('collections:', collections)
   if (Object.keys(collections).length !== 0) {
     Object.values(tokens)
       .flat()
