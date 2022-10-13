@@ -25,7 +25,7 @@ const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
                   <CardItem key={card.id}>
                     <CardImg src={`/images/nfts/${card.type}`} />
                     <CardText>
-                      {t('Count')}: {card.count}
+                      {card.tokenId}: {card.count}
                     </CardText>
                   </CardItem>
                 </Grid>

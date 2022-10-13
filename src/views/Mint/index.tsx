@@ -123,20 +123,31 @@ const Mint = () => {
       const { logs, events } = recipient
       const levels = []
       const id = BigNumber.from(events[events.length - 1].topics[3])
-      const tokenId = id.toString()
+      const mintTokenId = id.toString()
       // eslint-disable-next-line no-await-in-loop
-      const level = await dfsNFT.getItems(tokenId)
+      const level = await dfsNFT.getItems(mintTokenId)
       levels.push(level.toString())
-      setDrawBindData(formatLevel(levels))
+      setDrawBindData(formatLevel({ mintTokenId, levels }))
       setPlayBindBoxModalVisible(false)
       setBlindBoxModalVisible(true)
+      const response = await fetch('https://middle.diffusiondao.org/mintNFT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          account,
+          collection: dfsNFT.address,
+          mintTokenId,
+        }),
+      })
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
       setPlayBindBoxModalVisible(false)
     }
   }
-  const formatLevel = (data) => {
-    const objItem = data.reduce((allNames: any, name: any) => {
+  const formatLevel = ({ mintTokenId, levels }) => {
+    const objItem = levels.reduce((allNames: any, name: any) => {
       if (name in allNames) {
         allNames[name]++
       } else {
@@ -144,12 +155,23 @@ const Mint = () => {
       }
       return allNames
     }, {})
+    console.log('objItem:', objItem)
     const newData = []
+    const levelToName = {
+      '0': 'Lord fragment',
+      '1': 'Lord',
+      '2': 'Golden Lord',
+      '3': 'General',
+      '4': 'Golden General',
+      '5': 'Congressman',
+      '6': 'Golden Congressman',
+    }
     Object.keys(objItem).forEach((key) => {
       newData.push({
         id: key,
         type: key,
         count: objItem[key],
+        tokenId: `${levelToName[key]}#${mintTokenId}`,
       })
     })
     return newData
