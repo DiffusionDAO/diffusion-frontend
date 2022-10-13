@@ -131,6 +131,7 @@ export interface Collection {
     small: string
   }
   attributes?: NftAttribute[]
+  tokens?: NftToken[]
 }
 
 export interface ApiCollections {

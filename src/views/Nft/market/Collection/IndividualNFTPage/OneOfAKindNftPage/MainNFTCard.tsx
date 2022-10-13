@@ -151,7 +151,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
                 }),
               })
               const unstaked = await response.json()
-              console.log(unstaked)
+              console.log('unstaked:', unstaked)
             } catch (error: any) {
               window.alert(error.reason ?? error.data?.message ?? error.message)
             }
