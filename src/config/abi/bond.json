@@ -325,44 +325,6 @@
         "type": "address"
       }
     ],
-    "name": "addressToLevel",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "addressToTeamV0Amount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
     "name": "allowedZappers",
     "outputs": [
       {
@@ -436,13 +398,8 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
-        "name": "_minPrice",
-        "type": "uint256"
-      },
-      {
         "internalType": "address",
-        "name": "ref",
+        "name": "_ref",
         "type": "address"
       }
     ],
@@ -455,6 +412,19 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dfsMiningAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -486,62 +456,25 @@
   {
     "inputs": [
       {
+        "internalType": "address[]",
+        "name": "_superiors",
+        "type": "address[]"
+      },
+      {
         "internalType": "address",
-        "name": "_pair",
+        "name": "_superior",
         "type": "address"
       }
     ],
-    "name": "getKValue",
+    "name": "includes",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "k_",
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_pair",
-        "type": "address"
-      }
-    ],
-    "name": "getTotalValue",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_minimumPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_maxPayout",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_vestingTerm",
-        "type": "uint32"
-      }
-    ],
-    "name": "initializeBondTerms",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -586,19 +519,6 @@
   {
     "inputs": [],
     "name": "multiSignAddress",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "nftMiningAddress",
     "outputs": [
       {
         "internalType": "address",
@@ -802,6 +722,29 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_minimumPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxPayout",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_vestingTerm",
+        "type": "uint32"
+      }
+    ],
+    "name": "setBondTerms",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_dao",
         "type": "address"
@@ -846,7 +789,7 @@
         "type": "address"
       }
     ],
-    "name": "setMintAddress",
+    "name": "setMintNFTAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -925,36 +868,12 @@
   },
   {
     "inputs": [],
-    "name": "usdtAddress",
+    "name": "usdt",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IERC20",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_pair",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount_",
-        "type": "uint256"
-      }
-    ],
-    "name": "valuation",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "_value",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",

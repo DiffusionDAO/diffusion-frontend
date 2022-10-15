@@ -215,10 +215,14 @@ const Reward = () => {
     if (account) {
       // eslint-disable-next-line @typescript-eslint/no-shadow
       fetch('https://middle.diffusiondao.org/referrals').then((res) =>
-        res.json().then((response) => {
-          setReferrals(response)
-          setMe(response[account])
-        }),
+        res
+          .json()
+          .then((response) => {
+            setReferrals(response)
+            console.log(response, account)
+            setMe(response[account])
+          })
+          .catch((error) => console.log(error)),
       )
     }
   }, [account])
@@ -230,15 +234,14 @@ const Reward = () => {
         .catch((error) => console.log(error))
     }
   }, [account, me])
-  const updateSwiper = useCallback(
-    (swiper) => {
-      if (me?.level) {
-        console.log('updateSwiper:', me?.level)
-        swiper?.slideTo(me?.level, 50, false)
-      }
-    },
-    [me?.level],
-  )
+  // const updateSwiper = useCallback(
+  //   (swiper) => {
+  //     if (me?.level) {
+  //       swiper?.slideTo(me?.level, 50, false)
+  //     }
+  //   },
+  //   [me],
+  // )
   // useInterval(() => {
   //   if (me.level && me.level <= 7) {
   //     me.level++
@@ -255,16 +258,20 @@ const Reward = () => {
               modules={[Navigation]}
               className="rewardSwiper"
               spaceBetween={50}
-              initialSlide={4}
+              initialSlide={me?.level}
               slidesPerView={slidesPerView}
               centeredSlides
               navigation
               // onSwiper={updateSwiper}
-              onSlideChange={updateSwiper}
-              onUpdate={updateSwiper}
+              onSlideChange={(swiper) => {
+                swiper.slideTo(me?.level)
+              }}
+              onUpdate={(swiper) => {
+                swiper.slideTo(me?.level)
+              }}
               // onActiveIndexChange={updateSwiper}
             >
-              {me?.level &&
+              {me?.level !== undefined &&
                 swiperSlideData.map((item, index) => {
                   return (
                     <SwiperSlide key={item.name}>

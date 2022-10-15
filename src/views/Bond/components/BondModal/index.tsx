@@ -70,9 +70,9 @@ const BondModal: React.FC<BondModalProps> = ({
   const { t } = useTranslation()
   const { onPresentConnectModal } = useWallet()
   const router = useRouter()
-  const [hasReferral, setHasReferral] = useState<boolean>(true)
-  const [referral, setReferral] = useState<string>('')
-  const [amount, setAmount] = useState<string>()
+  const [hasReferral, setHasReferral] = useState<boolean>(false)
+  const [referral, setReferral] = useState<string>()
+  const [amount, setAmount] = useState<string>('')
   const [activeTab, setActiveTab] = useState<string>('mint')
   const [bondPrice, setBondPrice] = useState<number>(0)
   const [marketPrice, setMarketPrice] = useState<number>(0)
@@ -83,49 +83,78 @@ const BondModal: React.FC<BondModalProps> = ({
   const [payout, setPayout] = useState<string>('0')
   const [pendingPayout, setPendingPayout] = useState<string>('0')
 
-  const changeReferral = () => {
-    setReferral('')
-    setHasReferral(!hasReferral)
-  }
-  console.log(bondData.discount)
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const bond = useBondContract()
   const dfs = useDFSContract()
   const usdtAddress = getUSDTAddress()
   const usdt = useERC20(usdtAddress, true)
   const pancakeRouter = useRouterContract()
+
+  const changeReferral = () => {
+    setReferral('')
+    setHasReferral(!hasReferral)
+  }
+
   useEffect(() => {
-    try {
-      bond.bondPrice().then((res) => {
+    bond
+      .bondPrice()
+      .then((res) => {
         setBondPrice(res.toNumber())
         setMarketPrice((res.toNumber() * 100) / bondData.discount)
       })
-    } catch (error: any) {
-      window.alert(error.reason ?? error.data?.message ?? error.message)
-    }
-  })
+      .catch((error) => console.log(error))
+  }, [account])
+
   useEffect(() => {
-    try {
-      bond.terms().then((res) => {
+    setReferral('')
+    setHasReferral(!hasReferral)
+    if (account) {
+      if (!referral) {
+        bond
+          .referrals(account)
+          .then((res) => {
+            if (res !== zeroAddress) {
+              setHasReferral(true)
+              setReferral(res)
+            }
+          })
+          .catch((error) => console.log(error))
+      }
+      bond
+        .pendingPayoutFor(account)
+        .then((res) => {
+          setPendingPayout(formatBigNumber(res, 18))
+        })
+        .catch((error) => console.log(error))
+      dfs
+        .balanceOf(account)
+        .then((res) => {
+          setDfsBalance(formatBigNumber(res, 18))
+        })
+        .catch((error) => console.log(error))
+    }
+  }, [account])
+
+  useEffect(() => {
+    bond
+      .terms()
+      .then((res) => {
         setMinPrice(res[0])
         setVestingTerms(res[2])
       })
-      bond.maxPayout().then((res) => {
-        setMaxPayout(formatBigNumber(res, 2))
+      .catch((error) => console.log(error))
+    bond
+      .maxPayout()
+      .then((res) => {
+        setMaxPayout(formatBigNumber(res, 18))
       })
-      bond.pendingPayoutFor(account).then((res) => {
-        setPendingPayout(formatBigNumber(res, 2))
-      })
-      if (amount) {
-        bond.payoutFor(parseUnits(amount, 'ether')).then((payout) => setPayout(formatBigNumber(payout, 2)))
-      }
-    } catch (error: any) {
-      window.alert(error.reason ?? error.data?.message ?? error.message)
-    }
-    if (account) {
-      dfs.balanceOf(account).then((res) => {
-        setDfsBalance(formatBigNumber(res, 2))
-      })
+      .catch((error) => console.log(error))
+
+    if (amount) {
+      bond
+        .payoutFor(parseUnits(amount, 'ether'))
+        .then((payout) => setPayout(formatBigNumber(payout, 4)))
+        .catch((error) => console.log(error))
     }
   }, [account, bondPrice])
   const buy = () => {
@@ -149,47 +178,40 @@ const BondModal: React.FC<BondModalProps> = ({
   }
 
   const buySubmit = async () => {
-    if (referral && account && referral !== account) {
-      const existReferral = await bond.referrals(account)
-      if (existReferral === zeroAddress) {
-        let allowance = await usdt.allowance(account, pancakeRouter.address)
-        if (allowance.eq(0)) {
-          let receipt = await usdt.approve(pancakeRouter.address, MaxUint256)
-          await receipt.wait()
-          receipt = await dfs.approve(pancakeRouter.address, MaxUint256)
-          await receipt.wait()
-        }
-        allowance = await usdt.allowance(account, bond.address)
-        if (allowance.eq(0)) {
-          const receipt = await usdt.approve(bond.address, MaxUint256)
-          await receipt.wait()
-        }
-        try {
-          const receipt = await bond.deposit(parseUnits(amount, 'ether'), minPrice, referral)
-          await receipt.wait()
-        } catch (error: any) {
-          window.alert(error.reason ?? error.data?.message ?? error.message)
-        }
-        const response = await fetch('https://middle.diffusiondao.org/deposit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            address: account,
-            amount: parseUnits(amount, 'ether'),
-            referral,
-          }),
-        })
-        const json = await response.json()
-        console.log(json)
-        setAmount('')
-        setReferral('')
-        // onClose()
-      }
-    } else {
-      window.alert('Cannot set yourself as referral')
+    let allowance = await usdt.allowance(account, pancakeRouter.address)
+    if (allowance.eq(0)) {
+      let receipt = await usdt.approve(pancakeRouter.address, MaxUint256)
+      await receipt.wait()
+      receipt = await dfs.approve(pancakeRouter.address, MaxUint256)
+      await receipt.wait()
     }
+    allowance = await usdt.allowance(account, bond.address)
+    if (allowance.eq(0)) {
+      const receipt = await usdt.approve(bond.address, MaxUint256)
+      await receipt.wait()
+    }
+    try {
+      const receipt = await bond.deposit(parseUnits(amount, 'ether'), referral)
+      await receipt.wait()
+    } catch (error: any) {
+      window.alert(error.reason ?? error.data?.message ?? error.message)
+      return
+    }
+    const response = await fetch('https://middle.diffusiondao.org/deposit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: account,
+        amount: parseUnits(amount, 'ether'),
+        referral,
+      }),
+    })
+    const json = await response.json()
+    console.log(json)
+    setAmount('')
+    // onClose()
   }
   const withdraw = () => {
     confirm({
@@ -262,7 +284,7 @@ const BondModal: React.FC<BondModalProps> = ({
                 if (e.target.value) {
                   try {
                     const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
-                    setPayout(formatBigNumber(payout, 2))
+                    setPayout(formatBigNumber(payout, 4))
                   } catch (error: any) {
                     window.alert(error.reason ?? error.data?.message ?? error.message)
                   }
@@ -282,6 +304,7 @@ const BondModal: React.FC<BondModalProps> = ({
                 onInput={(e: any) => {
                   setReferral(e.target.value)
                 }}
+                disabled={hasReferral && referral !== zeroAddress}
               />
             </RecommandWrap>
             <BondListItemBtn onClick={buy}>{t('Buy')}</BondListItemBtn>

@@ -130,11 +130,11 @@ const Bond = () => {
         <OverviewCard isMobile={isMobile}>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
-            <OverviewCardItemContent isMobile={isMobile}>{dfsTotalSupply ?? 0}</OverviewCardItemContent>
+            <OverviewCardItemContent isMobile={isMobile}>${dfsTotalSupply ?? 0}</OverviewCardItemContent>
           </OverviewCardItem>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Price of DFS')}</OverviewCardItemTitle>
-            <OverviewCardItemContent isMobile={isMobile}>{bondData[0].price}</OverviewCardItemContent>
+            <OverviewCardItemContent isMobile={isMobile}>${bondData[0].price}</OverviewCardItemContent>
           </OverviewCardItem>
         </OverviewCard>
         {isMobile ? (
@@ -188,7 +188,7 @@ const Bond = () => {
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Duration')}</CellTitle>
-                  <CellText>{item.duration}days</CellText>
+                  <CellText>{item.duration} days</CellText>
                 </ContentCell>
               </BondListItemContent>
               {item.status === 'opened' ? (
