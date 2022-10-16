@@ -106,8 +106,8 @@ const BondModal: React.FC<BondModalProps> = ({
   }, [account, amount])
 
   useEffect(() => {
-    setReferral('')
     setHasReferral(false)
+    setReferral('')
     if (account) {
       if (!referral) {
         bond
@@ -178,6 +178,10 @@ const BondModal: React.FC<BondModalProps> = ({
   }
 
   const buySubmit = async () => {
+    if (!hasReferral) {
+      window.alert('missing referral')
+      return
+    }
     let allowance = await usdt.allowance(account, pancakeRouter.address)
     if (allowance.eq(0)) {
       let receipt = await usdt.approve(pancakeRouter.address, MaxUint256)
@@ -217,11 +221,11 @@ const BondModal: React.FC<BondModalProps> = ({
     confirm({
       title: t('Get even bigger gains with undrawn DFS draws'),
       icon: <ExclamationCircleOutlined />,
-      okText: t('Continue to Mint'),
+      okText: t('Continue'),
       okType: 'danger',
       cancelText: t('Go to Mint'),
       onOk() {
-        bond.redeem(account)
+        bond.redeem(account).catch((error) => window.alert(error.reason ?? error.data?.message ?? error.message))
       },
       onCancel() {
         router.push(`/mint`)
