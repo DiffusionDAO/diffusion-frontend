@@ -155,13 +155,10 @@ const Reward = () => {
     Number.isNaN(epochLength / rewardVestingSeconds) ? 0 : (epochLength / rewardVestingSeconds) * 100,
     2,
   )
-  console.log('epochLength:', epochLength?.toString(), savingVestingSeconds?.toString())
   const savingInterest = Number.isNaN(epochLength / savingVestingSeconds)
     ? 0
     : (epochLength / savingVestingSeconds) * 100
-  console.log(savingInterest)
   const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : (1 + savingInterest / 100) ** 15 - 1, 2)
-  console.log((1 + savingInterest / 100) ** 15 - 1)
   const lockedPower = useMemo(() => {
     return formatBigNumber(
       BigNumber.from(me?.power ?? 0)
@@ -218,9 +215,8 @@ const Reward = () => {
         res
           .json()
           .then((response) => {
-            setReferrals(response)
-            console.log(response, account)
             setMe(response[account])
+            setReferrals(response)
           })
           .catch((error) => console.log(error)),
       )
