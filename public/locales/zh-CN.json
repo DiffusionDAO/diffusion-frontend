@@ -1,4 +1,5 @@
 {
+  "Go to Mint": "去抽卡",
   "Referral": "推荐人",
   "Balance Mint": "可用额度铸造",
   "Payout Mint": "未提取额度铸造",
@@ -37,7 +38,7 @@
   "Play": "抽取",
   "Count": "数量",
   "Acquire any of the 2 types of NFT cards": "随机获得2种NFT",
-  "Continue to Draw Card": "继续抽卡",
+  "Continue to Mint": "继续抽卡",
   "Continue to Combine NFTs": "继续合成NFT",
 
   "Your balance is insufficient": "您的余额不足",

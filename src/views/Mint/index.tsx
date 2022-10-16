@@ -60,7 +60,7 @@ const Mint = () => {
   const [pendingPayout, setPendingPayout] = useState('')
 
   const dfsAddress = getDFSAddress()
-  const tokenContract = useERC20(dfsAddress)
+  const DFS = useERC20(dfsAddress)
 
   const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
   const seniorPrice = BigNumber.from(10).pow(18).mul(60)
@@ -70,8 +70,7 @@ const Mint = () => {
   useEffect(() => {
     if (account) {
       bond.bondInfo(account).then((res) => setPendingPayout(formatBigNumber(res[0], 2)))
-      tokenContract
-        .balanceOf(account)
+      DFS.balanceOf(account)
         .then((res) => {
           if (!res.eq(balance)) {
             setBalance(res)
@@ -80,8 +79,7 @@ const Mint = () => {
         .catch((error) => {
           console.log(error)
         })
-      tokenContract
-        .allowance(account, nftMintAddress)
+      DFS.allowance(account, nftMintAddress)
         .then((res) => {
           if (!res.eq(allowance)) setAllowance(res)
         })
@@ -97,7 +95,6 @@ const Mint = () => {
   }, [account, balance])
 
   const dfsNFT = useDFSNftContract()
-  const DFS = useERC20(getDFSAddress())
   const mint = async (type: string, useBond = false) => {
     if (!account) {
       onPresentConnectModal()
@@ -280,7 +277,15 @@ const Mint = () => {
                     )}
                   </ActionRight>
                 </ActionWrap>
-                <DrawBlindBoxPrimaryBtn className="orangeBtn" onClick={() => mint('senior')}>
+                <DrawBlindBoxPrimaryBtn
+                  className="orangeBtn"
+                  onClick={async () => {
+                    if (allowance.eq(0)) {
+                      await DFS.approve(nftMintAddress, MaxUint256)
+                    }
+                    mint('senior')
+                  }}
+                >
                   {t('Balance Mint')}
                 </DrawBlindBoxPrimaryBtn>
                 <DrawBlindBoxPrimaryBtn
@@ -383,12 +388,22 @@ const Mint = () => {
                     )}
                   </ActionRight>
                 </ActionWrap>
-                <DrawBlindBoxPrimaryBtn className="purpleBtn" onClick={() => mint('ordinary')}>
+                <DrawBlindBoxPrimaryBtn
+                  className="purpleBtn"
+                  onClick={async () => {
+                    if (allowance.eq(0)) {
+                      await DFS.approve(nftMintAddress, MaxUint256)
+                    }
+                    mint('ordinary')
+                  }}
+                >
                   {t('Balance Mint')}
                 </DrawBlindBoxPrimaryBtn>
                 <DrawBlindBoxPrimaryBtn
                   className="purpleBtn"
-                  onClick={() => mint('ordinary', true)}
+                  onClick={async () => {
+                    mint('ordinary', true)
+                  }}
                   style={{ marginTop: '20px' }}
                 >
                   {t('Payout Mint')}

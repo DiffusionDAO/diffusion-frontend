@@ -10,6 +10,7 @@ import {
   useModal,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
+import { useRouter } from 'next/router'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
@@ -97,6 +98,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
 }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
+  const router = useRouter()
   const bnbBusdPrice = useBNBBusdPrice()
   const dfsMineContract = useDFSMineContract()
   const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ?? '0'
@@ -152,6 +154,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
               })
               const unstaked = await response.json()
               console.log('unstaked:', unstaked)
+              router.push(`/profile/${account}`)
             } catch (error: any) {
               window.alert(error.reason ?? error.data?.message ?? error.message)
             }

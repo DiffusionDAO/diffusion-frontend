@@ -103,11 +103,11 @@ const BondModal: React.FC<BondModalProps> = ({
         setMarketPrice((res.toNumber() * 100) / bondData.discount)
       })
       .catch((error) => console.log(error))
-  }, [account])
+  }, [account, amount])
 
   useEffect(() => {
     setReferral('')
-    setHasReferral(!hasReferral)
+    setHasReferral(false)
     if (account) {
       if (!referral) {
         bond
@@ -133,7 +133,7 @@ const BondModal: React.FC<BondModalProps> = ({
         })
         .catch((error) => console.log(error))
     }
-  }, [account])
+  }, [account, amount])
 
   useEffect(() => {
     bond
@@ -156,7 +156,7 @@ const BondModal: React.FC<BondModalProps> = ({
         .then((payout) => setPayout(formatBigNumber(payout, 4)))
         .catch((error) => console.log(error))
     }
-  }, [account, bondPrice])
+  }, [account, bondPrice, amount])
   const buy = () => {
     if (!hasReferral) {
       confirm({
@@ -217,11 +217,12 @@ const BondModal: React.FC<BondModalProps> = ({
     confirm({
       title: t('Get even bigger gains with undrawn DFS draws'),
       icon: <ExclamationCircleOutlined />,
-      okText: t('Continue'),
+      okText: t('Continue to Mint'),
       okType: 'danger',
-      cancelText: t('Cancel'),
+      cancelText: t('Go to Mint'),
       onOk() {
-        bond.redeem(account)
+        // bond.redeem(account)
+        router.push(`/mint`)
       },
       onCancel() {
         router.push(`/mint`)
@@ -346,10 +347,13 @@ const BondModal: React.FC<BondModalProps> = ({
             <ListContent>{pendingPayout ?? 0} DFS</ListContent>
           )}
         </ListItem>
-        <ListItem>
-          <ListLable>{t('Max You Can Buy')}</ListLable>
-          <ListContent>{maxPayout ?? 0} DFS</ListContent>
-        </ListItem>
+        {activeTab === 'mint' && (
+          <ListItem>
+            <ListLable>{t('Max You Can Buy')}</ListLable>
+            <ListContent>{maxPayout ?? 0} DFS</ListContent>
+          </ListItem>
+        )}
+
         <ListItem>
           <ListLable>{t('Discount')}</ListLable>
           <ListContent>

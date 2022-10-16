@@ -254,11 +254,13 @@ const Reward = () => {
               modules={[Navigation]}
               className="rewardSwiper"
               spaceBetween={50}
-              initialSlide={me?.level}
+              initialSlide={0}
               slidesPerView={slidesPerView}
               centeredSlides
               navigation
-              // onSwiper={updateSwiper}
+              onSwiper={(swiper) => {
+                swiper.slideTo(me?.level)
+              }}
               onSlideChange={(swiper) => {
                 swiper.slideTo(me?.level)
               }}
