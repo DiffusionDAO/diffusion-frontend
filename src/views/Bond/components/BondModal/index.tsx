@@ -221,8 +221,7 @@ const BondModal: React.FC<BondModalProps> = ({
       okType: 'danger',
       cancelText: t('Go to Mint'),
       onOk() {
-        // bond.redeem(account)
-        router.push(`/mint`)
+        bond.redeem(account)
       },
       onCancel() {
         router.push(`/mint`)

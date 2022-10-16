@@ -194,7 +194,7 @@ const Bond = () => {
               {item.status === 'opened' ? (
                 <BondListItemBtn onClick={() => openBondModal(item)}>{t('Bonds')}</BondListItemBtn>
               ) : (
-                <BondListItemBtnClosed onClick={() => openBondModal(item)}>{t('Not opened')}</BondListItemBtnClosed>
+                <BondListItemBtnClosed>{t('Not opened')}</BondListItemBtnClosed>
               )}
             </BondListItem>
           </Grid>
