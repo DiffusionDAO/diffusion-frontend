@@ -178,7 +178,7 @@ const BondModal: React.FC<BondModalProps> = ({
   }
 
   const buySubmit = async () => {
-    if (!hasReferral) {
+    if (!referral) {
       window.alert('missing referral')
       return
     }
@@ -284,6 +284,7 @@ const BondModal: React.FC<BondModalProps> = ({
               suffix="ALL"
               value={amount}
               onInput={async (e: any) => {
+                setHasReferral(true)
                 setAmount(e.target.value)
                 if (e.target.value) {
                   try {

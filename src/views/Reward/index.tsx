@@ -473,13 +473,13 @@ const Reward = () => {
                 <CardItem isMobile={isMobile} className="hasBorder">
                   <DataCellWrap>
                     <DataCell
-                      label={t('Available limit')}
+                      label={t('Balance')}
                       value={`${formatBigNumber(DfsBalance ?? BigNumber.from(0), 2)} DFS`}
                       position="horizontal"
                     />
                   </DataCellWrap>
                   <DataCell
-                    label={t('Staked limit')}
+                    label={t('Staked')}
                     value={`${formatBigNumber(BigNumber.from(me?.stakedSavings ?? 0), 2)} DFS`}
                     position="horizontal"
                   />
@@ -498,20 +498,12 @@ const Reward = () => {
                       style={{ marginRight: '10px' }}
                       onClick={async () => {
                         const parsedAmount = parseUnits(amount, 'ether')
-                        const receipt = await dfsMineContract.unstakeSavings(parsedAmount)
-                        await receipt.wait()
-                        const response = await fetch('https://middle.diffusiondao.org/unstakeSavings', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          body: JSON.stringify({
-                            address: account,
-                            amount: parsedAmount.toString(),
-                          }),
-                        })
-                        const json = await response.json()
-                        setMe(json[account])
+                        try {
+                          const receipt = await dfsMineContract.unstakeSavings(parsedAmount)
+                          await receipt.wait()
+                        } catch (error: any) {
+                          window.alert(error.reason ?? error.data?.message ?? error.message)
+                        }
                       }}
                     >
                       {t('Unstake')}
@@ -524,22 +516,12 @@ const Reward = () => {
                             await dfsContract.approve(dfsMineAddress, MaxUint256)
                           }
                           const parsedAmount = parseUnits(amount, 'ether')
-                          console.log(parsedAmount.toString())
-                          let receipt = await dfsMineContract.stakeSavings(parsedAmount)
-                          receipt = await receipt.wait()
-                          console.log(receipt)
-                          const response = await fetch('https://middle.diffusiondao.org/stakeSavings', {
-                            method: 'POST',
-                            headers: {
-                              'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                              address: account,
-                              amount: parsedAmount.toString(),
-                            }),
-                          })
-                          const json = await response.json()
-                          setMe(json[account])
+                          try {
+                            let receipt = await dfsMineContract.stakeSavings(parsedAmount)
+                            receipt = await receipt.wait()
+                          } catch (error: any) {
+                            window.alert(error.reason ?? error.data?.message ?? error.message)
+                          }
                         }
                       }}
                     >

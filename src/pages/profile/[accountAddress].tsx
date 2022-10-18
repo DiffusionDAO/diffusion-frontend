@@ -128,7 +128,6 @@ function NftProfilePage() {
       console.log('nfts:', nfts)
       const tokens: NftToken[] = nfts.map((nft: NFT) => {
         const tokenId = nft.tokenId.toString()
-        console.log('tokenId:', tokenId)
         // if (tokenId === "0") return
         const level = nft.level.toString()
         const token: NftToken = {
