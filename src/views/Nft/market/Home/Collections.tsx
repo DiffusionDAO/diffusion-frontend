@@ -3,18 +3,17 @@ import { NextLinkFromReactRouter } from 'components/NextLink'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { Collection } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
+import toBuffer from 'it-to-buffer'
+import { create } from 'ipfs-http-client'
+import { useEffect } from 'react'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
 
-// const BtnViewWrap = styled.div`
-// width: calc(50% - 5px);
-//   border-radius: 8px;
-//   color: #fff;
-//   line-height: 36px;
-//   text-align: center;
-//   cursor: pointer;
-//   border: 2px solid #EC6EFF;
-// `
+const ipfs = create({
+  host: '207.148.117.145',
+  port: 5001,
+  protocol: 'http',
+})
 
 const Collections: React.FC<{ title: string; testId: string; collections: Collection[] }> = ({
   title,
@@ -23,6 +22,7 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
 }) => {
   const { t } = useTranslation()
   const addresses = Object.keys(collections)
+
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" mb="32px" mt="80px">
@@ -42,20 +42,20 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
       </Flex>
       <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)']} mb="64px">
         {addresses.map((address) => {
-          const collection = collections[address].data[0]
+          const collection = collections[address]
           return (
             <CollectionCard
-              key={collection.address}
-              bgSrc={collection.banner.small}
-              avatarSrc={collection.avatar}
-              collectionName={collection.name}
-              url={`${nftsBaseUrl}/collections/${collection.address}`}
+              key={collection?.address}
+              bgSrc={collection?.banner?.small}
+              avatarSrc={collection?.avatar}
+              collectionName={collection?.name}
+              url={`${nftsBaseUrl}/collections/${collection?.address}`}
             >
               <Flex alignItems="center">
                 <Text fontSize="12px" color="textSubtle">
                   {t('Volume')}
                 </Text>
-                <BNBAmountLabel amount={collection.totalVolumeBNB ? parseFloat(collection.totalVolumeBNB) : 0} />
+                <BNBAmountLabel amount={collection?.totalVolumeBNB ? parseFloat(collection?.totalVolumeBNB) : 0} />
               </Flex>
             </CollectionCard>
           )

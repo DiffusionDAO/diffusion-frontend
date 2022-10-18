@@ -149,3 +149,6 @@ export const getDFSNFTAddress = () => {
 export const getStarlightAddress = () => {
   return getAddress(addresses.starlightNft)
 }
+export const getNFTDatabaseAddress = () => {
+  return getAddress(addresses.nftDatabase)
+}

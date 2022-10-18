@@ -211,7 +211,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
     : getCollectionsApi().then((res: any) => {
         localStorage?.setItem('nfts', JSON.stringify(res))
       })
-  const collection = collections[collectionAddress].data[0]
+  const collection = collections[collectionAddress]
 
   const tokens = Object.values(collections[collectionAddress]?.tokens) as NftToken[]
   const { field, direction } = useGetNftOrdering(collectionAddress)

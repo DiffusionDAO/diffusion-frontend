@@ -46,6 +46,7 @@ import {
   getDFSNFTAddress,
   getStarlightAddress,
   getIDOAddress,
+  getNFTDatabaseAddress,
   getDFSAddress,
   getBondAddress,
   getMineAddress,
@@ -106,6 +107,7 @@ import nftMintAbi from 'config/abi/nftMintAbi.json'
 import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
 import starlightAbi from 'config/abi/starlight.json'
 import duffionIDOAbi from 'config/abi/diffusionIDO.json'
+import aggregatorAbi from 'config/abi/nftDatabase.json'
 import bondAbi from 'config/abi/bond.json'
 import mineAbi from 'config/abi/dfsMining.json'
 import { ERC20_ABI } from 'config/abi/erc20'
@@ -406,4 +408,7 @@ export const getMineContract = (signer?: Signer | Provider) => {
 }
 export const getIDOContract = (signer?: Signer | Provider) => {
   return getContract({ abi: duffionIDOAbi, address: getIDOAddress(), signer })
+}
+export const getNFTDatabaseContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: aggregatorAbi, address: getNFTDatabaseAddress(), signer })
 }

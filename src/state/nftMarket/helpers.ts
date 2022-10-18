@@ -6,16 +6,15 @@ import erc721Abi from 'config/abi/erc721.json'
 import range from 'lodash/range'
 import groupBy from 'lodash/groupBy'
 import { BigNumber } from '@ethersproject/bignumber'
-import { getNftMarketContract } from 'utils/contractHelpers'
+import { getNftMarketContract, getContract } from 'utils/contractHelpers'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
-import DELIST_COLLECTIONS from 'config/constants/nftsCollections/delist'
 import { pancakeBunniesAddress } from 'views/Nft/market/constants'
 import { formatBigNumber } from 'utils/formatBalance'
-import { getNftMarketAddress } from 'utils/addressHelpers'
-import nftMarketAbi from 'config/abi/nftMarket.json'
 import fromPairs from 'lodash/fromPairs'
-import { useSWRContract } from 'hooks/useSWRContract'
-import { useSigner } from 'wagmi'
+import { getNFTDatabaseAddress, getNftMarketAddress } from 'utils/addressHelpers'
+import nftMarketAbi from 'config/abi/nftMarket.json'
+import nftDatabaseAbi from 'config/abi/nftDatabase.json'
+import { CollectionData } from 'pages/profile/[accountAddress]'
 
 import {
   ApiCollection,
@@ -40,15 +39,28 @@ import {
   UserActivity,
 } from './types'
 import { baseNftFields, collectionBaseFields, baseTransactionFields } from './queries'
+import { ChainId } from '../../../packages/swap-sdk/src/constants'
 
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
-  const res = await fetch(`${API_NFT}/collections`)
-  if (res.ok) {
-    const json = await res.json()
-    return json
-  }
-  console.error('Failed to fetch NFT collections', res.statusText)
-  return null
+  const nftDatabaseAddress = getNFTDatabaseAddress()
+  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
+  const collectionAddresses = await nftDatabase.getCollectionAddresses()
+  const data: ApiCollection[] = await Promise.all(
+    collectionAddresses.map(async (collectionAddress) => {
+      const collection: CollectionData = await nftDatabase.collections(collectionAddress)
+      const apiCollection: ApiCollection = {
+        name: collection.name,
+        address: collection.collectionAddress,
+        avatar: collection.avatar,
+        banner: collection.banner,
+        totalSupply: collection.totalSupply,
+      }
+      return apiCollection
+    }),
+  )
+  const response: ApiCollectionsResponse = { total: data.length, data }
+  console.log('getCollectionsApi:', response)
+  return response
 }
 
 const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promise<number[]> => {
@@ -72,7 +84,11 @@ const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promis
 
 export const getCollections = async (): Promise<Record<string, any>> => {
   try {
-    const collections = await getCollectionsApi()
+    const collectionsApi = await getCollectionsApi()
+    const collections = collectionsApi.data.reduce((accm, collection, index) => {
+      accm[collection.address] = collection
+      return { ...accm }
+    }, {})
     return collections
   } catch (error) {
     console.error('getCollections Unable to fetch data:', error)
@@ -82,9 +98,28 @@ export const getCollections = async (): Promise<Record<string, any>> => {
 
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
-    const collection = await getCollectionApi(collectionAddress)
-    const collectionData = { [collectionAddress]: collection[collectionAddress].data[0] }
-    return collectionData
+    const nftDatabaseAddress = getNFTDatabaseAddress()
+    const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
+    const collectionData: CollectionData = await nftDatabase.collections(collectionAddress)
+    return {
+      [collectionAddress]: {
+        name: collectionData.name,
+        address: collectionData.collectionAddress,
+        owner: '',
+        verified: true,
+        id: '',
+        symbol: '',
+        active: true,
+        totalVolumeBNB: collectionData.totalVolumeBNB.toString(),
+        totalSupply: collectionData.totalSupply.toString(),
+        avatar: collectionData.avatar,
+        banner: { large: collectionData.banner.large, small: collectionData.banner.small },
+      },
+    }
+
+    // const collection = await getCollectionApi(collectionAddress)
+    // const collectionData = { [collectionAddress]: collection[collectionAddress] }
+    // return collectionData
   } catch (error) {
     console.error('getCollection Unable to fetch data:', error)
     return null
@@ -92,13 +127,12 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
 }
 
 export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
-  const url = `${API_NFT}/collections/${collectionAddress}`
-  const res = await fetch(url)
-  if (res.ok) {
-    const json = await res.json()
-    return json
-  }
-  console.error(`API: Failed to fetch NFT collection ${collectionAddress}`, res.statusText)
+  const nftDatabaseAddress = getNFTDatabaseAddress()
+  console.log(nftDatabaseAddress)
+  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
+  const data: CollectionData = await nftDatabase.collections(collectionAddress)
+  console.log('getCollectionApi:', data)
+
   return null
 }
 
@@ -298,55 +332,6 @@ export const getMarketDataForTokenIds = async (
     return res.collection.nfts
   } catch (error) {
     console.error(`Failed to fetch market data for NFTs stored tokens`, error)
-    return []
-  }
-}
-
-export const getNftsOnChainMarketData = async (
-  collectionAddress: string,
-  tokenIds: string[],
-  signer?: any,
-): Promise<TokenMarketData[]> => {
-  try {
-    // const nftMarketContract = getNftMarketContract(signer)
-    const response = await fetch('https://middle.diffusiondao.org/fetchMarketItems')
-    const askInfo = await response.json()
-    console.log('getNftsOnChainMarketData:', askInfo)
-
-    // const askInfo = await nftMarketContract.fetchMarketItems()
-    // const askInfo = await multicallv2({
-    //   abi: nftMarketAbi,
-    //   calls: [
-    //     {
-    //       address: nftMarketContract.address,
-    //       name: 'fetchMarketItems',
-    //     },
-    //   ],
-    //   options: { requireSuccess: true },
-    // })
-    // console.log('askInfo:', askInfo)
-    // const {data:askInfo} = useSWRContract([nftMarketContract,'fetchMarketItems'])
-
-    if (!askInfo) return []
-
-    return askInfo
-      .map((tokenAskInfo, index) => {
-        if (!tokenAskInfo.seller || !tokenAskInfo.price) return null
-        const currentSeller = tokenAskInfo.seller
-        const isTradable = currentSeller.toLowerCase() !== NOT_ON_SALE_SELLER
-        const currentAskPrice = tokenAskInfo.price && BigNumber.from(tokenAskInfo.price)
-
-        return {
-          collection: { id: collectionAddress.toLowerCase() },
-          tokenId: tokenIds[index],
-          currentSeller,
-          isTradable,
-          currentAskPrice,
-        }
-      })
-      .filter(Boolean)
-  } catch (error) {
-    console.error('Failed to fetch NFTs onchain market data', error)
     return []
   }
 }

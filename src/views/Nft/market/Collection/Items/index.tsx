@@ -21,7 +21,7 @@ const Items = () => {
     : getCollectionsApi().then((res: any) => {
         localStorage?.setItem('nfts', JSON.stringify(res))
       })
-  const collection = collections[collectionAddress].data[0]
+  const collection = collections[collectionAddress]
 
   const isPBCollection = collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase()
 

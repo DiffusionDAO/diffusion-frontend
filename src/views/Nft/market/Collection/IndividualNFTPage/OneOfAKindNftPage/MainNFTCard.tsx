@@ -99,17 +99,13 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const router = useRouter()
-  const bnbBusdPrice = useBNBBusdPrice()
   const dfsMineContract = useDFSMineContract()
   const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ?? '0'
-  // const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, currentAskPriceAsNumber)
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
     <SellModal variant={nft?.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
-  const [onEditProfileModal] = useModal(<EditProfileModal />, false)
   const { isMobile } = useMatchBreakpoints()
-
   const ownerButtons = (
     <Flex flexDirection={['column', 'column', 'row']}>
       <BtnB
@@ -132,28 +128,6 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
             try {
               const receipt = await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
               await receipt.wait()
-              // eslint-disable-next-line no-param-reassign
-              nft.staked = false
-              // eslint-disable-next-line no-param-reassign
-              nft.selected = false
-              const collections = JSON.parse(localStorage?.getItem('nfts'))
-              if (Object.keys(collections).length !== 0) {
-                collections[nft?.collectionAddress].tokens[nft.tokenId].staked = false
-                localStorage?.setItem('nfts', JSON.stringify(collections))
-              }
-
-              const response = await fetch('https://middle.diffusiondao.org/unstakeNFT', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  address: account,
-                  nft,
-                }),
-              })
-              const unstaked = await response.json()
-              console.log('unstaked:', unstaked)
               router.push(`/profile/${account}`)
             } catch (error: any) {
               window.alert(error.reason ?? error.data?.message ?? error.message)

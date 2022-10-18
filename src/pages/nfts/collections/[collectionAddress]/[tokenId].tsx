@@ -1,9 +1,14 @@
 import IndividualNFT from 'views/Nft/market/Collection/IndividualNFTPage'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getCollection, getNftApi, getCollectionApi } from 'state/nftMarket/helpers'
-import { NftToken } from 'state/nftMarket/types'
+import { ApiCollection, Collection, NftToken } from 'state/nftMarket/types'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
+import { getNFTDatabaseAddress } from 'utils/addressHelpers'
+import { getContract } from 'utils/contractHelpers'
+import nftDatabaseAbi from 'config/abi/nftDatabase.json'
+import { CollectionData, NFT } from 'pages/profile/[accountAddress]'
+import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 
 const IndividualNFTPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -32,9 +37,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       notFound: true,
     }
   }
-  const collectionWithToken = await getCollectionApi(collectionAddress)
-  const collection = { [collectionAddress]: collectionWithToken[collectionAddress].data[0] }
-  const metadata: any = collectionWithToken[collectionAddress].tokens[tokenId]
+
+  const nftDatabaseAddress = getNFTDatabaseAddress()
+  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
+  const metadata: NFT = await nftDatabase.getToken(collectionAddress, tokenId)
+  let collection = await getCollection(collectionAddress)
+  collection = JSON.parse(JSON.stringify(collection))
+  // const collectionWithToken: ApiCollection = await getCollectionApi(collectionAddress)
+  // // const collectionWithToken: ApiCollection = {...data, address:collectionAddress, name:""}
+  // console.log("collectionWithToken:",collectionWithToken)
+  // const collection = { [collectionAddress]: collectionWithToken[collectionAddress].data[0] }
+  // const metadata: any = collectionWithToken[collectionAddress].tokens[tokenId]
   if (!metadata) {
     return {
       notFound: true,
@@ -46,10 +59,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     tokenId,
     collectionAddress,
     collectionName: metadata.collectionName,
-    name: metadata.name,
-    description: metadata.description,
-    image: metadata.image,
-    attributes: metadata.attributes,
+    name: metadata.collectionName,
+    description: metadata.collectionName,
+    image: { original: 'string', thumbnail: `/images/nfts/${metadata.level.toString()}` },
+    attributes: [{ value: metadata.level.toString() }],
+    staked: metadata.staked,
   }
 
   return {

@@ -5,6 +5,14 @@ import { getCollection, getCollectionApi } from 'state/nftMarket/helpers'
 import CollectionPageRouter from 'views/Nft/market/Collection/CollectionPageRouter'
 import { useNftStorage } from 'state/nftMarket/storage'
 import Collection from 'views/Nft/market/Collection'
+import toBuffer from 'it-to-buffer'
+import { create } from 'ipfs-http-client'
+
+const ipfs = create({
+  host: '207.148.117.145',
+  port: 5001,
+  protocol: 'http',
+})
 
 const CollectionPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -34,8 +42,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   try {
-    const collectionData = await getCollection(collectionAddress)
-
+    const collection = await getCollection(collectionAddress)
+    const jsonString = JSON.stringify(collection)
+    const collectionData = JSON.parse(jsonString)
     if (collectionData) {
       return {
         props: {

@@ -103,9 +103,9 @@ export interface TokenIdWithCollectionAddress {
 }
 
 export interface NftAttribute {
-  traitType: string
+  traitType?: string
   value: string | number
-  displayType: string
+  displayType?: string
 }
 
 // Internal type used to refer to a collection
@@ -119,12 +119,12 @@ export interface Collection {
   symbol: string
   active: boolean
   totalVolumeBNB: string
-  numberTokensListed: string
-  tradingFee: string
-  creatorFee: string
-  owner: string
+  numberTokensListed?: string
+  tradingFee?: string
+  creatorFee?: string
+  owner?: string
   totalSupply: string
-  verified: boolean
+  verified?: boolean
   avatar: string
   banner: {
     large: string
@@ -152,14 +152,14 @@ export interface User {
 
 export interface ApiCollection {
   address: string
-  owner: string
+  owner?: string
   name: string
-  description: string
-  symbol: string
+  description?: string
+  symbol?: string
   totalSupply: string
-  verified: boolean
-  createdAt: string
-  updatedAt: string
+  verified?: boolean
+  createdAt?: string
+  updatedAt?: string
   avatar: string
   banner: {
     large: string

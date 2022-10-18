@@ -12,6 +12,7 @@ const CollectibleLinkCard: React.FC<React.PropsWithChildren<CollectibleCardProps
   ...props
 }) => {
   const urlId = nft.tokenId
+  // console.log("CollectibleLinkCard:",nft)
   return (
     <StyledCollectibleCard {...props}>
       {isSelected ? (

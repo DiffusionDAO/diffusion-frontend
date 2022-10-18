@@ -44,22 +44,53 @@ import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import { useGetCollections, useGetMyNfts } from 'state/nftMarket/hooks'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
 import { getDFSNFTAddress, getMineAddress, getNFTComposeAddress } from 'utils/addressHelpers'
-import { useDFSMineContract, useDFSNftContract, useNftComposeContract, useNftMarketContract } from 'hooks/useContract'
+import {
+  useNFTDatabaseContract,
+  useDFSMineContract,
+  useDFSNftContract,
+  useNftComposeContract,
+  useNftMarketContract,
+} from 'hooks/useContract'
+import useSWR from 'swr'
 
 interface noteProps {
   title: string
   description: string
   visible: boolean
 }
+export interface NFT {
+  tokenId: BigNumber
+  itemId: BigNumber
+  collectionName: string
+  collectionAddress: string
+  level: BigNumber
+  seller: string
+  price: BigNumber
+  createdAt: BigNumber
+  updatedAt: BigNumber
+  staked: boolean
+  owner: string
+}
+export interface CollectionData {
+  collectionAddress: string
+  name: string
+  totalVolumeBNB: string
+  totalSupply: string
+  avatar: string
+  banner: {
+    large: string
+    small: string
+  }
+}
 const zeroAddress = '0x0000000000000000000000000000000000000000'
 const dfsName = {
-  0: 'Lord fragment',
-  1: 'Lord',
-  2: 'Golden Lord',
-  3: 'General',
-  4: 'Golden General',
-  5: 'Congressman',
-  6: 'Golden Congressman',
+  '0': 'Lord fragment',
+  '1': 'Lord',
+  '2': 'Golden Lord',
+  '3': 'General',
+  '4': 'Golden General',
+  '5': 'Congressman',
+  '6': 'Golden Congressman',
 }
 const greeceNumber = { 0: 'I', 1: 'II', 2: 'III', 3: 'IV', 4: 'V', 5: 'VI', 6: 'VII' }
 
@@ -67,80 +98,95 @@ function NftProfilePage() {
   const { account } = useWeb3React()
   const dfsNFTAddress = getDFSNFTAddress()
 
-  const [unstakedTokenIds, setUnstakedTokenIds] = useState<string[]>()
-
   const [stakedNFTs, setStakedNFTs] = useState<NftToken[]>()
   const [unstakedNFTs, setUnstakedNFTs] = useState<NftToken[]>()
   const [onSaleNFTs, setOnSaleNFT] = useState([])
   const [tokens, setTokens] = useState<any>()
-  const [refresh, setRefresh] = useState<boolean>(false)
   const [selectedNFTs, setSelectedNFTs] = useState<NftToken[]>(unstakedNFTs)
 
-  // const { data: tokens, status } = useGetMyNfts(account, dfsNFTAddress)
-  // console.log('tokens:', tokens)
+  const nftDatabase = useNFTDatabaseContract()
 
-  const { data, status } = useGetCollections()
-  if (data && Object.keys(data).length !== 0) {
-    localStorage?.setItem('nfts', JSON.stringify(data))
-  }
-  let collections = data
-  console.log('collections:', Object.keys(collections ?? {}).length)
-  useMemo(() => {
-    if (collections && Object.keys(collections).length !== 0) {
-      const collection: NftToken[] = Object.values(collections && collections[dfsNFTAddress]?.tokens)
-      const myTokens = collection.filter((token: NftToken) => token?.owner?.toLowerCase() === account?.toLowerCase())
-      const tokens: { unstaked: NftToken[]; staked: NftToken[]; onSale: NftToken[] } = {
-        unstaked: myTokens.filter((token) => !token.staked),
-        staked: collection.filter((token) => token.staked),
-        onSale: [],
-      }
-      setTokens(tokens)
-      console.log('tokens:', tokens)
+  const [collectionAddresses, setCollectionAddresses] = useState<string[]>()
+  useEffect(() => {
+    nftDatabase.getCollectionAddresses().then((res) => {
+      setCollectionAddresses(res)
+    })
+  }, [account])
+
+  const updateFn = async () => {
+    let result = []
+    for (let i = 0; i < collectionAddresses.length; i++) {
+      const tokenIds = await nftDatabase.getCollectionTokenIds(collectionAddresses[i])
+      const nfts = await Promise.all(
+        tokenIds.map(async (tokenId) => nftDatabase.getToken(collectionAddresses[i], tokenId.toString())),
+      )
+      const tokens: NftToken[] = nfts.map((nft) => {
+        const tokenId = nft.tokenId.toString()
+        const level = nft.level.toString()
+        const token: NftToken = {
+          tokenId,
+          name: `${dfsName[level]}#${tokenId}`,
+          description: dfsName[level],
+          collectionName: nft.collectionName,
+          collectionAddress: nft.collectionAddress,
+          image: {
+            original: 'string',
+            thumbnail: `/images/nfts/${level}`,
+          },
+          attributes: [
+            {
+              traitType: '',
+              value: level,
+              displayType: '',
+            },
+          ],
+          createdAt: '',
+          updatedAt: '',
+          location: NftLocation.FORSALE,
+          marketData: {
+            tokenId,
+            collection: {
+              id: tokenId,
+            },
+            currentAskPrice: '',
+            currentSeller: accountAddress,
+            isTradable: true,
+          },
+          staked: nft?.staked,
+        }
+        return token
+      })
+      result = result?.concat(tokens)
     }
-  }, [collections, selectedNFTs])
+    setTokens(result)
+    return result
+  }
+  const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
+  useEffect(() => {
+    setTokens(data)
+  }, [collectionAddresses, account, status])
 
   useEffect(() => {
-    // collections = JSON.parse(localStorage?.getItem('nfts'))
-    setUnstakedNFTs(tokens?.unstaked)
-    // console.log(unstakedTokenIds)
-    // if (unstakedTokenIds)
-    // setUnstakedNFTs(tokens?.unstaked.filter((unstaked:NftToken) => unstakedTokenIds?.includes(unstaked.tokenId)))
-    // Object.values(tokens)
-    //   .flat()
-    //   .map((token) => (collections[dfsNFTAddress].tokens[token.tokenId] = token))
-    // localStorage?.setItem('nfts', JSON.stringify(collections))
-  }, [account, status, tokens])
+    setUnstakedNFTs(tokens?.filter((token) => !token.staked))
+    setStakedNFTs(tokens?.filter((token) => token.staked))
+    // setOnSaleNFT(tokens)
+  }, [account, tokens])
 
   const composeNFT = useNftComposeContract()
   const dfsNFT = useDFSNftContract()
   const mine = useDFSMineContract()
   const market = useNftMarketContract()
-  useEffect(() => {
-    if (account) {
-      mine
-        .getStaked(account, dfsNFTAddress)
-        .then((res) => {
-          const stakedTokenIds = res.map((i) => i.toString())
-          // console.log(stakedTokenIds, tokens?.staked)
-          const staked = tokens?.staked?.filter((nft) => stakedTokenIds.includes(nft.tokenId))
-          // console.log("staked:",staked)
-          setStakedNFTs(staked)
-        })
-        .catch((error) => console.log(error))
-    }
-  }, [account, status, tokens])
-
-  useEffect(() => {
-    if (account && tokens) {
-      market
-        .getTokensOnSaleByOwner(account)
-        .then((res) => {
-          const onSale = tokens?.onSale?.filter((nft) => res.includes(nft.tokenId))
-          setOnSaleNFT(onSale)
-        })
-        .catch((error) => console.log(error))
-    }
-  }, [account, status, tokens])
+  // useEffect(() => {
+  //   if (account && tokens) {
+  //     market
+  //       .getTokensOnSaleByOwner(account)
+  //       .then((res) => {
+  //         const onSale = tokens?.onSale?.filter((nft) => res.includes(nft.tokenId))
+  //         setOnSaleNFT(onSale)
+  //       })
+  //       .catch((error) => console.log(error))
+  //   }
+  // }, [account, status, tokens])
 
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
@@ -195,7 +241,7 @@ function NftProfilePage() {
   const resetPage = () => {
     setIsSelected(false)
     setSelectedCount(0)
-    unstakedNFTs.map((item) => {
+    unstakedNFTs?.map((item) => {
       item.selected = false
     })
     setSelectedNFTs(unstakedNFTs)
@@ -217,7 +263,7 @@ function NftProfilePage() {
   }
 
   const closeCompoundSuccessModal = () => {
-    setUnstakedNFTs(tokens?.unstaked)
+    setUnstakedNFTs(unstakedNFTs)
     setSuccessModalVisible(false)
     resetPage()
   }
@@ -270,36 +316,6 @@ function NftProfilePage() {
       }
       setComposedNFT([newNft])
       console.log('selectedTokenIds:', selectedTokenIds)
-
-      collections = JSON.parse(localStorage?.getItem('nfts'))
-      selectedTokenIds.map((tokenId) => {
-        delete collections[collection].tokens[tokenId]
-      })
-      if (Object.keys(collections).length !== 0) {
-        collections[collection].tokens[composedTokenId] = newNft
-        localStorage?.setItem('nfts', JSON.stringify(collections))
-      }
-
-      const response = await fetch('https://middle.diffusiondao.org/composeNft', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          account,
-          collection: dfsNFTAddress,
-          selectedTokenIds,
-          composedTokenId,
-        }),
-      })
-      // let resp = await response.json() as NftToken[]
-      // console.log(resp.length)
-      // json.push(newNft)
-      const json = Object.values(collections[dfsNFTAddress]?.tokens).filter(
-        (token: any) => token.owner === account?.toLowerCase() && !token.staked,
-      ) as NftToken[]
-      console.log(json?.length)
-      setUnstakedNFTs(json)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
     } catch (error: any) {
@@ -338,43 +354,14 @@ function NftProfilePage() {
     try {
       receipt = await mine.stakeNFT(dfsNFTAddress, tokenIds)
       await receipt.wait()
+      mutate(updateFn())
+      selected.map((item) => (item.staked = !item.staked))
+      selected.map((item) => (item.selected = !item.selected))
+      resetPage()
+      message.success('Stake success')
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
-      return
     }
-
-    selected.map((item) => (item.staked = !item.staked))
-    selected.map((item) => (item.selected = !item.selected))
-
-    collections = JSON.parse(localStorage?.getItem('nfts'))
-    if (Object.keys(dfsNFTAddress).length !== 0) {
-      selected.map((item) => {
-        console.log('updating:', item.tokenId)
-        collections[dfsNFTAddress].tokens[item.tokenId].staked = true
-      })
-      console.log('updating:', collections)
-      localStorage?.setItem('nfts', JSON.stringify(collections))
-    }
-
-    const response = await fetch('https://middle.diffusiondao.org/stakeNFT', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        address: account,
-        collection: dfsNFTAddress,
-        nfts: selected,
-      }),
-    })
-    const myNfts = await response.json()
-    console.log('stakeNFT myNfts:', myNfts?.unstaked?.length)
-    setRefresh(true)
-    // setUnstakedNFTs(myNfts?.unstaked)
-    // setUnstakedTokenIds(myNfts?.unstaked.map(item => item.tokenId))
-    // setStakedNFTs(myNfts?.staked)
-    resetPage()
-    message.success('Stake success')
   }
 
   const confirmOpt = async () => {

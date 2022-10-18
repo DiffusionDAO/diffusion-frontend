@@ -195,7 +195,7 @@ const Collectible = () => {
       sortDirection ? 'desc' : 'asc',
     )
   }, [collections, sortField, sortDirection])
-
+  console.log('Collectible:', sortedCollections)
   return (
     <>
       <PageHeader>
@@ -331,20 +331,21 @@ const Collectible = () => {
                 data-test="nft-collection-row"
               >
                 {sortedCollections.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection: any) => {
-                  const data = collection?.data[0]
+                  const data = collection
+                  console.log(data)
                   return (
                     <CollectionCard
-                      key={data.address}
-                      bgSrc={data.banner.small}
-                      avatarSrc={data.avatar}
-                      collectionName={data.name}
-                      url={`${nftsBaseUrl}/collections/${data.address}`}
+                      key={data?.address}
+                      bgSrc={data?.banner.small}
+                      avatarSrc={data?.avatar}
+                      collectionName={data?.name}
+                      url={`${nftsBaseUrl}/collections/${data?.address}`}
                     >
                       <Flex alignItems="center">
                         <Text fontSize="12px" color="textSubtle">
                           {t('Volume')}
                         </Text>
-                        <BNBAmountLabel amount={data.totalVolumeBNB ? parseFloat(data.totalVolumeBNB) : 0} />
+                        <BNBAmountLabel amount={data?.totalVolumeBNB ? parseFloat(data?.totalVolumeBNB) : 0} />
                       </Flex>
                     </CollectionCard>
                   )
