@@ -52,7 +52,6 @@ const UserNfts: React.FC<
         >
           {nfts?.map((nft) => {
             const { marketData, location } = nft
-
             return (
               <CollectibleLinkCard
                 isSelected={isSelected}

@@ -58,6 +58,7 @@ interface noteProps {
   description: string
   visible: boolean
 }
+
 export interface NFT {
   tokenId: BigNumber
   itemId: BigNumber
@@ -117,11 +118,18 @@ function NftProfilePage() {
     let result = []
     for (let i = 0; i < collectionAddresses.length; i++) {
       const tokenIds = await nftDatabase.getCollectionTokenIds(collectionAddresses[i])
+      console.log(
+        'tokenIds:',
+        tokenIds.map((tokenId) => tokenId.toString()),
+      )
       const nfts = await Promise.all(
         tokenIds.map(async (tokenId) => nftDatabase.getToken(collectionAddresses[i], tokenId.toString())),
       )
-      const tokens: NftToken[] = nfts.map((nft) => {
+      console.log('nfts:', nfts)
+      const tokens: NftToken[] = nfts.map((nft: NFT) => {
         const tokenId = nft.tokenId.toString()
+        console.log('tokenId:', tokenId)
+        // if (tokenId === "0") return
         const level = nft.level.toString()
         const token: NftToken = {
           tokenId,
@@ -148,7 +156,7 @@ function NftProfilePage() {
             collection: {
               id: tokenId,
             },
-            currentAskPrice: '',
+            currentAskPrice: nft.price.toString(),
             currentSeller: accountAddress,
             isTradable: true,
           },
@@ -158,35 +166,28 @@ function NftProfilePage() {
       })
       result = result?.concat(tokens)
     }
-    setTokens(result)
+    if (result.length) setTokens(result)
     return result
   }
   const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
-  useEffect(() => {
-    setTokens(data)
-  }, [collectionAddresses, account, status])
+  // useEffect(() => {
+  //   setTokens(data)
+  // }, [collectionAddresses, account, status])
 
   useEffect(() => {
-    setUnstakedNFTs(tokens?.filter((token) => !token.staked))
-    setStakedNFTs(tokens?.filter((token) => token.staked))
-    // setOnSaleNFT(tokens)
+    setUnstakedNFTs(tokens?.filter((token) => !token?.staked))
+    setStakedNFTs(tokens?.filter((token) => token?.staked))
+    setOnSaleNFT(
+      tokens?.filter(
+        (token: NftToken) => token?.marketData?.currentAskPrice !== '0' && token?.marketData?.currentAskPrice !== '',
+      ),
+    )
   }, [account, tokens])
 
   const composeNFT = useNftComposeContract()
   const dfsNFT = useDFSNftContract()
   const mine = useDFSMineContract()
   const market = useNftMarketContract()
-  // useEffect(() => {
-  //   if (account && tokens) {
-  //     market
-  //       .getTokensOnSaleByOwner(account)
-  //       .then((res) => {
-  //         const onSale = tokens?.onSale?.filter((nft) => res.includes(nft.tokenId))
-  //         setOnSaleNFT(onSale)
-  //       })
-  //       .catch((error) => console.log(error))
-  //   }
-  // }, [account, status, tokens])
 
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
@@ -270,14 +271,14 @@ function NftProfilePage() {
 
   const submitCompose = async () => {
     const selectedTokenIds = selectedNFTs.filter((nft) => nft.selected).map((nft) => nft.tokenId)
-    const attribute = selectedNFTs[0].attributes[0].value
+    const value = selectedNFTs[0].attributes[0].value
     const collection = selectedNFTs[0].collectionAddress
     let tx
     try {
       if (selectedTokenIds?.length === 6) {
         tx = await composeNFT.ComposeLv0(selectedTokenIds)
       } else {
-        tx = await composeNFT.ComposeLvX(selectedTokenIds, attribute)
+        tx = await composeNFT.ComposeLvX(selectedTokenIds, value)
       }
       const recipient = await tx.wait()
       const id = BigNumber.from(recipient.events.slice(-1)[0].topics[3])
@@ -318,6 +319,7 @@ function NftProfilePage() {
       console.log('selectedTokenIds:', selectedTokenIds)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
+      mutate(updateFn())
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }
@@ -366,10 +368,6 @@ function NftProfilePage() {
 
   const confirmOpt = async () => {
     const selected = unstakedNFTs.filter((item) => item.selected)
-    console.log(
-      'Save:',
-      selected.map((item) => item.tokenId),
-    )
     setSelectedNFTs(selected)
     if (!selected?.length) {
       setNoteContent({
@@ -405,43 +403,38 @@ function NftProfilePage() {
   }
 
   const selectNft = (nft) => {
+    nft.selected = !nft.selected
+    const selected = selectedNFTs.filter((item) => item.selected)
+    setSelectedCount(selected?.length)
     if (option === 'compose') {
       const level = nft.attributes[0].value
-      setSelectedNFTs(unstakedNFTs)
-      const data = selectedNFTs.filter((my) => my.attributes[0].value === level)
-      data.map((item: NftToken) => {
-        if (item.attributes[0].value === nft.attributes[0].value) {
-          item.selected = !item.selected
-        }
-      })
+      // setSelectedNFTs(unstakedNFTs)
+      // const data = selectedNFTs.filter(nft => nft.attributes[0].value === level && !nft.staked)
+      // data.map((item: NftToken) => {
+      //   if (item.attributes[0].value === nft.attributes[0].value) {
+      //     item.selected = !item.selected
+      //   }
+      // })
       if (level === '0') {
-        if (data?.length < 6) {
+        if (selectedNFTs?.length < 6) {
           setNoteContent({
             title: t('Important note'),
             description: t('need 6 pieces'),
             visible: true,
           })
-          return
         }
-        const datas = data.slice(0, 6)
-        setSelectedNFTs(datas)
-        setSelectedCount(datas.filter((item) => item.selected)?.length)
-      } else {
-        if (level === '6') {
-          setNoteContent({
-            title: t('Important note'),
-            description: t('Unable to compose highest level NFT'),
-            visible: true,
-          })
-          return
-        }
-        const datas = data.slice(0, 2)
-        setSelectedNFTs(datas)
-        setSelectedCount(datas.filter((item) => item.selected)?.length)
+        // const datas = data.slice(0, 6)
+        // setSelectedNFTs(selected)
+      } else if (level === '6') {
+        setNoteContent({
+          title: t('Important note'),
+          description: t('Unable to compose highest level NFT'),
+          visible: true,
+        })
       }
-    } else if (option === 'stake') {
-      nft.selected = !nft.selected
-      setSelectedCount(unstakedNFTs?.filter((item) => item.selected)?.length)
+      // const datas = data.slice(0, 2)
+      // setSelectedNFTs(datas)
+      // setSelectedNFTs(selected)
     }
   }
   const tabs = [
