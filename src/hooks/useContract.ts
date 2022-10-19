@@ -378,7 +378,7 @@ export const useNftComposeContract = (withSignerIfPossible = true) => {
   return useMemo(() => getNftComposeContract(providerOrSigner), [providerOrSigner])
 }
 
-export const useNftDrawContract = (withSignerIfPossible = true) => {
+export const useNFTMintContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
   return useMemo(() => getNftDrawContract(providerOrSigner), [providerOrSigner])
 }

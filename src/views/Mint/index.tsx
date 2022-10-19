@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
-import { useBondContract, useDFSNftContract, useERC20, useNftDrawContract, useTokenContract } from 'hooks/useContract'
+import { useBondContract, useDFSNftContract, useERC20, useNFTMintContract, useTokenContract } from 'hooks/useContract'
 import { getDFSAddress, getNftMintAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -64,7 +64,7 @@ const Mint = () => {
 
   const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
   const seniorPrice = BigNumber.from(10).pow(18).mul(60)
-  const NftDraw = useNftDrawContract()
+  const NFTMint = useNFTMintContract()
   const bond = useBondContract()
 
   useEffect(() => {
@@ -114,12 +114,12 @@ const Mint = () => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const res =
         type === 'ordinary'
-          ? await NftDraw.mintOne(ordinaryCount, useBond)
-          : await NftDraw.mintTwo(seniorCount, useBond)
+          ? await NFTMint.mintOne(ordinaryCount, useBond)
+          : await NFTMint.mintTwo(seniorCount, useBond)
       const recipient = await res.wait()
       const { logs } = recipient
-      console.log(logs)
-      let levelTokenIds
+      // eslint-disable-next-line prefer-const
+      let levelTokenIds = {}
       for (let i = 1; i <= logs.length; i++) {
         if (i % 2 === 0) {
           const id = BigNumber.from(logs[i - 1].topics[3])

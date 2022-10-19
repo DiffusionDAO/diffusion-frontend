@@ -117,46 +117,46 @@ function NftProfilePage() {
     let result = []
     for (let i = 0; i < collectionAddresses.length; i++) {
       const tokenIds = await nftDatabase.getCollectionTokenIds(collectionAddresses[i])
-      const nfts = await Promise.all(
-        tokenIds.map(async (tokenId) => nftDatabase.getToken(collectionAddresses[i], tokenId.toString())),
+      const tokens = await Promise.all(
+        tokenIds.map(async (tokenId) => {
+          const tokenIdString = tokenId.toString()
+          const nft = await nftDatabase.getToken(collectionAddresses[i], tokenIdString)
+          const level = nft.level.toString()
+          const token: NftToken = {
+            tokenId: tokenIdString,
+            name: `${dfsName[level]}#${tokenIdString}`,
+            description: dfsName[level],
+            collectionName: nft.collectionName,
+            collectionAddress: nft.collectionAddress,
+            image: {
+              original: 'string',
+              thumbnail: `/images/nfts/${level}`,
+            },
+            attributes: [
+              {
+                traitType: '',
+                value: level,
+                displayType: '',
+              },
+            ],
+            createdAt: '',
+            updatedAt: '',
+            location: NftLocation.FORSALE,
+            marketData: {
+              tokenId: tokenIdString,
+              collection: {
+                id: tokenIdString,
+              },
+              currentAskPrice: nft.price.toString(),
+              currentSeller: accountAddress,
+              isTradable: true,
+            },
+            staked: nft?.staked,
+            owner: nft?.owner,
+          }
+          return token
+        }),
       )
-      const tokens: NftToken[] = nfts.map((nft: NFT) => {
-        const tokenId = nft.tokenId.toString()
-        const level = nft.level.toString()
-        const token: NftToken = {
-          tokenId,
-          name: `${dfsName[level]}#${tokenId}`,
-          description: dfsName[level],
-          collectionName: nft.collectionName,
-          collectionAddress: nft.collectionAddress,
-          image: {
-            original: 'string',
-            thumbnail: `/images/nfts/${level}`,
-          },
-          attributes: [
-            {
-              traitType: '',
-              value: level,
-              displayType: '',
-            },
-          ],
-          createdAt: '',
-          updatedAt: '',
-          location: NftLocation.FORSALE,
-          marketData: {
-            tokenId,
-            collection: {
-              id: tokenId,
-            },
-            currentAskPrice: nft.price.toString(),
-            currentSeller: accountAddress,
-            isTradable: true,
-          },
-          staked: nft?.staked,
-          owner: nft?.owner,
-        }
-        return token
-      })
       result = result?.concat(tokens)
     }
     if (result.length) setTokens(result)
