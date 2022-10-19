@@ -159,23 +159,27 @@ function NftProfilePage() {
       })
       result = result?.concat(tokens)
     }
-    if (result.length) setTokens(result.filter((token) => token.owner === account.toLowerCase()))
+    if (result.length) setTokens(result)
+    console.log(result)
     return result
   }
   const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
-  // useEffect(() => {
-  //   setTokens(data)
-  // }, [collectionAddresses, account, status])
 
   useEffect(() => {
-    setUnstakedNFTs(tokens?.filter((token) => !token?.staked))
-    setStakedNFTs(tokens?.filter((token) => token?.staked))
-    setOnSaleNFT(
-      tokens?.filter(
-        (token: NftToken) => token?.marketData?.currentAskPrice !== '0' && token?.marketData?.currentAskPrice !== '',
-      ),
-    )
-  }, [account, tokens])
+    if (tokens) {
+      // tokens?.map(token=>{console.log(token.owner)})
+      setUnstakedNFTs(tokens?.filter((token) => token?.owner === account && !token?.staked))
+      setStakedNFTs(tokens?.filter((token) => token?.owner === account && token?.staked))
+      setOnSaleNFT(
+        tokens?.filter(
+          (token: NftToken) =>
+            token?.owner === account &&
+            token?.marketData?.currentAskPrice !== '0' &&
+            token?.marketData?.currentAskPrice !== '',
+        ),
+      )
+    }
+  }, [account, tokens, status])
 
   const composeNFT = useNftComposeContract()
   const dfsNFT = useDFSNftContract()
