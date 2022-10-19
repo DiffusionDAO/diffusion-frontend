@@ -160,7 +160,6 @@ function NftProfilePage() {
       result = result?.concat(tokens)
     }
     if (result.length) setTokens(result)
-    console.log(result)
     return result
   }
   const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
