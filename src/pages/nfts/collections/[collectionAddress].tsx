@@ -43,6 +43,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   try {
     const collection = await getCollection(collectionAddress)
+    console.log('collection:', collection)
     const jsonString = JSON.stringify(collection)
     const collectionData = JSON.parse(jsonString)
     if (collectionData) {

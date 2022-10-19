@@ -41,7 +41,6 @@ import {
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
-import { useGetCollections, useGetMyNfts } from 'state/nftMarket/hooks'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
 import { getDFSNFTAddress, getMineAddress, getNFTComposeAddress } from 'utils/addressHelpers'
 import {
@@ -154,12 +153,13 @@ function NftProfilePage() {
             isTradable: true,
           },
           staked: nft?.staked,
+          owner: nft?.owner,
         }
         return token
       })
       result = result?.concat(tokens)
     }
-    if (result.length) setTokens(result)
+    if (result.length) setTokens(result.filter((token) => token.owner === account.toLowerCase()))
     return result
   }
   const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
