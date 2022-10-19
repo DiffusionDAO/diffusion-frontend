@@ -364,7 +364,7 @@ function NftProfilePage() {
           currentSeller: accountAddress,
           isTradable: true,
         },
-        staker: false,
+        staker: zeroAddress,
       }
       setComposedNFT([newNft])
       console.log('selectedTokenIds:', selectedTokenIds)
