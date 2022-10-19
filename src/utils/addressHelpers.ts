@@ -134,7 +134,7 @@ export const getDFSAddress = () => {
 export const getBondAddress = () => {
   return getAddress(addresses.bond)
 }
-export const getMineAddress = () => {
+export const getMiningAddress = () => {
   return getAddress(addresses.dfsMining)
 }
 export const getNftMintAddress = () => {

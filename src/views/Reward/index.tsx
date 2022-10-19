@@ -13,7 +13,7 @@ import { useDFSContract, useDFSMineContract } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useSWRContract, useSWRMulticall } from 'hooks/useSWRContract'
 import { MaxUint256 } from '@ethersproject/constants'
-import { getMineAddress } from 'utils/addressHelpers'
+import { getMiningAddress } from 'utils/addressHelpers'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import { formatBigNumber, formatBigNumberToFixed, formatNumber } from 'utils/formatBalance'
 import { shorten } from 'helpers'
@@ -83,7 +83,7 @@ const Reward = () => {
   const { onPresentConnectModal } = useWallet()
   const dfsMineContract = useDFSMineContract()
   const dfsContract = useDFSContract()
-  const dfsMineAddress = getMineAddress()
+  const dfsMineAddress = getMiningAddress()
   const slidesPerView = isMobile ? 1 : 3
   const swiperWrapBgImgUrl = isMobile ? '/images/reward/swiperWrapBgMobile.png' : '/images/reward/swiperWrapBg.png'
   const swiperSlideData = [

@@ -49,7 +49,7 @@ import {
   getNFTDatabaseAddress,
   getDFSAddress,
   getBondAddress,
-  getMineAddress,
+  getMiningAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -404,7 +404,7 @@ export const getBondContract = (signer?: Signer | Provider) => {
   return getContract({ abi: bondAbi, address: getBondAddress(), signer })
 }
 export const getMineContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: mineAbi, address: getMineAddress(), signer })
+  return getContract({ abi: mineAbi, address: getMiningAddress(), signer })
 }
 export const getIDOContract = (signer?: Signer | Provider) => {
   return getContract({ abi: duffionIDOAbi, address: getIDOAddress(), signer })

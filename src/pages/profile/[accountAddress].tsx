@@ -42,7 +42,7 @@ import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundCo
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
-import { getDFSNFTAddress, getMineAddress, getNFTComposeAddress } from 'utils/addressHelpers'
+import { getDFSNFTAddress, getMiningAddress, getNFTComposeAddress, getNftMarketAddress } from 'utils/addressHelpers'
 import {
   useNFTDatabaseContract,
   useDFSMineContract,
@@ -60,16 +60,16 @@ interface noteProps {
 
 export interface NFT {
   tokenId: BigNumber
-  itemId: BigNumber
-  collectionName: string
-  collectionAddress: string
+  owner: string
+  staker: string
   level: BigNumber
   seller: string
   price: BigNumber
+  itemId: BigNumber
+  collectionName: string
+  collectionAddress: string
   createdAt: BigNumber
   updatedAt: BigNumber
-  staked: boolean
-  owner: string
 }
 export interface CollectionData {
   collectionAddress: string
@@ -106,23 +106,31 @@ function NftProfilePage() {
 
   const nftDatabase = useNFTDatabaseContract()
 
-  const [collectionAddresses, setCollectionAddresses] = useState<string[]>()
-  useEffect(() => {
-    nftDatabase.getCollectionAddresses().then((res) => {
-      setCollectionAddresses(res)
-    })
-  }, [account])
+  // const [collectionAddresses, setCollectionAddresses] = useState<string[]>()
+  // useEffect(() => {
+  //   nftDatabase.getCollectionAddresses().then((res) => {
+  //     setCollectionAddresses(res)
+  //   })
+  // }, [account])
 
-  const updateFn = async () => {
-    let result = []
-    for (let i = 0; i < collectionAddresses.length; i++) {
-      const tokenIds = await nftDatabase.getCollectionTokenIds(collectionAddresses[i])
-      const tokens = await Promise.all(
-        tokenIds.map(async (tokenId) => {
-          const tokenIdString = tokenId.toString()
-          const nft = await nftDatabase.getToken(collectionAddresses[i], tokenIdString)
+  const updateOwnedFn = async () => {
+    const collectionAddresses = await nftDatabase.getCollectionAddresses()
+
+    if (account) {
+      // console.log("collectionAddresses:", collectionAddresses)
+      const owned = collectionAddresses.map(async (collectionAddress) => {
+        // console.log("collectionAddress:", collectionAddress, account)
+        const nfts: NFT[] = await nftDatabase.getTokensOfOwner(
+          collectionAddress,
+          account,
+          getMiningAddress(),
+          getNftMarketAddress(),
+        )
+        // console.log("nfts:", nfts)
+        const tokens = nfts.map((nft) => {
+          const tokenIdString = nft.tokenId.toString()
           const level = nft.level.toString()
-          const token: NftToken = {
+          const token = {
             tokenId: tokenIdString,
             name: `${dfsName[level]}#${tokenIdString}`,
             description: dfsName[level],
@@ -151,8 +159,62 @@ function NftProfilePage() {
               currentSeller: accountAddress,
               isTradable: true,
             },
-            staked: nft?.staked,
+            staker: nft?.staker,
             owner: nft?.owner,
+            seller: nft?.seller,
+          }
+          return token
+        })
+        if (tokens?.length > 0 && tokens[0]?.collectionAddress === dfsNFTAddress) {
+          setTokens(tokens)
+        }
+      })
+      return owned
+    }
+    return {}
+  }
+  const updateFn = async () => {
+    let result = []
+    const collectionAddresses = await nftDatabase.getCollectionAddresses()
+    for (let i = 0; i < collectionAddresses.length; i++) {
+      const tokenIds = await nftDatabase.getCollectionTokenIds(collectionAddresses[i])
+      const tokens = await Promise.all(
+        tokenIds.map(async (tokenId) => {
+          const tokenIdString = tokenId.toString()
+          const nft: NFT = await nftDatabase.getToken(collectionAddresses[i], tokenIdString)
+          const level = nft.level.toString()
+          const token = {
+            tokenId: tokenIdString,
+            name: `${dfsName[level]}#${tokenIdString}`,
+            description: dfsName[level],
+            collectionName: nft.collectionName,
+            collectionAddress: nft.collectionAddress,
+            image: {
+              original: 'string',
+              thumbnail: `/images/nfts/${level}`,
+            },
+            attributes: [
+              {
+                traitType: '',
+                value: level,
+                displayType: '',
+              },
+            ],
+            createdAt: '',
+            updatedAt: '',
+            location: NftLocation.FORSALE,
+            marketData: {
+              tokenId: tokenIdString,
+              collection: {
+                id: tokenIdString,
+              },
+              currentAskPrice: nft.price.toString(),
+              currentSeller: accountAddress,
+              isTradable: true,
+            },
+            staker: nft?.staker,
+            owner: nft?.owner,
+            seller: nft?.seller,
           }
           return token
         }),
@@ -162,21 +224,14 @@ function NftProfilePage() {
     if (result.length) setTokens(result)
     return result
   }
-  const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
+  const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateOwnedFn)
 
   useEffect(() => {
     if (tokens) {
-      // tokens?.map(token=>{console.log(token.owner)})
-      setUnstakedNFTs(tokens?.filter((token) => token?.owner === account && !token?.staked))
-      setStakedNFTs(tokens?.filter((token) => token?.owner === account && token?.staked))
-      setOnSaleNFT(
-        tokens?.filter(
-          (token: NftToken) =>
-            token?.owner === account &&
-            token?.marketData?.currentAskPrice !== '0' &&
-            token?.marketData?.currentAskPrice !== '',
-        ),
-      )
+      console.log('setUnstakedNFTs')
+      setUnstakedNFTs(tokens?.filter((token) => token?.staker === zeroAddress))
+      setStakedNFTs(tokens?.filter((token) => token?.staker !== zeroAddress))
+      setOnSaleNFT(tokens?.filter((token) => token?.seller === account))
     }
   }, [account, tokens, status])
 
@@ -309,13 +364,13 @@ function NftProfilePage() {
           currentSeller: accountAddress,
           isTradable: true,
         },
-        staked: false,
+        staker: false,
       }
       setComposedNFT([newNft])
       console.log('selectedTokenIds:', selectedTokenIds)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
-      mutate(updateFn())
+      mutate(updateOwnedFn())
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }
@@ -341,7 +396,7 @@ function NftProfilePage() {
   }
 
   const submitStake = async (selected) => {
-    const mineAddress = getMineAddress()
+    const mineAddress = getMiningAddress()
     const tokenIds = selected.map((item) => item.tokenId)
     const approved = await dfsNFT.isApprovedForAll(account, mineAddress)
     let receipt
@@ -352,8 +407,8 @@ function NftProfilePage() {
     try {
       receipt = await mine.stakeNFT(dfsNFTAddress, tokenIds)
       await receipt.wait()
-      mutate(updateFn())
-      selected.map((item) => (item.staked = !item.staked))
+      mutate(updateOwnedFn())
+      selected.map((item) => (item.staker = !item.staker))
       selected.map((item) => (item.selected = !item.selected))
       resetPage()
       message.success('Stake success')
@@ -405,7 +460,7 @@ function NftProfilePage() {
     if (option === 'compose') {
       const level = nft.attributes[0].value
       // setSelectedNFTs(unstakedNFTs)
-      // const data = selectedNFTs.filter(nft => nft.attributes[0].value === level && !nft.staked)
+      // const data = selectedNFTs.filter(nft => nft.attributes[0].value === level && !nft.staker)
       // data.map((item: NftToken) => {
       //   if (item.attributes[0].value === nft.attributes[0].value) {
       //     item.selected = !item.selected

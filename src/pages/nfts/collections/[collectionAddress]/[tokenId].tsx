@@ -55,7 +55,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
 
-  const nft: NftToken = {
+  const nft = {
     tokenId,
     collectionAddress,
     collectionName: metadata.collectionName,
@@ -63,7 +63,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     description: metadata.collectionName,
     image: { original: 'string', thumbnail: `/images/nfts/${metadata.level.toString()}` },
     attributes: [{ value: metadata.level.toString() }],
-    staked: metadata.staked,
+    staker: metadata.staker,
   }
 
   return {

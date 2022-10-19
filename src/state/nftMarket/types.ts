@@ -78,7 +78,7 @@ export interface NftToken {
   location?: NftLocation
   meta?: Record<string, string | number>
   selected?: boolean
-  staked?: boolean
+  staker?: string
   owner?: string
 }
 

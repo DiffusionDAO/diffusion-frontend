@@ -90,6 +90,8 @@ const BondGearImg = styled.img`
     `
   }};
 `
+const zeroAddress = '0x0000000000000000000000000000000000000000'
+
 const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   nft,
   isOwnNft,
@@ -118,7 +120,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
       >
         {nft?.marketData?.isTradable ? t('Adjust price') : t('List for sale')}
       </BtnB>
-      {nft?.staked && (
+      {nft?.staker !== zeroAddress && (
         <BtnB
           minWidth="168px"
           variant="secondary"
