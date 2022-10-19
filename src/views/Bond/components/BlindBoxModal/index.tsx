@@ -29,9 +29,9 @@ const MintBoxModal: React.FC<BondModalProps> = ({ nftData, onClose }) => {
             ))}
         </Grid>
         <BtnWrap>
-          <TakeCardBtn>{t('Continue to Draw Card')}</TakeCardBtn>
+          <TakeCardBtn>{t('Continue to Mint')}</TakeCardBtn>
           <TakeCardBtn onClick={() => router.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)}>
-            <JumpBtnCont>{t('Continue to Combine NFTs >')}</JumpBtnCont>
+            <JumpBtnCont>{t('Continue to Compose NFTs >')}</JumpBtnCont>
           </TakeCardBtn>
         </BtnWrap>
       </ContentWrap>

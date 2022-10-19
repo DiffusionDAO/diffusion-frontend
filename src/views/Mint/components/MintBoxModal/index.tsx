@@ -10,6 +10,16 @@ interface BondModalProps {
   onClose: () => void
 }
 
+const levelToName = {
+  '0': 'Lord fragment',
+  '1': 'Lord',
+  '2': 'Golden Lord',
+  '3': 'General',
+  '4': 'Golden General',
+  '5': 'Congressman',
+  '6': 'Golden Congressman',
+}
+
 const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -20,12 +30,13 @@ const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
         <Grid container spacing={2}>
           {data.length &&
             data.map((card) =>
-              card.count ? (
+              card.tokenIds.length ? (
                 <Grid item lg={6} md={6} sm={6} xs={6} key={card.id}>
                   <CardItem key={card.id}>
-                    <CardImg src={`/images/nfts/${card.type}`} />
+                    <CardImg src={`/images/nfts/${card.level}`} />
                     <CardText>
-                      {card.tokenId}: {card.count}
+                      {t('amount')}: {card.tokenIds.length} {levelToName[card.level]}{' '}
+                      {card.tokenIds.map((tokenId) => `#${tokenId}`)}
                     </CardText>
                   </CardItem>
                 </Grid>
@@ -33,9 +44,9 @@ const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
             )}
         </Grid>
         <BtnWrap>
-          <TakeCardBtn onClick={onClose}>{t('Continue to Draw Card')}</TakeCardBtn>
-          <TakeCardBtn onClick={() => router.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)}>
-            <JumpBtnCont>{t('Continue to Combine NFTs >')}</JumpBtnCont>
+          <TakeCardBtn onClick={onClose}>{t('Continue to Mint')}</TakeCardBtn>
+          <TakeCardBtn onClick={() => router.push(`/profile/${account.toLowerCase()}`)}>
+            <JumpBtnCont>{t('Continue to Compose NFTs >')}</JumpBtnCont>
           </TakeCardBtn>
         </BtnWrap>
       </ContentWrap>

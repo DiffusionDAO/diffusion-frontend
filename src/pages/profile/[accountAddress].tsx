@@ -118,17 +118,11 @@ function NftProfilePage() {
     let result = []
     for (let i = 0; i < collectionAddresses.length; i++) {
       const tokenIds = await nftDatabase.getCollectionTokenIds(collectionAddresses[i])
-      console.log(
-        'tokenIds:',
-        tokenIds.map((tokenId) => tokenId.toString()),
-      )
       const nfts = await Promise.all(
         tokenIds.map(async (tokenId) => nftDatabase.getToken(collectionAddresses[i], tokenId.toString())),
       )
-      console.log('nfts:', nfts)
       const tokens: NftToken[] = nfts.map((nft: NFT) => {
         const tokenId = nft.tokenId.toString()
-        // if (tokenId === "0") return
         const level = nft.level.toString()
         const token: NftToken = {
           tokenId,

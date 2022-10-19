@@ -185,8 +185,8 @@ export const CountInput = styled(InputNumber)`
       box-shadow: none;
     }
   }
-  ${({ isMobile }: { isMobile: boolean }) => {
-    if (isMobile) {
+  ${({ ismobile }: { ismobile: string }) => {
+    if (ismobile === 'true') {
       return css`
         width: 80px;
       `

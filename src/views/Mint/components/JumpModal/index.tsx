@@ -22,7 +22,7 @@ const JumpModal: React.FC<JumpModalProps> = ({ onClose }) => {
           <JumpBtnCont>{t('Insufficient balance? Purchase bonds on this page >')}</JumpBtnCont>
         </TakeCardBtn>
         <TakeCardBtn onClick={() => router.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)}>
-          <JumpBtnCont>{t('Insufficient balance? Combine/stake NFT >')}</JumpBtnCont>
+          <JumpBtnCont>{t('Insufficient balance? Compose/stake NFT >')}</JumpBtnCont>
         </TakeCardBtn>
         <TakeCardBtn onClick={onClose}>
           <JumpBtnCont>{t('Insufficient balance? Withdraw/stake DFS >')}</JumpBtnCont>

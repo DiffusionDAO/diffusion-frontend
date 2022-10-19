@@ -90,11 +90,6 @@ const BondModal: React.FC<BondModalProps> = ({
   const usdt = useERC20(usdtAddress, true)
   const pancakeRouter = useRouterContract()
 
-  const changeReferral = () => {
-    setReferral('')
-    setHasReferral(!hasReferral)
-  }
-
   useEffect(() => {
     bond
       .bondPrice()
@@ -106,8 +101,6 @@ const BondModal: React.FC<BondModalProps> = ({
   }, [account, amount])
 
   useEffect(() => {
-    setHasReferral(false)
-    setReferral('')
     if (account) {
       if (!referral) {
         bond

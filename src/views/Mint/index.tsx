@@ -53,7 +53,7 @@ const Mint = () => {
   const [maxSenior, setMaxSenior] = useState<BigNumber>(BigNumber.from(1))
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1)
   const [maxOrdinary, setMaxOrdinary] = useState<BigNumber>(BigNumber.from(1))
-  const [drawBindData, setDrawBindData] = useState<any>([])
+  const [mintNFTData, setMintNFTData] = useState<any>([])
   const nftMintAddress = getNftMintAddress()
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
@@ -117,65 +117,36 @@ const Mint = () => {
           ? await NftDraw.mintOne(ordinaryCount, useBond)
           : await NftDraw.mintTwo(seniorCount, useBond)
       const recipient = await res.wait()
-      const { logs, events } = recipient
-      const levels = []
-      const id = BigNumber.from(events[events.length - 1].topics[3])
-      const mintTokenId = id.toString()
-      // eslint-disable-next-line no-await-in-loop
-      const level = await dfsNFT.getItems(mintTokenId)
-      levels.push(level.toString())
-      setDrawBindData(formatLevel({ mintTokenId, levels }))
+      const { logs } = recipient
+      console.log(logs)
+      let levelTokenIds
+      for (let i = 1; i <= logs.length; i++) {
+        if (i % 2 === 0) {
+          const id = BigNumber.from(logs[i - 1].topics[3])
+          const tokenId = id.toString()
+          // eslint-disable-next-line no-await-in-loop
+          const level = await dfsNFT.getItems(tokenId)
+          if (!levelTokenIds[level]) levelTokenIds[level] = []
+          levelTokenIds[level].push(tokenId)
+        }
+      }
+      const data = Object.keys(levelTokenIds).map((level) => {
+        const data = { id: level, level, tokenIds: levelTokenIds[level] }
+        return data
+      })
+      console.log(data)
+      setMintNFTData(data)
       setPlayBindBoxModalVisible(false)
       setBlindBoxModalVisible(true)
-      const response = await fetch('https://middle.diffusiondao.org/mintNFT', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          account,
-          collection: dfsNFT.address,
-          mintTokenId,
-        }),
-      })
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
       setPlayBindBoxModalVisible(false)
     }
   }
-  const formatLevel = ({ mintTokenId, levels }) => {
-    const objItem = levels.reduce((allNames: any, name: any) => {
-      if (name in allNames) {
-        allNames[name]++
-      } else {
-        allNames[name] = 1
-      }
-      return allNames
-    }, {})
-    console.log('objItem:', objItem)
-    const newData = []
-    const levelToName = {
-      '0': 'Lord fragment',
-      '1': 'Lord',
-      '2': 'Golden Lord',
-      '3': 'General',
-      '4': 'Golden General',
-      '5': 'Congressman',
-      '6': 'Golden Congressman',
-    }
-    Object.keys(objItem).forEach((key) => {
-      newData.push({
-        id: key,
-        type: key,
-        count: objItem[key],
-        tokenId: `${levelToName[key]}#${mintTokenId}`,
-      })
-    })
-    return newData
-  }
+
   const closeBlindBoxModal = () => {
     setBlindBoxModalVisible(false)
-    setDrawBindData([])
+    setMintNFTData([])
   }
   const closeJumpModal = () => {
     setJumpModalVisible(false)
@@ -239,7 +210,7 @@ const Mint = () => {
                     </DrawBlindBoxTextBtn>
                     <CountInput
                       value={seniorCount}
-                      isMobile={isMobile}
+                      ismobile={isMobile.toString()}
                       min={1}
                       controls={false}
                       onChange={(val) => setSeniorCount(Number(val))}
@@ -261,7 +232,7 @@ const Mint = () => {
                       {t('Max')}
                     </DrawBlindBoxTextBtn>
                   </ActionLeft>
-                  <ActionRight>
+                  {/* <ActionRight>
                     {allowance.eq(0) ? (
                       <DrawBlindBoxPrimaryBtn
                         className="orangeBtn"
@@ -275,13 +246,14 @@ const Mint = () => {
                     ) : (
                       <></>
                     )}
-                  </ActionRight>
+                  </ActionRight> */}
                 </ActionWrap>
                 <DrawBlindBoxPrimaryBtn
                   className="orangeBtn"
                   onClick={async () => {
                     if (allowance.eq(0)) {
-                      await DFS.approve(nftMintAddress, MaxUint256)
+                      const receipt = await DFS.approve(nftMintAddress, MaxUint256)
+                      await receipt.wait()
                     }
                     mint('senior')
                   }}
@@ -350,7 +322,7 @@ const Mint = () => {
                     </DrawBlindBoxTextBtn>
                     <CountInput
                       value={ordinaryCount}
-                      isMobile={isMobile}
+                      ismobile={isMobile.toString()}
                       min={1}
                       controls={false}
                       onChange={(val) => setOrdinaryCount(Number(val))}
@@ -372,7 +344,7 @@ const Mint = () => {
                       {t('Max')}
                     </DrawBlindBoxTextBtn>
                   </ActionLeft>
-                  <ActionRight>
+                  {/* <ActionRight>
                     {allowance.eq(0) ? (
                       <DrawBlindBoxPrimaryBtn
                         className="purpleBtn"
@@ -386,13 +358,14 @@ const Mint = () => {
                     ) : (
                       <></>
                     )}
-                  </ActionRight>
+                  </ActionRight> */}
                 </ActionWrap>
                 <DrawBlindBoxPrimaryBtn
                   className="purpleBtn"
                   onClick={async () => {
                     if (allowance.eq(0)) {
-                      await DFS.approve(nftMintAddress, MaxUint256)
+                      const receipt = await DFS.approve(nftMintAddress, MaxUint256)
+                      await receipt.wait()
                     }
                     mint('ordinary')
                   }}
@@ -414,7 +387,7 @@ const Mint = () => {
         </Grid>
       </DrawBlindBoxList>
       {playMintBoxModalVisible ? <PlayBindBoxModal onClose={closePlayBindBoxModal} gifUrl={gifUrl} /> : null}
-      {mintBoxModalVisible ? <MintBoxModal data={drawBindData} onClose={closeBlindBoxModal} /> : null}
+      {mintBoxModalVisible ? <MintBoxModal data={mintNFTData} onClose={closeBlindBoxModal} /> : null}
       {jumpModalVisible ? <JumpModal onClose={closeJumpModal} /> : null}
     </BondPageWrap>
   )

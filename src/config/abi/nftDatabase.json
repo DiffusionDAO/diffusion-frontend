@@ -266,6 +266,26 @@
             "type": "uint256"
           },
           {
+            "internalType": "bool",
+            "name": "staked",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "level",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
             "internalType": "uint256",
             "name": "itemId",
             "type": "uint256"
@@ -281,19 +301,9 @@
             "type": "address"
           },
           {
-            "internalType": "uint256",
-            "name": "level",
-            "type": "uint256"
-          },
-          {
             "internalType": "address",
             "name": "seller",
             "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "price",
-            "type": "uint256"
           },
           {
             "internalType": "uint256",
@@ -304,16 +314,6 @@
             "internalType": "uint256",
             "name": "updatedAt",
             "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "staked",
-            "type": "bool"
-          },
-          {
-            "internalType": "address",
-            "name": "owner",
-            "type": "address"
           }
         ],
         "internalType": "struct NFTStruct.NFT",
