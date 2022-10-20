@@ -12,6 +12,7 @@ import { NftToken } from 'state/nftMarket/types'
 import { getCollection } from 'state/nftMarket/helpers'
 import { getContract } from 'utils/contractHelpers'
 
+import { useNFTDatabaseContract } from 'hooks/useContract'
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
@@ -50,18 +51,25 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const { isMobile } = useMatchBreakpoints()
   const bgImg = isMobile ? "url('/images/nfts/mretc.png')" : "url('/images/nfts/smxl.png')"
   const bgOffset = !isMobile ? '40px' : '80px'
-  const [collection, setCollection] = useState<any>()
   const [nft, setNFT] = useState<NftToken>()
+  const collection = useGetCollection(collectionAddress)
+  const nftDatabase = useNFTDatabaseContract()
   useEffect(() => {
-    getCollection(collectionAddress)
-      .then((res) => setCollection(res))
-      .catch((error) => console.log(error))
-    const nftDatabase = getContract({
-      abi: nftDatabaseAbi,
-      address: getNFTDatabaseAddress(),
-      chainId: ChainId.BSC_TESTNET,
+    nftDatabase.getToken(collectionAddress, tokenId).then((res) => {
+      const nft: NftToken = {
+        tokenId,
+        collectionAddress,
+        collectionName: res.collectionName,
+        name: res.collectionName,
+        description: res.collectionName,
+        image: { original: 'string', thumbnail: `/images/nfts/${res.level.toString()}` },
+        attributes: [{ value: res.level.toString() }],
+        staker: res.staker,
+        owner: res.owner,
+        itemId: res.itemId.toString(),
+      }
+      setNFT(nft)
     })
-    nftDatabase.getToken(collectionAddress, tokenId).then((res) => setNFT(res))
   }, [])
 
   const properties = nft?.attributes

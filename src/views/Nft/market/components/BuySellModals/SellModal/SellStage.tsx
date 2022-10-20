@@ -25,10 +25,7 @@ const SellStage: React.FC<React.PropsWithChildren<SellStageProps>> = ({
 }) => {
   const { t } = useTranslation()
   const { hasProfile } = useProfile()
-  const itemPageUrlId =
-    nftToSell.collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase()
-      ? nftToSell.attributes[0].value
-      : nftToSell.tokenId
+  const itemPageUrlId = nftToSell.tokenId
 
   const [onEditProfileModal] = useModal(<EditProfileModal onSuccess={onSuccessEditProfile} />, false)
 
@@ -47,7 +44,6 @@ const SellStage: React.FC<React.PropsWithChildren<SellStageProps>> = ({
                 {t('Lowest price')}
               </Text>
               <Flex alignItems="center" justifyContent="flex-end">
-                <BinanceIcon width={16} height={16} mr="4px" />
                 <Text small>
                   {lowestPrice.toLocaleString(undefined, {
                     minimumFractionDigits: 3,
@@ -65,26 +61,6 @@ const SellStage: React.FC<React.PropsWithChildren<SellStageProps>> = ({
             {t('Token ID: %id%', { id: nftToSell.tokenId })}
           </Text>
         </Flex>
-        <Flex justifyContent="space-between" flex="3">
-          <Button
-            as={Link}
-            p="0px"
-            height="16px"
-            external
-            variant="text"
-            href={`${nftsBaseUrl}/collections/${nftToSell.collectionAddress}/${itemPageUrlId}`}
-          >
-            {t('View Item')}
-          </Button>
-          <HorizontalDivider />
-          <LinkExternal
-            p="0px"
-            height="16px"
-            href={getBscScanLinkForNft(nftToSell.collectionAddress, nftToSell.tokenId)}
-          >
-            BscScan
-          </LinkExternal>
-        </Flex>
       </Flex>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
@@ -94,11 +70,11 @@ const SellStage: React.FC<React.PropsWithChildren<SellStageProps>> = ({
         <Button mb="8px" variant="secondary" onClick={continueToTransferStage}>
           {t('Transfer')}
         </Button>
-        {hasProfile && (
+        {/* {hasProfile && (
           <Button variant="secondary" onClick={onEditProfileModal}>
             {t('Set as Profile Pic')}
           </Button>
-        )}
+        )} */}
       </Flex>
     </>
   )

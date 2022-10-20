@@ -169,6 +169,7 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
     onRequiresApproval: async () => {
       try {
         const approvedForContract = await collectionContractReader.isApprovedForAll(account, nftMarketContract.address)
+        console.log('approvedForContract:', approvedForContract)
         return !approvedForContract
       } catch (error) {
         return true
@@ -185,7 +186,7 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
     },
     onConfirm: () => {
       if (stage === SellingStage.CONFIRM_REMOVE_FROM_MARKET) {
-        return callWithGasPrice(nftMarketContract, 'cancelAskOrder', [nftToSell.collectionAddress, nftToSell.tokenId])
+        return callWithGasPrice(nftMarketContract, 'offshelf', [nftToSell.itemId])
       }
       if (stage === SellingStage.CONFIRM_TRANSFER) {
         return callWithGasPrice(collectionContractSigner, 'safeTransferFrom(address,address,uint256)', [
@@ -194,7 +195,7 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
           nftToSell.tokenId,
         ])
       }
-      const methodName = variant === 'sell' ? 'createAskOrder' : 'modifyAskOrder'
+      const methodName = 'createMarketItemByERC20'
       const askPrice = parseUnits(price)
       return callWithGasPrice(nftMarketContract, methodName, [nftToSell.collectionAddress, nftToSell.tokenId, askPrice])
     },

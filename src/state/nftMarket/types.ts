@@ -80,6 +80,7 @@ export interface NftToken {
   selected?: boolean
   staker?: string
   owner?: string
+  itemId?: string
 }
 
 export interface NftFilter {

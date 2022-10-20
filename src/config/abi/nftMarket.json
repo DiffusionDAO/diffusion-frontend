@@ -26,6 +26,12 @@
         "type": "uint256"
       },
       {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "itemId",
+        "type": "uint256"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "price",
@@ -47,12 +53,6 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "itemId",
         "type": "uint256"
       },
       {
@@ -81,30 +81,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "isItem1155",
-        "type": "bool"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "iserc20",
-        "type": "bool"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "itemId",
-        "type": "uint256"
-      },
-      {
         "indexed": true,
         "internalType": "address",
         "name": "collection",
@@ -114,6 +90,18 @@
         "indexed": true,
         "internalType": "uint256",
         "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "itemId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
         "type": "uint256"
       },
       {
@@ -131,8 +119,20 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "price",
+        "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isItem1155",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "iserc20",
+        "type": "bool"
       },
       {
         "indexed": false,
@@ -362,6 +362,19 @@
   },
   {
     "inputs": [],
+    "name": "database",
+    "outputs": [
+      {
+        "internalType": "contract INFTDatabase",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "erc20Contract",
     "outputs": [
       {
@@ -391,6 +404,11 @@
           },
           {
             "internalType": "uint256",
+            "name": "itemId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
             "name": "price",
             "type": "uint256"
           },
@@ -403,11 +421,6 @@
             "internalType": "address payable",
             "name": "owner",
             "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "itemId",
-            "type": "uint256"
           },
           {
             "internalType": "uint256",
@@ -430,7 +443,7 @@
             "type": "bool"
           }
         ],
-        "internalType": "struct NftMarket.MarketItem[]",
+        "internalType": "struct NFTMarket.MarketItem[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -462,6 +475,11 @@
           },
           {
             "internalType": "uint256",
+            "name": "itemId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
             "name": "price",
             "type": "uint256"
           },
@@ -474,11 +492,6 @@
             "internalType": "address payable",
             "name": "owner",
             "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "itemId",
-            "type": "uint256"
           },
           {
             "internalType": "uint256",
@@ -501,7 +514,7 @@
             "type": "bool"
           }
         ],
-        "internalType": "struct NftMarket.MarketItem[]",
+        "internalType": "struct NFTMarket.MarketItem[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -531,6 +544,11 @@
       },
       {
         "internalType": "uint256",
+        "name": "itemId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "price",
         "type": "uint256"
       },
@@ -543,11 +561,6 @@
         "internalType": "address payable",
         "name": "owner",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "itemId",
-        "type": "uint256"
       },
       {
         "internalType": "uint256",
@@ -615,6 +628,19 @@
   {
     "inputs": [],
     "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_database",
+        "type": "address"
+      }
+    ],
+    "name": "setDatabase",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

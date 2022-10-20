@@ -83,7 +83,7 @@ export interface CollectionData {
   }
 }
 const zeroAddress = '0x0000000000000000000000000000000000000000'
-const dfsName = {
+export const dfsName = {
   '0': 'Lord fragment',
   '1': 'Lord',
   '2': 'Golden Lord',
@@ -156,7 +156,7 @@ function NftProfilePage() {
                 id: tokenIdString,
               },
               currentAskPrice: nft.price.toString(),
-              currentSeller: accountAddress,
+              currentSeller: nft?.seller,
               isTradable: true,
             },
             staker: nft?.staker,
@@ -209,7 +209,7 @@ function NftProfilePage() {
                 id: tokenIdString,
               },
               currentAskPrice: nft.price.toString(),
-              currentSeller: accountAddress,
+              currentSeller: nft?.seller,
               isTradable: true,
             },
             staker: nft?.staker,
@@ -229,8 +229,8 @@ function NftProfilePage() {
   useEffect(() => {
     if (tokens) {
       console.log('setUnstakedNFTs')
-      setUnstakedNFTs(tokens?.filter((token) => token?.staker === zeroAddress))
-      setStakedNFTs(tokens?.filter((token) => token?.staker !== zeroAddress))
+      setUnstakedNFTs(tokens?.filter((token) => token?.staker === zeroAddress && token?.owner === account))
+      setStakedNFTs(tokens?.filter((token) => token?.staker !== zeroAddress && token?.owner === account))
       setOnSaleNFT(tokens?.filter((token) => token?.seller === account))
     }
   }, [account, tokens, status])
@@ -412,6 +412,17 @@ function NftProfilePage() {
       selected.map((item) => (item.selected = !item.selected))
       resetPage()
       message.success('Stake success')
+      const response = await fetch('https://middle.diffusiondao.org/stakeNFT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: account,
+          collection: dfsNFTAddress,
+          nfts: selected,
+        }),
+      })
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }

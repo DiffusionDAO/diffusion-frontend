@@ -40,7 +40,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const nftDatabaseAddress = getNFTDatabaseAddress()
   const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
-  const metadata: NFT = await nftDatabase.getToken(collectionAddress, tokenId)
+  const nft: NFT = await nftDatabase.getToken(collectionAddress, tokenId)
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
   // const collectionWithToken: ApiCollection = await getCollectionApi(collectionAddress)
@@ -48,28 +48,29 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   // console.log("collectionWithToken:",collectionWithToken)
   // const collection = { [collectionAddress]: collectionWithToken[collectionAddress].data[0] }
   // const metadata: any = collectionWithToken[collectionAddress].tokens[tokenId]
-  if (!metadata) {
+  if (!nft) {
     return {
       notFound: true,
       revalidate: 1,
     }
   }
 
-  const nft = {
+  const token: NftToken = {
     tokenId,
     collectionAddress,
-    collectionName: metadata.collectionName,
-    name: metadata.collectionName,
-    description: metadata.collectionName,
-    image: { original: 'string', thumbnail: `/images/nfts/${metadata.level.toString()}` },
-    attributes: [{ value: metadata.level.toString() }],
-    staker: metadata.staker,
+    collectionName: nft.collectionName,
+    name: nft.collectionName,
+    description: nft.collectionName,
+    image: { original: 'string', thumbnail: `/images/nfts/${nft.level.toString()}` },
+    attributes: [{ value: nft.level.toString() }],
+    staker: nft.staker,
+    owner: nft.owner,
+    itemId: nft.itemId.toString(),
   }
-
   return {
     props: {
       fallback: {
-        [unstable_serialize(['nft', nft.collectionAddress, nft.tokenId])]: nft,
+        [unstable_serialize(['nft', token.collectionAddress, token.tokenId])]: token,
         ...(collection && {
           [unstable_serialize(['nftMarket', 'collections', collectionAddress.toLowerCase()])]: collection,
         }),

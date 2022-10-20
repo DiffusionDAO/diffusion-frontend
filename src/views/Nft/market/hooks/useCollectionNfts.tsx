@@ -5,6 +5,7 @@ import {
   NftAttribute,
   NftToken,
   Collection,
+  NftLocation,
 } from 'state/nftMarket/types'
 import {
   useGetNftFilters,
@@ -16,6 +17,7 @@ import {
 import { FetchStatus } from 'config/constants/types'
 import {
   fetchNftsFiltered,
+  getCollection,
   getCollectionApi,
   getCollectionsApi,
   getMarketDataForTokenIds,
@@ -27,16 +29,13 @@ import useSWRInfinite from 'swr/infinite'
 import isEmpty from 'lodash/isEmpty'
 import uniqBy from 'lodash/uniqBy'
 import fromPairs from 'lodash/fromPairs'
-import { getNftMarketContract } from 'utils/contractHelpers'
-import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
-import { useNftMarketContract } from 'hooks/useContract'
-import { BigNumber } from '@ethersproject/bignumber'
-import { useAccount, useSigner } from 'wagmi'
-import { getNftMarketAddress } from 'utils/addressHelpers'
-import { Contract } from '@ethersproject/contracts'
-import nftMarketAbi from 'config/abi/nftMarket.json'
-import { useSWRContract } from 'hooks/useSWRContract'
-
+import { getNftMarketContract, getContract } from 'utils/contractHelpers'
+import { useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
+import { getNFTDatabaseAddress, getNftMarketAddress } from 'utils/addressHelpers'
+import nftDatabaseAbi from 'config/abi/nftDatabase.json'
+import { dfsName, CollectionData, NFT } from 'pages/profile/[accountAddress]'
+import useSWR from 'swr'
+import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 import { REQUEST_SIZE } from '../Collection/config'
 import { useWeb3React } from '../../../../../packages/wagmi/src/useWeb3React'
 import { useWeb3LibraryContext } from '../../../../../packages/wagmi/src/provider'
@@ -200,20 +199,58 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const fetchedNfts = useRef<NftToken[]>([])
   const fallbackMode = useRef(false)
   const fallbackModePage = useRef(0)
-  const library = useWeb3LibraryContext()
-  const { connector } = useAccount()
   const isLastPage = useRef(false)
-  const { data: signer } = useSigner()
-  // const collection = useGetCollection(collectionAddress)
-  const parsed = JSON.parse(localStorage?.getItem('nfts'))
-  const collections = Object.keys(parsed).length
-    ? parsed
-    : getCollectionsApi().then((res: any) => {
-        localStorage?.setItem('nfts', JSON.stringify(res))
-      })
-  const collection = collections[collectionAddress]
+  const [tokens, setTokens] = useState<any[]>()
+  const nftDatabaseAddress = getNFTDatabaseAddress()
+  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
+  const { data: collection, status: collectionStatus } = useSWR('collections', async () => {
+    const collection: any = getCollection(collectionAddress)
 
-  const tokens = Object.values(collections[collectionAddress]?.tokens) as NftToken[]
+    const tokenIds = await nftDatabase.getCollectionTokenIds(collectionAddress)
+    const getTokens = await Promise.all(
+      tokenIds.map(async (tokenId) => {
+        const tokenIdString = tokenId.toString()
+        const nft: NFT = await nftDatabase.getToken(collectionAddress, tokenIdString)
+        const level = nft.level.toString()
+        const token = {
+          tokenId: tokenIdString,
+          name: `${dfsName[level]}#${tokenIdString}`,
+          description: dfsName[level],
+          collectionName: nft.collectionName,
+          collectionAddress: nft.collectionAddress,
+          image: {
+            original: 'string',
+            thumbnail: `/images/nfts/${level}`,
+          },
+          attributes: [
+            {
+              traitType: '',
+              value: level,
+              displayType: '',
+            },
+          ],
+          createdAt: '',
+          updatedAt: '',
+          location: NftLocation.FORSALE,
+          marketData: {
+            tokenId: tokenIdString,
+            collection: {
+              id: tokenIdString,
+            },
+            currentAskPrice: nft.price.toString(),
+            currentSeller: nft?.seller,
+            isTradable: true,
+          },
+          staker: nft?.staker,
+          owner: nft?.owner,
+          seller: nft?.seller,
+        }
+        return token
+      }),
+    )
+    setTokens(getTokens)
+    return collection
+  })
   const { field, direction } = useGetNftOrdering(collectionAddress)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(collectionAddress)
   const nftFilters = useGetNftFilters(collectionAddress)
@@ -224,11 +261,10 @@ export const useCollectionNfts = (collectionAddress: string) => {
     nftFilters,
   })
 
-  // We don't know the amount in advance if nft filters exist
   const resultSize =
     !Object.keys(nftFilters).length && collection
       ? showOnlyNftsOnSale
-        ? collection.numberTokensListed
+        ? collection?.numberTokensListed
         : collection?.totalSupply
       : null
 
@@ -266,24 +302,16 @@ export const useCollectionNfts = (collectionAddress: string) => {
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
-        // const response = await fetch('https://middle.diffusiondao.org/fetchMarketItems')
-        // const marketItems = await response.json()
-        // console.log(marketItems)
         const marketItems = await nftMarketContract.fetchMarketItems()
         const marketTokenIds = marketItems.filter((item) => item[4] === collectionAddress).map((item) => item[5])
-        newNfts = await marketTokenIds.map(async (tokenId) => {
-          const url = `${API_NFT}/collections/${collection.address}/tokens/${tokenId.toString()}`
-          const res = await fetch(url)
-          if (res.ok) {
-            const json = await res.json()
-            return json
-          }
-          return {}
-        })
-        newNfts = await Promise.all(newNfts)
+        newNfts = await Promise.all(
+          marketTokenIds.map(async (tokenId) => {
+            const token = await nftDatabase.getToken(collectionAddress, tokenId)
+            return token
+          }),
+        )
+
         // eslint-disable-next-line no-return-assign, no-param-reassign
-        newNfts.map((item) => (collections[collection.address].tokens[item.tokenId] = item))
-        localStorage?.setItem('nfts', JSON.stringify(collections))
       } else {
         // const {
         //   nfts: allNewNfts,

@@ -80,8 +80,9 @@ const BondModal: React.FC<BondModalProps> = ({
   const [minPrice, setMinPrice] = useState<BigNumber>()
   const [vestingTerms, setVestingTerms] = useState<number>(0)
   const [maxPayout, setMaxPayout] = useState<string>()
-  const [payout, setPayout] = useState<string>('0')
+  const [payout, setPayoutFor] = useState<string>('0')
   const [pendingPayout, setPendingPayout] = useState<string>('0')
+  const [bondPayout, setBondPayout] = useState<string>('0')
 
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const bond = useBondContract()
@@ -113,6 +114,7 @@ const BondModal: React.FC<BondModalProps> = ({
           })
           .catch((error) => console.log(error))
       }
+      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
       bond
         .pendingPayoutFor(account)
         .then((res) => {
@@ -142,14 +144,14 @@ const BondModal: React.FC<BondModalProps> = ({
         setMaxPayout(formatBigNumber(res, 18))
       })
       .catch((error) => console.log(error))
-
     if (amount) {
       bond
         .payoutFor(parseUnits(amount, 'ether'))
-        .then((payout) => setPayout(formatBigNumber(payout, 4)))
+        .then((payout) => setPayoutFor(formatBigNumber(payout, 4)))
         .catch((error) => console.log(error))
     }
   }, [account, bondPrice, amount])
+
   const buy = () => {
     if (!hasReferral) {
       confirm({
@@ -282,12 +284,12 @@ const BondModal: React.FC<BondModalProps> = ({
                 if (e.target.value) {
                   try {
                     const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
-                    setPayout(formatBigNumber(payout, 4))
+                    setPayoutFor(formatBigNumber(payout, 4))
                   } catch (error: any) {
                     window.alert(error.reason ?? error.data?.message ?? error.message)
                   }
                 } else {
-                  setPayout('0')
+                  setPayoutFor('0')
                 }
               }}
             />
@@ -343,6 +345,10 @@ const BondModal: React.FC<BondModalProps> = ({
           ) : (
             <ListContent>{pendingPayout ?? 0} DFS</ListContent>
           )}
+        </ListItem>
+        <ListItem>
+          <ListLable>{t('Payout')}</ListLable>
+          <ListContent>{bondPayout ?? 0} DFS</ListContent>
         </ListItem>
         {activeTab === 'mint' && (
           <ListItem>

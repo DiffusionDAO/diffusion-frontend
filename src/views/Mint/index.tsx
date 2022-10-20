@@ -57,7 +57,7 @@ const Mint = () => {
   const nftMintAddress = getNftMintAddress()
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
-  const [pendingPayout, setPendingPayout] = useState('')
+  const [bondPayout, setBondPayout] = useState('')
 
   const dfsAddress = getDFSAddress()
   const DFS = useERC20(dfsAddress)
@@ -69,7 +69,7 @@ const Mint = () => {
 
   useEffect(() => {
     if (account) {
-      bond.bondInfo(account).then((res) => setPendingPayout(formatBigNumber(res[0], 2)))
+      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
       DFS.balanceOf(account)
         .then((res) => {
           if (!res.eq(balance)) {
@@ -134,7 +134,6 @@ const Mint = () => {
         const data = { id: level, level, tokenIds: levelTokenIds[level] }
         return data
       })
-      console.log(data)
       setMintNFTData(data)
       setPlayBindBoxModalVisible(false)
       setBlindBoxModalVisible(true)
@@ -195,7 +194,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Payout')}: {pendingPayout ?? 0} DFS
+                    {t('Payout')}: {bondPayout ?? 0} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -307,7 +306,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Payout')}: {pendingPayout ?? 0} DFS
+                    {t('Payout')}: {bondPayout ?? 0} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>

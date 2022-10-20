@@ -332,7 +332,6 @@ const Collectible = () => {
               >
                 {sortedCollections.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection: any) => {
                   const data = collection
-                  console.log(data)
                   return (
                     <CollectionCard
                       key={data?.address}

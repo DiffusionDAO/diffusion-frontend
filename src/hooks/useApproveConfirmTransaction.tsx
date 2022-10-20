@@ -85,7 +85,7 @@ const useApproveConfirmTransaction = ({
   const [state, dispatch] = useReducer(reducer, initialState)
   const handlePreApprove = useRef(onRequiresApproval)
   const { fetchWithCatchTxError } = useCatchTxError()
-
+  // console.log("handlePreApprove:",handlePreApprove)
   const handleApprove = useCallback(async () => {
     const receipt = await fetchWithCatchTxError(() => {
       dispatch({ type: 'approve_sending' })
@@ -119,6 +119,7 @@ const useApproveConfirmTransaction = ({
   useEffect(() => {
     if (account && handlePreApprove.current) {
       handlePreApprove.current().then((requiresApproval) => {
+        console.log(requiresApproval)
         if (!requiresApproval) {
           dispatch({ type: 'approve_receipt' })
         }
