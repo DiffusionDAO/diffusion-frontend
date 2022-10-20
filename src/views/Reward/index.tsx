@@ -389,7 +389,7 @@ const Reward = () => {
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
-                          if (socialReward !== 0) {
+                          if (socialReward.gt(0)) {
                             const receipt = await dfsMineContract.claim()
                             await receipt.wait()
                             const response = await fetch('https://middle.diffusiondao.org/withdrawSoicalReward', {
