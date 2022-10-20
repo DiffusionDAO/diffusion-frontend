@@ -173,7 +173,7 @@ const Reward = () => {
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
     ? 0
-    : formatUnits(totalSavings ?? 0, 'ether') * savingInterest
+    : BigNumber.from(formatUnits(totalSavings ?? 0, 'ether')).toNumber() * savingInterest
 
   const nextRewardSaving = formatNumber(Number.isNaN(nextRewardSavingNumber) ? 0 : nextRewardSavingNumber, 2)
   const bondRewardDetailKeys = Object.keys(me?.dfsBondRewardDetail ?? {})
