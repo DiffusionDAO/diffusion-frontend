@@ -364,17 +364,17 @@ function NftProfilePage() {
       selected.map((item) => (item.selected = !item.selected))
       resetPage()
       message.success('Stake success')
-      const response = await fetch('https://middle.diffusiondao.org/stakeNFT', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          address: account,
-          collection: dfsNFTAddress,
-          nfts: selected,
-        }),
-      })
+      // const response = await fetch('https://middle.diffusiondao.org/stakeNFT', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     address: account,
+      //     collection: dfsNFTAddress,
+      //     nfts: selected,
+      //   }),
+      // })
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }
