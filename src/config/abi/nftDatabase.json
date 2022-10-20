@@ -393,15 +393,29 @@
         "internalType": "address",
         "name": "_owner",
         "type": "address"
-      },
+      }
+    ],
+    "name": "getTokenIdsOfOwner",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "result",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "internalType": "address",
-        "name": "_mining",
+        "name": "_collection",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_market",
+        "name": "_owner",
         "type": "address"
       }
     ],

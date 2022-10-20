@@ -9,7 +9,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { useTranslation } from '@pancakeswap/localization'
 import { useRouter } from 'next/router'
-import { useDFSContract, useDFSMineContract } from 'hooks/useContract'
+import { useBondContract, useDFSContract, useDFSMineContract } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useSWRContract, useSWRMulticall } from 'hooks/useSWRContract'
 import { MaxUint256 } from '@ethersproject/constants'
@@ -83,6 +83,7 @@ const Reward = () => {
   const { onPresentConnectModal } = useWallet()
   const dfsMineContract = useDFSMineContract()
   const dfsContract = useDFSContract()
+  const bondContract = useBondContract()
   const dfsMineAddress = getMiningAddress()
   const slidesPerView = isMobile ? 1 : 3
   const swiperWrapBgImgUrl = isMobile ? '/images/reward/swiperWrapBgMobile.png' : '/images/reward/swiperWrapBg.png'
@@ -112,52 +113,38 @@ const Reward = () => {
   }
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [reward, setReward] = useState([])
-  // const { data:reward } = useSWRContract([dfsMineContract, 'getReward', [account ?? zeroAddress]])
+  const [bondReward, setBondReward] = useState<BigNumber>()
+  const [pendingReward, setPendingReward] = useState()
+  const [DfsBalance, setDfsBalance] = useState<BigNumber>()
+  const [totalSavings, setTotalSaving] = useState<BigNumber>()
+  const [socialReward, setSocialReward] = useState<BigNumber>()
+  useEffect(() => {
+    if (account) {
+      dfsMineContract.pendingReward(account).then((res) => setPendingReward(res))
+      dfsMineContract.totalRewards().then((res) => setTotalSaving(res))
+      dfsMineContract.userInfo(account).then((res) => setSocialReward(res.socialReward))
+      bondContract.addressToReferral(account).then((res) => setBondReward(res.bondReward))
+      dfsContract.balanceOf(account).then((res) => setDfsBalance(res))
+    }
+  }, [account])
 
-  const [
-    pendingReward,
-    DfsBalance,
-    totalRewards,
-    totalSavings,
-    rewardVestingSeconds,
-    bondRewardVestingSeconds,
-    savingVestingSeconds,
-    rewardPerSecond,
-    savingsPerSecond,
-    nextSavingsStakingPayoutTime,
-    epochLength,
-    stakedSavings,
-    socialReward,
-    bondReward,
-  ] = [...(reward ?? [])]
-  console.log(
-    pendingReward,
-    DfsBalance,
-    totalRewards,
-    totalSavings,
-    rewardVestingSeconds,
-    bondRewardVestingSeconds?.toString(),
-    savingVestingSeconds,
-    rewardPerSecond?.toString(),
-    savingsPerSecond,
-    nextSavingsStakingPayoutTime,
-    epochLength,
-    stakedSavings,
-    socialReward?.toString(),
-    bondReward?.toString(),
-  )
-  const nextTime = nextSavingsStakingPayoutTime ? new Date(nextSavingsStakingPayoutTime?.toNumber() * 1000) : 0
-  const nextSavingInterestChange =
-    nextTime !== 0
-      ? `${nextTime?.toLocaleDateString().replace(/\//g, '-')} ${nextTime?.toTimeString().slice(0, 8)}`
-      : '0'
+  const rewardVestingSeconds = 100 * 24 * 3600
+  const savingVestingSeconds = 300 * 24 * 3600
+  const nextTime = new Date(Date.now())
+  // const nextTime = nextSavingsStakingPayoutTime ? new Date(nextSavingsStakingPayoutTime?.toNumber() * 1000) : new Date(Date.now())
+  const nextSavingInterestChange = `${nextTime?.toLocaleDateString().replace(/\//g, '-')} ${nextTime
+    ?.toTimeString()
+    .slice(0, 8)}`
+  const epochLength = 8 * 3600
   const rewardInterest = formatNumber(
     Number.isNaN(epochLength / rewardVestingSeconds) ? 0 : (epochLength / rewardVestingSeconds) * 100,
     2,
   )
+  // console.log("epochLength:",epochLength.toString(), savingVestingSeconds.toString())
   const savingInterest = Number.isNaN(epochLength / savingVestingSeconds)
     ? 0
     : (epochLength / savingVestingSeconds) * 100
+
   const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : (1 + savingInterest / 100) ** 15 - 1, 2)
   const lockedPower = useMemo(() => {
     return formatBigNumber(
@@ -174,26 +161,21 @@ const Reward = () => {
   const greenPower = formatBigNumber(BigNumber.from(me?.power ?? 0), 3)
   const totalUnlockedPower = formatBigNumber(BigNumber.from(me?.totalUnlockedPower ?? 0), 3)
 
-  // const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 5)
   const now = Math.floor(Date.now() / 1000)
   // const socialRewardSeconds = me?.lastSocialRewardWithdraw ? (now - me?.lastSocialRewardWithdraw) : 0
   // console.log("socialRewardSeconds:", socialRewardSeconds)
   // const pendingRewardString = formatBigNumber(BigNumber.from(rewardPerSecond ? rewardPerSecond?.mul(socialRewardSeconds) : 0), 5)
   const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 5)
-
   const bondRewardSeconds = me?.lastBondRewardWidthdraw ? now - me?.lastBondRewardWidthdraw : 0
   const bondRewardLocked = me?.bondRewardLocked ?? 0
   // const userPendingBondReward = bondRewardLocked * bondRewardSeconds / bondRewardVestingSeconds
   // console.log("userPendingBondReward:", userPendingBondReward)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward ?? 0), 6)
-  const nextRewardSavingNumber = Number.isNaN(savingInterest) ? 0 : totalSavings * savingInterest
-  const nextRewardSaving = formatBigNumber(
-    BigNumber.from(Number.isNaN(nextRewardSavingNumber) ? '0' : nextRewardSavingNumber?.toString()),
-    3,
-  )
-  // const dfsFromBondReward = '0'
-  // const pendingRewardString = "0"
-  // const nextRewardSaving = '0'
+  const nextRewardSavingNumber = Number.isNaN(savingInterest)
+    ? 0
+    : formatUnits(totalSavings ?? 0, 'ether') * savingInterest
+
+  const nextRewardSaving = formatNumber(Number.isNaN(nextRewardSavingNumber) ? 0 : nextRewardSavingNumber, 2)
   const bondRewardDetailKeys = Object.keys(me?.dfsBondRewardDetail ?? {})
   const unlockedPowerDetailKeys = Object.keys(me?.unlockedPowerDetail ?? {})
   const bondRewardDetailData = bondRewardDetailKeys.map((key) => {
@@ -511,12 +493,15 @@ const Reward = () => {
                     <StakeBtn
                       onClick={async () => {
                         if (amount) {
-                          const allowance = await dfsContract.allowance(account, dfsMineAddress)
-                          if (allowance.eq(0)) {
-                            await dfsContract.approve(dfsMineAddress, MaxUint256)
-                          }
-                          const parsedAmount = parseUnits(amount, 'ether')
                           try {
+                            const allowance = await dfsContract.allowance(account, dfsMineAddress)
+                            console.log('allowance:', allowance)
+                            if (allowance.eq(0)) {
+                              const receipt = await dfsContract.approve(dfsMineAddress, MaxUint256)
+                              await receipt.wait()
+                            }
+                            const parsedAmount = parseUnits(amount, 'ether')
+
                             let receipt = await dfsMineContract.stakeSavings(parsedAmount)
                             receipt = await receipt.wait()
                           } catch (error: any) {

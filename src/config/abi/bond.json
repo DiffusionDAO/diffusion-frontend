@@ -23,11 +23,6 @@
       },
       {
         "internalType": "address",
-        "name": "_nftAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_mintAddress",
         "type": "address"
       },
@@ -255,6 +250,31 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawBondReward",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "DAO",
     "outputs": [
@@ -281,37 +301,49 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "DfsNFT",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
         "name": "",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
-    "name": "addressToDownMembers",
+    "name": "addressToReferral",
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "self",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "level",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "power",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dfsFromDeposit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "bondReward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "bondRewardLocked",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastBondRewardWithdraw",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -385,6 +417,19 @@
   },
   {
     "inputs": [],
+    "name": "bondRewardVestingSeconds",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "claimOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -448,6 +493,25 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "getReferrals",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",
@@ -577,6 +641,25 @@
       }
     ],
     "name": "payoutFor",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "pendingBondReward",
     "outputs": [
       {
         "internalType": "uint256",
@@ -723,6 +806,19 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "_seconds",
+        "type": "uint256"
+      }
+    ],
+    "name": "setBondRewardVestingTerm",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "_minimumPrice",
         "type": "uint256"
       },
@@ -772,6 +868,24 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_lastTime",
+        "type": "uint256"
+      }
+    ],
+    "name": "setLastBondRewardWithdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_mining",
         "type": "address"
       }
@@ -803,6 +917,24 @@
       }
     ],
     "name": "setMultiSignAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_referral",
+        "type": "address"
+      }
+    ],
+    "name": "setReferral",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -893,6 +1025,13 @@
       }
     ],
     "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawBondReward",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

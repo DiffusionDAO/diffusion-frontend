@@ -103,17 +103,18 @@ const BondModal: React.FC<BondModalProps> = ({
 
   useEffect(() => {
     if (account) {
-      if (!referral) {
-        bond
-          .referrals(account)
-          .then((res) => {
-            if (res !== zeroAddress) {
-              setHasReferral(true)
-              setReferral(res)
-            }
-          })
-          .catch((error) => console.log(error))
-      }
+      bond
+        .referrals(account)
+        .then((res) => {
+          if (res !== zeroAddress) {
+            setHasReferral(true)
+            setReferral(res)
+          } else {
+            setReferral('')
+            setHasReferral(false)
+          }
+        })
+        .catch((error) => console.log(error))
       bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
       bond
         .pendingPayoutFor(account)
@@ -304,7 +305,7 @@ const BondModal: React.FC<BondModalProps> = ({
                 onInput={(e: any) => {
                   setReferral(e.target.value)
                 }}
-                disabled={hasReferral && referral !== zeroAddress}
+                disabled={hasReferral}
               />
             </RecommandWrap>
             <BondListItemBtn onClick={buy}>{t('Buy')}</BondListItemBtn>
