@@ -322,16 +322,6 @@
       },
       {
         "internalType": "uint256",
-        "name": "power",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "dfsFromDeposit",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
         "name": "bondReward",
         "type": "uint256"
       },

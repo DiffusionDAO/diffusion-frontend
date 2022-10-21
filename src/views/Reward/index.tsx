@@ -65,7 +65,6 @@ import {
 import DataCell from '../../components/ListDataCell'
 import DetailModal from './components/DetailModal'
 import NoPower from './components/NoPower'
-import useInterval from '../../../packages/hooks/src/useInterval'
 
 const Reward = () => {
   const { t } = useTranslation()
@@ -78,6 +77,7 @@ const Reward = () => {
   const [socialRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
   const [referrals, setReferrals] = useState({})
   const [me, setMe] = useState<any>({})
+  const [stake, setStake] = useState<any>({})
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -112,7 +112,6 @@ const Reward = () => {
     setBondRewardDetailModalVisible(false)
   }
   const zeroAddress = '0x0000000000000000000000000000000000000000'
-  const [reward, setReward] = useState([])
   const [bondReward, setBondReward] = useState<BigNumber>()
   const [pendingReward, setPendingReward] = useState()
   const [DfsBalance, setDfsBalance] = useState<BigNumber>()
@@ -122,11 +121,11 @@ const Reward = () => {
     if (account) {
       dfsMineContract.pendingReward(account).then((res) => setPendingReward(res))
       dfsMineContract.totalRewards().then((res) => setTotalSaving(res))
-      dfsMineContract.userInfo(account).then((res) => setSocialReward(res.socialReward))
+      dfsMineContract.stakeInfo(account).then((res) => setStake(res))
       bondContract.addressToReferral(account).then((res) => setBondReward(res.bondReward))
       dfsContract.balanceOf(account).then((res) => setDfsBalance(res))
     }
-  }, [account])
+  }, [account, amount])
 
   const rewardVestingSeconds = 100 * 24 * 3600
   const savingVestingSeconds = 300 * 24 * 3600
@@ -140,54 +139,39 @@ const Reward = () => {
     Number.isNaN(epochLength / rewardVestingSeconds) ? 0 : (epochLength / rewardVestingSeconds) * 100,
     2,
   )
-  // console.log("epochLength:",epochLength.toString(), savingVestingSeconds.toString())
   const savingInterest = Number.isNaN(epochLength / savingVestingSeconds)
     ? 0
     : (epochLength / savingVestingSeconds) * 100
 
   const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : (1 + savingInterest / 100) ** 15 - 1, 2)
-  const lockedPower = useMemo(() => {
-    return formatBigNumber(
-      BigNumber.from(me?.power ?? 0)
-        .mul(2)
-        .sub(BigNumber.from(me?.totalUnlockedPower ?? 0)),
-      3,
-    )
-  }, [me])
-  const totalPowerOfUser = formatBigNumber(
-    BigNumber.from(me?.power ?? 0).add(BigNumber.from(me?.totalUnlockedPower ?? 0)),
-    3,
-  )
-  const greenPower = formatBigNumber(BigNumber.from(me?.power ?? 0), 3)
-  const totalUnlockedPower = formatBigNumber(BigNumber.from(me?.totalUnlockedPower ?? 0), 3)
+  const myLockedPower = BigNumber.from(stake?.power ?? 0)
+    .mul(2)
+    .toString()
+  const myTotalPower = BigNumber.from(stake?.power ?? 0).toString()
+  const greenPower = BigNumber.from(stake?.power ?? 0).toString()
 
   const now = Math.floor(Date.now() / 1000)
-  // const socialRewardSeconds = me?.lastSocialRewardWithdraw ? (now - me?.lastSocialRewardWithdraw) : 0
-  // console.log("socialRewardSeconds:", socialRewardSeconds)
-  // const pendingRewardString = formatBigNumber(BigNumber.from(rewardPerSecond ? rewardPerSecond?.mul(socialRewardSeconds) : 0), 5)
+
   const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 5)
-  const bondRewardSeconds = me?.lastBondRewardWidthdraw ? now - me?.lastBondRewardWidthdraw : 0
-  const bondRewardLocked = me?.bondRewardLocked ?? 0
-  // const userPendingBondReward = bondRewardLocked * bondRewardSeconds / bondRewardVestingSeconds
-  // console.log("userPendingBondReward:", userPendingBondReward)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
-    ? 0
-    : BigNumber.from(formatUnits(totalSavings ?? 0, 'ether')).toNumber() * savingInterest
-
-  const nextRewardSaving = formatNumber(Number.isNaN(nextRewardSavingNumber) ? 0 : nextRewardSavingNumber, 2)
+    ? BigNumber.from(0)
+    : BigNumber.from(totalSavings ?? 0)
+        .mul(epochLength)
+        .div(savingVestingSeconds)
+  const nextRewardSaving = formatBigNumber(nextRewardSavingNumber, 2)
   const bondRewardDetailKeys = Object.keys(me?.dfsBondRewardDetail ?? {})
   const unlockedPowerDetailKeys = Object.keys(me?.unlockedPowerDetail ?? {})
   const bondRewardDetailData = bondRewardDetailKeys.map((key) => {
     return {
       address: isMobile ? shorten(key) : key,
-      value: formatBigNumber(BigNumber.from(me?.dfsBondRewardDetail[key]), 5),
+      value: formatBigNumber(BigNumber.from(me?.dfsBondRewardDetail[key] ?? 0), 5),
     }
   })
   const socialRewardDetailData = unlockedPowerDetailKeys.map((key) => {
     return {
       address: isMobile ? shorten(key) : key,
-      value: formatBigNumber(BigNumber.from(Object.values(me?.unlockedPowerDetail[key])[0]), 5),
+      value: formatBigNumber(BigNumber.from(Object.values(me?.unlockedPowerDetail[key])[0] ?? 0), 5),
     }
   })
   useEffect(() => {
@@ -204,29 +188,7 @@ const Reward = () => {
       )
     }
   }, [account])
-  useEffect(() => {
-    if (account) {
-      dfsMineContract
-        .getReward(account)
-        .then((res) => setReward(res))
-        .catch((error) => console.log(error))
-    }
-  }, [account, me])
-  // const updateSwiper = useCallback(
-  //   (swiper) => {
-  //     if (me?.level) {
-  //       swiper?.slideTo(me?.level, 50, false)
-  //     }
-  //   },
-  //   [me],
-  // )
-  // useInterval(() => {
-  //   if (me.level && me.level <= 7) {
-  //     me.level++
-  //     setMe(me)
-  //     console.log('me.level:', me.level)
-  //   }
-  // }, 1000)
+
   return (
     <RewardPageWrap>
       {account && access && (
@@ -241,17 +203,17 @@ const Reward = () => {
               centeredSlides
               navigation
               onSwiper={(swiper) => {
-                swiper.slideTo(me?.level)
+                swiper.slideTo(stake?.level?.toString())
               }}
               onSlideChange={(swiper) => {
-                swiper.slideTo(me?.level)
+                swiper.slideTo(stake?.level?.toString())
               }}
               onUpdate={(swiper) => {
-                swiper.slideTo(me?.level)
+                swiper.slideTo(stake?.level?.toString())
               }}
               // onActiveIndexChange={updateSwiper}
             >
-              {me?.level !== undefined &&
+              {stake?.level !== undefined &&
                 swiperSlideData.map((item, index) => {
                   return (
                     <SwiperSlide key={item.name}>
@@ -290,7 +252,7 @@ const Reward = () => {
                         }),
                       })
                       const json = await response.json()
-                      setMe(json[account])
+                      setStake(json[account])
                     } else {
                       alert('No bond reward')
                     }
@@ -344,7 +306,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem2.png" />
                           )}
                           <MySposDashboardValue className="alignRight" style={{ color: 'grey' }}>
-                            {lockedPower ?? '0'}
+                            {myLockedPower ?? '0'}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Locked SPOS value')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -355,7 +317,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>
-                            {totalUnlockedPower ?? '0'}
+                            {myTotalPower ?? '0'}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Networking unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -375,7 +337,7 @@ const Reward = () => {
                         </MySposDashboardItem>
                       </MySposDashboardList>
                       <MySposDashboardMiddleItem>
-                        <MySposDashboardMiddleItemValue>{totalPowerOfUser ?? '0'}</MySposDashboardMiddleItemValue>
+                        <MySposDashboardMiddleItemValue>{myTotalPower ?? '0'}</MySposDashboardMiddleItemValue>
                         <MySposDashboardMiddleItemDes>{t('Valid SPOS value')}</MySposDashboardMiddleItemDes>
                       </MySposDashboardMiddleItem>
                     </MySposDashboardWrap>
@@ -402,7 +364,7 @@ const Reward = () => {
                               }),
                             })
                             const json = await response.json()
-                            setMe(json[account])
+                            setStake(json[account])
                           } else {
                             alert('No social reward')
                           }
@@ -462,7 +424,7 @@ const Reward = () => {
                   </DataCellWrap>
                   <DataCell
                     label={t('Staked')}
-                    value={`${formatBigNumber(BigNumber.from(me?.stakedSavings ?? 0), 2)} DFS`}
+                    value={`${formatBigNumber(stake?.stakedSavings ?? BigNumber.from(0), 2)} DFS`}
                     position="horizontal"
                   />
                 </CardItem>
@@ -483,6 +445,7 @@ const Reward = () => {
                         try {
                           const receipt = await dfsMineContract.unstakeSavings(parsedAmount)
                           await receipt.wait()
+                          setAmount('')
                         } catch (error: any) {
                           window.alert(error.reason ?? error.data?.message ?? error.message)
                         }
@@ -495,7 +458,6 @@ const Reward = () => {
                         if (amount) {
                           try {
                             const allowance = await dfsContract.allowance(account, dfsMineAddress)
-                            console.log('allowance:', allowance)
                             if (allowance.eq(0)) {
                               const receipt = await dfsContract.approve(dfsMineAddress, MaxUint256)
                               await receipt.wait()
@@ -504,6 +466,7 @@ const Reward = () => {
 
                             let receipt = await dfsMineContract.stakeSavings(parsedAmount)
                             receipt = await receipt.wait()
+                            setAmount('')
                           } catch (error: any) {
                             window.alert(error.reason ?? error.data?.message ?? error.message)
                           }
