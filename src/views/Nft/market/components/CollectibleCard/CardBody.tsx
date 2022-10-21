@@ -33,9 +33,8 @@ const CollectibleCardBody: React.FC<React.PropsWithChildren<CollectibleCardProps
         {nftLocation && <LocationTag nftLocation={nftLocation} />}
       </Flex>
       <div style={{ display: 'flex', justifyContent: 'space-between', height: '8px', alignItems: 'center' }}>
-        <Text as="h4" fontWeight="600">
-          {name}
-        </Text>
+        {/* <Text as="h4" fontWeight="600"> */}
+        <Text small>{name}</Text>
         {nft?.attributes && nft?.attributes[0].value && (
           <img alt="" src={`/images/grade/${nft.attributes[0].value}.png`} />
         )}

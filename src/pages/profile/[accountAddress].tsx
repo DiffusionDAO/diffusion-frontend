@@ -146,13 +146,14 @@ function NftProfilePage() {
     }
     return token
   }
-  const updateOwnedFn = async () => {
+  const updateFn = async () => {
     const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
       await Promise.all(
         collectionAddresses.map(async (collectionAddress) => {
           const nfts: NFT[] = await nftDatabase.getTokensOfOwner(collectionAddress, account)
+          console.log(nfts)
           nfts.map((nft) => tokens.unstaked.push(nftToNftToken(nft)))
         }),
       )
@@ -181,13 +182,16 @@ function NftProfilePage() {
     }
     return { unstaked: [], staked: [], onSale: [] }
   }
-  const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateOwnedFn)
+  const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
   console.log('data:', data)
+  useEffect(() => {
+    mutate(updateFn())
+  }, [account])
   useEffect(() => {
     setUnstakedNFTs(data?.unstaked?.filter((token) => token.owner !== zeroAddress))
     setStakedNFTs(data?.staked?.filter((token) => token.owner !== zeroAddress))
     setOnSaleNFT(data?.onSale?.filter((token) => token.owner !== zeroAddress))
-  }, [data, status, account])
+  }, [data, status])
   const composeNFT = useNftComposeContract()
   const dfsNFT = useDFSNftContract()
   const mine = useDFSMineContract()
@@ -257,6 +261,8 @@ function NftProfilePage() {
   }
   const startCompound = () => {
     setIsSelected(true)
+    console.log(isSelected)
+    console.log(unstakedNFTs.length)
     setUnstakedNFTs(unstakedNFTs)
     setSelectedNFTs(unstakedNFTs)
     setOption('compose')
@@ -322,7 +328,7 @@ function NftProfilePage() {
       console.log('selectedTokenIds:', selectedTokenIds)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
-      mutate(updateOwnedFn())
+      mutate(updateFn())
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }
@@ -359,22 +365,22 @@ function NftProfilePage() {
     try {
       receipt = await mine.stakeNFT(dfsNFTAddress, tokenIds)
       await receipt.wait()
-      mutate(updateOwnedFn())
+      mutate(updateFn())
       selected.map((item) => (item.staker = !item.staker))
       selected.map((item) => (item.selected = !item.selected))
       resetPage()
       message.success('Stake success')
-      // const response = await fetch('https://middle.diffusiondao.org/stakeNFT', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     address: account,
-      //     collection: dfsNFTAddress,
-      //     nfts: selected,
-      //   }),
-      // })
+      const response = await fetch('https://middle.diffusiondao.org/stakeNFT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: account,
+          collection: dfsNFTAddress,
+          nfts: selected,
+        }),
+      })
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }

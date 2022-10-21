@@ -110,7 +110,6 @@ const BondModal: React.FC<BondModalProps> = ({
             setHasReferral(true)
             setReferral(res)
           } else {
-            setReferral('')
             setHasReferral(false)
           }
         })

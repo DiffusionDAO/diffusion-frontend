@@ -131,16 +131,16 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
               const receipt = await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
               await receipt.wait()
               router.push(`/profile/${account}`)
-              // const response = await fetch('https://middle.diffusiondao.org/unstakeNFT', {
-              //   method: 'POST',
-              //   headers: {
-              //     'Content-Type': 'application/json',
-              //   },
-              //   body: JSON.stringify({
-              //     address: account,
-              //     nft,
-              //   }),
-              // })
+              const response = await fetch('https://middle.diffusiondao.org/unstakeNFT', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  address: account,
+                  nft,
+                }),
+              })
             } catch (error: any) {
               window.alert(error.reason ?? error.data?.message ?? error.message)
             }
