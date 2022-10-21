@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Grid, useModal, Text, Flex } from '@pancakeswap/uikit'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
+import { formatBigNumber } from 'utils/formatBalance'
+import { BigNumber } from '@ethersproject/bignumber'
 import { CollectibleActionCard, CollectibleLinkCard } from '../../Nft/market/components/CollectibleCard'
 import GridPlaceholder from '../../Nft/market/components/GridPlaceholder'
 import ProfileNftModal from '../../Nft/market/components/ProfileNftModal'
@@ -60,7 +62,9 @@ const UserNfts: React.FC<
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
                 nft={nft}
                 currentAskPrice={
-                  marketData?.currentAskPrice && marketData?.isTradable && parseFloat(marketData?.currentAskPrice)
+                  marketData?.currentAskPrice &&
+                  marketData?.isTradable &&
+                  Number(formatBigNumber(BigNumber.from(marketData?.currentAskPrice), 2))
                 }
                 nftLocation={location}
               />

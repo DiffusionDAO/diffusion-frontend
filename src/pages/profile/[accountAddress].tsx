@@ -95,6 +95,44 @@ export const dfsName = {
 }
 const greeceNumber = { 0: 'I', 1: 'II', 2: 'III', 3: 'IV', 4: 'V', 5: 'VI', 6: 'VII' }
 
+export const nftToNftToken = (nft: NFT) => {
+  const tokenIdString = nft?.tokenId?.toString()
+  const level = nft?.level?.toString()
+  const token = {
+    tokenId: tokenIdString,
+    name: `${dfsName[level]}#${tokenIdString}`,
+    description: dfsName[level],
+    collectionName: nft.collectionName,
+    collectionAddress: nft.collectionAddress,
+    image: {
+      original: 'string',
+      thumbnail: `/images/nfts/${level}`,
+    },
+    attributes: [
+      {
+        traitType: '',
+        value: level,
+        displayType: '',
+      },
+    ],
+    createdAt: '',
+    updatedAt: '',
+    location: NftLocation.FORSALE,
+    marketData: {
+      tokenId: tokenIdString,
+      collection: {
+        id: tokenIdString,
+      },
+      currentAskPrice: nft?.price?.toString(),
+      currentSeller: nft?.seller,
+      isTradable: true,
+    },
+    staker: nft?.staker,
+    owner: nft?.owner,
+    seller: nft?.seller,
+  }
+  return token
+}
 function NftProfilePage() {
   const { account } = useWeb3React()
   const dfsNFTAddress = getDFSNFTAddress()
@@ -108,44 +146,6 @@ function NftProfilePage() {
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMineContract()
 
-  const nftToNftToken = (nft: NFT) => {
-    const tokenIdString = nft?.tokenId?.toString()
-    const level = nft?.level?.toString()
-    const token = {
-      tokenId: tokenIdString,
-      name: `${dfsName[level]}#${tokenIdString}`,
-      description: dfsName[level],
-      collectionName: nft.collectionName,
-      collectionAddress: nft.collectionAddress,
-      image: {
-        original: 'string',
-        thumbnail: `/images/nfts/${level}`,
-      },
-      attributes: [
-        {
-          traitType: '',
-          value: level,
-          displayType: '',
-        },
-      ],
-      createdAt: '',
-      updatedAt: '',
-      location: NftLocation.FORSALE,
-      marketData: {
-        tokenId: tokenIdString,
-        collection: {
-          id: tokenIdString,
-        },
-        currentAskPrice: nft?.price?.toString(),
-        currentSeller: nft?.seller,
-        isTradable: true,
-      },
-      staker: nft?.staker,
-      owner: nft?.owner,
-      seller: nft?.seller,
-    }
-    return token
-  }
   const updateFn = async () => {
     const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }

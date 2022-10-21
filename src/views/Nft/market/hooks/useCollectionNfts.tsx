@@ -33,7 +33,7 @@ import { getNftMarketContract, getContract } from 'utils/contractHelpers'
 import { useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
 import { getNFTDatabaseAddress, getNftMarketAddress } from 'utils/addressHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
-import { dfsName, CollectionData, NFT } from 'pages/profile/[accountAddress]'
+import { dfsName, CollectionData, NFT, nftToNftToken } from 'pages/profile/[accountAddress]'
 import useSWR from 'swr'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 import { REQUEST_SIZE } from '../Collection/config'
@@ -303,11 +303,14 @@ export const useCollectionNfts = (collectionAddress: string) => {
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
         const marketItems = await nftMarketContract.fetchMarketItems()
-        const marketTokenIds = marketItems.filter((item) => item[4] === collectionAddress).map((item) => item[5])
+        console.log(marketItems)
+        const marketTokenIds = marketItems
+          .filter((item) => item.collection === collectionAddress)
+          .map((item) => item.tokenId)
         newNfts = await Promise.all(
           marketTokenIds.map(async (tokenId) => {
             const token = await nftDatabase.getToken(collectionAddress, tokenId)
-            return token
+            return nftToNftToken(token)
           }),
         )
 

@@ -2,6 +2,8 @@ import { useCallback } from 'react'
 import { BunnyPlaceholderIcon, AutoRenewIcon, Button, Flex, Grid, Text } from '@pancakeswap/uikit'
 import { Collection } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
+import { BigNumber } from '@ethersproject/bignumber'
+import { formatBigNumber } from 'utils/formatBalance'
 import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard } from '../../components/CollectibleCard'
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
@@ -40,7 +42,8 @@ const CollectionNfts: React.FC<React.PropsWithChildren<CollectionNftsProps>> = (
             alignItems="start"
           >
             {nfts.map((nft) => {
-              const currentAskPriceAsNumber = nft.marketData && parseFloat(nft?.marketData?.currentAskPrice)
+              const currentAskPriceAsNumber =
+                nft.marketData && Number(formatBigNumber(BigNumber.from(nft?.marketData?.currentAskPrice), 2))
 
               return (
                 <CollectibleLinkCard

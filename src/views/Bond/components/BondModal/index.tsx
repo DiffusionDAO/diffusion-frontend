@@ -114,23 +114,24 @@ const BondModal: React.FC<BondModalProps> = ({
           }
         })
         .catch((error) => console.log(error))
-      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
-      bond
-        .pendingPayoutFor(account)
-        .then((res) => {
-          setPendingPayout(formatBigNumber(res, 18))
-        })
-        .catch((error) => console.log(error))
-      dfs
-        .balanceOf(account)
-        .then((res) => {
-          setDfsBalance(formatBigNumber(res, 18))
-        })
-        .catch((error) => console.log(error))
     }
-  }, [account, amount])
+  }, [account])
 
   useEffect(() => {
+    bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
+    bond
+      .pendingPayoutFor(account)
+      .then((res) => {
+        setPendingPayout(formatBigNumber(res, 18))
+      })
+      .catch((error) => console.log(error))
+    dfs
+      .balanceOf(account)
+      .then((res) => {
+        setDfsBalance(formatBigNumber(res, 18))
+      })
+      .catch((error) => console.log(error))
+
     bond
       .terms()
       .then((res) => {
