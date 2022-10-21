@@ -116,13 +116,14 @@ const Mint = () => {
         type === 'ordinary'
           ? await NFTMint.mintOne(ordinaryCount, useBond)
           : await NFTMint.mintTwo(seniorCount, useBond)
-      const recipient = await res.wait()
-      const { logs } = recipient
+      const receipt = await res.wait()
+      const { logs } = receipt
       // eslint-disable-next-line prefer-const
       let levelTokenIds = {}
-      for (let i = 1; i <= logs.length; i++) {
-        if (i % 2 === 0) {
-          const id = BigNumber.from(logs[i - 1].topics[3])
+      const topics = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+      for (let i = 0; i <= logs.length; i++) {
+        if (logs[i] && logs[i].topics[0] === topics) {
+          const id = BigNumber.from(logs[i]?.topics[3])
           const tokenId = id.toString()
           // eslint-disable-next-line no-await-in-loop
           const level = await dfsNFT.getItems(tokenId)

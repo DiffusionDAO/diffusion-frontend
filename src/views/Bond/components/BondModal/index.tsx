@@ -197,19 +197,19 @@ const BondModal: React.FC<BondModalProps> = ({
       window.alert(error.reason ?? error.data?.message ?? error.message)
       return
     }
-    const response = await fetch('https://middle.diffusiondao.org/deposit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        address: account,
-        amount: parseUnits(amount, 'ether'),
-        referral,
-      }),
-    })
-    const json = await response.json()
-    console.log(json)
+    // const response = await fetch('https://middle.diffusiondao.org/deposit', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     address: account,
+    //     amount: parseUnits(amount, 'ether'),
+    //     referral,
+    //   }),
+    // })
+    // const json = await response.json()
+    // console.log(json)
     setAmount('')
     // onClose()
   }
