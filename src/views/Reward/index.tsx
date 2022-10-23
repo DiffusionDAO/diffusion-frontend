@@ -113,13 +113,13 @@ const Reward = () => {
   }
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [bondReward, setBondReward] = useState<BigNumber>()
-  const [pendingReward, setPendingReward] = useState()
+  const [pendingSocialReward, setPendingReward] = useState()
   const [DfsBalance, setDfsBalance] = useState<BigNumber>()
   const [totalSavings, setTotalSaving] = useState<BigNumber>()
   const [socialReward, setSocialReward] = useState<BigNumber>()
   useEffect(() => {
     if (account) {
-      dfsMineContract.pendingReward(account).then((res) => setPendingReward(res))
+      dfsMineContract.pendingSocialReward(account).then((res) => setPendingReward(res))
       dfsMineContract.totalRewards().then((res) => setTotalSaving(res))
       dfsMineContract.stakeInfo(account).then((res) => setStake(res))
       bondContract.addressToReferral(account).then((res) => setBondReward(res.bondReward))
@@ -152,7 +152,7 @@ const Reward = () => {
 
   const now = Math.floor(Date.now() / 1000)
 
-  const pendingRewardString = formatBigNumber(BigNumber.from(pendingReward ?? 0), 5)
+  const pendingRewardString = formatBigNumber(BigNumber.from(pendingSocialReward ?? 0), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
     ? BigNumber.from(0)

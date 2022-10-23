@@ -197,21 +197,21 @@ const BondModal: React.FC<BondModalProps> = ({
       window.alert(error.reason ?? error.data?.message ?? error.message)
       return
     }
-    // const response = await fetch('https://middle.diffusiondao.org/deposit', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     address: account,
-    //     amount: parseUnits(amount, 'ether'),
-    //     referral,
-    //   }),
-    // })
-    // const json = await response.json()
-    // console.log(json)
     setAmount('')
-    // onClose()
+    onClose()
+    const response = await fetch('https://middle.diffusiondao.org/deposit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: account,
+        amount: parseUnits(amount, 'ether'),
+        referral,
+      }),
+    })
+    const json = await response.json()
+    console.log(json)
   }
   const withdraw = () => {
     confirm({
@@ -280,7 +280,6 @@ const BondModal: React.FC<BondModalProps> = ({
               suffix="ALL"
               value={amount}
               onInput={async (e: any) => {
-                setHasReferral(true)
                 setAmount(e.target.value)
                 if (e.target.value) {
                   try {

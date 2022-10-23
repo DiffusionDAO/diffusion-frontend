@@ -79,11 +79,15 @@ const Bond = () => {
     usdt.approve(bondAddress, MaxUint256).then(() => setIsApprove(true))
   }
   useEffect(() => {
-    if (account) {
-      usdt.allowance(account, bondAddress).then((res) => {
-        if (res !== BigNumber.from(0)) setIsApprove(true)
-      })
-    }
+    setIsApprove(false)
+    usdt.allowance(account, bondAddress).then((res) => {
+      if (res.gt(0)) {
+        console.log('setIsApprove', res)
+        setIsApprove(true)
+      }
+    })
+  }, [account])
+  useEffect(() => {
     const dfsUsdt = bondDatasMock[0]
     // eslint-disable-next-line no-return-assign, no-param-reassign
     bond

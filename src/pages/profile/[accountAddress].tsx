@@ -153,7 +153,7 @@ function NftProfilePage() {
       await Promise.all(
         collectionAddresses.map(async (collectionAddress) => {
           const nfts: NFT[] = await nftDatabase.getTokensOfOwner(collectionAddress, account)
-          console.log(nfts)
+          console.log(nfts.map((nft) => nft.tokenId.toString()))
           nfts.map((nft) => tokens.unstaked.push(nftToNftToken(nft)))
         }),
       )
@@ -190,7 +190,7 @@ function NftProfilePage() {
   useEffect(() => {
     setUnstakedNFTs(data?.unstaked?.filter((token) => token.owner !== zeroAddress))
     setStakedNFTs(data?.staked?.filter((token) => token.owner !== zeroAddress))
-    setOnSaleNFT(data?.onSale?.filter((token) => token.owner !== zeroAddress))
+    setOnSaleNFT(data?.onSale?.filter((token) => token.seller === account))
   }, [data, status])
   const composeNFT = useNftComposeContract()
   const dfsNFT = useDFSNftContract()

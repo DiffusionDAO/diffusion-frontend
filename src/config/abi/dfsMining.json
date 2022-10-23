@@ -221,6 +221,19 @@
   },
   {
     "inputs": [],
+    "name": "bond",
+    "outputs": [
+      {
+        "internalType": "contract IBond",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "database",
     "outputs": [
       {
@@ -277,25 +290,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "getReward",
-    "outputs": [
-      {
-        "internalType": "uint256[12]",
-        "name": "",
-        "type": "uint256[12]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_collection",
         "type": "address"
       },
@@ -317,6 +311,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getv8",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -330,57 +337,6 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "lastSavingWithdraw",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "lastSocialRewardWithdraw",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "lastTime",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -407,7 +363,7 @@
         "type": "uint256"
       }
     ],
-    "name": "level2Power",
+    "name": "levelToPower",
     "outputs": [
       {
         "internalType": "uint256",
@@ -458,7 +414,7 @@
         "type": "address"
       }
     ],
-    "name": "pendingReward",
+    "name": "pendingSavings",
     "outputs": [
       {
         "internalType": "uint256",
@@ -477,7 +433,7 @@
         "type": "address"
       }
     ],
-    "name": "pendingSavings",
+    "name": "pendingSocialReward",
     "outputs": [
       {
         "internalType": "uint256",
@@ -545,6 +501,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_bond",
+        "type": "address"
+      }
+    ],
+    "name": "setBond",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -629,19 +598,6 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_totalPower",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTotalPower",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
         "name": "_totalSupply",
         "type": "uint256"
       }
@@ -691,7 +647,22 @@
       },
       {
         "internalType": "uint256",
+        "name": "lockedPower",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "socialReward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "socialRewardLocked",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastSocialRewardWithdraw",
         "type": "uint256"
       },
       {
@@ -702,6 +673,11 @@
       {
         "internalType": "uint256",
         "name": "stakedSavings",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastSavingsWithdraw",
         "type": "uint256"
       }
     ],
@@ -949,6 +925,44 @@
     "name": "upgrade",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "v8",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "v8Index",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

@@ -56,13 +56,17 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const nftDatabase = useNFTDatabaseContract()
   useEffect(() => {
     nftDatabase.getToken(collectionAddress, tokenId).then((res) => {
+      let thumbnail = `/images/nfts/${res.level.toString()}`
+      if (res.collectionName === 'StarLight') {
+        thumbnail = `https://middle.diffusiondao.org/0x88eBFd7841D131BCeab3e7149217aa8e36985a40/${tokenId}`
+      }
       const nft: NftToken = {
         tokenId,
         collectionAddress,
         collectionName: res.collectionName,
         name: res.collectionName,
         description: res.collectionName,
-        image: { original: 'string', thumbnail: `/images/nfts/${res.level.toString()}` },
+        image: { original: 'string', thumbnail },
         attributes: [{ value: res.level.toString() }],
         staker: res.staker,
         owner: res.owner,
