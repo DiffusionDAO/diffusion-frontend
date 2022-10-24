@@ -153,7 +153,6 @@ function NftProfilePage() {
       await Promise.all(
         collectionAddresses.map(async (collectionAddress) => {
           const nfts: NFT[] = await nftDatabase.getTokensOfOwner(collectionAddress, account)
-          console.log(nfts.map((nft) => nft.tokenId.toString()))
           nfts.map((nft) => tokens.unstaked.push(nftToNftToken(nft)))
         }),
       )

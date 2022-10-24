@@ -4,7 +4,7 @@ import { getCollection, getNftApi, getCollectionApi } from 'state/nftMarket/help
 import { ApiCollection, Collection, NftToken } from 'state/nftMarket/types'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
-import { getNFTDatabaseAddress } from 'utils/addressHelpers'
+import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
 import { getContract } from 'utils/contractHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { CollectionData, NFT } from 'pages/profile/[accountAddress]'
@@ -54,14 +54,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 1,
     }
   }
-
+  let thumbnail = `/images/nfts/${nft.level.toString()}`
+  const starLightAddress = getStarlightAddress()
+  if (collectionAddress === starLightAddress) {
+    thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
+  }
   const token: NftToken = {
     tokenId,
     collectionAddress,
     collectionName: nft.collectionName,
     name: nft.collectionName,
     description: nft.collectionName,
-    image: { original: 'string', thumbnail: `/images/nfts/${nft.level.toString()}` },
+    image: { original: 'string', thumbnail },
     attributes: [{ value: nft.level.toString() }],
     staker: nft.staker,
     owner: nft.owner,

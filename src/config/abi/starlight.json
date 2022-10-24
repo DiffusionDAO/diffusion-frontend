@@ -20,6 +20,11 @@
         "internalType": "uint256",
         "name": "amountForDevs_",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "database_",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -281,6 +286,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "database",
+    "outputs": [
+      {
+        "internalType": "contract INFTDatabase",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

@@ -7,7 +7,7 @@ import Page from 'components/Layout/Page'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import PageLoader from 'components/Loader/PageLoader'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
-import { getNFTDatabaseAddress } from 'utils/addressHelpers'
+import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
 import { NftToken } from 'state/nftMarket/types'
 import { getCollection } from 'state/nftMarket/helpers'
 import { getContract } from 'utils/contractHelpers'
@@ -57,8 +57,9 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   useEffect(() => {
     nftDatabase.getToken(collectionAddress, tokenId).then((res) => {
       let thumbnail = `/images/nfts/${res.level.toString()}`
-      if (res.collectionName === 'StarLight') {
-        thumbnail = `https://middle.diffusiondao.org/0x88eBFd7841D131BCeab3e7149217aa8e36985a40/${tokenId}`
+      const starLightAddress = getStarlightAddress()
+      if (res.collectionAddress === starLightAddress) {
+        thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
       }
       const nft: NftToken = {
         tokenId,

@@ -117,6 +117,8 @@ const Reward = () => {
   const [DfsBalance, setDfsBalance] = useState<BigNumber>()
   const [totalSavings, setTotalSaving] = useState<BigNumber>()
   const [socialReward, setSocialReward] = useState<BigNumber>()
+  const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
+
   useEffect(() => {
     if (account) {
       dfsMineContract.pendingSocialReward(account).then((res) => setPendingReward(res))
@@ -124,6 +126,7 @@ const Reward = () => {
       dfsMineContract.stakeInfo(account).then((res) => setStake(res))
       bondContract.addressToReferral(account).then((res) => setBondReward(res.bondReward))
       dfsContract.balanceOf(account).then((res) => setDfsBalance(res))
+      dfsMineContract.epoch().then((res) => setNextSavingInterestChangeTime(new Date(res.endTime * 1000)))
     }
   }, [account, amount])
 
@@ -131,9 +134,9 @@ const Reward = () => {
   const savingVestingSeconds = 300 * 24 * 3600
   const nextTime = new Date(Date.now())
   // const nextTime = nextSavingsStakingPayoutTime ? new Date(nextSavingsStakingPayoutTime?.toNumber() * 1000) : new Date(Date.now())
-  const nextSavingInterestChange = `${nextTime?.toLocaleDateString().replace(/\//g, '-')} ${nextTime
-    ?.toTimeString()
-    .slice(0, 8)}`
+  const nextSavingPayoutTime = `${nextSavingInterestChange
+    ?.toLocaleDateString()
+    .replace(/\//g, '-')} ${nextSavingInterestChange?.toTimeString().slice(0, 8)}`
   const epochLength = 8 * 3600
   const rewardInterest = formatNumber(
     Number.isNaN(epochLength / rewardVestingSeconds) ? 0 : (epochLength / rewardVestingSeconds) * 100,
@@ -143,7 +146,7 @@ const Reward = () => {
     ? 0
     : (epochLength / savingVestingSeconds) * 100
 
-  const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : (1 + savingInterest / 100) ** 15 - 1, 2)
+  const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : ((1 + savingInterest / 100) ** 15 - 1) * 100, 2)
   const myLockedPower = BigNumber.from(stake?.power ?? 0)
     .mul(2)
     .toString()
@@ -384,8 +387,8 @@ const Reward = () => {
               <Grid item lg={4} md={4} sm={12} xs={12}>
                 <CardItem isMobile={isMobile}>
                   <DataCell
-                    label={t('Next payout timing')}
-                    value={nextSavingInterestChange}
+                    label={t('Next payout time')}
+                    value={nextSavingPayoutTime}
                     position="horizontal"
                     valueDivStyle={{ fontSize: '14px' }}
                   />
@@ -432,8 +435,8 @@ const Reward = () => {
               <Grid item lg={4} md={4} sm={12} xs={12}>
                 <CardItem isMobile={isMobile} className="hasBorder">
                   <MoneyInput
-                    prefix="$"
-                    suffix="ALL"
+                    prefix=""
+                    suffix="DFS"
                     value={amount?.toString()}
                     onInput={(e: any) => setAmount(e.target.value)}
                   />

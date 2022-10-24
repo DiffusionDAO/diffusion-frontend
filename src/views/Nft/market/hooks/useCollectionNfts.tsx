@@ -31,7 +31,7 @@ import uniqBy from 'lodash/uniqBy'
 import fromPairs from 'lodash/fromPairs'
 import { getNftMarketContract, getContract } from 'utils/contractHelpers'
 import { useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
-import { getNFTDatabaseAddress, getNftMarketAddress } from 'utils/addressHelpers'
+import { getNFTDatabaseAddress, getNftMarketAddress, getStarlightAddress } from 'utils/addressHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { dfsName, CollectionData, NFT, nftToNftToken } from 'pages/profile/[accountAddress]'
 import useSWR from 'swr'
@@ -212,15 +212,22 @@ export const useCollectionNfts = (collectionAddress: string) => {
         const tokenIdString = tokenId.toString()
         const nft: NFT = await nftDatabase.getToken(collectionAddress, tokenIdString)
         const level = nft.level.toString()
+        let thumbnail = `/images/nfts/${nft.level.toString()}`
+        let name = `${dfsName[level]}#${tokenIdString}`
+        const starLightAddress = getStarlightAddress()
+        if (collectionAddress === starLightAddress) {
+          thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
+          name = `StarLight#${tokenId}`
+        }
         const token = {
           tokenId: tokenIdString,
-          name: `${dfsName[level]}#${tokenIdString}`,
-          description: dfsName[level],
+          name,
+          description: name,
           collectionName: nft.collectionName,
           collectionAddress: nft.collectionAddress,
           image: {
             original: 'string',
-            thumbnail: `/images/nfts/${level}`,
+            thumbnail,
           },
           attributes: [
             {
