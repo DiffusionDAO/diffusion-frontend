@@ -11,7 +11,7 @@ import {
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRouter } from 'next/router'
-
+import { useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { formatUnits, parseUnits } from '@ethersproject/units'
@@ -91,6 +91,12 @@ const BondGearImg = styled.img`
     `
   }};
 `
+interface noteProps {
+  title: string
+  description: string
+  visible: boolean
+}
+
 const zeroAddress = '0x0000000000000000000000000000000000000000'
 
 const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
@@ -109,6 +115,11 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   const [onPresentSellModal] = useModal(
     <SellModal variant={nft?.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
+  const [noteContent, setNoteContent] = useState<noteProps>({
+    title: '',
+    description: '',
+    visible: false,
+  })
   const { isMobile } = useMatchBreakpoints()
   const ownerButtons = (
     <Flex flexDirection={['column', 'column', 'row']}>
@@ -129,6 +140,11 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
           width={['100%', null, 'max-content']}
           mt="24px"
           onClick={async () => {
+            setNoteContent({
+              title: t('Note'),
+              description: t('15% fees will be charged for unstaking'),
+              visible: true,
+            })
             try {
               const allowance = await dfsContract.allowance(account, dfsMineContract.address)
               if (allowance.eq(0)) {

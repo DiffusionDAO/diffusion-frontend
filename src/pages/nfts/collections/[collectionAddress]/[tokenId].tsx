@@ -54,9 +54,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 1,
     }
   }
-  let thumbnail = `/images/nfts/dfsnft/${nft.level.toString()}`
+  let thumbnail = `/images/nfts/socialnft/${nft.level.toString()}`
   const starLightAddress = getStarlightAddress()
-  if (collectionAddress === starLightAddress || nft.collectionName === 'StarLight') {
+  if (collectionAddress === starLightAddress) {
     thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
   }
   const token: NftToken = {
@@ -70,6 +70,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     staker: nft.staker,
     owner: nft.owner,
     itemId: nft.itemId.toString(),
+    marketData: {
+      tokenId,
+      collection: {
+        id: tokenId,
+      },
+      currentAskPrice: nft.price.toString(),
+      currentSeller: nft.seller,
+      isTradable: nft.price.gt(0) ?? false,
+    },
   }
   return {
     props: {

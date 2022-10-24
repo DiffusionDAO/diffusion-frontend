@@ -35,8 +35,6 @@ import {
   BackgroundText,
   NftSculptureWrap,
   NftSculptureGif,
-  NftGearImg,
-  NftBallImg,
 } from 'views/Nft/market/Profile/components/styles'
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
 import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
@@ -153,6 +151,7 @@ function NftProfilePage() {
       await Promise.all(
         collectionAddresses.map(async (collectionAddress) => {
           const nfts: NFT[] = await nftDatabase.getTokensOfOwner(collectionAddress, account)
+          // console.log(nfts.map(nft=>nft.tokenId.toString()))
           nfts
             .filter((nft) => nft.collectionAddress === dfsNFTAddress)
             .map((nft) => tokens.unstaked.push(nftToNftToken(nft)))
@@ -187,7 +186,7 @@ function NftProfilePage() {
     return { unstaked: [], staked: [], onSale: [] }
   }
   const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
-  console.log('data:', data)
+  // console.log('data:', data)
   useEffect(() => {
     mutate(updateFn())
   }, [account])
@@ -197,7 +196,7 @@ function NftProfilePage() {
     setOnSaleNFT(data?.onSale?.filter((token) => token.seller === account))
   }, [data, status])
   const composeNFT = useNftComposeContract()
-  const dfsNFT = useDFSNftContract()
+  const socialNFT = useDFSNftContract()
   const mine = useDFSMineContract()
   const market = useNftMarketContract()
 
@@ -265,8 +264,6 @@ function NftProfilePage() {
   }
   const startCompound = () => {
     setIsSelected(true)
-    console.log(isSelected)
-    console.log(unstakedNFTs.length)
     setUnstakedNFTs(unstakedNFTs)
     setSelectedNFTs(unstakedNFTs)
     setOption('compose')
@@ -296,7 +293,7 @@ function NftProfilePage() {
       const recipient = await tx.wait()
       const id = BigNumber.from(recipient.events.slice(-1)[0].topics[3])
       const composedTokenId = id.toString()
-      const level = await dfsNFT.getItems(composedTokenId)
+      const level = await socialNFT.getItems(composedTokenId)
       const newNft: NftToken = {
         tokenId: composedTokenId,
         name: greeceNumber[level],
@@ -329,7 +326,6 @@ function NftProfilePage() {
         staker: zeroAddress,
       }
       setComposedNFT([newNft])
-      console.log('selectedTokenIds:', selectedTokenIds)
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
       mutate(updateFn())
@@ -360,10 +356,10 @@ function NftProfilePage() {
   const submitStake = async (selected) => {
     const mineAddress = getMiningAddress()
     const tokenIds = selected.map((item) => item.tokenId)
-    const approved = await dfsNFT.isApprovedForAll(account, mineAddress)
+    const approved = await socialNFT.isApprovedForAll(account, mineAddress)
     let receipt
     if (!approved) {
-      receipt = await dfsNFT.setApprovalForAll(mineAddress, true)
+      receipt = await socialNFT.setApprovalForAll(mineAddress, true)
       await receipt.wait()
     }
     try {
@@ -395,7 +391,7 @@ function NftProfilePage() {
     setSelectedNFTs(selected)
     if (!selected?.length) {
       setNoteContent({
-        title: t('Important notice'),
+        title: t('Note'),
         description: t('Please select one NFT at least'),
         visible: true,
       })

@@ -220,7 +220,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
           thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
           name = `StarLight#${tokenId}`
         } else if (collectionAddress === dfsNFTAddress) {
-          thumbnail = `/images/nfts/dfsnft/starlight${tokenId}.gif`
+          thumbnail = `/images/nfts/socialnft/${level}`
           name = `${dfsName[level]}#${tokenId}`
         }
         const token = {

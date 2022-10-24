@@ -199,6 +199,7 @@ const BondModal: React.FC<BondModalProps> = ({
     setAmount('')
     onClose()
     const parsedAmount = parseUnits(amount, 'ether').toString()
+    console.log(parsedAmount)
     const response = await fetch('https://middle.diffusiondao.org/deposit', {
       method: 'POST',
       headers: {

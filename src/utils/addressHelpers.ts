@@ -144,7 +144,7 @@ export const getIDOAddress = () => {
   return getAddress(addresses.ido)
 }
 export const getDFSNFTAddress = () => {
-  return getAddress(addresses.dfsNFT)
+  return getAddress(addresses.socialNFT)
 }
 export const getStarlightAddress = () => {
   return getAddress(addresses.starlightNft)

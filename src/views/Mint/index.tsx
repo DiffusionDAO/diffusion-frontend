@@ -102,7 +102,7 @@ const Mint = () => {
     }
   }, [account, balance])
 
-  const dfsNFT = useDFSNftContract()
+  const socialNFT = useDFSNftContract()
   const mint = async (type: string, useBond = false) => {
     if (!account) {
       onPresentConnectModal()
@@ -134,7 +134,7 @@ const Mint = () => {
           const id = BigNumber.from(logs[i]?.topics[3])
           const tokenId = id.toString()
           // eslint-disable-next-line no-await-in-loop
-          const level = await dfsNFT.getItems(tokenId)
+          const level = await socialNFT.getItems(tokenId)
           if (!levelTokenIds[level]) levelTokenIds[level] = []
           levelTokenIds[level].push(tokenId)
         }
