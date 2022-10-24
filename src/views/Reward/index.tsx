@@ -71,6 +71,7 @@ interface StakeInfo {
   level: BigNumber
   power: BigNumber
   lockedPower: BigNumber
+  unlockedPower: BigNumber
   socialReward: BigNumber
   socialRewardLocked: BigNumber
   lastSocialRewardWithdraw: BigNumber
@@ -182,7 +183,7 @@ const Reward = () => {
   const myLockedPower = BigNumber.from(stake?.power ?? 0)
     .mul(2)
     .toString()
-  const myTotalPower = BigNumber.from(stake?.power ?? 0).toString()
+  const myTotalPower = BigNumber.from(stake?.power?.add(stake?.unlockedPower ?? 0) ?? 0).toString()
   const greenPower = BigNumber.from(stake?.power ?? 0).toString()
 
   const now = Math.floor(Date.now() / 1000)
