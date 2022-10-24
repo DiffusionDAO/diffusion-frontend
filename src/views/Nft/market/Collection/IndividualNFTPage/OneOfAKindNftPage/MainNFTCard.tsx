@@ -18,9 +18,10 @@ import { formatUnits, parseUnits } from '@ethersproject/units'
 import { BigNumber } from '@ethersproject/bignumber'
 import { NftToken } from 'state/nftMarket/types'
 import styled, { css } from 'styled-components'
-import { useDFSMineContract } from 'hooks/useContract'
+import { useDFSContract, useDFSMineContract } from 'hooks/useContract'
 import { formatNumber } from 'utils/formatBalance'
 import NFTMedia from 'views/Nft/market/components/NFTMedia'
+import { MaxUint256 } from '@ethersproject/constants'
 import EditProfileModal from 'views/Profile/components/EditProfileModal'
 import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
@@ -102,6 +103,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   const { account } = useWeb3React()
   const router = useRouter()
   const dfsMineContract = useDFSMineContract()
+  const dfsContract = useDFSContract()
   const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ?? '0'
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
@@ -128,6 +130,11 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
           mt="24px"
           onClick={async () => {
             try {
+              const allowance = await dfsContract.allowance(account, dfsMineContract.address)
+              if (allowance.eq(0)) {
+                const receipt = await dfsContract.approve(dfsMineContract.address, MaxUint256)
+                await receipt.wait()
+              }
               const receipt = await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
               await receipt.wait()
               router.push(`/profile/${account}`)

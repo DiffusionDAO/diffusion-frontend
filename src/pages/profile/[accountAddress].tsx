@@ -403,7 +403,7 @@ function NftProfilePage() {
     if (option === 'stake') {
       setNoteContent({
         title: t('Note'),
-        description: t('You will stake the NFT to the platform and a 15% fee will be charged when you unstake'),
+        description: t('Obtain SPOS with staking and unstake anytime'),
         visible: true,
       })
     }
