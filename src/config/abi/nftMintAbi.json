@@ -13,12 +13,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "_mintOneAmount",
+        "name": "_mintOneCost",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_mintTwoAmount",
+        "name": "_mintTwoCost",
         "type": "uint256"
       },
       {
@@ -146,7 +146,7 @@
   },
   {
     "inputs": [],
-    "name": "mintOneAmount",
+    "name": "mintOneCost",
     "outputs": [
       {
         "internalType": "uint256",
@@ -183,7 +183,7 @@
   },
   {
     "inputs": [],
-    "name": "mintTwoAmount",
+    "name": "mintTwoCost",
     "outputs": [
       {
         "internalType": "uint256",
@@ -286,17 +286,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_mintOneAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_mintTwoAmount",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_bond",
+        "type": "address"
       }
     ],
-    "name": "setAmount",
+    "name": "setBondAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -304,12 +299,17 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_bond",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "_mintOneCost",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_mintTwoCost",
+        "type": "uint256"
       }
     ],
-    "name": "setBondAddress",
+    "name": "setCost",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

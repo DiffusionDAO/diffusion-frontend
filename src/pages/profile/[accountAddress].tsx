@@ -283,7 +283,7 @@ function NftProfilePage() {
     const value = selectedNFTs[0].attributes[0].value
     let tx
     try {
-      if (selectedTokenIds?.length === 6) {
+      if (selectedTokenIds?.length === 3) {
         tx = await composeNFT.ComposeLv0(selectedTokenIds)
       } else {
         tx = await composeNFT.ComposeLvX(selectedTokenIds, value)
@@ -397,64 +397,55 @@ function NftProfilePage() {
       return
     }
     if (option === 'compose') {
-      if (selected?.length % 2 !== 0 || !selected?.length) {
-        setNoteContent({
-          title: t('Important note'),
-          description: t(
-            'Your selection of NFTs are from different levels of the hierarchy, please select the same level of NFTs to combine',
-          ),
-          visible: true,
-        })
-        return
-      }
       setConfirmModalVisible(true)
       return
     }
     if (option === 'stake') {
       setNoteContent({
-        title: t('Important note'),
-        description: t(
-          'You will stake the NFT to the platform and a 15% handling fee will be charged when you cancel the stake',
-        ),
+        title: t('Note'),
+        description: t('You will stake the NFT to the platform and a 15% fee will be charged when you unstake'),
         visible: true,
       })
     }
   }
 
   const selectNft = (nft) => {
-    nft.selected = !nft.selected
-    const selected = selectedNFTs.filter((item) => item.selected)
-    setSelectedCount(selected?.length)
     if (option === 'compose') {
       const level = nft.attributes[0].value
-      // setSelectedNFTs(unstakedNFTs)
-      // const data = selectedNFTs.filter(nft => nft.attributes[0].value === level && !nft.staker)
-      // data.map((item: NftToken) => {
-      //   if (item.attributes[0].value === nft.attributes[0].value) {
-      //     item.selected = !item.selected
-      //   }
-      // })
+      const data = selectedNFTs.filter((nft) => nft.attributes[0].value === level)
       if (level === '0') {
-        if (selectedNFTs?.length < 6) {
+        if (selectedNFTs?.length < 3) {
           setNoteContent({
-            title: t('Important note'),
-            description: t('need 6 pieces'),
+            title: t('Note'),
+            description: t('Need 3 pieces'),
             visible: true,
           })
         }
-        // const datas = data.slice(0, 6)
-        // setSelectedNFTs(selected)
+        data.slice(0, 3).map((item: NftToken) => {
+          if (item.attributes[0].value === nft.attributes[0].value) {
+            item.selected = !item.selected
+          }
+        })
+        setSelectedNFTs(data.slice(0, 3))
       } else if (level === '6') {
         setNoteContent({
-          title: t('Important note'),
+          title: t('Note'),
           description: t('Unable to compose highest level NFT'),
           visible: true,
         })
+      } else {
+        data.slice(0, 2).map((item: NftToken) => {
+          if (item.attributes[0].value === nft.attributes[0].value) {
+            item.selected = !item.selected
+          }
+        })
+        setSelectedNFTs(data.slice(0, 2))
       }
-      // const datas = data.slice(0, 2)
-      // setSelectedNFTs(datas)
-      // setSelectedNFTs(selected)
+    } else if (option === 'stake') {
+      nft.selected = !nft.selected
     }
+    const selected = selectedNFTs.filter((item) => item.selected)
+    setSelectedCount(selected?.length)
   }
   const tabs = [
     { key: 'WithoutStake', label: t('Not Staked'), length: unstakedNFTs?.length ?? 0 },

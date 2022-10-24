@@ -57,13 +57,18 @@ const Mint = () => {
   const nftMintAddress = getNftMintAddress()
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
-  const [bondPayout, setBondPayout] = useState('')
+  const [bondPayout, setBondPayout] = useState<string>('0')
+  const [ordinaryPrice, setOneCost] = useState<BigNumber>(BigNumber.from(0))
+  const [seniorPrice, setTwoCost] = useState<BigNumber>(BigNumber.from(0))
 
+  const mintContract = useNFTMintContract()
+  useEffect(() => {
+    mintContract.mintOneCost().then((oneCost) => setOneCost(oneCost))
+    mintContract.mintTwoCost().then((twoCost) => setTwoCost(twoCost))
+  })
   const dfsAddress = getDFSAddress()
   const DFS = useERC20(dfsAddress)
 
-  const ordinaryPrice = BigNumber.from(10).pow(18).mul(10)
-  const seniorPrice = BigNumber.from(10).pow(18).mul(60)
   const NFTMint = useNFTMintContract()
   const bond = useBondContract()
 
@@ -86,11 +91,14 @@ const Mint = () => {
         .catch((error) => {
           console.log(error)
         })
-
-      const maxOrd = balance.div(ordinaryPrice)
-      const maxSen = balance.div(seniorPrice)
-      setMaxOrdinary(maxOrd)
-      setMaxSenior(maxSen)
+      if (ordinaryPrice.gt(0)) {
+        const maxOrd = balance.div(ordinaryPrice)
+        setMaxOrdinary(maxOrd)
+      }
+      if (seniorPrice.gt(0)) {
+        const maxSen = balance.div(seniorPrice)
+        setMaxSenior(maxSen)
+      }
     }
   }, [account, balance])
 
