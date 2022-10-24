@@ -82,7 +82,6 @@ const Bond = () => {
     setIsApprove(false)
     usdt.allowance(account, bondAddress).then((res) => {
       if (res.gt(0)) {
-        console.log('setIsApprove', res)
         setIsApprove(true)
       }
     })

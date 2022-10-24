@@ -197,26 +197,25 @@ export const Petal = styled.img`
 `
 
 export const RewardText = styled.div`
-  height: 21px;
-  font-size: 18px;
+  height: 14px;
+  font-size: 14px;
   font-family: HelveticaNeue-CondensedBold, HelveticaNeue;
   font-weight: normal;
   color: grey;
   line-height: 21px;
 `
 export const RewardValueDiv = styled.div`
-  height: 50px;
-  font-size: 35px;
+  font-size: 20px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   color: #ffffff;
-  line-height: 50px;
+  line-height: 30px;
   text-shadow: 0px 2px 27px rgba(255, 255, 255, 0.5);
 `
 export const ExtractBtn = styled.div`
   width: 124px;
   height: 40px;
-  margin: 20px 0;
+  margin: 0 0 10px 0;
   border-radius: 8px;
   color: #fff;
   line-height: 40px;

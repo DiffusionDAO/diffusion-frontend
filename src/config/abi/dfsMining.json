@@ -275,7 +275,7 @@
   },
   {
     "inputs": [],
-    "name": "getParticipants",
+    "name": "getStakers",
     "outputs": [
       {
         "internalType": "address[]",
@@ -327,11 +327,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_user",
+        "name": "_staker",
         "type": "address"
       }
     ],
-    "name": "includeUser",
+    "name": "includeStaker",
     "outputs": [
       {
         "internalType": "bool",
@@ -377,25 +377,6 @@
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "participants",
     "outputs": [
       {
         "internalType": "address",
@@ -763,6 +744,44 @@
       }
     ],
     "name": "stakedByOwnerIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "stakers",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "stakersIndex",
     "outputs": [
       {
         "internalType": "uint256",

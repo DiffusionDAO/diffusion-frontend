@@ -66,6 +66,25 @@ import DataCell from '../../components/ListDataCell'
 import DetailModal from './components/DetailModal'
 import NoPower from './components/NoPower'
 
+interface StakeInfo {
+  self: string
+  level: BigNumber
+  power: BigNumber
+  lockedPower: BigNumber
+  socialReward: BigNumber
+  socialRewardLocked: BigNumber
+  lastSocialRewardWithdraw: BigNumber
+  savings: BigNumber
+  stakedSavings: BigNumber
+  lastSavingsWithdraw: BigNumber
+}
+interface Referral {
+  self: string
+  level: BigNumber
+  bondReward: BigNumber
+  bondRewardLocked: BigNumber
+  lastBondRewardWithdraw: BigNumber
+}
 const Reward = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -77,7 +96,18 @@ const Reward = () => {
   const [socialRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
   const [referrals, setReferrals] = useState({})
   const [me, setMe] = useState<any>({})
-  const [stake, setStake] = useState<any>({})
+  const [stake, setStake] = useState<StakeInfo>()
+  const [stakers, setStakers] = useState<string[]>()
+  const zeroAddress = '0x0000000000000000000000000000000000000000'
+  const [bondReward, setBondReward] = useState<BigNumber>()
+  const [pendingSocialReward, setPendingReward] = useState()
+  const [DfsBalance, setDfsBalance] = useState<BigNumber>()
+  const [totalSavings, setTotalSaving] = useState<BigNumber>()
+  const [socialReward, setSocialReward] = useState<BigNumber>()
+  const [pendingBondReward, setPendingBondReward] = useState<BigNumber>()
+  const [referral, setReferral] = useState<Referral>()
+  const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
+  const [unpaidBondReward, setUnpaidBondReward] = useState<string>()
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -111,22 +141,24 @@ const Reward = () => {
   const closeDetailModal = () => {
     setBondRewardDetailModalVisible(false)
   }
-  const zeroAddress = '0x0000000000000000000000000000000000000000'
-  const [bondReward, setBondReward] = useState<BigNumber>()
-  const [pendingSocialReward, setPendingReward] = useState()
-  const [DfsBalance, setDfsBalance] = useState<BigNumber>()
-  const [totalSavings, setTotalSaving] = useState<BigNumber>()
-  const [socialReward, setSocialReward] = useState<BigNumber>()
-  const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
 
   useEffect(() => {
     if (account) {
       dfsMineContract.pendingSocialReward(account).then((res) => setPendingReward(res))
       dfsMineContract.totalRewards().then((res) => setTotalSaving(res))
-      dfsMineContract.stakeInfo(account).then((res) => setStake(res))
-      bondContract.addressToReferral(account).then((res) => setBondReward(res.bondReward))
-      dfsContract.balanceOf(account).then((res) => setDfsBalance(res))
+      dfsMineContract.stakeInfo(account).then((stakeInfo) => {
+        setStake(stakeInfo)
+      })
+      dfsMineContract.getStakers().then((res) => setStakers(res))
       dfsMineContract.epoch().then((res) => setNextSavingInterestChangeTime(new Date(res.endTime * 1000)))
+      bondContract.pendingBondReward(account).then((res) => setPendingBondReward(res))
+      bondContract.addressToReferral(account).then((referral) => {
+        setReferral(referral)
+        setUnpaidBondReward(
+          formatBigNumber(BigNumber.from(referral?.bondRewardLocked?.sub(pendingBondReward ?? BigNumber.from(0))), 6),
+        )
+      })
+      dfsContract.balanceOf(account).then((res) => setDfsBalance(res))
     }
   }, [account, amount])
 
@@ -206,13 +238,13 @@ const Reward = () => {
               centeredSlides
               navigation
               onSwiper={(swiper) => {
-                swiper.slideTo(stake?.level?.toString())
+                swiper.slideTo(stake?.level?.toNumber())
               }}
               onSlideChange={(swiper) => {
-                swiper.slideTo(stake?.level?.toString())
+                swiper.slideTo(stake?.level?.toNumber())
               }}
               onUpdate={(swiper) => {
-                swiper.slideTo(stake?.level?.toString())
+                swiper.slideTo(stake?.level?.toNumber())
               }}
               // onActiveIndexChange={updateSwiper}
             >
@@ -263,6 +295,10 @@ const Reward = () => {
                 >
                   {t('Withdraw')}
                 </ExtractBtn>
+                <RewardText>{t('Unpaid Bond Rewards')}</RewardText>
+                <RewardValueDiv>
+                  {formatBigNumber(referral?.bondRewardLocked?.sub(pendingBondReward) ?? BigNumber.from(0), 2)}
+                </RewardValueDiv>
               </DiffusionGoldWrap>
             </Grid>
             <Grid item lg={8} md={8} sm={12} xs={12}>
@@ -331,10 +367,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem4.png" />
                           )}
                           <MySposDashboardValue className="alignRight" style={{ color: '#E7A4FF' }}>
-                            {
-                              Object.values(referrals).filter((referral: any) => BigNumber.from(referral.power).gt(0))
-                                .length
-                            }
+                            {stakers?.length ?? 0}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Networking headcount')}</MySposDashboardDes>
                         </MySposDashboardItem>
