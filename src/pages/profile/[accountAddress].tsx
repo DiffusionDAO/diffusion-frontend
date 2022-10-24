@@ -104,7 +104,7 @@ export const nftToNftToken = (nft: NFT) => {
     collectionAddress: nft.collectionAddress,
     image: {
       original: 'string',
-      thumbnail: `/images/nfts/${level}`,
+      thumbnail: `/images/nfts/socialnft/${level}`,
     },
     attributes: [
       {
@@ -302,7 +302,7 @@ function NftProfilePage() {
         collectionAddress: dfsNFTAddress,
         image: {
           original: 'string',
-          thumbnail: `/images/nfts/${level}`,
+          thumbnail: `/images/nfts/socialnft/${level}`,
         },
         attributes: [
           {
