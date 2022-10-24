@@ -357,7 +357,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>
-                            {myTotalPower ?? '0'}
+                            {stake?.unlockedPower?.toString() ?? '0'}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Networking unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
