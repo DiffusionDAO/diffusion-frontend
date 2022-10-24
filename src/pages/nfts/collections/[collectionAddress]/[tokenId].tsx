@@ -54,9 +54,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 1,
     }
   }
-  let thumbnail = `/images/nfts/${nft.level.toString()}`
+  let thumbnail = `/images/nfts/dfsnft/${nft.level.toString()}`
   const starLightAddress = getStarlightAddress()
-  if (collectionAddress === starLightAddress) {
+  if (collectionAddress === starLightAddress || nft.collectionName === 'StarLight') {
     thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
   }
   const token: NftToken = {

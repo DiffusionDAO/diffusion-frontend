@@ -153,7 +153,9 @@ function NftProfilePage() {
       await Promise.all(
         collectionAddresses.map(async (collectionAddress) => {
           const nfts: NFT[] = await nftDatabase.getTokensOfOwner(collectionAddress, account)
-          nfts.map((nft) => tokens.unstaked.push(nftToNftToken(nft)))
+          nfts
+            .filter((nft) => nft.collectionAddress === dfsNFTAddress)
+            .map((nft) => tokens.unstaked.push(nftToNftToken(nft)))
         }),
       )
       await Promise.all(
@@ -171,7 +173,10 @@ function NftProfilePage() {
           const staked = await dfsMining.getTokensStakedByOwner(dfsNFTAddress, account)
           await Promise.all(
             staked.map(async (tokenId) => {
-              tokens.staked.push(nftToNftToken(await nftDatabase.getToken(collectionAddress, tokenId)))
+              const token = await nftDatabase.getToken(collectionAddress, tokenId)
+              if (token.collectionAddress === dfsNFTAddress) {
+                tokens.staked.push(nftToNftToken(token))
+              }
             }),
           )
         }),

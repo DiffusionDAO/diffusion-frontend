@@ -56,9 +56,9 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const nftDatabase = useNFTDatabaseContract()
   useEffect(() => {
     nftDatabase.getToken(collectionAddress, tokenId).then((res) => {
-      let thumbnail = `/images/nfts/${res.level.toString()}`
+      let thumbnail = `/images/nfts/dfsnft/${res.level.toString()}`
       const starLightAddress = getStarlightAddress()
-      if (res.collectionAddress === starLightAddress) {
+      if (res.collectionAddress === starLightAddress || res.collectionName === 'StarLight') {
         thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
       }
       const nft: NftToken = {
