@@ -15,6 +15,7 @@ import { getNFTDatabaseAddress, getNftMarketAddress } from 'utils/addressHelpers
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { CollectionData } from 'pages/profile/[accountAddress]'
+import { formatUnits } from '@ethersproject/units'
 
 import {
   ApiCollection,
@@ -54,6 +55,7 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
         avatar: collection.avatar,
         banner: collection.banner,
         totalSupply: collection.totalSupply,
+        totalVolume: collection.totalVolume,
       }
       return apiCollection
     }),
@@ -110,8 +112,8 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
         id: '',
         symbol: '',
         active: true,
-        totalVolumeBNB: collectionData.totalVolumeBNB.toString(),
-        totalSupply: collectionData.totalSupply.toString(),
+        totalVolume: formatUnits(BigNumber.from(collectionData?.totalVolume), 'ether'),
+        totalSupply: collectionData?.totalSupply,
         avatar: collectionData.avatar,
         banner: { large: collectionData.banner.large, small: collectionData.banner.small },
       },

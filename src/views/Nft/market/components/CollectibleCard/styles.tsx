@@ -27,7 +27,7 @@ interface BNBAmountLabelProps extends FlexProps {
   amount: number
 }
 
-export const BNBAmountLabel: React.FC<React.PropsWithChildren<BNBAmountLabelProps>> = ({ amount, ...props }) => (
+export const DFSAmountLabel: React.FC<React.PropsWithChildren<BNBAmountLabelProps>> = ({ amount, ...props }) => (
   <Flex alignItems="center" {...props}>
     <BinanceIcon width="16px" height="16px" mx="4px" />
     <Text fontWeight="600">
@@ -55,7 +55,7 @@ export const CostLabel: React.FC<React.PropsWithChildren<CostLabelProps>> = ({ c
           maximumFractionDigits: 2,
         })})`}</Text>
       )} */}
-      <BNBAmountLabel amount={cost} />
+      <DFSAmountLabel amount={cost} />
     </Flex>
   )
 }

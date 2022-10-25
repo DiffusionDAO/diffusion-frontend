@@ -6,8 +6,9 @@ import { useTranslation } from '@pancakeswap/localization'
 import toBuffer from 'it-to-buffer'
 import { create } from 'ipfs-http-client'
 import { useEffect } from 'react'
+import { formatUnits } from '@ethersproject/units'
 import { CollectionCard } from '../components/CollectibleCard'
-import { BNBAmountLabel } from '../components/CollectibleCard/styles'
+import { DFSAmountLabel } from '../components/CollectibleCard/styles'
 
 const ipfs = create({
   host: '207.148.117.145',
@@ -55,7 +56,9 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
                 <Text fontSize="12px" color="textSubtle">
                   {t('Volume')}
                 </Text>
-                <BNBAmountLabel amount={collection?.totalVolumeBNB ? parseFloat(collection?.totalVolumeBNB) : 0} />
+                <DFSAmountLabel
+                  amount={collection?.totalVolume ? Number(formatUnits(collection?.totalVolume, 'ether')) : 0}
+                />
               </Flex>
             </CollectionCard>
           )

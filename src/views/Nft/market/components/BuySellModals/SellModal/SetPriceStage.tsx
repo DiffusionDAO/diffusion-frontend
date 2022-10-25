@@ -7,7 +7,7 @@ import { useGetCollection } from 'state/nftMarket/hooks'
 import { useBondContract } from 'hooks/useContract'
 import useSWR from 'swr'
 import { Divider } from '../shared/styles'
-import { GreyedOutContainer, BnbAmountCell, RightAlignedInput, FeeAmountCell } from './styles'
+import { GreyedOutContainer, DfsAmountCell, RightAlignedInput, FeeAmountCell } from './styles'
 
 interface SetPriceStageProps {
   nftToSell: NftToken
@@ -159,7 +159,7 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
             {t('Platform fee if sold')}
           </Text>
           {Number.isFinite(creatorFeeAsNumber) && Number.isFinite(tradingFeeAsNumber) ? (
-            <FeeAmountCell bnbAmount={priceAsFloat} creatorFee={creatorFeeAsNumber} tradingFee={tradingFeeAsNumber} />
+            <FeeAmountCell dfsAmount={priceAsFloat} creatorFee={creatorFeeAsNumber} tradingFee={tradingFeeAsNumber} />
           ) : (
             <Skeleton width={40} />
           )}
@@ -169,7 +169,7 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
             <Text small color="textSubtle">
               {t('Lowest price on market')}
             </Text>
-            <BnbAmountCell bnbAmount={lowestPrice} />
+            <DfsAmountCell dfsAmount={lowestPrice} />
           </Flex>
         )}
       </GreyedOutContainer>
@@ -182,7 +182,7 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
             {t('The NFT will be removed from your wallet and put on sale at this price.')}
           </Text>
           <Text small color="textSubtle">
-            {t('Sales are in DFS. You can swap DFS to BNB 1:1 for free with PancakeSwap.')}
+            {t('Sales are in DFS.')}
           </Text>
         </Box>
       </Grid>

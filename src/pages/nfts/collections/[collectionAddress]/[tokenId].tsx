@@ -56,7 +56,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 1,
     }
   }
-  let thumbnail = `/images/nfts/socialnft/${nft.level.toString()}`
+  let thumbnail = `/images/nfts/socialnft/${nft?.level?.toString()}`
   const starLightAddress = getStarlightAddress()
   if (collectionAddress === starLightAddress) {
     thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
@@ -68,10 +68,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     name: nft.collectionName,
     description: nft.collectionName,
     image: { original: 'string', thumbnail },
-    attributes: [{ value: nft.level.toString() }],
+    attributes: [{ value: nft?.level?.toString() }],
     staker: nft.staker,
     owner: nft.owner,
-    itemId: nft.itemId.toString(),
+    itemId: nft?.itemId?.toString(),
     marketData: {
       tokenId,
       collection: {

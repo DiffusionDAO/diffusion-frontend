@@ -119,7 +119,7 @@ export interface Collection {
   description?: string
   symbol: string
   active: boolean
-  totalVolumeBNB: string
+  totalVolume: string
   numberTokensListed?: string
   tradingFee?: string
   creatorFee?: string
@@ -158,6 +158,7 @@ export interface ApiCollection {
   description?: string
   symbol?: string
   totalSupply: string
+  totalVolume?: string
   verified?: boolean
   createdAt?: string
   updatedAt?: string
@@ -266,7 +267,7 @@ export interface CollectionMarketDataBaseFields {
   symbol: string
   active: boolean
   totalTrades: string
-  totalVolumeBNB: string
+  totalVolume: string
   numberTokensListed: string
   creatorAddress: string
   tradingFee: string

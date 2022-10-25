@@ -35,7 +35,7 @@ export const collectionBaseFields = `
   symbol
   active
   totalTrades
-  totalVolumeBNB
+  totalVolume
   numberTokensListed
   creatorAddress
   tradingFee

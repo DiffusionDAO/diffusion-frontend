@@ -33,13 +33,13 @@ import { nftsBaseUrl } from 'views/Nft/market/constants'
 import PageLoader from 'components/Loader/PageLoader'
 import ToggleView from 'components/ToggleView/ToggleView'
 import { CollectionCard } from '../components/CollectibleCard'
-import { BNBAmountLabel } from '../components/CollectibleCard/styles'
+import { DFSAmountLabel } from '../components/CollectibleCard/styles'
 
 export const ITEMS_PER_PAGE = 9
 
 const SORT_FIELD = {
   createdAt: 'createdAt',
-  volumeBNB: 'totalVolumeBNB',
+  volumeBNB: 'totalVolume',
   items: 'numberTokensListed',
   supply: 'totalSupply',
   lowestPrice: 'lowestPrice',
@@ -278,8 +278,8 @@ const Collectible = () => {
                   <tbody>
                     {sortedCollections
                       .map((collection) => {
-                        const volume = collection.totalVolumeBNB
-                          ? parseFloat(collection.totalVolumeBNB).toLocaleString(undefined, {
+                        const volume = collection.totalVolume
+                          ? parseFloat(collection.totalVolume).toLocaleString(undefined, {
                               minimumFractionDigits: 3,
                               maximumFractionDigits: 3,
                             })
@@ -344,7 +344,7 @@ const Collectible = () => {
                         <Text fontSize="12px" color="textSubtle">
                           {t('Volume')}
                         </Text>
-                        <BNBAmountLabel amount={data?.totalVolumeBNB ? parseFloat(data?.totalVolumeBNB) : 0} />
+                        <DFSAmountLabel amount={data?.totalVolume ? parseFloat(data?.totalVolume) : 0} />
                       </Flex>
                     </CollectionCard>
                   )

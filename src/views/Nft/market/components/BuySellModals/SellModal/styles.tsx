@@ -37,13 +37,13 @@ export const RightAlignedInput = styled(Input)`
   text-align: right;
 `
 
-interface BnbAmountCellProps {
-  bnbAmount: number
+interface DfsAmountCellProps {
+  dfsAmount: number
 }
 
-export const BnbAmountCell: React.FC<React.PropsWithChildren<BnbAmountCellProps>> = ({ bnbAmount }) => {
+export const DfsAmountCell: React.FC<React.PropsWithChildren<DfsAmountCellProps>> = ({ dfsAmount }) => {
   const bnbBusdPrice = useBNBBusdPrice()
-  if (!bnbAmount || bnbAmount === 0) {
+  if (!dfsAmount || dfsAmount === 0) {
     return (
       <Flex alignItems="center" justifyContent="flex-end">
         <BinanceIcon width={16} height={16} mr="4px" />
@@ -53,11 +53,11 @@ export const BnbAmountCell: React.FC<React.PropsWithChildren<BnbAmountCellProps>
       </Flex>
     )
   }
-  const usdAmount = multiplyPriceByAmount(bnbBusdPrice, bnbAmount)
+  const usdAmount = multiplyPriceByAmount(bnbBusdPrice, dfsAmount)
   return (
     <Flex alignItems="center" justifyContent="flex-end">
       <BinanceIcon width={16} height={16} mr="4px" />
-      <Text bold mr="4px">{`${bnbAmount.toLocaleString(undefined, {
+      <Text bold mr="4px">{`${dfsAmount.toLocaleString(undefined, {
         minimumFractionDigits: 3,
         maximumFractionDigits: 3,
       })}`}</Text>
@@ -72,17 +72,17 @@ export const BnbAmountCell: React.FC<React.PropsWithChildren<BnbAmountCellProps>
 }
 
 interface FeeAmountCellProps {
-  bnbAmount: number
+  dfsAmount: number
   creatorFee: number
   tradingFee: number
 }
 
 export const FeeAmountCell: React.FC<React.PropsWithChildren<FeeAmountCellProps>> = ({
-  bnbAmount,
+  dfsAmount,
   creatorFee,
   tradingFee,
 }) => {
-  if (!bnbAmount || bnbAmount === 0) {
+  if (!dfsAmount || dfsAmount === 0) {
     return (
       <Flex alignItems="center" justifyContent="flex-end">
         <BinanceIcon width={16} height={16} mr="4px" />
@@ -95,7 +95,7 @@ export const FeeAmountCell: React.FC<React.PropsWithChildren<FeeAmountCellProps>
 
   const totalFee = creatorFee + tradingFee
   const totalFeeAsDecimal = totalFee / 100
-  const feeAmount = bnbAmount * totalFeeAsDecimal
+  const feeAmount = dfsAmount * totalFeeAsDecimal
   return (
     <Flex alignItems="center" justifyContent="flex-end">
       <BinanceIcon width={16} height={16} mr="4px" />

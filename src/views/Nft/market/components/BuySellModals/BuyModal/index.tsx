@@ -1,20 +1,24 @@
 import { MaxUint256, Zero } from '@ethersproject/constants'
+import { TransactionResponse } from '@ethersproject/providers'
 import { formatEther, parseUnits } from '@ethersproject/units'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { ChainId } from '@pancakeswap/sdk'
 import { bscTokens } from '@pancakeswap/tokens'
 import { InjectedModalProps, useToast } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
+import BigNumber from 'bignumber.js'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useNftMarketContract } from 'hooks/useContract'
+import { useDFSContract, useERC20, useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
+import { NFT } from 'pages/profile/[accountAddress]'
 import { useEffect, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
+import { getDFSAddress } from 'utils/addressHelpers'
 import { ethersToBigNumber } from 'utils/bigNumber'
-import { getBalanceNumber } from 'utils/formatBalance'
+import { formatBigNumber, formatNumber, getBalanceNumber } from 'utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
 import ApproveAndConfirmStage from '../shared/ApproveAndConfirmStage'
 import ConfirmStage from '../shared/ConfirmStage'
@@ -40,17 +44,29 @@ const TESTNET_WBNB_NFT_ADDRESS = '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, onDismiss }) => {
   const [stage, setStage] = useState(BuyingStage.REVIEW)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
-  const [paymentCurrency, setPaymentCurrency] = useState<PaymentCurrency>(PaymentCurrency.BNB)
+  const [paymentCurrency, setPaymentCurrency] = useState<PaymentCurrency>(PaymentCurrency.DFS)
   const [isPaymentCurrentInitialized, setIsPaymentCurrentInitialized] = useState(false)
   const { theme } = useTheme()
   const { t } = useTranslation()
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const { account, chainId } = useWeb3React()
-  const wbnbAddress = chainId === ChainId.BSC_TESTNET ? TESTNET_WBNB_NFT_ADDRESS : bscTokens.wbnb.address
-  const wbnbContractReader = useERC20(wbnbAddress, false)
-  const wbnbContractApprover = useERC20(wbnbAddress)
+  const dfsAddress = getDFSAddress()
+  const dfsContractReader = useERC20(dfsAddress, false)
+  const dfsContractApprover = useERC20(dfsAddress)
   const nftMarketContract = useNftMarketContract()
+
+  const database = useNFTDatabaseContract()
+  const dfsContract = useERC20(dfsAddress)
+
+  // useEffect(() => {
+  //   dfsContract.allowance(account, nftMarketContract.address).then(allowance => {
+  //     if (allowance.eq(0)) {
+  //       dfsContract.approve(nftMarketContract.address, MaxUint256).then(res => {
+  //       })
+  //     }
+  //   }).catch(error => console.log(error))
+  // }, [account])
 
   const { toastSuccess } = useToast()
 
@@ -58,33 +74,29 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
   const nftPrice = parseFloat(nftToBuy?.marketData?.currentAskPrice)
 
   // BNB - returns ethers.BigNumber
-  const { balance: bnbBalance, fetchStatus: bnbFetchStatus } = useGetBnbBalance()
-  const formattedBnbBalance = parseFloat(formatEther(bnbBalance))
-  // WBNB - returns BigNumber
-  const { balance: wbnbBalance, fetchStatus: wbnbFetchStatus } = useTokenBalance(wbnbAddress)
-  const formattedWbnbBalance = getBalanceNumber(wbnbBalance)
+  // const { balance: walletBalance, fetchStatus: bnbFetchStatus } = useGetBnbBalance()
+  // const formattedBnbBalance = parseFloat(formatEther(walletBalance))
+  // // WBNB - returns BigNumber
+  // const { balance: wbnbBalance, fetchStatus: wbnbFetchStatus } = useTokenBalance(wbnbAddress)
+  // const formattedWbnbBalance = getBalanceNumber(wbnbBalance)
 
-  const walletBalance = paymentCurrency === PaymentCurrency.BNB ? formattedBnbBalance : formattedWbnbBalance
-  const walletFetchStatus = paymentCurrency === PaymentCurrency.BNB ? bnbFetchStatus : wbnbFetchStatus
-
-  const notEnoughBnbForPurchase =
-    paymentCurrency === PaymentCurrency.BNB
-      ? bnbBalance.lt(nftPriceWei)
-      : wbnbBalance.lt(ethersToBigNumber(nftPriceWei))
-
+  // const walletBalance = paymentCurrency === PaymentCurrency.BNB ? formattedBnbBalance : formattedWbnbBalance
+  const { balance: walletBalance, fetchStatus: walletFetchStatus } = useTokenBalance(getDFSAddress())
+  const walletBalanceNumber = walletBalance.div(10 ** 18).toNumber()
+  const notEnoughBnbForPurchase = walletBalance.lt(ethersToBigNumber(nftPriceWei)) ?? false
   useEffect(() => {
-    if (bnbBalance.lt(nftPriceWei) && wbnbBalance.gte(ethersToBigNumber(nftPriceWei)) && !isPaymentCurrentInitialized) {
+    if (walletBalance.lt(ethersToBigNumber(nftPriceWei)) && !isPaymentCurrentInitialized) {
       setPaymentCurrency(PaymentCurrency.WBNB)
       setIsPaymentCurrentInitialized(true)
     }
-  }, [bnbBalance, wbnbBalance, nftPriceWei, isPaymentCurrentInitialized])
+  }, [walletBalance, nftPriceWei, isPaymentCurrentInitialized])
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
-      return requiresApproval(wbnbContractReader, account, nftMarketContract.address)
+      return requiresApproval(dfsContract, account, nftMarketContract.address)
     },
     onApprove: () => {
-      return callWithGasPrice(wbnbContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
+      return callWithGasPrice(dfsContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
@@ -93,17 +105,23 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
       )
     },
     onConfirm: () => {
-      const payAmount = Number.isNaN(nftPrice) ? Zero : parseUnits(nftToBuy?.marketData?.currentAskPrice)
-      if (paymentCurrency === PaymentCurrency.BNB) {
-        return callWithGasPrice(nftMarketContract, 'buyTokenUsingBNB', [nftToBuy.collectionAddress, nftToBuy.tokenId], {
-          value: payAmount,
+      /* eslint-disable no-param-reassign */
+
+      // const payAmount = Number.isNaN(nftPrice) ? Zero : parseUnits(nftToBuy?.marketData?.currentAskPrice)
+      const transactionResponse: Promise<TransactionResponse> = callWithGasPrice(
+        nftMarketContract,
+        'createMarketSaleByERC20',
+        [nftToBuy.itemId],
+      )
+      transactionResponse.then((response) => {
+        response.wait().then((res) => {
+          database.getToken(nftToBuy.collectionAddress, nftToBuy.tokenId).then((nft: NFT) => {
+            nftToBuy.marketData.isTradable = false
+            nftToBuy.marketData.currentSeller = account
+          })
         })
-      }
-      return callWithGasPrice(nftMarketContract, 'buyTokenUsingWBNB', [
-        nftToBuy.collectionAddress,
-        nftToBuy.tokenId,
-        payAmount,
-      ])
+      })
+      return transactionResponse
     },
     onSuccess: async ({ receipt }) => {
       setConfirmedTxHash(receipt.transactionHash)
@@ -143,7 +161,7 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
           paymentCurrency={paymentCurrency}
           setPaymentCurrency={setPaymentCurrency}
           nftPrice={nftPrice}
-          walletBalance={walletBalance}
+          walletBalance={walletBalanceNumber}
           walletFetchStatus={walletFetchStatus}
           notEnoughBnbForPurchase={notEnoughBnbForPurchase}
           continueToNextStage={continueToNextStage}

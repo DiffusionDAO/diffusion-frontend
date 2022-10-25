@@ -18,7 +18,7 @@ const DELIST_COLLECTIONS = {
     symbol: 'POT',
     totalSupply: '',
     totalTrades: '',
-    totalVolumeBNB: '',
+    totalVolume: '',
     tradingFee: '',
     updatedAt: '',
     verified: true,

@@ -96,7 +96,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   if (!nft || !collection) {
     return <PageLoader />
   }
-  const isOwnNft = nft?.marketData?.currentSeller === account
+  const isOwnNft = nft?.marketData?.currentSeller === account || nft?.owner === account
   const nftIsProfilePic = false
   return (
     <PageWrap>

@@ -74,7 +74,7 @@ export interface NFT {
 export interface CollectionData {
   collectionAddress: string
   name: string
-  totalVolumeBNB: string
+  totalVolume: string
   totalSupply: string
   avatar: string
   banner: {

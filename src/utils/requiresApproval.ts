@@ -13,6 +13,7 @@ export const requiresApproval = async (
       (typeof minimumRequired === 'number' && minimumRequired > 0) ||
       (BigNumber.isBigNumber(minimumRequired) && minimumRequired.gt(0))
     if (hasMinimumRequired) {
+      console.log('requiresApproval:', response)
       return response.lt(minimumRequired)
     }
     return response.lte(0)

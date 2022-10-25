@@ -6,7 +6,7 @@ import { NftToken } from 'state/nftMarket/types'
 import { getBscScanLinkForNft } from 'utils'
 import { FetchStatus } from 'config/constants/types'
 import { Divider, RoundedImage } from '../shared/styles'
-import { BorderedBox, BnbAmountCell } from './styles'
+import { BorderedBox, DfsAmountCell } from './styles'
 import { PaymentCurrency } from './types'
 
 interface ReviewStageProps {
@@ -61,7 +61,7 @@ const ReviewStage: React.FC<React.PropsWithChildren<ReviewStageProps>> = ({
           </Flex>
         </Flex>
         <BorderedBox>
-          <Text small color="textSubtle">
+          {/* <Text small color="textSubtle">
             {t('Pay with')}
           </Text>
           <ButtonMenu
@@ -70,23 +70,23 @@ const ReviewStage: React.FC<React.PropsWithChildren<ReviewStageProps>> = ({
             scale="sm"
             variant="subtle"
           >
-            <ButtonMenuItem>BNB</ButtonMenuItem>
+            <ButtonMenuItem>DFS</ButtonMenuItem>
             <ButtonMenuItem>WBNB</ButtonMenuItem>
-          </ButtonMenu>
+          </ButtonMenu> */}
           <Text small color="textSubtle">
             {t('Total payment')}
           </Text>
-          <BnbAmountCell bnbAmount={nftPrice} />
+          <DfsAmountCell dfsAmount={nftPrice} />
           <Text small color="textSubtle">
-            {t('%symbol% in wallet', { symbol: paymentCurrency === PaymentCurrency.BNB ? 'BNB' : 'WBNB' })}
+            {t('DFS in wallet')}
           </Text>
           {!account ? (
             <Flex justifySelf="flex-end">
               <ConnectWalletButton scale="sm" />
             </Flex>
           ) : (
-            <BnbAmountCell
-              bnbAmount={walletBalance}
+            <DfsAmountCell
+              dfsAmount={walletBalance}
               isLoading={walletFetchStatus !== FetchStatus.Fetched}
               isInsufficient={walletFetchStatus === FetchStatus.Fetched && notEnoughBnbForPurchase}
             />
@@ -94,14 +94,10 @@ const ReviewStage: React.FC<React.PropsWithChildren<ReviewStageProps>> = ({
         </BorderedBox>
         {walletFetchStatus === FetchStatus.Fetched && notEnoughBnbForPurchase && (
           <Message p="8px" variant="danger">
-            <Text>
-              {t('Not enough %symbol% to purchase this NFT', {
-                symbol: paymentCurrency === PaymentCurrency.BNB ? 'BNB' : 'WBNB',
-              })}
-            </Text>
+            <Text>{t('Not enough DFS to purchase this NFT')}</Text>
           </Message>
         )}
-        <Flex alignItems="center">
+        {/* <Flex alignItems="center">
           <Text my="16px" mr="4px">
             {t('Convert between BNB and WBNB for free')}:
           </Text>
@@ -115,7 +111,7 @@ const ReviewStage: React.FC<React.PropsWithChildren<ReviewStageProps>> = ({
           >
             {t('Convert')}
           </Button>
-        </Flex>
+        </Flex> */}
       </Flex>
       <Divider />
       <Flex px="24px" pb="24px" flexDirection="column">
@@ -126,9 +122,9 @@ const ReviewStage: React.FC<React.PropsWithChildren<ReviewStageProps>> = ({
         >
           {t('Checkout')}
         </Button>
-        <Button as={Link} external style={{ width: '100%' }} href="/swap?outputCurrency=BNB" variant="secondary">
-          {t('Get %symbol1% or %symbol2%', { symbol1: 'BNB', symbol2: 'WBNB' })}
-        </Button>
+        {/* <Button as={Link} external style={{ width: '100%' }} href="/swap?outputCurrency=BNB" variant="secondary">
+          {t('Get DFS')}
+        </Button> */}
       </Flex>
     </>
   )
