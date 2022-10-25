@@ -416,7 +416,7 @@ function NftProfilePage() {
       const level = nft.attributes[0].value
       const data = selectedNFTs.filter((nft) => nft.attributes[0].value === level)
       if (level === '0') {
-        if (selectedNFTs?.length < 3) {
+        if (data?.length < 3) {
           setNoteContent({
             title: t('Note'),
             description: t('Need 3 pieces'),
