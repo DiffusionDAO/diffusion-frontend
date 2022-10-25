@@ -100,8 +100,7 @@ const Reward = () => {
   const [stake, setStake] = useState<StakeInfo>()
   const [stakers, setStakers] = useState<string[]>()
   const zeroAddress = '0x0000000000000000000000000000000000000000'
-  const [bondReward, setBondReward] = useState<BigNumber>()
-  const [pendingSocialReward, setPendingReward] = useState()
+  const [pendingSocialReward, setPendingSocialReward] = useState<BigNumber>()
   const [DfsBalance, setDfsBalance] = useState<BigNumber>()
   const [totalSavings, setTotalSaving] = useState<BigNumber>()
   const [socialReward, setSocialReward] = useState<BigNumber>()
@@ -145,7 +144,7 @@ const Reward = () => {
 
   useEffect(() => {
     if (account) {
-      dfsMineContract.pendingSocialReward(account).then((res) => setPendingReward(res))
+      dfsMineContract.pendingSocialReward(account).then((res) => setPendingSocialReward(res))
       dfsMineContract.totalRewards().then((res) => setTotalSaving(res))
       dfsMineContract.stakeInfo(account).then((stakeInfo) => {
         setStake(stakeInfo)
@@ -181,15 +180,13 @@ const Reward = () => {
     : (epochLength / savingVestingSeconds) * 100
 
   const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : ((1 + savingInterest / 100) ** 15 - 1) * 100, 2)
-  const myLockedPower = BigNumber.from(stake?.power ?? 0)
-    .mul(2)
-    .toString()
+  const myLockedPower = BigNumber.from(stake?.power.mul(2).sub(stake?.unlockedPower) ?? 0).toString()
   const myTotalPower = BigNumber.from(stake?.power?.add(stake?.unlockedPower ?? 0) ?? 0).toString()
   const greenPower = BigNumber.from(stake?.power ?? 0).toString()
 
   const now = Math.floor(Date.now() / 1000)
 
-  const pendingRewardString = formatBigNumber(BigNumber.from(pendingSocialReward ?? 0), 5)
+  const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward ?? 0), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(referral?.bondReward ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
     ? BigNumber.from(0)
@@ -277,19 +274,12 @@ const Reward = () => {
                 <ExtractBtn
                   onClick={async () => {
                     if (dfsFromBondReward !== '0.0') {
-                      const receipt = await dfsMineContract.withdrawBondReward()
-                      await receipt.wait()
-                      const response = await fetch('https://middle.diffusiondao.org/withdrawBondReward', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                          address: account,
-                        }),
-                      })
-                      const json = await response.json()
-                      setStake(json[account])
+                      try {
+                        const receipt = await bondContract.withdrawBondReward()
+                        await receipt.wait()
+                      } catch (error: any) {
+                        window.alert(error.reason ?? error.data?.message ?? error.message)
+                      }
                     } else {
                       alert('No bond reward')
                     }
@@ -385,24 +375,17 @@ const Reward = () => {
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Rewards')}</RewardText>
-                        <RewardValueDiv>{pendingRewardString ?? '0'}</RewardValueDiv>
+                        <RewardValueDiv>{pendingSocialRewardString ?? '0'}</RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
-                          if (socialReward.gt(0)) {
-                            const receipt = await dfsMineContract.claim()
-                            await receipt.wait()
-                            const response = await fetch('https://middle.diffusiondao.org/withdrawSoicalReward', {
-                              method: 'POST',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify({
-                                address: account,
-                              }),
-                            })
-                            const json = await response.json()
-                            setStake(json[account])
+                          if (pendingSocialReward?.gt(0)) {
+                            try {
+                              const receipt = await dfsMineContract.withdrawSocialReward()
+                              await receipt.wait()
+                            } catch (error: any) {
+                              window.alert(error.reason ?? error.data?.message ?? error.message)
+                            }
                           } else {
                             alert('No social reward')
                           }
