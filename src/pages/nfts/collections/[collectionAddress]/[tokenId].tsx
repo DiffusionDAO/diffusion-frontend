@@ -7,6 +7,7 @@ import { SWRConfig, unstable_serialize } from 'swr'
 import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
 import { getContract } from 'utils/contractHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
+import { formatBigNumber } from 'utils/formatBalance'
 import { CollectionData, NFT } from 'pages/profile/[accountAddress]'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 
@@ -41,6 +42,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const nftDatabaseAddress = getNFTDatabaseAddress()
   const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
   const nft: NFT = await nftDatabase.getToken(collectionAddress, tokenId)
+  console.log('nft:', nft)
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
   // const collectionWithToken: ApiCollection = await getCollectionApi(collectionAddress)
@@ -75,7 +77,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       collection: {
         id: tokenId,
       },
-      currentAskPrice: nft.price.toString(),
+      currentAskPrice: formatBigNumber(nft.price, 2),
       currentSeller: nft.seller,
       isTradable: nft.price.gt(0) ?? false,
     },

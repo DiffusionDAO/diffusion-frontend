@@ -50,6 +50,7 @@ import {
 } from 'hooks/useContract'
 import useSWR from 'swr'
 import { setTokenSourceMapRange } from 'typescript'
+import { formatBigNumber } from 'utils/formatBalance'
 
 interface noteProps {
   title: string
@@ -121,7 +122,7 @@ export const nftToNftToken = (nft: NFT) => {
       collection: {
         id: tokenIdString,
       },
-      currentAskPrice: nft?.price?.toString(),
+      currentAskPrice: formatBigNumber(nft?.price, 3),
       currentSeller: nft?.seller,
       isTradable: true,
     },
@@ -319,7 +320,7 @@ function NftProfilePage() {
           collection: {
             id: composedTokenId,
           },
-          currentAskPrice: '',
+          currentAskPrice: '0',
           currentSeller: accountAddress,
           isTradable: true,
         },

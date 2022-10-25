@@ -1,15 +1,19 @@
-import { parseUnits } from '@ethersproject/units'
+import { TransactionResponse } from '@ethersproject/providers'
+import { formatUnits, parseUnits } from '@ethersproject/units'
 import { ContextApi, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
+import { responsePathAsArray } from 'graphql'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useErc721CollectionContract, useNftMarketContract } from 'hooks/useContract'
+import { useErc721CollectionContract, useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
+import { NFT, nftToNftToken } from 'pages/profile/[accountAddress]'
 import { useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { isAddress } from 'utils'
+import { formatBigNumber } from 'utils/formatBalance'
 import { useGetLowestPriceFromNft } from 'views/Nft/market/hooks/useGetLowestPrice'
 import ApproveAndConfirmStage from '../shared/ApproveAndConfirmStage'
 import ConfirmStage from '../shared/ConfirmStage'
@@ -95,7 +99,7 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
     nftToSell.collectionAddress,
   )
   const nftMarketContract = useNftMarketContract()
-
+  const database = useNFTDatabaseContract()
   const isInvalidTransferAddress = transferAddress.length > 0 && !isAddress(transferAddress)
 
   const { lowestPrice } = useGetLowestPriceFromNft(nftToSell)
@@ -195,9 +199,48 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
           nftToSell.tokenId,
         ])
       }
-      const methodName = 'createMarketItemByERC20'
+      const methodName = variant === 'sell' ? 'createMarketItemByERC20' : 'adjustPrice'
       const askPrice = parseUnits(price)
-      return callWithGasPrice(nftMarketContract, methodName, [nftToSell.collectionAddress, nftToSell.tokenId, askPrice])
+      try {
+        /* eslint-disable no-param-reassign */
+        /* eslint-disable no-return-assign */
+        if (methodName === 'createMarketItemByERC20') {
+          const transactionResponse: Promise<TransactionResponse> = callWithGasPrice(nftMarketContract, methodName, [
+            nftToSell.collectionAddress,
+            nftToSell.tokenId,
+            askPrice,
+          ])
+          transactionResponse.then((response) => {
+            response.wait().then((res) => {
+              database.getToken(nftToSell.collectionAddress, nftToSell.tokenId).then((nft: NFT) => {
+                nftToSell.itemId = nft.itemId.toString()
+                nftToSell.marketData.currentAskPrice = price
+                nftToSell.marketData.isTradable = true
+                nftToSell.marketData.currentSeller = account
+              })
+            })
+          })
+          return transactionResponse
+        }
+        if (methodName === 'adjustPrice') {
+          const transactionResponse: Promise<TransactionResponse> = callWithGasPrice(nftMarketContract, methodName, [
+            nftToSell.itemId,
+            askPrice,
+          ])
+          transactionResponse.then((response) => {
+            response.wait().then((res) => {
+              database
+                .getToken(nftToSell.collectionAddress, nftToSell.tokenId)
+                .then((nft: NFT) => (nftToSell.marketData.currentAskPrice = formatBigNumber(nft?.price, 3)))
+            })
+          })
+          return transactionResponse
+        }
+      } catch (error: any) {
+        window.alert(error.reason ?? error.data?.message ?? error.message)
+        return null
+      }
+      return null
     },
     onSuccess: async ({ receipt }) => {
       toastSuccess(getToastText(variant, stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)

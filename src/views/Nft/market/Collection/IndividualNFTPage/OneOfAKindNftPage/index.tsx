@@ -13,6 +13,8 @@ import { getCollection } from 'state/nftMarket/helpers'
 import { getContract } from 'utils/contractHelpers'
 
 import { useNFTDatabaseContract } from 'hooks/useContract'
+import { formatBigNumber } from 'utils/formatBalance'
+
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
@@ -56,6 +58,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const nftDatabase = useNFTDatabaseContract()
   useEffect(() => {
     nftDatabase.getToken(collectionAddress, tokenId).then((res) => {
+      // console.log("IndividualNFTPage:", res)
       let thumbnail = `/images/nfts/socialnft/${res.level.toString()}`
       const starLightAddress = getStarlightAddress()
       if (res.collectionAddress === starLightAddress) {
@@ -77,7 +80,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
           collection: {
             id: tokenId,
           },
-          currentAskPrice: res?.price.toString(),
+          currentAskPrice: formatBigNumber(res?.price, 2),
           currentSeller: res?.seller,
           isTradable: res?.price.gt(0) ?? false,
         },

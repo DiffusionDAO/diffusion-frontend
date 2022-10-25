@@ -35,6 +35,7 @@ import { getDFSNFTAddress, getNFTDatabaseAddress, getNftMarketAddress, getStarli
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { dfsName, CollectionData, NFT, nftToNftToken } from 'pages/profile/[accountAddress]'
 import useSWR from 'swr'
+import { formatUnits, parseUnits } from '@ethersproject/units'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 import { REQUEST_SIZE } from '../Collection/config'
 import { useWeb3React } from '../../../../../packages/wagmi/src/useWeb3React'
@@ -248,7 +249,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
             collection: {
               id: tokenIdString,
             },
-            currentAskPrice: nft.price.toString(),
+            currentAskPrice: formatUnits(nft.price, 'ether'),
             currentSeller: nft?.seller,
             isTradable: true,
           },

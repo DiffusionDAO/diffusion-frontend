@@ -61,9 +61,9 @@ const ProfileNftModal: React.FC<React.PropsWithChildren<ProfileNftModalProps>> =
               {t('View Item')}
             </Button>
             <HorizontalDivider />
-            <LinkExternal p="0px" height="16px" href={getBscScanLinkForNft(nft.collectionAddress, nft.tokenId)}>
+            {/* <LinkExternal p="0px" height="16px" href={getBscScanLinkForNft(nft.collectionAddress, nft.tokenId)}>
               BscScan
-            </LinkExternal>
+            </LinkExternal> */}
           </Flex>
         </Flex>
         <TextWrapper p="24px 16px" flexDirection="column">

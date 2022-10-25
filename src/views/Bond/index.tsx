@@ -80,11 +80,13 @@ const Bond = () => {
   }
   useEffect(() => {
     setIsApprove(false)
-    usdt.allowance(account, bondAddress).then((res) => {
-      if (res.gt(0)) {
-        setIsApprove(true)
-      }
-    })
+    if (account) {
+      usdt.allowance(account, bondAddress).then((res) => {
+        if (res.gt(0)) {
+          setIsApprove(true)
+        }
+      })
+    }
   }, [account])
   useEffect(() => {
     const dfsUsdt = bondDatasMock[0]

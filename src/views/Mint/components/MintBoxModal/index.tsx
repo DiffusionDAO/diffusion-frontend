@@ -33,7 +33,7 @@ const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
               card.tokenIds.length ? (
                 <Grid item lg={6} md={6} sm={6} xs={6} key={card.id}>
                   <CardItem key={card.id}>
-                    <CardImg src={`/images/nfts/${card.level}`} />
+                    <CardImg src={`/images/nfts/socialnft/${card.level}`} />
                     <CardText>
                       {t('amount')}: {card.tokenIds.length} {levelToName[card.level]}{' '}
                       {card.tokenIds.map((tokenId) => `#${tokenId}`)}
@@ -46,7 +46,7 @@ const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
         <BtnWrap>
           <TakeCardBtn onClick={onClose}>{t('Continue to Mint')}</TakeCardBtn>
           <TakeCardBtn onClick={() => router.push(`/profile/${account.toLowerCase()}`)}>
-            <JumpBtnCont>{t('Continue to Compose NFTs >')}</JumpBtnCont>
+            <JumpBtnCont>{t('Continue to Compose NFTs')}</JumpBtnCont>
           </TakeCardBtn>
         </BtnWrap>
       </ContentWrap>

@@ -220,7 +220,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
                       <Flex alignItems="center" mt="8px">
                         <BinanceImage width={30} height={30} mr="4px" />
                         <Text fontSize="32px" bold mr="4px">
-                          {formatUnits(BigNumber.from(currentAskPriceAsNumber))}
+                          {currentAskPriceAsNumber}
                         </Text>
                       </Flex>
                     ) : (

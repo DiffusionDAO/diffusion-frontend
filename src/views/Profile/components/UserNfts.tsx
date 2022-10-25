@@ -62,9 +62,7 @@ const UserNfts: React.FC<
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
                 nft={nft}
                 currentAskPrice={
-                  marketData?.currentAskPrice &&
-                  marketData?.isTradable &&
-                  Number(formatBigNumber(BigNumber.from(marketData?.currentAskPrice), 2))
+                  marketData?.currentAskPrice && marketData?.isTradable && parseFloat(marketData?.currentAskPrice)
                 }
                 nftLocation={location}
               />
