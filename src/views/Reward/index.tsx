@@ -153,6 +153,7 @@ const Reward = () => {
       dfsMineContract.getStakers().then((res) => setStakers(res))
       dfsMineContract.epoch().then((res) => setNextSavingInterestChangeTime(new Date(res.endTime * 1000)))
       bondContract.pendingBondReward(account).then((res) => setPendingBondReward(res))
+
       bondContract.addressToReferral(account).then((referral) => {
         setReferral(referral)
         setUnpaidBondReward(
@@ -189,7 +190,7 @@ const Reward = () => {
   const now = Math.floor(Date.now() / 1000)
 
   const pendingRewardString = formatBigNumber(BigNumber.from(pendingSocialReward ?? 0), 5)
-  const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward ?? 0), 6)
+  const dfsFromBondReward = formatBigNumber(BigNumber.from(referral?.bondReward ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
     ? BigNumber.from(0)
     : BigNumber.from(totalSavings ?? 0)
