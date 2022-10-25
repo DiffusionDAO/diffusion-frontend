@@ -26,6 +26,7 @@ import ActivityCard from './ActivityCard'
 import ManageNFTsCard from '../shared/ManageNFTsCard'
 
 import { ChainId } from '../../../../../../../packages/swap-sdk/src/constants'
+import { useWeb3React } from '../../../../../../../packages/wagmi/src/useWeb3React'
 
 interface IndividualNFTPageProps {
   collectionAddress: string
@@ -50,6 +51,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   collectionAddress,
   tokenId,
 }) => {
+  const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const bgImg = isMobile ? "url('/images/nfts/mretc.png')" : "url('/images/nfts/smxl.png')"
   const bgOffset = !isMobile ? '40px' : '80px'
@@ -80,21 +82,21 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
           collection: {
             id: tokenId,
           },
-          currentAskPrice: formatBigNumber(res?.price, 2),
+          currentAskPrice: formatBigNumber(res?.price, 3),
           currentSeller: res?.seller,
           isTradable: res?.price.gt(0) ?? false,
         },
       }
       setNFT(nft)
     })
-  }, [])
+  }, [account])
 
   const properties = nft?.attributes
 
   if (!nft || !collection) {
     return <PageLoader />
   }
-  const isOwnNft = true
+  const isOwnNft = nft?.marketData?.currentSeller === account
   const nftIsProfilePic = false
   return (
     <PageWrap>

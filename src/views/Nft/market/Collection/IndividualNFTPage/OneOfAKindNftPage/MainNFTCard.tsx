@@ -131,7 +131,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
         mt="24px"
         onClick={onPresentSellModal}
       >
-        {nft?.marketData?.isTradable ? t('Adjust price') : t('List for sale')}
+        {isOwnNft && nft?.marketData?.isTradable ? t('Adjust price') : t('List for sale')}
       </BtnB>
       {nft?.staker !== zeroAddress && (
         <BtnB
