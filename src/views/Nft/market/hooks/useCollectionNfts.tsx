@@ -33,7 +33,7 @@ import { getNftMarketContract, getContract } from 'utils/contractHelpers'
 import { useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
 import { getDFSNFTAddress, getNFTDatabaseAddress, getNftMarketAddress, getStarlightAddress } from 'utils/addressHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
-import { dfsName, CollectionData, NFT, nftToNftToken } from 'pages/profile/[accountAddress]'
+import { levelToName, CollectionData, NFT, nftToNftToken } from 'pages/profile/[accountAddress]'
 import useSWR from 'swr'
 import { useTranslation } from '@pancakeswap/localization'
 import { formatUnits, parseUnits } from '@ethersproject/units'
@@ -224,7 +224,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
           name = `StarLight#${tokenId}`
         } else if (collectionAddress === dfsNFTAddress) {
           thumbnail = `/images/nfts/socialnft/${level}`
-          name = `${dfsName[level]}#${tokenId}`
+          name = `${levelToName[level]}#${tokenId}`
         }
         const token = {
           tokenId: tokenIdString,
