@@ -105,6 +105,7 @@ import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftComposeAbi from 'config/abi/nftComposeAbi.json'
 import nftMintAbi from 'config/abi/nftMintAbi.json'
 import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
+import dfsAbi from 'config/abi/dfsAbi.json'
 import starlightAbi from 'config/abi/starlight.json'
 import duffionIDOAbi from 'config/abi/diffusionIDO.json'
 import aggregatorAbi from 'config/abi/nftDatabase.json'
@@ -398,7 +399,7 @@ export const getDFSNFTContract = (signer?: Signer | Provider) => {
   return getContract({ abi: dfsNFTAbi, address: getDFSNFTAddress(), signer })
 }
 export const getDFSContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: ERC20_ABI, address: getDFSAddress(), signer })
+  return getContract({ abi: dfsAbi, address: getDFSAddress(), signer })
 }
 export const getBondContract = (signer?: Signer | Provider) => {
   return getContract({ abi: bondAbi, address: getBondAddress(), signer })

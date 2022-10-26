@@ -35,6 +35,7 @@ import { getDFSNFTAddress, getNFTDatabaseAddress, getNftMarketAddress, getStarli
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { dfsName, CollectionData, NFT, nftToNftToken } from 'pages/profile/[accountAddress]'
 import useSWR from 'swr'
+import { useTranslation } from '@pancakeswap/localization'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 import { REQUEST_SIZE } from '../Collection/config'
@@ -201,6 +202,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const fallbackMode = useRef(false)
   const fallbackModePage = useRef(0)
   const isLastPage = useRef(false)
+  const { t } = useTranslation()
   const [tokens, setTokens] = useState<any[]>()
   const nftDatabaseAddress = getNFTDatabaseAddress()
   const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
@@ -322,7 +324,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
         newNfts = await Promise.all(
           marketTokenIds.map(async (tokenId) => {
             const token = await nftDatabase.getToken(collectionAddress, tokenId)
-            return nftToNftToken(token)
+            return nftToNftToken(token, t)
           }),
         )
 

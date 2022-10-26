@@ -83,24 +83,25 @@ export interface CollectionData {
   }
 }
 const zeroAddress = '0x0000000000000000000000000000000000000000'
-export const dfsName = {
-  '0': 'Lord fragment',
-  '1': 'Lord',
-  '2': 'Golden Lord',
+export const levelToName = {
+  '0': 'Wiseman fragment',
+  '1': 'Wiseman',
+  '2': 'Wiseman Gold',
   '3': 'General',
-  '4': 'Golden General',
-  '5': 'Congressman',
-  '6': 'Golden Congressman',
+  '4': 'General Gold',
+  '5': 'Senator',
+  '6': 'Crown Senator',
 }
 const greeceNumber = { 0: 'I', 1: 'II', 2: 'III', 3: 'IV', 4: 'V', 5: 'VI', 6: 'VII' }
 
-export const nftToNftToken = (nft: NFT) => {
+export const nftToNftToken = (nft: NFT, t) => {
   const tokenIdString = nft?.tokenId?.toString()
   const level = nft?.level?.toString()
+  const translatedName = t(levelToName[level])
   const token = {
     tokenId: tokenIdString,
-    name: `${dfsName[level]}#${tokenIdString}`,
-    description: dfsName[level],
+    name: `${translatedName}#${tokenIdString}`,
+    description: levelToName[level],
     collectionName: nft.collectionName,
     collectionAddress: nft.collectionAddress,
     image: {
@@ -135,7 +136,7 @@ export const nftToNftToken = (nft: NFT) => {
 function NftProfilePage() {
   const { account } = useWeb3React()
   const dfsNFTAddress = getDFSNFTAddress()
-
+  const { t } = useTranslation()
   const [stakedNFTs, setStakedNFTs] = useState<NftToken[]>()
   const [unstakedNFTs, setUnstakedNFTs] = useState<NftToken[]>()
   const [onSaleNFTs, setOnSaleNFT] = useState([])
@@ -145,6 +146,8 @@ function NftProfilePage() {
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMineContract()
 
+  const translate = t('Wiseman')
+  // console.log("translate:",translate)
   const updateFn = async () => {
     const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
@@ -155,7 +158,7 @@ function NftProfilePage() {
           // console.log(nfts.map(nft=>nft.tokenId.toString()))
           nfts
             .filter((nft) => nft.collectionAddress === dfsNFTAddress)
-            .map((nft) => tokens.unstaked.push(nftToNftToken(nft)))
+            .map((nft) => tokens.unstaked.push(nftToNftToken(nft, t)))
         }),
       )
       await Promise.all(
@@ -163,7 +166,7 @@ function NftProfilePage() {
           const marketItem = await nftMarket.getTokensOnSaleByOwner(account)
           await Promise.all(
             marketItem.map(async (token) => {
-              tokens.onSale.push(nftToNftToken(await nftDatabase.getToken(collectionAddress, token.tokenId)))
+              tokens.onSale.push(nftToNftToken(await nftDatabase.getToken(collectionAddress, token.tokenId), t))
             }),
           )
         }),
@@ -175,7 +178,7 @@ function NftProfilePage() {
             staked.map(async (tokenId) => {
               const token = await nftDatabase.getToken(collectionAddress, tokenId)
               if (token.collectionAddress === dfsNFTAddress) {
-                tokens.staked.push(nftToNftToken(token))
+                tokens.staked.push(nftToNftToken(token, t))
               }
             }),
           )
@@ -187,10 +190,9 @@ function NftProfilePage() {
     return { unstaked: [], staked: [], onSale: [] }
   }
   const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
-  // console.log('data:', data)
   useEffect(() => {
     mutate(updateFn())
-  }, [account])
+  }, [account, t])
   useEffect(() => {
     setUnstakedNFTs(data?.unstaked?.filter((token) => token.owner !== zeroAddress))
     setStakedNFTs(data?.staked?.filter((token) => token.owner !== zeroAddress))
@@ -202,7 +204,6 @@ function NftProfilePage() {
   const market = useNftMarketContract()
 
   const { isMobile } = useMatchBreakpoints()
-  const { t } = useTranslation()
   const { query } = useRouter()
 
   const accountAddress = query.accountAddress as string
@@ -226,7 +227,7 @@ function NftProfilePage() {
 
   const sortByItems = [
     {
-      label: t('Lord'),
+      label: t('Wiseman'),
       value: 'Lord',
       children: [
         { label: t('silver'), value: 'silver' },
@@ -298,8 +299,8 @@ function NftProfilePage() {
       const newNft: NftToken = {
         tokenId: composedTokenId,
         name: greeceNumber[level],
-        description: dfsName[level],
-        collectionName: dfsName[level],
+        description: levelToName[level],
+        collectionName: levelToName[level],
         collectionAddress: dfsNFTAddress,
         image: {
           original: 'string',

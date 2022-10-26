@@ -37,7 +37,7 @@ const Header: React.FC<React.PropsWithChildren<HeaderProps>> = ({ collection }) 
         <TopBar />
         <BannerHeader bannerImage={banner?.large} avatar={<AvatarImage src={avatar} />} />
         <MarketPageTitle
-          title={collection?.name}
+          title={t(collection?.name)}
           description={collection?.description ? <Text color="textSubtle">{t(collection?.description)}</Text> : null}
         >
           <StatBox style={{ background: 'none' }}>

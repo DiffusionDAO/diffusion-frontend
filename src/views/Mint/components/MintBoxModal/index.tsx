@@ -3,21 +3,12 @@ import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { Grid } from '@material-ui/core'
+import { levelToName } from 'pages/profile/[accountAddress]'
 import { StyledModal, ContentWrap, CardItem, CardImg, CardText, BtnWrap, TakeCardBtn, JumpBtnCont } from './styles'
 
 interface BondModalProps {
   data: any[]
   onClose: () => void
-}
-
-const levelToName = {
-  '0': 'Lord fragment',
-  '1': 'Lord',
-  '2': 'Golden Lord',
-  '3': 'General',
-  '4': 'Golden General',
-  '5': 'Congressman',
-  '6': 'Golden Congressman',
 }
 
 const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
@@ -35,7 +26,7 @@ const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
                   <CardItem key={card.id}>
                     <CardImg src={`/images/nfts/socialnft/${card.level}`} />
                     <CardText>
-                      {t('amount')}: {card.tokenIds.length} {levelToName[card.level]}{' '}
+                      {t('amount')}: {card.tokenIds.length} {t(levelToName[card.level])}{' '}
                       {card.tokenIds.map((tokenId) => `#${tokenId}`)}
                     </CardText>
                   </CardItem>

@@ -59,7 +59,7 @@ const Bond = () => {
   const [vestingTerms, setVestingTerms] = useState<number>(0)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<string>()
   const bond = useBondContract()
-  const dfsContract = useERC20(getDFSAddress())
+  const dfsContract = useDFSContract()
   const openBondModal = (item) => {
     setBondItem(item)
     setBondModalVisible(true)
@@ -92,13 +92,21 @@ const Bond = () => {
     const dfsUsdt = bondDatasMock[0]
     // eslint-disable-next-line no-return-assign, no-param-reassign
     bond
-      .bondPrice()
+      .getDFSUSDTPrice()
       .then((res) => {
         dfsUsdt.price = res.toNumber()
       })
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
+    // bond
+    //   .bondPrice()
+    //   .then((res) => {
+    //     dfsUsdt.price = res.toNumber()
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.reason ?? error.data?.message ?? error.message)
+    //   })
     bond
       .terms()
       .then((res) => {

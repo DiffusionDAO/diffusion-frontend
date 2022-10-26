@@ -207,6 +207,7 @@ const Reward = () => {
 
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward ?? 0), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
+  console.log('dfsFromBondReward:', dfsFromBondReward)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
     ? BigNumber.from(0)
     : BigNumber.from(totalSavings ?? 0)
@@ -276,8 +277,8 @@ const Reward = () => {
             <Grid item lg={4} md={4} sm={12} xs={12}>
               <DiffusionGoldWrap isMobile={isMobile}>
                 <DiffusionGoldHeader>
-                  <DiffusionGoldTitle>{t('My social networking rewards')}</DiffusionGoldTitle>
-                  <DiffusionGoldDetailJump onClick={openDetailModal}>{`${t('Detail')}>`}</DiffusionGoldDetailJump>
+                  <DiffusionGoldTitle>{t('Bond reward')}</DiffusionGoldTitle>
+                  <DiffusionGoldDetailJump onClick={openDetailModal}>{`${t('Detail')}`}</DiffusionGoldDetailJump>
                 </DiffusionGoldHeader>
                 <Petal src="/images/reward/petal.png" isMobile={isMobile} />
                 <RewardText>{t('Rewards')}</RewardText>
@@ -307,8 +308,8 @@ const Reward = () => {
             <Grid item lg={8} md={8} sm={12} xs={12}>
               <MySposWrap>
                 <MySposHeader>
-                  <MySposTitle>{t('My SPOS value')}</MySposTitle>
-                  <MySposDetailJump onClick={openUnlockedDetailModal}>{`${t('Detail')}>`}</MySposDetailJump>
+                  <MySposTitle>{t('SPOS value')}</MySposTitle>
+                  <MySposDetailJump onClick={openUnlockedDetailModal}>{`${t('Detail')}`}</MySposDetailJump>
                 </MySposHeader>
                 <MySposOveview>
                   <MySposOveviewItem>

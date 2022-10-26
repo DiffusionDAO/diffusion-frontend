@@ -93,12 +93,19 @@ const BondModal: React.FC<BondModalProps> = ({
 
   useEffect(() => {
     bond
-      .bondPrice()
+      .getDFSUSDTPrice()
       .then((res) => {
         setBondPrice(res.toNumber())
         setMarketPrice((res.toNumber() * 100) / bondData.discount)
       })
       .catch((error) => console.log(error))
+    // bond
+    //   .bondPrice()
+    //   .then((res) => {
+    //     setBondPrice(res.toNumber())
+    //     setMarketPrice((res.toNumber() * 100) / bondData.discount)
+    //   })
+    //   .catch((error) => console.log(error))
   }, [account, amount])
 
   useEffect(() => {
@@ -278,10 +285,11 @@ const BondModal: React.FC<BondModalProps> = ({
           <>
             <MoneyInput
               prefix="$"
-              suffix="ALL"
+              suffix=""
               value={amount}
               onInput={async (e: any) => {
                 setAmount(e.target.value)
+                setHasReferral(true)
                 if (e.target.value) {
                   try {
                     const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
