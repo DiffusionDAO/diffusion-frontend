@@ -207,14 +207,12 @@ const Reward = () => {
 
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward ?? 0), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
-  console.log('dfsFromBondReward:', dfsFromBondReward)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
     ? BigNumber.from(0)
     : BigNumber.from(totalSavings ?? 0)
         .mul(epoch?.length ?? 0)
         .div(savingsRewardVestingSeconds)
   const nextRewardSaving = formatBigNumber(nextRewardSavingNumber, 2)
-  console.log('bondRewardContributors:', bondRewardContributors, powerRewardContributors)
   const bondRewardDetailData = bondRewardContributors?.map((contributor) => {
     let value = BigNumber.from(0)
     bondContract.bondRewardDetails(account, contributor).then((res) => {
