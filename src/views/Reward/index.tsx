@@ -224,10 +224,14 @@ const Reward = () => {
       value: formatBigNumber(BigNumber.from(value), 5),
     }
   })
-  const socialRewardDetailData = powerRewardContributors?.map(async (contributor) => {
+  const socialRewardDetailData = powerRewardContributors?.map((contributor) => {
+    let value = BigNumber.from(0)
+    dfsMineContract.powerRewardPerContributor(account, contributor).then((res) => {
+      value = res
+    })
     return {
       address: isMobile ? shorten(contributor) : contributor,
-      value: formatBigNumber(BigNumber.from(await dfsMineContract.powerRewardPerContributor(account, contributor)), 5),
+      value: formatBigNumber(BigNumber.from(value), 5),
     }
   })
   const hasPower = useCallback(
