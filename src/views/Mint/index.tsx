@@ -57,7 +57,7 @@ const Mint = () => {
   const nftMintAddress = getNftMintAddress()
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
-  const [bondPayout, setBondPayout] = useState<string>('0')
+  const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
   const [ordinaryPrice, setOneCost] = useState<BigNumber>(BigNumber.from(0))
   const [seniorPrice, setTwoCost] = useState<BigNumber>(BigNumber.from(0))
 
@@ -74,7 +74,7 @@ const Mint = () => {
 
   useEffect(() => {
     if (account) {
-      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
+      bond.bondInfo(account).then((res) => setBondPayout(res[0]))
       DFS.balanceOf(account)
         .then((res) => {
           if (!res.eq(balance)) {
@@ -110,7 +110,8 @@ const Mint = () => {
     }
     if (
       (type === 'senior' && balance.lt(seniorPrice.mul(seniorCount))) ||
-      (type === 'ordinary' && balance.lt(ordinaryPrice.mul(ordinaryCount)))
+      (type === 'ordinary' && balance.lt(ordinaryPrice.mul(ordinaryCount))) ||
+      (useBond && bondPayout.lt(ordinaryPrice.mul(ordinaryCount)))
     ) {
       setJumpModalVisible(true)
       return
@@ -194,7 +195,7 @@ const Mint = () => {
                       {t('Wiseman')}
                       {isMobile ? <br /> : null}
                       <ColorFont style={{ color: '#FF7056' }}> 2% </ColorFont>
-                      {t('General Aureate')}
+                      {t('General Gold')}
                     </DalaCardValueDiv>
                   </DalaCardCellWrap>
                 </DalaCardList>
@@ -203,7 +204,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Payout')}: {bondPayout ?? 0} DFS
+                    {t('Payout')}: {formatBigNumber(bondPayout, 2)} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -293,6 +294,7 @@ const Mint = () => {
                     valueDivStyle={{ fontSize: '14px' }}
                     position="horizontal"
                   />
+                  Silver
                   <DataCell
                     label={t('Description')}
                     value={t('Acquire any of the 2 types of NFT cards')}
@@ -303,10 +305,10 @@ const Mint = () => {
                     <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
                     <DalaCardValueDiv>
                       <ColorFont style={{ color: '#EC6EFF' }}> 98% </ColorFont>
-                      {t('Wiseman Silver')}
+                      {t('Wiseman fragment')}
                       {isMobile ? <br /> : null}
                       <ColorFont style={{ color: '#EC6EFF' }}> 2% </ColorFont>
-                      {t('Wiseman NFT')}
+                      {t('Wiseman')}
                     </DalaCardValueDiv>
                   </DalaCardCellWrap>
                 </DalaCardList>
@@ -315,7 +317,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Payout')}: {bondPayout ?? 0} DFS
+                    {t('Payout')}: {formatBigNumber(bondPayout, 2)} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>

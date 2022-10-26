@@ -184,7 +184,6 @@ function NftProfilePage() {
           )
         }),
       )
-
       return tokens
     }
     return { unstaked: [], staked: [], onSale: [] }
@@ -423,6 +422,7 @@ function NftProfilePage() {
             description: t('Need 3 pieces'),
             visible: true,
           })
+          return
         }
         data.slice(0, 3).map((item: NftToken) => {
           if (item.attributes[0].value === nft.attributes[0].value) {
@@ -498,9 +498,9 @@ function NftProfilePage() {
           />
 
           <SubMenuRight>
-            <SelectWrap>
+            {/* <SelectWrap>
               <Cascader options={sortByItems} style={{ width: '200px' }} />
-            </SelectWrap>
+            </SelectWrap> */}
             {activeTab === 'WithoutStake' && (
               <Button type="primary" style={{ marginLeft: '10px' }} size="middle" onClick={startStake}>
                 {t('Stake')}

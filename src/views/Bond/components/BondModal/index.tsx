@@ -71,7 +71,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const { onPresentConnectModal } = useWallet()
   const router = useRouter()
   const [hasReferral, setHasReferral] = useState<boolean>(false)
-  const [referral, setReferral] = useState<string>()
+  const [referral, setReferral] = useState<string>('')
   const [amount, setAmount] = useState<string>('')
   const [activeTab, setActiveTab] = useState<string>('mint')
   const [bondPrice, setBondPrice] = useState<number>(0)
@@ -99,13 +99,6 @@ const BondModal: React.FC<BondModalProps> = ({
         setMarketPrice((res.toNumber() * 100) / bondData.discount)
       })
       .catch((error) => console.log(error))
-    // bond
-    //   .bondPrice()
-    //   .then((res) => {
-    //     setBondPrice(res.toNumber())
-    //     setMarketPrice((res.toNumber() * 100) / bondData.discount)
-    //   })
-    //   .catch((error) => console.log(error))
   }, [account, amount])
 
   useEffect(() => {
@@ -258,7 +251,7 @@ const BondModal: React.FC<BondModalProps> = ({
               <ToImg src={bondData?.to} />
             </ImgWrap>
             <BondName>{bondData?.name}</BondName>
-            <BondTime>{bondData?.duration}days</BondTime>
+            <BondTime>{`${bondData?.duration} ${t('days')}`}</BondTime>
           </BondListItemHeader>
           <BondListItemContent>
             <ContentCell>
@@ -289,8 +282,8 @@ const BondModal: React.FC<BondModalProps> = ({
               value={amount}
               onInput={async (e: any) => {
                 setAmount(e.target.value)
-                setHasReferral(true)
                 if (e.target.value) {
+                  setHasReferral(true)
                   try {
                     const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
                     setPayoutFor(formatBigNumber(payout, 4))
@@ -313,7 +306,7 @@ const BondModal: React.FC<BondModalProps> = ({
                 onInput={(e: any) => {
                   setReferral(e.target.value)
                 }}
-                disabled={hasReferral}
+                disabled={hasReferral && referral !== ''}
               />
             </RecommandWrap>
             <BondListItemBtn onClick={buy}>{t('Buy')}</BondListItemBtn>

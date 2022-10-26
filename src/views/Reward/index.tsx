@@ -182,14 +182,12 @@ const Reward = () => {
         setReferral(referral)
         setBondReward(referral?.bondReward)
         setBondRewardLocked(referral?.bondRewardLocked)
-        setUnpaidBondReward(
-          formatBigNumber(BigNumber.from(bondRewardLocked?.sub(pendingBondReward ?? BigNumber.from(0))), 6),
-        )
       })
       dfsContract.balanceOf(account).then((res) => setDfsBalance(res))
     }
   }, [account, amount])
   useInterval(refresh, 3000)
+
   const nextSavingPayoutTime = `${nextSavingInterestChange
     ?.toLocaleDateString()
     .replace(/\//g, '-')} ${nextSavingInterestChange?.toTimeString().slice(0, 8)}`
@@ -198,18 +196,15 @@ const Reward = () => {
     2,
   )
   const savingInterest = (epoch?.length * 3) / savingsRewardVestingSeconds
-
-  // console.log("savingInterest:",savingInterest)
   const fiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
   const myLockedPower = BigNumber.from(stake?.power.mul(2).sub(stake?.unlockedPower) ?? 0).toString()
   const myTotalPower = BigNumber.from(stake?.power?.add(stake?.unlockedPower ?? 0) ?? 0).toString()
   const greenPower = BigNumber.from(stake?.power ?? 0).toString()
-
-  const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward ?? 0), 5)
+  const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
     ? BigNumber.from(0)
-    : BigNumber.from(totalSavings ?? 0)
+    : BigNumber.from(totalSavings)
         .mul(epoch?.length ?? 0)
         .div(savingsRewardVestingSeconds)
   const nextRewardSaving = formatBigNumber(nextRewardSavingNumber, 2)
@@ -264,7 +259,6 @@ const Reward = () => {
               onUpdate={(swiper) => {
                 swiper.slideTo(stake?.level?.toNumber())
               }}
-              // onActiveIndexChange={updateSwiper}
             >
               {stake?.level !== undefined &&
                 swiperSlideData.map((item, index) => {
@@ -307,9 +301,7 @@ const Reward = () => {
                   {t('Withdraw')}
                 </ExtractBtn>
                 <RewardText>{t('Unpaid Bond Rewards')}</RewardText>
-                <RewardValueDiv>
-                  {formatBigNumber(bondRewardLocked?.sub(pendingBondReward ?? 0) ?? BigNumber.from(0), 2)}
-                </RewardValueDiv>
+                <RewardValueDiv>{formatBigNumber(bondRewardLocked ?? BigNumber.from(0), 2)}</RewardValueDiv>
               </DiffusionGoldWrap>
             </Grid>
             <Grid item lg={8} md={8} sm={12} xs={12}>

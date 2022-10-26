@@ -1,16 +1,11 @@
 import { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
-import sum from 'lodash/sum'
 import noop from 'lodash/noop'
-import Page from 'components/Layout/Page'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import PageLoader from 'components/Loader/PageLoader'
-import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
 import { NftToken } from 'state/nftMarket/types'
-import { getCollection } from 'state/nftMarket/helpers'
-import { getContract } from 'utils/contractHelpers'
 
 import { useNFTDatabaseContract } from 'hooks/useContract'
 import { formatBigNumber } from 'utils/formatBalance'
@@ -19,13 +14,8 @@ import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
 import DetailsCard from '../shared/DetailsCard'
-import useGetCollectionDistribution from '../../../hooks/useGetCollectionDistribution'
-import OwnerCard from './OwnerCard'
-import MoreFromThisCollection from '../shared/MoreFromThisCollection'
-import ActivityCard from './ActivityCard'
 import ManageNFTsCard from '../shared/ManageNFTsCard'
 
-import { ChainId } from '../../../../../../../packages/swap-sdk/src/constants'
 import { useWeb3React } from '../../../../../../../packages/wagmi/src/useWeb3React'
 
 interface IndividualNFTPageProps {
@@ -110,7 +100,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
         <MainNFTCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={nftIsProfilePic} onSuccess={noop} />
         <TwoColumnsContainer flexDirection={['column', 'column', 'column', 'column', 'row']}>
           <Flex flexDirection="column" width="100%">
-            <ManageNFTsCard collection={collection} tokenId={tokenId} onSuccess={noop} />
+            {/* <ManageNFTsCard collection={collection} tokenId={tokenId} onSuccess={noop} /> */}
             <PropertiesCard properties={properties} rarity={{}} />
             <DetailsCard contractAddress={collectionAddress} ipfsJson={nft?.marketData?.metadataUrl} />
           </Flex>

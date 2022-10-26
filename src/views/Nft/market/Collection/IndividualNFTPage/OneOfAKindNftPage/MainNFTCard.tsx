@@ -129,49 +129,46 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
         mr="16px"
         width={['100%', null, 'max-content']}
         mt="24px"
-        onClick={onPresentSellModal}
-      >
-        {nft?.marketData?.isTradable ? t('Adjust price') : t('List for sale')}
-      </BtnB>
-      {nft?.staker !== zeroAddress && (
-        <BtnB
-          minWidth="168px"
-          variant="secondary"
-          width={['100%', null, 'max-content']}
-          mt="24px"
-          onClick={async () => {
-            setNoteContent({
-              title: t('Note'),
-              description: t('15% fees will be charged for unstaking'),
-              visible: true,
-            })
-            try {
-              const allowance = await dfsContract.allowance(account, dfsMineContract.address)
-              if (allowance.eq(0)) {
-                const receipt = await dfsContract.approve(dfsMineContract.address, MaxUint256)
-                await receipt.wait()
+        onClick={
+          nft?.staker === zeroAddress
+            ? onPresentSellModal
+            : async () => {
+                setNoteContent({
+                  title: t('Note'),
+                  description: t('15% fees will be charged for unstaking'),
+                  visible: true,
+                })
+                try {
+                  const allowance = await dfsContract.allowance(account, dfsMineContract.address)
+                  if (allowance.eq(0)) {
+                    const receipt = await dfsContract.approve(dfsMineContract.address, MaxUint256)
+                    await receipt.wait()
+                  }
+                  const receipt = await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
+                  await receipt.wait()
+                  router.push(`/profile/${account}`)
+                  const response = await fetch('https://middle.diffusiondao.org/unstakeNFT', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      address: account,
+                      nft,
+                    }),
+                  })
+                } catch (error: any) {
+                  window.alert(error.reason ?? error.data?.message ?? error.message)
+                }
               }
-              const receipt = await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
-              await receipt.wait()
-              router.push(`/profile/${account}`)
-              const response = await fetch('https://middle.diffusiondao.org/unstakeNFT', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  address: account,
-                  nft,
-                }),
-              })
-            } catch (error: any) {
-              window.alert(error.reason ?? error.data?.message ?? error.message)
-            }
-          }}
-        >
-          {t('Unstake')}
-        </BtnB>
-      )}
+        }
+      >
+        {nft?.marketData?.isTradable
+          ? t('Adjust price')
+          : nft?.staker === zeroAddress
+          ? t('List for sale')
+          : t('Unstake')}
+      </BtnB>
     </Flex>
   )
   return (

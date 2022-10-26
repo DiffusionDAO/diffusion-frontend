@@ -16,7 +16,7 @@ const JumpModal: React.FC<JumpModalProps> = ({ onClose }) => {
   return (
     <StyledModal width={500} onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <JumpWrap>
-        <JumpTitle>{t('Your balance is insufficient')}</JumpTitle>
+        <JumpTitle>{t('Insufficient balance')}</JumpTitle>
         <JumpDes>{t('There are several ways to receive DFS')}</JumpDes>
         <TakeCardBtn onClick={onClose}>
           <JumpBtnCont>{t('Insufficient balance? Purchase bonds on this page >')}</JumpBtnCont>

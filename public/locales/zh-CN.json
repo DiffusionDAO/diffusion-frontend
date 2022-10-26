@@ -1,4 +1,9 @@
 {
+  "Insufficient balance": "余额不足",
+  "Filter by": "过滤",
+  "Sort by": "排序",
+  "Buy": "购买",
+  "days": "天",
   "Next payout time": "下一次支出时间",
   "SocialNFT": "社交NFT",
   "Wiseman NFT": "智者NFT",
