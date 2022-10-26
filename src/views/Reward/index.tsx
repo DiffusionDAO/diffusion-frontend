@@ -65,6 +65,7 @@ import {
 import DataCell from '../../components/ListDataCell'
 import DetailModal from './components/DetailModal'
 import NoPower from './components/NoPower'
+import useInterval from '../../../packages/hooks/src/useInterval'
 
 interface StakeInfo {
   self: string
@@ -86,6 +87,15 @@ interface Referral {
   bondRewardLocked: BigNumber
   lastBondRewardWithdraw: BigNumber
 }
+interface BondRewardDetail {
+  contributor: string
+  contribution: BigNumber
+}
+interface PowerRewardDetail {
+  contributor: string
+  tokenId: string
+  contribution: BigNumber
+}
 const Reward = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -95,19 +105,25 @@ const Reward = () => {
   const [activeItem, setActiveItem] = useState<number>(0)
   const [bondRewardDetailModalVisible, setBondRewardDetailModalVisible] = useState<boolean>(false)
   const [socialRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
-  const [referrals, setReferrals] = useState({})
-  const [me, setMe] = useState<any>({})
   const [stake, setStake] = useState<StakeInfo>()
-  const [stakers, setStakers] = useState<string[]>()
   const zeroAddress = '0x0000000000000000000000000000000000000000'
-  const [pendingSocialReward, setPendingSocialReward] = useState<BigNumber>()
-  const [DfsBalance, setDfsBalance] = useState<BigNumber>()
-  const [totalSavings, setTotalSaving] = useState<BigNumber>()
-  const [socialReward, setSocialReward] = useState<BigNumber>()
-  const [pendingBondReward, setPendingBondReward] = useState<BigNumber>()
+  const [pendingSocialReward, setPendingSocialReward] = useState<BigNumber>(BigNumber.from(0))
+  const [DfsBalance, setDfsBalance] = useState<BigNumber>(BigNumber.from(0))
+  const [totalSavings, setTotalSaving] = useState<BigNumber>(BigNumber.from(0))
+  const [pendingBondReward, setPendingBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [referral, setReferral] = useState<Referral>()
   const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
   const [unpaidBondReward, setUnpaidBondReward] = useState<string>()
+  const [soicalRewardVestingSeconds, setSoicalRewardVestingSeconds] = useState<number>(100 * 24 * 3600)
+  const [savingsRewardVestingSeconds, setSavingsRewardVestingSeconds] = useState<number>(300 * 24 * 3600)
+  const [pendingSavingReward, setPendingSavingsReward] = useState<BigNumber>(BigNumber.from(0))
+  const [bondReward, setBondReward] = useState<BigNumber>(BigNumber.from(0))
+  const [bondRewardLocked, setBondRewardLocked] = useState<BigNumber>(BigNumber.from(0))
+  const [powerRewardContributors, setPowerRewardContributors] = useState<any[]>()
+  const [bondRewardContributors, setBondRewardContributors] = useState<any[]>()
+  const [subordinates, setSubordinates] = useState<string[]>()
+
+  const [epoch, setEpoch] = useState<any>({})
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -142,86 +158,81 @@ const Reward = () => {
     setBondRewardDetailModalVisible(false)
   }
 
-  useEffect(() => {
+  const refresh = useCallback(() => {
     if (account) {
-      dfsMineContract.pendingSocialReward(account).then((res) => setPendingSocialReward(res))
-      dfsMineContract.totalRewards().then((res) => setTotalSaving(res))
-      dfsMineContract.stakeInfo(account).then((stakeInfo) => {
-        setStake(stakeInfo)
+      dfsMineContract.epoch().then((res) => {
+        setEpoch(res)
+        setNextSavingInterestChangeTime(new Date(res.endTime * 1000))
       })
-      dfsMineContract.getStakers().then((res) => setStakers(res))
-      dfsMineContract.epoch().then((res) => setNextSavingInterestChangeTime(new Date(res.endTime * 1000)))
+      dfsMineContract.getPowerRewardContributors(account).then((res) => setPowerRewardContributors(res))
+      bondContract.getBondRewardContributors(account).then((res) => setBondRewardContributors(res))
+      bondContract.getSubordinates(account).then((res) => setSubordinates(res))
+      dfsMineContract.socialRewardVestingSeconds().then((res) => setSoicalRewardVestingSeconds(res))
+      dfsMineContract.savingsRewardVestingSeconds().then((res) => setSavingsRewardVestingSeconds(res))
+      dfsMineContract.pendingSocialReward(account).then((res) => setPendingSocialReward(res))
       bondContract.pendingBondReward(account).then((res) => setPendingBondReward(res))
+      dfsMineContract?.pendingSavingReward(account).then((res) => setPendingSavingsReward(res))
+
+      dfsMineContract.totalSavings().then((res) => setTotalSaving(res))
+      dfsMineContract.stakeInfo(account).then((stake) => {
+        setStake(stake)
+      })
 
       bondContract.addressToReferral(account).then((referral) => {
         setReferral(referral)
+        setBondReward(referral?.bondReward)
+        setBondRewardLocked(referral?.bondRewardLocked)
         setUnpaidBondReward(
-          formatBigNumber(BigNumber.from(referral?.bondRewardLocked?.sub(pendingBondReward ?? BigNumber.from(0))), 6),
+          formatBigNumber(BigNumber.from(bondRewardLocked?.sub(pendingBondReward ?? BigNumber.from(0))), 6),
         )
       })
       dfsContract.balanceOf(account).then((res) => setDfsBalance(res))
     }
   }, [account, amount])
-
-  const rewardVestingSeconds = 100 * 24 * 3600
-  const savingVestingSeconds = 300 * 24 * 3600
-  const nextTime = new Date(Date.now())
-  // const nextTime = nextSavingsStakingPayoutTime ? new Date(nextSavingsStakingPayoutTime?.toNumber() * 1000) : new Date(Date.now())
+  useInterval(refresh, 3000)
   const nextSavingPayoutTime = `${nextSavingInterestChange
     ?.toLocaleDateString()
     .replace(/\//g, '-')} ${nextSavingInterestChange?.toTimeString().slice(0, 8)}`
-  const epochLength = 8 * 3600
   const rewardInterest = formatNumber(
-    Number.isNaN(epochLength / rewardVestingSeconds) ? 0 : (epochLength / rewardVestingSeconds) * 100,
+    Number.isNaN(epoch?.length / soicalRewardVestingSeconds) ? 0 : (epoch?.length / soicalRewardVestingSeconds) * 100,
     2,
   )
-  const savingInterest = Number.isNaN(epochLength / savingVestingSeconds)
-    ? 0
-    : (epochLength / savingVestingSeconds) * 100
+  const savingInterest = (epoch?.length * 3) / savingsRewardVestingSeconds
 
-  const fiveDayROI = formatNumber(Number.isNaN(savingInterest) ? 0 : ((1 + savingInterest / 100) ** 15 - 1) * 100, 2)
+  // console.log("savingInterest:",savingInterest)
+  const fiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
   const myLockedPower = BigNumber.from(stake?.power.mul(2).sub(stake?.unlockedPower) ?? 0).toString()
   const myTotalPower = BigNumber.from(stake?.power?.add(stake?.unlockedPower ?? 0) ?? 0).toString()
   const greenPower = BigNumber.from(stake?.power ?? 0).toString()
 
-  const now = Math.floor(Date.now() / 1000)
-
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward ?? 0), 5)
-  const dfsFromBondReward = formatBigNumber(BigNumber.from(referral?.bondReward ?? 0), 6)
+  const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
     ? BigNumber.from(0)
     : BigNumber.from(totalSavings ?? 0)
-        .mul(epochLength)
-        .div(savingVestingSeconds)
+        .mul(epoch?.length ?? 0)
+        .div(savingsRewardVestingSeconds)
   const nextRewardSaving = formatBigNumber(nextRewardSavingNumber, 2)
-  const bondRewardDetailKeys = Object.keys(me?.dfsBondRewardDetail ?? {})
-  const unlockedPowerDetailKeys = Object.keys(me?.unlockedPowerDetail ?? {})
-  const bondRewardDetailData = bondRewardDetailKeys.map((key) => {
+  console.log('bondRewardContributors:', bondRewardContributors, powerRewardContributors)
+  const bondRewardDetailData = bondRewardContributors?.map(async (contributor) => {
     return {
-      address: isMobile ? shorten(key) : key,
-      value: formatBigNumber(BigNumber.from(me?.dfsBondRewardDetail[key] ?? 0), 5),
+      address: isMobile ? shorten(contributor) : contributor,
+      value: formatBigNumber(BigNumber.from(await bondContract.bondRewardDetails(account, contributor)), 5),
     }
   })
-  const socialRewardDetailData = unlockedPowerDetailKeys.map((key) => {
+  const socialRewardDetailData = powerRewardContributors?.map(async (contributor) => {
     return {
-      address: isMobile ? shorten(key) : key,
-      value: formatBigNumber(BigNumber.from(Object.values(me?.unlockedPowerDetail[key])[0] ?? 0), 5),
+      address: isMobile ? shorten(contributor) : contributor,
+      value: formatBigNumber(BigNumber.from(await dfsMineContract.powerRewardPerContributor(account, contributor)), 5),
     }
   })
-  useEffect(() => {
-    if (account) {
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      fetch('https://middle.diffusiondao.org/referrals').then((res) =>
-        res
-          .json()
-          .then((response) => {
-            setMe(response[account])
-            setReferrals(response)
-          })
-          .catch((error) => console.log(error)),
-      )
-    }
-  }, [account])
+  const hasPower = useCallback(
+    async (address) => {
+      const res = await dfsMineContract.stakeInfo(address)
+      return res.power !== 0
+    },
+    [account],
+  )
 
   return (
     <RewardPageWrap>
@@ -289,7 +300,7 @@ const Reward = () => {
                 </ExtractBtn>
                 <RewardText>{t('Unpaid Bond Rewards')}</RewardText>
                 <RewardValueDiv>
-                  {formatBigNumber(referral?.bondRewardLocked?.sub(pendingBondReward ?? 0) ?? BigNumber.from(0), 2)}
+                  {formatBigNumber(bondRewardLocked?.sub(pendingBondReward ?? 0) ?? BigNumber.from(0), 2)}
                 </RewardValueDiv>
               </DiffusionGoldWrap>
             </Grid>
@@ -359,7 +370,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem4.png" />
                           )}
                           <MySposDashboardValue className="alignRight" style={{ color: '#E7A4FF' }}>
-                            {stakers?.length ?? 0}
+                            {subordinates?.filter((address) => hasPower(address)).length ?? 0}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Networking headcount')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -383,6 +394,7 @@ const Reward = () => {
                             try {
                               const receipt = await dfsMineContract.withdrawSocialReward()
                               await receipt.wait()
+                              setPendingBondReward(BigNumber.from(0))
                             } catch (error: any) {
                               window.alert(error.reason ?? error.data?.message ?? error.message)
                             }
@@ -412,7 +424,7 @@ const Reward = () => {
                   />
                   <DataCell
                     label={t('Next payout rate')}
-                    value={`${savingInterest.toPrecision(5)}%`}
+                    value={`${(100 * savingInterest).toPrecision(5)}%`}
                     position="horizontal"
                     valueDivStyle={{ fontSize: '14px' }}
                   />
@@ -436,16 +448,21 @@ const Reward = () => {
               </Grid>
               <Grid item lg={4} md={4} sm={12} xs={12}>
                 <CardItem isMobile={isMobile} className="hasBorder">
-                  <DataCellWrap>
-                    <DataCell
-                      label={t('Balance')}
-                      value={`${formatBigNumber(DfsBalance ?? BigNumber.from(0), 2)} DFS`}
-                      position="horizontal"
-                    />
-                  </DataCellWrap>
+                  <DataCell
+                    label={t('Balance')}
+                    value={`${formatBigNumber(DfsBalance ?? BigNumber.from(0), 2)} DFS`}
+                    position="horizontal"
+                  />
+
                   <DataCell
                     label={t('Staked')}
                     value={`${formatBigNumber(stake?.stakedSavings ?? BigNumber.from(0), 2)} DFS`}
+                    position="horizontal"
+                  />
+
+                  <DataCell
+                    label={t('Rewards')}
+                    value={`${formatBigNumber(pendingSavingReward ?? BigNumber.from(0), 2)} DFS`}
                     position="horizontal"
                   />
                 </CardItem>
