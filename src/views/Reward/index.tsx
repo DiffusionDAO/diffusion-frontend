@@ -215,10 +215,15 @@ const Reward = () => {
         .div(savingsRewardVestingSeconds)
   const nextRewardSaving = formatBigNumber(nextRewardSavingNumber, 2)
   console.log('bondRewardContributors:', bondRewardContributors, powerRewardContributors)
-  const bondRewardDetailData = bondRewardContributors?.map(async (contributor) => {
+  const bondRewardDetailData = bondRewardContributors?.map((contributor) => {
+    let value = BigNumber.from(0)
+    bondContract.bondRewardDetails(account, contributor).then((res) => {
+      console.log(account, contributor, res.toString())
+      value = res
+    })
     return {
       address: isMobile ? shorten(contributor) : contributor,
-      value: formatBigNumber(BigNumber.from(await bondContract.bondRewardDetails(account, contributor)), 5),
+      value: formatBigNumber(BigNumber.from(value), 5),
     }
   })
   const socialRewardDetailData = powerRewardContributors?.map(async (contributor) => {
