@@ -37,7 +37,7 @@ const CompoundSuccessModal: React.FC<CompoundSuccessModalProps> = ({ onClose, nf
     >
       <ContentWrap>
         <CongratulationsTitle>{t('Congratulations')}</CongratulationsTitle>
-        <CongratulationsDes>{t('A new NFT was synthesized successfully')}</CongratulationsDes>
+        <CongratulationsDes>{t('A new NFT was composed successfully')}</CongratulationsDes>
         <AchievWrap>
           <AchievCard>
             <AchievImg src={nfts[0]?.image.thumbnail} />

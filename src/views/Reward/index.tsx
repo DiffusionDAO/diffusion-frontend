@@ -17,6 +17,7 @@ import { getMiningAddress } from 'utils/addressHelpers'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import { formatBigNumber, formatBigNumberToFixed, formatNumber } from 'utils/formatBalance'
 import { shorten } from 'helpers'
+import useSWR from 'swr'
 
 import {
   RewardPageWrap,
@@ -104,7 +105,7 @@ const Reward = () => {
   const [amount, setAmount] = useState('')
   const [activeItem, setActiveItem] = useState<number>(0)
   const [bondRewardDetailModalVisible, setBondRewardDetailModalVisible] = useState<boolean>(false)
-  const [socialRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
+  const [powerRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
   const [stake, setStake] = useState<StakeInfo>()
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [pendingSocialReward, setPendingSocialReward] = useState<BigNumber>(BigNumber.from(0))
@@ -122,7 +123,6 @@ const Reward = () => {
   const [powerRewardContributors, setPowerRewardContributors] = useState<any[]>()
   const [bondRewardContributors, setBondRewardContributors] = useState<any[]>()
   const [subordinates, setSubordinates] = useState<string[]>()
-
   const [epoch, setEpoch] = useState<any>({})
 
   const { isMobile } = useMatchBreakpoints()
@@ -171,7 +171,7 @@ const Reward = () => {
       dfsMineContract.savingsRewardVestingSeconds().then((res) => setSavingsRewardVestingSeconds(res))
       dfsMineContract.pendingSocialReward(account).then((res) => setPendingSocialReward(res))
       bondContract.pendingBondReward(account).then((res) => setPendingBondReward(res))
-      dfsMineContract?.pendingSavingReward(account).then((res) => setPendingSavingsReward(res))
+      dfsMineContract.pendingSavingReward(account).then((res) => setPendingSavingsReward(res))
 
       dfsMineContract.totalSavings().then((res) => setTotalSaving(res))
       dfsMineContract.stakeInfo(account).then((stake) => {
@@ -187,6 +187,48 @@ const Reward = () => {
     }
   }, [account, amount])
   useInterval(refresh, 3000)
+
+  const updateBondRewardDetailData = async () => {
+    const details = await Promise?.all(
+      bondRewardContributors?.map(async (contributor) => {
+        return {
+          address: isMobile ? shorten(contributor) : contributor,
+          value: formatBigNumber(BigNumber.from(await bondContract.bondRewardDetails(account, contributor)), 5),
+        }
+      }),
+    )
+    return details
+  }
+  const {
+    data: bondRewardDetailData,
+    status: bondRewardDetailDataStatus,
+    mutate: bondRewardDetailDataMutate,
+  } = useSWR('BondRewardDetailData', updateBondRewardDetailData)
+  useEffect(() => {
+    bondRewardDetailDataMutate(updateBondRewardDetailData())
+  }, [bondRewardDetailModalVisible])
+
+  const updatePowerRewardDetailData = async () => {
+    const details = await Promise?.all(
+      bondRewardContributors?.map(async (contributor) => {
+        const reward = await dfsMineContract.powerRewardPerContributor(account, contributor)
+        console.log(reward.toString())
+        return {
+          address: isMobile ? shorten(contributor) : contributor,
+          value: reward.toString(),
+        }
+      }),
+    )
+    return details
+  }
+  const {
+    data: powerRewardDetailData,
+    status: socialRewardDetailDataStatus,
+    mutate: powerRewardDetailDataMutate,
+  } = useSWR('powerRewardDetailData', updatePowerRewardDetailData)
+  useEffect(() => {
+    powerRewardDetailDataMutate(updatePowerRewardDetailData())
+  }, [powerRewardDetailModalVisible])
 
   const nextSavingPayoutTime = `${nextSavingInterestChange
     ?.toLocaleDateString()
@@ -208,27 +250,7 @@ const Reward = () => {
         .mul(epoch?.length ?? 0)
         .div(savingsRewardVestingSeconds)
   const nextRewardSaving = formatBigNumber(nextRewardSavingNumber, 2)
-  const bondRewardDetailData = bondRewardContributors?.map((contributor) => {
-    let value = BigNumber.from(0)
-    bondContract.bondRewardDetails(account, contributor).then((res) => {
-      console.log(account, contributor, res.toString())
-      value = res
-    })
-    return {
-      address: isMobile ? shorten(contributor) : contributor,
-      value: formatBigNumber(BigNumber.from(value), 5),
-    }
-  })
-  const socialRewardDetailData = powerRewardContributors?.map((contributor) => {
-    let value = BigNumber.from(0)
-    dfsMineContract.powerRewardPerContributor(account, contributor).then((res) => {
-      value = res
-    })
-    return {
-      address: isMobile ? shorten(contributor) : contributor,
-      value: formatBigNumber(BigNumber.from(value), 5),
-    }
-  })
+
   const hasPower = useCallback(
     async (address) => {
       const res = await dfsMineContract.stakeInfo(address)
@@ -462,7 +484,7 @@ const Reward = () => {
 
                   <DataCell
                     label={t('Rewards')}
-                    value={`${formatBigNumber(pendingSavingReward ?? BigNumber.from(0), 2)} DFS`}
+                    value={`${formatBigNumber(pendingSavingReward, 5)} DFS`}
                     position="horizontal"
                   />
                 </CardItem>
@@ -523,8 +545,8 @@ const Reward = () => {
       {bondRewardDetailModalVisible ? (
         <DetailModal detailData={bondRewardDetailData} onClose={closeDetailModal} />
       ) : null}
-      {socialRewardDetailModalVisible ? (
-        <DetailModal detailData={socialRewardDetailData} onClose={closeUnlockedDetailModal} />
+      {powerRewardDetailModalVisible ? (
+        <DetailModal detailData={powerRewardDetailData} onClose={closeUnlockedDetailModal} />
       ) : null}
       {!account && (
         <NoPower

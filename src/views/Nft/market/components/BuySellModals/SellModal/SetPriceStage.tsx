@@ -40,7 +40,7 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
   const adjustedPriceIsTheSame = variant === 'adjust' && parseFloat(currentPrice) === parseFloat(price)
   const priceIsValid = !price || Number.isNaN(parseFloat(price)) || parseFloat(price) <= 0
 
-  const { creatorFee = '', tradingFee = '' } = useGetCollection(nftToSell.collectionAddress) || {}
+  const { creatorFee = '0', tradingFee = '5' } = useGetCollection(nftToSell.collectionAddress) || {}
   const creatorFeeAsNumber = parseFloat(creatorFee)
   const tradingFeeAsNumber = parseFloat(tradingFee)
   // const bnbPrice = useBNBBusdPrice()
@@ -64,13 +64,13 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
     <>
       <Text>
         {t(
-          'When selling NFTs from this collection, a portion of the BNB paid will be diverted before reaching the seller:',
+          'When selling NFTs from this collection, a portion of the DFS paid will be diverted before reaching the seller:',
         )}
       </Text>
       {creatorFeeAsNumber > 0 && (
         <Text>{t('%percentage%% royalties to the collection owner', { percentage: creatorFee })}</Text>
       )}
-      <Text>{t('%percentage%% trading fee will be used to buy & burn CAKE', { percentage: tradingFee })}</Text>
+      <Text>{t('%percentage%% trading fee will be used to burn', { percentage: tradingFee })}</Text>
     </>,
     { placement: 'auto' },
   )
