@@ -164,8 +164,7 @@ const Reward = () => {
         setEpoch(res)
         setNextSavingInterestChangeTime(new Date(res.endTime * 1000))
       })
-      dfsMineContract.getPowerRewardContributors(account).then((res) => setPowerRewardContributors(res))
-      bondContract.getBondRewardContributors(account).then((res) => setBondRewardContributors(res))
+
       bondContract.getSubordinates(account).then((res) => setSubordinates(res))
       dfsMineContract.socialRewardVestingSeconds().then((res) => setSoicalRewardVestingSeconds(res))
       dfsMineContract.savingsRewardVestingSeconds().then((res) => setSavingsRewardVestingSeconds(res))
@@ -189,15 +188,19 @@ const Reward = () => {
   useInterval(refresh, 3000)
 
   const updateBondRewardDetailData = async () => {
-    const details = await Promise?.all(
-      bondRewardContributors?.map(async (contributor) => {
-        return {
-          address: isMobile ? shorten(contributor) : contributor,
-          value: formatBigNumber(BigNumber.from(await bondContract.bondRewardDetails(account, contributor)), 5),
-        }
-      }),
-    )
-    return details
+    if (account) {
+      const bondRewardContributors = await bondContract.getBondRewardContributors(account)
+      const details = await Promise?.all(
+        bondRewardContributors?.map(async (contributor) => {
+          return {
+            address: isMobile ? shorten(contributor) : contributor,
+            value: formatBigNumber(BigNumber.from(await bondContract.bondRewardDetails(account, contributor)), 5),
+          }
+        }),
+      )
+      return details
+    }
+    return []
   }
   const {
     data: bondRewardDetailData,
@@ -206,20 +209,23 @@ const Reward = () => {
   } = useSWR('BondRewardDetailData', updateBondRewardDetailData)
   useEffect(() => {
     bondRewardDetailDataMutate(updateBondRewardDetailData())
-  }, [bondRewardDetailModalVisible])
+  }, [bondRewardDetailModalVisible, account])
 
   const updatePowerRewardDetailData = async () => {
-    const details = await Promise?.all(
-      bondRewardContributors?.map(async (contributor) => {
-        const reward = await dfsMineContract.powerRewardPerContributor(account, contributor)
-        console.log(reward.toString())
-        return {
-          address: isMobile ? shorten(contributor) : contributor,
-          value: reward.toString(),
-        }
-      }),
-    )
-    return details
+    if (account) {
+      const powerRewardContributors = await dfsMineContract.getPowerRewardContributors(account)
+      const details = await Promise?.all(
+        powerRewardContributors?.map(async (contributor) => {
+          const reward = await dfsMineContract.powerRewardPerContributor(account, contributor)
+          return {
+            address: isMobile ? shorten(contributor) : contributor,
+            value: reward.toString(),
+          }
+        }),
+      )
+      return details
+    }
+    return []
   }
   const {
     data: powerRewardDetailData,
@@ -228,7 +234,7 @@ const Reward = () => {
   } = useSWR('powerRewardDetailData', updatePowerRewardDetailData)
   useEffect(() => {
     powerRewardDetailDataMutate(updatePowerRewardDetailData())
-  }, [powerRewardDetailModalVisible])
+  }, [powerRewardDetailModalVisible, account])
 
   const nextSavingPayoutTime = `${nextSavingInterestChange
     ?.toLocaleDateString()
