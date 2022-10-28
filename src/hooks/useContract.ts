@@ -61,7 +61,6 @@ import {
   getNftDrawContract,
   getDFSNFTContract,
   getMineContract,
-  getBondContract,
   getDFSContract,
   getIDOContract,
   getNFTDatabaseContract,
