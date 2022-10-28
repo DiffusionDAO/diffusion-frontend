@@ -16,7 +16,7 @@ import { bscTestnetTokens } from '@pancakeswap/tokens'
 import { Modal, Input } from 'antd'
 import styled, { css } from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { useBondContract, useDFSContract, useDFSMineContract, useIDOContract } from 'hooks/useContract'
+import { useDFSContract, useDFSMineContract, useIDOContract } from 'hooks/useContract'
 import CopyAddress from './CopyAddress'
 
 export const MoneyInput = styled(Input)`

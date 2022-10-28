@@ -9,7 +9,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { useTranslation } from '@pancakeswap/localization'
 import { useRouter } from 'next/router'
-import { useBondContract, useDFSContract, useDFSMineContract } from 'hooks/useContract'
+import { useDFSContract, useDFSMineContract } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useSWRContract, useSWRMulticall } from 'hooks/useSWRContract'
 import { MaxUint256 } from '@ethersproject/constants'
@@ -129,7 +129,6 @@ const Reward = () => {
   const { onPresentConnectModal } = useWallet()
   const dfsMineContract = useDFSMineContract()
   const dfsContract = useDFSContract()
-  const bondContract = useBondContract()
   const dfsMineAddress = getMiningAddress()
   const slidesPerView = isMobile ? 1 : 3
   const swiperWrapBgImgUrl = isMobile ? '/images/reward/swiperWrapBgMobile.png' : '/images/reward/swiperWrapBg.png'

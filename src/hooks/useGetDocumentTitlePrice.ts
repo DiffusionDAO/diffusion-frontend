@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import useSWR from 'swr'
 import { getPairAddress } from 'utils/addressHelpers'
-import { useBondContract, usePairContract } from './useContract'
+import { usePairContract } from './useContract'
 
 const useGetDocumentTitlePrice = () => {
   const pairAddress = getPairAddress()

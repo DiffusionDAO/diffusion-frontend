@@ -4,7 +4,6 @@ import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  useBondContract,
   useDFSMineContract,
   useDFSNftContract,
   useERC20,

@@ -6,7 +6,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { getUSDTAddress, getMiningAddress, getDFSAddress, getPairAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useBondContract, useDFSContract, useDFSMineContract, useERC20, usePairContract } from 'hooks/useContract'
+import { useDFSContract, useDFSMineContract, useERC20, usePairContract } from 'hooks/useContract'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import { useRouterContract } from 'utils/exchange'
 

@@ -398,9 +398,7 @@ export const getDFSNFTContract = (signer?: Signer | Provider) => {
 export const getDFSContract = (signer?: Signer | Provider) => {
   return getContract({ abi: dfsAbi, address: getDFSAddress(), signer })
 }
-export const getBondContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: mineAbi, address: getMiningAddress(), signer })
-}
+
 export const getMineContract = (signer?: Signer | Provider) => {
   return getContract({ abi: mineAbi, address: getMiningAddress(), signer })
 }

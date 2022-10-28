@@ -395,10 +395,6 @@ export const useDFSContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
   return useMemo(() => getDFSContract(providerOrSigner), [providerOrSigner])
 }
-export const useBondContract = (withSignerIfPossible = true) => {
-  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getBondContract(providerOrSigner), [providerOrSigner])
-}
 
 export const useIDOContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
