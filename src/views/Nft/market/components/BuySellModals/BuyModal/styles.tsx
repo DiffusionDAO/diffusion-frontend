@@ -67,7 +67,7 @@ export const DfsAmountCell: React.FC<React.PropsWithChildren<DfsAmountCellProps>
       </Flex>
     )
   }
-  const usdAmount = multiplyPriceByAmount(dfsPrice?.toNumber(), dfsAmount)
+  const usdAmount = dfsPrice * dfsAmount
   return (
     <Flex justifySelf="flex-end" flexDirection="column">
       <Flex justifyContent="flex-end">
