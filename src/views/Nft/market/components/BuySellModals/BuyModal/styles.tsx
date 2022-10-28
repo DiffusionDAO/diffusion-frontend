@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import { Modal, Grid, Flex, Text, BinanceIcon, Skeleton } from '@pancakeswap/uikit'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { useBondContract } from 'hooks/useContract'
+import { useBondContract, usePairContract } from 'hooks/useContract'
 import useSWR from 'swr'
+import { getPairAddress } from 'utils/addressHelpers'
 import { BuyingStage } from './types'
 
 export const StyledModal = styled(Modal)<{ stage: BuyingStage }>`
@@ -46,10 +47,16 @@ export const DfsAmountCell: React.FC<React.PropsWithChildren<DfsAmountCellProps>
   isLoading,
   isInsufficient,
 }) => {
-  const bond = useBondContract()
-  const { data: dfsPrice, status } = useSWR('getDFSUSDTPrice', async () => {
-    const price = await bond.getDFSUSDTPrice()
-    return price
+  const pairAddress = getPairAddress()
+  const pair = usePairContract(pairAddress)
+
+  const { data: dfsPrice, status } = useSWR('getPriceInUSDT', async () => {
+    const reserves: any = await pair.getReserves()
+    let marketPrice = reserves[1] / reserves[0]
+    if (marketPrice < 1) {
+      marketPrice = reserves[0] / reserves[1]
+    }
+    return marketPrice
   })
 
   if (isLoading) {

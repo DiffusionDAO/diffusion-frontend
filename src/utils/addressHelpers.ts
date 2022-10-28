@@ -130,9 +130,8 @@ export const getUSDTAddress = () => {
 export const getDFSAddress = () => {
   return getAddress(addresses.dfs)
 }
-
-export const getBondAddress = () => {
-  return getAddress(addresses.bond)
+export const getPairAddress = () => {
+  return getAddress(addresses.pair)
 }
 export const getMiningAddress = () => {
   return getAddress(addresses.dfsMining)

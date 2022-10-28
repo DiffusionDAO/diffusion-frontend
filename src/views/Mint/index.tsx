@@ -3,7 +3,14 @@ import { FC, useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
-import { useBondContract, useDFSNftContract, useERC20, useNFTMintContract, useTokenContract } from 'hooks/useContract'
+import {
+  useBondContract,
+  useDFSMineContract,
+  useDFSNftContract,
+  useERC20,
+  useNFTMintContract,
+  useTokenContract,
+} from 'hooks/useContract'
 import { getDFSAddress, getNftMintAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -70,11 +77,11 @@ const Mint = () => {
   const DFS = useERC20(dfsAddress)
 
   const NFTMint = useNFTMintContract()
-  const bond = useBondContract()
+  const dfsMining = useDFSMineContract()
 
   useEffect(() => {
     if (account) {
-      bond.bondInfo(account).then((res) => setBondPayout(res[0]))
+      dfsMining.bondInfo(account).then((res) => setBondPayout(res[0]))
       DFS.balanceOf(account)
         .then((res) => {
           if (!res.eq(balance)) {
@@ -294,7 +301,6 @@ const Mint = () => {
                     valueDivStyle={{ fontSize: '14px' }}
                     position="horizontal"
                   />
-                  Silver
                   <DataCell
                     label={t('Description')}
                     value={t('Acquire any of the 2 types of NFT cards')}

@@ -20,14 +20,14 @@ import { Bond } from 'helpers/bond/bond'
 //     let bondDetails: IAllBondData[]
 //     bondDetails = allBonds
 //       .flatMap((bond) => {
-//         if (bondState[bond.name] && bondState[bond.name].bondDiscount) {
-//           return Object.assign(bond, bondState[bond.name]) // Keeps the object type
+//         if (bondState[dfsMining.name] && bondState[dfsMining.name].bondDiscount) {
+//           return Object.assign(bond, bondState[dfsMining.name]) // Keeps the object type
 //         }
 //         return bond
 //       })
 //       .flatMap((bond) => {
-//         if (accountBondsState[bond.name]) {
-//           return Object.assign(bond, accountBondsState[bond.name])
+//         if (accountBondsState[dfsMining.name]) {
+//           return Object.assign(bond, accountBondsState[dfsMining.name])
 //         }
 //         return bond
 //       })

@@ -4,8 +4,9 @@ import { escapeRegExp } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/nftMarket/types'
 import { useGetCollection } from 'state/nftMarket/hooks'
-import { useBondContract } from 'hooks/useContract'
+import { useBondContract, usePairContract } from 'hooks/useContract'
 import useSWR from 'swr'
+import { getPairAddress } from 'utils/addressHelpers'
 import { Divider } from '../shared/styles'
 import { GreyedOutContainer, DfsAmountCell, RightAlignedInput, FeeAmountCell } from './styles'
 
@@ -44,13 +45,19 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
   const creatorFeeAsNumber = parseFloat(creatorFee)
   const tradingFeeAsNumber = parseFloat(tradingFee)
   // const bnbPrice = useBNBBusdPrice()
-  const bond = useBondContract()
-  const { data: dfsPrice, status } = useSWR('getDFSUSDTPrice', async () => {
-    const price = await bond.getDFSUSDTPrice()
-    return price
+  const pairAddress = getPairAddress()
+  const pair = usePairContract(pairAddress)
+
+  const { data: dfsPrice, status } = useSWR('getPriceInUSDT', async () => {
+    const reserves: any = await pair.getReserves()
+    let marketPrice = reserves[1] / reserves[0]
+    if (marketPrice < 1) {
+      marketPrice = reserves[0] / reserves[1]
+    }
+    return marketPrice
   })
   const priceAsFloat = parseFloat(price)
-  const priceInUsd = priceAsFloat * dfsPrice?.toNumber()
+  const priceInUsd = priceAsFloat * dfsPrice
 
   const priceIsOutOfRange = priceAsFloat > MAX_PRICE || priceAsFloat < MIN_PRICE
 

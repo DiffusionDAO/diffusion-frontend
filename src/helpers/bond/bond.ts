@@ -11,7 +11,7 @@ export interface BondOpts {
   readonly bondContractABI: ContractInterface // ABI for contract
   readonly testContractABI: ContractInterface // ABI for contract
   readonly networkAddrs: NetworkAddresses // Mapping of network --> Addresses
-  readonly bondToken: string // Unused, but native token to buy the bond.
+  readonly bondToken: string // Unused, but native token to buy the dfsMining.
 }
 
 export abstract class Bond {

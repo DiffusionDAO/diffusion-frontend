@@ -4,11 +4,11 @@ import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
-import { getUSDTAddress, getBondAddress, getDFSAddress } from 'utils/addressHelpers'
+import { getUSDTAddress, getMiningAddress, getDFSAddress, getPairAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useBondContract, useDFSContract, useERC20 } from 'hooks/useContract'
-import { BigNumber } from '@ethersproject/bignumber'
+import { useBondContract, useDFSContract, useDFSMineContract, useERC20, usePairContract } from 'hooks/useContract'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
+import { useRouterContract } from 'utils/exchange'
 
 import {
   BondPageWrap,
@@ -58,8 +58,17 @@ const Bond = () => {
   const [bondItem, setBondItem] = useState<any>(null)
   const [vestingTerms, setVestingTerms] = useState<number>(0)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<string>()
-  const bond = useBondContract()
-  const dfsContract = useDFSContract()
+
+  useEffect(() => {
+    pair.getReserves().then((reserves: any) => {
+      let marketPrice = reserves[1] / reserves[0]
+      if (marketPrice < 1) {
+        marketPrice = reserves[0] / reserves[1]
+      }
+      bondDatasMock[0].price = marketPrice.toFixed(5)
+    })
+  }, [account])
+
   const openBondModal = (item) => {
     setBondItem(item)
     setBondModalVisible(true)
@@ -73,15 +82,28 @@ const Bond = () => {
   const closeSettingModal = () => {
     setSettingModalVisible(false)
   }
-  const bondAddress = getBondAddress()
-  const usdt = useERC20(getUSDTAddress())
+  const miningAddress = getMiningAddress()
+  const dfsMining = useDFSMineContract()
+  const dfs = useDFSContract()
+  const usdtAddress = getUSDTAddress()
+  const usdt = useERC20(usdtAddress, true)
+  const pairAddress = getPairAddress()
+  const pair = usePairContract(pairAddress)
+  const dfsContract = useDFSContract()
+  const pancakeRouter = useRouterContract()
+
   const getApprove = () => {
-    usdt.approve(bondAddress, MaxUint256).then(() => setIsApprove(true))
+    usdt
+      .approve(pancakeRouter.address, MaxUint256)
+      .then((receipt) =>
+        dfsContract
+          .approve(pancakeRouter.address, MaxUint256)
+          .then((res) => res.wait().then((res) => setIsApprove(true))),
+      )
   }
   useEffect(() => {
-    setIsApprove(false)
     if (account) {
-      usdt.allowance(account, bondAddress).then((res) => {
+      usdt.allowance(account, pancakeRouter.address).then((res) => {
         if (res.gt(0)) {
           setIsApprove(true)
         }
@@ -91,23 +113,7 @@ const Bond = () => {
   useEffect(() => {
     const dfsUsdt = bondDatasMock[0]
     // eslint-disable-next-line no-return-assign, no-param-reassign
-    bond
-      .getDFSUSDTPrice()
-      .then((res) => {
-        dfsUsdt.price = res.toNumber()
-      })
-      .catch((error) => {
-        console.log(error.reason ?? error.data?.message ?? error.message)
-      })
-    // bond
-    //   .bondPrice()
-    //   .then((res) => {
-    //     dfsUsdt.price = res.toNumber()
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.reason ?? error.data?.message ?? error.message)
-    //   })
-    bond
+    dfsMining
       .terms()
       .then((res) => {
         dfsUsdt.duration = res[2] / (24 * 3600)

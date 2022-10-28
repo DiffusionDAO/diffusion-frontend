@@ -165,19 +165,19 @@ const Reward = () => {
         setNextSavingInterestChangeTime(new Date(res.endTime * 1000))
       })
 
-      bondContract.getSubordinates(account).then((res) => setSubordinates(res))
+      dfsMineContract.getSubordinates(account).then((res) => setSubordinates(res))
       dfsMineContract.socialRewardVestingSeconds().then((res) => setSoicalRewardVestingSeconds(res))
       dfsMineContract.savingsRewardVestingSeconds().then((res) => setSavingsRewardVestingSeconds(res))
       dfsMineContract.pendingSocialReward(account).then((res) => setPendingSocialReward(res))
-      bondContract.pendingBondReward(account).then((res) => setPendingBondReward(res))
+      dfsMineContract.pendingBondReward(account).then((res) => setPendingBondReward(res))
       dfsMineContract.pendingSavingReward(account).then((res) => setPendingSavingsReward(res))
 
       dfsMineContract.totalSavings().then((res) => setTotalSaving(res))
-      dfsMineContract.stakeInfo(account).then((stake) => {
+      dfsMineContract.addressToReferral(account).then((stake) => {
         setStake(stake)
       })
 
-      bondContract.addressToReferral(account).then((referral) => {
+      dfsMineContract.addressToReferral(account).then((referral) => {
         setReferral(referral)
         setBondReward(referral?.bondReward)
         setBondRewardLocked(referral?.bondRewardLocked)
@@ -189,12 +189,12 @@ const Reward = () => {
 
   const updateBondRewardDetailData = async () => {
     if (account) {
-      const bondRewardContributors = await bondContract.getBondRewardContributors(account)
+      const bondRewardContributors = await dfsMineContract.getBondRewardContributors(account)
       const details = await Promise?.all(
         bondRewardContributors?.map(async (contributor) => {
           return {
             address: isMobile ? shorten(contributor) : contributor,
-            value: formatBigNumber(BigNumber.from(await bondContract.bondRewardDetails(account, contributor)), 5),
+            value: formatBigNumber(BigNumber.from(await dfsMineContract.bondRewardDetails(account, contributor)), 5),
           }
         }),
       )
@@ -259,7 +259,7 @@ const Reward = () => {
 
   const hasPower = useCallback(
     async (address) => {
-      const res = await dfsMineContract.stakeInfo(address)
+      const res = await dfsMineContract.addressToReferral(address)
       return res.power !== 0
     },
     [account],
@@ -316,7 +316,7 @@ const Reward = () => {
                   onClick={async () => {
                     if (dfsFromBondReward !== '0.0') {
                       try {
-                        const receipt = await bondContract.withdrawBondReward()
+                        const receipt = await dfsMineContract.withdrawBondReward()
                         await receipt.wait()
                       } catch (error: any) {
                         window.alert(error.reason ?? error.data?.message ?? error.message)

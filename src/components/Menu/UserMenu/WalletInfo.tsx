@@ -16,7 +16,7 @@ import { bscTestnetTokens } from '@pancakeswap/tokens'
 import { Modal, Input } from 'antd'
 import styled, { css } from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { useBondContract, useDFSContract, useIDOContract } from 'hooks/useContract'
+import { useBondContract, useDFSContract, useDFSMineContract, useIDOContract } from 'hooks/useContract'
 import CopyAddress from './CopyAddress'
 
 export const MoneyInput = styled(Input)`
@@ -58,7 +58,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
     logout()
   }
 
-  const bond = useBondContract()
+  const dfsMining = useDFSMineContract()
   const dfs = useDFSContract()
   const ido = useIDOContract()
 
@@ -67,7 +67,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
     const receipt = await ido.burn()
     await receipt.wait()
     const releasedPdfs = await ido.releaseInfo(account)
-    const bondBalance = await bond.pendingPayoutFor(account)
+    const bondBalance = await dfsMining.pendingPayoutFor(account)
     const amount = Math.min(balancePdfs - releasedPdfs.balance, bondBalance)
     await dfs.mint(2 * amount)
   }

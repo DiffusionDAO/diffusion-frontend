@@ -6,11 +6,11 @@ import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 import { parseUnits } from '@ethersproject/units'
 import { useWallet } from 'hooks/useWallet'
-import { useBondContract, useDFSContract, useERC20 } from 'hooks/useContract'
+import { useBondContract, useDFSContract, useDFSMineContract, useERC20, usePairContract } from 'hooks/useContract'
 import { BigNumber, ethers } from 'ethers'
 import { USDT } from '@pancakeswap/tokens'
 import { MaxUint256 } from '@ethersproject/constants'
-import { getUSDTAddress } from 'utils/addressHelpers'
+import { getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { useSigner } from 'wagmi'
 import { useRouterContract } from 'utils/exchange'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
@@ -74,8 +74,8 @@ const BondModal: React.FC<BondModalProps> = ({
   const [referral, setReferral] = useState<string>('')
   const [amount, setAmount] = useState<string>('')
   const [activeTab, setActiveTab] = useState<string>('mint')
-  const [bondPrice, setBondPrice] = useState<number>(0)
-  const [marketPrice, setMarketPrice] = useState<number>(0)
+  const [bondPrice, setBondPrice] = useState<string>('0')
+  const [marketPrice, setMarketPrice] = useState<string>('0')
   const [dfsBalance, setDfsBalance] = useState<string>()
   const [minPrice, setMinPrice] = useState<BigNumber>()
   const [vestingTerms, setVestingTerms] = useState<number>(0)
@@ -85,25 +85,27 @@ const BondModal: React.FC<BondModalProps> = ({
   const [bondPayout, setBondPayout] = useState<string>('0')
 
   const zeroAddress = '0x0000000000000000000000000000000000000000'
-  const bond = useBondContract()
+  const dfsMining = useDFSMineContract()
   const dfs = useDFSContract()
   const usdtAddress = getUSDTAddress()
   const usdt = useERC20(usdtAddress, true)
-  const pancakeRouter = useRouterContract()
+  const pairAddress = getPairAddress()
+  const pair = usePairContract(pairAddress)
 
   useEffect(() => {
-    bond
-      .getDFSUSDTPrice()
-      .then((res) => {
-        setBondPrice(res.toNumber())
-        setMarketPrice((res.toNumber() * 100) / bondData.discount)
-      })
-      .catch((error) => console.log(error))
+    pair.getReserves().then((reserves: any) => {
+      let marketPrice = reserves[1] / reserves[0]
+      if (marketPrice < 1) {
+        marketPrice = reserves[0] / reserves[1]
+      }
+      setBondPrice(marketPrice.toFixed(5))
+      setMarketPrice(((marketPrice * 100) / bondData.discount).toFixed(5))
+    })
   }, [account, amount])
 
   useEffect(() => {
     if (account) {
-      bond
+      dfsMining
         .referrals(account)
         .then((res) => {
           if (res !== zeroAddress) {
@@ -114,8 +116,8 @@ const BondModal: React.FC<BondModalProps> = ({
           }
         })
         .catch((error) => console.log(error))
-      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
-      bond
+      dfsMining.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
+      dfsMining
         .pendingPayoutFor(account)
         .then((res) => {
           setPendingPayout(formatBigNumber(res, 18))
@@ -131,21 +133,21 @@ const BondModal: React.FC<BondModalProps> = ({
   }, [account])
 
   useEffect(() => {
-    bond
+    dfsMining
       .terms()
       .then((res) => {
         setMinPrice(res[0])
         setVestingTerms(res[2])
       })
       .catch((error) => console.log(error))
-    bond
+    dfsMining
       .maxPayout()
       .then((res) => {
         setMaxPayout(formatBigNumber(res, 18))
       })
       .catch((error) => console.log(error))
     if (amount) {
-      bond
+      dfsMining
         .payoutFor(parseUnits(amount, 'ether'))
         .then((payout) => setPayoutFor(formatBigNumber(payout, 4)))
         .catch((error) => console.log(error))
@@ -177,20 +179,13 @@ const BondModal: React.FC<BondModalProps> = ({
       window.alert('missing referral')
       return
     }
-    let allowance = await usdt.allowance(account, pancakeRouter.address)
+    const allowance = await usdt.allowance(account, dfsMining.address)
     if (allowance.eq(0)) {
-      let receipt = await usdt.approve(pancakeRouter.address, MaxUint256)
-      await receipt.wait()
-      receipt = await dfs.approve(pancakeRouter.address, MaxUint256)
-      await receipt.wait()
-    }
-    allowance = await usdt.allowance(account, bond.address)
-    if (allowance.eq(0)) {
-      const receipt = await usdt.approve(bond.address, MaxUint256)
+      const receipt = await usdt.approve(dfsMining.address, MaxUint256)
       await receipt.wait()
     }
     try {
-      const receipt = await bond.deposit(parseUnits(amount, 'ether'), referral)
+      const receipt = await dfsMining.deposit(parseUnits(amount, 'ether'), referral)
       await receipt.wait()
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
@@ -222,7 +217,7 @@ const BondModal: React.FC<BondModalProps> = ({
       okType: 'danger',
       cancelText: t('Go to Mint'),
       onOk() {
-        bond.redeem(account).catch((error) => window.alert(error.reason ?? error.data?.message ?? error.message))
+        dfsMining.redeem(account).catch((error) => window.alert(error.reason ?? error.data?.message ?? error.message))
       },
       onCancel() {
         router.push(`/mint`)
@@ -285,7 +280,7 @@ const BondModal: React.FC<BondModalProps> = ({
                 if (e.target.value) {
                   setHasReferral(true)
                   try {
-                    const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
+                    const payout = await dfsMining.payoutFor(parseUnits(e.target.value, 'ether'))
                     setPayoutFor(formatBigNumber(payout, 4))
                   } catch (error: any) {
                     window.alert(error.reason ?? error.data?.message ?? error.message)

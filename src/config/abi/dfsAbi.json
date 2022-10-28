@@ -345,7 +345,7 @@
   },
   {
     "inputs": [],
-    "name": "getDFSUSDTPrice",
+    "name": "getPriceInUSDT",
     "outputs": [
       {
         "internalType": "uint256",
