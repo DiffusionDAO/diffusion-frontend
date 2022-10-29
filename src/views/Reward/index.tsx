@@ -68,10 +68,13 @@ import DetailModal from './components/DetailModal'
 import NoPower from './components/NoPower'
 import useInterval from '../../../packages/hooks/src/useInterval'
 
-interface StakeInfo {
+interface Referral {
   self: string
   level: BigNumber
   power: BigNumber
+  bondReward: BigNumber
+  bondRewardLocked: BigNumber
+  lastBondRewardWithdraw: BigNumber
   lockedPower: BigNumber
   unlockedPower: BigNumber
   socialReward: BigNumber
@@ -80,13 +83,6 @@ interface StakeInfo {
   savings: BigNumber
   stakedSavings: BigNumber
   lastSavingsWithdraw: BigNumber
-}
-interface Referral {
-  self: string
-  level: BigNumber
-  bondReward: BigNumber
-  bondRewardLocked: BigNumber
-  lastBondRewardWithdraw: BigNumber
 }
 interface BondRewardDetail {
   contributor: string
@@ -106,7 +102,6 @@ const Reward = () => {
   const [activeItem, setActiveItem] = useState<number>(0)
   const [bondRewardDetailModalVisible, setBondRewardDetailModalVisible] = useState<boolean>(false)
   const [powerRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
-  const [stake, setStake] = useState<StakeInfo>()
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [pendingSocialReward, setPendingSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [DfsBalance, setDfsBalance] = useState<BigNumber>(BigNumber.from(0))
@@ -124,6 +119,9 @@ const Reward = () => {
   const [bondRewardContributors, setBondRewardContributors] = useState<any[]>()
   const [subordinates, setSubordinates] = useState<string[]>()
   const [epoch, setEpoch] = useState<any>({})
+  const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
+  const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
+  const [socialRewardPerSecond, setSocialRewardPerSecond] = useState<BigNumber>(BigNumber.from(0))
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -164,6 +162,9 @@ const Reward = () => {
         setNextSavingInterestChangeTime(new Date(res.endTime * 1000))
       })
 
+      dfsMineContract.socialRewardPerSecond().then((res) => setSocialRewardPerSecond(res))
+      dfsMineContract.totalSocialReward().then((res) => setTotalSocialReward(res))
+      dfsMineContract.totalPower().then((res) => setTotalPower(res))
       dfsMineContract.getSubordinates(account).then((res) => setSubordinates(res))
       dfsMineContract.socialRewardVestingSeconds().then((res) => setSoicalRewardVestingSeconds(res))
       dfsMineContract.savingsRewardVestingSeconds().then((res) => setSavingsRewardVestingSeconds(res))
@@ -172,8 +173,8 @@ const Reward = () => {
       dfsMineContract.pendingSavingReward(account).then((res) => setPendingSavingsReward(res))
 
       dfsMineContract.totalSavings().then((res) => setTotalSaving(res))
-      dfsMineContract.addressToReferral(account).then((stake) => {
-        setStake(stake)
+      dfsMineContract.addressToReferral(account).then((res) => {
+        setReferral(res)
       })
 
       dfsMineContract.addressToReferral(account).then((referral) => {
@@ -238,15 +239,29 @@ const Reward = () => {
   const nextSavingPayoutTime = `${nextSavingInterestChange
     ?.toLocaleDateString()
     .replace(/\//g, '-')} ${nextSavingInterestChange?.toTimeString().slice(0, 8)}`
-  const rewardInterest = formatNumber(
-    Number.isNaN(epoch?.length / soicalRewardVestingSeconds) ? 0 : (epoch?.length / soicalRewardVestingSeconds) * 100,
-    2,
-  )
+
+  const currentIndex = totalPower.gt(0) ? formatBigNumber(totalSocialReward?.div(totalPower), 2) : '0'
   const savingInterest = (epoch?.length * 3) / savingsRewardVestingSeconds
-  const fiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
-  const myLockedPower = BigNumber.from(stake?.power.mul(2).sub(stake?.unlockedPower) ?? 0).toString()
-  const myTotalPower = BigNumber.from(stake?.power?.add(stake?.unlockedPower ?? 0) ?? 0).toString()
-  const greenPower = BigNumber.from(stake?.power ?? 0).toString()
+  const socialRewardfiveDayROI =
+    ((parseFloat(formatUnits(socialRewardPerSecond)) * referral?.power.toNumber()) /
+      totalPower.toNumber() /
+      parseFloat(formatUnits(totalSocialReward))) *
+    5 *
+    24 *
+    3600 *
+    100
+  const sposAPY =
+    ((parseFloat(formatUnits(socialRewardPerSecond)) * referral?.power.toNumber()) /
+      totalPower.toNumber() /
+      parseFloat(formatUnits(totalSocialReward))) *
+    365 *
+    24 *
+    3600 *
+    100
+  const savingsfiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
+  const myLockedPower = BigNumber.from(referral?.power.mul(2).sub(referral?.unlockedPower) ?? 0).toString()
+  const myTotalPower = BigNumber.from(referral?.power?.add(referral?.unlockedPower ?? 0) ?? 0).toString()
+  const greenPower = BigNumber.from(referral?.power ?? 0).toString()
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
@@ -278,16 +293,16 @@ const Reward = () => {
               centeredSlides
               navigation
               onSwiper={(swiper) => {
-                swiper.slideTo(stake?.level?.toNumber())
+                swiper.slideTo(referral?.level?.toNumber())
               }}
               onSlideChange={(swiper) => {
-                swiper.slideTo(stake?.level?.toNumber())
+                swiper.slideTo(referral?.level?.toNumber())
               }}
               onUpdate={(swiper) => {
-                swiper.slideTo(stake?.level?.toNumber())
+                swiper.slideTo(referral?.level?.toNumber())
               }}
             >
-              {stake?.level !== undefined &&
+              {referral?.level !== undefined &&
                 swiperSlideData.map((item, index) => {
                   return (
                     <SwiperSlide key={item.name}>
@@ -339,17 +354,28 @@ const Reward = () => {
                 </MySposHeader>
                 <MySposOveview>
                   <MySposOveviewItem>
-                    <DataCell label={t('Next payout')} value="0" valueDivStyle={{ fontSize: '16px' }} />
-                  </MySposOveviewItem>
-                  <MySposOveviewItem>
-                    <DataCell label={t('Next reward')} value="0" valueDivStyle={{ fontSize: '16px' }} />
+                    <DataCell
+                      label={t('Total SPOS')}
+                      value={formatNumber(totalPower.toNumber(), 0)}
+                      valueDivStyle={{ fontSize: '16px' }}
+                    />
                   </MySposOveviewItem>
                   <MySposOveviewItem>
                     <DataCell
-                      label={t('Current interest')}
-                      value={`${rewardInterest}%`}
+                      label={t('ROI (5 days)')}
+                      value={`${formatNumber(socialRewardfiveDayROI, 2)}%`}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
+                  </MySposOveviewItem>
+                  <MySposOveviewItem>
+                    <DataCell
+                      label={t('APY')}
+                      value={`${formatNumber(sposAPY, 2)}%`}
+                      valueDivStyle={{ fontSize: '16px' }}
+                    />
+                  </MySposOveviewItem>
+                  <MySposOveviewItem>
+                    <DataCell label={t('Current Index')} value={currentIndex} valueDivStyle={{ fontSize: '16px' }} />
                   </MySposOveviewItem>
                   <CoinImg src="/images/reward/coin.png" />
                 </MySposOveview>
@@ -386,7 +412,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>
-                            {stake?.unlockedPower?.toString() ?? '0'}
+                            {referral?.unlockedPower?.toString() ?? '0'}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Networking unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -457,7 +483,7 @@ const Reward = () => {
                   />
                   <DataCell
                     label={t('ROI (5 days)')}
-                    value={`${fiveDayROI}%`}
+                    value={`${savingsfiveDayROI}%`}
                     position="horizontal"
                     valueDivStyle={{ fontSize: '14px' }}
                   />
@@ -468,7 +494,7 @@ const Reward = () => {
                     valueDivStyle={{ fontSize: '14px' }}
                   />
 
-                  {/* <DataCell label='apy' value={rewardData.apy} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
+                  {/* <DataCell label='sposAPY' value={rewardData.sposAPY} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
                   <DataCell label='current index' value={`${rewardData.curIndex}DFS`} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/>
                   <DataCell label='total value deposited' value={rewardData.totalValueDeposited} position="horizontal" valueDivStyle={{ fontSize: "14px" }}/> */}
                 </CardItem>
@@ -483,7 +509,7 @@ const Reward = () => {
 
                   <DataCell
                     label={t('Staked')}
-                    value={`${formatBigNumber(stake?.stakedSavings ?? BigNumber.from(0), 2)} DFS`}
+                    value={`${formatBigNumber(referral?.stakedSavings ?? BigNumber.from(0), 2)} DFS`}
                     position="horizontal"
                   />
 

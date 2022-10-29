@@ -33,7 +33,7 @@ import { getContract } from 'utils/contractHelpers'
 import { useNftMarketContract } from 'hooks/useContract'
 import { getDFSNFTAddress, getNFTDatabaseAddress, getNftMarketAddress, getStarlightAddress } from 'utils/addressHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
-import { levelToName, CollectionData, NFT, nftToNftToken } from 'pages/profile/[accountAddress]'
+import { levelToName, CollectionData, NFT, nftToNftToken, levelToSPOS } from 'pages/profile/[accountAddress]'
 import useSWR from 'swr'
 import { useTranslation } from '@pancakeswap/localization'
 import { formatUnits, parseUnits } from '@ethersproject/units'
@@ -236,8 +236,8 @@ export const useCollectionNfts = (collectionAddress: string) => {
           },
           attributes: [
             {
-              traitType: '',
-              value: level,
+              traitType: 'SPOS',
+              value: levelToSPOS[level],
               displayType: '',
             },
           ],

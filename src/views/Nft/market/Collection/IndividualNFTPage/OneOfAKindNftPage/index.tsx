@@ -9,12 +9,13 @@ import { NftToken } from 'state/nftMarket/types'
 
 import { useNFTDatabaseContract } from 'hooks/useContract'
 import { formatBigNumber } from 'utils/formatBalance'
+import { useTranslation } from '@pancakeswap/localization'
+import { levelToSPOS } from 'pages/profile/[accountAddress]'
 
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
 import DetailsCard from '../shared/DetailsCard'
-import ManageNFTsCard from '../shared/ManageNFTsCard'
 
 import { useWeb3React } from '../../../../../../../packages/wagmi/src/useWeb3React'
 
@@ -42,6 +43,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   tokenId,
 }) => {
   const { account } = useWeb3React()
+  const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const bgImg = isMobile ? "url('/images/nfts/mretc.png')" : "url('/images/nfts/smxl.png')"
   const bgOffset = !isMobile ? '40px' : '80px'
@@ -56,6 +58,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
       if (res.collectionAddress === starLightAddress) {
         thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
       }
+      const level = res.level.toString()
       const nft: NftToken = {
         tokenId,
         collectionAddress,
@@ -63,7 +66,10 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
         name: res.collectionName,
         description: res.collectionName,
         image: { original: 'string', thumbnail },
-        attributes: [{ value: res.level.toString() }],
+        attributes: [
+          { traitType: t('Valid SPOS'), value: levelToSPOS[level].validSPOS, displayType: '' },
+          { traitType: t('Unlockable SPOS'), value: levelToSPOS[level].unlockableSPOS, displayType: '' },
+        ],
         staker: res.staker,
         owner: res.owner,
         itemId: res.itemId.toString(),
@@ -82,7 +88,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   }, [account])
 
   const properties = nft?.attributes
-
+  console.log('properties:', properties)
   if (!nft || !collection) {
     return <PageLoader />
   }

@@ -135,7 +135,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
             : async () => {
                 setNoteContent({
                   title: t('Note'),
-                  description: t('15% fees will be charged for unstaking'),
+                  description: t('2% fees will be charged for unstaking'),
                   visible: true,
                 })
                 try {
@@ -144,19 +144,10 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
                     const receipt = await dfsContract.approve(dfsMineContract.address, MaxUint256)
                     await receipt.wait()
                   }
+                  console.log('unstakeNFT:', nft?.collectionAddress, nft?.tokenId)
                   const receipt = await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
                   await receipt.wait()
                   router.push(`/profile/${account}`)
-                  const response = await fetch('https://middle.diffusiondao.org/unstakeNFT', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      address: account,
-                      nft,
-                    }),
-                  })
                 } catch (error: any) {
                   window.alert(error.reason ?? error.data?.message ?? error.message)
                 }

@@ -8,7 +8,7 @@ import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers
 import { getContract } from 'utils/contractHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { formatBigNumber } from 'utils/formatBalance'
-import { CollectionData, NFT } from 'pages/profile/[accountAddress]'
+import { CollectionData, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 
 const IndividualNFTPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -42,7 +42,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const nftDatabaseAddress = getNFTDatabaseAddress()
   const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
   const nft: NFT = await nftDatabase.getToken(collectionAddress, tokenId)
-  console.log('nft:', nft)
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
   // const collectionWithToken: ApiCollection = await getCollectionApi(collectionAddress)
@@ -61,6 +60,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (collectionAddress === starLightAddress) {
     thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
   }
+  const level = nft?.level?.toString()
   const token: NftToken = {
     tokenId,
     collectionAddress,
@@ -68,7 +68,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     name: nft.collectionName,
     description: nft.collectionName,
     image: { original: 'string', thumbnail },
-    attributes: [{ value: nft?.level?.toString() }],
+    attributes: [{ traitType: 'SPOS', value: levelToSPOS[level].validSPOS, displayType: '' }],
     staker: nft.staker,
     owner: nft.owner,
     itemId: nft?.itemId?.toString(),
@@ -82,6 +82,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       isTradable: nft.price.gt(0) ?? false,
     },
   }
+  console.log('token:', token)
+
   return {
     props: {
       fallback: {

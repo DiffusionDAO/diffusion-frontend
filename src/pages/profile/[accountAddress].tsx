@@ -93,7 +93,15 @@ export const levelToName = {
   '6': 'Crown Senator',
 }
 const greeceNumber = { 0: 'I', 1: 'II', 2: 'III', 3: 'IV', 4: 'V', 5: 'VI', 6: 'VII' }
-
+export const levelToSPOS = {
+  '0': { validSPOS: 20, unlockableSPOS: 40 },
+  '1': { validSPOS: 63, unlockableSPOS: 126 },
+  '2': { validSPOS: 128, unlockableSPOS: 256 },
+  '3': { validSPOS: 262, unlockableSPOS: 524 },
+  '4': { validSPOS: 534, unlockableSPOS: 1068 },
+  '5': { validSPOS: 1091, unlockableSPOS: 2182 },
+  '6': { validSPOS: 2225, unlockableSPOS: 4450 },
+}
 export const nftToNftToken = (nft: NFT, t) => {
   const tokenIdString = nft?.tokenId?.toString()
   const level = nft?.level?.toString()
@@ -110,8 +118,8 @@ export const nftToNftToken = (nft: NFT, t) => {
     },
     attributes: [
       {
-        traitType: '',
-        value: level,
+        traitType: 'SPOS',
+        value: levelToSPOS[level].validSPOS,
         displayType: '',
       },
     ],

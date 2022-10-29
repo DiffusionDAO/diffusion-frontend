@@ -60,13 +60,17 @@ const Bond = () => {
   const [dfsTotalSupply, setDfsTotalSupply] = useState<string>()
 
   useEffect(() => {
-    pair.getReserves().then((reserves: any) => {
-      let marketPrice = reserves[1] / reserves[0]
-      if (marketPrice < 1) {
-        marketPrice = reserves[0] / reserves[1]
-      }
-      bondDatasMock[0].price = marketPrice.toFixed(5)
+    dfsMining.getPriceInUSDT().then((res) => {
+      console.log(res.toString())
+      bondDatasMock[0].price = formatBigNumber(res, 5)
     })
+    // pair.getReserves().then((reserves: any) => {
+    //   let marketPrice = reserves[1] / reserves[0]
+    //   if (marketPrice < 1) {
+    //     marketPrice = reserves[0] / reserves[1]
+    //   }
+    //   bondDatasMock[0].price = marketPrice.toFixed(5)
+    // })
   }, [account])
 
   const openBondModal = (item) => {
@@ -122,9 +126,10 @@ const Bond = () => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
     setBondData([dfsUsdt, ...bondDatasMock.slice(1)])
+    console.log('dfsUsdt.price:', dfsUsdt.price)
     dfsContract
       .totalSupply()
-      .then((res) => setDfsTotalSupply(formatBigNumber(res.mul(dfsUsdt.price), 2)))
+      .then((res) => setDfsTotalSupply(res.mul(parseFloat(dfsUsdt.price))))
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
