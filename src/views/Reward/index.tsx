@@ -363,14 +363,14 @@ const Reward = () => {
                   <MySposOveviewItem>
                     <DataCell
                       label={t('ROI (5 days)')}
-                      value={`${formatNumber(socialRewardfiveDayROI, 2)}%`}
+                      value={`${formatNumber(Number.isNaN(socialRewardfiveDayROI) ? 0 : socialRewardfiveDayROI, 2)}%`}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>
                   <MySposOveviewItem>
                     <DataCell
                       label={t('APY')}
-                      value={`${formatNumber(sposAPY, 2)}%`}
+                      value={`${formatNumber(Number.isNaN(sposAPY) ? 0 : sposAPY, 2)}%`}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>

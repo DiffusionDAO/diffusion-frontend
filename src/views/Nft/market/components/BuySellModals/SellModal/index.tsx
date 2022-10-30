@@ -9,7 +9,8 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useErc721CollectionContract, useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { NFT, nftToNftToken } from 'pages/profile/[accountAddress]'
+import { useRouter } from 'next/router'
+import { NFT, nftToNftToken, zeroAddress } from 'pages/profile/[accountAddress]'
 import { useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { isAddress } from 'utils'
@@ -101,6 +102,7 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
   const nftMarketContract = useNftMarketContract()
   const database = useNFTDatabaseContract()
   const isInvalidTransferAddress = transferAddress.length > 0 && !isAddress(transferAddress)
+  const router = useRouter()
 
   const { lowestPrice } = useGetLowestPriceFromNft(nftToSell)
 
@@ -190,7 +192,20 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
     },
     onConfirm: () => {
       if (stage === SellingStage.CONFIRM_REMOVE_FROM_MARKET) {
-        return callWithGasPrice(nftMarketContract, 'offshelf', [nftToSell.itemId])
+        const transactionResponse: Promise<TransactionResponse> = callWithGasPrice(nftMarketContract, 'offshelf', [
+          nftToSell.itemId,
+        ])
+        transactionResponse.then((response) => {
+          response.wait().then((res) => {
+            /* eslint-disable no-param-reassign */
+            /* eslint-disable no-return-assign */
+            nftToSell.marketData.currentAskPrice = '0'
+            nftToSell.marketData.isTradable = false
+            nftToSell.marketData.currentSeller = zeroAddress
+            router.push(`/profile/${account.toLowerCase()}`)
+          })
+        })
+        return transactionResponse
       }
       if (stage === SellingStage.CONFIRM_TRANSFER) {
         return callWithGasPrice(collectionContractSigner, 'safeTransferFrom(address,address,uint256)', [

@@ -945,6 +945,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "s8Index",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "savingInterestTime",
     "outputs": [
@@ -1041,6 +1060,37 @@
       }
     ],
     "name": "setEndTime",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_superior",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_level",
+        "type": "uint256"
+      }
+    ],
+    "name": "setLevel",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_mint",
+        "type": "address"
+      }
+    ],
+    "name": "setMintNFTAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1478,25 +1528,6 @@
         "internalType": "contract IERC20",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "v8Index",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",

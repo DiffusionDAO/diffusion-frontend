@@ -57,7 +57,7 @@ const Bond = () => {
   const [isApprove, setIsApprove] = useState<boolean>(false)
   const [bondItem, setBondItem] = useState<any>(null)
   const [vestingTerms, setVestingTerms] = useState<number>(0)
-  const [dfsTotalSupply, setDfsTotalSupply] = useState<string>()
+  const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
 
   useEffect(() => {
     dfsMining.getPriceInUSDT().then((res) => {
@@ -126,10 +126,9 @@ const Bond = () => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
     setBondData([dfsUsdt, ...bondDatasMock.slice(1)])
-    console.log('dfsUsdt.price:', dfsUsdt.price)
     dfsContract
       .totalSupply()
-      .then((res) => setDfsTotalSupply(res.mul(parseFloat(dfsUsdt.price))))
+      .then((res) => setDfsTotalSupply(res * parseFloat(dfsUsdt.price)))
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
@@ -154,7 +153,9 @@ const Bond = () => {
         <OverviewCard isMobile={isMobile}>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
-            <OverviewCardItemContent isMobile={isMobile}>${dfsTotalSupply ?? 0}</OverviewCardItemContent>
+            <OverviewCardItemContent isMobile={isMobile}>
+              ${formatNumber(Number.isNaN(dfsTotalSupply / 1e18) ? 0 : dfsTotalSupply / 1e18, 2)}
+            </OverviewCardItemContent>
           </OverviewCardItem>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Price of DFS')}</OverviewCardItemTitle>

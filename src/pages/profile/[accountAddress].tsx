@@ -82,7 +82,7 @@ export interface CollectionData {
     small: string
   }
 }
-const zeroAddress = '0x0000000000000000000000000000000000000000'
+export const zeroAddress = '0x0000000000000000000000000000000000000000'
 export const levelToName = {
   '0': 'Wiseman fragment',
   '1': 'Wiseman',
@@ -379,17 +379,6 @@ function NftProfilePage() {
       selected.map((item) => (item.selected = !item.selected))
       resetPage()
       message.success('Stake success')
-      const response = await fetch('https://middle.diffusiondao.org/stakeNFT', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          address: account,
-          collection: dfsNFTAddress,
-          nfts: selected,
-        }),
-      })
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }

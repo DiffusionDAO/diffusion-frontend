@@ -195,19 +195,6 @@ const BondModal: React.FC<BondModalProps> = ({
     onClose()
     const parsedAmount = parseUnits(amount, 'ether').toString()
     console.log(parsedAmount)
-    const response = await fetch('https://middle.diffusiondao.org/deposit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        address: account,
-        amount: parsedAmount,
-        referral,
-      }),
-    })
-    const json = await response.json()
-    console.log(json)
   }
   const withdraw = () => {
     confirm({
