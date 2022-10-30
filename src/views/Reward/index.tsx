@@ -122,6 +122,7 @@ const Reward = () => {
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardPerSecond, setSocialRewardPerSecond] = useState<BigNumber>(BigNumber.from(0))
+  const [rewardVestingSeconds, setRewardVestingSeconds] = useState<BigNumber>(BigNumber.from(0))
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -162,6 +163,7 @@ const Reward = () => {
         setNextSavingInterestChangeTime(new Date(res.endTime * 1000))
       })
 
+      dfsMineContract.socialRewardVestingSeconds().then((res) => setRewardVestingSeconds(res))
       dfsMineContract.socialRewardPerSecond().then((res) => setSocialRewardPerSecond(res))
       dfsMineContract.totalSocialReward().then((res) => setTotalSocialReward(res))
       dfsMineContract.totalPower().then((res) => setTotalPower(res))
@@ -242,22 +244,12 @@ const Reward = () => {
 
   const currentIndex = totalPower.gt(0) ? formatBigNumber(totalSocialReward?.div(totalPower), 2) : '0'
   const savingInterest = (epoch?.length * 3) / savingsRewardVestingSeconds
-  const socialRewardfiveDayROI =
-    ((parseFloat(formatUnits(socialRewardPerSecond)) * referral?.power.toNumber()) /
-      totalPower.toNumber() /
-      parseFloat(formatUnits(totalSocialReward))) *
-    5 *
-    24 *
-    3600 *
-    100
-  const sposAPY =
-    ((parseFloat(formatUnits(socialRewardPerSecond)) * referral?.power.toNumber()) /
-      totalPower.toNumber() /
-      parseFloat(formatUnits(totalSocialReward))) *
-    365 *
-    24 *
-    3600 *
-    100
+  const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
+  const totalPowerNumber = totalPower.toNumber()
+  const socialRewardInterest =
+    (totalSocialRewardNumber * 100 * 24 * 3600) / (rewardVestingSeconds.toNumber() * totalPowerNumber)
+  const socialRewardfiveDayROI = 5 * socialRewardInterest
+  const sposAPY = 365 * socialRewardInterest
   const savingsfiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
   const myLockedPower = BigNumber.from(referral?.power.mul(2).sub(referral?.unlockedPower) ?? 0).toString()
   const myTotalPower = BigNumber.from(referral?.power?.add(referral?.unlockedPower ?? 0) ?? 0).toString()
