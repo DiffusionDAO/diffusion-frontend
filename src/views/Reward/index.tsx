@@ -251,8 +251,8 @@ const Reward = () => {
   const socialRewardfiveDayROI = 5 * socialRewardInterest
   const sposAPY = 365 * socialRewardInterest
   const savingsfiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
-  const myLockedPower = BigNumber.from(referral?.power.mul(2).sub(referral?.unlockedPower) ?? 0).toString()
-  const myTotalPower = BigNumber.from(referral?.power?.add(referral?.unlockedPower ?? 0) ?? 0).toString()
+  const myLockedPower = referral?.power.toNumber() * 2 - referral?.unlockedPower?.toNumber() / 100
+  const myTotalPower = referral?.power?.toNumber() + referral?.unlockedPower?.toNumber() / 100
   const greenPower = BigNumber.from(referral?.power ?? 0).toString()
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
@@ -348,7 +348,7 @@ const Reward = () => {
                   <MySposOveviewItem>
                     <DataCell
                       label={t('Total SPOS')}
-                      value={formatNumber(totalPower.toNumber(), 0)}
+                      value={formatNumber(totalPower.toNumber(), 2)}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>
@@ -404,7 +404,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>
-                            {referral?.unlockedPower?.toString() ?? '0'}
+                            {referral?.unlockedPower?.toNumber() / 100 ?? 0}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Networking unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>

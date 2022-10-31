@@ -51,6 +51,8 @@ import {
 import useSWR from 'swr'
 import { setTokenSourceMapRange } from 'typescript'
 import { formatBigNumber } from 'utils/formatBalance'
+import { zhCN } from 'date-fns/locale'
+import { ZHCN } from '@pancakeswap/localization/src/config/languages'
 
 interface noteProps {
   title: string
@@ -144,7 +146,7 @@ export const nftToNftToken = (nft: NFT, t) => {
 function NftProfilePage() {
   const { account } = useWeb3React()
   const dfsNFTAddress = getDFSNFTAddress()
-  const { t } = useTranslation()
+  const { t, currentLanguage } = useTranslation()
   const [stakedNFTs, setStakedNFTs] = useState<NftToken[]>()
   const [unstakedNFTs, setUnstakedNFTs] = useState<NftToken[]>()
   const [onSaleNFTs, setOnSaleNFT] = useState([])
@@ -524,7 +526,10 @@ function NftProfilePage() {
                 </div>
               </>
             ) : (
-              <SyntheticBtn src="/images/nfts/synthetic-btn.svg" onClick={startCompound} />
+              <SyntheticBtn
+                src={currentLanguage === ZHCN ? '/images/nfts/compose-zhcn.svg' : '/images/nfts/compose-en.svg'}
+                onClick={startCompound}
+              />
             )}
           </CompoundBtnWrap>
         )}
