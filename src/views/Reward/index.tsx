@@ -221,7 +221,7 @@ const Reward = () => {
           const reward = await dfsMineContract.powerRewardPerContributor(account, contributor)
           return {
             address: isMobile ? shorten(contributor) : contributor,
-            value: reward.toString(),
+            value: reward.toNumber() / 100,
           }
         }),
       )
@@ -251,9 +251,9 @@ const Reward = () => {
   const socialRewardfiveDayROI = 5 * socialRewardInterest
   const sposAPY = 365 * socialRewardInterest
   const savingsfiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
-  const myLockedPower = referral?.power.toNumber() * 2 - referral?.unlockedPower?.toNumber() / 100
-  const myTotalPower = referral?.power?.toNumber() + referral?.unlockedPower?.toNumber() / 100
-  const greenPower = BigNumber.from(referral?.power ?? 0).toString()
+  const myLockedPower = (referral?.power.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
+  const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
+  const greenPower = referral?.power.toNumber() / 100
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
   const nextRewardSavingNumber = Number.isNaN(savingInterest)
@@ -348,7 +348,7 @@ const Reward = () => {
                   <MySposOveviewItem>
                     <DataCell
                       label={t('Total SPOS')}
-                      value={formatNumber(totalPower.toNumber(), 2)}
+                      value={formatNumber(totalPower.toNumber() / 100, 2)}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>
@@ -404,7 +404,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>
-                            {referral?.unlockedPower?.toNumber() / 100 ?? 0}
+                            {referral?.unlockedPower?.toNumber() / 100}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Networking unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>

@@ -104,6 +104,7 @@ export interface TokenIdWithCollectionAddress {
 }
 
 export interface NftAttribute {
+  description?: string
   traitType?: string
   value: string | number
   displayType?: string

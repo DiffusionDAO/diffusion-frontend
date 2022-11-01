@@ -75,6 +75,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         displayType: '',
       },
       {
+        description: levelToSPOS[level].description,
         traitType: 'SPOS',
         value: levelToSPOS[level].validSPOS,
         displayType: '',
