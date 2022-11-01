@@ -242,7 +242,7 @@ const Reward = () => {
     ?.toLocaleDateString()
     .replace(/\//g, '-')} ${nextSavingInterestChange?.toTimeString().slice(0, 8)}`
 
-  const currentIndex = totalPower.gt(0) ? formatBigNumber(totalSocialReward?.div(totalPower), 2) : '0'
+  const currentIndex = totalPower.gt(0) ? formatBigNumber(totalSocialReward?.mul(100).div(totalPower), 2) : '0'
   const savingInterest = (epoch?.length * 3) / savingsRewardVestingSeconds
   const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
   const totalPowerNumber = totalPower.toNumber()
