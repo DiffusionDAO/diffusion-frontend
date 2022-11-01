@@ -120,6 +120,11 @@ export const nftToNftToken = (nft: NFT, t) => {
     },
     attributes: [
       {
+        traitType: 'Level',
+        value: level,
+        displayType: '',
+      },
+      {
         traitType: 'SPOS',
         value: levelToSPOS[level].validSPOS,
         displayType: '',
@@ -273,7 +278,7 @@ function NftProfilePage() {
     resetPage()
     setActiveTab(key)
   }
-  const startCompound = () => {
+  const startCompose = () => {
     setIsSelected(true)
     setUnstakedNFTs(unstakedNFTs)
     setSelectedNFTs(unstakedNFTs)
@@ -317,8 +322,13 @@ function NftProfilePage() {
         },
         attributes: [
           {
-            traitType: '',
+            traitType: 'Level',
             value: level,
+            displayType: '',
+          },
+          {
+            traitType: 'SPOS',
+            value: levelToSPOS[level].validSPOS,
             displayType: '',
           },
         ],
@@ -414,6 +424,7 @@ function NftProfilePage() {
     if (option === 'compose') {
       const level = nft.attributes[0].value
       const data = selectedNFTs.filter((nft) => nft.attributes[0].value === level)
+      console.log('data:', data)
       if (level === '0') {
         if (data?.length < 3) {
           setNoteContent({
@@ -528,7 +539,7 @@ function NftProfilePage() {
             ) : (
               <SyntheticBtn
                 src={currentLanguage === ZHCN ? '/images/nfts/compose-zhcn.svg' : '/images/nfts/compose-en.svg'}
-                onClick={startCompound}
+                onClick={startCompose}
               />
             )}
           </CompoundBtnWrap>

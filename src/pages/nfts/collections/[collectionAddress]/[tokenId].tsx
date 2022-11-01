@@ -68,7 +68,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     name: nft.collectionName,
     description: nft.collectionName,
     image: { original: 'string', thumbnail },
-    attributes: [{ traitType: 'SPOS', value: levelToSPOS[level].validSPOS, displayType: '' }],
+    attributes: [
+      {
+        traitType: 'Level',
+        value: level,
+        displayType: '',
+      },
+      {
+        traitType: 'SPOS',
+        value: levelToSPOS[level].validSPOS,
+        displayType: '',
+      },
+    ],
     staker: nft.staker,
     owner: nft.owner,
     itemId: nft?.itemId?.toString(),
