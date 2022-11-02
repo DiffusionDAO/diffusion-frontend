@@ -3,6 +3,11 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_pdfs",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
         "name": "_dfs",
         "type": "address"
       },
@@ -715,6 +720,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "pdfs",
+    "outputs": [
+      {
+        "internalType": "contract IPDFS",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1117,6 +1135,19 @@
       }
     ],
     "name": "setMintNFTAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_pdfs",
+        "type": "address"
+      }
+    ],
+    "name": "setPDFS",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

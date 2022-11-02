@@ -251,7 +251,7 @@ const Reward = () => {
   const socialRewardfiveDayROI = 5 * socialRewardInterest
   const sposAPY = 365 * socialRewardInterest
   const savingsfiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
-  const myLockedPower = (referral?.power.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
+  const myLockedPower = (referral?.power?.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
   const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
   const greenPower = referral?.power.toNumber() / 100
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
