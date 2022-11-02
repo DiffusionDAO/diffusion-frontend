@@ -123,11 +123,8 @@ const ModalProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
               variants={animationVariants}
               transition={{ duration: 0.3 }}
             >
-              <Overlay onClick={handleOverlayDismiss} />
-              {React.isValidElement(modalNode) &&
-                React.cloneElement(modalNode, {
-                  onDismiss: handleDismiss,
-                })}
+              {/* <Overlay onClick={handleOverlayDismiss} /> */}
+              {React.isValidElement(modalNode) && React.cloneElement(modalNode, { onDismiss: handleDismiss })}
             </ModalWrapper>
           )}
         </AnimatePresence>
