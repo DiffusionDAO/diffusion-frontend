@@ -62,12 +62,12 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
       const nft: NftToken = {
         tokenId,
         collectionAddress,
-        collectionName: res.collectionName,
-        name: res.collectionName,
-        description: res.collectionName,
+        collectionName: t(res.collectionName),
+        name: t(res.collectionName),
+        description: t(res.collectionNamet),
         image: { original: 'string', thumbnail },
         attributes: [
-          { traitType: t('Description'), value: levelToSPOS[level].validSPOS, displayType: '' },
+          { traitType: t('Description'), value: levelToSPOS[level].description, displayType: '' },
           { traitType: t('Valid SPOS'), value: levelToSPOS[level].validSPOS, displayType: '' },
           { traitType: t('Unlockable SPOS'), value: levelToSPOS[level].unlockableSPOS, displayType: '' },
         ],
@@ -86,10 +86,9 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
       }
       setNFT(nft)
     })
-  }, [account])
+  }, [account, t])
 
   const properties = nft?.attributes
-  console.log('properties:', properties)
   if (!nft || !collection) {
     return <PageLoader />
   }

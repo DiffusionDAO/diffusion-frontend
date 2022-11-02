@@ -93,13 +93,16 @@ const BondModal: React.FC<BondModalProps> = ({
   const pair = usePairContract(pairAddress)
 
   useEffect(() => {
+    dfsMining.getPriceInUSDT().then((res) => {
+      console.log(res.toString())
+      setBondPrice(formatBigNumber(res, 5))
+    })
     pair.getReserves().then((reserves: any) => {
       let marketPrice = reserves[1] / reserves[0]
       if (marketPrice < 1) {
         marketPrice = reserves[0] / reserves[1]
       }
-      setBondPrice(marketPrice.toFixed(5))
-      setMarketPrice(((marketPrice * 100) / bondData.discount).toFixed(5))
+      setMarketPrice(marketPrice.toFixed(5))
     })
   }, [account, amount])
 

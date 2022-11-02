@@ -58,19 +58,20 @@ const Bond = () => {
   const [bondItem, setBondItem] = useState<any>(null)
   const [vestingTerms, setVestingTerms] = useState<number>(0)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
+  const [marketPrice, setMarketPrice] = useState<string>()
 
   useEffect(() => {
     dfsMining.getPriceInUSDT().then((res) => {
       console.log(res.toString())
       bondDatasMock[0].price = formatBigNumber(res, 5)
     })
-    // pair.getReserves().then((reserves: any) => {
-    //   let marketPrice = reserves[1] / reserves[0]
-    //   if (marketPrice < 1) {
-    //     marketPrice = reserves[0] / reserves[1]
-    //   }
-    //   bondDatasMock[0].price = marketPrice.toFixed(5)
-    // })
+    pair.getReserves().then((reserves: any) => {
+      let marketPrice = reserves[1] / reserves[0]
+      if (marketPrice < 1) {
+        marketPrice = reserves[0] / reserves[1]
+      }
+      setMarketPrice(marketPrice.toFixed(5))
+    })
   }, [account])
 
   const openBondModal = (item) => {
@@ -128,7 +129,7 @@ const Bond = () => {
     setBondData([dfsUsdt, ...bondDatasMock.slice(1)])
     dfsContract
       .totalSupply()
-      .then((res) => setDfsTotalSupply(res * parseFloat(dfsUsdt.price)))
+      .then((res) => setDfsTotalSupply(res * parseFloat(marketPrice)))
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
@@ -159,7 +160,7 @@ const Bond = () => {
           </OverviewCardItem>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Price of DFS')}</OverviewCardItemTitle>
-            <OverviewCardItemContent isMobile={isMobile}>${bondData[0].price}</OverviewCardItemContent>
+            <OverviewCardItemContent isMobile={isMobile}>${marketPrice}</OverviewCardItemContent>
           </OverviewCardItem>
         </OverviewCard>
         {isMobile ? (

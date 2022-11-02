@@ -23,10 +23,10 @@ import {
   SubMenuWrap,
   SubMenuRight,
   SelectWrap,
-  CompoundBtnWrap,
+  ComposeBtnWrap,
   SelectedCountWrap,
   SyntheticBtn,
-  CompoundBtnWrapImg,
+  ComposeBtnWrapImg,
   SelectedCountBox,
   BackgroundWrap,
   ConentWrap,
@@ -36,11 +36,11 @@ import {
   NftSculptureWrap,
   NftSculptureGif,
 } from 'views/Nft/market/Profile/components/styles'
-import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
-import CompoundSuccessModal from 'views/Nft/market/Profile/components/CompoundSuccessModal'
+import ComposeConfirmModal from 'views/Nft/market/Profile/components/ComposeConfirmModal'
+import ComposeSuccessModal from 'views/Nft/market/Profile/components/ComposeSuccessModal'
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
-import { getDFSNFTAddress, getMiningAddress, getNFTComposeAddress, getNftMarketAddress } from 'utils/addressHelpers'
+import { getDFSNFTAddress, getMiningAddress } from 'utils/addressHelpers'
 import {
   useNFTDatabaseContract,
   useDFSMineContract,
@@ -324,7 +324,7 @@ function NftProfilePage() {
     resetPage()
   }
 
-  const closeCompoundSuccessModal = () => {
+  const closeComposeSuccessModal = () => {
     setUnstakedNFTs(unstakedNFTs)
     setSuccessModalVisible(false)
     resetPage()
@@ -554,8 +554,8 @@ function NftProfilePage() {
           </SubMenuRight>
         </SubMenuWrap>
         {activeTab === 'WithoutStake' && (
-          <CompoundBtnWrap isSelected={isSelected}>
-            <CompoundBtnWrapImg src="/images/nfts/compoundBtnWrap.png" />
+          <ComposeBtnWrap isSelected={isSelected}>
+            <ComposeBtnWrapImg src="/images/nfts/compoundBtnWrap.png" />
             {isSelected ? (
               <>
                 <SelectedCountBox>
@@ -577,7 +577,7 @@ function NftProfilePage() {
                 onClick={startCompose}
               />
             )}
-          </CompoundBtnWrap>
+          </ComposeBtnWrap>
         )}
         {isConnectedProfile ? (
           <UserNfts
@@ -618,13 +618,13 @@ function NftProfilePage() {
         />
       ) : null}
       {confirmModalVisible ? (
-        <CompoundConfirmModal
+        <ComposeConfirmModal
           nfts={selectedNFTs}
           onDismiss={() => setConfirmModalVisible(false)}
           submitCompose={submitCompose}
         />
       ) : null}
-      {successModalVisible ? <CompoundSuccessModal nfts={composedNFT} onClose={closeCompoundSuccessModal} /> : null}
+      {successModalVisible ? <ComposeSuccessModal nfts={composedNFT} onClose={closeComposeSuccessModal} /> : null}
     </AccountNftWrap>
   )
 }

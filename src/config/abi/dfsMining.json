@@ -338,6 +338,19 @@
   },
   {
     "inputs": [],
+    "name": "discount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "epoch",
     "outputs": [
       {
@@ -505,7 +518,7 @@
   },
   {
     "inputs": [],
-    "name": "getv8",
+    "name": "gets8",
     "outputs": [
       {
         "internalType": "address[]",
@@ -1047,6 +1060,19 @@
       }
     ],
     "name": "setDatabase",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_discount",
+        "type": "uint256"
+      }
+    ],
+    "name": "setDiscount",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

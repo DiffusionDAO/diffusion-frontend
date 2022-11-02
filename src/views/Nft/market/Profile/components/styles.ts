@@ -42,10 +42,10 @@ export const SelectWrap = styled.div`
     border-radius: 8px;
   }
 `
-interface CompoundBtnWrapProps {
+interface ComposeBtnWrapProps {
   isSelected: boolean
 }
-export const CompoundBtnWrap = styled.div`
+export const ComposeBtnWrap = styled.div`
   padding: 20px;
   height: 90px;
   margin-bottom: 20px;
@@ -53,7 +53,7 @@ export const CompoundBtnWrap = styled.div`
   align-items: center;
   position: relative;
   overflow: hodden;
-  ${({ isSelected }: CompoundBtnWrapProps) => {
+  ${({ isSelected }: ComposeBtnWrapProps) => {
     if (isSelected) {
       return css`
         justify-content: space-between;
@@ -64,7 +64,7 @@ export const CompoundBtnWrap = styled.div`
     `
   }}
 `
-export const CompoundBtnWrapImg = styled.img`
+export const ComposeBtnWrapImg = styled.img`
   height: 100%;
   width: 100%;
   position: absolute;
