@@ -62,8 +62,10 @@ const Bond = () => {
 
   useEffect(() => {
     dfsMining.getPriceInUSDT().then((res) => {
-      console.log(res.toString())
       bondDatasMock[0].price = formatBigNumber(res, 5)
+    })
+    dfsMining.discount().then((res) => {
+      bondDatasMock[0].discount = res
     })
     pair.getReserves().then((reserves: any) => {
       let marketPrice = reserves[1] / reserves[0]
