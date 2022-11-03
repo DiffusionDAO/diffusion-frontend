@@ -115,15 +115,29 @@ const Mint = () => {
       onPresentConnectModal()
       return
     }
-    if (
-      (type === 'senior' && balance.lt(seniorPrice.mul(seniorCount))) ||
-      (type === 'ordinary' && balance.lt(ordinaryPrice.mul(ordinaryCount))) ||
-      (useBond && type === 'ordinary' && bondPayout.lt(ordinaryPrice.mul(ordinaryCount))) ||
-      (useBond && type === 'senior' && bondPayout.lt(seniorPrice.mul(seniorCount)))
-    ) {
-      setInsufficientBalanceModalVisible(true)
-      return
+    console.log(useBond, formatBigNumber(bondPayout), formatBigNumber(balance), type)
+    if (type === 'ordinary') {
+      if (useBond) {
+        if (bondPayout.lt(ordinaryPrice.mul(ordinaryCount))) {
+          setInsufficientBalanceModalVisible(true)
+          return
+        }
+      } else if (balance.lt(ordinaryPrice.mul(ordinaryCount))) {
+        setInsufficientBalanceModalVisible(true)
+        return
+      }
+    } else if (type === 'senior') {
+      if (useBond) {
+        if (bondPayout.lt(seniorPrice.mul(seniorCount))) {
+          setInsufficientBalanceModalVisible(true)
+          return
+        }
+      } else if (balance.lt(seniorPrice.mul(seniorCount))) {
+        setInsufficientBalanceModalVisible(true)
+        return
+      }
     }
+
     setGifUrl(`/images/mint/${type}.gif`)
     setPlayBindBoxModalVisible(true)
 
