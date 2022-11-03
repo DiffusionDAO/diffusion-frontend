@@ -43,7 +43,7 @@ import {
 } from './style'
 import DataCell from '../../components/ListDataCell'
 import MintBoxModal from './components/MintBoxModal'
-import JumpModal from './components/JumpModal'
+import InsufficientBalance from './components/InsufficientBalance'
 import PlayBindBoxModal from './components/PlayMintBoxModal'
 
 const Mint = () => {
@@ -52,7 +52,7 @@ const Mint = () => {
   const { t } = useTranslation()
   const { onPresentConnectModal } = useWallet()
   const [mintBoxModalVisible, setMintBoxModalVisible] = useState<boolean>(false)
-  const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false)
+  const [InsufficientBalanceVisible, setInsufficientBalanceModalVisible] = useState<boolean>(false)
   const [playMintBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false)
   const [gifUrl, setGifUrl] = useState<string>('/images/mint/ordinary.gif')
   const [seniorCount, setSeniorCount] = useState<number>(1)
@@ -66,7 +66,7 @@ const Mint = () => {
   const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
   const [ordinaryPrice, setOneCost] = useState<BigNumber>(BigNumber.from(0))
   const [seniorPrice, setTwoCost] = useState<BigNumber>(BigNumber.from(0))
-  const [useBond, setUseBond] = useState<boolean>(false)
+  // const [useBond, setUseBond] = useState<boolean>(false)
 
   const mintContract = useNFTMintContract()
   useEffect(() => {
@@ -101,22 +101,16 @@ const Mint = () => {
       if (ordinaryPrice.gt(0)) {
         const maxOrd = balance.div(ordinaryPrice)
         setMaxOrdinary(maxOrd)
-        if (useBond) {
-          setMaxOrdinary(bondPayout.div(ordinaryPrice))
-        }
       }
       if (seniorPrice.gt(0)) {
         const maxSen = balance.div(seniorPrice)
         setMaxSenior(maxSen)
-        if (useBond) {
-          setMaxSenior(bondPayout.div(seniorPrice))
-        }
       }
     }
   }, [account, mintBoxModalVisible, ordinaryPrice, seniorPrice])
 
   const socialNFT = useDFSNftContract()
-  const mint = async (type: string) => {
+  const mint = async (type: string, useBond: boolean) => {
     if (!account) {
       onPresentConnectModal()
       return
@@ -127,7 +121,7 @@ const Mint = () => {
       (useBond && type === 'ordinary' && bondPayout.lt(ordinaryPrice.mul(ordinaryCount))) ||
       (useBond && type === 'senior' && bondPayout.lt(seniorPrice.mul(seniorCount)))
     ) {
-      setJumpModalVisible(true)
+      setInsufficientBalanceModalVisible(true)
       return
     }
     setGifUrl(`/images/mint/${type}.gif`)
@@ -172,7 +166,7 @@ const Mint = () => {
     setMintNFTData([])
   }
   const closeJumpModal = () => {
-    setJumpModalVisible(false)
+    setInsufficientBalanceModalVisible(false)
   }
   const closePlayBindBoxModal = () => {
     setPlayBindBoxModalVisible(false)
@@ -286,8 +280,7 @@ const Mint = () => {
                 <DrawBlindBoxPrimaryBtn
                   className="orangeBtn"
                   onClick={() => {
-                    setUseBond(true)
-                    mint('senior')
+                    mint('senior', true)
                   }}
                   style={{ marginTop: '20px' }}
                 >
@@ -402,8 +395,7 @@ const Mint = () => {
                 <DrawBlindBoxPrimaryBtn
                   className="purpleBtn"
                   onClick={async () => {
-                    setUseBond(true)
-                    mint('ordinary')
+                    mint('ordinary', true)
                   }}
                   style={{ marginTop: '20px' }}
                 >
@@ -416,7 +408,7 @@ const Mint = () => {
       </DrawBlindBoxList>
       {playMintBoxModalVisible ? <PlayBindBoxModal onClose={closePlayBindBoxModal} gifUrl={gifUrl} /> : null}
       {mintBoxModalVisible ? <MintBoxModal data={mintNFTData} onClose={closeBlindBoxModal} /> : null}
-      {jumpModalVisible ? <JumpModal onClose={closeJumpModal} /> : null}
+      {InsufficientBalanceVisible ? <InsufficientBalance onClose={closeJumpModal} /> : null}
     </BondPageWrap>
   )
 }
