@@ -124,7 +124,8 @@ const Mint = () => {
     if (
       (type === 'senior' && balance.lt(seniorPrice.mul(seniorCount))) ||
       (type === 'ordinary' && balance.lt(ordinaryPrice.mul(ordinaryCount))) ||
-      (useBond && bondPayout.lt(ordinaryPrice.mul(ordinaryCount)))
+      (useBond && type === 'ordinary' && bondPayout.lt(ordinaryPrice.mul(ordinaryCount))) ||
+      (useBond && type === 'senior' && bondPayout.lt(seniorPrice.mul(seniorCount)))
     ) {
       setJumpModalVisible(true)
       return
