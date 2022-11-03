@@ -67,6 +67,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
             const currentAskPrice = nft.marketData?.isTradable ? parseFloat(nft.marketData?.currentAskPrice) : undefined
             return (
               <CollectibleLinkCard
+                isSelected={false}
                 data-test="newest-nft-card"
                 key={nft.collectionAddress + nft.tokenId}
                 nft={nft}

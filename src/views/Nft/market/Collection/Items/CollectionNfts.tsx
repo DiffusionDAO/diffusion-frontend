@@ -46,6 +46,7 @@ const CollectionNfts: React.FC<React.PropsWithChildren<CollectionNftsProps>> = (
 
               return (
                 <CollectibleLinkCard
+                  isSelected={false}
                   key={nft.tokenId}
                   nft={nft}
                   currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}

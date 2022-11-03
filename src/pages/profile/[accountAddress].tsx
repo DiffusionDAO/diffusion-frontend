@@ -190,13 +190,36 @@ function NftProfilePage() {
   const [unstakedNFTs, setUnstakedNFTs] = useState<NftToken[]>()
   const [onSaleNFTs, setOnSaleNFT] = useState([])
   const [selectedNFTs, setSelectedNFTs] = useState<NftToken[]>(unstakedNFTs)
+  const { isMobile } = useMatchBreakpoints()
+  const { query } = useRouter()
+
+  const accountAddress = query.accountAddress as string
+
+  const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
+
+  const [isSelected, setIsSelected] = useState<boolean>(false)
+  const [option, setOption] = useState<string>('')
+
+  const [selectedCount, setSelectedCount] = useState<number>(0)
+  const [composedNFT, setComposedNFT] = useState([])
+
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false)
+  const [successModalVisible, setSuccessModalVisible] = useState(false)
+  const [noteContent, setNoteContent] = useState<noteProps>({
+    title: '',
+    description: '',
+    visible: false,
+  })
+  const [activeTab, setActiveTab] = useState<string>('WithoutStake')
 
   const nftDatabase = useNFTDatabaseContract()
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMineContract()
+  const composeNFT = useNftComposeContract()
+  const socialNFT = useDFSNftContract()
+  const mine = useDFSMineContract()
+  const market = useNftMarketContract()
 
-  const translate = t('Wiseman')
-  // console.log("translate:",translate)
   const updateFn = async () => {
     const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
@@ -241,37 +264,13 @@ function NftProfilePage() {
   useEffect(() => {
     mutate(updateFn())
   }, [account, t])
+
   useEffect(() => {
     setUnstakedNFTs(data?.unstaked?.filter((token) => token.owner !== zeroAddress))
     setStakedNFTs(data?.staked?.filter((token) => token.owner !== zeroAddress))
     setOnSaleNFT(data?.onSale?.filter((token) => token.seller === account))
+    setIsSelected(false)
   }, [data, status, account])
-  const composeNFT = useNftComposeContract()
-  const socialNFT = useDFSNftContract()
-  const mine = useDFSMineContract()
-  const market = useNftMarketContract()
-
-  const { isMobile } = useMatchBreakpoints()
-  const { query } = useRouter()
-
-  const accountAddress = query.accountAddress as string
-
-  const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
-
-  const [isSelected, setIsSelected] = useState<boolean>(false)
-  const [option, setOption] = useState<string>('')
-
-  const [selectedCount, setSelectedCount] = useState<number>(0)
-  const [composedNFT, setComposedNFT] = useState([])
-
-  const [confirmModalVisible, setConfirmModalVisible] = useState(false)
-  const [successModalVisible, setSuccessModalVisible] = useState(false)
-  const [noteContent, setNoteContent] = useState<noteProps>({
-    title: '',
-    description: '',
-    visible: false,
-  })
-  const [activeTab, setActiveTab] = useState<string>('WithoutStake')
 
   const sortByItems = [
     {

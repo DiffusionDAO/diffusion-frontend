@@ -281,10 +281,6 @@ const BondModal: React.FC<BondModalProps> = ({
               }}
             />
             <RecommandWrap>
-              {/* <CheckBoxWrap onClick={changeReferral}>
-                {hasReferral ? <img src="/images/nfts/gou.svg" alt="img" style={{ height: '4px' }} /> : <CheckBox />}
-              </CheckBoxWrap> */}
-              {/* <RecommandLable onClick={changeReferral}>{t('Any Referrals?')}</RecommandLable> */}
               <RecommandInput
                 value={referral}
                 placeholder={t('Referral')}

@@ -133,7 +133,7 @@ const Bond = () => {
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
-  }, [account])
+  }, [account, marketPrice])
   return (
     <BondPageWrap>
       <BondPageHeader>

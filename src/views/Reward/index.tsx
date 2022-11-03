@@ -4,7 +4,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useWallet } from 'hooks/useWallet'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation } from 'swiper'
+import { Navigation, SwiperCore } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { useTranslation } from '@pancakeswap/localization'
@@ -109,20 +109,20 @@ const Reward = () => {
   const [pendingBondReward, setPendingBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [referral, setReferral] = useState<Referral>()
   const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
-  const [unpaidBondReward, setUnpaidBondReward] = useState<string>()
-  const [soicalRewardVestingSeconds, setSoicalRewardVestingSeconds] = useState<number>(100 * 24 * 3600)
-  const [savingsRewardVestingSeconds, setSavingsRewardVestingSeconds] = useState<number>(300 * 24 * 3600)
+  const [soicalRewardVestingSeconds, setSoicalRewardVestingSeconds] = useState<BigNumber>(BigNumber.from(0))
+  const [savingsRewardVestingSeconds, setSavingsRewardVestingSeconds] = useState<BigNumber>(BigNumber.from(0))
   const [pendingSavingReward, setPendingSavingsReward] = useState<BigNumber>(BigNumber.from(0))
   const [bondReward, setBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [bondRewardLocked, setBondRewardLocked] = useState<BigNumber>(BigNumber.from(0))
-  const [powerRewardContributors, setPowerRewardContributors] = useState<any[]>()
-  const [bondRewardContributors, setBondRewardContributors] = useState<any[]>()
   const [subordinates, setSubordinates] = useState<string[]>()
   const [epoch, setEpoch] = useState<any>({})
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardPerSecond, setSocialRewardPerSecond] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardVestingSeconds, setSocialRewardVestingSeconds] = useState<BigNumber>(BigNumber.from(0))
+
+  const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
+  const [activeIndex, setActiveIndex] = useState(1)
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -175,9 +175,6 @@ const Reward = () => {
       dfsMineContract.pendingSavingReward(account).then((res) => setPendingSavingsReward(res))
 
       dfsMineContract.totalSavings().then((res) => setTotalSaving(res))
-      dfsMineContract.addressToReferral(account).then((res) => {
-        setReferral(res)
-      })
 
       dfsMineContract.addressToReferral(account).then((referral) => {
         setReferral(referral)
@@ -246,7 +243,8 @@ const Reward = () => {
   const currentIndex = totalPower.gt(0)
     ? formatBigNumber(totalSocialReward?.mul(100).div(BigNumber.from(totalPower)), 2)
     : '0'
-  const savingInterest = (epoch?.length * 3) / savingsRewardVestingSeconds
+  // console.log("savingsRewardVestingSeconds:",savingsRewardVestingSeconds.toNumber())
+  const savingInterest = (epoch?.length * 8 * 3600) / savingsRewardVestingSeconds.toNumber()
   const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
   const socialRewardInterest =
     (totalSocialRewardNumber * 100 * 24 * 3600) / (socialRewardVestingSeconds.toNumber() * totalPowerNumber)
@@ -258,7 +256,7 @@ const Reward = () => {
   const greenPower = referral?.power.toNumber() / 100
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
-  const nextRewardSavingNumber = Number.isNaN(savingInterest)
+  const nextRewardSavingNumber = savingsRewardVestingSeconds.eq(0)
     ? BigNumber.from(0)
     : BigNumber.from(totalSavings)
         .mul(epoch?.length ?? 0)
@@ -272,6 +270,9 @@ const Reward = () => {
     },
     [account],
   )
+  const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
+    if (newActiveIndex !== undefined) setActiveIndex(Math.ceil(newActiveIndex / slidesPerView))
+  }
 
   return (
     <RewardPageWrap>
@@ -286,15 +287,13 @@ const Reward = () => {
               slidesPerView={slidesPerView}
               centeredSlides
               navigation
-              onSwiper={(swiper) => {
-                swiper.slideTo(referral?.level?.toNumber())
-              }}
+              onSwiper={setSwiperRef}
               onSlideChange={(swiper) => {
-                swiper.slideTo(referral?.level?.toNumber())
+                const index = referral?.level?.toNumber()
+                setActiveIndex(index / slidesPerView)
+                swiperRef.slideTo(index)
               }}
-              onUpdate={(swiper) => {
-                swiper.slideTo(referral?.level?.toNumber())
-              }}
+              onActiveIndexChange={updateActiveIndex}
             >
               {referral?.level !== undefined &&
                 swiperSlideData.map((item, index) => {

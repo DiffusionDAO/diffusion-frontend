@@ -20,7 +20,6 @@ const SpaceIcon = () => {
 const SingleProperty: React.FC<
   React.PropsWithChildren<{ description: string; title: string; value: string | number; rarity: number }>
 > = ({ description, title, value, rarity }) => {
-  console.log(description, description?.length, description?.slice(0, 39))
   return (
     <Flex justifyContent="space-between" alignItems="center">
       <Text fontSize="12px" color="textSubtle" bold textTransform="uppercase">
