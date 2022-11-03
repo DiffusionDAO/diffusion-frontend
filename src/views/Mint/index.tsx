@@ -272,7 +272,7 @@ const Mint = () => {
                       const receipt = await DFS.approve(nftMintAddress, MaxUint256)
                       await receipt.wait()
                     }
-                    mint('senior')
+                    mint('senior', false)
                   }}
                 >
                   {t('Balance Mint')}
@@ -387,7 +387,7 @@ const Mint = () => {
                       const receipt = await DFS.approve(nftMintAddress, MaxUint256)
                       await receipt.wait()
                     }
-                    mint('ordinary')
+                    mint('ordinary', false)
                   }}
                 >
                   {t('Balance Mint')}
