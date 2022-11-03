@@ -119,10 +119,10 @@ const Reward = () => {
   const [bondRewardContributors, setBondRewardContributors] = useState<any[]>()
   const [subordinates, setSubordinates] = useState<string[]>()
   const [epoch, setEpoch] = useState<any>({})
-  const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
+  const [totalPower, setTotalPower] = useState<number>(0)
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardPerSecond, setSocialRewardPerSecond] = useState<BigNumber>(BigNumber.from(0))
-  const [rewardVestingSeconds, setRewardVestingSeconds] = useState<BigNumber>(BigNumber.from(0))
+  const [socialRewardVestingSeconds, setSocialRewardVestingSeconds] = useState<BigNumber>(BigNumber.from(0))
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
@@ -163,10 +163,10 @@ const Reward = () => {
         setNextSavingInterestChangeTime(new Date(res.endTime * 1000))
       })
 
-      dfsMineContract.socialRewardVestingSeconds().then((res) => setRewardVestingSeconds(res))
+      dfsMineContract.socialRewardVestingSeconds().then((res) => setSocialRewardVestingSeconds(res))
       dfsMineContract.socialRewardPerSecond().then((res) => setSocialRewardPerSecond(res))
       dfsMineContract.totalSocialReward().then((res) => setTotalSocialReward(res))
-      dfsMineContract.totalPower().then((res) => setTotalPower(res))
+      dfsMineContract.totalPower().then((res) => setTotalPower(res.toNumber() / 100))
       dfsMineContract.getSubordinates(account).then((res) => setSubordinates(res))
       dfsMineContract.socialRewardVestingSeconds().then((res) => setSoicalRewardVestingSeconds(res))
       dfsMineContract.savingsRewardVestingSeconds().then((res) => setSavingsRewardVestingSeconds(res))
@@ -242,12 +242,13 @@ const Reward = () => {
     ?.toLocaleDateString()
     .replace(/\//g, '-')} ${nextSavingInterestChange?.toTimeString().slice(0, 8)}`
 
-  const currentIndex = totalPower.gt(0) ? formatBigNumber(totalSocialReward?.mul(100).div(totalPower), 2) : '0'
+  const currentIndex =
+    totalPower > 0 ? formatBigNumber(totalSocialReward?.div(BigNumber.from(totalPower * 100)).mul(100), 2) : '0'
   const savingInterest = (epoch?.length * 3) / savingsRewardVestingSeconds
   const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
-  const totalPowerNumber = totalPower.toNumber()
   const socialRewardInterest =
-    (totalSocialRewardNumber * 100 * 24 * 3600) / (rewardVestingSeconds.toNumber() * totalPowerNumber)
+    (totalSocialRewardNumber * 100 * 24 * 3600) / (socialRewardVestingSeconds.toNumber() * totalPower)
+  // console.log(totalSocialRewardNumber, socialRewardVestingSeconds.toNumber(), totalPower)
   const socialRewardfiveDayROI = 5 * socialRewardInterest
   const sposAPY = 365 * socialRewardInterest
   const savingsfiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
@@ -348,7 +349,7 @@ const Reward = () => {
                   <MySposOveviewItem>
                     <DataCell
                       label={t('Total SPOS')}
-                      value={formatNumber(totalPower.toNumber() / 100, 2)}
+                      value={formatNumber(totalPower, 2)}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>

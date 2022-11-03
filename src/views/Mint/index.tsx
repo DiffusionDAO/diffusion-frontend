@@ -51,7 +51,7 @@ const Mint = () => {
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const { onPresentConnectModal } = useWallet()
-  const [mintBoxModalVisible, setBlindBoxModalVisible] = useState<boolean>(false)
+  const [mintBoxModalVisible, setMintBoxModalVisible] = useState<boolean>(false)
   const [jumpModalVisible, setJumpModalVisible] = useState<boolean>(false)
   const [playMintBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false)
   const [gifUrl, setGifUrl] = useState<string>('/images/mint/ordinary.gif')
@@ -71,7 +71,7 @@ const Mint = () => {
   useEffect(() => {
     mintContract.mintOneCost().then((oneCost) => setOneCost(oneCost))
     mintContract.mintTwoCost().then((twoCost) => setTwoCost(twoCost))
-  })
+  }, [account, balance])
   const dfsAddress = getDFSAddress()
   const DFS = useERC20(dfsAddress)
 
@@ -106,7 +106,7 @@ const Mint = () => {
         setMaxSenior(maxSen)
       }
     }
-  }, [account, balance])
+  }, [account, playMintBoxModalVisible, mintBoxModalVisible])
 
   const socialNFT = useDFSNftContract()
   const mint = async (type: string, useBond = false) => {
@@ -152,7 +152,7 @@ const Mint = () => {
       })
       setMintNFTData(data)
       setPlayBindBoxModalVisible(false)
-      setBlindBoxModalVisible(true)
+      setMintBoxModalVisible(true)
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
       setPlayBindBoxModalVisible(false)
@@ -160,7 +160,7 @@ const Mint = () => {
   }
 
   const closeBlindBoxModal = () => {
-    setBlindBoxModalVisible(false)
+    setMintBoxModalVisible(false)
     setMintNFTData([])
   }
   const closeJumpModal = () => {

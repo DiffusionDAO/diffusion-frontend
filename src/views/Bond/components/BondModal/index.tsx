@@ -290,6 +290,7 @@ const BondModal: React.FC<BondModalProps> = ({
                 placeholder={t('Referral')}
                 onInput={(e: any) => {
                   setReferral(e.target.value)
+                  setHasReferral(true)
                 }}
                 disabled={hasReferral && referral !== ''}
               />
