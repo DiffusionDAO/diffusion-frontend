@@ -130,6 +130,9 @@ export const getUSDTAddress = () => {
 export const getDFSAddress = () => {
   return getAddress(addresses.dfs)
 }
+export const getPDFSAddress = () => {
+  return getAddress(addresses.ido)
+}
 export const getPairAddress = () => {
   return getAddress(addresses.pair)
 }
