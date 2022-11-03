@@ -20,13 +20,14 @@ const SpaceIcon = () => {
 const SingleProperty: React.FC<
   React.PropsWithChildren<{ description: string; title: string; value: string | number; rarity: number }>
 > = ({ description, title, value, rarity }) => {
+  console.log(description, description?.length, description?.slice(0, 39))
   return (
     <Flex justifyContent="space-between" alignItems="center">
       <Text fontSize="12px" color="textSubtle" bold textTransform="uppercase">
         {KNOWN_TRAITS_TEXT[title] ?? title}
       </Text>
       <Text fontSize="12px" color="textSubtle" bold textTransform="uppercase">
-        {description}
+        {description && description?.length <= 40 && `${description?.slice(0, 39)}...`}
       </Text>
       <Flex alignItems="center">
         <Text bold textTransform="uppercase" mr="4px">
@@ -49,7 +50,7 @@ const PropertiesCard: React.FC<React.PropsWithChildren<PropertiesCardProps>> = (
       {properties?.map((property) => (
         <SingleProperty
           key={property.traitType}
-          description={property.description}
+          description={property?.description}
           title={property.traitType}
           value={property.value}
           rarity={rarity[property.traitType]}

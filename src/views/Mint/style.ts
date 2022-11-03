@@ -28,13 +28,13 @@ export const DrawBlindBoxImgWrap = styled.div`
   position: relative;
   &.item1 {
     border-bottom: 2px solid #ff7056;
-    background: url('images/mint/drawBlindBoxBg1.png');
+    background: url('/images/mint/drawBlindBoxBg1.png');
     background-repeat: no-repeat;
     background-size: cover;
   }
   &.item2 {
     border-bottom: 2px solid #ec6eff;
-    background: url('images/mint/drawBlindBoxBg2.png');
+    background: url('/images/mint/drawBlindBoxBg2.png');
     background-repeat: no-repeat;
     background-size: cover;
   }
