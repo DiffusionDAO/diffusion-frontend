@@ -66,6 +66,7 @@ const Mint = () => {
   const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
   const [ordinaryPrice, setOneCost] = useState<BigNumber>(BigNumber.from(0))
   const [seniorPrice, setTwoCost] = useState<BigNumber>(BigNumber.from(0))
+  const [useBond, setUseBond] = useState<boolean>(false)
 
   const mintContract = useNFTMintContract()
   useEffect(() => {
@@ -100,16 +101,22 @@ const Mint = () => {
       if (ordinaryPrice.gt(0)) {
         const maxOrd = balance.div(ordinaryPrice)
         setMaxOrdinary(maxOrd)
+        if (useBond) {
+          setMaxOrdinary(bondPayout.div(ordinaryPrice))
+        }
       }
       if (seniorPrice.gt(0)) {
         const maxSen = balance.div(seniorPrice)
         setMaxSenior(maxSen)
+        if (useBond) {
+          setMaxSenior(bondPayout.div(seniorPrice))
+        }
       }
     }
-  }, [account, playMintBoxModalVisible, mintBoxModalVisible])
+  }, [account, mintBoxModalVisible, ordinaryPrice, seniorPrice])
 
   const socialNFT = useDFSNftContract()
-  const mint = async (type: string, useBond = false) => {
+  const mint = async (type: string) => {
     if (!account) {
       onPresentConnectModal()
       return
@@ -277,7 +284,10 @@ const Mint = () => {
                 </DrawBlindBoxPrimaryBtn>
                 <DrawBlindBoxPrimaryBtn
                   className="orangeBtn"
-                  onClick={() => mint('senior', true)}
+                  onClick={() => {
+                    setUseBond(true)
+                    mint('senior')
+                  }}
                   style={{ marginTop: '20px' }}
                 >
                   {t('Payout Mint')}
@@ -345,7 +355,8 @@ const Mint = () => {
                     <DrawBlindBoxTextBtn
                       className="purpleBtn"
                       onClick={() => {
-                        if (ordinaryCount < maxOrdinary.toNumber()) setOrdinaryCount(ordinaryCount + 1)
+                        if (maxOrdinary.gt(1) && ordinaryCount < maxOrdinary.toNumber())
+                          setOrdinaryCount(ordinaryCount + 1)
                       }}
                     >
                       +
@@ -390,7 +401,8 @@ const Mint = () => {
                 <DrawBlindBoxPrimaryBtn
                   className="purpleBtn"
                   onClick={async () => {
-                    mint('ordinary', true)
+                    setUseBond(true)
+                    mint('ordinary')
                   }}
                   style={{ marginTop: '20px' }}
                 >
