@@ -6,7 +6,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 import { parseUnits } from '@ethersproject/units'
 import { useWallet } from 'hooks/useWallet'
-import { useDFSContract, useDFSMineContract, useERC20, usePairContract } from 'hooks/useContract'
+import { useDFSContract, useDFSMineContract, useERC20, usePairContract, usePDFSContract } from 'hooks/useContract'
 import { BigNumber, ethers } from 'ethers'
 import { USDT } from '@pancakeswap/tokens'
 import { MaxUint256 } from '@ethersproject/constants'
@@ -87,6 +87,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const dfsMining = useDFSMineContract()
   const dfs = useDFSContract()
+  const pdfs = usePDFSContract()
   const usdtAddress = getUSDTAddress()
   const usdt = useERC20(usdtAddress, true)
   const pairAddress = getPairAddress()
@@ -188,7 +189,12 @@ const BondModal: React.FC<BondModalProps> = ({
       await receipt.wait()
     }
     try {
-      const receipt = await dfsMining.deposit(parseUnits(amount, 'ether'), referral)
+      const pdfsRelease = await pdfs.releaseInfo(account)
+      let hasPdfs = false
+      if (pdfsRelease.balance.gt(0)) {
+        hasPdfs = true
+      }
+      const receipt = await dfsMining.deposit(parseUnits(amount, 'ether'), referral, hasPdfs)
       await receipt.wait()
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)

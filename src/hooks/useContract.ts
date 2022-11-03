@@ -62,6 +62,7 @@ import {
   getDFSNFTContract,
   getMineContract,
   getDFSContract,
+  getPDFSContract,
   getIDOContract,
   getNFTDatabaseContract,
 } from 'utils/contractHelpers'
@@ -394,7 +395,10 @@ export const useDFSContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
   return useMemo(() => getDFSContract(providerOrSigner), [providerOrSigner])
 }
-
+export const usePDFSContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getPDFSContract(providerOrSigner), [providerOrSigner])
+}
 export const useIDOContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
   return useMemo(() => getIDOContract(providerOrSigner), [providerOrSigner])
