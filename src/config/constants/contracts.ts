@@ -175,8 +175,8 @@ export default {
   },
 
   dfsMining: {
-    56: '0xDebaa787A78BDe68A725ed73257A98C6a8304E3e',
-    97: '0xDebaa787A78BDe68A725ed73257A98C6a8304E3e',
+    56: '0x47543b5965eebfe126d0ebcca5F324a79Dfe8B7B',
+    97: '0x47543b5965eebfe126d0ebcca5F324a79Dfe8B7B',
   },
   nftMarket: {
     56: '0xF9DB94668e71758431d094Ea6EAd45Ea1D7C6168',
