@@ -41,7 +41,7 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
   const adjustedPriceIsTheSame = variant === 'adjust' && parseFloat(currentPrice) === parseFloat(price)
   const priceIsValid = !price || Number.isNaN(parseFloat(price)) || parseFloat(price) <= 0
 
-  const { creatorFee = '0', tradingFee = '5' } = useGetCollection(nftToSell.collectionAddress) || {}
+  const { creatorFee = '0', tradingFee = '20' } = useGetCollection(nftToSell.collectionAddress) || {}
   const creatorFeeAsNumber = parseFloat(creatorFee)
   const tradingFeeAsNumber = parseFloat(tradingFee)
   // const bnbPrice = useBNBBusdPrice()
