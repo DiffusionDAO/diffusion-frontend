@@ -197,7 +197,7 @@ const Reward = () => {
           }
         }),
       )
-      return details
+      return details.reverse()
     }
     return []
   }
@@ -222,7 +222,7 @@ const Reward = () => {
           }
         }),
       )
-      return details
+      return details.reverse()
     }
     return []
   }
@@ -251,7 +251,7 @@ const Reward = () => {
   const socialRewardfiveDayROI = 5 * socialRewardInterest
   const sposAPY = 365 * socialRewardInterest
   const savingsfiveDayROI = formatNumber(((1 + savingInterest) ** 15 - 1) * 100, 2)
-  const myLockedPower = (referral?.power?.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
+  const myLockedPower = Math.min(referral?.power?.toNumber() * 2 - referral?.unlockedPower?.toNumber(), 0) / 100
   const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
   const greenPower = referral?.power.toNumber() / 100
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
@@ -385,7 +385,7 @@ const Reward = () => {
                           <MySposDashboardValue className="alignLeft" style={{ color: '#00FFEE' }}>
                             {greenPower ?? '0'}
                           </MySposDashboardValue>
-                          <MySposDashboardDes className="alignLeft">{t('Unlocked SPOS value')}</MySposDashboardDes>
+                          <MySposDashboardDes className="alignLeft">{t('Unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
                         <MySposDashboardItem onClick={() => setActiveItem(2)}>
                           {activeItem === 2 ? (
@@ -396,7 +396,7 @@ const Reward = () => {
                           <MySposDashboardValue className="alignRight" style={{ color: 'grey' }}>
                             {myLockedPower ?? '0'}
                           </MySposDashboardValue>
-                          <MySposDashboardDes className="alignRight">{t('Locked SPOS value')}</MySposDashboardDes>
+                          <MySposDashboardDes className="alignRight">{t('Locked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
                         <MySposDashboardItem onClick={() => setActiveItem(3)}>
                           {activeItem === 3 ? (
