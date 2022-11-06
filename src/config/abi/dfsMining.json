@@ -1014,7 +1014,7 @@
   },
   {
     "inputs": [],
-    "name": "savingsPerSecond",
+    "name": "savingRewardPerSecond",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1468,7 +1468,7 @@
   },
   {
     "inputs": [],
-    "name": "totalSavings",
+    "name": "totalSavingsReward",
     "outputs": [
       {
         "internalType": "uint256",

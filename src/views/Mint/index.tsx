@@ -213,11 +213,11 @@ const Mint = () => {
                   <DalaCardCellWrap>
                     <DalaCardLabelDiv>{t('Rewards probability')}</DalaCardLabelDiv>
                     <DalaCardValueDiv>
-                      <ColorFont style={{ color: '#FF7056' }}> 98% </ColorFont>
+                      <ColorFont style={{ color: '#FF7056' }}> 95% </ColorFont>
                       {t('Wiseman')}
                       {isMobile ? <br /> : null}
-                      <ColorFont style={{ color: '#FF7056' }}> 2% </ColorFont>
-                      {t('General Gold')}
+                      <ColorFont style={{ color: '#FF7056' }}> 5% </ColorFont>
+                      {t('General')}
                     </DalaCardValueDiv>
                   </DalaCardCellWrap>
                 </DalaCardList>

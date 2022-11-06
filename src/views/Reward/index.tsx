@@ -105,7 +105,8 @@ const Reward = () => {
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [pendingSocialReward, setPendingSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [DfsBalance, setDfsBalance] = useState<BigNumber>(BigNumber.from(0))
-  const [totalSavings, setTotalSaving] = useState<BigNumber>(BigNumber.from(0))
+  const [totalSavingsReward, setTotalSavingReward] = useState<BigNumber>(BigNumber.from(0))
+  const [totalStakedSavings, setTotalStakedSavings] = useState<BigNumber>(BigNumber.from(0))
   const [pendingBondReward, setPendingBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [referral, setReferral] = useState<Referral>()
   const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
@@ -119,6 +120,7 @@ const Reward = () => {
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardPerSecond, setSocialRewardPerSecond] = useState<BigNumber>(BigNumber.from(0))
+  const [savingRewardPerSecond, setSavingRewardPerSecond] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardVestingSeconds, setSocialRewardVestingSeconds] = useState<BigNumber>(BigNumber.from(0))
 
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
@@ -165,16 +167,17 @@ const Reward = () => {
 
       dfsMineContract.socialRewardVestingSeconds().then((res) => setSocialRewardVestingSeconds(res))
       dfsMineContract.socialRewardPerSecond().then((res) => setSocialRewardPerSecond(res))
+      dfsMineContract.savingRewardPerSecond().then((res) => setSavingRewardPerSecond(res))
       dfsMineContract.totalSocialReward().then((res) => setTotalSocialReward(res))
       dfsMineContract.totalPower().then((res) => setTotalPower(res))
-      dfsMineContract.getSubordinates(account).then((res) => setSubordinates(res))
       dfsMineContract.socialRewardVestingSeconds().then((res) => setSoicalRewardVestingSeconds(res))
       dfsMineContract.savingsRewardVestingSeconds().then((res) => setSavingsRewardVestingSeconds(res))
       dfsMineContract.pendingSocialReward(account).then((res) => setPendingSocialReward(res))
       dfsMineContract.pendingBondReward(account).then((res) => setPendingBondReward(res))
       dfsMineContract.pendingSavingReward(account).then((res) => setPendingSavingsReward(res))
 
-      dfsMineContract.totalSavings().then((res) => setTotalSaving(res))
+      dfsMineContract.totalSavingsReward().then((res) => setTotalSavingReward(res))
+      dfsMineContract.totalStakedSavings().then((res) => setTotalStakedSavings(res))
 
       dfsMineContract.addressToReferral(account).then((referral) => {
         setReferral(referral)
@@ -185,6 +188,27 @@ const Reward = () => {
     }
   }, [account, amount])
   useInterval(refresh, 3000)
+
+  const updateSubordinates = async () => {
+    const subordinates = await dfsMineContract.getSubordinates(account)
+    setSubordinates(subordinates)
+    const subordinatesHasPower = await Promise.all(
+      subordinates.map(async (sub) => {
+        const subordinate = await dfsMineContract.addressToReferral(sub)
+        console.log('sub:', sub, subordinate.power.toString(), subordinate)
+        if (subordinate?.power?.toString() !== '0') {
+          return subordinate
+        }
+        return null
+      }),
+    )
+    return subordinatesHasPower
+  }
+  const { data: subordinatesHasPower, status, mutate } = useSWR('updateSubordinates', updateSubordinates)
+  useEffect(() => {
+    mutate(updateSubordinates())
+  }, [account])
+  console.log('subordinatesHasPower:', subordinatesHasPower)
 
   const updateBondRewardDetailData = async () => {
     if (account) {
@@ -243,8 +267,11 @@ const Reward = () => {
   const currentIndex = totalPower.gt(0)
     ? formatBigNumber(totalSocialReward?.mul(100).div(BigNumber.from(totalPower)), 2)
     : '0'
-  // console.log("savingsRewardVestingSeconds:",savingsRewardVestingSeconds.toNumber())
-  const savingInterest = (epoch?.length * 8 * 3600) / savingsRewardVestingSeconds.toNumber()
+  const formatStakedSavings = formatUnits(referral?.stakedSavings ?? 0, 'ether')
+  const foramtTotalStakedSavings = formatUnits(totalStakedSavings ?? 0, 'ether')
+  const savingPercent =
+    totalSavingsReward.gt(0) && parseFloat(formatStakedSavings) / parseFloat(foramtTotalStakedSavings)
+  const savingInterest = (savingPercent * (epoch?.length * 8 * 3600)) / savingsRewardVestingSeconds.toNumber()
   const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
   const socialRewardInterest =
     (totalSocialRewardNumber * 100 * 24 * 3600) / (socialRewardVestingSeconds.toNumber() * totalPowerNumber)
@@ -256,20 +283,15 @@ const Reward = () => {
   const greenPower = referral?.power.toNumber() / 100
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
-  const nextRewardSavingNumber = savingsRewardVestingSeconds.eq(0)
-    ? BigNumber.from(0)
-    : BigNumber.from(totalSavings)
-        .mul(epoch?.length ?? 0)
-        .div(savingsRewardVestingSeconds)
-  const nextRewardSaving = formatBigNumber(nextRewardSavingNumber, 2)
-
-  const hasPower = useCallback(
-    async (address) => {
-      const res = await dfsMineContract.addressToReferral(address)
-      return res.power !== 0
-    },
-    [account],
+  const nextRewardSavingNumber = parseFloat(formatBigNumber(savingRewardPerSecond.mul(8).mul(3600), 9)) * savingPercent
+  // const nextRewardSaving = formatNumber(nextRewardSavingNumber, 2)
+  console.log(
+    'lastSavingsWithdraw:',
+    referral?.lastSavingsWithdraw.toNumber(),
+    formatUnits(totalSavingsReward, '18'),
+    foramtTotalStakedSavings,
   )
+
   const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
     if (newActiveIndex !== undefined) setActiveIndex(Math.ceil(newActiveIndex / slidesPerView))
   }
@@ -367,9 +389,9 @@ const Reward = () => {
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>
-                  <MySposOveviewItem>
+                  {/* <MySposOveviewItem>
                     <DataCell label={t('Current Index')} value={currentIndex} valueDivStyle={{ fontSize: '16px' }} />
-                  </MySposOveviewItem>
+                  </MySposOveviewItem> */}
                   <CoinImg src="/images/reward/coin.png" />
                 </MySposOveview>
                 <Grid container spacing={2}>
@@ -416,7 +438,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem4.png" />
                           )}
                           <MySposDashboardValue className="alignRight" style={{ color: '#E7A4FF' }}>
-                            {subordinates?.filter((address) => hasPower(address)).length ?? 0}
+                            {subordinatesHasPower?.filter((sub) => sub !== null).length ?? 0}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Networking headcount')}</MySposDashboardDes>
                         </MySposDashboardItem>
@@ -431,7 +453,7 @@ const Reward = () => {
                     <MySposRewardWrap isMobile={isMobile}>
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
                       <RewardWrap isMobile={isMobile}>
-                        <RewardText>{t('Rewards')}</RewardText>
+                        <RewardText>{t('Mint')}</RewardText>
                         <RewardValueDiv>{pendingSocialRewardString ?? '0'}</RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
@@ -481,8 +503,8 @@ const Reward = () => {
                     valueDivStyle={{ fontSize: '14px' }}
                   />
                   <DataCell
-                    label={t('Next reward value')}
-                    value={`${nextRewardSaving} DFS`}
+                    label={t('Next reward')}
+                    value={`${nextRewardSavingNumber} DFS`}
                     position="horizontal"
                     valueDivStyle={{ fontSize: '14px' }}
                   />
@@ -496,19 +518,19 @@ const Reward = () => {
                 <CardItem isMobile={isMobile} className="hasBorder">
                   <DataCell
                     label={t('Balance')}
-                    value={`${formatBigNumber(DfsBalance ?? BigNumber.from(0), 2)} DFS`}
+                    value={`${formatBigNumber(DfsBalance ?? BigNumber.from(0), 9)} DFS`}
                     position="horizontal"
                   />
 
                   <DataCell
                     label={t('Staked')}
-                    value={`${formatBigNumber(referral?.stakedSavings ?? BigNumber.from(0), 2)} DFS`}
+                    value={`${formatBigNumber(referral?.stakedSavings ?? BigNumber.from(0), 9)} DFS`}
                     position="horizontal"
                   />
 
                   <DataCell
                     label={t('Rewards')}
-                    value={`${formatBigNumber(pendingSavingReward, 5)} DFS`}
+                    value={`${parseFloat(formatBigNumber(pendingSavingReward, 9))} DFS`}
                     position="horizontal"
                   />
                 </CardItem>

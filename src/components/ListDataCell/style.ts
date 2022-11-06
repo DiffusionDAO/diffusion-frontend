@@ -24,7 +24,7 @@ export const LabelDiv = styled.div`
   line-height: 40px;
 `
 export const ValueDiv = styled.div`
-  font-size: 22px;
+  font-size: 14px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   color: #ffffff;
