@@ -195,7 +195,6 @@ const Reward = () => {
     const subordinatesHasPower = await Promise.all(
       subordinates.map(async (sub) => {
         const subordinate = await dfsMineContract.addressToReferral(sub)
-        console.log('sub:', sub, subordinate.power.toString(), subordinate)
         if (subordinate?.power?.toString() !== '0') {
           return subordinate
         }
@@ -208,7 +207,6 @@ const Reward = () => {
   useEffect(() => {
     mutate(updateSubordinates())
   }, [account])
-  console.log('subordinatesHasPower:', subordinatesHasPower)
 
   const updateBondRewardDetailData = async () => {
     if (account) {
@@ -285,12 +283,12 @@ const Reward = () => {
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
   const nextRewardSavingNumber = parseFloat(formatBigNumber(savingRewardPerSecond.mul(8).mul(3600), 9)) * savingPercent
   // const nextRewardSaving = formatNumber(nextRewardSavingNumber, 2)
-  console.log(
-    'lastSavingsWithdraw:',
-    referral?.lastSavingsWithdraw.toNumber(),
-    formatUnits(totalSavingsReward, '18'),
-    foramtTotalStakedSavings,
-  )
+  // console.log(
+  //   'lastSavingsWithdraw:',
+  //   referral?.lastSavingsWithdraw.toNumber(),
+  //   formatUnits(totalSavingsReward, '18'),
+  //   foramtTotalStakedSavings,
+  // )
 
   const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
     if (newActiveIndex !== undefined) setActiveIndex(Math.ceil(newActiveIndex / slidesPerView))
