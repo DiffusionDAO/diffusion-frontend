@@ -423,7 +423,7 @@ const Reward = () => {
                       </MySposDashboardList>
                       <MySposDashboardMiddleItem>
                         <MySposDashboardMiddleItemValue>{myTotalPower ?? '0'}</MySposDashboardMiddleItemValue>
-                        <MySposDashboardMiddleItemDes>{t('Valid SPOS value')}</MySposDashboardMiddleItemDes>
+                        <MySposDashboardMiddleItemDes>{t('Valid SPOS')}</MySposDashboardMiddleItemDes>
                       </MySposDashboardMiddleItem>
                     </MySposDashboardWrap>
                   </Grid>
