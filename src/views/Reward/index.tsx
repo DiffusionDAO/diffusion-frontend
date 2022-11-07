@@ -116,7 +116,8 @@ const Reward = () => {
   const [bondReward, setBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [bondRewardLocked, setBondRewardLocked] = useState<BigNumber>(BigNumber.from(0))
   const [subordinates, setSubordinates] = useState<string[]>()
-  const [epoch, setEpoch] = useState<any>({})
+  const [savingRewardEpoch, setSavingRewardEpoch] = useState<any>({})
+  const [socialRewardEpoch, setSocialRewardEpoch] = useState<any>({})
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardPerSecond, setSocialRewardPerSecond] = useState<BigNumber>(BigNumber.from(0))
@@ -160,8 +161,8 @@ const Reward = () => {
 
   const refresh = useCallback(() => {
     if (account) {
-      dfsMineContract.epoch().then((res) => {
-        setEpoch(res)
+      dfsMineContract.savingRewardEpoch().then((res) => {
+        setSavingRewardEpoch(res)
         setNextSavingInterestChangeTime(new Date(res.endTime * 1000))
       })
 
@@ -269,7 +270,8 @@ const Reward = () => {
   const foramtTotalStakedSavings = formatUnits(totalStakedSavings ?? 0, 'ether')
   const savingPercent =
     totalSavingsReward.gt(0) && parseFloat(formatStakedSavings) / parseFloat(foramtTotalStakedSavings)
-  const savingInterest = (savingPercent * (epoch?.length * 8 * 3600)) / savingsRewardVestingSeconds.toNumber()
+  const savingInterest =
+    (savingPercent * (savingRewardEpoch?.length * 8 * 3600)) / savingsRewardVestingSeconds.toNumber()
   const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
   const socialRewardInterest =
     (totalSocialRewardNumber * 100 * 24 * 3600) / (socialRewardVestingSeconds.toNumber() * totalPowerNumber)

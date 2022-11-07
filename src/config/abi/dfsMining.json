@@ -48,13 +48,13 @@
       },
       {
         "internalType": "uint32",
-        "name": "_epochLength",
+        "name": "_savingRewardEpochLength",
         "type": "uint32"
       },
       {
-        "internalType": "uint256",
-        "name": "_firstEpochNumber",
-        "type": "uint256"
+        "internalType": "uint32",
+        "name": "_socialRewardEpochLength",
+        "type": "uint32"
       },
       {
         "internalType": "uint32",
@@ -88,25 +88,6 @@
       }
     ],
     "name": "BondRedeemed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
     "type": "event"
   },
   {
@@ -348,7 +329,7 @@
   },
   {
     "inputs": [],
-    "name": "discount",
+    "name": "dfsIncrement",
     "outputs": [
       {
         "internalType": "uint256",
@@ -361,27 +342,12 @@
   },
   {
     "inputs": [],
-    "name": "epoch",
+    "name": "discount",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "number",
+        "name": "",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "distribute",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "length",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "endTime",
-        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -580,19 +546,6 @@
       }
     ],
     "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "lastTotalPower",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1001,12 +954,22 @@
   },
   {
     "inputs": [],
-    "name": "savingInterestTime",
+    "name": "savingRewardEpoch",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "distribute",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "length",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "endTime",
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -1014,20 +977,7 @@
   },
   {
     "inputs": [],
-    "name": "savingRewardPerSecond",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "savingsRewardVestingSeconds",
+    "name": "savingRewardInterest",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1103,37 +1053,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint32",
-        "name": "timestamp",
-        "type": "uint32"
-      }
-    ],
-    "name": "setEndTime",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_superior",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_level",
-        "type": "uint256"
-      }
-    ],
-    "name": "setLevel",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "_mint",
         "type": "address"
@@ -1191,12 +1110,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_seconds",
-        "type": "uint256"
+        "internalType": "uint32",
+        "name": "timestamp",
+        "type": "uint32"
       }
     ],
-    "name": "setSavingRewardVestingTerm",
+    "name": "setSavingRewardEndTime",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1217,12 +1136,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_seconds",
-        "type": "uint256"
+        "internalType": "uint32",
+        "name": "timestamp",
+        "type": "uint32"
       }
     ],
-    "name": "setSocialRewardVestingSeconds",
+    "name": "setSocialRewardEndTime",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1255,12 +1174,22 @@
   },
   {
     "inputs": [],
-    "name": "socialRewardPerSecond",
+    "name": "socialRewardEpoch",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "distribute",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "length",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "endTime",
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -1268,7 +1197,7 @@
   },
   {
     "inputs": [],
-    "name": "socialRewardVestingSeconds",
+    "name": "socialRewardInterest",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1448,6 +1377,19 @@
         "internalType": "uint32",
         "name": "vestingTerm",
         "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalCalls",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
