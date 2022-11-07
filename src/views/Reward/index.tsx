@@ -267,7 +267,8 @@ const Reward = () => {
   const formatStakedSavings = formatUnits(referral?.stakedSavings ?? 0, 'ether')
   const foramtTotalStakedSavings = formatUnits(totalStakedSavings ?? 0, 'ether')
   const savingPercent =
-    totalSavingsReward.gt(0) && parseFloat(formatStakedSavings) / parseFloat(foramtTotalStakedSavings)
+    foramtTotalStakedSavings !== '0' ? parseFloat(formatStakedSavings) / parseFloat(foramtTotalStakedSavings) : 0
+  // console.log("savingPercent:",formatStakedSavings,foramtTotalStakedSavings, savingPercent)
   const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
   const socialRewardfiveDayROI = (5 * socialRewardInterest) / 10
   const sposAPY = (365 * socialRewardInterest) / 10
@@ -277,7 +278,7 @@ const Reward = () => {
   const greenPower = referral?.power.toNumber() / 100
   const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
-  const nextRewardSavingNumber = (parseFloat(formatUnits(totalStakedSavings, 18)) * savingRewardInterest) / 10
+  const nextRewardSavingNumber = (savingPercent * savingRewardInterest) / 10
 
   const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
     if (newActiveIndex !== undefined) setActiveIndex(Math.ceil(newActiveIndex / slidesPerView))
