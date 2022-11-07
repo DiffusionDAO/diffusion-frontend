@@ -178,7 +178,6 @@ const Reward = () => {
     setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
     setTotalSocialReward(await dfsMineContract.totalSocialReward())
     setTotalPower(await dfsMineContract.totalPower())
-    setPendingSavingsReward(await dfsMineContract.totalSavingsReward())
     setTotalStakedSavings(await dfsMineContract.totalStakedSavings())
   }
   const { mutate: refreshMutate } = useSWR('refresh', refresh)
