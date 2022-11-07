@@ -158,43 +158,50 @@ const Reward = () => {
     setBondRewardDetailModalVisible(false)
   }
 
-  const { data } = useSWR('refresh', async () => {
+  const refresh = async () => {
     if (account) {
-      const savingRewardEpoch = await dfsMineContract.savingRewardEpoch()
-      setSavingRewardEpoch(savingRewardEpoch)
-      setNextSavingInterestChangeTime(new Date(savingRewardEpoch.endTime * 1000))
-
-      setSocialRewardInterest((await dfsMineContract.socialRewardInterest()).toNumber())
-      setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
-      setTotalSocialReward(await dfsMineContract.totalSocialReward())
-      setTotalPower(await dfsMineContract.totalPower())
-      setPendingSocialReward(await dfsMineContract.pendingSocialReward(account))
-      setPendingBondReward(await dfsMineContract.pendingBondReward(account))
-      setPendingSavingsReward(await dfsMineContract.pendingSavingReward(account))
-      setPendingSavingsReward(await dfsMineContract.totalSavingsReward())
-      setTotalStakedSavings(await dfsMineContract.totalStakedSavings())
-
       const referral = await dfsMineContract.addressToReferral(account)
       setReferral(referral)
       setBondReward(referral?.bondReward)
       setBondRewardLocked(referral?.bondRewardLocked)
-      setDfsBalance(await dfsContract.balanceOf(account))
+      const dfsBalance = await dfsContract.balanceOf(account)
+      setDfsBalance(dfsBalance)
+
+      setPendingSocialReward(await dfsMineContract.pendingSocialReward(account))
+      setPendingBondReward(await dfsMineContract.pendingBondReward(account))
+      setPendingSavingsReward(await dfsMineContract.pendingSavingReward(account))
     }
-  })
+    const savingRewardEpoch = await dfsMineContract.savingRewardEpoch()
+    setSavingRewardEpoch(savingRewardEpoch)
+    setNextSavingInterestChangeTime(new Date(savingRewardEpoch.endTime * 1000))
+    setSocialRewardInterest((await dfsMineContract.socialRewardInterest()).toNumber())
+    setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
+    setTotalSocialReward(await dfsMineContract.totalSocialReward())
+    setTotalPower(await dfsMineContract.totalPower())
+    setPendingSavingsReward(await dfsMineContract.totalSavingsReward())
+    setTotalStakedSavings(await dfsMineContract.totalStakedSavings())
+  }
+  const { mutate: refreshMutate } = useSWR('refresh', refresh)
+  useEffect(() => {
+    refreshMutate(refresh())
+  }, [account])
 
   const updateSubordinates = async () => {
-    const subordinates = await dfsMineContract.getSubordinates(account)
-    setSubordinates(subordinates)
-    const subordinatesHasPower = await Promise.all(
-      subordinates.map(async (sub) => {
-        const subordinate = await dfsMineContract.addressToReferral(sub)
-        if (subordinate?.power?.toString() !== '0') {
-          return subordinate
-        }
-        return null
-      }),
-    )
-    return subordinatesHasPower
+    if (account) {
+      const subordinates = await dfsMineContract.getSubordinates(account)
+      setSubordinates(subordinates)
+      const subordinatesHasPower = await Promise.all(
+        subordinates.map(async (sub) => {
+          const subordinate = await dfsMineContract.addressToReferral(sub)
+          if (subordinate?.power?.toString() !== '0') {
+            return subordinate
+          }
+          return null
+        }),
+      )
+      return subordinatesHasPower
+    }
+    return null
   }
   const { data: subordinatesHasPower, status, mutate } = useSWR('updateSubordinates', updateSubordinates)
   useEffect(() => {
