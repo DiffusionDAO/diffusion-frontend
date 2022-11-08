@@ -148,12 +148,7 @@ const BondModal: React.FC<BondModalProps> = ({
         setVestingTerms(res[2])
       })
       .catch((error) => console.log(error))
-    dfsMining
-      .maxPayout()
-      .then((res) => {
-        setMaxPayout(formatBigNumber(res, 18))
-      })
-      .catch((error) => console.log(error))
+
     if (amount) {
       dfsMining
         .payoutFor(parseUnits(amount, 'ether'))
