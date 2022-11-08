@@ -66,31 +66,6 @@
     "type": "constructor"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "recipient",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "payout",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "remaining",
-        "type": "uint256"
-      }
-    ],
-    "name": "BondRedeemed",
-    "type": "event"
-  },
-  {
     "inputs": [],
     "name": "DAO",
     "outputs": [
@@ -173,17 +148,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "lastSocialRewardWithdraw",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
         "name": "stakedSavings",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lastSavingsWithdraw",
         "type": "uint256"
       }
     ],
@@ -280,6 +245,30 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "children",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -437,19 +426,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getStakers",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -551,25 +527,36 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "levelToPower",
-    "outputs": [
+        "type": "address"
+      },
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
       }
     ],
+    "name": "indirectSubordinates",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "maxPayout",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "levelToPower",
     "outputs": [
       {
         "internalType": "uint256",
@@ -876,6 +863,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "recursiveSubordinate",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1054,6 +1054,24 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_level",
+        "type": "uint256"
+      }
+    ],
+    "name": "setLevel",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_mint",
         "type": "address"
       }
@@ -1092,6 +1110,19 @@
   {
     "inputs": [
       {
+        "internalType": "bool",
+        "name": "_recursive",
+        "type": "bool"
+      }
+    ],
+    "name": "setRecursiveSubordinate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_address",
         "type": "address"
@@ -1110,38 +1141,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint32",
-        "name": "timestamp",
-        "type": "uint32"
-      }
-    ],
-    "name": "setSavingRewardEndTime",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "_nft",
         "type": "address"
       }
     ],
     "name": "setSocialNFT",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint32",
-        "name": "timestamp",
-        "type": "uint32"
-      }
-    ],
-    "name": "setSocialRewardEndTime",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1336,41 +1341,12 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "subordinates",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "terms",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "minimumPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "maxPayout",
         "type": "uint256"
       },
       {
@@ -1464,19 +1440,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_to",
-        "type": "address"
-      }
-    ],
-    "name": "transfer",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "newOwner",
         "type": "address"
       }
@@ -1551,6 +1514,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "withdrawBondReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1563,14 +1533,7 @@
         "type": "uint256"
       }
     ],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "withdrawBondReward",
+    "name": "withdrawPayout",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1580,6 +1543,32 @@
     "name": "withdrawSocialReward",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawedSavingReward",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawedSocialReward",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]

@@ -160,6 +160,7 @@ const Reward = () => {
 
   const refresh = async () => {
     if (account) {
+      console.log(account)
       const referral = await dfsMineContract.addressToReferral(account)
       setReferral(referral)
       setBondReward(referral?.bondReward)
@@ -191,6 +192,7 @@ const Reward = () => {
       setSubordinates(subordinates)
       const subordinatesHasPower = await Promise.all(
         subordinates.map(async (sub) => {
+          console.log('sub:', sub)
           const subordinate = await dfsMineContract.addressToReferral(sub)
           if (subordinate?.power?.toString() !== '0') {
             return subordinate
