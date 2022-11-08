@@ -79,7 +79,6 @@ const BondModal: React.FC<BondModalProps> = ({
   const [dfsBalance, setDfsBalance] = useState<string>()
   const [minPrice, setMinPrice] = useState<BigNumber>()
   const [vestingTerms, setVestingTerms] = useState<number>(0)
-  const [maxPayout, setMaxPayout] = useState<string>()
   const [payout, setPayoutFor] = useState<string>('0')
   const [pendingPayout, setPendingPayout] = useState<string>('0')
   const [bondPayout, setBondPayout] = useState<string>('0')
@@ -96,7 +95,6 @@ const BondModal: React.FC<BondModalProps> = ({
 
   useEffect(() => {
     dfsMining.getPriceInUSDT().then((res) => {
-      console.log(res.toString())
       setBondPrice(formatBigNumber(res, 5))
     })
     pair.getReserves().then((reserves: any) => {
@@ -144,8 +142,9 @@ const BondModal: React.FC<BondModalProps> = ({
     dfsMining
       .terms()
       .then((res) => {
-        setMinPrice(res[0])
-        setVestingTerms(res[2])
+        // console.log(res)
+        setMinPrice(res.minimumPrice)
+        setVestingTerms(res.vestingTerm / (24 * 3600))
       })
       .catch((error) => console.log(error))
 
@@ -236,7 +235,7 @@ const BondModal: React.FC<BondModalProps> = ({
               <ToImg src={bondData?.to} />
             </ImgWrap>
             <BondName>{bondData?.name}</BondName>
-            <BondTime>{`${bondData?.duration} ${t('days')}`}</BondTime>
+            <BondTime>{`${vestingTerms} ${t('days')}`}</BondTime>
           </BondListItemHeader>
           <BondListItemContent>
             <ContentCell>
@@ -350,7 +349,7 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem>
         <ListItem>
           <ListLable>{t('Duration')}</ListLable>
-          <ListContent>{vestingTerms / (24 * 3600)} Days</ListContent>
+          <ListContent>{vestingTerms} Days</ListContent>
         </ListItem>
       </ContentWrap>
     </StyledModal>

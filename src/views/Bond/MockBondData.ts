@@ -7,7 +7,7 @@ const bondDatasMock = [
     to: '/images/bond/usdt.png',
     price: '0',
     discount: (10 * 100) / 11,
-    duration: 0,
+    duration: 5,
     balance: 0,
     maxFee: '0',
     getFee: '0',

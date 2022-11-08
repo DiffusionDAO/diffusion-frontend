@@ -56,10 +56,8 @@ const Bond = () => {
   const [bondPrice, setBondPrice] = useState<number>(0)
   const [isApprove, setIsApprove] = useState<boolean>(false)
   const [bondItem, setBondItem] = useState<any>(null)
-  const [vestingTerms, setVestingTerms] = useState<number>(0)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
   const [marketPrice, setMarketPrice] = useState<string>()
-
   useEffect(() => {
     dfsMining.getPriceInUSDT().then((res) => {
       bondDatasMock[0].price = formatBigNumber(res, 5)
@@ -123,7 +121,7 @@ const Bond = () => {
     dfsMining
       .terms()
       .then((res) => {
-        dfsUsdt.duration = res[2] / (24 * 3600)
+        dfsUsdt.duration = res.vestingTerm / (24 * 3600)
       })
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
