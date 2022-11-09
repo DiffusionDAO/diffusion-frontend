@@ -184,7 +184,7 @@ const Reward = () => {
   const { mutate: refreshMutate } = useSWR('refresh', refresh)
   useEffect(() => {
     refreshMutate(refresh())
-  }, [account])
+  }, [account, amount])
 
   const updateSubordinates = async () => {
     if (account) {
