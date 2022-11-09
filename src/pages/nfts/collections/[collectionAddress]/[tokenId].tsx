@@ -74,12 +74,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         value: level,
         displayType: '',
       },
-      {
-        description: levelToSPOS[level].description,
-        traitType: 'SPOS',
-        value: levelToSPOS[level].validSPOS,
-        displayType: '',
-      },
+      // {
+      //   description: levelToSPOS[level].description,
+      //   traitType: 'SPOS',
+      //   value: levelToSPOS[level].validSPOS,
+      //   displayType: '',
+      // },
     ],
     staker: nft.staker,
     owner: nft.owner,

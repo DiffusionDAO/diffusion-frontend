@@ -25,11 +25,11 @@ import {
   SelectWrap,
   ComposeBtnWrap,
   SelectedCountWrap,
-  SyntheticBtn,
+  ComposeBtn,
   ComposeBtnWrapImg,
   SelectedCountBox,
   BackgroundWrap,
-  ConentWrap,
+  ContentWrap,
   BackgroundTitle,
   BackgroundDes,
   BackgroundText,
@@ -49,9 +49,7 @@ import {
   useNftMarketContract,
 } from 'hooks/useContract'
 import useSWR from 'swr'
-import { setTokenSourceMapRange } from 'typescript'
 import { formatBigNumber } from 'utils/formatBalance'
-import { zhCN } from 'date-fns/locale'
 import { ZHCN } from '@pancakeswap/localization/src/config/languages'
 
 interface noteProps {
@@ -220,14 +218,13 @@ function NftProfilePage() {
   const mine = useDFSMineContract()
   const market = useNftMarketContract()
 
-  const updateFn = async () => {
+  const getProfileToken = async () => {
     const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
       await Promise.all(
         collectionAddresses.map(async (collectionAddress) => {
           const nfts: NFT[] = await nftDatabase.getTokensOfOwner(collectionAddress, account)
-          // console.log(nfts.map(nft=>nft.tokenId.toString()))
           nfts
             .filter((nft) => nft.collectionAddress === dfsNFTAddress)
             .map((nft) => tokens.unstaked.push(nftToNftToken(nft, t)))
@@ -260,17 +257,16 @@ function NftProfilePage() {
     }
     return { unstaked: [], staked: [], onSale: [] }
   }
-  const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], updateFn)
+  const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], getProfileToken)
   useEffect(() => {
-    mutate(updateFn())
+    mutate(getProfileToken())
   }, [account, t])
 
   useEffect(() => {
     setUnstakedNFTs(data?.unstaked?.filter((token) => token.owner !== zeroAddress))
     setStakedNFTs(data?.staked?.filter((token) => token.owner !== zeroAddress))
     setOnSaleNFT(data?.onSale?.filter((token) => token.seller === account))
-    setIsSelected(false)
-  }, [data, status, account])
+  }, [data, status, account, isSelected])
 
   const sortByItems = [
     {
@@ -383,7 +379,7 @@ function NftProfilePage() {
       setComposedNFT([newNft])
       setConfirmModalVisible(false)
       setSuccessModalVisible(true)
-      mutate(updateFn())
+      mutate(getProfileToken())
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }
@@ -420,7 +416,7 @@ function NftProfilePage() {
     try {
       receipt = await mine.stakeNFT(dfsNFTAddress, tokenIds)
       await receipt.wait()
-      mutate(updateFn())
+      mutate(getProfileToken())
       selected.map((item) => (item.staker = !item.staker))
       selected.map((item) => (item.selected = !item.selected))
       resetPage()
@@ -507,6 +503,7 @@ function NftProfilePage() {
     { key: 'Staked', label: t('Staked'), length: stakedNFTs?.length ?? 0 },
     { key: 'OnSale', label: t('On Sale'), length: onSaleNFTs?.length ?? 0 },
   ]
+  console.log(isSelected, option, activeTab)
 
   return (
     <AccountNftWrap>
@@ -531,7 +528,7 @@ function NftProfilePage() {
         </BackgroundWrap>
       )}
 
-      <ConentWrap>
+      <ContentWrap>
         <SubMenuWrap>
           <Tabs
             defaultActiveKey={activeTab}
@@ -579,7 +576,7 @@ function NftProfilePage() {
                 </div>
               </>
             ) : (
-              <SyntheticBtn
+              <ComposeBtn
                 src={currentLanguage === ZHCN ? '/images/nfts/compose-zhcn.svg' : '/images/nfts/compose-en.svg'}
                 onClick={startCompose}
               />
@@ -615,7 +612,7 @@ function NftProfilePage() {
             isLoading={false}
           />
         )}
-      </ConentWrap>
+      </ContentWrap>
       {noteContent.visible ? (
         <CustomModal
           title={noteContent.title}

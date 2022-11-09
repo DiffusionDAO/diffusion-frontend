@@ -72,7 +72,7 @@ export const ComposeBtnWrapImg = styled.img`
   left: 0;
   z-index: -1;
 `
-export const SyntheticBtn = styled.img`
+export const ComposeBtn = styled.img`
   cursor: pointer;
   height: 120px;
 `
@@ -203,4 +203,4 @@ export const BackgroundDes = styled.div`
   color: #abb6ff;
   line-height: 28px;
 `
-export const ConentWrap = styled.div``
+export const ContentWrap = styled.div``
