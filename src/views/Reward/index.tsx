@@ -104,6 +104,8 @@ const Reward = () => {
   const [powerRewardDetailModalVisible, setSocialRewardDetailModalVisible] = useState<boolean>(false)
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const [pendingSocialReward, setPendingSocialReward] = useState<BigNumber>(BigNumber.from(0))
+  const [socialReward, setSocialReward] = useState<BigNumber>(BigNumber.from(0))
+
   const [DfsBalance, setDfsBalance] = useState<BigNumber>(BigNumber.from(0))
   const [totalSavingsReward, setTotalSavingReward] = useState<BigNumber>(BigNumber.from(0))
   const [totalStakedSavings, setTotalStakedSavings] = useState<BigNumber>(BigNumber.from(0))
@@ -164,11 +166,12 @@ const Reward = () => {
       const referral = await dfsMineContract.addressToReferral(account)
       setReferral(referral)
       setBondReward(referral?.bondReward)
+      setSocialReward(referral?.socialReward)
       setBondRewardLocked(referral?.bondRewardLocked)
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)
 
-      setPendingSocialReward(await dfsMineContract.pendingSocialReward(account))
+      // setPendingSocialReward(await dfsMineContract.pendingSocialReward(account))
       setPendingBondReward(await dfsMineContract.pendingBondReward(account))
       setPendingSavingsReward(await dfsMineContract.pendingSavingReward(account))
     }
@@ -278,7 +281,7 @@ const Reward = () => {
   const myLockedPower = (referral?.power?.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
   const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
   const greenPower = referral?.power.toNumber() / 100
-  const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
+  // const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
   const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
   const nextRewardSavingNumber = (savingPercent * savingRewardInterest) / 10
 
@@ -444,11 +447,11 @@ const Reward = () => {
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Mint')}</RewardText>
-                        <RewardValueDiv>{pendingSocialRewardString ?? '0'}</RewardValueDiv>
+                        <RewardValueDiv>{formatBigNumber(socialReward, 2) ?? '0'}</RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
-                          if (pendingSocialReward?.gt(0)) {
+                          if (socialReward?.gt(0)) {
                             try {
                               const receipt = await dfsMineContract.withdrawSocialReward()
                               await receipt.wait()
