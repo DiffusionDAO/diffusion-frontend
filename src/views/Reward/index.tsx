@@ -447,7 +447,7 @@ const Reward = () => {
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Mint')}</RewardText>
-                        <RewardValueDiv>{formatBigNumber(socialReward, 2) ?? '0'}</RewardValueDiv>
+                        <RewardValueDiv>{formatBigNumber(socialReward.div(100), 5) ?? '0'}</RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
