@@ -480,7 +480,7 @@ function NftProfilePage() {
         if (data?.length < 2) {
           setNoteContent({
             title: t('Note'),
-            description: t('Need 2 pieces'),
+            description: t('Need 2') + t(levelToName[Number(data[0].attributes[0].value) - 1]),
             visible: true,
           })
           return

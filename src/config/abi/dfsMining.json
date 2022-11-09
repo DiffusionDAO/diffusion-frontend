@@ -414,7 +414,7 @@
         "type": "address"
       }
     ],
-    "name": "getReferrals",
+    "name": "getParents",
     "outputs": [
       {
         "internalType": "address[]",
@@ -433,7 +433,7 @@
         "type": "address"
       }
     ],
-    "name": "getSubordinates",
+    "name": "getChildren",
     "outputs": [
       {
         "internalType": "address[]",

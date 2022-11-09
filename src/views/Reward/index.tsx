@@ -188,7 +188,7 @@ const Reward = () => {
 
   const updateSubordinates = async () => {
     if (account) {
-      const subordinates = await dfsMineContract.getSubordinates(account)
+      const subordinates = await dfsMineContract.getChildren(account)
       setSubordinates(subordinates)
       const subordinatesHasPower = await Promise.all(
         subordinates.map(async (sub) => {
