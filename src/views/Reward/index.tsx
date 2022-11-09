@@ -463,6 +463,18 @@ const Reward = () => {
                       >
                         {t('Withdraw')}
                       </ExtractBtn>
+                      <ExtractBtn
+                        onClick={async () => {
+                          try {
+                            const receipt = await dfsMineContract.updatePool()
+                            await receipt.wait()
+                          } catch (error: any) {
+                            window.alert(error.reason ?? error.data?.message ?? error.message)
+                          }
+                        }}
+                      >
+                        {t('Refresh')}
+                      </ExtractBtn>
                     </MySposRewardWrap>
                   </Grid>
                 </Grid>
