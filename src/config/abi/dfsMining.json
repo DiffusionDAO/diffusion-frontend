@@ -148,7 +148,17 @@
       },
       {
         "internalType": "uint256",
+        "name": "lastSocialRewardWithdraw",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "stakedSavings",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "savingReward",
         "type": "uint256"
       }
     ],
@@ -344,6 +354,13 @@
   },
   {
     "inputs": [],
+    "name": "distrbuteSocialReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "foundation",
     "outputs": [
       {
@@ -382,25 +399,12 @@
         "type": "address"
       }
     ],
-    "name": "getPowerRewardContributors",
+    "name": "getChildren",
     "outputs": [
       {
         "internalType": "address[]",
         "name": "",
         "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getPriceInUSDT",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -433,12 +437,25 @@
         "type": "address"
       }
     ],
-    "name": "getChildren",
+    "name": "getPowerRewardContributors",
     "outputs": [
       {
         "internalType": "address[]",
         "name": "",
         "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPriceInUSDT",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -537,7 +554,7 @@
         "type": "uint256"
       }
     ],
-    "name": "indirectSubordinates",
+    "name": "indirectChildren",
     "outputs": [
       {
         "internalType": "address",
@@ -864,7 +881,7 @@
   },
   {
     "inputs": [],
-    "name": "recursiveSubordinate",
+    "name": "recursiveChild",
     "outputs": [
       {
         "internalType": "bool",
@@ -996,11 +1013,6 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
-        "name": "_maxPayout",
-        "type": "uint256"
-      },
-      {
         "internalType": "uint32",
         "name": "_vestingTerm",
         "type": "uint32"
@@ -1115,7 +1127,7 @@
         "type": "bool"
       }
     ],
-    "name": "setRecursiveSubordinate",
+    "name": "setRecursiveChild",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1154,6 +1166,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_interest",
+        "type": "uint256"
+      }
+    ],
+    "name": "setSocialRewardInterest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_usdt",
         "type": "address"
@@ -1172,29 +1197,6 @@
         "internalType": "contract ISocialNFT",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "socialRewardEpoch",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "distribute",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "length",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "endTime",
-        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -1386,7 +1388,7 @@
   },
   {
     "inputs": [],
-    "name": "totalSavingsReward",
+    "name": "totalSavingReward",
     "outputs": [
       {
         "internalType": "uint256",
