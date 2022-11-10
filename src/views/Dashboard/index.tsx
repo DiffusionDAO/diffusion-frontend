@@ -67,12 +67,12 @@ const Dashboard = () => {
     const telegram = await fetch(telegramLink)
     const telegramJson = await telegram.json()
     const telegramFollowers = telegramJson.result
-    console.log(telegramFollowers)
+    console.log('telegramFollowers:', telegramFollowers)
 
     const discord = await fetch(discordLink)
     const discordJson = await discord.json()
     const discordFollowers = discordJson.approximate_member_count
-    console.log(discordFollowers)
+    console.log('discordFollowers:', discordFollowers)
 
     const medium = await fetch(mediumLink)
     const text = await medium.text()
@@ -80,12 +80,12 @@ const Dashboard = () => {
     console.log(mediumJson)
     const userId = mediumJson.payload.user.userId
     const mediumFollowers = mediumJson.payload.references.SocialStats.userId.usersFollowedByCount
-    console.log(mediumFollowers)
+    console.log('mediumFollowers:', mediumFollowers)
 
     const twitter = await fetch(twitterLink)
     const twitterJson = await twitter.json()
     const twitterFollowers = twitterJson[0].followers_count
-    console.log(twitterFollowers)
+    console.log('twitterFollowers:', twitterFollowers)
 
     const followers = {
       concentration: {
