@@ -436,21 +436,17 @@ const Reward = () => {
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Mint')}</RewardText>
                         <RewardValueDiv>
-                          {formatBigNumber(socialReward.add(pendingSocialReward).div(100), 5) ?? '0'}
+                          {formatBigNumber(socialReward.add(pendingSocialReward), 5) ?? '0'}
                         </RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
-                          if (socialReward?.gt(0)) {
-                            try {
-                              const receipt = await dfsMineContract.withdrawSocialReward()
-                              await receipt.wait()
-                              setRefresh(true)
-                            } catch (error: any) {
-                              window.alert(error.reason ?? error.data?.message ?? error.message)
-                            }
-                          } else {
-                            alert('No social reward')
+                          try {
+                            const receipt = await dfsMineContract.withdrawSocialReward()
+                            await receipt.wait()
+                            setRefresh(true)
+                          } catch (error: any) {
+                            window.alert(error.reason ?? error.data?.message ?? error.message)
                           }
                         }}
                       >
