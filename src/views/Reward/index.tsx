@@ -171,7 +171,7 @@ const Reward = () => {
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)
 
-      // setPendingSocialReward(await dfsMineContract.pendingSocialReward(account))
+      setPendingSocialReward(await dfsMineContract.pendingSocialReward(account))
       setPendingBondReward(await dfsMineContract.pendingBondReward(account))
       setPendingSavingsReward(await dfsMineContract.pendingSavingReward(account))
     }
@@ -447,7 +447,7 @@ const Reward = () => {
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Mint')}</RewardText>
-                        <RewardValueDiv>{formatBigNumber(socialReward.div(100), 5) ?? '0'}</RewardValueDiv>
+                        <RewardValueDiv>{formatBigNumber(pendingSocialReward.div(100), 5) ?? '0'}</RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
@@ -455,7 +455,7 @@ const Reward = () => {
                             try {
                               const receipt = await dfsMineContract.withdrawSocialReward()
                               await receipt.wait()
-                              setPendingBondReward(BigNumber.from(0))
+                              // setPendingBondReward(BigNumber.from(0))
                             } catch (error: any) {
                               window.alert(error.reason ?? error.data?.message ?? error.message)
                             }
@@ -466,7 +466,7 @@ const Reward = () => {
                       >
                         {t('Withdraw')}
                       </ExtractBtn>
-                      <ExtractBtn
+                      {/* <ExtractBtn
                         onClick={async () => {
                           try {
                             const receipt = await dfsMineContract.updatePool()
@@ -477,7 +477,7 @@ const Reward = () => {
                         }}
                       >
                         {t('Refresh')}
-                      </ExtractBtn>
+                      </ExtractBtn> */}
                     </MySposRewardWrap>
                   </Grid>
                 </Grid>
