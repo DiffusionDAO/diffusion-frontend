@@ -451,11 +451,11 @@ const Reward = () => {
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
-                          if (socialReward?.gt(0)) {
+                          if (pendingSocialReward?.gt(0)) {
                             try {
                               const receipt = await dfsMineContract.withdrawSocialReward()
                               await receipt.wait()
-                              // setPendingBondReward(BigNumber.from(0))
+                              setPendingBondReward(BigNumber.from(0))
                             } catch (error: any) {
                               window.alert(error.reason ?? error.data?.message ?? error.message)
                             }
