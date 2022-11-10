@@ -29,12 +29,6 @@ const UserNfts: React.FC<React.PropsWithChildren<{ nfts: NftToken[]; isLoading: 
             return (
               <CollectibleLinkCard
                 isSelected={false}
-                isUserNft
-                onClick={() => {
-                  // if (isSelected) {
-                  selectNft(nft)
-                  // }
-                }}
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
                 nft={nft}
                 currentAskPrice={
