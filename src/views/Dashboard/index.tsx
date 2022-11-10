@@ -69,7 +69,12 @@ const Dashboard = () => {
     const telegramFollowers = telegramJson.result
     console.log(telegramFollowers)
 
-    const medium = await fetch(mediumLink, { mode: 'no-cors' })
+    const discord = await fetch(discordLink)
+    const discordJson = await discord.json()
+    const discordFollowers = discordJson.approximate_member_count
+    console.log(discordFollowers)
+
+    const medium = await fetch(mediumLink)
     const text = await medium.text()
     const mediumJson = JSON.parse(text.replace('])}while(1);</x>', ''))
     console.log(mediumJson)
@@ -82,11 +87,6 @@ const Dashboard = () => {
     const twitterFollowers = twitterJson[0].followers_count
     console.log(twitterFollowers)
 
-    const discord = await fetch(discordLink)
-    const discordJson = await discord.json()
-    const discordFollowers = discordJson.approximate_member_count
-    console.log(discordFollowers)
-
     const followers = {
       concentration: {
         telegram: telegramFollowers,
@@ -97,9 +97,9 @@ const Dashboard = () => {
     }
     return followers
 
-    const response = await fetch('https://middle.diffusiondao.org/dashboard')
-    const json = await response.json()
-    return json
+    // const response = await fetch('https://middle.diffusiondao.org/dashboard')
+    // const json = await response.json()
+    // return json
   })
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign
