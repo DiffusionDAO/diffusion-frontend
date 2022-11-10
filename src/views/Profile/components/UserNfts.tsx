@@ -1,25 +1,9 @@
-import { useState, useEffect } from 'react'
 import { Grid, useModal, Text, Flex } from '@pancakeswap/uikit'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { formatBigNumber } from 'utils/formatBalance'
-import { BigNumber } from '@ethersproject/bignumber'
 import { CollectibleActionCard, CollectibleLinkCard } from '../../Nft/market/components/CollectibleCard'
 import GridPlaceholder from '../../Nft/market/components/GridPlaceholder'
-import ProfileNftModal from '../../Nft/market/components/ProfileNftModal'
 import NoNftsImage from '../../Nft/market/components/Activity/NoNftsImage'
-import SellModal from '../../Nft/market/components/BuySellModals/SellModal'
-
-interface ProfileNftProps {
-  nft: NftToken
-  location: NftLocation
-}
-
-interface SellNftProps {
-  nft: NftToken
-  location: NftLocation
-  variant: 'sell' | 'edit'
-}
 
 const UserNfts: React.FC<
   React.PropsWithChildren<{
@@ -31,6 +15,7 @@ const UserNfts: React.FC<
     onSuccessEditProfile?: () => void
   }>
 > = ({ isSelected, nfts, isLoading, selectNft, onSuccessSale, onSuccessEditProfile }) => {
+  console.log('UserNfts:')
   const { t } = useTranslation()
   const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
     if (isSelected) {

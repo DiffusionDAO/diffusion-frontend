@@ -46,6 +46,7 @@ const MoreFromThisCollection: React.FC<React.PropsWithChildren<MoreFromThisColle
   currentTokenName = '',
   title = <Trans>More from this collection</Trans>,
 }) => {
+  console.log('MoreFromThisCollection:')
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
   const [activeIndex, setActiveIndex] = useState(1)
   const { isMobile, isMd, isLg } = useMatchBreakpoints()

@@ -7,10 +7,9 @@ import NoNftsImage from '../../Nft/market/components/Activity/NoNftsImage'
 
 const UserNfts: React.FC<React.PropsWithChildren<{ nfts: NftToken[]; isLoading: boolean }>> = ({ nfts, isLoading }) => {
   const { t } = useTranslation()
-
+  console.log('UnconnectedProfileNfts UserNfts:')
   return (
     <>
-      {/* User has no NFTs */}
       {nfts?.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />
@@ -30,6 +29,12 @@ const UserNfts: React.FC<React.PropsWithChildren<{ nfts: NftToken[]; isLoading: 
             return (
               <CollectibleLinkCard
                 isSelected={false}
+                isUserNft
+                onClick={() => {
+                  // if (isSelected) {
+                  selectNft(nft)
+                  // }
+                }}
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
                 nft={nft}
                 currentAskPrice={

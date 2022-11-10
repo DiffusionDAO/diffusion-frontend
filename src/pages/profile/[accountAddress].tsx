@@ -189,12 +189,14 @@ function NftProfilePage() {
   const [onSaleNFTs, setOnSaleNFT] = useState([])
   const [selectedNFTs, setSelectedNFTs] = useState<NftToken[]>(unstakedNFTs)
   const { isMobile } = useMatchBreakpoints()
-  const { query } = useRouter()
+  const { push, query } = useRouter()
 
   const accountAddress = query.accountAddress as string
 
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
-
+  if (account && !isConnectedProfile) {
+    push(`/profile/${account?.toLowerCase()}`)
+  }
   const [isSelected, setIsSelected] = useState<boolean>(false)
   const [option, setOption] = useState<string>('')
 
@@ -259,6 +261,7 @@ function NftProfilePage() {
   }
   const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], getProfileToken)
   useEffect(() => {
+    setUnstakedNFTs([])
     mutate(getProfileToken())
   }, [account, t])
 
@@ -266,34 +269,7 @@ function NftProfilePage() {
     setUnstakedNFTs(data?.unstaked?.filter((token) => token.owner !== zeroAddress))
     setStakedNFTs(data?.staked?.filter((token) => token.owner !== zeroAddress))
     setOnSaleNFT(data?.onSale?.filter((token) => token.seller === account))
-  }, [data, status, account, isSelected])
-
-  const sortByItems = [
-    {
-      label: t('Wiseman'),
-      value: 'Lord',
-      children: [
-        { label: t('silver'), value: 'silver' },
-        { label: t('golden'), value: 'golden' },
-      ],
-    },
-    {
-      label: t('General'),
-      value: 'General',
-      children: [
-        { label: t('silver'), value: 'silver' },
-        { label: t('golden'), value: 'golden' },
-      ],
-    },
-    {
-      label: t('Congressman'),
-      value: 'Congressman',
-      children: [
-        { label: t('silver'), value: 'silver' },
-        { label: t('golden'), value: 'golden' },
-      ],
-    },
-  ]
+  }, [data])
 
   const resetPage = () => {
     setIsSelected(false)
@@ -503,7 +479,7 @@ function NftProfilePage() {
     { key: 'Staked', label: t('Staked'), length: stakedNFTs?.length ?? 0 },
     { key: 'OnSale', label: t('On Sale'), length: onSaleNFTs?.length ?? 0 },
   ]
-  console.log(isSelected, option, activeTab)
+  console.log(isSelected, option, activeTab, isConnectedProfile)
 
   return (
     <AccountNftWrap>

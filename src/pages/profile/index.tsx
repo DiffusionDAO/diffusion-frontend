@@ -6,7 +6,6 @@ import { nftsBaseUrl } from 'views/Nft/market/constants'
 const ProfilePage = () => {
   const { account } = useWeb3React()
   const router = useRouter()
-
   useEffect(() => {
     if (account) {
       router.push(`/profile/${account.toLowerCase()}`)
