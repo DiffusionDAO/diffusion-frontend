@@ -61,7 +61,7 @@ const Dashboard = () => {
 
   const { data } = useSWR('dashboard', async () => {
     const callFactor = await dfsMineContract.totalCalls()
-    thirteen = callFactor
+
     console.log('callFactor:', callFactor.toNumber())
 
     const telegram = await fetch(telegramLink)
@@ -104,7 +104,7 @@ const Dashboard = () => {
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign
   const avgConentraction = conentractions.reduce((acc, cur) => (acc += cur), 0) / conentractions.length
-  const coefficient = avgConentraction + thirteen
+  const coefficient = avgConentraction + callFactor
   const time = new Date()
   return (
     <div className="dashboard-view">
@@ -259,7 +259,7 @@ const Dashboard = () => {
                         />
                         <DataCell
                           title="Call Factor"
-                          data={thirteen}
+                          data={callFactor}
                           imgUrl="/images/dashboard/cf.png"
                           titleStyle={{ color: '#ABB6FF' }}
                           imgStyle={{ height: '85px', width: '54px' }}
