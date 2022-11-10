@@ -368,7 +368,7 @@ export const MySposDashboardMiddleItem = styled.div`
 `
 export const MySposDashboardMiddleItemValue = styled.div`
   width: 100%;
-  height: 40px;
+  height: 20px;
   text-align: center;
   position: absolute;
   left: 0;
@@ -376,13 +376,13 @@ export const MySposDashboardMiddleItemValue = styled.div`
   bottom: 0;
   right: 0;
   margin: auto;
-  font-size: 36px;
+  font-size: 20px;
   color: #fff;
 `
 export const MySposDashboardMiddleItemDes = styled.div`
   width: 182px;
-  height: 36px;
-  line-height: 36px;
+  height: 40px;
+  line-height: 40px;
   border-radius: 8px;
   border: 1px solid #8a7ea5;
   font-size: 13px;
