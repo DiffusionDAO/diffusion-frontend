@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useState } from 'react'
 import useSWR from 'swr'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useDFSMineContract } from 'hooks/useContract'
 import { Paper } from './style'
 import { DataCell } from './components/DataCell/DataCell'
 import {
@@ -32,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const telegramLink =
+  'https://api.telegram.org/bot5334696884:AAHzLTcSxbmnzHZUBNfCBN2SjXAyaT06hQo/getChatMembersCount?chat_id=@DiffusionDAO'
+const discordLink = 'https://discord.com/api/invite/XYKQdqmuTe?with_counts=true'
+const twitterLink = 'https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=DFSDIFFUSION'
+const mediumLink = 'https://medium.com/@getdiffusion?format=json'
+
 const { one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen } =
   dashboardMock.OverviewData
 
@@ -46,10 +53,50 @@ const Dashboard = () => {
   const { isMobile } = useMatchBreakpoints()
   const classes = useStyles()
   const [activeTab, setActiveTab] = useState<string>('Overview')
+  const [followers, setFollowers] = useState<any>({})
   const clickTab = (tab: string) => {
     setActiveTab(tab)
   }
+  const dfsMineContract = useDFSMineContract()
+
   const { data } = useSWR('dashboard', async () => {
+    const callFactor = await dfsMineContract.totalCalls()
+    thirteen = callFactor
+    console.log('callFactor:', callFactor.toNumber())
+
+    const telegram = await fetch(telegramLink)
+    const telegramJson = await telegram.json()
+    const telegramFollowers = telegramJson.result
+    console.log(telegramFollowers)
+
+    const medium = await fetch(mediumLink, { mode: 'no-cors' })
+    const text = await medium.text()
+    const mediumJson = JSON.parse(text.replace('])}while(1);</x>', ''))
+    console.log(mediumJson)
+    const userId = mediumJson.payload.user.userId
+    const mediumFollowers = mediumJson.payload.references.SocialStats.userId.usersFollowedByCount
+    console.log(mediumFollowers)
+
+    const twitter = await fetch(twitterLink)
+    const twitterJson = await twitter.json()
+    const twitterFollowers = twitterJson[0].followers_count
+    console.log(twitterFollowers)
+
+    const discord = await fetch(discordLink)
+    const discordJson = await discord.json()
+    const discordFollowers = discordJson.approximate_member_count
+    console.log(discordFollowers)
+
+    const followers = {
+      concentration: {
+        telegram: telegramFollowers,
+        discord: discordFollowers,
+        twitter: twitterFollowers,
+        medium: mediumFollowers,
+      },
+    }
+    return followers
+
     const response = await fetch('https://middle.diffusiondao.org/dashboard')
     const json = await response.json()
     return json
