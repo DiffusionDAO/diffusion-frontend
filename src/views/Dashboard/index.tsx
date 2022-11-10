@@ -53,7 +53,7 @@ const Dashboard = () => {
   const { isMobile } = useMatchBreakpoints()
   const classes = useStyles()
   const [activeTab, setActiveTab] = useState<string>('Overview')
-  const [followers, setFollowers] = useState<any>({})
+  const [callFactor, setCallfactor] = useState<number>(0)
   const clickTab = (tab: string) => {
     setActiveTab(tab)
   }
@@ -61,7 +61,7 @@ const Dashboard = () => {
 
   const { data } = useSWR('dashboard', async () => {
     const callFactor = await dfsMineContract.totalCalls()
-
+    setCallfactor(callFactor.toNumber())
     console.log('callFactor:', callFactor.toNumber())
 
     const telegram = await fetch(telegramLink)
@@ -259,7 +259,7 @@ const Dashboard = () => {
                         />
                         <DataCell
                           title="Call Factor"
-                          data={callFactor}
+                          data={callFactor.toString()}
                           imgUrl="/images/dashboard/cf.png"
                           titleStyle={{ color: '#ABB6FF' }}
                           imgStyle={{ height: '85px', width: '54px' }}
