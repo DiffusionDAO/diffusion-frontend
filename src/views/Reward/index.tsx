@@ -161,6 +161,8 @@ const Reward = () => {
       setDfsBalance(dfsBalance)
 
       setPendingSocialReward(await dfsMineContract.pendingSocialReward(account))
+      console.log('socialReward:', formatUnits(socialReward, 18), formatUnits(pendingSocialReward, 18))
+
       setPendingBondReward(await dfsMineContract.pendingBondReward(account))
       setPendingSavingsReward(await dfsMineContract.pendingSavingReward(account))
     }
@@ -184,7 +186,6 @@ const Reward = () => {
       setSubordinates(subordinates)
       const subordinatesHasPower = await Promise.all(
         subordinates.map(async (sub) => {
-          console.log('sub:', sub)
           const subordinate = await dfsMineContract.addressToReferral(sub)
           if (subordinate?.power?.toString() !== '0') {
             return subordinate
@@ -434,7 +435,9 @@ const Reward = () => {
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Mint')}</RewardText>
-                        <RewardValueDiv>{formatBigNumber(socialReward.div(100), 5) ?? '0'}</RewardValueDiv>
+                        <RewardValueDiv>
+                          {formatBigNumber(socialReward.add(pendingSocialReward).div(100), 5) ?? '0'}
+                        </RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
