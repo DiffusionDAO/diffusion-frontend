@@ -84,15 +84,7 @@ interface Referral {
   stakedSavings: BigNumber
   lastSavingsWithdraw: BigNumber
 }
-interface BondRewardDetail {
-  contributor: string
-  contribution: BigNumber
-}
-interface PowerRewardDetail {
-  contributor: string
-  tokenId: string
-  contribution: BigNumber
-}
+
 const Reward = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -112,18 +104,16 @@ const Reward = () => {
   const [pendingBondReward, setPendingBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [referral, setReferral] = useState<Referral>()
   const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
-  const [soicalRewardVestingSeconds, setSoicalRewardVestingSeconds] = useState<BigNumber>(BigNumber.from(0))
-  const [savingsRewardVestingSeconds, setSavingsRewardVestingSeconds] = useState<BigNumber>(BigNumber.from(0))
   const [pendingSavingReward, setPendingSavingsReward] = useState<BigNumber>(BigNumber.from(0))
   const [bondReward, setBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [bondRewardLocked, setBondRewardLocked] = useState<BigNumber>(BigNumber.from(0))
   const [subordinates, setSubordinates] = useState<string[]>()
   const [savingRewardEpoch, setSavingRewardEpoch] = useState<any>({})
-  const [socialRewardEpoch, setSocialRewardEpoch] = useState<any>({})
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardInterest, setSocialRewardInterest] = useState<number>(0)
   const [savingRewardInterest, setSavingRewardInterest] = useState<number>(0)
+  const [requireRefresh, setRefresh] = useState<boolean>(false)
 
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
   const [activeIndex, setActiveIndex] = useState(1)
@@ -162,7 +152,6 @@ const Reward = () => {
 
   const refresh = async () => {
     if (account) {
-      console.log(account)
       const referral = await dfsMineContract.addressToReferral(account)
       setReferral(referral)
       setBondReward(referral?.bondReward)
@@ -187,7 +176,7 @@ const Reward = () => {
   const { mutate: refreshMutate } = useSWR('refresh', refresh)
   useEffect(() => {
     refreshMutate(refresh())
-  }, [account, amount])
+  }, [account, amount, requireRefresh])
 
   const updateSubordinates = async () => {
     if (account) {
@@ -282,7 +271,6 @@ const Reward = () => {
   const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
   const greenPower = referral?.power.toNumber() / 100
   // const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
-  const dfsFromBondReward = formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)
   const nextRewardSavingNumber = (savingPercent * savingRewardInterest) / 10
 
   const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
@@ -333,25 +321,24 @@ const Reward = () => {
                 </DiffusionGoldHeader>
                 <Petal src="/images/reward/petal.png" isMobile={isMobile} />
                 <RewardText>{t('Rewards')}</RewardText>
-                <RewardValueDiv>{dfsFromBondReward}</RewardValueDiv>
+                <RewardValueDiv>
+                  {formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)}
+                </RewardValueDiv>
                 <ExtractBtn
                   onClick={async () => {
-                    if (dfsFromBondReward !== '0.0') {
-                      try {
-                        const receipt = await dfsMineContract.withdrawBondReward()
-                        await receipt.wait()
-                      } catch (error: any) {
-                        window.alert(error.reason ?? error.data?.message ?? error.message)
-                      }
-                    } else {
-                      alert('No bond reward')
+                    try {
+                      const receipt = await dfsMineContract.withdrawBondReward()
+                      await receipt.wait()
+                      setRefresh(true)
+                    } catch (error: any) {
+                      window.alert(error.reason ?? error.data?.message ?? error.message)
                     }
                   }}
                 >
                   {t('Withdraw')}
                 </ExtractBtn>
                 <RewardText>{t('Unpaid Bond Rewards')}</RewardText>
-                <RewardValueDiv>{formatBigNumber(bondRewardLocked ?? BigNumber.from(0), 2)}</RewardValueDiv>
+                <RewardValueDiv>{formatBigNumber(bondRewardLocked ?? BigNumber.from(0), 5)}</RewardValueDiv>
               </DiffusionGoldWrap>
             </Grid>
             <Grid item lg={8} md={8} sm={12} xs={12}>
@@ -447,15 +434,15 @@ const Reward = () => {
                       <MySposRewardBg src="/images/reward/mySposRewardBg.png" />
                       <RewardWrap isMobile={isMobile}>
                         <RewardText>{t('Mint')}</RewardText>
-                        <RewardValueDiv>{formatBigNumber(pendingSocialReward.div(100), 5) ?? '0'}</RewardValueDiv>
+                        <RewardValueDiv>{formatBigNumber(socialReward.div(100), 5) ?? '0'}</RewardValueDiv>
                       </RewardWrap>
                       <ExtractBtn
                         onClick={async () => {
-                          if (pendingSocialReward?.gt(0)) {
+                          if (socialReward?.gt(0)) {
                             try {
                               const receipt = await dfsMineContract.withdrawSocialReward()
                               await receipt.wait()
-                              setPendingBondReward(BigNumber.from(0))
+                              setRefresh(true)
                             } catch (error: any) {
                               window.alert(error.reason ?? error.data?.message ?? error.message)
                             }
