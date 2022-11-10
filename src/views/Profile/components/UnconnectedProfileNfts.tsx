@@ -7,7 +7,6 @@ import NoNftsImage from '../../Nft/market/components/Activity/NoNftsImage'
 
 const UserNfts: React.FC<React.PropsWithChildren<{ nfts: NftToken[]; isLoading: boolean }>> = ({ nfts, isLoading }) => {
   const { t } = useTranslation()
-  console.log('UnconnectedProfileNfts UserNfts:')
   return (
     <>
       {nfts?.length === 0 && !isLoading ? (

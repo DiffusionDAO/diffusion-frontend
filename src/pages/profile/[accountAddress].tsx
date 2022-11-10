@@ -430,7 +430,6 @@ function NftProfilePage() {
     if (option === 'compose') {
       const level = nft.attributes[0].value
       const data = selectedNFTs.filter((nft) => nft.attributes[0].value === level)
-      // console.log('data:', data)
       if (level === '0') {
         if (data?.length < 3) {
           setNoteContent({
@@ -479,7 +478,6 @@ function NftProfilePage() {
     { key: 'Staked', label: t('Staked'), length: stakedNFTs?.length ?? 0 },
     { key: 'OnSale', label: t('On Sale'), length: onSaleNFTs?.length ?? 0 },
   ]
-  console.log(isSelected, option, activeTab, isConnectedProfile)
 
   return (
     <AccountNftWrap>
