@@ -146,8 +146,8 @@ export default {
     97: '',
   },
   ido: {
-    56: '0x5fef6b9f477621825F5c0e40b08e8Eba14D615c5',
-    97: '0x5fef6b9f477621825F5c0e40b08e8Eba14D615c5',
+    56: '0x0e6dfbCe936ABe08cda0Caf576E3CfcF13A11830',
+    97: '0x0e6dfbCe936ABe08cda0Caf576E3CfcF13A11830',
   },
   usdt: {
     56: '0x55d398326f99059fF775485246999027B3197955',
@@ -175,8 +175,8 @@ export default {
   },
 
   dfsMining: {
-    56: '0xF3F6f1d4D485985d6b3036af05192Ff64E8F735C',
-    97: '0xF3F6f1d4D485985d6b3036af05192Ff64E8F735C',
+    56: '0xB057067400c1fcB749BeC1b4b72B87D3f6d9a48c',
+    97: '0xB057067400c1fcB749BeC1b4b72B87D3f6d9a48c',
   },
   nftMarket: {
     56: '0x09622aa9e9f2e983F7308E8095760079a8eF16eb',

@@ -161,7 +161,6 @@ const Reward = () => {
       setDfsBalance(dfsBalance)
 
       setPendingSocialReward(await dfsMineContract.pendingSocialReward(account))
-      console.log('socialReward:', formatUnits(socialReward, 18), formatUnits(pendingSocialReward, 18))
 
       setPendingBondReward(await dfsMineContract.pendingBondReward(account))
       setPendingSavingsReward(await dfsMineContract.pendingSavingReward(account))
