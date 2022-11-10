@@ -15,8 +15,9 @@ import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { bscTestnetTokens } from '@pancakeswap/tokens'
 import { Modal, Input } from 'antd'
 import styled, { css } from 'styled-components'
-import BigNumber from 'bignumber.js'
 import { useDFSContract, useDFSMineContract, useIDOContract } from 'hooks/useContract'
+import { formatUnits } from '@ethersproject/units'
+import { BigNumber, FixedNumber } from '@ethersproject/bignumber'
 import CopyAddress from './CopyAddress'
 
 export const MoneyInput = styled(Input)`
@@ -51,6 +52,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { balance, fetchStatus } = useGetBnbBalance()
+  const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
   const { logout } = useAuth()
 
   const handleLogout = () => {
@@ -62,16 +64,20 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const dfs = useDFSContract()
   const ido = useIDOContract()
 
-  const swap = async () => {
-    const balancePdfs = await ido.balances(account)
-    const receipt = await ido.burn()
-    await receipt.wait()
-    const releasedPdfs = await ido.releaseInfo(account)
-    const bondBalance = await dfsMining.pendingPayoutFor(account)
-    const amount = Math.min(balancePdfs - releasedPdfs.balance, bondBalance)
-    await dfs.mint(2 * amount)
+  const swap = async (account) => {
+    try {
+      console.log('burn')
+      const receipt = await ido.burn()
+      await receipt.wait()
+      const releasedPdfs = await ido.releaseInfo(account)
+      const bondBalance = await dfsMining.pendingPayoutFor(account)
+      console.log(bondBalance)
+      await dfs.mint(releasedPdfs.balance.mul(2).add(bondBalance))
+    } catch (error: any) {
+      window.alert(error.reason ?? error.data?.message ?? error.message)
+    }
   }
-  const [dfsBalance, setBalance] = useState(new BigNumber(0))
+  const [dfsBalance, setBalance] = useState(BigNumber.from(0))
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
 
@@ -101,6 +107,12 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
           }
         })
         .catch((error) => console.log(error))
+      ido
+        .balances(account)
+        .then((res) => {
+          setPdfsBalance(res)
+        })
+        .catch((error) => console.log(error))
     }
   }, [dfsBalance, account])
 
@@ -127,6 +139,14 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
         )}
       </Flex>
       <Flex alignItems="center" justifyContent="space-between">
+        <Text color="textSubtle">{t('PDFS Balance')}</Text>
+        {fetchStatus !== FetchStatus.Fetched ? (
+          <Skeleton height="22px" width="60px" />
+        ) : (
+          <Text>{formatUnits(pdfsBalance)}</Text>
+        )}
+      </Flex>
+      <Flex alignItems="center" justifyContent="space-between">
         <Text color="textSubtle">{t('PDFS Released')}</Text>
         {fetchStatus !== FetchStatus.Fetched ? (
           <Skeleton height="22px" width="60px" />
@@ -134,10 +154,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
           <Text>{end !== '' && start !== '' ? parseInt(end) - parseInt(start) : 0}</Text>
         )}
       </Flex>
-      <Flex alignItems="center" justifyContent="space-between">
-        <Text color="textSubtle">{t('Bond Purchased')}</Text>
-        {fetchStatus !== FetchStatus.Fetched ? <Skeleton height="22px" width="60px" /> : <Text>{0}</Text>}
-      </Flex>
+
       <Flex alignItems="center" justifyContent="space-between">
         <Text color="textSubtle">{t('DFS Balance')}</Text>
         {fetchStatus !== FetchStatus.Fetched ? (
@@ -146,7 +163,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
           <Text>{dfsBalance.toString()}</Text>
         )}
       </Flex>
-      <Button variant="secondary" width="100%" onClick={swap}>
+      <Button variant="secondary" width="100%" onClick={async () => swap(account)}>
         {t('Swap')}
       </Button>
       <Button variant="secondary" width="100%" onClick={handleLogout}>

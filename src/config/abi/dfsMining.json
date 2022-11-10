@@ -148,6 +148,11 @@
       },
       {
         "internalType": "uint256",
+        "name": "pendingSocialReward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "lastSocialRewardWithdraw",
         "type": "uint256"
       },
@@ -1153,6 +1158,24 @@
   {
     "inputs": [
       {
+        "internalType": "uint32",
+        "name": "_endTime",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_length",
+        "type": "uint32"
+      }
+    ],
+    "name": "setSavingRewardEpoch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_nft",
         "type": "address"
@@ -1478,13 +1501,6 @@
       }
     ],
     "name": "unstakeSavings",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "updatePool",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

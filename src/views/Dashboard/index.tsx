@@ -44,12 +44,6 @@ const { one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelv
 
 const Dashboard = () => {
   const { t } = useTranslation()
-
-  // xs, extra-small: 0px or larger
-  // sm, small: 600px or larger
-  // md, medium: 960px or larger
-  // lg, large: 1280px or larger
-  // xl, xlarge: 1920px or larger
   const { isMobile } = useMatchBreakpoints()
   const classes = useStyles()
   const [activeTab, setActiveTab] = useState<string>('Overview')
@@ -64,42 +58,42 @@ const Dashboard = () => {
     setCallfactor(callFactor.toNumber())
     console.log('callFactor:', callFactor.toNumber())
 
-    const telegram = await fetch(telegramLink)
-    const telegramJson = await telegram.json()
-    const telegramFollowers = telegramJson.result
-    console.log('telegramFollowers:', telegramFollowers)
+    // const telegram = await fetch(telegramLink)
+    // const telegramJson = await telegram.json()
+    // const telegramFollowers = telegramJson.result
+    // console.log('telegramFollowers:', telegramFollowers)
 
-    const discord = await fetch(discordLink)
-    const discordJson = await discord.json()
-    const discordFollowers = discordJson.approximate_member_count
-    console.log('discordFollowers:', discordFollowers)
+    // const discord = await fetch(discordLink)
+    // const discordJson = await discord.json()
+    // const discordFollowers = discordJson.approximate_member_count
+    // console.log('discordFollowers:', discordFollowers)
 
-    const medium = await fetch(mediumLink)
-    const text = await medium.text()
-    const mediumJson = JSON.parse(text.replace('])}while(1);</x>', ''))
-    console.log(mediumJson)
-    const userId = mediumJson.payload.user.userId
-    const mediumFollowers = mediumJson.payload.references.SocialStats.userId.usersFollowedByCount
-    console.log('mediumFollowers:', mediumFollowers)
+    // const twitter = await fetch(twitterLink)
+    // const twitterJson = await twitter.json()
+    // const twitterFollowers = twitterJson[0].followers_count
+    // console.log('twitterFollowers:', twitterFollowers)
 
-    const twitter = await fetch(twitterLink)
-    const twitterJson = await twitter.json()
-    const twitterFollowers = twitterJson[0].followers_count
-    console.log('twitterFollowers:', twitterFollowers)
+    // const medium = await fetch(mediumLink)
+    // const text = await medium.text()
+    // const mediumJson = JSON.parse(text.replace('])}while(1);</x>', ''))
+    // console.log(mediumJson)
+    // const userId = mediumJson.payload.user.userId
+    // const mediumFollowers = mediumJson.payload.references.SocialStats.userId.usersFollowedByCount
+    // console.log('mediumFollowers:', mediumFollowers)
 
-    const followers = {
-      concentration: {
-        telegram: telegramFollowers,
-        discord: discordFollowers,
-        twitter: twitterFollowers,
-        medium: mediumFollowers,
-      },
-    }
-    return followers
+    // const followers = {
+    //   concentration: {
+    //     telegram: telegramFollowers,
+    //     discord: discordFollowers,
+    //     twitter: twitterFollowers,
+    //     medium: mediumFollowers,
+    //   },
+    // }
+    // return followers
 
-    // const response = await fetch('https://middle.diffusiondao.org/dashboard')
-    // const json = await response.json()
-    // return json
+    const response = await fetch('https://middle.diffusiondao.org/dashboard')
+    const json = await response.json()
+    return json
   })
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign
@@ -258,7 +252,7 @@ const Dashboard = () => {
                           titleStyle={{ color: '#ABB6FF' }}
                         />
                         <DataCell
-                          title="Call Factor"
+                          title={t('Call Factor')}
                           data={callFactor.toString()}
                           imgUrl="/images/dashboard/cf.png"
                           titleStyle={{ color: '#ABB6FF' }}
