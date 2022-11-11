@@ -156,7 +156,7 @@ const BondModal: React.FC<BondModalProps> = ({
     }
   }, [account, bondPrice, amount])
 
-  const buy = (hasPdfs: boolean) => {
+  const buy = () => {
     if (!hasReferral) {
       confirm({
         title: t('You will not be able to add a referrer on your next purchase'),
@@ -165,18 +165,18 @@ const BondModal: React.FC<BondModalProps> = ({
         okType: 'danger',
         cancelText: t('Cancel'),
         onOk() {
-          buySubmit(hasPdfs)
+          buySubmit()
         },
         onCancel() {
           console.log('Cancel')
         },
       })
     } else {
-      buySubmit(hasPdfs)
+      buySubmit()
     }
   }
 
-  const buySubmit = async (hasPdfs) => {
+  const buySubmit = async () => {
     if (!referral) {
       window.alert('missing referral')
       return
@@ -187,7 +187,7 @@ const BondModal: React.FC<BondModalProps> = ({
       await receipt.wait()
     }
     try {
-      const receipt = await dfsMining.deposit(parseUnits(amount, 'ether'), referral, hasPdfs)
+      const receipt = await dfsMining.deposit(parseUnits(amount, 'ether'), referral)
       await receipt.wait()
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
@@ -290,8 +290,8 @@ const BondModal: React.FC<BondModalProps> = ({
                 disabled={hasReferral && referral !== ''}
               />
             </RecommandWrap>
-            <BondListItemBtn onClick={() => buy(false)}>{t('Buy')}</BondListItemBtn>
-            {pdfsBalance.gt(0) && <BondListItemBtn onClick={() => buy(true)}>{t('Buy With PDFS')}</BondListItemBtn>}
+            <BondListItemBtn onClick={() => buy()}>{t('Buy')}</BondListItemBtn>
+            {/* {pdfsBalance.gt(0) && <BondListItemBtn onClick={() => buy()}>{t('Buy With PDFS')}</BondListItemBtn>} */}
           </>
         )}
         {account && isApprove && activeTab === 'redeem' && (

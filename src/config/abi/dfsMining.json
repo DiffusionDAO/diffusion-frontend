@@ -313,11 +313,6 @@
         "internalType": "address",
         "name": "_ref",
         "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "_hasPdfs",
-        "type": "bool"
       }
     ],
     "name": "deposit",
