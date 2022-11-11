@@ -71,7 +71,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
               <CollectibleLinkCard
                 isSelected={false}
                 data-test="newest-nft-card"
-                key={nft.collectionAddress + nft.tokenId}
+                key={`${nft?.tokenId}-${nft?.collectionName}`}
                 nft={nft}
                 currentAskPrice={currentAskPrice}
               />

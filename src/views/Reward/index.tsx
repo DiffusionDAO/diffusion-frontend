@@ -156,7 +156,7 @@ const Reward = () => {
       setReferral(referral)
       setBondReward(referral?.bondReward)
       setSocialReward(referral?.socialReward)
-      setPendingSocialReward(referral?.pendingSocialReward)
+      setPendingSocialReward(referral?.pendingSocialReward.add(await dfsMineContract.pendingSocialReward(account)))
       setBondRewardLocked(referral?.bondRewardLocked)
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)
@@ -261,15 +261,13 @@ const Reward = () => {
   const foramtTotalStakedSavings = formatUnits(totalStakedSavings ?? 0, 'ether')
   const savingPercent =
     foramtTotalStakedSavings !== '0' ? parseFloat(formatStakedSavings) / parseFloat(foramtTotalStakedSavings) : 0
-  // console.log("savingPercent:",formatStakedSavings,foramtTotalStakedSavings, savingPercent)
   const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
   const socialRewardfiveDayROI = (5 * socialRewardInterest) / 10
   const sposAPY = (365 * socialRewardInterest) / 10
-  const savingsfiveDayROI = formatNumber(((1 + savingRewardInterest / 10) ** 15 - 1) * 100, 2)
+  const savingsfiveDayROI = formatNumber(((1 + savingRewardInterest / 1000) ** 15 - 1) * 100, 2)
   const myLockedPower = (referral?.power?.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
   const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
   const greenPower = referral?.power.toNumber() / 100
-  // const pendingSocialRewardString = formatBigNumber(BigNumber.from(pendingSocialReward), 5)
   const nextRewardSavingNumber = (savingPercent * savingRewardInterest) / 10
 
   const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
