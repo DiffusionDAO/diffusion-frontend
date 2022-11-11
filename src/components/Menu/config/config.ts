@@ -51,47 +51,61 @@ const config: (
   isDark: boolean,
   languageCode?: string,
   chainId?: number,
-) => ConfigMenuItemsType[] = (t, isDark, languageCode, chainId) => [
-  {
-    label: t('Dashboard'),
-    icon: DashboardIcon,
-    fillIcon: DashboardIcon,
-    href: '/dashboard',
-    showItemsOnMobile: false,
-    items: [],
-  },
-  {
-    label: t('Bonds'),
-    icon: BondIcon,
-    fillIcon: BondFillIcon,
-    href: '/bond',
-    showItemsOnMobile: false,
-    items: [],
-  },
-  {
-    label: t('Mint'),
-    icon: MintIcon,
-    fillIcon: MintFillIcon,
-    href: '/mint',
-    showItemsOnMobile: false,
-    items: [],
-  },
-  {
-    label: t('Rewards'),
-    icon: RewardIcon,
-    fillIcon: RewardFillIcon,
-    href: '/reward',
-    showItemsOnMobile: false,
-    items: [],
-  },
-  {
-    label: t('NFT'),
-    icon: NftMarketIcon,
-    fillIcon: NftMarketFillIcon,
-    href: `${nftsBaseUrl}`,
-    showItemsOnMobile: false,
-    items: [],
-  },
-]
+) => ConfigMenuItemsType[] = (t, isDark, languageCode, chainId) => {
+  const items = [
+    {
+      label: t('Dashboard'),
+      icon: DashboardIcon,
+      fillIcon: DashboardIcon,
+      href: '/dashboard',
+      showItemsOnMobile: false,
+      items: [],
+    },
+    {
+      label: t('Bonds'),
+      icon: BondIcon,
+      fillIcon: BondFillIcon,
+      href: '/bond',
+      showItemsOnMobile: false,
+      items: [],
+    },
+    {
+      label: t('Mint'),
+      icon: MintIcon,
+      fillIcon: MintFillIcon,
+      href: '/mint',
+      showItemsOnMobile: false,
+      items: [],
+    },
+    {
+      label: t('Rewards'),
+      icon: RewardIcon,
+      fillIcon: RewardFillIcon,
+      href: '/reward',
+      showItemsOnMobile: false,
+      items: [],
+    },
+    {
+      label: t('NFT'),
+      icon: NftMarketIcon,
+      fillIcon: NftMarketFillIcon,
+      href: `${nftsBaseUrl}`,
+      showItemsOnMobile: false,
+      items: [],
+    },
+  ]
+  if (true) {
+    items.push({
+      label: t('Private'),
+      icon: NftMarketIcon,
+      fillIcon: NftMarketFillIcon,
+      href: `/private`,
+      showItemsOnMobile: false,
+      items: [],
+    })
+  }
+  console.log(items)
+  return items
+}
 
 export default config

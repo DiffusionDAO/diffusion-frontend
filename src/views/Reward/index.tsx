@@ -156,11 +156,10 @@ const Reward = () => {
       setReferral(referral)
       setBondReward(referral?.bondReward)
       setSocialReward(referral?.socialReward)
+      setPendingSocialReward(referral?.pendingSocialReward)
       setBondRewardLocked(referral?.bondRewardLocked)
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)
-
-      setPendingSocialReward(await dfsMineContract.pendingSocialReward(account))
 
       setPendingBondReward(await dfsMineContract.pendingBondReward(account))
       setPendingSavingsReward(await dfsMineContract.pendingSavingReward(account))
