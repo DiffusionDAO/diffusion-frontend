@@ -266,6 +266,7 @@ function NftProfilePage() {
   }, [account, t])
 
   useEffect(() => {
+    console.log(data)
     setUnstakedNFTs(data?.unstaked?.filter((token) => token.owner !== zeroAddress))
     setStakedNFTs(data?.staked?.filter((token) => token.owner !== zeroAddress))
     setOnSaleNFT(data?.onSale?.filter((token) => token.seller === account))
