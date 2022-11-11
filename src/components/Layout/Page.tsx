@@ -1,9 +1,14 @@
 import styled from 'styled-components'
+import { useState } from 'react'
+
 import { useTranslation } from '@pancakeswap/localization'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { DEFAULT_META, getCustomMeta } from 'config/constants/meta'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
+import { BigNumber } from '@ethersproject/bignumber'
+import { formatBigNumber } from 'utils/formatBalance'
+import { useDFSMineContract } from 'hooks/useContract'
 import Container from './Container'
 
 const StyledPage = styled(Container)`
@@ -28,12 +33,17 @@ export const PageMeta: React.FC<React.PropsWithChildren<{ symbol?: string }>> = 
     currentLanguage: { locale },
   } = useTranslation()
   const { pathname } = useRouter()
+  const dfsMining = useDFSMineContract()
+  const [dfsPrice, setDfsPrice] = useState<BigNumber>(BigNumber.from(0))
   const cakePriceUsd = useCakeBusdPrice({ forceMainnet: true })
-  const cakePriceUsdDisplay = cakePriceUsd ? `$${cakePriceUsd.toFixed(3)}` : '...'
+  dfsMining.getPriceInUSDT().then((res) => {
+    setDfsPrice(res)
+  })
+  // const cakePriceUsdDisplay = cakePriceUsd ? `$${cakePriceUsd.toFixed(3)}` : '...'
 
   const pageMeta = getCustomMeta(pathname, t, locale) || {}
   const { title, description, image } = { ...DEFAULT_META, ...pageMeta }
-  let pageTitle = cakePriceUsdDisplay ? [title, cakePriceUsdDisplay].join(' - ') : title
+  let pageTitle = dfsPrice ? [title, formatBigNumber(dfsPrice, 3)].join(' - ') : title
   if (symbol) {
     pageTitle = [symbol, title].join(' - ')
   }

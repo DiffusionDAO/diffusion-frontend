@@ -58,6 +58,8 @@ const Bond = () => {
   const [bondItem, setBondItem] = useState<any>(null)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
   const [marketPrice, setMarketPrice] = useState<string>()
+  const dfsMining = useDFSMineContract()
+
   useEffect(() => {
     dfsMining.getPriceInUSDT().then((res) => {
       bondDatasMock[0].price = formatBigNumber(res, 5)
@@ -88,7 +90,6 @@ const Bond = () => {
     setSettingModalVisible(false)
   }
   const miningAddress = getMiningAddress()
-  const dfsMining = useDFSMineContract()
   const dfs = useDFSContract()
   const usdtAddress = getUSDTAddress()
   const usdt = useERC20(usdtAddress, true)
