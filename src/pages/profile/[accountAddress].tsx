@@ -95,42 +95,42 @@ export const levelToName = {
 const greeceNumber = { 0: 'I', 1: 'II', 2: 'III', 3: 'IV', 4: 'V', 5: 'VI', 6: 'VII' }
 export const levelToSPOS = {
   '0': {
-    description: '智者碎片是DIffusion socialfi 宇宙的基础元素，所有的治理NFT都由碎片组成',
+    // description: '智者碎片是DIffusion socialfi 宇宙的基础元素，所有的治理NFT都由碎片组成',
     validSPOS: 20,
     unlockableSPOS: 40,
   },
   '1': {
-    description: '智者NFT是DIffusion socialfi 宇宙的初阶治理型社交NFT，拥有智者NFT意味着开启了一段有无限可能的WEB3之旅',
+    // description: '智者NFT是DIffusion socialfi 宇宙的初阶治理型社交NFT，拥有智者NFT意味着开启了一段有无限可能的WEB3之旅',
     validSPOS: 63,
     unlockableSPOS: 126,
   },
   '2': {
-    description:
-      '金色智能需要两位智者NFT才能生成，拥有金色智者的人在一定程度上意味着对整个生态有了不错的理解，理解WEB3的人一定是闪烁着金色光芒的智慧之人',
+    // description:
+    // '金色智能需要两位智者NFT才能生成，拥有金色智者的人在一定程度上意味着对整个生态有了不错的理解，理解WEB3的人一定是闪烁着金色光芒的智慧之人',
     validSPOS: 128,
     unlockableSPOS: 256,
   },
   '3': {
-    description:
-      '将军NFT需要两位金色智者NFT才能生成，将军的持有人除了对web3有所了解之外，一定有开拓与组建DAO组织的能力，并帮助更多的人进入到新世界，故而持有者，将军是也',
+    // description:
+    // '将军NFT需要两位金色智者NFT才能生成，将军的持有人除了对web3有所了解之外，一定有开拓与组建DAO组织的能力，并帮助更多的人进入到新世界，故而持有者，将军是也',
     validSPOS: 262,
     unlockableSPOS: 524,
   },
   '4': {
-    description:
-      '金色将军NFT需要两位将军NFT才能生成，金色将军闪烁着迷人的光芒，这迷人的光芒会影响和帮助更多的人进入到全新的拥有无限机会的数字空间',
+    // description:
+    // '金色将军NFT需要两位将军NFT才能生成，金色将军闪烁着迷人的光芒，这迷人的光芒会影响和帮助更多的人进入到全新的拥有无限机会的数字空间',
     validSPOS: 534,
     unlockableSPOS: 1068,
   },
   '5': {
-    description:
-      '议员NFT需要两位金色将军NFT才能生成，议员的组成拥有影响DIffusiondao多元宇宙的能量，并在多元宇宙开启时成为新平行宇宙的创始人与股东',
+    // description:
+    // '议员NFT需要两位金色将军NFT才能生成，议员的组成拥有影响DIffusiondao多元宇宙的能量，并在多元宇宙开启时成为新平行宇宙的创始人与股东',
     validSPOS: 1091,
     unlockableSPOS: 2182,
   },
   '6': {
-    description:
-      '皇冠议员NFT需要两位议员NFT才能生成，皇冠议员是整个DIffusiondao多元宇宙中分量最高的一类NFT，他象征着勇气智慧与权利，皇冠议员将带领WEB3新居民开启伟大的WEB3征程',
+    // description:
+    // '皇冠议员NFT需要两位议员NFT才能生成，皇冠议员是整个DIffusiondao多元宇宙中分量最高的一类NFT，他象征着勇气智慧与权利，皇冠议员将带领WEB3新居民开启伟大的WEB3征程',
     validSPOS: 2225,
     unlockableSPOS: 4450,
   },

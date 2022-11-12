@@ -67,7 +67,6 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
         description: t(res.collectionNamet),
         image: { original: 'string', thumbnail },
         attributes: [
-          { traitType: t('Description'), value: levelToSPOS[level].description, displayType: '' },
           { traitType: t('Valid SPOS'), value: levelToSPOS[level].validSPOS, displayType: '' },
           { traitType: t('Unlockable SPOS'), value: levelToSPOS[level].unlockableSPOS, displayType: '' },
         ],

@@ -53,6 +53,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const { account } = useWeb3React()
   const { balance, fetchStatus } = useGetBnbBalance()
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
+  const [pdfsReleased, setPdfsReleased] = useState<BigNumber>(BigNumber.from(0))
   const { logout } = useAuth()
 
   const handleLogout = () => {
@@ -86,9 +87,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
       dfs
         .balanceOf(account)
         .then((res) => {
-          if (!dfsBalance.eq(0)) {
-            setBalance(res)
-          }
+          setBalance(res)
         })
         .catch((error) => console.log(error))
       ido
@@ -111,6 +110,12 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
         .balances(account)
         .then((res) => {
           setPdfsBalance(res)
+        })
+        .catch((error) => console.log(error))
+      ido
+        .releaseInfo(account)
+        .then((res) => {
+          setPdfsReleased(res.balance)
         })
         .catch((error) => console.log(error))
     }
@@ -151,7 +156,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
         {fetchStatus !== FetchStatus.Fetched ? (
           <Skeleton height="22px" width="60px" />
         ) : (
-          <Text>{end !== '' && start !== '' ? parseInt(end) - parseInt(start) : 0}</Text>
+          <Text>{formatUnits(pdfsReleased)}</Text>
         )}
       </Flex>
 
@@ -160,12 +165,12 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
         {fetchStatus !== FetchStatus.Fetched ? (
           <Skeleton height="22px" width="60px" />
         ) : (
-          <Text>{dfsBalance.toString()}</Text>
+          <Text>{formatUnits(dfsBalance)}</Text>
         )}
       </Flex>
-      <Button variant="secondary" width="100%" onClick={async () => swap(account)}>
+      {/* <Button variant="secondary" width="100%" onClick={async () => swap(account)}>
         {t('Swap')}
-      </Button>
+      </Button> */}
       <Button variant="secondary" width="100%" onClick={handleLogout}>
         {t('Disconnect Wallet')}
       </Button>
