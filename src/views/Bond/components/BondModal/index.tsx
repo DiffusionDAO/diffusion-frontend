@@ -6,7 +6,14 @@ import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 import { parseUnits } from '@ethersproject/units'
 import { useWallet } from 'hooks/useWallet'
-import { useDFSContract, useDFSMineContract, useERC20, usePairContract, usePDFSContract } from 'hooks/useContract'
+import {
+  useBondContract,
+  useDFSContract,
+  useDFSMiningContract,
+  useERC20,
+  usePairContract,
+  usePDFSContract,
+} from 'hooks/useContract'
 import { BigNumber, ethers } from 'ethers'
 import { USDT } from '@pancakeswap/tokens'
 import { MaxUint256 } from '@ethersproject/constants'
@@ -85,16 +92,17 @@ const BondModal: React.FC<BondModalProps> = ({
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
 
   const zeroAddress = '0x0000000000000000000000000000000000000000'
-  const dfsMining = useDFSMineContract()
+  const dfsMining = useDFSMiningContract()
   const dfs = useDFSContract()
   const pdfs = usePDFSContract()
   const usdtAddress = getUSDTAddress()
   const usdt = useERC20(usdtAddress, true)
   const pairAddress = getPairAddress()
   const pair = usePairContract(pairAddress)
+  const bond = useBondContract()
 
   useEffect(() => {
-    dfsMining.getPriceInUSDT().then((res) => {
+    bond.getPriceInUSDT().then((res) => {
       setBondPrice(formatBigNumber(res, 5))
     })
     pair.getReserves().then((reserves: any) => {
@@ -108,8 +116,8 @@ const BondModal: React.FC<BondModalProps> = ({
 
   useEffect(() => {
     if (account) {
-      dfsMining
-        .referrals(account)
+      bond
+        .parent(account)
         .then((res) => {
           if (res !== zeroAddress) {
             setHasReferral(true)
@@ -119,8 +127,8 @@ const BondModal: React.FC<BondModalProps> = ({
           }
         })
         .catch((error) => console.log(error))
-      dfsMining.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
-      dfsMining
+      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
+      bond
         .pendingPayoutFor(account)
         .then((res) => {
           setPendingPayout(formatBigNumber(res, 18))
@@ -139,7 +147,7 @@ const BondModal: React.FC<BondModalProps> = ({
   }, [account])
 
   useEffect(() => {
-    dfsMining
+    bond
       .terms()
       .then((res) => {
         // console.log(res)
@@ -149,7 +157,7 @@ const BondModal: React.FC<BondModalProps> = ({
       .catch((error) => console.log(error))
 
     if (amount) {
-      dfsMining
+      bond
         .payoutFor(parseUnits(amount, 'ether'))
         .then((payout) => setPayoutFor(formatBigNumber(payout, 4)))
         .catch((error) => console.log(error))
@@ -181,13 +189,13 @@ const BondModal: React.FC<BondModalProps> = ({
       window.alert('missing referral')
       return
     }
-    const allowance = await usdt.allowance(account, dfsMining.address)
+    const allowance = await usdt.allowance(account, bond.address)
     if (allowance.eq(0)) {
-      const receipt = await usdt.approve(dfsMining.address, MaxUint256)
+      const receipt = await usdt.approve(bond.address, MaxUint256)
       await receipt.wait()
     }
     try {
-      const receipt = await dfsMining.deposit(parseUnits(amount, 'ether'), referral)
+      const receipt = await bond.deposit(parseUnits(amount, 'ether'), referral)
       await receipt.wait()
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
@@ -206,7 +214,7 @@ const BondModal: React.FC<BondModalProps> = ({
       okType: 'danger',
       cancelText: t('Go to Mint'),
       onOk() {
-        dfsMining.redeem(account).catch((error) => window.alert(error.reason ?? error.data?.message ?? error.message))
+        bond.redeem(account).catch((error) => window.alert(error.reason ?? error.data?.message ?? error.message))
       },
       onCancel() {
         router.push(`/mint`)
@@ -269,7 +277,7 @@ const BondModal: React.FC<BondModalProps> = ({
                 if (e.target.value) {
                   setHasReferral(true)
                   try {
-                    const payout = await dfsMining.payoutFor(parseUnits(e.target.value, 'ether'))
+                    const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
                     setPayoutFor(formatBigNumber(payout, 4))
                   } catch (error: any) {
                     window.alert(error.reason ?? error.data?.message ?? error.message)

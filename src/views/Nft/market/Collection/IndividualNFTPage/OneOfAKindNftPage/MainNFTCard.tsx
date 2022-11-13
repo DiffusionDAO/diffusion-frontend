@@ -18,7 +18,7 @@ import { formatUnits, parseUnits } from '@ethersproject/units'
 import { BigNumber } from '@ethersproject/bignumber'
 import { NftToken } from 'state/nftMarket/types'
 import styled, { css } from 'styled-components'
-import { useDFSContract, useDFSMineContract } from 'hooks/useContract'
+import { useDFSContract, useDFSMiningContract } from 'hooks/useContract'
 import { formatNumber } from 'utils/formatBalance'
 import NFTMedia from 'views/Nft/market/components/NFTMedia'
 import { MaxUint256 } from '@ethersproject/constants'
@@ -108,7 +108,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const router = useRouter()
-  const dfsMineContract = useDFSMineContract()
+  const dfsMineContract = useDFSMiningContract()
   const dfsContract = useDFSContract()
   const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ?? '0'
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)

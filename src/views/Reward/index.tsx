@@ -9,7 +9,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { useTranslation } from '@pancakeswap/localization'
 import { useRouter } from 'next/router'
-import { useDFSContract, useDFSMineContract } from 'hooks/useContract'
+import { useBondContract, useDFSContract, useDFSMiningContract } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useSWRContract, useSWRMulticall } from 'hooks/useSWRContract'
 import { MaxUint256 } from '@ethersproject/constants'
@@ -120,7 +120,8 @@ const Reward = () => {
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
-  const dfsMineContract = useDFSMineContract()
+  const dfsMineContract = useDFSMiningContract()
+  const bond = useBondContract()
   const dfsContract = useDFSContract()
   const dfsMineAddress = getMiningAddress()
   const slidesPerView = isMobile ? 1 : 3
@@ -152,16 +153,17 @@ const Reward = () => {
 
   const refresh = async () => {
     if (account) {
-      const referral = await dfsMineContract.addressToReferral(account)
-      setReferral(referral)
-      setBondReward(referral?.bondReward)
-      setSocialReward(referral?.socialReward)
-      setPendingSocialReward(referral?.pendingSocialReward.add(await dfsMineContract.pendingSocialReward(account)))
-      setBondRewardLocked(referral?.bondRewardLocked)
+      const referralStake = await dfsMineContract.addressToReferral(account)
+      const referralBond = await bond.addressToReferral(account)
+      setReferral(referralStake)
+      setBondReward(referralBond?.bondReward)
+      setSocialReward(referralStake?.socialReward)
+      setPendingSocialReward(referralStake?.pendingSocialReward.add(await dfsMineContract.pendingSocialReward(account)))
+      setBondRewardLocked(referralBond?.bondRewardLocked)
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)
 
-      setPendingBondReward(await dfsMineContract.pendingBondReward(account))
+      setPendingBondReward(await bond.pendingBondReward(account))
       setPendingSavingsReward(await dfsMineContract.pendingSavingReward(account))
     }
     const savingRewardEpoch = await dfsMineContract.savingRewardEpoch()
@@ -180,7 +182,7 @@ const Reward = () => {
 
   const updateSubordinates = async () => {
     if (account) {
-      const subordinates = await dfsMineContract.getChildren(account)
+      const subordinates = await bond.getChildren(account)
       setSubordinates(subordinates)
       const subordinatesHasPower = await Promise.all(
         subordinates.map(async (sub) => {
@@ -202,12 +204,12 @@ const Reward = () => {
 
   const updateBondRewardDetailData = async () => {
     if (account) {
-      const bondRewardContributors = await dfsMineContract.getBondRewardContributors(account)
+      const bondRewardContributors = await bond.getBondRewardContributors(account)
       const details = await Promise?.all(
         bondRewardContributors?.map(async (contributor) => {
           return {
             address: isMobile ? shorten(contributor) : contributor,
-            value: formatBigNumber(BigNumber.from(await dfsMineContract.bondRewardDetails(account, contributor)), 5),
+            value: formatBigNumber(BigNumber.from(await bond.bondRewardDetails(account, contributor)), 5),
           }
         }),
       )
@@ -406,7 +408,7 @@ const Reward = () => {
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>
                             {referral?.unlockedPower?.toNumber() / 100}
                           </MySposDashboardValue>
-                          <MySposDashboardDes className="alignLeft">{t('Networking unlocked SPOS')}</MySposDashboardDes>
+                          <MySposDashboardDes className="alignLeft">{t('Unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
                         <MySposDashboardItem onClick={() => setActiveItem(4)}>
                           {activeItem === 4 ? (

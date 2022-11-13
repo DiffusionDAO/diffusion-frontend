@@ -9,7 +9,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { useTranslation } from '@pancakeswap/localization'
 import { useRouter } from 'next/router'
-import { useDFSContract, useDFSMineContract } from 'hooks/useContract'
+import { useDFSContract, useDFSMiningContract } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useSWRContract, useSWRMulticall } from 'hooks/useSWRContract'
 import { MaxUint256 } from '@ethersproject/constants'
@@ -40,7 +40,7 @@ const Private = () => {
   const [withdrawedSavingReward, setWithdrawedSavingReward] = useState<BigNumber>(BigNumber.from(0))
   const [runway, setRunway] = useState<number>(0)
 
-  const dfsMineContract = useDFSMineContract()
+  const dfsMineContract = useDFSMiningContract()
   const dfsContract = useDFSContract()
   const dfsMineAddress = getMiningAddress()
 

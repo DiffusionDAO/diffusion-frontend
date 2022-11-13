@@ -15,7 +15,7 @@ import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { bscTestnetTokens } from '@pancakeswap/tokens'
 import { Modal, Input } from 'antd'
 import styled, { css } from 'styled-components'
-import { useDFSContract, useDFSMineContract, useIDOContract } from 'hooks/useContract'
+import { useDFSContract, useDFSMiningContract, useIDOContract } from 'hooks/useContract'
 import { formatUnits } from '@ethersproject/units'
 import { BigNumber, FixedNumber } from '@ethersproject/bignumber'
 import CopyAddress from './CopyAddress'
@@ -61,7 +61,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
     logout()
   }
 
-  const dfsMining = useDFSMineContract()
+  const dfsMining = useDFSMiningContract()
   const dfs = useDFSContract()
   const ido = useIDOContract()
 
@@ -168,9 +168,9 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
           <Text>{formatUnits(dfsBalance)}</Text>
         )}
       </Flex>
-      {/* <Button variant="secondary" width="100%" onClick={async () => swap(account)}>
+      <Button variant="secondary" width="100%" onClick={async () => swap(account)}>
         {t('Swap')}
-      </Button> */}
+      </Button>
       <Button variant="secondary" width="100%" onClick={handleLogout}>
         {t('Disconnect Wallet')}
       </Button>

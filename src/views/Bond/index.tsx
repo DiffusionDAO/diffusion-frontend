@@ -6,7 +6,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { getUSDTAddress, getMiningAddress, getDFSAddress, getPairAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useDFSContract, useDFSMineContract, useERC20, usePairContract } from 'hooks/useContract'
+import { useBondContract, useDFSContract, useDFSMiningContract, useERC20, usePairContract } from 'hooks/useContract'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import { useRouterContract } from 'utils/exchange'
 
@@ -58,13 +58,12 @@ const Bond = () => {
   const [bondItem, setBondItem] = useState<any>(null)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
   const [marketPrice, setMarketPrice] = useState<string>()
-  const dfsMining = useDFSMineContract()
-
+  const bond = useBondContract()
   useEffect(() => {
-    dfsMining.getPriceInUSDT().then((res) => {
+    bond.getPriceInUSDT().then((res) => {
       bondDatasMock[0].price = formatBigNumber(res, 5)
     })
-    dfsMining.discount().then((res) => {
+    bond.discount().then((res) => {
       bondDatasMock[0].discount = res
     })
     pair.getReserves().then((reserves: any) => {
@@ -119,7 +118,7 @@ const Bond = () => {
   useEffect(() => {
     const dfsUsdt = bondDatasMock[0]
     // eslint-disable-next-line no-return-assign, no-param-reassign
-    dfsMining
+    bond
       .terms()
       .then((res) => {
         dfsUsdt.duration = res.vestingTerm / (24 * 3600)

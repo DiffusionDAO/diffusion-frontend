@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  useDFSMineContract,
+  useDFSMiningContract,
   useDFSNftContract,
   useERC20,
   useNFTMintContract,
@@ -77,7 +77,7 @@ const Mint = () => {
   const DFS = useERC20(dfsAddress)
 
   const NFTMint = useNFTMintContract()
-  const dfsMining = useDFSMineContract()
+  const dfsMining = useDFSMiningContract()
 
   useEffect(() => {
     if (account) {

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useState } from 'react'
 import useSWR from 'swr'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useDFSMineContract } from 'hooks/useContract'
+import { useDFSMiningContract } from 'hooks/useContract'
 import { Paper } from './style'
 import { DataCell } from './components/DataCell/DataCell'
 import {
@@ -51,7 +51,7 @@ const Dashboard = () => {
   const clickTab = (tab: string) => {
     setActiveTab(tab)
   }
-  const dfsMineContract = useDFSMineContract()
+  const dfsMineContract = useDFSMiningContract()
 
   const { data } = useSWR('dashboard', async () => {
     const callFactor = await dfsMineContract.totalCalls()

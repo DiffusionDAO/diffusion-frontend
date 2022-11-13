@@ -65,6 +65,7 @@ import {
   getPDFSContract,
   getIDOContract,
   getNFTDatabaseContract,
+  getBondContract,
 } from 'utils/contractHelpers'
 import { useSigner } from 'wagmi'
 
@@ -387,7 +388,11 @@ export const useDFSNftContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
   return useMemo(() => getDFSNFTContract(providerOrSigner), [providerOrSigner])
 }
-export const useDFSMineContract = (withSignerIfPossible = true) => {
+export const useBondContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getBondContract(providerOrSigner), [providerOrSigner])
+}
+export const useDFSMiningContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
   return useMemo(() => getMineContract(providerOrSigner), [providerOrSigner])
 }

@@ -43,7 +43,7 @@ import { NftLocation, NftToken } from 'state/nftMarket/types'
 import { getDFSNFTAddress, getMiningAddress } from 'utils/addressHelpers'
 import {
   useNFTDatabaseContract,
-  useDFSMineContract,
+  useDFSMiningContract,
   useDFSNftContract,
   useNftComposeContract,
   useNftMarketContract,
@@ -214,10 +214,10 @@ function NftProfilePage() {
 
   const nftDatabase = useNFTDatabaseContract()
   const nftMarket = useNftMarketContract()
-  const dfsMining = useDFSMineContract()
+  const dfsMining = useDFSMiningContract()
   const composeNFT = useNftComposeContract()
   const socialNFT = useDFSNftContract()
-  const mine = useDFSMineContract()
+  const mine = useDFSMiningContract()
   const market = useNftMarketContract()
 
   const getProfileToken = async () => {

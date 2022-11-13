@@ -8,7 +8,7 @@ import { DEFAULT_META, getCustomMeta } from 'config/constants/meta'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatBigNumber } from 'utils/formatBalance'
-import { useDFSMineContract } from 'hooks/useContract'
+import { useBondContract, useDFSMiningContract } from 'hooks/useContract'
 import Container from './Container'
 
 const StyledPage = styled(Container)`
@@ -33,14 +33,11 @@ export const PageMeta: React.FC<React.PropsWithChildren<{ symbol?: string }>> = 
     currentLanguage: { locale },
   } = useTranslation()
   const { pathname } = useRouter()
-  const dfsMining = useDFSMineContract()
+  const bond = useBondContract()
   const [dfsPrice, setDfsPrice] = useState<BigNumber>(BigNumber.from(0))
-  const cakePriceUsd = useCakeBusdPrice({ forceMainnet: true })
-  dfsMining.getPriceInUSDT().then((res) => {
+  bond.getPriceInUSDT().then((res) => {
     setDfsPrice(res)
   })
-  // const cakePriceUsdDisplay = cakePriceUsd ? `$${cakePriceUsd.toFixed(3)}` : '...'
-
   const pageMeta = getCustomMeta(pathname, t, locale) || {}
   const { title, description, image } = { ...DEFAULT_META, ...pageMeta }
   let pageTitle = dfsPrice ? [title, formatBigNumber(dfsPrice, 3)].join(' - ') : title
