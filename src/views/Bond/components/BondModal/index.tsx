@@ -17,7 +17,7 @@ import {
 import { BigNumber, ethers } from 'ethers'
 import { USDT } from '@pancakeswap/tokens'
 import { MaxUint256 } from '@ethersproject/constants'
-import { getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { useSigner } from 'wagmi'
 import { useRouterContract } from 'utils/exchange'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
@@ -96,6 +96,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const dfs = useDFSContract()
   const pdfs = usePDFSContract()
   const usdtAddress = getUSDTAddress()
+  const dfsAddress = getDFSAddress()
   const usdt = useERC20(usdtAddress, true)
   const pairAddress = getPairAddress()
   const pair = usePairContract(pairAddress)
@@ -106,10 +107,9 @@ const BondModal: React.FC<BondModalProps> = ({
       setBondPrice(formatBigNumber(res, 5))
     })
     pair.getReserves().then((reserves: any) => {
-      let marketPrice = reserves[1] / reserves[0]
-      if (marketPrice < 1) {
-        marketPrice = reserves[0] / reserves[1]
-      }
+      const numerator = usdtAddress < dfsAddress ? reserves[1] : reserves[0]
+      const denominator = usdtAddress < dfsAddress ? reserves[0] : reserves[1]
+      const marketPrice = numerator / denominator
       setMarketPrice(marketPrice.toFixed(5))
     })
   }, [account, amount])

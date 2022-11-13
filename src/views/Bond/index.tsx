@@ -67,10 +67,11 @@ const Bond = () => {
       bondDatasMock[0].discount = res
     })
     pair.getReserves().then((reserves: any) => {
-      let marketPrice = reserves[1] / reserves[0]
-      if (marketPrice < 1) {
-        marketPrice = reserves[0] / reserves[1]
-      }
+      const dfsAddress = getDFSAddress()
+      const usdtAddress = getUSDTAddress()
+      const numerator = usdtAddress < dfsAddress ? reserves[1] : reserves[0]
+      const denominator = usdtAddress < dfsAddress ? reserves[0] : reserves[1]
+      const marketPrice = numerator / denominator
       setMarketPrice(marketPrice.toFixed(5))
     })
   }, [account])

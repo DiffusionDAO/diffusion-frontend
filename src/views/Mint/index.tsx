@@ -4,6 +4,7 @@ import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import {
+  useBondContract,
   useDFSMiningContract,
   useDFSNftContract,
   useERC20,
@@ -78,10 +79,11 @@ const Mint = () => {
 
   const NFTMint = useNFTMintContract()
   const dfsMining = useDFSMiningContract()
+  const bond = useBondContract()
 
   useEffect(() => {
     if (account) {
-      dfsMining.bondInfo(account).then((res) => setBondPayout(res[0]))
+      bond.bondInfo(account).then((res) => setBondPayout(res[0]))
       DFS.balanceOf(account)
         .then((res) => {
           if (!res.eq(balance)) {

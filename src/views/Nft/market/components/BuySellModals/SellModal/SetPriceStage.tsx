@@ -6,7 +6,7 @@ import { NftToken } from 'state/nftMarket/types'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import { usePairContract } from 'hooks/useContract'
 import useSWR from 'swr'
-import { getPairAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { Divider } from '../shared/styles'
 import { GreyedOutContainer, DfsAmountCell, RightAlignedInput, FeeAmountCell } from './styles'
 
@@ -50,10 +50,11 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
 
   const { data: dfsPrice, status } = useSWR('getPriceInUSDT', async () => {
     const reserves: any = await pair.getReserves()
-    let marketPrice = reserves[1] / reserves[0]
-    if (marketPrice < 1) {
-      marketPrice = reserves[0] / reserves[1]
-    }
+    const usdtAddress = getUSDTAddress()
+    const dfsAddress = getDFSAddress()
+    const numerator = usdtAddress < dfsAddress ? reserves[1] : reserves[0]
+    const denominator = usdtAddress < dfsAddress ? reserves[0] : reserves[1]
+    const marketPrice = numerator / denominator
     return marketPrice
   })
   const priceAsFloat = parseFloat(price)
