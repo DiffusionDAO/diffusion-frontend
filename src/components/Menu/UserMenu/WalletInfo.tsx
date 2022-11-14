@@ -15,7 +15,7 @@ import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { bscTestnetTokens } from '@pancakeswap/tokens'
 import { Modal, Input } from 'antd'
 import styled, { css } from 'styled-components'
-import { useDFSContract, useDFSMiningContract, useIDOContract } from 'hooks/useContract'
+import { useDFSContract, useBondContract, useIDOContract } from 'hooks/useContract'
 import { formatUnits } from '@ethersproject/units'
 import { BigNumber, FixedNumber } from '@ethersproject/bignumber'
 import CopyAddress from './CopyAddress'
@@ -61,7 +61,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
     logout()
   }
 
-  const dfsMining = useDFSMiningContract()
+  const bond = useBondContract()
   const dfs = useDFSContract()
   const ido = useIDOContract()
 
@@ -71,9 +71,8 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
       const receipt = await ido.burn()
       await receipt.wait()
       const releasedPdfs = await ido.releaseInfo(account)
-      const bondBalance = await dfsMining.pendingPayoutFor(account)
+      const bondBalance = await bond.pendingPayoutFor(account)
       console.log(bondBalance)
-      await dfs.mint(releasedPdfs.balance.mul(2).add(bondBalance))
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }
