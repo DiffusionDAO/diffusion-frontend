@@ -70,9 +70,8 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
       console.log('burn')
       const receipt = await ido.burn()
       await receipt.wait()
-      const releasedPdfs = await ido.releaseInfo(account)
-      const bondBalance = await bond.pendingPayoutFor(account)
-      console.log(bondBalance)
+      const release = await ido.releaseInfo(account)
+      console.log(release.balance)
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
     }
