@@ -9,6 +9,7 @@ import { MaxUint256 } from '@ethersproject/constants'
 import { useBondContract, useDFSContract, useDFSMiningContract, useERC20, usePairContract } from 'hooks/useContract'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import { useRouterContract } from 'utils/exchange'
+import { BigNumber } from '@ethersproject/bignumber'
 
 import {
   BondPageWrap,
@@ -53,7 +54,7 @@ const Bond = () => {
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false)
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false)
 
-  const [bondPrice, setBondPrice] = useState<number>(0)
+  const [usdtAmount, setUsdtAmount] = useState<BigNumber>(BigNumber.from(0))
   const [isApprove, setIsApprove] = useState<boolean>(false)
   const [bondItem, setBondItem] = useState<any>(null)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
@@ -69,9 +70,10 @@ const Bond = () => {
     pair.getReserves().then((reserves: any) => {
       const dfsAddress = getDFSAddress()
       const usdtAddress = getUSDTAddress()
-      const numerator = usdtAddress < dfsAddress ? reserves[1] : reserves[0]
-      const denominator = usdtAddress < dfsAddress ? reserves[0] : reserves[1]
+      const numerator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[1] : reserves[0]
+      const denominator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[0] : reserves[1]
       const marketPrice = numerator / denominator
+      setUsdtAmount(denominator)
       setMarketPrice(marketPrice.toFixed(5))
     })
   }, [account])
@@ -156,7 +158,7 @@ const Bond = () => {
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
             <OverviewCardItemContent isMobile={isMobile}>
-              ${formatNumber(Number.isNaN(dfsTotalSupply / 1e18) ? 0 : dfsTotalSupply / 1e18, 2)}
+              ${parseFloat(formatBigNumber(usdtAmount, 5)) * 2}
             </OverviewCardItemContent>
           </OverviewCardItem>
           <OverviewCardItem>

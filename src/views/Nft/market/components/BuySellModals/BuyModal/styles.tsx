@@ -6,6 +6,7 @@ import { multiplyPriceByAmount } from 'utils/prices'
 import { usePairContract } from 'hooks/useContract'
 import useSWR from 'swr'
 import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
+import { BigNumber } from '@ethersproject/bignumber'
 import { BuyingStage } from './types'
 
 export const StyledModal = styled(Modal)<{ stage: BuyingStage }>`
@@ -54,8 +55,8 @@ export const DfsAmountCell: React.FC<React.PropsWithChildren<DfsAmountCellProps>
     const reserves: any = await pair.getReserves()
     const usdtAddress = getUSDTAddress()
     const dfsAddress = getDFSAddress()
-    const numerator = usdtAddress < dfsAddress ? reserves[1] : reserves[0]
-    const denominator = usdtAddress < dfsAddress ? reserves[0] : reserves[1]
+    const numerator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[1] : reserves[0]
+    const denominator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[0] : reserves[1]
     const marketPrice = numerator / denominator
     return marketPrice
   })

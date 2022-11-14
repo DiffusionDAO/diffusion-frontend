@@ -107,8 +107,8 @@ const BondModal: React.FC<BondModalProps> = ({
       setBondPrice(formatBigNumber(res, 5))
     })
     pair.getReserves().then((reserves: any) => {
-      const numerator = usdtAddress < dfsAddress ? reserves[1] : reserves[0]
-      const denominator = usdtAddress < dfsAddress ? reserves[0] : reserves[1]
+      const numerator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[1] : reserves[0]
+      const denominator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[0] : reserves[1]
       const marketPrice = numerator / denominator
       setMarketPrice(marketPrice.toFixed(5))
     })
