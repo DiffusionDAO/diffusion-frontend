@@ -1,17 +1,6 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "contract DiffusionOne",
-        "name": "_one",
-        "type": "address"
-      },
-      {
-        "internalType": "contract DiffusionTwo",
-        "name": "_two",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -279,7 +268,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "_user",
         "type": "address"
       }
     ],
@@ -332,7 +321,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_receipt",
+        "type": "address"
+      }
+    ],
     "name": "burn",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -624,6 +619,24 @@
   {
     "inputs": [],
     "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "setBalance",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
