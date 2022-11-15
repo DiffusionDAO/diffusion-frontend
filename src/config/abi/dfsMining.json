@@ -8,11 +8,6 @@
       },
       {
         "internalType": "address",
-        "name": "_pdfs",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_dfs",
         "type": "address"
       },
@@ -30,21 +25,6 @@
         "internalType": "address",
         "name": "_router",
         "type": "address"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_savingRewardEpochLength",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_socialRewardEpochLength",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_firstEpochTime",
-        "type": "uint32"
       }
     ],
     "stateMutability": "nonpayable",
@@ -90,21 +70,6 @@
       },
       {
         "internalType": "uint256",
-        "name": "bondReward",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "bondRewardLocked",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lastBondRewardWithdraw",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
         "name": "lockedPower",
         "type": "uint256"
       },
@@ -135,8 +100,13 @@
       },
       {
         "internalType": "uint256",
-        "name": "savingReward",
+        "name": "savingInterest",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "savingInterestEndTime",
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -414,7 +384,7 @@
         "type": "address"
       }
     ],
-    "name": "pendingSavingReward",
+    "name": "pendingSavingInterest",
     "outputs": [
       {
         "internalType": "uint256",
@@ -549,21 +519,11 @@
   },
   {
     "inputs": [],
-    "name": "savingRewardEpoch",
+    "name": "savingInterestEpochLength",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "distribute",
-        "type": "uint256"
-      },
-      {
         "internalType": "uint32",
-        "name": "length",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "endTime",
+        "name": "",
         "type": "uint32"
       }
     ],
@@ -631,16 +591,11 @@
     "inputs": [
       {
         "internalType": "uint32",
-        "name": "_endTime",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
         "name": "_length",
         "type": "uint32"
       }
     ],
-    "name": "setSavingRewardEpoch",
+    "name": "setSavingInterestEpochLength",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

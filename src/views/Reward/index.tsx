@@ -83,6 +83,7 @@ interface Referral {
   savings: BigNumber
   stakedSavings: BigNumber
   lastSavingsWithdraw: BigNumber
+  savingInterestEndTime: number
 }
 
 const Reward = () => {
@@ -104,16 +105,16 @@ const Reward = () => {
   const [pendingBondReward, setPendingBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [referral, setReferral] = useState<Referral>()
   const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
-  const [pendingSavingReward, setPendingSavingsReward] = useState<BigNumber>(BigNumber.from(0))
+  const [pendingSavingInterest, setPendingSavingsReward] = useState<BigNumber>(BigNumber.from(0))
   const [bondReward, setBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [bondRewardLocked, setBondRewardLocked] = useState<BigNumber>(BigNumber.from(0))
   const [subordinates, setSubordinates] = useState<string[]>()
-  const [savingRewardEpoch, setSavingRewardEpoch] = useState<any>({})
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardInterest, setSocialRewardInterest] = useState<number>(0)
   const [savingRewardInterest, setSavingRewardInterest] = useState<number>(0)
   const [requireRefresh, setRefresh] = useState<boolean>(false)
+  const [savingInterestEpochLength, setSavingInterestEpochLength] = useState<number>(1)
 
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
   const [activeIndex, setActiveIndex] = useState(1)
@@ -152,23 +153,25 @@ const Reward = () => {
   }
 
   const refresh = async () => {
+    const savingInterestEpochLength = await dfsMineContract.savingInterestEpochLength()
+    console.log(savingInterestEpochLength)
+    setSavingInterestEpochLength(savingInterestEpochLength)
     if (account) {
       const referralStake = await dfsMineContract.addressToReferral(account)
       const referralBond = await bond.addressToReferral(account)
       setReferral(referralStake)
       setBondReward(referralBond?.bondReward)
       setSocialReward(referralStake?.socialReward)
+      setNextSavingInterestChangeTime(new Date(referralStake?.savingInterestEndTime * 1000))
+
       setPendingSocialReward(referralStake?.pendingSocialReward.add(await dfsMineContract.pendingSocialReward(account)))
       setBondRewardLocked(referralBond?.bondRewardLocked)
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)
 
       setPendingBondReward(await bond.pendingBondReward(account))
-      setPendingSavingsReward(await dfsMineContract.pendingSavingReward(account))
+      setPendingSavingsReward(await dfsMineContract.pendingSavingInterest(account))
     }
-    const savingRewardEpoch = await dfsMineContract.savingRewardEpoch()
-    setSavingRewardEpoch(savingRewardEpoch)
-    setNextSavingInterestChangeTime(new Date(savingRewardEpoch.endTime * 1000))
     setSocialRewardInterest((await dfsMineContract.socialRewardInterest()).toNumber())
     setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
     setTotalSocialReward(await dfsMineContract.totalSocialReward())
@@ -266,7 +269,8 @@ const Reward = () => {
   const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
   const socialRewardfiveDayROI = (5 * socialRewardInterest) / 10
   const sposAPY = (365 * socialRewardInterest) / 10
-  const savingsfiveDayROI = formatNumber(((1 + savingRewardInterest / 1000) ** 15 - 1) * 100, 2)
+  const n = 86400 / savingInterestEpochLength
+  const savingsfiveDayROI = formatNumber(((1 + savingRewardInterest / 1000) ** n - 1) * 100, 2)
   const myLockedPower = (referral?.power?.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
   const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
   const greenPower = referral?.power.toNumber() / 100
@@ -519,7 +523,7 @@ const Reward = () => {
 
                   <DataCell
                     label={t('Rewards')}
-                    value={`${parseFloat(formatBigNumber(pendingSavingReward, 9))} DFS`}
+                    value={`${parseFloat(formatBigNumber(pendingSavingInterest, 9))} DFS`}
                     position="horizontal"
                   />
                 </CardItem>
