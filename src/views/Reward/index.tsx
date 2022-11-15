@@ -104,7 +104,7 @@ const Reward = () => {
   const [totalStakedSavings, setTotalStakedSavings] = useState<BigNumber>(BigNumber.from(0))
   const [pendingBondReward, setPendingBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [referral, setReferral] = useState<Referral>()
-  const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
+  const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<number>(0)
   const [pendingSavingInterest, setPendingSavingInterest] = useState<BigNumber>(BigNumber.from(0))
   const [bondReward, setBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [bondRewardLocked, setBondRewardLocked] = useState<BigNumber>(BigNumber.from(0))
@@ -115,6 +115,7 @@ const Reward = () => {
   const [savingRewardInterest, setSavingRewardInterest] = useState<number>(0)
   const [requireRefresh, setRefresh] = useState<boolean>(false)
   const [savingInterestEpochLength, setSavingInterestEpochLength] = useState<number>(1)
+  const [stakedSavings, setStakedSavings] = useState<BigNumber>(BigNumber.from(0))
 
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
   const [activeIndex, setActiveIndex] = useState(1)
@@ -154,7 +155,6 @@ const Reward = () => {
 
   const refresh = async () => {
     const savingInterestEpochLength = await dfsMineContract.savingInterestEpochLength()
-    console.log(savingInterestEpochLength)
     setSavingInterestEpochLength(savingInterestEpochLength)
     if (account) {
       const referralStake = await dfsMineContract.addressToReferral(account)
@@ -162,7 +162,15 @@ const Reward = () => {
       setReferral(referralStake)
       setBondReward(referralBond?.bondReward)
       setSocialReward(referralStake?.socialReward)
-      setNextSavingInterestChangeTime(new Date(referralStake?.savingInterestEndTime * 1000))
+      setStakedSavings(referralStake?.stakedSavings)
+      const now = Date.now()
+      if (nextSavingInterestChange === 0) {
+        setNextSavingInterestChangeTime(referral?.savingInterestEndTime * 1000)
+      }
+      if (now >= referral?.savingInterestEndTime * 1000) {
+        const n = Math.ceil((now - referral?.savingInterestEndTime * 1000) / (savingInterestEpochLength * 1000))
+        setNextSavingInterestChangeTime(referral?.savingInterestEndTime * 1000 + n * savingInterestEpochLength * 1000)
+      }
 
       setPendingSocialReward(referralStake?.pendingSocialReward.add(await dfsMineContract.pendingSocialReward(account)))
       setBondRewardLocked(referralBond?.bondRewardLocked)
@@ -171,7 +179,6 @@ const Reward = () => {
 
       setPendingBondReward(await bond.pendingBondReward(account))
       setPendingSavingInterest(await dfsMineContract.pendingSavingInterest(account))
-      console.log('pendingSavingInterest:', pendingSavingInterest)
     }
     setSocialRewardInterest((await dfsMineContract.socialRewardInterest()).toNumber())
     setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
@@ -255,27 +262,20 @@ const Reward = () => {
     powerRewardDetailDataMutate(updatePowerRewardDetailData())
   }, [powerRewardDetailModalVisible, account])
 
-  const nextSavingPayoutTime = `${nextSavingInterestChange
-    ?.toLocaleDateString()
-    .replace(/\//g, '-')} ${nextSavingInterestChange?.toTimeString().slice(0, 8)}`
+  const nowDate = new Date(nextSavingInterestChange)
+  const nextSavingPayoutTime = `${nowDate?.toLocaleDateString().replace(/\//g, '-')} ${nowDate
+    .toTimeString()
+    .slice(0, 8)}`
 
   const totalPowerNumber = totalPower.toNumber() / 100
-  const currentIndex = totalPower.gt(0)
-    ? formatBigNumber(totalSocialReward?.mul(100).div(BigNumber.from(totalPower)), 2)
-    : '0'
-  const formatStakedSavings = formatUnits(referral?.stakedSavings ?? 0, 'ether')
-  const foramtTotalStakedSavings = formatUnits(totalStakedSavings ?? 0, 'ether')
-  const savingPercent =
-    foramtTotalStakedSavings !== '0' ? parseFloat(formatStakedSavings) / parseFloat(foramtTotalStakedSavings) : 0
-  const totalSocialRewardNumber = parseFloat(formatUnits(totalSocialReward))
   const socialRewardfiveDayROI = (5 * socialRewardInterest) / 10
   const sposAPY = (365 * socialRewardInterest) / 10
-  const n = 86400 / savingInterestEpochLength
+  const n = (5 * 86400) / savingInterestEpochLength
   const savingsfiveDayROI = formatNumber(((1 + savingRewardInterest / 1000) * n - 1) * 100, 2)
   const myLockedPower = (referral?.power?.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
   const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
   const greenPower = referral?.power.toNumber() / 100
-  const nextRewardSavingNumber = (savingPercent * savingRewardInterest) / 10
+  const nextRewardSavingNumber = (parseFloat(formatUnits(stakedSavings, 18)) * savingRewardInterest) / 1000
 
   const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
     if (newActiveIndex !== undefined) setActiveIndex(Math.ceil(newActiveIndex / slidesPerView))
@@ -518,7 +518,7 @@ const Reward = () => {
 
                   <DataCell
                     label={t('Staked')}
-                    value={`${formatBigNumber(referral?.stakedSavings ?? BigNumber.from(0), 9)} DFS`}
+                    value={`${formatBigNumber(stakedSavings, 9)} DFS`}
                     position="horizontal"
                   />
 
