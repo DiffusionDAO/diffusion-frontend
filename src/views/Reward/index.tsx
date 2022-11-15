@@ -271,7 +271,7 @@ const Reward = () => {
   const socialRewardfiveDayROI = (5 * socialRewardInterest) / 10
   const sposAPY = (365 * socialRewardInterest) / 10
   const n = 86400 / savingInterestEpochLength
-  const savingsfiveDayROI = formatNumber(((1 + savingRewardInterest / 1000) ** n - 1) * 100, 2)
+  const savingsfiveDayROI = formatNumber(((1 + savingRewardInterest / 1000) * n - 1) * 100, 2)
   const myLockedPower = (referral?.power?.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
   const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
   const greenPower = referral?.power.toNumber() / 100
