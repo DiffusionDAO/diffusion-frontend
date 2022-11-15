@@ -105,10 +105,10 @@ const Reward = () => {
   const [pendingBondReward, setPendingBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [referral, setReferral] = useState<Referral>()
   const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
-  const [pendingSavingInterest, setPendingSavingsReward] = useState<BigNumber>(BigNumber.from(0))
+  const [pendingSavingInterest, setPendingSavingInterest] = useState<BigNumber>(BigNumber.from(0))
   const [bondReward, setBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [bondRewardLocked, setBondRewardLocked] = useState<BigNumber>(BigNumber.from(0))
-  const [subordinates, setSubordinates] = useState<string[]>()
+  const [children, setChildren] = useState<string[]>()
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardInterest, setSocialRewardInterest] = useState<number>(0)
@@ -170,7 +170,8 @@ const Reward = () => {
       setDfsBalance(dfsBalance)
 
       setPendingBondReward(await bond.pendingBondReward(account))
-      setPendingSavingsReward(await dfsMineContract.pendingSavingInterest(account))
+      setPendingSavingInterest(await dfsMineContract.pendingSavingInterest(account))
+      console.log('pendingSavingInterest:', pendingSavingInterest)
     }
     setSocialRewardInterest((await dfsMineContract.socialRewardInterest()).toNumber())
     setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
@@ -183,26 +184,26 @@ const Reward = () => {
     refreshMutate(refresh())
   }, [account, amount, requireRefresh])
 
-  const updateSubordinates = async () => {
+  const updateChildren = async () => {
     if (account) {
-      const subordinates = await bond.getChildren(account)
-      setSubordinates(subordinates)
-      const subordinatesHasPower = await Promise.all(
-        subordinates.map(async (sub) => {
-          const subordinate = await dfsMineContract.addressToReferral(sub)
-          if (subordinate?.power?.toString() !== '0') {
-            return subordinate
+      const children = await bond.getChildren(account)
+      setChildren(children)
+      const childrenHasPower = await Promise.all(
+        children.map(async (sub) => {
+          const child = await dfsMineContract.addressToReferral(sub)
+          if (child?.power?.toString() !== '0') {
+            return child
           }
           return null
         }),
       )
-      return subordinatesHasPower
+      return childrenHasPower
     }
     return null
   }
-  const { data: subordinatesHasPower, status, mutate } = useSWR('updateSubordinates', updateSubordinates)
+  const { data: childrenHasPower, status, mutate } = useSWR('updateChildren', updateChildren)
   useEffect(() => {
-    mutate(updateSubordinates())
+    mutate(updateChildren())
   }, [account])
 
   const updateBondRewardDetailData = async () => {
@@ -421,7 +422,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem4.png" />
                           )}
                           <MySposDashboardValue className="alignRight" style={{ color: '#E7A4FF' }}>
-                            {subordinatesHasPower?.filter((sub) => sub !== null).length ?? 0}
+                            {childrenHasPower?.filter((sub) => sub !== null).length ?? 0}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignRight">{t('Networking headcount')}</MySposDashboardDes>
                         </MySposDashboardItem>
