@@ -321,14 +321,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "bond",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
         "name": "_receipt",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
       }
     ],
-    "name": "burn",
+    "name": "decreaseReleaseBalance",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -567,6 +585,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_receipt",
+        "type": "address"
+      }
+    ],
+    "name": "release",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "releaseEnd",
     "outputs": [
@@ -637,6 +674,19 @@
       }
     ],
     "name": "setBalance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_bond",
+        "type": "address"
+      }
+    ],
+    "name": "setBondAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
