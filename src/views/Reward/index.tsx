@@ -103,7 +103,7 @@ const Reward = () => {
   const [totalSavingsReward, setTotalSavingReward] = useState<BigNumber>(BigNumber.from(0))
   const [totalStakedSavings, setTotalStakedSavings] = useState<BigNumber>(BigNumber.from(0))
   const [pendingBondReward, setPendingBondReward] = useState<BigNumber>(BigNumber.from(0))
-  const [referral, setReferral] = useState<Referral>()
+  const [referralStake, setReferralStake] = useState<Referral>()
   const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<number>(0)
   const [pendingSavingInterest, setPendingSavingInterest] = useState<BigNumber>(BigNumber.from(0))
   const [bondReward, setBondReward] = useState<BigNumber>(BigNumber.from(0))
@@ -159,17 +159,18 @@ const Reward = () => {
     if (account) {
       const referralStake = await dfsMineContract.addressToReferral(account)
       const referralBond = await bond.addressToReferral(account)
-      setReferral(referralStake)
+      setReferralStake(referralStake)
       setBondReward(referralBond?.bondReward)
       setSocialReward(referralStake?.socialReward)
       setStakedSavings(referralStake?.stakedSavings)
       const now = Date.now()
-      if (nextSavingInterestChange === 0) {
-        setNextSavingInterestChangeTime(referral?.savingInterestEndTime * 1000)
-      }
-      if (now >= referral?.savingInterestEndTime * 1000) {
-        const n = Math.ceil((now - referral?.savingInterestEndTime * 1000) / (savingInterestEpochLength * 1000))
-        setNextSavingInterestChangeTime(referral?.savingInterestEndTime * 1000 + n * savingInterestEpochLength * 1000)
+      if (now >= referralStake?.savingInterestEndTime * 1000) {
+        const n = Math.ceil((now - referralStake?.savingInterestEndTime * 1000) / (savingInterestEpochLength * 1000))
+        setNextSavingInterestChangeTime(
+          referralStake?.savingInterestEndTime * 1000 + n * savingInterestEpochLength * 1000,
+        )
+      } else {
+        setNextSavingInterestChangeTime(referralStake?.savingInterestEndTime * 1000)
       }
 
       setPendingSocialReward(referralStake?.pendingSocialReward.add(await dfsMineContract.pendingSocialReward(account)))
@@ -272,9 +273,9 @@ const Reward = () => {
   const sposAPY = (365 * socialRewardInterest) / 10
   const n = (5 * 86400) / savingInterestEpochLength
   const savingsfiveDayROI = formatNumber(((1 + savingRewardInterest / 1000) * n - 1) * 100, 2)
-  const myLockedPower = (referral?.power?.toNumber() * 2 - referral?.unlockedPower?.toNumber()) / 100
-  const myTotalPower = (referral?.power?.toNumber() + referral?.unlockedPower?.toNumber()) / 100
-  const greenPower = referral?.power.toNumber() / 100
+  const myLockedPower = (referralStake?.power?.toNumber() * 2 - referralStake?.unlockedPower?.toNumber()) / 100
+  const myTotalPower = (referralStake?.power?.toNumber() + referralStake?.unlockedPower?.toNumber()) / 100
+  const greenPower = referralStake?.power.toNumber() / 100
   const nextRewardSavingNumber = (parseFloat(formatUnits(stakedSavings, 18)) * savingRewardInterest) / 1000
 
   const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
@@ -296,13 +297,13 @@ const Reward = () => {
               navigation
               onSwiper={setSwiperRef}
               onSlideChange={(swiper) => {
-                const index = referral?.level?.toNumber()
+                const index = referralStake?.level?.toNumber()
                 setActiveIndex(index / slidesPerView)
                 swiperRef.slideTo(index)
               }}
               onActiveIndexChange={updateActiveIndex}
             >
-              {referral?.level !== undefined &&
+              {referralStake?.level !== undefined &&
                 swiperSlideData.map((item, index) => {
                   return (
                     <SwiperSlide key={item.name}>
@@ -411,7 +412,7 @@ const Reward = () => {
                             <MySposDashboardItemImage src="/images/reward/mySposDashboardItem3.png" />
                           )}
                           <MySposDashboardValue className="alignLeft" style={{ color: '#FF2757' }}>
-                            {referral?.unlockedPower?.toNumber() / 100}
+                            {referralStake?.unlockedPower?.toNumber() / 100}
                           </MySposDashboardValue>
                           <MySposDashboardDes className="alignLeft">{t('Unlocked SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
