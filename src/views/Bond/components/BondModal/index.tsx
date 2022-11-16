@@ -223,8 +223,8 @@ const BondModal: React.FC<BondModalProps> = ({
   const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
   const enforcer = async (nextUserInput: string) => {
     if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
+      setAmount(nextUserInput)
       if (nextUserInput) {
-        setAmount(nextUserInput)
         try {
           const payout = await bond.payoutFor(parseUnits(nextUserInput, 'ether'))
           setPayoutFor(formatBigNumber(payout, 4))
