@@ -262,11 +262,12 @@ function NftProfilePage() {
   const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], getProfileToken)
   useEffect(() => {
     setUnstakedNFTs([])
+    setStakedNFTs([])
+    setOnSaleNFT([])
     mutate(getProfileToken())
   }, [account, t])
 
   useEffect(() => {
-    console.log(data)
     setUnstakedNFTs(data?.unstaked?.filter((token) => token.owner !== zeroAddress))
     setStakedNFTs(data?.staked?.filter((token) => token.owner !== zeroAddress))
     setOnSaleNFT(data?.onSale?.filter((token) => token.seller === account))
