@@ -29,7 +29,6 @@ const Private = () => {
   const zeroAddress = '0x0000000000000000000000000000000000000000'
 
   const [totalStakedSavings, setTotalStakedSavings] = useState<BigNumber>(BigNumber.from(0))
-  const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<Date>()
   const [savingRewardEpoch, setSavingRewardEpoch] = useState<any>({})
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
@@ -39,12 +38,16 @@ const Private = () => {
   const [withdrawedSocialReward, setWithdrawedSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [withdrawedSavingReward, setWithdrawedSavingReward] = useState<BigNumber>(BigNumber.from(0))
   const [runway, setRunway] = useState<number>(0)
+  const [savingInterestEpochLength, setSavingInterestEpochLength] = useState<number>(1)
 
   const dfsMineContract = useDFSMiningContract()
   const dfsContract = useDFSContract()
   const dfsMineAddress = getMiningAddress()
 
   const refresh = async () => {
+    const savingInterestEpochLength = await dfsMineContract.savingInterestEpochLength()
+    setSavingInterestEpochLength(savingInterestEpochLength)
+
     const dfsRewardBalance = await dfsContract.balanceOf(dfsMineAddress)
     setDfsRewardBalance(dfsRewardBalance)
 
@@ -54,9 +57,6 @@ const Private = () => {
     const withdrawedSavingReward = await dfsMineContract.withdrawedSavingReward()
     setWithdrawedSavingReward(withdrawedSavingReward)
 
-    const savingRewardEpoch = await dfsMineContract.savingRewardEpoch()
-    setSavingRewardEpoch(savingRewardEpoch)
-    setNextSavingInterestChangeTime(new Date(savingRewardEpoch.endTime * 1000))
     setSocialRewardInterest((await dfsMineContract.socialRewardInterest()).toNumber())
     setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
     setTotalSocialReward(await dfsMineContract.totalSocialReward())
@@ -68,7 +68,10 @@ const Private = () => {
     refreshMutate(refresh())
   }, [account, runway])
 
-  const remain = dfsRewardBalance.sub(withdrawedSavingReward.add(withdrawedSocialReward))
+  const n = (24 * 3600) / savingInterestEpochLength
+  const suggestedSavingReward = (savingRewardInterest * n * runway * 100) / 1000
+
+  const rewardExcludeWithdrawed = dfsRewardBalance.sub(withdrawedSavingReward.add(withdrawedSocialReward))
   const spos = totalPower.toNumber() / 100
   return (
     <div style={{ color: 'white', display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
@@ -92,15 +95,15 @@ const Private = () => {
         }}
       />
       <span>SPOS建议利率</span>
-      <span>{runway && runway !== 0 && parseFloat(formatUnits(remain.div(runway * spos))) * 95}</span>
-      <br />
-      <span>零钱罐建议利率</span>
       <span>
         {runway &&
           runway !== 0 &&
-          totalStakedSavings.gt(0) &&
-          (parseFloat(formatUnits(remain)) / (parseFloat(formatUnits(totalStakedSavings)) * runway * 3 * spos)) * 5}
+          spos !== 0 &&
+          parseFloat(formatUnits(rewardExcludeWithdrawed.div(runway * spos))) * 95}
       </span>
+      <br />
+      <span>零钱罐建议利率</span>
+      <span>{runway && runway !== 0 && suggestedSavingReward}</span>
     </div>
   )
 }
