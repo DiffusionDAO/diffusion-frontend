@@ -156,6 +156,11 @@ const Reward = () => {
   const refresh = async () => {
     const savingInterestEpochLength = await dfsMineContract.savingInterestEpochLength()
     setSavingInterestEpochLength(savingInterestEpochLength)
+    setSocialRewardInterest((await dfsMineContract.socialRewardInterest()).toNumber())
+    setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
+    setTotalSocialReward(await dfsMineContract.totalSocialReward())
+    setTotalPower(await dfsMineContract.totalPower())
+    setTotalStakedSavings(await dfsMineContract.totalStakedSavings())
     if (account) {
       const referralStake = await dfsMineContract.addressToReferral(account)
       const referralBond = await bond.addressToReferral(account)
@@ -181,11 +186,6 @@ const Reward = () => {
       setPendingBondReward(await bond.pendingBondReward(account))
       setPendingSavingInterest(await dfsMineContract.pendingSavingInterest(account))
     }
-    setSocialRewardInterest((await dfsMineContract.socialRewardInterest()).toNumber())
-    setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
-    setTotalSocialReward(await dfsMineContract.totalSocialReward())
-    setTotalPower(await dfsMineContract.totalPower())
-    setTotalStakedSavings(await dfsMineContract.totalStakedSavings())
   }
   const { mutate: refreshMutate } = useSWR('refresh', refresh)
   useEffect(() => {
