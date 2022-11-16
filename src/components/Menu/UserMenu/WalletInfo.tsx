@@ -142,7 +142,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
         {fetchStatus !== FetchStatus.Fetched ? (
           <Skeleton height="22px" width="60px" />
         ) : (
-          <Text>{formatUnits(pdfsBalance)}</Text>
+          <Text>{formatBigNumber(pdfsBalance, 9)}</Text>
         )}
       </Flex>
       <Flex alignItems="center" justifyContent="space-between">
@@ -150,7 +150,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
         {fetchStatus !== FetchStatus.Fetched ? (
           <Skeleton height="22px" width="60px" />
         ) : (
-          <Text>{formatUnits(pdfsReleased)}</Text>
+          <Text>{formatBigNumber(pdfsReleased, 9)}</Text>
         )}
       </Flex>
 

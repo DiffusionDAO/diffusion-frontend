@@ -140,9 +140,9 @@ const BondModal: React.FC<BondModalProps> = ({
           setDfsBalance(formatBigNumber(res, 18))
         })
         .catch((error) => console.log(error))
-      // pdfs.releaseInfo(account).then((res) => {
-      //   setPdfsBalance(res.balance)
-      // })
+      pdfs.releaseInfo(account).then((res) => {
+        setPdfsBalance(res.balance)
+      })
     }
   }, [account])
 
