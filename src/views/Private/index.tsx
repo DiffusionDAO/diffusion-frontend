@@ -69,7 +69,6 @@ const Private = () => {
   }, [account, runway])
 
   const n = (24 * 3600) / savingInterestEpochLength
-  const suggestedSavingReward = (savingRewardInterest * n * runway * 100) / 1000
 
   const rewardExcludeWithdrawed = dfsRewardBalance.sub(withdrawedSavingReward.add(withdrawedSocialReward))
   const spos = totalPower.toNumber() / 100
@@ -99,11 +98,18 @@ const Private = () => {
         {runway &&
           runway !== 0 &&
           spos !== 0 &&
-          parseFloat(formatUnits(rewardExcludeWithdrawed.div(runway * spos))) * 95}
+          parseFloat(formatUnits(rewardExcludeWithdrawed.div(runway * spos))) * 95 * 100}
+        %
       </span>
       <br />
       <span>零钱罐建议利率</span>
-      <span>{runway && runway !== 0 && suggestedSavingReward}</span>
+      <span>
+        {runway &&
+          runway !== 0 &&
+          (parseFloat(formatUnits(rewardExcludeWithdrawed, 18)) * 5) /
+            (n * runway * parseFloat(formatUnits(totalStakedSavings)))}
+        %
+      </span>
     </div>
   )
 }
