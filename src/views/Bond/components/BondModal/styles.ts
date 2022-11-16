@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
-import { Modal, Input } from 'antd'
+import { Input } from '@pancakeswap/uikit'
+import { Modal } from 'antd'
 
 export const StyledModal = styled(Modal)`
   width: 60%;
@@ -181,7 +182,7 @@ export const MoneyInput = styled(Input)`
     color: rgba(210, 87, 255, 1);
   }
 `
-export const RecommandWrap = styled.div`
+export const ReferralWrap = styled.div`
   width: 100%;
   height: 60px;
   display: flex;
@@ -206,7 +207,7 @@ export const CheckBox = styled.div`
   border-radius: 50%;
   background-color: antiquewhite;
 `
-export const RecommandLable = styled.div`
+export const ReferralLable = styled.div`
   width: 150px;
   margin: 0 5px;
   height: 40px;
@@ -217,7 +218,7 @@ export const RecommandLable = styled.div`
   color: #abb6ff;
   cursor: pointer;
 `
-export const RecommandInput = styled(Input)`
+export const ReferralInput = styled(Input)`
   width: 100%;
   height: 32px;
   margin-bottom: 10px;

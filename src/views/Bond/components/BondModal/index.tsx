@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
 import { CloseIcon, CogIcon, InfoIcon, useWalletModal } from '@pancakeswap/uikit'
@@ -15,12 +15,10 @@ import {
   usePDFSContract,
 } from 'hooks/useContract'
 import { BigNumber, ethers } from 'ethers'
-import { USDT } from '@pancakeswap/tokens'
 import { MaxUint256 } from '@ethersproject/constants'
 import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
-import { useSigner } from 'wagmi'
-import { useRouterContract } from 'utils/exchange'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
+import { escapeRegExp } from 'utils'
 
 import {
   StyledModal,
@@ -48,11 +46,11 @@ import {
   TabItem,
   MoneyLable,
   MoneyInput,
-  RecommandWrap,
+  ReferralWrap,
   CheckBoxWrap,
   CheckBox,
-  RecommandLable,
-  RecommandInput,
+  ReferralLable,
+  ReferralInput,
 } from './styles'
 
 const { confirm } = Modal
@@ -77,6 +75,8 @@ const BondModal: React.FC<BondModalProps> = ({
   const { t } = useTranslation()
   const { onPresentConnectModal } = useWallet()
   const router = useRouter()
+  const inputRef = useRef<HTMLInputElement>()
+
   const [hasReferral, setHasReferral] = useState<boolean>(false)
   const [referral, setReferral] = useState<string>('')
   const [amount, setAmount] = useState<string>('')
@@ -101,6 +101,12 @@ const BondModal: React.FC<BondModalProps> = ({
   const pairAddress = getPairAddress()
   const pair = usePairContract(pairAddress)
   const bond = useBondContract()
+
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [inputRef])
 
   useEffect(() => {
     bond.getPriceInUSDT().then((res) => {
@@ -150,33 +156,22 @@ const BondModal: React.FC<BondModalProps> = ({
     bond
       .terms()
       .then((res) => {
-        // console.log(res)
         setMinPrice(res.minimumPrice)
         setVestingTerms(res.vestingTerm / (24 * 3600))
       })
       .catch((error) => console.log(error))
-
-    if (amount) {
-      bond
-        .payoutFor(parseUnits(amount, 'ether'))
-        .then((payout) => setPayoutFor(formatBigNumber(payout, 4)))
-        .catch((error) => console.log(error))
-    }
   }, [account, bondPrice, amount])
 
   const buy = () => {
     if (!hasReferral) {
       confirm({
-        title: t('You will not be able to add a referrer on your next purchase'),
+        title: t('You will not be able to set referral next time'),
         icon: <ExclamationCircleOutlined />,
         okText: t('Confirm'),
         okType: 'danger',
-        cancelText: t('Cancel'),
+        // cancelText: t('Cancel'),
         onOk() {
           buySubmit()
-        },
-        onCancel() {
-          console.log('Cancel')
         },
       })
     } else {
@@ -185,8 +180,7 @@ const BondModal: React.FC<BondModalProps> = ({
   }
 
   const buySubmit = async () => {
-    if (!referral) {
-      window.alert('missing referral')
+    if (!hasReferral) {
       return
     }
     const allowance = await usdt.allowance(account, bond.address)
@@ -203,8 +197,6 @@ const BondModal: React.FC<BondModalProps> = ({
     }
     setAmount('')
     onClose()
-    const parsedAmount = parseUnits(amount, 'ether').toString()
-    console.log(parsedAmount)
   }
   const withdraw = () => {
     confirm({
@@ -228,7 +220,20 @@ const BondModal: React.FC<BondModalProps> = ({
     onClose()
     onPresentConnectModal()
   }
-
+  const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
+  const enforcer = async (nextUserInput: string) => {
+    if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
+      if (nextUserInput) {
+        setAmount(nextUserInput)
+        try {
+          const payout = await bond.payoutFor(parseUnits(nextUserInput, 'ether'))
+          setPayoutFor(formatBigNumber(payout, 4))
+        } catch (error: any) {
+          window.alert(error.reason ?? error.data?.message ?? error.message)
+        }
+      }
+    }
+  }
   return (
     <StyledModal width={500} className="no-header" onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <ContentWrap>
@@ -269,26 +274,26 @@ const BondModal: React.FC<BondModalProps> = ({
         {account && isApprove && activeTab === 'mint' && (
           <>
             <MoneyInput
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck="false"
+              inputMode="decimal"
+              type="text"
+              pattern="^[0-9]*[.,]?[0-9]*$"
               prefix="$"
-              suffix=""
               value={amount}
-              onInput={async (e: any) => {
-                setAmount(e.target.value)
-                if (e.target.value) {
-                  setHasReferral(true)
-                  try {
-                    const payout = await bond.payoutFor(parseUnits(e.target.value, 'ether'))
-                    setPayoutFor(formatBigNumber(payout, 4))
-                  } catch (error: any) {
-                    window.alert(error.reason ?? error.data?.message ?? error.message)
-                  }
-                } else {
-                  setPayoutFor('0')
-                }
+              ref={inputRef}
+              onChange={async (e: any) => {
+                await enforcer(e.target.value.replace(/,/g, '.'))
               }}
             />
-            <RecommandWrap>
-              <RecommandInput
+            <ReferralWrap>
+              <ReferralInput
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck="false"
+                type="text"
+                pattern="^[0-9|a-z|A-Z]*$"
                 value={referral}
                 placeholder={t('Referral')}
                 onInput={(e: any) => {
@@ -297,7 +302,7 @@ const BondModal: React.FC<BondModalProps> = ({
                 }}
                 disabled={hasReferral && referral !== ''}
               />
-            </RecommandWrap>
+            </ReferralWrap>
             <BondListItemBtn onClick={() => buy()}>{t('Buy')}</BondListItemBtn>
             {/* {pdfsBalance.gt(0) && <BondListItemBtn onClick={() => buy()}>{t('Buy With PDFS')}</BondListItemBtn>} */}
           </>
