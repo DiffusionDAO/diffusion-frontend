@@ -6,7 +6,7 @@ import { useTranslation, languageList } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import { usePhishingBannerManager } from 'state/user/hooks'
-import { useDFSContract } from 'hooks/useContract'
+import { useDFSMiningContract } from 'hooks/useContract'
 import UserMenu from './UserMenu'
 import { useMenuItems } from './hooks/useMenuItems'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
@@ -21,10 +21,10 @@ const Menu = (props) => {
   const [showPhishingWarningBanner] = usePhishingBannerManager()
   const { account } = useWeb3React()
 
-  const dfsMining = useDFSContract()
   const [whitelist, setWhitelist] = useState<string[]>([])
 
-  dfsMining.whitelist().then((res) => setWhitelist(res))
+  const dfsMining = useDFSMiningContract()
+  dfsMining.getPrivateWhitelist().then((res) => setWhitelist(res))
   const isPrivate = whitelist.includes(account)
   const menuItems = useMenuItems(isPrivate)
 
