@@ -6,7 +6,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useMenuItemsStatus } from './useMenuItemsStatus'
 import config, { ConfigMenuItemsType } from '../config/config'
 
-export const useMenuItems = (): ConfigMenuItemsType[] => {
+export const useMenuItems = (isPrivate?: boolean): ConfigMenuItemsType[] => {
   const {
     t,
     currentLanguage: { code: languageCode },
@@ -16,8 +16,8 @@ export const useMenuItems = (): ConfigMenuItemsType[] => {
   const menuItemsStatus = useMenuItemsStatus()
 
   const menuItems = useMemo(() => {
-    return config(t, isDark, languageCode, chainId)
-  }, [t, isDark, languageCode, chainId])
+    return config(t, isDark, languageCode, chainId, isPrivate)
+  }, [t, isDark, languageCode, chainId, isPrivate])
 
   return useMemo(() => {
     if (menuItemsStatus && Object.keys(menuItemsStatus).length) {

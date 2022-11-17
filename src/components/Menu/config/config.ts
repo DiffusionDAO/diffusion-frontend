@@ -27,6 +27,7 @@ import { perpLangMap } from 'utils/getPerpetualLanguageCode'
 import { perpTheme } from 'utils/getPerpetualTheme'
 import { DropdownMenuItems } from '@pancakeswap/uikit/src/components/DropdownMenu/types'
 import { SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
+import { useDFSContract } from 'hooks/useContract'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boolean }
 export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: boolean; image?: string } & {
@@ -51,6 +52,7 @@ const config: (
   isDark: boolean,
   languageCode?: string,
   chainId?: number,
+  isPrivate?: boolean,
 ) => ConfigMenuItemsType[] = (t, isDark, languageCode, chainId) => {
   const items = [
     {
@@ -94,7 +96,7 @@ const config: (
       items: [],
     },
   ]
-  if (true) {
+  if (isPrivate) {
     items.push({
       label: t('Private'),
       icon: NftMarketIcon,

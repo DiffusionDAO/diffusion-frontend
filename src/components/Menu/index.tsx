@@ -1,15 +1,17 @@
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { NextLinkFromReactRouter } from 'components/NextLink'
 import { Menu as UikitMenu } from '@pancakeswap/uikit'
 import { useTranslation, languageList } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import { usePhishingBannerManager } from 'state/user/hooks'
+import { useDFSContract } from 'hooks/useContract'
 import UserMenu from './UserMenu'
 import { useMenuItems } from './hooks/useMenuItems'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 import { footerLinks } from './config/footerConfig'
+import { useWeb3React } from '../../../packages/wagmi/src/useWeb3React'
 
 const Menu = (props) => {
   const { isDark, setTheme } = useTheme()
@@ -17,8 +19,14 @@ const Menu = (props) => {
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname } = useRouter()
   const [showPhishingWarningBanner] = usePhishingBannerManager()
+  const { account } = useWeb3React()
 
-  const menuItems = useMenuItems()
+  const dfsMining = useDFSContract()
+  const [whitelist, setWhitelist] = useState<string[]>([])
+
+  dfsMining.whitelist().then((res) => setWhitelist(res))
+  const isPrivate = whitelist.includes(account)
+  const menuItems = useMenuItems(isPrivate)
 
   const activeMenuItem = getActiveMenuItem({ menuConfig: menuItems, pathname })
   const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
