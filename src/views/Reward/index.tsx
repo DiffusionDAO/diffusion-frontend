@@ -184,7 +184,8 @@ const Reward = () => {
       setDfsBalance(dfsBalance)
 
       setPendingBondReward(await bond.pendingBondReward(account))
-      setPendingSavingInterest(await dfsMineContract.pendingSavingInterest(account))
+      const pendingSavingInterest = await dfsMineContract.pendingSavingInterest(account)
+      setPendingSavingInterest(referralStake?.savingInterest.add(pendingSavingInterest))
     }
   }
   const { mutate: refreshMutate } = useSWR('refresh', refresh)
