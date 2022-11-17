@@ -6,7 +6,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useMenuItemsStatus } from './useMenuItemsStatus'
 import config, { ConfigMenuItemsType } from '../config/config'
 
-export const useMenuItems = (isPrivate?: boolean): ConfigMenuItemsType[] => {
+export const useMenuItems = (isPrivate = false): ConfigMenuItemsType[] => {
   const {
     t,
     currentLanguage: { code: languageCode },

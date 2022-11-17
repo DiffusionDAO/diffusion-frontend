@@ -106,7 +106,6 @@ const config: (
       items: [],
     })
   }
-  console.log(items)
   return items
 }
 

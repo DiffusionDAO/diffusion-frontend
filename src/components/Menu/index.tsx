@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { NextLinkFromReactRouter } from 'components/NextLink'
-import { Menu as UikitMenu } from '@pancakeswap/uikit'
+import { Menu as UikitMenu, useIsomorphicEffect } from '@pancakeswap/uikit'
 import { useTranslation, languageList } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
@@ -24,7 +24,9 @@ const Menu = (props) => {
   const [whitelist, setWhitelist] = useState<string[]>([])
 
   const dfsMining = useDFSMiningContract()
-  dfsMining.getPrivateWhitelist().then((res) => setWhitelist(res))
+  useEffect(() => {
+    dfsMining.getPrivateWhitelist().then((res) => setWhitelist(res))
+  }, [])
   const isPrivate = whitelist.includes(account)
   const menuItems = useMenuItems(isPrivate)
 
