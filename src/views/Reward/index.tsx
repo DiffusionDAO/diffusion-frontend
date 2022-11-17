@@ -122,7 +122,7 @@ const Reward = () => {
 
   const { isMobile } = useMatchBreakpoints()
   const { onPresentConnectModal } = useWallet()
-  const dfsMineContract = useDFSMiningContract()
+  const dfsMining = useDFSMiningContract()
   const bond = useBondContract()
   const dfsContract = useDFSContract()
   const dfsMineAddress = getMiningAddress()
@@ -154,15 +154,15 @@ const Reward = () => {
   }
 
   const refresh = async () => {
-    const savingInterestEpochLength = await dfsMineContract.savingInterestEpochLength()
+    const savingInterestEpochLength = await dfsMining.savingInterestEpochLength()
     setSavingInterestEpochLength(savingInterestEpochLength)
-    setSocialRewardInterest((await dfsMineContract.socialRewardInterest()).toNumber())
-    setSavingRewardInterest((await dfsMineContract.savingRewardInterest()).toNumber())
-    setTotalSocialReward(await dfsMineContract.totalSocialReward())
-    setTotalPower(await dfsMineContract.totalPower())
-    setTotalStakedSavings(await dfsMineContract.totalStakedSavings())
+    setSocialRewardInterest((await dfsMining.socialRewardInterest()).toNumber())
+    setSavingRewardInterest((await dfsMining.savingRewardInterest()).toNumber())
+    setTotalSocialReward(await dfsMining.totalSocialReward())
+    setTotalPower(await dfsMining.totalPower())
+    setTotalStakedSavings(await dfsMining.totalStakedSavings())
     if (account) {
-      const referralStake = await dfsMineContract.addressToReferral(account)
+      const referralStake = await dfsMining.addressToReferral(account)
       const referralBond = await bond.addressToReferral(account)
       setReferralStake(referralStake)
       setBondReward(referralBond?.bondReward)
@@ -178,13 +178,14 @@ const Reward = () => {
         setNextSavingInterestChangeTime(referralStake?.savingInterestEndTime * 1000)
       }
 
-      setPendingSocialReward(referralStake?.pendingSocialReward.add(await dfsMineContract.pendingSocialReward(account)))
+      setPendingSocialReward(referralStake?.pendingSocialReward.add(await dfsMining.pendingSocialReward(account)))
       setBondRewardLocked(referralBond?.bondRewardLocked)
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)
 
       setPendingBondReward(await bond.pendingBondReward(account))
-      const pendingSavingInterest = await dfsMineContract.pendingSavingInterest(account)
+      const pendingSavingInterest = await dfsMining.pendingSavingInterest(account)
+      console.log(referralStake?.savingInterest, pendingSavingInterest)
       setPendingSavingInterest(referralStake?.savingInterest.add(pendingSavingInterest))
     }
   }
@@ -199,7 +200,7 @@ const Reward = () => {
       setChildren(children)
       const childrenHasPower = await Promise.all(
         children.map(async (sub) => {
-          const child = await dfsMineContract.addressToReferral(sub)
+          const child = await dfsMining.addressToReferral(sub)
           if (child?.power?.toString() !== '0') {
             return child
           }
@@ -241,10 +242,10 @@ const Reward = () => {
 
   const updatePowerRewardDetailData = async () => {
     if (account) {
-      const powerRewardContributors = await dfsMineContract.getPowerRewardContributors(account)
+      const powerRewardContributors = await dfsMining.getPowerRewardContributors(account)
       const details = await Promise?.all(
         powerRewardContributors?.map(async (contributor) => {
-          const reward = await dfsMineContract.powerRewardPerContributor(account, contributor)
+          const reward = await dfsMining.powerRewardPerContributor(account, contributor)
           return {
             address: isMobile ? shorten(contributor) : contributor,
             value: reward.toNumber() / 100,
@@ -333,7 +334,7 @@ const Reward = () => {
                 <ExtractBtn
                   onClick={async () => {
                     try {
-                      const receipt = await dfsMineContract.withdrawBondReward()
+                      const receipt = await dfsMining.withdrawBondReward()
                       await receipt.wait()
                       setRefresh(true)
                     } catch (error: any) {
@@ -447,7 +448,7 @@ const Reward = () => {
                       <ExtractBtn
                         onClick={async () => {
                           try {
-                            const receipt = await dfsMineContract.withdrawSocialReward()
+                            const receipt = await dfsMining.withdrawSocialReward()
                             await receipt.wait()
                             setRefresh(true)
                           } catch (error: any) {
@@ -460,7 +461,7 @@ const Reward = () => {
                       {/* <ExtractBtn
                         onClick={async () => {
                           try {
-                            const receipt = await dfsMineContract.updatePool()
+                            const receipt = await dfsMining.updatePool()
                             await receipt.wait()
                           } catch (error: any) {
                             window.alert(error.reason ?? error.data?.message ?? error.message)
@@ -545,7 +546,7 @@ const Reward = () => {
                       onClick={async () => {
                         const parsedAmount = parseUnits(amount, 'ether')
                         try {
-                          const receipt = await dfsMineContract.unstakeSavings(parsedAmount)
+                          const receipt = await dfsMining.unstakeSavings(parsedAmount)
                           await receipt.wait()
                           setAmount('')
                         } catch (error: any) {
@@ -566,7 +567,7 @@ const Reward = () => {
                             }
                             const parsedAmount = parseUnits(amount, 'ether')
 
-                            let receipt = await dfsMineContract.stakeSavings(parsedAmount)
+                            let receipt = await dfsMining.stakeSavings(parsedAmount)
                             receipt = await receipt.wait()
                             setAmount('')
                           } catch (error: any) {
