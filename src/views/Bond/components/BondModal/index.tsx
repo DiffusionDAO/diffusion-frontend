@@ -89,6 +89,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [pendingPayout, setPendingPayout] = useState<string>('0')
   const [bondPayout, setBondPayout] = useState<string>('0')
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
+  const [bondvested, setReferralBondVested] = useState<BigNumber>(BigNumber.from(0))
 
   const inputRef = useRef<HTMLInputElement>()
   const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
@@ -136,6 +137,7 @@ const BondModal: React.FC<BondModalProps> = ({
 
   useEffect(() => {
     if (account) {
+      bond.addressToReferral(account).then((res) => setReferralBondVested(res.bondVested))
       bond
         .parent(account)
         .then((res) => {
@@ -147,11 +149,11 @@ const BondModal: React.FC<BondModalProps> = ({
           }
         })
         .catch((error) => console.log(error))
-      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res[0], 2)))
+      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res.payout, 2)))
       bond
         .pendingPayoutFor(account)
         .then((res) => {
-          setPendingPayout(formatBigNumber(res, 18))
+          setPendingPayout(formatBigNumber(res.add(bondvested), 18))
         })
         .catch((error) => console.log(error))
       dfs
@@ -164,7 +166,7 @@ const BondModal: React.FC<BondModalProps> = ({
         setPdfsBalance(res.balance)
       })
     }
-  }, [account])
+  }, [account, amount])
 
   useEffect(() => {
     bond
@@ -183,7 +185,6 @@ const BondModal: React.FC<BondModalProps> = ({
         icon: <ExclamationCircleOutlined />,
         okText: t('Confirm'),
         okType: 'danger',
-        // cancelText: t('Cancel'),
         onOk() {
           buySubmit()
         },
@@ -210,7 +211,6 @@ const BondModal: React.FC<BondModalProps> = ({
       return
     }
     setAmount('')
-    onClose()
   }
   const withdraw = () => {
     confirm({
@@ -220,7 +220,10 @@ const BondModal: React.FC<BondModalProps> = ({
       okType: 'danger',
       cancelText: t('Go to Mint'),
       onOk() {
-        bond.redeem(account).catch((error) => window.alert(error.reason ?? error.data?.message ?? error.message))
+        bond
+          .redeem(account)
+          .then((res) => setAmount(''))
+          .catch((error) => window.alert(error.reason ?? error.data?.message ?? error.message))
       },
       onCancel() {
         router.push(`/mint`)
