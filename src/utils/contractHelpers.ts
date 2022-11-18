@@ -51,6 +51,8 @@ import {
   getPDFSAddress,
   getMiningAddress,
   getBondAddress,
+  getHBondAddress,
+  getHDFSAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -113,6 +115,8 @@ import duffionIDOAbi from 'config/abi/diffusionIDO.json'
 import aggregatorAbi from 'config/abi/nftDatabase.json'
 import mineAbi from 'config/abi/dfsMining.json'
 import dfsBond from 'config/abi/dfsBond.json'
+import hbond from 'config/abi/hbond.json'
+import hdfs from 'config/abi/hdfs.json'
 
 // Types
 import type {
@@ -416,4 +420,12 @@ export const getIDOContract = (signer?: Signer | Provider) => {
 }
 export const getNFTDatabaseContract = (signer?: Signer | Provider) => {
   return getContract({ abi: aggregatorAbi, address: getNFTDatabaseAddress(), signer })
+}
+
+export const getHBondContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: dfsBond, address: getHBondAddress(), signer })
+}
+
+export const getHDFSContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: dfsBond, address: getHDFSAddress(), signer })
 }

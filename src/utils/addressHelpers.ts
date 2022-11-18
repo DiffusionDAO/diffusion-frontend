@@ -157,3 +157,9 @@ export const getStarlightAddress = () => {
 export const getNFTDatabaseAddress = () => {
   return getAddress(addresses.nftDatabase)
 }
+export const getHBondAddress = () => {
+  return getAddress(addresses.hbond)
+}
+export const getHDFSAddress = () => {
+  return getAddress(addresses.hdfs)
+}

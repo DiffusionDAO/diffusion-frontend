@@ -14,7 +14,7 @@ import {
   usePairContract,
   usePDFSContract,
 } from 'hooks/useContract'
-import { BigNumber, ethers } from 'ethers'
+import { BigNumber } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
@@ -57,11 +57,11 @@ const { confirm } = Modal
 
 interface BondModalProps {
   bondData: any
-  isApprove: boolean
-  account: string
-  getApprove: () => void
-  onClose: () => void
-  openSettingModal: () => void
+  isApprove?: boolean
+  account?: string
+  getApprove?: () => void
+  onClose?: () => void
+  openSettingModal?: () => void
 }
 
 const BondModal: React.FC<BondModalProps> = ({
@@ -75,7 +75,6 @@ const BondModal: React.FC<BondModalProps> = ({
   const { t } = useTranslation()
   const { onPresentConnectModal } = useWallet()
   const router = useRouter()
-  const inputRef = useRef<HTMLInputElement>()
 
   const [hasReferral, setHasReferral] = useState<boolean>(false)
   const [referral, setReferral] = useState<string>('')
@@ -91,6 +90,21 @@ const BondModal: React.FC<BondModalProps> = ({
   const [bondPayout, setBondPayout] = useState<string>('0')
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
 
+  const inputRef = useRef<HTMLInputElement>()
+  const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
+  const enforcer = async (nextUserInput: string) => {
+    if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
+      setAmount(nextUserInput)
+      if (nextUserInput) {
+        try {
+          const payout = await bond.payoutFor(parseUnits(nextUserInput, 'ether'))
+          setPayoutFor(formatBigNumber(payout, 4))
+        } catch (error: any) {
+          window.alert(error.reason ?? error.data?.message ?? error.message)
+        }
+      }
+    }
+  }
   const zeroAddress = '0x0000000000000000000000000000000000000000'
   const dfsMining = useDFSMiningContract()
   const dfs = useDFSContract()
@@ -220,20 +234,7 @@ const BondModal: React.FC<BondModalProps> = ({
     onClose()
     onPresentConnectModal()
   }
-  const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
-  const enforcer = async (nextUserInput: string) => {
-    if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
-      setAmount(nextUserInput)
-      if (nextUserInput) {
-        try {
-          const payout = await bond.payoutFor(parseUnits(nextUserInput, 'ether'))
-          setPayoutFor(formatBigNumber(payout, 4))
-        } catch (error: any) {
-          window.alert(error.reason ?? error.data?.message ?? error.message)
-        }
-      }
-    }
-  }
+
   return (
     <StyledModal width={500} className="no-header" onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <ContentWrap>
