@@ -1,5 +1,4 @@
 import { ResetCSS, ToastListener } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
 import GlobalCheckClaimStatus from 'components/GlobalCheckClaimStatus'
 import { NetworkModal } from 'components/NetworkModal'
 import { FixedSubgraphHealthIndicator } from 'components/SubgraphHealthIndicator/FixedSubgraphHealthIndicator'
@@ -14,9 +13,12 @@ import type { AppProps } from 'next/app'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Script from 'next/script'
-import { Fragment } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, useStore } from 'state'
+import { useDFSMiningContract } from 'hooks/useContract'
+import { useRouter } from 'next/router'
+
 import { usePollBlockNumber } from 'state/block/hooks'
 import { usePollCoreFarmData } from 'state/farms/hooks'
 import { Blocklist, Updaters } from '..'
@@ -32,11 +34,12 @@ import './animation.scss'
 import './cover.scss'
 import './DiffusionChart.scss'
 import './Dashboard.scss'
+import { useWeb3React } from '../../packages/wagmi/src/useWeb3React'
 
-BigNumber.config({
-  EXPONENTIAL_AT: 1000,
-  DECIMAL_PLACES: 80,
-})
+// BigNumber.config({
+//   EXPONENTIAL_AT: 1000,
+//   DECIMAL_PLACES: 80,
+// })
 
 function GlobalHooks() {
   // usePollBlockNumber()
@@ -114,6 +117,20 @@ type AppPropsWithLayout = AppProps & {
 const ProductionErrorBoundary = process.env.NODE_ENV === 'production' ? SentryErrorBoundary : Fragment
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const router = useRouter()
+  const [whitelist, setWhitelist] = useState<string[]>([])
+  const { account } = useWeb3React()
+  const dfsMining = useDFSMiningContract()
+  useEffect(() => {
+    dfsMining
+      .getPrivateWhitelist()
+      .then((res) => setWhitelist(res))
+      .catch((error) => console.log(error))
+  }, [account, dfsMining])
+  if (router.pathname === '/private' && !whitelist.includes(account)) {
+    return <></>
+  }
+
   if (Component.pure) {
     return <Component {...pageProps} />
   }
@@ -121,7 +138,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   // Use the layout defined at the page level, if available
   const Layout = Component.Layout || Fragment
   const ShowMenu = Component.mp ? Fragment : Menu
-
   return (
     <ProductionErrorBoundary>
       <ShowMenu>

@@ -42,7 +42,7 @@ import {
   ToImg,
   BondHeaderName,
 } from './style'
-import bondDatasMock from './MockBondData'
+import bondDatas from './bondData'
 import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
 
@@ -50,7 +50,7 @@ const Bond = () => {
   const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
-  const [bondData, setBondData] = useState<any[]>(bondDatasMock)
+  const [bondData, setBondData] = useState<any[]>(bondDatas)
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false)
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false)
 
@@ -62,10 +62,10 @@ const Bond = () => {
   const bond = useBondContract()
   useEffect(() => {
     bond.getPriceInUSDT().then((res) => {
-      bondDatasMock[0].price = formatBigNumber(res, 5)
+      bondDatas[0].price = formatBigNumber(res, 5)
     })
     bond.discount().then((res) => {
-      bondDatasMock[0].discount = res
+      bondDatas[0].discount = res
     })
     pair.getReserves().then((reserves: any) => {
       const dfsAddress = getDFSAddress()
@@ -119,7 +119,7 @@ const Bond = () => {
     }
   }, [account])
   useEffect(() => {
-    const dfsUsdt = bondDatasMock[0]
+    const dfsUsdt = bondDatas[0]
     // eslint-disable-next-line no-return-assign, no-param-reassign
     bond
       .terms()
@@ -129,7 +129,7 @@ const Bond = () => {
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
-    setBondData([dfsUsdt, ...bondDatasMock.slice(1)])
+    setBondData([dfsUsdt, ...bondDatas.slice(1)])
     dfsContract
       .totalSupply()
       .then((res) => setDfsTotalSupply(res * parseFloat(marketPrice)))

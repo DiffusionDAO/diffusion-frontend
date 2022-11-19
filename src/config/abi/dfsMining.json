@@ -188,20 +188,14 @@
   },
   {
     "inputs": [],
-    "name": "dfsIncrement",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "distributeSavingReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "distrbuteSocialReward",
+    "name": "distributeSocialReward",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -531,6 +525,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "s0UpgradeNeed",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -539,6 +546,19 @@
       }
     ],
     "name": "s8Index",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "s8RevenueRate",
     "outputs": [
       {
         "internalType": "uint256",
@@ -667,6 +687,19 @@
       }
     ],
     "name": "setSavingInterestEpochLength",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_interest",
+        "type": "uint256"
+      }
+    ],
+    "name": "setSavingRewardInterest",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -879,19 +912,6 @@
   {
     "inputs": [],
     "name": "totalPower",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "totalSavingReward",
     "outputs": [
       {
         "internalType": "uint256",

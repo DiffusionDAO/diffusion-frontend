@@ -90,6 +90,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [bondPayout, setBondPayout] = useState<string>('0')
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
   const [bondvested, setReferralBondVested] = useState<BigNumber>(BigNumber.from(0))
+  const [maxPayout, setMaxPayout] = useState<BigNumber>(BigNumber.from(0))
 
   const inputRef = useRef<HTMLInputElement>()
   const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
@@ -126,6 +127,10 @@ const BondModal: React.FC<BondModalProps> = ({
   useEffect(() => {
     bond.getPriceInUSDT().then((res) => {
       setBondPrice(formatBigNumber(res, 5))
+    })
+    bond.maxPayout().then((res) => {
+      console.log(res.toString())
+      setMaxPayout(res)
     })
     pair.getReserves().then((reserves: any) => {
       const numerator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[1] : reserves[0]
@@ -346,6 +351,10 @@ const BondModal: React.FC<BondModalProps> = ({
           ) : (
             <ListContent>{pendingPayout ?? 0} DFS</ListContent>
           )}
+        </ListItem>
+        <ListItem>
+          <ListLable>{t('MaxPayout')}</ListLable>
+          <ListContent>{maxPayout.toNumber() ?? 0} USDT</ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('Payout')}</ListLable>
