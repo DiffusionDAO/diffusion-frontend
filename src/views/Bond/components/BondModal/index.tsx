@@ -312,7 +312,6 @@ const BondModal: React.FC<BondModalProps> = ({
               />
             </ReferralWrap>
             <BondListItemBtn onClick={() => buy()}>{t('Buy')}</BondListItemBtn>
-            {/* {pdfsBalance.gt(0) && <BondListItemBtn onClick={() => buy()}>{t('Buy With PDFS')}</BondListItemBtn>} */}
           </>
         )}
         {account && isApprove && activeTab === 'redeem' && (
