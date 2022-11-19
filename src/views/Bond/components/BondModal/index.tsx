@@ -4,7 +4,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { CloseIcon, CogIcon, InfoIcon, useWalletModal } from '@pancakeswap/uikit'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
-import { parseUnits } from '@ethersproject/units'
+import { parseUnits, formatUnits } from '@ethersproject/units'
 import { useWallet } from 'hooks/useWallet'
 import {
   useBondContract,
