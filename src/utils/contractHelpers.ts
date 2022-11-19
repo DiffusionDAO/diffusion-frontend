@@ -423,9 +423,9 @@ export const getNFTDatabaseContract = (signer?: Signer | Provider) => {
 }
 
 export const getHBondContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: dfsBond, address: getHBondAddress(), signer })
+  return getContract({ abi: hbond, address: getHBondAddress(), signer })
 }
 
 export const getHDFSContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: dfsBond, address: getHDFSAddress(), signer })
+  return getContract({ abi: hdfs, address: getHDFSAddress(), signer })
 }

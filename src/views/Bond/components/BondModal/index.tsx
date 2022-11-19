@@ -86,7 +86,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [minPrice, setMinPrice] = useState<BigNumber>()
   const [vestingTerms, setVestingTerms] = useState<number>(0)
   const [payout, setPayoutFor] = useState<string>('0')
-  const [pendingPayout, setPendingPayout] = useState<string>('0')
+  const [pendingPayout, setPendingPayout] = useState<BigNumber>(BigNumber.from(0))
   const [bondPayout, setBondPayout] = useState<string>('0')
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
   const [bondvested, setReferralBondVested] = useState<BigNumber>(BigNumber.from(0))
@@ -157,7 +157,7 @@ const BondModal: React.FC<BondModalProps> = ({
       bond
         .pendingPayoutFor(account)
         .then((res) => {
-          setPendingPayout(formatBigNumber(res.add(bondvested), 18))
+          setPendingPayout(res)
         })
         .catch((error) => console.log(error))
       dfs
@@ -348,7 +348,7 @@ const BondModal: React.FC<BondModalProps> = ({
           {activeTab === 'mint' ? (
             <ListContent>{payout ?? 0} DFS</ListContent>
           ) : (
-            <ListContent>{pendingPayout ?? 0} DFS</ListContent>
+            <ListContent>{formatUnits(pendingPayout.add(bondvested)) ?? 0} DFS</ListContent>
           )}
         </ListItem>
         <ListItem>
