@@ -10,6 +10,7 @@ import { useBondContract, useDFSContract, useDFSMiningContract, useERC20, usePai
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import { useRouterContract } from 'utils/exchange'
 import { BigNumber } from '@ethersproject/bignumber'
+import { formatUnits } from '@ethersproject/units'
 
 import {
   BondPageWrap,
@@ -70,8 +71,8 @@ const Bond = () => {
     pair.getReserves().then((reserves: any) => {
       const dfsAddress = getDFSAddress()
       const usdtAddress = getUSDTAddress()
-      const numerator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[1] : reserves[0]
-      const denominator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[0] : reserves[1]
+      const [numerator, denominator] =
+        usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[1], reserves[0]] : [reserves[0], reserves[1]]
       const marketPrice = numerator / denominator
       setUsdtAmount(denominator)
       setMarketPrice(marketPrice.toFixed(5))

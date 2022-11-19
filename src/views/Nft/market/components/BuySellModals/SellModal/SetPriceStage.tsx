@@ -53,8 +53,8 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
     const reserves: any = await pair.getReserves()
     const usdtAddress = getUSDTAddress()
     const dfsAddress = getDFSAddress()
-    const numerator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[1] : reserves[0]
-    const denominator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[0] : reserves[1]
+    const [numerator, denominator] =
+      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[1], reserves[0]] : [reserves[0], reserves[1]]
     const marketPrice = numerator / denominator
     return marketPrice
   })
