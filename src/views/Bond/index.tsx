@@ -69,12 +69,13 @@ const Bond = () => {
       bondDatas[0].discount = res
     })
     pair.getReserves().then((reserves: any) => {
-      const dfsAddress = getDFSAddress()
       const usdtAddress = getUSDTAddress()
+      const dfsAddress = getDFSAddress()
       const [numerator, denominator] =
         usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+      console.log(formatUnits(numerator, 18), formatUnits(denominator, 18))
       const marketPrice = numerator / denominator
-      setUsdtAmount(denominator)
+      setUsdtAmount(numerator)
       setMarketPrice(marketPrice.toFixed(5))
     })
   }, [account])
