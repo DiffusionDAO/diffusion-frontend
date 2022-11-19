@@ -12,7 +12,7 @@ const useGetDocumentTitlePrice = () => {
   const { data, status } = useSWR('getPriceInUSDT', async () => {
     const reserves: any = await pair.getReserves()
     const [numerator, denominator] =
-      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[1], reserves[0]] : [reserves[0], reserves[1]]
+      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
     const marketPrice = numerator / denominator
 
     return marketPrice

@@ -72,7 +72,7 @@ const Bond = () => {
       const dfsAddress = getDFSAddress()
       const usdtAddress = getUSDTAddress()
       const [numerator, denominator] =
-        usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[1], reserves[0]] : [reserves[0], reserves[1]]
+        usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
       const marketPrice = numerator / denominator
       setUsdtAmount(denominator)
       setMarketPrice(marketPrice.toFixed(5))
