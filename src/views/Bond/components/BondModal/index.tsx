@@ -129,7 +129,6 @@ const BondModal: React.FC<BondModalProps> = ({
       setBondPrice(formatBigNumber(res, 5))
     })
     bond.maxPayout().then((res) => {
-      console.log(res.toString())
       setMaxPayout(res)
     })
     pair.getReserves().then((reserves: any) => {
@@ -354,7 +353,7 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem>
         <ListItem>
           <ListLable>{t('MaxPayout')}</ListLable>
-          <ListContent>{maxPayout.toNumber() ?? 0} USDT</ListContent>
+          <ListContent>{formatBigNumber(maxPayout, 2) ?? 0} USDT</ListContent>
         </ListItem>
         <ListItem>
           <ListLable>{t('Payout')}</ListLable>
