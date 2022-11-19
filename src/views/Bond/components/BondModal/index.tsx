@@ -89,7 +89,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [pendingPayout, setPendingPayout] = useState<BigNumber>(BigNumber.from(0))
   const [bondPayout, setBondPayout] = useState<string>('0')
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
-  const [bondvested, setReferralBondVested] = useState<BigNumber>(BigNumber.from(0))
+  const [bondvested, setBondVested] = useState<BigNumber>(BigNumber.from(0))
   const [maxPayout, setMaxPayout] = useState<BigNumber>(BigNumber.from(0))
 
   const inputRef = useRef<HTMLInputElement>()
@@ -131,9 +131,23 @@ const BondModal: React.FC<BondModalProps> = ({
     bond.maxPayout().then((res) => {
       setMaxPayout(res)
     })
+    if (account) {
+      bond
+        .pendingPayoutFor(account)
+        .then((res) => {
+          console.log('pendingPayoutFor:', formatUnits(res, 18))
+          setPendingPayout(res)
+        })
+        .catch((error) => console.log(error))
+      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res.payout, 2)))
+      bond.addressToReferral(account).then((res) => {
+        console.log('bondVested:', formatUnits(res.bondVested, 18))
+        setBondVested(res.bondVested)
+      })
+    }
     pair.getReserves().then((reserves: any) => {
-      const numerator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[1] : reserves[0]
-      const denominator = BigNumber.from(usdtAddress) < BigNumber.from(dfsAddress) ? reserves[0] : reserves[1]
+      const [numerator, denominator] =
+        usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
       const marketPrice = numerator / denominator
       setMarketPrice(marketPrice.toFixed(5))
     })
@@ -141,7 +155,6 @@ const BondModal: React.FC<BondModalProps> = ({
 
   useEffect(() => {
     if (account) {
-      bond.addressToReferral(account).then((res) => setReferralBondVested(res.bondVested))
       bond
         .parent(account)
         .then((res) => {
@@ -151,13 +164,6 @@ const BondModal: React.FC<BondModalProps> = ({
           } else {
             setHasReferral(false)
           }
-        })
-        .catch((error) => console.log(error))
-      bond.bondInfo(account).then((res) => setBondPayout(formatBigNumber(res.payout, 2)))
-      bond
-        .pendingPayoutFor(account)
-        .then((res) => {
-          setPendingPayout(res)
         })
         .catch((error) => console.log(error))
       dfs
@@ -170,7 +176,7 @@ const BondModal: React.FC<BondModalProps> = ({
         setPdfsBalance(res.balance)
       })
     }
-  }, [account, amount])
+  }, [account])
 
   useEffect(() => {
     bond
@@ -347,11 +353,11 @@ const BondModal: React.FC<BondModalProps> = ({
           {activeTab === 'mint' ? (
             <ListContent>{payout ?? 0} DFS</ListContent>
           ) : (
-            <ListContent>{formatUnits(pendingPayout.add(bondvested)) ?? 0} DFS</ListContent>
+            <ListContent>{formatUnits(pendingPayout.add(bondvested), 18)} DFS</ListContent>
           )}
         </ListItem>
         <ListItem>
-          <ListLable>{t('MaxPayout')}</ListLable>
+          <ListLable>{t('Max Payout')}</ListLable>
           <ListContent>{formatBigNumber(maxPayout, 2) ?? 0} USDT</ListContent>
         </ListItem>
         <ListItem>

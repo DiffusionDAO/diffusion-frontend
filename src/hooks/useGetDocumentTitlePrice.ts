@@ -1,18 +1,20 @@
 import { useEffect } from 'react'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import useSWR from 'swr'
-import { getPairAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { usePairContract } from './useContract'
 
 const useGetDocumentTitlePrice = () => {
   const pairAddress = getPairAddress()
+  const dfsAddress = getDFSAddress()
+  const usdtAddress = getUSDTAddress()
   const pair = usePairContract(pairAddress)
   const { data, status } = useSWR('getPriceInUSDT', async () => {
     const reserves: any = await pair.getReserves()
-    let marketPrice = reserves[1] / reserves[0]
-    if (marketPrice < 1) {
-      marketPrice = reserves[0] / reserves[1]
-    }
+    const [numerator, denominator] =
+      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[1], reserves[0]] : [reserves[0], reserves[1]]
+    const marketPrice = numerator / denominator
+
     return marketPrice
   })
   useEffect(() => {
