@@ -110,10 +110,10 @@ const Private = () => {
 
   const n = (24 * 3600) / savingInterestEpochLength
 
-  const totalReward = dfsRewardBalance.sub(totalStakedSavings)
   const rewardExcludeWithdrawed = dfsRewardBalance
     .sub(withdrawedSavingReward.add(withdrawedSocialReward))
     .sub(totalStakedSavings)
+  const totalReward = dfsRewardBalance.sub(totalStakedSavings).sub(withdrawedSavingReward.add(withdrawedSocialReward))
   const spos = totalPower.toNumber() / 100
 
   const refresh = async () => {
