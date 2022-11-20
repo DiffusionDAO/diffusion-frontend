@@ -89,8 +89,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [pendingPayout, setPendingPayout] = useState<BigNumber>(BigNumber.from(0))
   const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
-  const [bondvested, setBondVested] = useState<BigNumber>(BigNumber.from(0))
-  const [maxPayout, setMaxPayout] = useState<BigNumber>(BigNumber.from(0))
+  const [bondVested, setBondVested] = useState<BigNumber>(BigNumber.from(0))
   const [refresh, setRefresh] = useState<boolean>(false)
 
   const inputRef = useRef<HTMLInputElement>()
@@ -129,12 +128,10 @@ const BondModal: React.FC<BondModalProps> = ({
     bond.getPriceInUSDT().then((res) => {
       setBondPrice(formatBigNumber(res.mul(100 - bondData.discount).div(100), 5))
     })
-    bond.maxPayout().then((res) => {
-      setMaxPayout(res)
-    })
+
     if (account) {
       bond
-        .pendingPayoutFor(account)
+        .pendingPayoutFor()
         .then((res) => {
           console.log('pendingPayoutFor:', formatUnits(res, 18))
           setPendingPayout(res)
@@ -232,7 +229,7 @@ const BondModal: React.FC<BondModalProps> = ({
       cancelText: t('Go to Mint'),
       onOk() {
         bond
-          .redeem(account)
+          .redeem()
           .then((res) => setRefresh(true))
           .catch((error) => window.alert(error.reason ?? error.data?.message ?? error.message))
       },
@@ -354,7 +351,7 @@ const BondModal: React.FC<BondModalProps> = ({
           {activeTab === 'mint' ? (
             <ListContent>{payout ?? 0} DFS</ListContent>
           ) : (
-            <ListContent>{formatUnits(pendingPayout.add(bondvested), 18)} DFS</ListContent>
+            <ListContent>{formatUnits(pendingPayout.add(bondVested), 18)} DFS</ListContent>
           )}
         </ListItem>
         {/* <ListItem>
@@ -363,7 +360,7 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem> */}
         <ListItem>
           <ListLable>{t('Payout')}</ListLable>
-          <ListContent>{formatBigNumber(bondPayout.sub(bondvested), 18)} DFS</ListContent>
+          <ListContent>{formatBigNumber(bondPayout.sub(bondVested).sub(pendingPayout), 18)} DFS</ListContent>
         </ListItem>
         {pdfsBalance.gt(0) && (
           <ListItem>

@@ -768,13 +768,7 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_depositor",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "name": "pendingPayoutFor",
     "outputs": [
       {
@@ -826,13 +820,7 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_recipient",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "name": "redeem",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -1141,6 +1129,19 @@
         "internalType": "contract IERC20",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vestedOf",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "vested",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
