@@ -76,19 +76,6 @@
   },
   {
     "inputs": [],
-    "name": "DAO",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "DAO1",
     "outputs": [
       {
@@ -184,12 +171,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "lastBondRewardWithdraw",
+        "name": "bondVested",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "bondVested",
+        "name": "lastBondRewardWithdraw",
         "type": "uint256"
       }
     ],
@@ -215,6 +202,11 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "name": "bondInfo",
@@ -226,7 +218,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "pricePaid",
+        "name": "vested",
         "type": "uint256"
       },
       {
@@ -238,6 +230,65 @@
         "internalType": "uint32",
         "name": "vesting",
         "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "name": "bondInfoIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "bondOf",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "payout",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "vested",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint32",
+            "name": "lastTime",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "vesting",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct Bond.BondInfo[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -586,7 +637,7 @@
     "name": "pair",
     "outputs": [
       {
-        "internalType": "contract IUniswapV2Pair",
+        "internalType": "contract IPancakePair",
         "name": "",
         "type": "address"
       }
@@ -660,6 +711,19 @@
   },
   {
     "inputs": [],
+    "name": "payoutOf",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "payout",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "pdfs",
     "outputs": [
       {
@@ -723,18 +787,12 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_depositor",
-        "type": "address"
-      }
-    ],
-    "name": "percentVestedFor",
+    "inputs": [],
+    "name": "rate",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "percentVested_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -743,12 +801,12 @@
   },
   {
     "inputs": [],
-    "name": "price_",
+    "name": "rateFeeAddress",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -789,29 +847,11 @@
       },
       {
         "internalType": "address",
-        "name": "_addressDFS",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_addressUSDT",
         "type": "address"
       }
     ],
     "name": "setAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_price",
-        "type": "uint256"
-      }
-    ],
-    "name": "setBondPrice",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -851,11 +891,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_dao",
+        "name": "_dfs",
         "type": "address"
       }
     ],
-    "name": "setDAOAddress",
+    "name": "setDfsAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
