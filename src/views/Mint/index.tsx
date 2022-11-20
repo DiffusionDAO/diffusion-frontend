@@ -157,7 +157,6 @@ const Mint = () => {
       for (let i = 0; i <= logs.length; i++) {
         if (logs[i] && logs[i].topics[0] === topics && logs[i].address === socialNFT.address) {
           const id = BigNumber.from(logs[i]?.topics[3])
-
           const tokenId = id.toString()
           // eslint-disable-next-line no-await-in-loop
           const level = await socialNFT.getItems(tokenId)

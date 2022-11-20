@@ -357,10 +357,10 @@ const BondModal: React.FC<BondModalProps> = ({
             <ListContent>{formatUnits(pendingPayout.add(bondvested), 18)} DFS</ListContent>
           )}
         </ListItem>
-        <ListItem>
+        {/* <ListItem>
           <ListLable>{t('Max Payout')}</ListLable>
           <ListContent>{formatBigNumber(maxPayout, 2) ?? 0} USDT</ListContent>
-        </ListItem>
+        </ListItem> */}
         <ListItem>
           <ListLable>{t('Payout')}</ListLable>
           <ListContent>{formatBigNumber(bondPayout.sub(bondvested), 18)} DFS</ListContent>
