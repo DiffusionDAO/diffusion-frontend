@@ -140,10 +140,10 @@ const BondModal: React.FC<BondModalProps> = ({
           setPendingPayout(res)
         })
         .catch((error) => console.log(error))
-      bond.payoutOf(account).then((res) => setBondPayout(res))
-      bond.addressToReferral(account).then((res) => {
-        console.log('bondVested:', formatUnits(res.bondVested, 18))
-        setBondVested(res.bondVested)
+      bond.payoutOf().then((res) => setBondPayout(res))
+      bond.vestedOf().then((res) => {
+        console.log('bondVested:', formatUnits(res, 18))
+        setBondVested(res)
       })
     }
     pair.getReserves().then((reserves: any) => {
