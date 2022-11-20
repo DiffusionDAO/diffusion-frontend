@@ -127,7 +127,7 @@ const BondModal: React.FC<BondModalProps> = ({
 
   useEffect(() => {
     bond.getPriceInUSDT().then((res) => {
-      setBondPrice(formatBigNumber(res, 5))
+      setBondPrice(formatBigNumber(res.mul(100 - bondData.discount).div(100), 5))
     })
     bond.maxPayout().then((res) => {
       setMaxPayout(res)
