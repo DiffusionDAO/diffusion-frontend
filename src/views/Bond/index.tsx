@@ -86,7 +86,7 @@ const Bond = () => {
 
   useEffect(() => {
     bond.discount().then((res) => {
-      bondDatas[0].discount = 100 - res
+      bondDatas[0].discount = res
     })
   }, [account])
 

@@ -153,6 +153,7 @@ const Mint = () => {
       const { logs } = receipt
       // eslint-disable-next-line prefer-const
       let levelTokenIds = {}
+      console.log(logs)
       const topics = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
       for (let i = 0; i <= logs.length; i++) {
         if (logs[i] && logs[i].topics[0] === topics) {
