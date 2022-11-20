@@ -75,23 +75,10 @@ const Bond = () => {
   const { data, status } = useSWR('dfsBond', async () => {
     const price = await bond.getPriceInUSDT()
     bondDatas[0].price = formatBigNumber(price, 9)
-    const token0 = await pair.token0()
-    const token1 = await pair.token1()
-    console.log('token0:', token0, token1)
 
     const [reserve0, reserve1] = await pair.getReserves()
-    const usdtBalance = await usdt.balanceOf(pair.address)
-    const dfsBalance = await dfs.balanceOf(dfs.address)
-    console.log('usdtBalance:', usdtBalance, dfsBalance)
-    console.log(
-      'usdtAddress:',
-      usdtAddress.toLowerCase(),
-      dfsAddress.toLowerCase(),
-      usdtAddress.toLowerCase() < dfsAddress.toLowerCase(),
-    )
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserve0, reserve1] : [reserve1, reserve0]
-    console.log('numerator:', formatUnits(numerator, 18), formatUnits(denominator, 18))
     const marketPrice = parseFloat(formatUnits(numerator, 18)) / parseFloat(formatUnits(denominator, 18))
     setUsdtAmount(numerator)
     setMarketPrice(marketPrice.toFixed(5))
@@ -99,7 +86,7 @@ const Bond = () => {
 
   useEffect(() => {
     bond.discount().then((res) => {
-      bondDatas[0].discount = res
+      bondDatas[0].discount = 100 - res
     })
   }, [account])
 
