@@ -186,8 +186,8 @@ export default {
     97: '0x71e2ca7c1d34DD5ea147A17a0C9975c0F33c632b',
   },
   bond: {
-    56: '0x24c586Cf44d65AAfEcD92Fc105d7c692ebf08bDa',
-    97: '0x24c586Cf44d65AAfEcD92Fc105d7c692ebf08bDa',
+    56: '0xeEcc48d18Ca3D8990afEc8E36eD85D72186ccd9b',
+    97: '0xeEcc48d18Ca3D8990afEc8E36eD85D72186ccd9b',
   },
   dfsMining: {
     56: '0x32fA42db331c7Dd2220fB166aAa7F39b9EA9660A',

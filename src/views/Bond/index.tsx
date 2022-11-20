@@ -74,7 +74,7 @@ const Bond = () => {
 
   const { data, status } = useSWR('dfsBond', async () => {
     const price = await bond.getPriceInUSDT()
-    bondDatas[0].price = formatBigNumber(price, 9)
+    bondDatas[0].price = formatBigNumber(price.mul(97).div(100), 5)
 
     const [reserve0, reserve1] = await pair.getReserves()
     const [numerator, denominator] =
