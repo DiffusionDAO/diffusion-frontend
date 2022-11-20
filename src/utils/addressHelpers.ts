@@ -131,7 +131,7 @@ export const getDFSAddress = () => {
   return getAddress(addresses.dfs)
 }
 export const getPDFSAddress = () => {
-  return getAddress(addresses.ido)
+  return getAddress(addresses.pdfs)
 }
 export const getPairAddress = () => {
   return getAddress(addresses.pair)
@@ -146,7 +146,7 @@ export const getNftMintAddress = () => {
   return getAddress(addresses.mintNFT)
 }
 export const getIDOAddress = () => {
-  return getAddress(addresses.ido)
+  return getAddress(addresses.pdfs)
 }
 export const getDFSNFTAddress = () => {
   return getAddress(addresses.socialNFT)
