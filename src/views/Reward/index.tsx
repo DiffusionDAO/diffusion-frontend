@@ -164,7 +164,6 @@ const Reward = () => {
     if (account) {
       const referralStake = await dfsMining.addressToReferral(account)
       const referralBond = await bond.addressToReferral(account)
-      console.log(referralBond)
       setReferralStake(referralStake)
       setBondReward(referralBond?.bondReward)
       setSocialReward(referralStake?.socialReward)
@@ -179,8 +178,8 @@ const Reward = () => {
         setNextSavingInterestChangeTime(referralStake?.savingInterestEndTime * 1000)
       }
       const pendingSocialReward = await dfsMining.pendingSocialReward(account)
-      console.log(referralStake?.socialReward, pendingSocialReward)
-      setPendingSocialReward(referralStake?.socialReward.add(pendingSocialReward))
+      console.log('socialReward:', formatUnits(referralStake?.socialReward, 18), formatUnits(pendingSocialReward, 18))
+      setPendingSocialReward(pendingSocialReward)
       setBondRewardLocked(referralBond?.bondRewardLocked)
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)

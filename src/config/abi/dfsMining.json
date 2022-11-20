@@ -85,11 +85,6 @@
       },
       {
         "internalType": "uint256",
-        "name": "pendingSocialReward",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
         "name": "lastSocialRewardWithdraw",
         "type": "uint256"
       },
@@ -188,7 +183,7 @@
   },
   {
     "inputs": [],
-    "name": "distributeSavingReward",
+    "name": "distributeSavingInterest",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -612,11 +607,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_dfs",
+        "name": "_database",
         "type": "address"
       }
     ],
-    "name": "setDFSAddress",
+    "name": "setDatabase",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -625,11 +620,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_database",
+        "name": "_dfs",
         "type": "address"
       }
     ],
-    "name": "setDatabase",
+    "name": "setDfsAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
