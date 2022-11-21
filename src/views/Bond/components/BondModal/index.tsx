@@ -130,6 +130,7 @@ const BondModal: React.FC<BondModalProps> = ({
     })
 
     if (account) {
+      bond.addressToReferral(account).then((res) => setBondVested(res.bondVested))
       bond
         .pendingPayoutFor()
         .then((res) => {
@@ -138,9 +139,9 @@ const BondModal: React.FC<BondModalProps> = ({
         })
         .catch((error) => console.log(error))
       bond.payoutOf(account).then((res) => setBondPayout(res))
-      bond.vestedOf().then((res) => {
-        setBondVested(res)
-      })
+      // bond.vestedOf().then((res) => {
+      //   setBondVested(res)
+      // })
     }
     pair.getReserves().then((reserves: any) => {
       const [numerator, denominator] =
@@ -361,7 +362,7 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem>
         <ListItem>
           <ListLable>{t('Payout')}</ListLable>
-          <ListContent>{formatBigNumber(bondPayout.sub(bondVested).sub(pendingPayout), 18)} DFS</ListContent>
+          <ListContent>{formatBigNumber(bondPayout.sub(bondVested), 18)} DFS</ListContent>
         </ListItem>
         {pdfsBalance.gt(0) && (
           <ListItem>
