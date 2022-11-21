@@ -89,7 +89,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [pendingPayout, setPendingPayout] = useState<BigNumber>(BigNumber.from(0))
   const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
-  const [bondVested, setBondVested] = useState<BigNumber>(BigNumber.from(0))
+  const [bondUsed, setBondUsed] = useState<BigNumber>(BigNumber.from(0))
   const [refresh, setRefresh] = useState<boolean>(false)
 
   const inputRef = useRef<HTMLInputElement>()
@@ -131,8 +131,8 @@ const BondModal: React.FC<BondModalProps> = ({
 
     if (account) {
       bond.addressToReferral(account).then((res) => {
-        console.log('res.bondVested:', formatUnits(res.bondVested, 18))
-        setBondVested(res.bondVested)
+        console.log('res.bondUsed:', formatUnits(res.bondUsed, 18))
+        setBondUsed(res.bondUsed)
       })
       bond
         .pendingPayoutFor()
@@ -143,7 +143,7 @@ const BondModal: React.FC<BondModalProps> = ({
         .catch((error) => console.log(error))
       bond.payoutOf(account).then((res) => setBondPayout(res))
       // bond.vestedOf().then((res) => {
-      //   setBondVested(res)
+      //   setBondUsed(res)
       // })
     }
     pair.getReserves().then((reserves: any) => {
@@ -365,7 +365,7 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem>
         <ListItem>
           <ListLable>{t('Payout')}</ListLable>
-          <ListContent>{formatBigNumber(bondPayout.sub(bondVested), 18)} DFS</ListContent>
+          <ListContent>{formatBigNumber(bondPayout.sub(bondUsed), 18)} DFS</ListContent>
         </ListItem>
         {pdfsBalance.gt(0) && (
           <ListItem>
