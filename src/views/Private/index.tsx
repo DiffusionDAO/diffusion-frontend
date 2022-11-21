@@ -96,6 +96,15 @@ const Private = () => {
   const [s6, setS6] = useState<number>(0)
   const [s7, setS7] = useState<number>(0)
   const [s8, setS8] = useState<number>(0)
+
+  const [level0Staked, setLevel0Staked] = useState<BigNumber>(BigNumber.from(0))
+  const [level1Staked, setLevel1Staked] = useState<BigNumber>(BigNumber.from(0))
+  const [level2Staked, setLevel2Staked] = useState<BigNumber>(BigNumber.from(0))
+  const [level3Staked, setLevel3Staked] = useState<BigNumber>(BigNumber.from(0))
+  const [level4Staked, setLevel4Staked] = useState<BigNumber>(BigNumber.from(0))
+  const [level5Staked, setLevel5Staked] = useState<BigNumber>(BigNumber.from(0))
+  const [level6Staked, setLevel6Staked] = useState<BigNumber>(BigNumber.from(0))
+
   const [stakers, setStakers] = useState<string[]>([])
   const [totalPayout, setTotalPayout] = useState<BigNumber>(BigNumber.from(0))
   const [totalBondVested, setTotalBondVested] = useState<BigNumber>(BigNumber.from(0))
@@ -142,6 +151,14 @@ const Private = () => {
         setS8(s8 + 1)
       }
     })
+
+    setLevel0Staked(await dfsMining.level0Staked())
+    setLevel1Staked(await dfsMining.level1Staked())
+    setLevel2Staked(await dfsMining.level2Staked())
+    setLevel3Staked(await dfsMining.level3Staked())
+    setLevel4Staked(await dfsMining.level4Staked())
+    setLevel5Staked(await dfsMining.level5Staked())
+    setLevel6Staked(await dfsMining.level6Staked())
 
     const totalPayout = await bond.totalPayout()
     setTotalPayout(totalPayout)
@@ -221,20 +238,27 @@ const Private = () => {
       <br />
       <span>零钱罐质押DFS:{formatUnits(totalStakedSavings, 18)}</span>
       <br />
-      <span>系统内总质押NFT:{}</span>
+      <span>系统内总质押NFT:</span>
+      <span>智者碎片:{level0Staked.toNumber()} </span>
+      <span>智者:{level1Staked.toNumber()} </span>
+      <span>金色智者:{level2Staked.toNumber()} </span>
+      <span>将军:{level3Staked.toNumber()} </span>
+      <span>金色将军:{level4Staked.toNumber()} </span>
+      <span>议员:{level5Staked.toNumber()} </span>
+      <span>皇冠议员:{level6Staked.toNumber()} </span>
       <br />
       <span>生态总用户数:{stakers.length}</span>
       <br />
       <span>生态不同等级人数:</span>
-      <span>s0: {s0}</span>
-      <span>s1: {s1}</span>
-      <span>s2: {s2}</span>
-      <span>s3: {s3}</span>
-      <span>s4: {s4}</span>
-      <span>s5: {s5}</span>
-      <span>s6: {s6}</span>
-      <span>s7: {s7}</span>
-      <span>s8: {s8}</span>
+      <span>s0: {s0} </span>
+      <span>s1: {s1} </span>
+      <span>s2: {s2} </span>
+      <span>s3: {s3} </span>
+      <span>s4: {s4} </span>
+      <span>s5: {s5} </span>
+      <span>s6: {s6} </span>
+      <span>s7: {s7} </span>
+      <span>s8: {s8} </span>
       <br />
       <span>DFS奖励池已发放:</span>
       <span>{formatUnits(withdrawedSavingReward.add(withdrawedSocialReward))}</span>

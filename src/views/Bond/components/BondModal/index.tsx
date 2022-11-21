@@ -139,7 +139,6 @@ const BondModal: React.FC<BondModalProps> = ({
         .catch((error) => console.log(error))
       bond.payoutOf(account).then((res) => setBondPayout(res))
       bond.vestedOf().then((res) => {
-        console.log('bondVested:', formatUnits(res, 18))
         setBondVested(res)
       })
     }
@@ -354,10 +353,6 @@ const BondModal: React.FC<BondModalProps> = ({
             <ListContent>{formatUnits(pendingPayout.add(bondVested), 18)} DFS</ListContent>
           )}
         </ListItem>
-        {/* <ListItem>
-          <ListLable>{t('Max Payout')}</ListLable>
-          <ListContent>{formatBigNumber(maxPayout, 2) ?? 0} USDT</ListContent>
-        </ListItem> */}
         <ListItem>
           <ListLable>{t('Payout')}</ListLable>
           <ListContent>{formatBigNumber(bondPayout.sub(bondVested).sub(pendingPayout), 18)} DFS</ListContent>
