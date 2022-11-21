@@ -128,7 +128,13 @@ const Bond = () => {
     bond
       .terms()
       .then((res) => {
-        dfsUsdt.duration = res.vestingTerm / (24 * 3600)
+        if (res.vestingTerm / (24 * 3600) >= 1) {
+          dfsUsdt.duration = `${formatNumber(res.vestingTerm / (24 * 3600), 2)} Days`
+        } else if (res.vestingTerm / 3600 >= 1) {
+          dfsUsdt.duration = `${formatNumber(res.vestingTerm / 3600, 2)} Hours`
+        } else if (res.vestingTerm / 60 >= 1) {
+          dfsUsdt.duration = `${formatNumber(res.vestingTerm / 60, 2)} Minutes`
+        }
       })
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
@@ -221,7 +227,7 @@ const Bond = () => {
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Duration')}</CellTitle>
-                  <CellText>{item.duration} days</CellText>
+                  <CellText>{item.duration}</CellText>
                 </ContentCell>
               </BondListItemContent>
               {item.status === 'opened' ? (

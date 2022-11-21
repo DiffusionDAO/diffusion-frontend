@@ -84,7 +84,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [marketPrice, setMarketPrice] = useState<string>('0')
   const [dfsBalance, setDfsBalance] = useState<string>()
   const [minPrice, setMinPrice] = useState<BigNumber>()
-  const [vestingTerms, setVestingTerms] = useState<number>(0)
+  const [vestingTerms, setVestingTerms] = useState<string>('')
   const [payout, setPayoutFor] = useState<string>('0')
   const [pendingPayout, setPendingPayout] = useState<BigNumber>(BigNumber.from(0))
   const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
@@ -180,7 +180,13 @@ const BondModal: React.FC<BondModalProps> = ({
       .terms()
       .then((res) => {
         setMinPrice(res.minimumPrice)
-        setVestingTerms(res.vestingTerm / (24 * 3600))
+        if (res.vestingTerm / (24 * 3600) >= 1) {
+          setVestingTerms(`${formatNumber(res.vestingTerm / (24 * 3600), 2)} Days`)
+        } else if (res.vestingTerm / 3600 >= 1) {
+          setVestingTerms(`${formatNumber(res.vestingTerm / 3600, 2)} Hours`)
+        } else if (res.vestingTerm / 60 >= 1) {
+          setVestingTerms(`${formatNumber(res.vestingTerm / 60, 2)} Minutes`)
+        }
       })
       .catch((error) => console.log(error))
   }, [account, bondPrice, amount])
@@ -259,7 +265,7 @@ const BondModal: React.FC<BondModalProps> = ({
               <ToImg src={bondData?.to} />
             </ImgWrap>
             <BondName>{bondData?.name}</BondName>
-            <BondTime>{`${vestingTerms} ${t('days')}`}</BondTime>
+            <BondTime>{vestingTerms}</BondTime>
           </BondListItemHeader>
           <BondListItemContent>
             <ContentCell>
@@ -372,7 +378,7 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem>
         <ListItem>
           <ListLable>{t('Duration')}</ListLable>
-          <ListContent>{vestingTerms} Days</ListContent>
+          <ListContent>{vestingTerms}</ListContent>
         </ListItem>
       </ContentWrap>
     </StyledModal>
