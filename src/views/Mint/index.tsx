@@ -83,7 +83,7 @@ const Mint = () => {
 
   useEffect(() => {
     if (account) {
-      bond.payoutOf().then((res) => setBondPayout(res))
+      bond.payoutOf(account).then((res) => setBondPayout(res))
       DFS.balanceOf(account)
         .then((res) => {
           if (!res.eq(balance)) {
