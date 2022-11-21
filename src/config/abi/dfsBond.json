@@ -171,7 +171,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "bondVested",
+        "name": "bondUsed",
         "type": "uint256"
       },
       {
@@ -228,7 +228,7 @@
       },
       {
         "internalType": "uint32",
-        "name": "vesting",
+        "name": "vestingEnd",
         "type": "uint32"
       }
     ],
@@ -282,7 +282,7 @@
           },
           {
             "internalType": "uint32",
-            "name": "vesting",
+            "name": "vestingEnd",
             "type": "uint32"
           }
         ],
@@ -408,6 +408,19 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dfsToPairRate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -562,19 +575,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "maxPayout",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -903,6 +903,19 @@
       }
     ],
     "name": "setDfsMiningAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_rate",
+        "type": "uint256"
+      }
+    ],
+    "name": "setDfsToPairRate",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
