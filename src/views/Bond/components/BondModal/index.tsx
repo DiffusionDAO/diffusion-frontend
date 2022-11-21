@@ -360,7 +360,7 @@ const BondModal: React.FC<BondModalProps> = ({
           {activeTab === 'mint' ? (
             <ListContent>{payout ?? 0} DFS</ListContent>
           ) : (
-            <ListContent>{formatUnits(pendingPayout.add(bondVested), 18)} DFS</ListContent>
+            <ListContent>{formatUnits(pendingPayout, 18)} DFS</ListContent>
           )}
         </ListItem>
         <ListItem>
