@@ -67,7 +67,7 @@ const Mint = () => {
   const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
   const [ordinaryPrice, setOneCost] = useState<BigNumber>(BigNumber.from(0))
   const [seniorPrice, setTwoCost] = useState<BigNumber>(BigNumber.from(0))
-  const [bondVested, setBondVested] = useState<BigNumber>(BigNumber.from(0))
+  const [bondUsed, setBondUsed] = useState<BigNumber>(BigNumber.from(0))
 
   const mintContract = useNFTMintContract()
   useEffect(() => {
@@ -83,8 +83,8 @@ const Mint = () => {
 
   useEffect(() => {
     if (account) {
-      bond.addressToReferral(account).then((res) => setBondVested(res.bondUsed))
-      bond.payoutOf(account).then((res) => setBondPayout(res.sub(bondVested)))
+      bond.addressToReferral(account).then((res) => setBondUsed(res.bondUsed))
+      bond.payoutOf(account).then((res) => setBondPayout(res))
       DFS.balanceOf(account)
         .then((res) => {
           if (!res.eq(balance)) {
