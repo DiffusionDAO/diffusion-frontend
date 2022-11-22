@@ -236,7 +236,7 @@ function NftProfilePage() {
           await Promise.all(
             staked.map(async (tokenId) => {
               const token = await nftDatabase.getToken(collectionAddress, tokenId)
-              if (token.collectionAddress === dfsNFTAddress && token.owner === account) {
+              if (token.collectionAddress === dfsNFTAddress) {
                 tokens.staked.push(nftToNftToken(token, t))
               }
             }),
