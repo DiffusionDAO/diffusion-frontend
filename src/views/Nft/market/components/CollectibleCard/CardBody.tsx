@@ -18,23 +18,20 @@ const CollectibleCardBody: React.FC<React.PropsWithChildren<CollectibleCardProps
   const { t } = useTranslation()
   const { name } = nft
   const bnbBusdPrice = useBNBBusdPrice()
-  const isPancakeBunny = nft.collectionAddress?.toLowerCase() === pancakeBunniesAddress.toLowerCase()
-  const { isFetching, lowestPrice } = useGetLowestPriceFromNft(nft)
-
+  const translatedName = `${t(name.split('#')[0])}#${name.split('#')[1]}`
   return (
     <CardBody p="8px">
       <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />
       <Flex alignItems="center" justifyContent="space-between">
         {nft?.collectionName && (
           <Text fontSize="12px" color="textSubtle" mb="8px">
-            {nft?.collectionName}
+            {t(nft?.collectionName)}
           </Text>
         )}
         {nftLocation && <LocationTag nftLocation={nftLocation} />}
       </Flex>
       <div style={{ display: 'flex', justifyContent: 'space-between', height: '8px', alignItems: 'center' }}>
-        {/* <Text as="h4" fontWeight="600"> */}
-        <Text small>{name}</Text>
+        <Text small>{translatedName}</Text>
         {nft?.attributes && nft?.attributes[0].value && (
           <img alt="" src={`/images/grade/${nft.attributes[0].value}.png`} />
         )}

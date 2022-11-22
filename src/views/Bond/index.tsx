@@ -173,7 +173,7 @@ const Bond = () => {
           </OverviewCardItem>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Price of DFS')}</OverviewCardItemTitle>
-            <OverviewCardItemContent isMobile={isMobile}>${marketPrice}</OverviewCardItemContent>
+            <OverviewCardItemContent isMobile={isMobile}>${marketPrice ?? 0}</OverviewCardItemContent>
           </OverviewCardItem>
         </OverviewCard>
         {isMobile ? (

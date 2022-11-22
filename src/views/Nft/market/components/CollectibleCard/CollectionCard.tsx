@@ -3,6 +3,7 @@ import { Card, CardBody, Flex, Heading, ProfileAvatar } from '@pancakeswap/uikit
 import Image from 'next/image'
 import { NextLinkFromReactRouter } from 'components/NextLink'
 import styled, { css } from 'styled-components'
+import { useTranslation } from '@pancakeswap/localization'
 
 interface HotCollectionCardProps {
   bgSrc: string
@@ -66,6 +67,8 @@ const CollectionCard: React.FC<React.PropsWithChildren<HotCollectionCardProps>> 
   disabled,
   children,
 }) => {
+  const { t } = useTranslation()
+
   const renderBody = () => (
     <CardBody p="8px">
       <StyledImage src={bgSrc} height={180} width={556} />
@@ -85,7 +88,7 @@ const CollectionCard: React.FC<React.PropsWithChildren<HotCollectionCardProps>> 
             as="h3"
             mb={children ? '8px' : '0'}
           >
-            {collectionName}
+            {t(collectionName)}
           </Heading>
           {children}
         </Flex>

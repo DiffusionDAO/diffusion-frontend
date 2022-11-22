@@ -182,7 +182,7 @@ const BondModal: React.FC<BondModalProps> = ({
       const marketPrice = numerator / denominator
       setMarketPrice(marketPrice.toFixed(5))
     })
-  }, [account, amount, refresh])
+  }, [account, amount, refresh, activeTab])
 
   const buy = () => {
     if (!hasReferral) {

@@ -178,7 +178,7 @@ export const ListTraitFilter: React.FC<React.PropsWithChildren<ListTraitFilterPr
                 orderBy(filteredItems, orderKey, orderDir).map((filteredItem) => {
                   const handleSelect = () => handleItemSelect(filteredItem)
                   const isItemSelected = traitFilter ? traitFilter.value === filteredItem.attr.value : false
-
+                  console.log('TraitItemRow:', filteredItem)
                   return (
                     <TraitItemRow
                       key={filteredItem.label}

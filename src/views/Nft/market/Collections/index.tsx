@@ -289,7 +289,7 @@ const Collectible = () => {
                               <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${collection.address}`}>
                                 <Flex alignItems="center">
                                   <ProfileAvatar src={collection.avatar} width={48} height={48} mr="16px" />
-                                  {collection.name}
+                                  {t(collection.name)}
                                 </Flex>
                               </NextLinkFromReactRouter>
                             </Td>
