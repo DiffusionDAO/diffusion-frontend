@@ -84,7 +84,7 @@ const Mint = () => {
   useEffect(() => {
     if (account) {
       bond.addressToReferral(account).then((res) => setBondUsed(res.bondUsed))
-      bond.payoutOf(account).then((res) => setBondPayout(res))
+      bond.unusedOf(account).then((res) => setBondPayout(res))
       DFS.balanceOf(account)
         .then((res) => {
           if (!res.eq(balance)) {
@@ -229,7 +229,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Payout')}: {formatBigNumber(bondPayout, 2)} DFS
+                    {t('Unused')}: {formatBigNumber(bondPayout, 2)} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -343,7 +343,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Payout')}: {formatBigNumber(bondPayout, 2)} DFS
+                    {t('Unused')}: {formatBigNumber(bondPayout, 2)} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>

@@ -88,7 +88,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [vestingTerms, setVestingTerms] = useState<string>('')
   const [payout, setPayoutFor] = useState<string>('0')
   const [pendingPayout, setPendingPayout] = useState<BigNumber>(BigNumber.from(0))
-  const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
+  const [bondUnused, setBondUnused] = useState<BigNumber>(BigNumber.from(0))
   const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
   const [bondUsed, setBondUsed] = useState<BigNumber>(BigNumber.from(0))
   const [refresh, setRefresh] = useState<boolean>(false)
@@ -172,7 +172,7 @@ const BondModal: React.FC<BondModalProps> = ({
           setPendingPayout(res)
         })
         .catch((error) => console.log(error))
-      bond.payoutOf(account).then((res) => setBondPayout(res))
+      bond.unusedOf(account).then((res) => setBondUnused(res))
 
       dfs
         .balanceOf(account)
@@ -364,8 +364,8 @@ const BondModal: React.FC<BondModalProps> = ({
           )}
         </ListItem>
         <ListItem>
-          <ListLable>{t('Payout')}</ListLable>
-          <ListContent>{formatBigNumber(bondPayout, 18)} DFS</ListContent>
+          <ListLable>{t('Unused')}</ListLable>
+          <ListContent>{formatBigNumber(bondUnused, 18)} DFS</ListContent>
         </ListItem>
         {pdfsBalance.gt(0) && (
           <ListItem>
