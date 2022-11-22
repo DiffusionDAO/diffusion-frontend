@@ -483,7 +483,7 @@ function NftProfilePage() {
             </BackgroundTitle>
             <BackgroundDes>
               {t(
-                'This is your digital asset treasure silo, stake or combine NFTs to explore more possibilities where you can obtain more fulfilling rewards',
+                'This is your digital asset treasure silo, stake or compose NFTs to explore more possibilities where you can obtain more fulfilling rewards',
               )}
             </BackgroundDes>
           </BackgroundText>
