@@ -710,25 +710,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_recipient",
-        "type": "address"
-      }
-    ],
-    "name": "payoutOf",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "payout",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "pdfs",
     "outputs": [
@@ -1141,6 +1122,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      }
+    ],
+    "name": "unusedOf",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "payout",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "usdt",
     "outputs": [
@@ -1155,7 +1155,7 @@
   },
   {
     "inputs": [],
-    "name": "vestedOf",
+    "name": "usedOf",
     "outputs": [
       {
         "internalType": "uint256",
