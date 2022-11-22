@@ -240,7 +240,7 @@ export const CellTitle = styled.div`
   align-items: center;
 `
 export const CellText = styled.div`
-  font-size: 20px;
+  font-size: 18px;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   color: #ffffff;

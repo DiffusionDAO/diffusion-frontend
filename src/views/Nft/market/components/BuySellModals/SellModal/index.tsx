@@ -208,11 +208,22 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
         return transactionResponse
       }
       if (stage === SellingStage.CONFIRM_TRANSFER) {
-        return callWithGasPrice(collectionContractSigner, 'safeTransferFrom(address,address,uint256)', [
-          account,
-          transferAddress,
-          nftToSell.tokenId,
-        ])
+        const transactionResponse: Promise<TransactionResponse> = callWithGasPrice(
+          collectionContractSigner,
+          'safeTransferFrom(address,address,uint256)',
+          [account, transferAddress, nftToSell.tokenId],
+        )
+        transactionResponse.then((response) => {
+          response.wait().then((res) => {
+            /* eslint-disable no-param-reassign */
+            /* eslint-disable no-return-assign */
+            nftToSell.marketData.currentAskPrice = '0'
+            nftToSell.marketData.isTradable = false
+            nftToSell.marketData.currentSeller = zeroAddress
+            nftToSell.owner = transferAddress
+          })
+        })
+        return transactionResponse
       }
       const methodName = variant === 'sell' ? 'createMarketItemByERC20' : 'adjustPrice'
       const askPrice = parseUnits(price)

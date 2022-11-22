@@ -87,15 +87,6 @@ const Private = () => {
   const [runway, setRunway] = useState<number>(0)
   const [savingInterestEpochLength, setSavingInterestEpochLength] = useState<number>(1)
   const [dfsBalance, setDfsBalance] = useState<BigNumber>(BigNumber.from(0))
-  const [s0, setS0] = useState<number>(0)
-  const [s1, setS1] = useState<number>(0)
-  const [s2, setS2] = useState<number>(0)
-  const [s3, setS3] = useState<number>(0)
-  const [s4, setS4] = useState<number>(0)
-  const [s5, setS5] = useState<number>(0)
-  const [s6, setS6] = useState<number>(0)
-  const [s7, setS7] = useState<number>(0)
-  const [s8, setS8] = useState<number>(0)
 
   const [level0Staked, setLevel0Staked] = useState<BigNumber>(BigNumber.from(0))
   const [level1Staked, setLevel1Staked] = useState<BigNumber>(BigNumber.from(0))
@@ -122,33 +113,40 @@ const Private = () => {
   const rewardExcludeWithdrawed = dfsRewardBalance
     .sub(withdrawedSavingReward.add(withdrawedSocialReward))
     .sub(totalStakedSavings)
-  const totalReward = dfsRewardBalance.sub(totalStakedSavings).sub(withdrawedSavingReward.add(withdrawedSocialReward))
+  const totalReward = dfsRewardBalance.sub(totalPayout).sub(withdrawedSavingReward.add(withdrawedSocialReward))
   const spos = totalPower.toNumber() / 100
 
   const refresh = async () => {
+    const totalLevelCount = { s0: 0, s1: 0, s2: 0, s3: 0, s4: 0, s5: 0, s6: 0, s7: 0, s8: 0, bondUsed: 0 }
     const stakers = await dfsMining.getStakers()
     setStakers(stakers)
-    stakers.map(async (staker) => {
-      const referral = await dfsMining.addressToReferral(staker)
-      const level = referral.level
-      if (level === 0) {
-        setS0(s0 + 1)
-      } else if (level === 1) {
-        setS1(s1 + 1)
-      } else if (level === 2) {
-        setS2(s2 + 1)
-      } else if (level === 3) {
-        setS3(s3 + 1)
-      } else if (level === 4) {
-        setS4(s4 + 1)
-      } else if (level === 5) {
-        setS5(s5 + 1)
-      } else if (level === 6) {
-        setS6(s6 + 1)
-      } else if (level === 7) {
-        setS7(s7 + 1)
-      } else if (level === 8) {
-        setS8(s8 + 1)
+    const levelCount = await Promise.all(
+      stakers.map(async (staker) => {
+        const referral = await bond.addressToReferral(staker)
+        const level = referral.level
+        return { level: level.toNumber(), bondUsed: referral.bondUsed }
+      }),
+    )
+
+    levelCount.map((l) => {
+      totalLevelCount.bondUsed += l.bondUsed
+      switch (l.level) {
+        case 0:
+          return totalLevelCount.s0++
+        case 1:
+          return totalLevelCount.s1++
+        case 2:
+          return totalLevelCount.s2++
+        case 3:
+          return totalLevelCount.s3++
+        case 4:
+          return totalLevelCount.s4++
+        case 5:
+          return totalLevelCount.s5++
+        case 6:
+          return totalLevelCount.s6++
+        default:
+          return 0
       }
     })
 
@@ -172,7 +170,7 @@ const Private = () => {
     const savingInterestEpochLength = await dfsMining.savingInterestEpochLength()
     setSavingInterestEpochLength(savingInterestEpochLength)
 
-    const dfsRewardBalance = await dfs.balanceOf(dfsMineAddress)
+    const dfsRewardBalance = await dfs.balanceOf(bond.address)
     setDfsRewardBalance(dfsRewardBalance)
 
     const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
@@ -186,8 +184,10 @@ const Private = () => {
     setTotalSocialReward(await dfsMining.totalSocialReward())
     setTotalPower(await dfsMining.totalPower())
     setTotalStakedSavings(await dfsMining.totalStakedSavings())
+
+    return totalLevelCount
   }
-  const { mutate: refreshMutate } = useSWR('refresh', refresh)
+  const { data, mutate: refreshMutate } = useSWR('refresh', refresh)
   useEffect(() => {
     refreshMutate(refresh())
   }, [account, runway])
@@ -250,15 +250,15 @@ const Private = () => {
       <span>生态总用户数:{stakers.length}</span>
       <br />
       <span>生态不同等级人数:</span>
-      <span>s0: {s0} </span>
-      <span>s1: {s1} </span>
-      <span>s2: {s2} </span>
-      <span>s3: {s3} </span>
-      <span>s4: {s4} </span>
-      <span>s5: {s5} </span>
-      <span>s6: {s6} </span>
-      <span>s7: {s7} </span>
-      <span>s8: {s8} </span>
+      <span>s0: {data?.s0} </span>
+      <span>s1: {data?.s1} </span>
+      <span>s2: {data?.s2} </span>
+      <span>s3: {data?.s3} </span>
+      <span>s4: {data?.s4} </span>
+      <span>s5: {data?.s5} </span>
+      <span>s6: {data?.s6} </span>
+      <span>s7: {data?.s7} </span>
+      <span>s8: {data?.s8} </span>
       <br />
       <span>DFS奖励池已发放:</span>
       <span>{formatUnits(withdrawedSavingReward.add(withdrawedSocialReward))}</span>

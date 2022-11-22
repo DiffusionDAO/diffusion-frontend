@@ -144,7 +144,6 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
                     const receipt = await dfsContract.approve(dfsMineContract.address, MaxUint256)
                     await receipt.wait()
                   }
-                  console.log('unstakeNFT:', nft?.collectionAddress, nft?.tokenId)
                   const receipt = await dfsMineContract.unstakeNFT(nft?.collectionAddress, nft?.tokenId)
                   await receipt.wait()
                   router.push(`/profile/${account}`)

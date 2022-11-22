@@ -13,7 +13,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useDFSContract, useERC20, useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
-import { NFT } from 'pages/profile/[accountAddress]'
+import { NFT, zeroAddress } from 'pages/profile/[accountAddress]'
 import { useEffect, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDFSAddress } from 'utils/addressHelpers'
@@ -61,11 +61,10 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
 
   // useEffect(() => {
   //   dfsContract.allowance(account, nftMarketContract.address).then(allowance => {
-  //     if (allowance.eq(0)) {
-  //       dfsContract.approve(nftMarketContract.address, MaxUint256).then(res => {
-  //       })
-  //     }
-  //   }).catch(error => console.log(error))
+  //     if (allowance.lt(parseUnits(nftToBuy.marketData.currentAskPrice,"ether"))) {
+  //         callWithGasPrice(dfsContractApprover, 'approve', [nftMarketContract.address, MaxUint256])
+  //       }
+  //     }).catch(error => console.log(error.reason))
   // }, [account])
 
   const { toastSuccess } = useToast()
@@ -106,21 +105,24 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
     },
     onConfirm: () => {
       /* eslint-disable no-param-reassign */
-
-      // const payAmount = Number.isNaN(nftPrice) ? Zero : parseUnits(nftToBuy?.marketData?.currentAskPrice)
       const transactionResponse: Promise<TransactionResponse> = callWithGasPrice(
         nftMarketContract,
         'createMarketSaleByERC20',
         [nftToBuy.itemId],
       )
-      transactionResponse.then((response) => {
-        response.wait().then((res) => {
-          database.getToken(nftToBuy.collectionAddress, nftToBuy.tokenId).then((nft: NFT) => {
-            nftToBuy.marketData.isTradable = false
-            nftToBuy.marketData.currentSeller = account
+      transactionResponse
+        .then((response) => {
+          response.wait().then((res) => {
+            database.getToken(nftToBuy.collectionAddress, nftToBuy.tokenId).then((nft: NFT) => {
+              nftToBuy.owner = nft.owner
+              nftToBuy.marketData.isTradable = false
+              nftToBuy.marketData.currentAskPrice = '0'
+              nftToBuy.marketData.currentSeller = nft.seller
+            })
           })
         })
-      })
+        .catch((error) => console.log(error.reason))
+
       return transactionResponse
     },
     onSuccess: async ({ receipt }) => {
@@ -137,7 +139,18 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
     if (paymentCurrency === PaymentCurrency.WBNB && !isApproved) {
       setStage(BuyingStage.APPROVE_AND_CONFIRM)
     } else {
-      setStage(BuyingStage.CONFIRM)
+      dfsContract
+        .allowance(account, nftMarketContract.address)
+        .then((allowance) => {
+          if (allowance.lt(nftPriceWei)) {
+            callWithGasPrice(dfsContractApprover, 'approve', [nftMarketContract.address, MaxUint256]).then((res) =>
+              setStage(BuyingStage.CONFIRM),
+            )
+          } else {
+            setStage(BuyingStage.CONFIRM)
+          }
+        })
+        .catch((error) => console.log(error.reason))
     }
   }
 

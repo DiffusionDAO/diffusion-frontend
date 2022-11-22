@@ -125,6 +125,19 @@ const BondModal: React.FC<BondModalProps> = ({
   }, [inputRef])
 
   useEffect(() => {
+    bond
+      .terms()
+      .then((res) => {
+        setMinPrice(res.minimumPrice)
+        if (res.vestingTerm / (24 * 3600) >= 1) {
+          setVestingTerms(`${formatNumber(res.vestingTerm / (24 * 3600), 2)} Days`)
+        } else if (res.vestingTerm / 3600 >= 1) {
+          setVestingTerms(`${formatNumber(res.vestingTerm / 3600, 2)} Hours`)
+        } else if (res.vestingTerm / 60 >= 1) {
+          setVestingTerms(`${formatNumber(res.vestingTerm / 60, 2)} Minutes`)
+        }
+      })
+      .catch((error) => console.log(error))
     bond.getPriceInUSDT().then((res) => {
       setBondPrice(formatBigNumber(res.mul(100 - bondData.discount).div(100), 5))
     })
@@ -142,17 +155,6 @@ const BondModal: React.FC<BondModalProps> = ({
         })
         .catch((error) => console.log(error))
       bond.payoutOf(account).then((res) => setBondPayout(res))
-    }
-    pair.getReserves().then((reserves: any) => {
-      const [numerator, denominator] =
-        usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
-      const marketPrice = numerator / denominator
-      setMarketPrice(marketPrice.toFixed(5))
-    })
-  }, [account, amount, refresh])
-
-  useEffect(() => {
-    if (account) {
       bond
         .parent(account)
         .then((res) => {
@@ -174,23 +176,13 @@ const BondModal: React.FC<BondModalProps> = ({
         setPdfsBalance(res.balance)
       })
     }
-  }, [account])
-
-  useEffect(() => {
-    bond
-      .terms()
-      .then((res) => {
-        setMinPrice(res.minimumPrice)
-        if (res.vestingTerm / (24 * 3600) >= 1) {
-          setVestingTerms(`${formatNumber(res.vestingTerm / (24 * 3600), 2)} Days`)
-        } else if (res.vestingTerm / 3600 >= 1) {
-          setVestingTerms(`${formatNumber(res.vestingTerm / 3600, 2)} Hours`)
-        } else if (res.vestingTerm / 60 >= 1) {
-          setVestingTerms(`${formatNumber(res.vestingTerm / 60, 2)} Minutes`)
-        }
-      })
-      .catch((error) => console.log(error))
-  }, [account, bondPrice, amount])
+    pair.getReserves().then((reserves: any) => {
+      const [numerator, denominator] =
+        usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+      const marketPrice = numerator / denominator
+      setMarketPrice(marketPrice.toFixed(5))
+    })
+  }, [account, amount, refresh])
 
   const buy = () => {
     if (!hasReferral) {
@@ -233,11 +225,14 @@ const BondModal: React.FC<BondModalProps> = ({
       okText: t('Continue'),
       okType: 'danger',
       cancelText: t('Go to Mint'),
-      onOk() {
-        bond
-          .redeem()
-          .then((res) => setRefresh(true))
-          .catch((error) => window.alert(error.reason ?? error.data?.message ?? error.message))
+      async onOk() {
+        try {
+          const receipt = await bond.redeem()
+          await receipt.wait()
+          setRefresh(true)
+        } catch (error: any) {
+          window.alert(error.reason ?? error.data?.message ?? error.message)
+        }
       },
       onCancel() {
         router.push(`/mint`)

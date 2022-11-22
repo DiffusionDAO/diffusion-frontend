@@ -334,7 +334,7 @@ const Reward = () => {
                 <ExtractBtn
                   onClick={async () => {
                     try {
-                      const receipt = await dfsMining.withdrawBondReward()
+                      const receipt = await bond.withdrawBondReward()
                       await receipt.wait()
                       setRefresh(true)
                     } catch (error: any) {
