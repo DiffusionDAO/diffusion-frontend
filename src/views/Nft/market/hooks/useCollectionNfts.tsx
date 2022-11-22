@@ -150,7 +150,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
           name = `StarLight#${tokenId}`
         } else if (collectionAddress === dfsNFTAddress) {
           thumbnail = `/images/nfts/socialnft/${level}`
-          name = `${levelToName[level]}#${tokenId}`
+          name = `${t(levelToName[level])}#${tokenId}`
         }
         const token = {
           tokenId: tokenIdString,
@@ -162,13 +162,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
             original: 'string',
             thumbnail,
           },
-          attributes: [
-            {
-              traitType: 'SPOS',
-              value: levelToSPOS[level],
-              displayType: '',
-            },
-          ],
+          attributes: [{ traitType: 'SPOS', value: levelToSPOS[level], displayType: '' }],
           createdAt: '',
           updatedAt: '',
           location: NftLocation.FORSALE,

@@ -173,7 +173,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
                     {nft?.collectionName}
                   </CollectionLink>
                   <Text fontSize="32px" bold mt="12px">
-                    {nft?.name}
+                    {t(`${nft?.name}#%tokenId%`, { tokenId: nft?.tokenId })}
                   </Text>
                   <Text color="textSubtle" mt={['16px', '16px', '48px']}>
                     {t('Price')}

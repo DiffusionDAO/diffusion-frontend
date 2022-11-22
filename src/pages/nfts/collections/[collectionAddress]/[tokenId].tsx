@@ -8,7 +8,7 @@ import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers
 import { getContract } from 'utils/contractHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { formatBigNumber } from 'utils/formatBalance'
-import { CollectionData, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
+import { CollectionData, levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 
 const IndividualNFTPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -65,7 +65,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     tokenId,
     collectionAddress,
     collectionName: nft.collectionName,
-    name: nft.collectionName,
+    name: levelToName[level],
     description: nft.collectionName,
     image: { original: 'string', thumbnail },
     attributes: [

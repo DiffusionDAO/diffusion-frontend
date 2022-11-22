@@ -124,13 +124,12 @@ export const levelToSPOS = {
   },
 }
 export const nftToNftToken = (nft: NFT, t) => {
-  const tokenIdString = nft?.tokenId?.toString()
+  const tokenId = nft?.tokenId?.toString()
   const level = nft?.level?.toString()
-  const translatedName = t(levelToName[level])
+  const translatedName = `${t(levelToName[level])}#${tokenId}`
   const token = {
-    tokenId: tokenIdString,
-    name: `${translatedName}#${tokenIdString}`,
-    description: levelToSPOS[level].description,
+    tokenId,
+    name: translatedName,
     collectionName: nft.collectionName,
     collectionAddress: nft.collectionAddress,
     image: {
@@ -144,7 +143,6 @@ export const nftToNftToken = (nft: NFT, t) => {
         displayType: '',
       },
       {
-        description: levelToSPOS[level].description,
         traitType: 'SPOS',
         value: levelToSPOS[level].validSPOS,
         displayType: '',
@@ -154,9 +152,9 @@ export const nftToNftToken = (nft: NFT, t) => {
     updatedAt: '',
     location: NftLocation.FORSALE,
     marketData: {
-      tokenId: tokenIdString,
+      tokenId,
       collection: {
-        id: tokenIdString,
+        id: tokenId,
       },
       currentAskPrice: formatBigNumber(nft?.price, 3),
       currentSeller: nft?.seller,

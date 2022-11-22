@@ -10,7 +10,7 @@ import { NftToken } from 'state/nftMarket/types'
 import { useNFTDatabaseContract } from 'hooks/useContract'
 import { formatBigNumber } from 'utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { levelToSPOS } from 'pages/profile/[accountAddress]'
+import { levelToName, levelToSPOS } from 'pages/profile/[accountAddress]'
 
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
@@ -63,7 +63,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
         tokenId,
         collectionAddress,
         collectionName: t(res.collectionName),
-        name: t(res.collectionName),
+        name: `${t(levelToName[res.level])}#${tokenId}`,
         description: t(res.collectionNamet),
         image: { original: 'string', thumbnail },
         attributes: [
