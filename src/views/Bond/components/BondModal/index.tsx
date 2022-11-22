@@ -19,6 +19,7 @@ import { MaxUint256 } from '@ethersproject/constants'
 import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import { escapeRegExp } from 'utils'
+import { useRouterContract } from 'utils/exchange'
 
 import {
   StyledModal,
@@ -117,12 +118,29 @@ const BondModal: React.FC<BondModalProps> = ({
   const pairAddress = getPairAddress()
   const pair = usePairContract(pairAddress)
   const bond = useBondContract()
+  const pancakeRouter = useRouterContract()
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
     }
   }, [inputRef])
+
+  useEffect(() => {
+    if (account) {
+      bond
+        .parent(account)
+        .then((res) => {
+          if (res !== zeroAddress) {
+            setHasReferral(true)
+            setReferral(res)
+          } else {
+            setHasReferral(false)
+          }
+        })
+        .catch((error) => console.log(error))
+    }
+  }, [account])
 
   useEffect(() => {
     bond
@@ -155,17 +173,7 @@ const BondModal: React.FC<BondModalProps> = ({
         })
         .catch((error) => console.log(error))
       bond.payoutOf(account).then((res) => setBondPayout(res))
-      bond
-        .parent(account)
-        .then((res) => {
-          if (res !== zeroAddress) {
-            setHasReferral(true)
-            setReferral(res)
-          } else {
-            setHasReferral(false)
-          }
-        })
-        .catch((error) => console.log(error))
+
       dfs
         .balanceOf(account)
         .then((res) => {
@@ -187,7 +195,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const buy = () => {
     if (!hasReferral) {
       confirm({
-        title: t('You will not be able to set referral next time'),
+        title: t('You have to set referral for the first time'),
         icon: <ExclamationCircleOutlined />,
         okText: t('Confirm'),
         okType: 'danger',
