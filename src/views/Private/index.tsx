@@ -78,7 +78,7 @@ const Private = () => {
   const [totalStakedSavings, setTotalStakedSavings] = useState<BigNumber>(BigNumber.from(0))
   const [savingRewardEpoch, setSavingRewardEpoch] = useState<any>({})
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
-  const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
+  // const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardInterest, setSocialRewardInterest] = useState<number>(0)
   const [savingRewardInterest, setSavingRewardInterest] = useState<number>(0)
   const [dfsRewardBalance, setDfsRewardBalance] = useState<BigNumber>(BigNumber.from(0))
@@ -110,45 +110,74 @@ const Private = () => {
 
   const n = (24 * 3600) / savingInterestEpochLength
 
-  const rewardExcludeWithdrawed = dfsRewardBalance
+  let totalPendingSocialReward = BigNumber.from(0)
+  let totalPendingSavingInterest = BigNumber.from(0)
+  let totalBondUsed = BigNumber.from(0)
+  let totalSocialReward = BigNumber.from(0)
+  let totalSavingInterest = BigNumber.from(0)
+
+  const totalReward = dfsRewardBalance
+    .sub(totalBondUsed)
     .sub(withdrawedSavingReward.add(withdrawedSocialReward))
-    .sub(totalStakedSavings)
-  const totalReward = dfsRewardBalance.sub(totalPayout).sub(withdrawedSavingReward.add(withdrawedSocialReward))
+    .sub(totalSocialReward.add(totalPendingSocialReward))
+    .sub(totalSavingInterest.add(totalPendingSavingInterest))
+
   const spos = totalPower.toNumber() / 100
 
   const refresh = async () => {
-    const totalLevelCount = { s0: 0, s1: 0, s2: 0, s3: 0, s4: 0, s5: 0, s6: 0, s7: 0, s8: 0, bondUsed: 0 }
-    const stakers = await dfsMining.getStakers()
-    setStakers(stakers)
-    const levelCount = await Promise.all(
-      stakers.map(async (staker) => {
-        const referral = await bond.addressToReferral(staker)
-        const level = referral.level
-        return { level: level.toNumber(), bondUsed: referral.bondUsed }
+    const totalLevelCount = {
+      s0: 0,
+      s1: 0,
+      s2: 0,
+      s3: 0,
+      s4: 0,
+      s5: 0,
+      s6: 0,
+      s7: 0,
+      s8: 0,
+      bondUsed: 0,
+      socialReward: 0,
+      savingInterest: 0,
+    }
+    const buyers = await bond.getBuyers()
+    await Promise.all(
+      buyers.map(async (buyer) => {
+        const referralBond = await bond.addressToReferral(buyer)
+        totalBondUsed = totalBondUsed.add(referralBond.bondUsed)
       }),
     )
+    const stakers = await dfsMining.getStakers()
+    setStakers(stakers)
 
-    levelCount.map((l) => {
-      totalLevelCount.bondUsed += l.bondUsed
-      switch (l.level) {
-        case 0:
-          return totalLevelCount.s0++
-        case 1:
-          return totalLevelCount.s1++
-        case 2:
-          return totalLevelCount.s2++
-        case 3:
-          return totalLevelCount.s3++
-        case 4:
-          return totalLevelCount.s4++
-        case 5:
-          return totalLevelCount.s5++
-        case 6:
-          return totalLevelCount.s6++
-        default:
-          return 0
-      }
-    })
+    await Promise.all(
+      stakers.map(async (staker) => {
+        totalPendingSocialReward = totalPendingSocialReward.add(await dfsMining.pendingSocialReward(staker))
+        totalPendingSavingInterest = totalPendingSavingInterest.add(await dfsMining.pendingSavingInterest(staker))
+
+        const referralStake = await dfsMining.addressToReferral(staker)
+        const level = referralStake.level
+        totalSocialReward = totalSocialReward.add(referralStake?.socialReward)
+        totalSavingInterest = totalSavingInterest.add(referralStake?.savingInterest)
+        switch (level.toNumber()) {
+          case 0:
+            return totalLevelCount.s0++
+          case 1:
+            return totalLevelCount.s1++
+          case 2:
+            return totalLevelCount.s2++
+          case 3:
+            return totalLevelCount.s3++
+          case 4:
+            return totalLevelCount.s4++
+          case 5:
+            return totalLevelCount.s5++
+          case 6:
+            return totalLevelCount.s6++
+          default:
+            return 0
+        }
+      }),
+    )
 
     setLevel0Staked(await dfsMining.level0Staked())
     setLevel1Staked(await dfsMining.level1Staked())
@@ -181,7 +210,7 @@ const Private = () => {
 
     setSocialRewardInterest((await dfsMining.socialRewardInterest()).toNumber())
     setSavingRewardInterest((await dfsMining.savingRewardInterest()).toNumber())
-    setTotalSocialReward(await dfsMining.totalSocialReward())
+    // setTotalSocialReward(await dfsMining.totalSocialReward())
     setTotalPower(await dfsMining.totalPower())
     setTotalStakedSavings(await dfsMining.totalStakedSavings())
 
@@ -214,6 +243,9 @@ const Private = () => {
     <StyledModal width={500} style={{ color: 'white' }} className="no-header" open closable maskClosable footer={[]}>
       <span>DFS奖励池总余额:{formatUnits(totalReward)}</span>
       <br />
+      <span>DFS奖励池已领取:</span>
+      <span>{formatUnits(withdrawedSavingReward.add(withdrawedSocialReward))}</span>
+      <br />
       <span>社交奖励总余额:</span>
       <span>{parseFloat(formatUnits(totalReward)) * 0.95}</span>
       <br />
@@ -224,15 +256,15 @@ const Private = () => {
       <br />
       <span>payout余额:{formatUnits(totalPayout.sub(totalBondVested), 18)}</span>
       <br />
-      <span>payout已释放:{formatUnits(totalBondVested, 18)}</span>
+      <span>payout已使用:{formatUnits(totalBondUsed, 18)}</span>
       <br />
-      <span>社交奖励已发放部分:{formatUnits(withdrawedSocialReward, 18)}</span>
+      <span>社交奖励已领取部分:{formatUnits(withdrawedSocialReward, 18)}</span>
       <br />
-      <span>社交奖励未发放部分:{formatUnits(totalReward.mul(95).div(100).sub(withdrawedSocialReward), 18)}</span>
+      <span>社交奖励未领取部分:{formatUnits(totalReward.mul(95).div(100).sub(withdrawedSocialReward), 18)}</span>
       <br />
-      <span>零钱罐已发放部分:{formatUnits(withdrawedSavingReward, 18)}</span>
+      <span>零钱罐已领取部分:{formatUnits(withdrawedSavingReward, 18)}</span>
       <br />
-      <span>零钱罐未发放部分:{formatUnits(totalReward.mul(5).div(100).sub(withdrawedSavingReward), 18)}</span>
+      <span>零钱罐未领取部分:{formatUnits(totalReward.mul(5).div(100).sub(withdrawedSavingReward), 18)}</span>
       <br />
       <span>总Spos值:{totalPower.toNumber() / 100}</span>
       <br />
@@ -260,9 +292,7 @@ const Private = () => {
       <span>s7: {data?.s7} </span>
       <span>s8: {data?.s8} </span>
       <br />
-      <span>DFS奖励池已发放:</span>
-      <span>{formatUnits(withdrawedSavingReward.add(withdrawedSocialReward))}</span>
-      <br />
+
       <span>总SPOS:</span>
       <span>{spos}</span>
       <br />
@@ -278,18 +308,13 @@ const Private = () => {
       />
       <span>SPOS建议利率:</span>
       <span>
-        {runway &&
-          runway !== 0 &&
-          spos !== 0 &&
-          parseFloat(formatUnits(rewardExcludeWithdrawed.div(runway * spos))) * 95 * 100}
-        %
+        {runway && runway !== 0 && spos !== 0 && (parseFloat(formatUnits(totalReward)) * 95) / (runway * spos)}%
       </span>
       <span>零钱罐建议利率:</span>
       <span>
         {runway &&
           runway !== 0 &&
-          (parseFloat(formatUnits(rewardExcludeWithdrawed, 18)) * 5) /
-            (n * runway * parseFloat(formatUnits(totalStakedSavings)))}
+          (parseFloat(formatUnits(totalReward, 18)) * 5) / (n * runway * parseFloat(formatUnits(totalStakedSavings)))}
         %
       </span>
       <ContentWrap>

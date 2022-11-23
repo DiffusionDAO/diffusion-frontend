@@ -394,7 +394,7 @@ const Reward = () => {
                           <MySposDashboardValue className="alignLeft" style={{ color: '#00FFEE' }}>
                             {greenPower ?? '0'}
                           </MySposDashboardValue>
-                          <MySposDashboardDes className="alignLeft">{t('Unlocked SPOS')}</MySposDashboardDes>
+                          <MySposDashboardDes className="alignLeft">{t('SPOS')}</MySposDashboardDes>
                         </MySposDashboardItem>
                         <MySposDashboardItem onClick={() => setActiveItem(2)}>
                           {activeItem === 2 ? (
