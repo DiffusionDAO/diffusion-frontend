@@ -328,15 +328,15 @@ export const tooltipInfoMessages = () => {
     nine: `The ratio of the difference between the current target market price and the intrinsic reserve price to the reserve fund`,
     ten: `The fit between the target inflation rate and the actual effect obtained by DSGE`,
     eleven: `The number of LPs supporting the value of the platform`,
-    twelve: `Total Value Deposited, is the dollar amount of all OHM staked in the protocol. This metric is often used as growth or health indicator in DeFi projects.`,
+    twelve: `Total Value Deposited, is the dollar amount of all DFS staked in the protocol. This metric is often used as growth or health indicator in DeFi projects.`,
     thirteen: `The number of LPs supporting the value of the platform`,
     mvt: `Market Value of Treasury Assets, is the sum of the value (in dollars) of all assets held by the treasury (Excluding pTokens and Vested tokens).`,
-    rfv: `Risk Free Value, is the amount of funds the treasury guarantees to use for backing OHM.`,
+    rfv: `Risk Free Value, is the amount of funds the treasury guarantees to use for backing DFS.`,
     pol: `Protocol Owned Liquidity, is the amount of LP the treasury owns and controls. The more POL the better for the protocol and its users.`,
-    holder: `Holders, represents the total number of Ohmies (sOHM holders)`,
-    staked: `OHM Staked is the ratio of sOHM to circulating supply of OHM (staked vs total)`,
+    holder: `Holders, represents the total number of Ohmies (DFS holders)`,
+    staked: `DFS Staked is the ratio of DFS to circulating supply of DFS (staked vs total)`,
     apy: `Annual Percentage Yield, is the normalized representation of an interest rate, based on a compounding period over one year. Note that APYs provided are rather ballpark level indicators and not so much precise future results.`,
-    runway: `Runway, is the number of days sOHM emissions can be sustained at a given rate. Lower APY = longer runway`,
+    runway: `Runway, is the number of days DFS emissions can be sustained at a given rate. Lower APY = longer runway`,
   }
 }
 
