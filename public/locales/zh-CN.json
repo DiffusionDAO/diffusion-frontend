@@ -1,4 +1,11 @@
 {
+  "Total Value Deposited, is the dollar amount of all DFS staked in the protocol. This metric is often used as growth or health indicator in DeFi projects.": "Total Value Deposited，是协议中抵押的所有 DFS 的美元金额。该指标通常用作 DeFi 项目中的增长或健康指标。",
+  "Search %subject%'": "搜索%subject%",
+  "This is your digital asset treasure silo, stake or compose NFTs to explore more possibilities where you can obtain more fulfilling rewards": "这是你的数字资产宝库，去质押或合成吧，去探索更多的可能性，你将收获颇丰",
+  "Volume": "成交量",
+  "Collection": "收藏",
+  "Supply": "供应量",
+  "Lowest Price": "最低价格",
   "Unused": "未使用",
   "Contract address": "合约地址",
   "SocialNFT": "社交NFT",
@@ -201,7 +208,6 @@
   "Contribution value": "贡献值",
 
   "Diffusion DAO": "Diffusion DAO",
-  "This is your digital asset treasure silo, stake or combine NFTs to explore more possibilities where you can obtain more fulfilling rewards": "这是你的数字资产宝库，去质押或合成吧，去探索更多的可能性，你将收获颇丰",
   "Not Staked": "未质押",
   "Staked": "已质押",
 
@@ -242,7 +248,7 @@
   "The number of LPs supporting the value of the platform": "作为平台价值支撑的LP的数量",
 
   "Discover more possibilities, explore more art and digital rights space": "发现更多可能性，探索更多艺术与数字权益空间",
-  "This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth": "这是一个全新的艺术数字空间，使用dfs来购买和销售NFT,你将获得无限的财富",
+  "This is a brand new digital art space, where you can use DFS to purchase and retail NFT to gain limitless wealth": "这是一个全新的艺术数字空间，使用DFS来购买和销售NFT,你将获得无限的财富",
   "Newest Collections": "最新系列",
   "asking price": "售价",
   "View All": "查看所有",

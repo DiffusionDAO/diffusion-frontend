@@ -17,6 +17,7 @@ import {
   YAxis,
 } from 'recharts'
 import { CategoricalChartProps } from 'recharts/types/chart/generateCategoricalChart'
+import { useTranslation } from '@pancakeswap/localization'
 import { formatCurrency, trim } from '../../helpers/dashboard/index'
 
 import CustomDiffusionTooltip from './CustomDiffusionTooltip'
@@ -25,7 +26,6 @@ import DiffusionExpandedChart from './DiffusionExpandedChart'
 const tickCount = 3
 const expandedTickCount = 5
 
-// 横着的网格线
 const renderExpandedChartStroke = (isExpanded: boolean, color: string) => {
   return isExpanded ? <CartesianGrid vertical={false} stroke={color} /> : ''
 }
@@ -239,12 +239,10 @@ const renderVerticalBarChart = (
         fill={stopColor && stopColor.length ? `url(#color-${dataKey[index]})` : stroke[index]}
         radius={5}
         maxBarSize={10}
-        // 柱状图背景色设置
         background={{
           radius: 5,
           fill: 'rgba(171, 182, 255, 0.1)',
         }}
-        // 柱状图文字配置
         label={{ fill: '#fff', fontSize: 12, position: 'right' }}
       />
     ))}
@@ -274,9 +272,9 @@ function DiffusionChart({
     left: 10,
   },
   menuItemData,
-  lineType = 'monotone', // 折线的类型，圆弧或者直线折叠
-  HeaderSuElement, // 副标题元素组件
-  minHeight = 260, // echarts最小高度
+  lineType = 'monotone',
+  HeaderSuElement,
+  minHeight = 260,
 }: {
   type: string
   data: any[]
@@ -301,7 +299,7 @@ function DiffusionChart({
 }) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(true)
-
+  const { t } = useTranslation()
   const handleOpen = () => {
     setOpen(true)
   }
@@ -398,9 +396,9 @@ function DiffusionChart({
               className="card-title-text"
               style={{ fontWeight: 600, overflow: 'hidden', color: '#6495f9', fontSize: '18px' }}
             >
-              {headerText}
+              {t(headerText)}
             </Typography>
-            <InfoTooltip title={infoTooltipMessage}>
+            <InfoTooltip title={t(infoTooltipMessage)}>
               <InfoCircleOutlined
                 style={{ color: 'rgb(153, 153, 153)', marginLeft: '10px', fontSize: '18px', cursor: 'pointer' }}
               />

@@ -161,10 +161,6 @@ const BondModal: React.FC<BondModalProps> = ({
     })
 
     if (account) {
-      bond.addressToReferral(account).then((res) => {
-        console.log('res.bondUsed:', formatUnits(res.bondUsed, 18))
-        setBondUsed(res.bondUsed)
-      })
       bond
         .pendingPayoutFor()
         .then((res) => {
@@ -172,6 +168,13 @@ const BondModal: React.FC<BondModalProps> = ({
           setPendingPayout(res)
         })
         .catch((error) => console.log(error))
+      setRefresh(false)
+
+      bond.addressToReferral(account).then((res) => {
+        console.log('res.bondUsed:', formatUnits(res.bondUsed, 18))
+        setBondUsed(res.bondUsed)
+      })
+
       bond.unusedOf(account).then((res) => setBondUnused(res))
 
       dfs
@@ -192,6 +195,7 @@ const BondModal: React.FC<BondModalProps> = ({
     })
   }, [account, amount, refresh, activeTab])
 
+  console.log('refresh:', refresh, activeTab)
   const buy = () => {
     if (!hasReferral) {
       confirm({

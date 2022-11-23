@@ -31,6 +31,8 @@ import Page from 'components/Layout/Page'
 import PageHeader from 'components/PageHeader'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
 import PageLoader from 'components/Loader/PageLoader'
+import { formatUnits } from '@ethersproject/units'
+
 import ToggleView from 'components/ToggleView/ToggleView'
 import { CollectionCard } from '../components/CollectibleCard'
 import { DFSAmountLabel } from '../components/CollectibleCard/styles'
@@ -278,11 +280,11 @@ const Collectible = () => {
                     {sortedCollections
                       .map((collection) => {
                         const volume = collection.totalVolume
-                          ? parseFloat(collection.totalVolume).toLocaleString(undefined, {
-                              minimumFractionDigits: 3,
-                              maximumFractionDigits: 3,
-                            })
-                          : '0'
+                        // ? parseFloat(collection.totalVolume).toLocaleString(undefined, {
+                        //     minimumFractionDigits: 3,
+                        //     maximumFractionDigits: 3,
+                        //   })
+                        // : '0'
                         return (
                           <tr key={collection.address} data-test="nft-collection-row">
                             <Td style={{ cursor: 'pointer', minWidth: '200px' }}>
@@ -295,7 +297,7 @@ const Collectible = () => {
                             </Td>
                             <Td>
                               <Flex alignItems="center">
-                                {volume}
+                                {formatUnits(volume, 18)}
                                 <BnbUsdtPairTokenIcon ml="8px" />
                               </Flex>
                             </Td>
@@ -343,7 +345,9 @@ const Collectible = () => {
                         <Text fontSize="12px" color="textSubtle">
                           {t('Volume')}
                         </Text>
-                        <DFSAmountLabel amount={data?.totalVolume ? parseFloat(data?.totalVolume) : 0} />
+                        <DFSAmountLabel
+                          amount={data?.totalVolume ? parseFloat(formatUnits(data?.totalVolume, 18)) : 0}
+                        />
                       </Flex>
                     </CollectionCard>
                   )
