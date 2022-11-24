@@ -161,17 +161,22 @@
       },
       {
         "internalType": "uint256",
+        "name": "bondUsed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "bondReward",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "bondRewardLocked",
+        "name": "bondRewardUnpaid",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "bondUsed",
+        "name": "bondRewardWithdrawed",
         "type": "uint256"
       },
       {
@@ -1080,7 +1085,7 @@
   },
   {
     "inputs": [],
-    "name": "totalBondVested",
+    "name": "totalBondReward",
     "outputs": [
       {
         "internalType": "uint256",
