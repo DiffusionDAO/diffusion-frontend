@@ -157,7 +157,7 @@ const Private = () => {
         const pendingBondReward = await bond.pendingBondReward(buyer)
         const referralBond = await bond.addressToReferral(buyer)
         bondUsed = bondUsed.add(referralBond.bondUsed)
-        withdrawed = withdrawed.add(referralBond.bondRewardWithdrawed).add(referralBond.bondReward)
+        withdrawed = withdrawed.add(referralBond.bondRewardWithdrawed)
         unpaid = unpaid.add(referralBond.bondRewardUnpaid)
         withdrawable = withdrawable.add(pendingBondReward.add(referralBond.bondReward))
       }),
@@ -283,25 +283,23 @@ const Private = () => {
       <br />
       <span>债券奖励未支付: {formatUnits(totalBondRewardUnpaid, 18)}</span>
       <br />
-      <span>payout未使用:{formatUnits(totalPayout.sub(totalBondUsed), 18)}</span>
+      <span>债券未使用:{formatUnits(totalPayout.sub(totalBondUsed), 18)}</span>
       <br />
-      <span>payout已使用:{formatUnits(totalBondUsed, 18)}</span>
-      <br />
-      <span>社交奖励已领取:{formatUnits(withdrawedSocialReward, 18)}</span>
+      <span>债券已使用:{formatUnits(totalBondUsed, 18)}</span>
       <br />
       <span>社交奖励总余额:</span>
       <span>{parseFloat(formatUnits(totalReward)) * 0.95}</span>
       <br />
-      <span>零钱奖励总余额:</span>
-      <span>{parseFloat(formatUnits(totalReward)) * 0.05}</span>
+      <span>社交奖励已领取:{formatUnits(withdrawedSocialReward, 18)}</span>
       <br />
       <span>社交奖励未领取:{formatUnits(totalSocialReward.add(totalPendingSocialReward))}</span>
       <br />
-      <span>零钱罐已领取:{formatUnits(withdrawedSavingReward, 18)}</span>
+      <span>零钱奖励总余额:</span>
+      <span>{parseFloat(formatUnits(totalReward)) * 0.05}</span>
       <br />
-      <span>零钱罐未领取部分:{formatUnits(totalSavingInterest.add(totalPendingSavingInterest))}</span>
+      <span>零钱奖励已领取:{formatUnits(withdrawedSavingReward, 18)}</span>
       <br />
-      <span>总Spos值:{totalPower.toNumber() / 100}</span>
+      <span>零钱奖励未领取部分:{formatUnits(totalSavingInterest.add(totalPendingSavingInterest))}</span>
       <br />
       <span>零钱罐质押DFS:{formatUnits(totalStakedSavings, 18)}</span>
       <br />
@@ -328,12 +326,8 @@ const Private = () => {
       <span>s7: {data?.s7} </span>
       <span>s8: {data?.s8} </span>
       <br />
-
       <span>总SPOS:</span>
       <span>{spos}</span>
-      <br />
-      <span>质押DFS:</span>
-      <span>{formatUnits(totalStakedSavings)}</span>
       <br />
       <span>跑道天数:</span>
       <input
