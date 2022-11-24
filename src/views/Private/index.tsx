@@ -156,18 +156,13 @@ const Private = () => {
       buyers.map(async (buyer) => {
         const pendingBondReward = await bond.pendingBondReward(buyer)
         const referralBond = await bond.addressToReferral(buyer)
-        bondUsed = totalBondUsed.add(referralBond.bondUsed)
-        withdrawed = totalBondRewardWithdrawed.add(referralBond.bondRewardWithdrawed)
-        unpaid = totalBondRewardUnpaid.add(referralBond.bondRewardUnpaid)
-        withdrawable = totalBondRewardWithdrawable.add(pendingBondReward.add(referralBond.bondReward))
+        bondUsed = bondUsed.add(referralBond.bondUsed)
+        withdrawed = withdrawed.add(referralBond.bondRewardWithdrawed)
+        unpaid = unpaid.add(referralBond.bondRewardUnpaid)
+        withdrawable = withdrawable.add(pendingBondReward.add(referralBond.bondReward))
       }),
     )
     setTotalBondUsed(bondUsed)
-    setTotalBondUsed(bondUsed)
-    console.log('totalBondUsed:', totalBondUsed.toString())
-    console.log('withdrawed:', withdrawed.toString())
-    console.log('unpaid:', unpaid.toString())
-    console.log('withdrawable:', withdrawable.toString())
     setTotalBondRewardWithdrawed(withdrawed)
     setTotalBondRewardUnpaid(unpaid)
     setTotalBondRewardWithdrawable(withdrawable)
@@ -181,13 +176,13 @@ const Private = () => {
     let pendingSavingInterest = BigNumber.from(0)
     await Promise.all(
       stakers.map(async (staker) => {
-        pendingSocialReward = totalPendingSocialReward.add(await dfsMining.pendingSocialReward(staker))
-        pendingSavingInterest = totalPendingSavingInterest.add(await dfsMining.pendingSavingInterest(staker))
+        pendingSocialReward = pendingSocialReward.add(await dfsMining.pendingSocialReward(staker))
+        pendingSavingInterest = pendingSavingInterest.add(await dfsMining.pendingSavingInterest(staker))
 
         const referralStake = await dfsMining.addressToReferral(staker)
         const level = referralStake.level
-        socialReward = totalSocialReward.add(referralStake?.socialReward)
-        savingInterest = totalSavingInterest.add(referralStake?.savingInterest)
+        socialReward = socialReward.add(referralStake?.socialReward)
+        savingInterest = savingInterest.add(referralStake?.savingInterest)
         switch (level.toNumber()) {
           case 0:
             return totalLevelCount.s0++
@@ -276,12 +271,6 @@ const Private = () => {
       <span>DFS奖励池已领取:</span>
       <span>{formatUnits(withdrawedSavingReward.add(withdrawedSocialReward))}</span>
       <br />
-      <span>社交奖励总余额:</span>
-      <span>{parseFloat(formatUnits(totalReward)) * 0.95}</span>
-      <br />
-      <span>零钱奖励总余额:</span>
-      <span>{parseFloat(formatUnits(totalReward)) * 0.05}</span>
-      <br />
       <span>债券总销售量: {formatUnits(totalPayout, 18)}</span>
       <br />
       <span>债券奖励总额: {formatUnits(totalBondReward, 18)}</span>
@@ -300,6 +289,12 @@ const Private = () => {
       <br />
       <span>社交奖励已领取:{formatUnits(withdrawedSocialReward, 18)}</span>
       <br />
+      <span>社交奖励总余额:</span>
+      <span>{parseFloat(formatUnits(totalReward)) * 0.95}</span>
+      <br />
+      <span>零钱奖励总余额:</span>
+      <span>{parseFloat(formatUnits(totalReward)) * 0.05}</span>
+      <br />
       <span>社交奖励未领取:{formatUnits(totalSocialReward.add(totalPendingSocialReward))}</span>
       <br />
       <span>零钱罐已领取:{formatUnits(withdrawedSavingReward, 18)}</span>
@@ -311,6 +306,7 @@ const Private = () => {
       <span>零钱罐质押DFS:{formatUnits(totalStakedSavings, 18)}</span>
       <br />
       <span>系统内总质押NFT:</span>
+      <br />
       <span>智者碎片:{level0Staked.toNumber()} </span>
       <span>智者:{level1Staked.toNumber()} </span>
       <span>金色智者:{level2Staked.toNumber()} </span>

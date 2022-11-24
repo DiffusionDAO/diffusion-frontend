@@ -273,11 +273,11 @@ const Reward = () => {
   const socialRewardfiveDayROI = (5 * socialRewardInterest) / 10
   const sposAPY = (365 * socialRewardInterest) / 10
   const n = (24 * 3600) / savingInterestEpochLength
-  const savingsfiveDayROI = (savingRewardInterest * n * 5 * 100) / 1000
+  const savingsfiveDayROI = (savingRewardInterest * n * 5 * 100) / 10000
   const myLockedPower = (referralStake?.power?.toNumber() * 2 - referralStake?.unlockedPower?.toNumber()) / 100
   const myTotalPower = (referralStake?.power?.toNumber() + referralStake?.unlockedPower?.toNumber()) / 100
   const greenPower = referralStake?.power.toNumber() / 100
-  const nextRewardSavingNumber = (parseFloat(formatUnits(stakedSavings, 18)) * savingRewardInterest) / 1000
+  const nextRewardSavingNumber = (parseFloat(formatUnits(stakedSavings, 18)) * savingRewardInterest) / 10000
 
   const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
     if (newActiveIndex !== undefined) setActiveIndex(Math.ceil(newActiveIndex / slidesPerView))
