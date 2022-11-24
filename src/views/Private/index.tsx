@@ -122,6 +122,12 @@ const Private = () => {
     .sub(totalSocialReward.add(totalPendingSocialReward))
     .sub(totalSavingInterest.add(totalPendingSavingInterest))
 
+  let totalBondReward = BigNumber.from(0)
+  let totalBondRewardUnpaid = BigNumber.from(0)
+  let totalBondRewardWithdrawed = BigNumber.from(0)
+  let totalBondRewardWithdrawable = BigNumber.from(0)
+  let totalBondRewardUnWithdrawed = BigNumber.from(0)
+
   const totalRewardNumber = parseFloat(formatUnits(totalReward, 18))
   const spos = totalPower.toNumber() / 100
 
@@ -145,6 +151,13 @@ const Private = () => {
       buyers.map(async (buyer) => {
         const referralBond = await bond.addressToReferral(buyer)
         totalBondUsed = totalBondUsed.add(referralBond.bondUsed)
+
+        totalBondReward = await bond.totalBondReward()
+        const pendingBondReward = await bond.pendingBondReward(buyer)
+        totalBondRewardWithdrawed = totalBondRewardWithdrawed.add(referralBond.bondRewardWithdrawed)
+        totalBondRewardUnWithdrawed = totalBondReward.sub(totalBondRewardWithdrawed)
+        totalBondRewardUnpaid = totalBondRewardUnpaid.add(referralBond.bondRewardUnpaid)
+        totalBondRewardWithdrawable = totalBondRewardWithdrawable.add(pendingBondReward.add(referralBond.bondReward))
       }),
     )
     const stakers = await dfsMining.getStakers()
@@ -254,17 +267,27 @@ const Private = () => {
       <br />
       <span>债券总销售量: {formatUnits(totalPayout, 18)}</span>
       <br />
-      <span>payout余额:{formatUnits(totalPayout.sub(totalBondVested), 18)}</span>
+      <span>债券奖励总额: {formatUnits(totalBondReward, 18)}</span>
+      <br />
+      <span>债券奖励已领取: {formatUnits(totalBondRewardWithdrawed, 18)}</span>
+      <br />
+      <span>债券奖励未领取: {formatUnits(totalBondRewardUnWithdrawed, 18)}</span>
+      <br />
+      <span>债券奖励可领取: {formatUnits(totalBondRewardWithdrawable, 18)}</span>
+      <br />
+      <span>债券奖励未支付: {formatUnits(totalBondRewardUnpaid, 18)}</span>
+      <br />
+      <span>payout未使用:{formatUnits(totalPayout.sub(totalBondUsed), 18)}</span>
       <br />
       <span>payout已使用:{formatUnits(totalBondUsed, 18)}</span>
       <br />
       <span>社交奖励已领取部分:{formatUnits(withdrawedSocialReward, 18)}</span>
       <br />
-      <span>社交奖励未领取部分:{formatUnits(totalReward.mul(95).div(100).sub(withdrawedSocialReward), 18)}</span>
+      <span>社交奖励未领取部分:{formatUnits(totalSocialReward.add(totalPendingSocialReward))}</span>
       <br />
       <span>零钱罐已领取部分:{formatUnits(withdrawedSavingReward, 18)}</span>
       <br />
-      <span>零钱罐未领取部分:{formatUnits(totalReward.mul(5).div(100).sub(withdrawedSavingReward), 18)}</span>
+      <span>零钱罐未领取部分:{formatUnits(totalSavingInterest.add(totalPendingSavingInterest))}</span>
       <br />
       <span>总Spos值:{totalPower.toNumber() / 100}</span>
       <br />
@@ -312,7 +335,7 @@ const Private = () => {
       <br />
       <span>零钱罐建议利率:</span>
       <span>
-        {runway && runway !== 0 && (totalRewardNumber * 5) / (n * runway * parseFloat(formatUnits(totalStakedSavings)))}
+        {runway && runway !== 0 && (totalRewardNumber * 5) / (n * runway * parseFloat(formatUnits(totalStakedSavings)))}{' '}
         %
       </span>
       <ContentWrap>

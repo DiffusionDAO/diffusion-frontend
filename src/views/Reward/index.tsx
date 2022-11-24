@@ -73,7 +73,7 @@ interface Referral {
   level: BigNumber
   power: BigNumber
   bondReward: BigNumber
-  bondRewardLocked: BigNumber
+  bondRewardUnpaid: BigNumber
   lastBondRewardWithdraw: BigNumber
   lockedPower: BigNumber
   unlockedPower: BigNumber
@@ -107,7 +107,7 @@ const Reward = () => {
   const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<number>(0)
   const [pendingSavingInterest, setPendingSavingInterest] = useState<BigNumber>(BigNumber.from(0))
   const [bondReward, setBondReward] = useState<BigNumber>(BigNumber.from(0))
-  const [bondRewardLocked, setBondRewardLocked] = useState<BigNumber>(BigNumber.from(0))
+  const [bondRewardUnpaid, setBondRewardUnpaid] = useState<BigNumber>(BigNumber.from(0))
   const [children, setChildren] = useState<string[]>()
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
   const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
@@ -178,9 +178,8 @@ const Reward = () => {
         setNextSavingInterestChangeTime(referralStake?.savingInterestEndTime * 1000)
       }
       const pendingSocialReward = await dfsMining.pendingSocialReward(account)
-      console.log('socialReward:', formatUnits(referralStake?.socialReward, 18), formatUnits(pendingSocialReward, 18))
       setPendingSocialReward(pendingSocialReward)
-      setBondRewardLocked(referralBond?.bondRewardLocked)
+      setBondRewardUnpaid(referralBond?.bondRewardUnpaid)
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)
 
@@ -345,7 +344,7 @@ const Reward = () => {
                   {t('Withdraw')}
                 </ExtractBtn>
                 <RewardText>{t('Unpaid Bond Rewards')}</RewardText>
-                <RewardValueDiv>{formatBigNumber(bondRewardLocked ?? BigNumber.from(0), 5)}</RewardValueDiv>
+                <RewardValueDiv>{formatBigNumber(bondRewardUnpaid ?? BigNumber.from(0), 5)}</RewardValueDiv>
               </DiffusionGoldWrap>
             </Grid>
             <Grid item lg={8} md={8} sm={12} xs={12}>
