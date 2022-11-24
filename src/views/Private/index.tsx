@@ -104,6 +104,12 @@ const Private = () => {
   const [totalBondRewardWithdrawable, setTotalBondRewardWithdrawable] = useState<BigNumber>(BigNumber.from(0))
   const [totalBondRewardUnwithdrawed, setTotalBondRewardUnwithdrawed] = useState<BigNumber>(BigNumber.from(0))
 
+  const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
+  const [totalSavingInterest, setTotalSavingInterest] = useState<BigNumber>(BigNumber.from(0))
+  const [totalPendingSocialReward, setTotalPendingSocialReward] = useState<BigNumber>(BigNumber.from(0))
+  const [totalPendingSavingInterest, setTotalPendingSavingInterest] = useState<BigNumber>(BigNumber.from(0))
+  const [totalBondUsed, setTotalBondUsed] = useState<BigNumber>(BigNumber.from(0))
+
   const dfsMineAddress = getMiningAddress()
   const dfsMining = useDFSMiningContract()
   const bond = useBondContract()
@@ -113,12 +119,6 @@ const Private = () => {
   const usdt = useERC20(getUSDTAddress())
 
   const n = (24 * 3600) / savingInterestEpochLength
-
-  let totalPendingSocialReward = BigNumber.from(0)
-  let totalPendingSavingInterest = BigNumber.from(0)
-  let totalBondUsed = BigNumber.from(0)
-  let totalSocialReward = BigNumber.from(0)
-  let totalSavingInterest = BigNumber.from(0)
 
   const totalReward = dfsRewardBalance
     .sub(totalBondUsed)
@@ -145,31 +145,49 @@ const Private = () => {
       savingInterest: 0,
     }
     const buyers = await bond.getBuyers()
+    setTotalBondReward(await bond.totalBondReward())
+    setTotalBondRewardUnwithdrawed(totalBondReward.sub(totalBondRewardWithdrawed))
+
+    let withdrawed = BigNumber.from(0)
+    let unpaid = BigNumber.from(0)
+    let withdrawable = BigNumber.from(0)
+    let bondUsed = BigNumber.from(0)
     await Promise.all(
       buyers.map(async (buyer) => {
-        const referralBond = await bond.addressToReferral(buyer)
-        totalBondUsed = totalBondUsed.add(referralBond.bondUsed)
-
-        setTotalBondReward(await bond.totalBondReward())
         const pendingBondReward = await bond.pendingBondReward(buyer)
-        setTotalBondRewardWithdrawed(totalBondRewardWithdrawed.add(referralBond.bondRewardWithdrawed))
-        setTotalBondRewardUnwithdrawed(totalBondReward.sub(totalBondRewardWithdrawed))
-        setTotalBondRewardUnpaid(totalBondRewardUnpaid.add(referralBond.bondRewardUnpaid))
-        setTotalBondRewardWithdrawable(totalBondRewardWithdrawable.add(pendingBondReward.add(referralBond.bondReward)))
+        const referralBond = await bond.addressToReferral(buyer)
+        bondUsed = totalBondUsed.add(referralBond.bondUsed)
+        withdrawed = totalBondRewardWithdrawed.add(referralBond.bondRewardWithdrawed)
+        unpaid = totalBondRewardUnpaid.add(referralBond.bondRewardUnpaid)
+        withdrawable = totalBondRewardWithdrawable.add(pendingBondReward.add(referralBond.bondReward))
       }),
     )
+    setTotalBondUsed(bondUsed)
+    setTotalBondUsed(bondUsed)
+    console.log('totalBondUsed:', totalBondUsed.toString())
+    console.log('withdrawed:', withdrawed.toString())
+    console.log('unpaid:', unpaid.toString())
+    console.log('withdrawable:', withdrawable.toString())
+    setTotalBondRewardWithdrawed(withdrawed)
+    setTotalBondRewardUnpaid(unpaid)
+    setTotalBondRewardWithdrawable(withdrawable)
+
     const stakers = await dfsMining.getStakers()
     setStakers(stakers)
 
+    let socialReward = BigNumber.from(0)
+    let savingInterest = BigNumber.from(0)
+    let pendingSocialReward = BigNumber.from(0)
+    let pendingSavingInterest = BigNumber.from(0)
     await Promise.all(
       stakers.map(async (staker) => {
-        totalPendingSocialReward = totalPendingSocialReward.add(await dfsMining.pendingSocialReward(staker))
-        totalPendingSavingInterest = totalPendingSavingInterest.add(await dfsMining.pendingSavingInterest(staker))
+        pendingSocialReward = totalPendingSocialReward.add(await dfsMining.pendingSocialReward(staker))
+        pendingSavingInterest = totalPendingSavingInterest.add(await dfsMining.pendingSavingInterest(staker))
 
         const referralStake = await dfsMining.addressToReferral(staker)
         const level = referralStake.level
-        totalSocialReward = totalSocialReward.add(referralStake?.socialReward)
-        totalSavingInterest = totalSavingInterest.add(referralStake?.savingInterest)
+        socialReward = totalSocialReward.add(referralStake?.socialReward)
+        savingInterest = totalSavingInterest.add(referralStake?.savingInterest)
         switch (level.toNumber()) {
           case 0:
             return totalLevelCount.s0++
@@ -190,6 +208,10 @@ const Private = () => {
         }
       }),
     )
+    setTotalPendingSocialReward(pendingSocialReward)
+    setTotalPendingSavingInterest(pendingSavingInterest)
+    setTotalSocialReward(socialReward)
+    setTotalSavingInterest(savingInterest)
 
     setLevel0Staked(await dfsMining.level0Staked())
     setLevel1Staked(await dfsMining.level1Staked())
@@ -212,7 +234,6 @@ const Private = () => {
     setDfsRewardBalance(dfsRewardBalance)
 
     const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
-    console.log('withdrawedSocialReward:', withdrawedSocialReward)
     setWithdrawedSocialReward(withdrawedSocialReward)
 
     const withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
