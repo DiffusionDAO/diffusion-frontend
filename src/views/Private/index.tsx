@@ -157,7 +157,7 @@ const Private = () => {
         const pendingBondReward = await bond.pendingBondReward(buyer)
         const referralBond = await bond.addressToReferral(buyer)
         bondUsed = bondUsed.add(referralBond.bondUsed)
-        withdrawed = withdrawed.add(referralBond.bondRewardWithdrawed)
+        withdrawed = withdrawed.add(referralBond.bondRewardWithdrawed).add(referralBond.bondReward)
         unpaid = unpaid.add(referralBond.bondRewardUnpaid)
         withdrawable = withdrawable.add(pendingBondReward.add(referralBond.bondReward))
       }),
