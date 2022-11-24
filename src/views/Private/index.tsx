@@ -98,7 +98,11 @@ const Private = () => {
 
   const [stakers, setStakers] = useState<string[]>([])
   const [totalPayout, setTotalPayout] = useState<BigNumber>(BigNumber.from(0))
-  const [totalBondVested, setTotalBondVested] = useState<BigNumber>(BigNumber.from(0))
+  const [totalBondReward, setTotalBondReward] = useState<BigNumber>(BigNumber.from(0))
+  const [totalBondRewardUnpaid, setTotalBondRewardUnpaid] = useState<BigNumber>(BigNumber.from(0))
+  const [totalBondRewardWithdrawed, setTotalBondRewardWithdrawed] = useState<BigNumber>(BigNumber.from(0))
+  const [totalBondRewardWithdrawable, setTotalBondRewardWithdrawable] = useState<BigNumber>(BigNumber.from(0))
+  const [totalBondRewardUnwithdrawed, setTotalBondRewardUnwithdrawed] = useState<BigNumber>(BigNumber.from(0))
 
   const dfsMineAddress = getMiningAddress()
   const dfsMining = useDFSMiningContract()
@@ -121,12 +125,6 @@ const Private = () => {
     .sub(withdrawedSavingReward.add(withdrawedSocialReward))
     .sub(totalSocialReward.add(totalPendingSocialReward))
     .sub(totalSavingInterest.add(totalPendingSavingInterest))
-
-  let totalBondReward = BigNumber.from(0)
-  let totalBondRewardUnpaid = BigNumber.from(0)
-  let totalBondRewardWithdrawed = BigNumber.from(0)
-  let totalBondRewardWithdrawable = BigNumber.from(0)
-  let totalBondRewardUnWithdrawed = BigNumber.from(0)
 
   const totalRewardNumber = parseFloat(formatUnits(totalReward, 18))
   const spos = totalPower.toNumber() / 100
@@ -152,12 +150,12 @@ const Private = () => {
         const referralBond = await bond.addressToReferral(buyer)
         totalBondUsed = totalBondUsed.add(referralBond.bondUsed)
 
-        totalBondReward = await bond.totalBondReward()
+        setTotalBondReward(await bond.totalBondReward())
         const pendingBondReward = await bond.pendingBondReward(buyer)
-        totalBondRewardWithdrawed = totalBondRewardWithdrawed.add(referralBond.bondRewardWithdrawed)
-        totalBondRewardUnWithdrawed = totalBondReward.sub(totalBondRewardWithdrawed)
-        totalBondRewardUnpaid = totalBondRewardUnpaid.add(referralBond.bondRewardUnpaid)
-        totalBondRewardWithdrawable = totalBondRewardWithdrawable.add(pendingBondReward.add(referralBond.bondReward))
+        setTotalBondRewardWithdrawed(totalBondRewardWithdrawed.add(referralBond.bondRewardWithdrawed))
+        setTotalBondRewardUnwithdrawed(totalBondReward.sub(totalBondRewardWithdrawed))
+        setTotalBondRewardUnpaid(totalBondRewardUnpaid.add(referralBond.bondRewardUnpaid))
+        setTotalBondRewardWithdrawable(totalBondRewardWithdrawable.add(pendingBondReward.add(referralBond.bondReward)))
       }),
     )
     const stakers = await dfsMining.getStakers()
@@ -214,6 +212,7 @@ const Private = () => {
     setDfsRewardBalance(dfsRewardBalance)
 
     const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
+    console.log('withdrawedSocialReward:', withdrawedSocialReward)
     setWithdrawedSocialReward(withdrawedSocialReward)
 
     const withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
@@ -268,7 +267,7 @@ const Private = () => {
       <br />
       <span>债券奖励已领取: {formatUnits(totalBondRewardWithdrawed, 18)}</span>
       <br />
-      <span>债券奖励未领取: {formatUnits(totalBondRewardUnWithdrawed, 18)}</span>
+      <span>债券奖励未领取: {formatUnits(totalBondRewardUnwithdrawed, 18)}</span>
       <br />
       <span>债券奖励可领取: {formatUnits(totalBondRewardWithdrawable, 18)}</span>
       <br />
@@ -278,11 +277,11 @@ const Private = () => {
       <br />
       <span>payout已使用:{formatUnits(totalBondUsed, 18)}</span>
       <br />
-      <span>社交奖励已领取部分:{formatUnits(withdrawedSocialReward, 18)}</span>
+      <span>社交奖励已领取:{formatUnits(withdrawedSocialReward, 18)}</span>
       <br />
-      <span>社交奖励未领取部分:{formatUnits(totalSocialReward.add(totalPendingSocialReward))}</span>
+      <span>社交奖励未领取:{formatUnits(totalSocialReward.add(totalPendingSocialReward))}</span>
       <br />
-      <span>零钱罐已领取部分:{formatUnits(withdrawedSavingReward, 18)}</span>
+      <span>零钱罐已领取:{formatUnits(withdrawedSavingReward, 18)}</span>
       <br />
       <span>零钱罐未领取部分:{formatUnits(totalSavingInterest.add(totalPendingSavingInterest))}</span>
       <br />
