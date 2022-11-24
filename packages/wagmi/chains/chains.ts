@@ -102,8 +102,8 @@ export const bscTest: Chain = {
     symbol: 'tBNB',
   },
   rpcUrls: {
-    public: 'https://data-seed-prebsc-1-s2.binance.org:8545',
-    default: 'https://data-seed-prebsc-1-s2.binance.org:8545',
+    public: 'https://bsctestapi.terminet.io/rpc',
+    default: 'https://bsctestapi.terminet.io/rpc',
   },
   blockExplorers: {
     default: { name: 'BscScan', url: 'https://testnet.bscscan.com' },

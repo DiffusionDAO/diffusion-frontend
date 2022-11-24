@@ -122,6 +122,7 @@ const Private = () => {
     .sub(totalSocialReward.add(totalPendingSocialReward))
     .sub(totalSavingInterest.add(totalPendingSavingInterest))
 
+  const totalRewardNumber = parseFloat(formatUnits(totalReward, 18))
   const spos = totalPower.toNumber() / 100
 
   const refresh = async () => {
@@ -210,7 +211,6 @@ const Private = () => {
 
     setSocialRewardInterest((await dfsMining.socialRewardInterest()).toNumber())
     setSavingRewardInterest((await dfsMining.savingRewardInterest()).toNumber())
-    // setTotalSocialReward(await dfsMining.totalSocialReward())
     setTotalPower(await dfsMining.totalPower())
     setTotalStakedSavings(await dfsMining.totalStakedSavings())
 
@@ -306,15 +306,13 @@ const Private = () => {
           setRunway(e?.target?.value)
         }}
       />
+      <br />
       <span>SPOS建议利率:</span>
-      <span>
-        {runway && runway !== 0 && spos !== 0 && (parseFloat(formatUnits(totalReward)) * 95) / (runway * spos)}%
-      </span>
+      <span>{runway && runway !== 0 && spos !== 0 && (totalRewardNumber * 95) / (runway * spos)}%</span>
+      <br />
       <span>零钱罐建议利率:</span>
       <span>
-        {runway &&
-          runway !== 0 &&
-          (parseFloat(formatUnits(totalReward, 18)) * 5) / (n * runway * parseFloat(formatUnits(totalStakedSavings)))}
+        {runway && runway !== 0 && (totalRewardNumber * 5) / (n * runway * parseFloat(formatUnits(totalStakedSavings)))}
         %
       </span>
       <ContentWrap>

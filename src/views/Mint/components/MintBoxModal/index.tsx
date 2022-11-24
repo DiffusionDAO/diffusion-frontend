@@ -27,7 +27,9 @@ const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
                     <CardImg src={`/images/nfts/socialnft/${card.level}`} />
                     <CardText>
                       {t('amount')}: {card.tokenIds.length} {t(levelToName[card.level])}{' '}
-                      {card.tokenIds.map((tokenId) => `#${tokenId}`)}
+                      {card.tokenIds.length > 1
+                        ? `#${card.tokenIds[0]}-#${card.tokenIds[card.tokenIds.length - 1]}`
+                        : card.tokenIds.map((tokenId) => `#${tokenId}`)}
                     </CardText>
                   </CardItem>
                 </Grid>
