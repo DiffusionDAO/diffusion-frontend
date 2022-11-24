@@ -204,9 +204,6 @@ const Private = () => {
     const totalPayout = await bond.totalPayout()
     setTotalPayout(totalPayout)
 
-    const totalBondVested = await bond.totalBondVested()
-    setTotalBondVested(totalBondVested)
-
     const dfsBalance = await dfs.balanceOf(account)
     setDfsBalance(dfsBalance)
 
