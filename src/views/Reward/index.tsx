@@ -13,7 +13,7 @@ import { useBondContract, useDFSContract, useDFSMiningContract } from 'hooks/use
 import { BigNumber } from '@ethersproject/bignumber'
 import { useSWRContract, useSWRMulticall } from 'hooks/useSWRContract'
 import { MaxUint256 } from '@ethersproject/constants'
-import { getMiningAddress } from 'utils/addressHelpers'
+import { getBondAddress, getMiningAddress } from 'utils/addressHelpers'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import { formatBigNumber, formatBigNumberToFixed, formatNumber } from 'utils/formatBalance'
 import { shorten } from 'helpers'
@@ -126,6 +126,8 @@ const Reward = () => {
   const bond = useBondContract()
   const dfsContract = useDFSContract()
   const dfsMineAddress = getMiningAddress()
+  const bondAddress = getBondAddress()
+
   const slidesPerView = isMobile ? 1 : 3
   const swiperWrapBgImgUrl = isMobile ? '/images/reward/swiperWrapBgMobile.png' : '/images/reward/swiperWrapBg.png'
   const swiperSlideData = [
@@ -559,12 +561,14 @@ const Reward = () => {
                       onClick={async () => {
                         if (amount) {
                           try {
-                            const allowance = await dfsContract.allowance(account, dfsMineAddress)
+                            const allowance = await dfsContract.allowance(account, bondAddress)
+                            console.log(allowance)
                             if (allowance.eq(0)) {
-                              const receipt = await dfsContract.approve(dfsMineAddress, MaxUint256)
+                              const receipt = await dfsContract.approve(bondAddress, MaxUint256)
                               await receipt.wait()
                             }
                             const parsedAmount = parseUnits(amount, 'ether')
+                            console.log(parsedAmount)
 
                             let receipt = await dfsMining.stakeSavings(parsedAmount)
                             receipt = await receipt.wait()

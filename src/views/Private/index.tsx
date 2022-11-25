@@ -130,7 +130,7 @@ const Private = () => {
   const spos = totalPower.toNumber() / 100
 
   const refresh = async () => {
-    const totalLevelCount = {
+    const count = {
       s0: 0,
       s1: 0,
       s2: 0,
@@ -140,32 +140,45 @@ const Private = () => {
       s6: 0,
       s7: 0,
       s8: 0,
-      bondUsed: 0,
-      socialReward: 0,
-      savingInterest: 0,
+      bondUsed: BigNumber.from(0),
+      socialReward: BigNumber.from(0),
+      savingInterest: BigNumber.from(0),
+      unpaid: BigNumber.from(0),
+      withdrawable: BigNumber.from(0),
+      withdrawed: BigNumber.from(0),
     }
     const buyers = await bond.getBuyers()
     setTotalBondReward(await bond.totalBondReward())
     setTotalBondRewardUnwithdrawed(totalBondReward.sub(totalBondRewardWithdrawed))
 
-    let withdrawed = BigNumber.from(0)
-    let unpaid = BigNumber.from(0)
-    let withdrawable = BigNumber.from(0)
-    let bondUsed = BigNumber.from(0)
     await Promise.all(
       buyers.map(async (buyer) => {
         const pendingBondReward = await bond.pendingBondReward(buyer)
         const referralBond = await bond.addressToReferral(buyer)
-        bondUsed = bondUsed.add(referralBond.bondUsed)
-        withdrawed = withdrawed.add(referralBond.bondRewardWithdrawed)
-        unpaid = unpaid.add(referralBond.bondRewardUnpaid)
-        withdrawable = withdrawable.add(pendingBondReward.add(referralBond.bondReward))
+        count.bondUsed = count.bondUsed.add(referralBond.bondUsed)
+        console.log('bondUsed:', buyer, formatUnits(count.bondUsed, 18), formatUnits(referralBond.bondUsed, 18))
+        count.withdrawed = count.withdrawed.add(referralBond.bondRewardWithdrawed)
+        console.log(
+          'withdrawed:',
+          buyer,
+          formatUnits(count.withdrawed, 18),
+          formatUnits(referralBond.bondRewardWithdrawed, 18),
+        )
+        count.unpaid = count.unpaid.add(referralBond.bondRewardUnpaid)
+        count.withdrawable = count.withdrawable.add(pendingBondReward.add(referralBond.bondReward))
+        console.log(
+          'withdrawable:',
+          buyer,
+          formatUnits(count.withdrawable, 18),
+          formatUnits(pendingBondReward, 18),
+          formatUnits(referralBond.bondReward, 18),
+        )
       }),
     )
-    setTotalBondUsed(bondUsed)
-    setTotalBondRewardWithdrawed(withdrawed)
-    setTotalBondRewardUnpaid(unpaid)
-    setTotalBondRewardWithdrawable(withdrawable)
+    setTotalBondUsed(count.bondUsed)
+    setTotalBondRewardWithdrawed(count.withdrawed)
+    setTotalBondRewardUnpaid(count.unpaid)
+    setTotalBondRewardWithdrawable(count.withdrawable)
 
     const stakers = await dfsMining.getStakers()
     setStakers(stakers)
@@ -185,19 +198,19 @@ const Private = () => {
         savingInterest = savingInterest.add(referralStake?.savingInterest)
         switch (level.toNumber()) {
           case 0:
-            return totalLevelCount.s0++
+            return count.s0++
           case 1:
-            return totalLevelCount.s1++
+            return count.s1++
           case 2:
-            return totalLevelCount.s2++
+            return count.s2++
           case 3:
-            return totalLevelCount.s3++
+            return count.s3++
           case 4:
-            return totalLevelCount.s4++
+            return count.s4++
           case 5:
-            return totalLevelCount.s5++
+            return count.s5++
           case 6:
-            return totalLevelCount.s6++
+            return count.s6++
           default:
             return 0
         }
@@ -239,7 +252,7 @@ const Private = () => {
     setTotalPower(await dfsMining.totalPower())
     setTotalStakedSavings(await dfsMining.totalStakedSavings())
 
-    return totalLevelCount
+    return count
   }
   const { data, mutate: refreshMutate } = useSWR('refresh', refresh)
   useEffect(() => {
