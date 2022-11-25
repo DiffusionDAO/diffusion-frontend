@@ -346,7 +346,9 @@ const Reward = () => {
                   {t('Withdraw')}
                 </ExtractBtn>
                 <RewardText>{t('Unpaid Bond Rewards')}</RewardText>
-                <RewardValueDiv>{formatBigNumber(bondRewardUnpaid ?? BigNumber.from(0), 5)}</RewardValueDiv>
+                <RewardValueDiv>
+                  {formatBigNumber(bondRewardUnpaid.sub(pendingBondReward) ?? BigNumber.from(0), 5)}
+                </RewardValueDiv>
               </DiffusionGoldWrap>
             </Grid>
             <Grid item lg={8} md={8} sm={12} xs={12}>
