@@ -105,7 +105,7 @@ export const AvailableCount = styled.div`
   width: 100%;
   height: 30px;
   line-height: 30px;
-  font-size: 14px;
+  font-size: 12px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #ffffff;

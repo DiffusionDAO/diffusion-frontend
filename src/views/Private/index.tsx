@@ -125,6 +125,7 @@ const Private = () => {
     .sub(withdrawedSavingReward.add(withdrawedSocialReward))
     .sub(totalSocialReward.add(totalPendingSocialReward))
     .sub(totalSavingInterest.add(totalPendingSavingInterest))
+    .sub(totalStakedSavings)
 
   const totalRewardNumber = parseFloat(formatUnits(totalReward, 18))
   const spos = totalPower.toNumber() / 100
@@ -154,25 +155,19 @@ const Private = () => {
     await Promise.all(
       buyers.map(async (buyer) => {
         const pendingBondReward = await bond.pendingBondReward(buyer)
+        const parents = await bond.getParents(buyer)
+        // console.log(parents)
         const referralBond = await bond.addressToReferral(buyer)
         count.bondUsed = count.bondUsed.add(referralBond.bondUsed)
-        console.log('bondUsed:', buyer, formatUnits(count.bondUsed, 18), formatUnits(referralBond.bondUsed, 18))
+        // console.log('bondUsed:', buyer, formatUnits(count.bondUsed, 18), formatUnits(referralBond.bondUsed, 18))
         count.withdrawed = count.withdrawed.add(referralBond.bondRewardWithdrawed)
-        console.log(
-          'withdrawed:',
-          buyer,
-          formatUnits(count.withdrawed, 18),
-          formatUnits(referralBond.bondRewardWithdrawed, 18),
-        )
-        count.unpaid = count.unpaid.add(referralBond.bondRewardUnpaid)
-        count.withdrawable = count.withdrawable.add(pendingBondReward.add(referralBond.bondReward))
-        console.log(
-          'withdrawable:',
-          buyer,
-          formatUnits(count.withdrawable, 18),
-          formatUnits(pendingBondReward, 18),
-          formatUnits(referralBond.bondReward, 18),
-        )
+
+        parents.map(async (parent) => {
+          const referral = await bond.addressToReferral(parent)
+          count.unpaid = count?.unpaid.add(referral?.bondRewardUnpaid)
+          count.withdrawable = count?.withdrawable.add(pendingBondReward.add(referral?.bondReward))
+          console.log('withdrawed:', buyer, formatUnits(count.withdrawable, 18), formatUnits(count.unpaid, 18))
+        })
       }),
     )
     setTotalBondUsed(count.bondUsed)
@@ -286,6 +281,10 @@ const Private = () => {
       <br />
       <span>债券总销售量: {formatUnits(totalPayout, 18)}</span>
       <br />
+      <span>债券已使用:{formatUnits(totalBondUsed, 18)}</span>
+      <br />
+      <span>债券未使用:{formatUnits(totalPayout.sub(totalBondUsed), 18)}</span>
+      <br />
       <span>债券奖励总额: {formatUnits(totalBondReward, 18)}</span>
       <br />
       <span>债券奖励已领取: {formatUnits(totalBondRewardWithdrawed, 18)}</span>
@@ -296,10 +295,7 @@ const Private = () => {
       <br />
       <span>债券奖励未支付: {formatUnits(totalBondRewardUnpaid, 18)}</span>
       <br />
-      <span>债券未使用:{formatUnits(totalPayout.sub(totalBondUsed), 18)}</span>
-      <br />
-      <span>债券已使用:{formatUnits(totalBondUsed, 18)}</span>
-      <br />
+
       <span>社交奖励总余额:</span>
       <span>{parseFloat(formatUnits(totalReward)) * 0.95}</span>
       <br />

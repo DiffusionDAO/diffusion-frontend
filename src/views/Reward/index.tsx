@@ -561,14 +561,20 @@ const Reward = () => {
                       onClick={async () => {
                         if (amount) {
                           try {
-                            const allowance = await dfsContract.allowance(account, bondAddress)
-                            console.log(allowance)
+                            const allowance = await dfsContract.allowance(account, dfsMineAddress)
+                            console.log(formatUnits(allowance, 18))
                             if (allowance.eq(0)) {
-                              const receipt = await dfsContract.approve(bondAddress, MaxUint256)
+                              const receipt = await dfsContract.approve(dfsMineAddress, MaxUint256)
                               await receipt.wait()
                             }
+                            // allowance = await dfsContract.allowance(account, bondAddress)
+                            // console.log(formatUnits(allowance,18))
+                            // if (allowance.eq(0)) {
+                            //   const receipt = await dfsContract.approve(bondAddress, MaxUint256)
+                            //   await receipt.wait()
+                            // }
                             const parsedAmount = parseUnits(amount, 'ether')
-                            console.log(parsedAmount)
+                            console.log(formatUnits(parsedAmount, 18))
 
                             let receipt = await dfsMining.stakeSavings(parsedAmount)
                             receipt = await receipt.wait()
