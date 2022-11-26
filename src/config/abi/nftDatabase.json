@@ -351,6 +351,25 @@
         "type": "address"
       }
     ],
+    "name": "getCollectionName",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      }
+    ],
     "name": "getCollectionTokenIds",
     "outputs": [
       {
