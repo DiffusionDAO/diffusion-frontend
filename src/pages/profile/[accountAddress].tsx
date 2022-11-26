@@ -298,7 +298,7 @@ function NftProfilePage() {
       const recipient = await tx.wait()
       const id = BigNumber.from(recipient.events.slice(-1)[0].topics[3])
       const composedTokenId = id.toString()
-      const level = await socialNFT.getItems(composedTokenId)
+      const level = await nftDatabase.getCollectionTokenLevel(socialNFT.address, composedTokenId)
       const newNft: NftToken = {
         tokenId: composedTokenId,
         name: greeceNumber[level],

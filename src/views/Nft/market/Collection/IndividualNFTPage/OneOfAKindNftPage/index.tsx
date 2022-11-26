@@ -62,7 +62,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
       const nft: NftToken = {
         tokenId,
         collectionAddress,
-        collectionName: t(res.collectionName),
+        collectionName: t(collection.name),
         name: `${t(levelToName[res.level])}#${tokenId}`,
         description: t(res.collectionNamet),
         image: { original: 'string', thumbnail },
