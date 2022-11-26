@@ -214,15 +214,20 @@ function NftProfilePage() {
             .map((nft) => tokens.unstaked.push(nftToNftToken(nft, t)))
         }),
       )
-      const items = await nftDatabase.getTokenIdsOfOwner(nftMarket.address)
       await Promise.all(
-        items.map(async (item) => {
-          const token = await nftDatabase.getToken(item.collection, item.tokenId)
-          if (token.seller === account) {
-            tokens.onSale.push(nftToNftToken(token, t))
-          }
+        collectionAddresses.map(async (collection) => {
+          const tokenIds = await nftDatabase.getTokenIdsOfOwner(collection, nftMarket.address)
+          await Promise.all(
+            tokenIds.map(async (tokenId) => {
+              const token = await nftDatabase.getToken(collection, tokenId)
+              if (token.seller === account) {
+                tokens.onSale.push(nftToNftToken(token, t))
+              }
+            }),
+          )
         }),
       )
+
       await Promise.all(
         collectionAddresses.map(async (collectionAddress) => {
           const staked = await dfsMining.getTokensStakedByOwner(dfsNFTAddress, account)
