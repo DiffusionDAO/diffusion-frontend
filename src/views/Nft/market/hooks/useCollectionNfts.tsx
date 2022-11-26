@@ -156,7 +156,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
           tokenId: tokenIdString,
           name,
           description: name,
-          collectionName: nft.collectionName,
+          collectionName: collection.name,
           collectionAddress: nft.collectionAddress,
           image: {
             original: 'string',

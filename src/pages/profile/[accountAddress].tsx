@@ -65,10 +65,7 @@ export interface NFT {
   seller: string
   price: BigNumber
   itemId: BigNumber
-  collectionName: string
   collectionAddress: string
-  createdAt: BigNumber
-  updatedAt: BigNumber
 }
 export interface CollectionData {
   collectionAddress: string
@@ -129,7 +126,6 @@ export const nftToNftToken = (nft: NFT, t) => {
   const token = {
     tokenId,
     name: translatedName,
-    collectionName: nft.collectionName,
     collectionAddress: nft.collectionAddress,
     image: {
       original: 'string',
@@ -371,6 +367,7 @@ function NftProfilePage() {
   const submitStake = async (selected) => {
     const mineAddress = getMiningAddress()
     const tokenIds = selected.map((item) => item.tokenId)
+    console.log('tokenIds:', tokenIds)
     const approved = await socialNFT.isApprovedForAll(account, mineAddress)
     let receipt
     if (!approved) {

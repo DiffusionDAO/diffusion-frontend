@@ -44,6 +44,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const nft: NFT = await nftDatabase.getToken(collectionAddress, tokenId)
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
+  console.log(collection)
   // const collectionWithToken: ApiCollection = await getCollectionApi(collectionAddress)
   // // const collectionWithToken: ApiCollection = {...data, address:collectionAddress, name:""}
   // console.log("collectionWithToken:",collectionWithToken)
@@ -64,9 +65,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const token: NftToken = {
     tokenId,
     collectionAddress,
-    collectionName: nft.collectionName,
+    collectionName: collection.name,
     name: levelToName[level],
-    description: nft.collectionName,
+    description: collection.name,
     image: { original: 'string', thumbnail },
     attributes: [
       {
