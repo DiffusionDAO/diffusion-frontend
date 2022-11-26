@@ -201,7 +201,6 @@ function NftProfilePage() {
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
   const socialNFT = useSocialNftContract()
-  const mine = useDFSMiningContract()
 
   const getProfileToken = async () => {
     const collectionAddresses = await nftDatabase.getCollectionAddresses()
@@ -374,7 +373,7 @@ function NftProfilePage() {
       await receipt.wait()
     }
     try {
-      receipt = await mine.stakeNFT(dfsNFTAddress, tokenIds)
+      receipt = await dfsMining.stakeNFT(dfsNFTAddress, tokenIds)
       await receipt.wait()
       mutate(getProfileToken())
       selected.map((item) => (item.staker = !item.staker))
