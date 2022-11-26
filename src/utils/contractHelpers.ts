@@ -103,7 +103,6 @@ import bCakeFarmBoosterProxyFactoryAbi from 'config/abi/bCakeFarmBoosterProxyFac
 import bCakeProxyAbi from 'config/abi/bCakeProxy.json'
 
 import nftMarketAbi from 'config/abi/nftMarket.json'
-import nftComposeAbi from 'config/abi/nftComposeAbi.json'
 import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
 import dfsAbi from 'config/abi/dfsAbi.json'
 import pdfsAbi from 'config/abi/pdfsAbi.json'
