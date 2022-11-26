@@ -44,7 +44,7 @@ import { getDFSNFTAddress, getMiningAddress } from 'utils/addressHelpers'
 import {
   useNFTDatabaseContract,
   useDFSMiningContract,
-  useDFSNftContract,
+  useSocialNftContract,
   useNftComposeContract,
   useNftMarketContract,
 } from 'hooks/useContract'
@@ -202,7 +202,7 @@ function NftProfilePage() {
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
   const composeNFT = useNftComposeContract()
-  const socialNFT = useDFSNftContract()
+  const socialNFT = useSocialNftContract()
   const mine = useDFSMiningContract()
   const market = useNftMarketContract()
 
@@ -218,11 +218,10 @@ function NftProfilePage() {
             .map((nft) => tokens.unstaked.push(nftToNftToken(nft, t)))
         }),
       )
-      const items = await nftMarket.getTokensOnSaleByOwner(account)
+      const items = await nftDatabase.getTokenIdsOfOwner(nftMarket.address)
       await Promise.all(
         items.map(async (item) => {
           const token = await nftDatabase.getToken(item.collection, item.tokenId)
-          console.log(token)
           if (token.seller === account) {
             tokens.onSale.push(nftToNftToken(token, t))
           }

@@ -195,7 +195,6 @@ const BondModal: React.FC<BondModalProps> = ({
     })
   }, [account, amount, refresh, activeTab])
 
-  console.log('refresh:', refresh, activeTab)
   const buy = () => {
     if (!hasReferral) {
       confirm({

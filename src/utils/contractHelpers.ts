@@ -40,8 +40,6 @@ import {
   getPredictionsV1Address,
   getBCakeFarmBoosterAddress,
   getBCakeFarmBoosterProxyFactoryAddress,
-  getNFTComposeAddress,
-  getNftMintAddress,
   getNftMarketAddress,
   getDFSNFTAddress,
   getStarlightAddress,
@@ -106,7 +104,6 @@ import bCakeProxyAbi from 'config/abi/bCakeProxy.json'
 
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftComposeAbi from 'config/abi/nftComposeAbi.json'
-import nftMintAbi from 'config/abi/nftMintAbi.json'
 import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
 import dfsAbi from 'config/abi/dfsAbi.json'
 import pdfsAbi from 'config/abi/pdfsAbi.json'
@@ -383,14 +380,6 @@ export const getBCakeFarmBoosterProxyFactoryContract = (signer?: Signer | Provid
 
 export const getBCakeProxyContract = (proxyContractAddress: string, signer?: Signer | Provider) => {
   return getContract({ abi: bCakeProxyAbi, address: proxyContractAddress, signer }) as BCakeProxy
-}
-
-export const getNftComposeContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: nftComposeAbi, address: getNFTComposeAddress(), signer })
-}
-
-export const getNftDrawContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: nftMintAbi, address: getNftMintAddress(), signer })
 }
 
 export const getNftMarketContract = (signer?: Signer | Provider) => {

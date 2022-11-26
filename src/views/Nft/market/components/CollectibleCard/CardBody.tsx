@@ -18,7 +18,8 @@ const CollectibleCardBody: React.FC<React.PropsWithChildren<CollectibleCardProps
   const { t } = useTranslation()
   const { name } = nft
   const bnbBusdPrice = useBNBBusdPrice()
-  const translatedName = `${t(name.split('#')[0])}#${name.split('#')[1]}`
+  console.log('name:', name)
+  const translatedName = `${t(name?.split('#')[0])}#${name?.split('#')[1]}`
   return (
     <CardBody p="8px">
       <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />

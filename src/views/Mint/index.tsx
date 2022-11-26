@@ -6,12 +6,12 @@ import { useTranslation } from '@pancakeswap/localization'
 import {
   useBondContract,
   useDFSMiningContract,
-  useDFSNftContract,
+  useSocialNftContract,
   useERC20,
-  useNFTMintContract,
   useTokenContract,
+  useNFTDatabaseContract,
 } from 'hooks/useContract'
-import { getDFSAddress, getNftMintAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getDFSNFTAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
@@ -61,7 +61,6 @@ const Mint = () => {
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1)
   const [maxOrdinary, setMaxOrdinary] = useState<BigNumber>(BigNumber.from(1))
   const [mintNFTData, setMintNFTData] = useState<any>([])
-  const nftMintAddress = getNftMintAddress()
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
   const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
@@ -69,16 +68,16 @@ const Mint = () => {
   const [seniorPrice, setTwoCost] = useState<BigNumber>(BigNumber.from(0))
   const [bondUsed, setBondUsed] = useState<BigNumber>(BigNumber.from(0))
 
-  const mintContract = useNFTMintContract()
+  const socialNFT = useSocialNftContract()
+  const database = useNFTDatabaseContract()
+
   useEffect(() => {
-    mintContract.mintOneCost().then((oneCost) => setOneCost(oneCost))
-    mintContract.mintTwoCost().then((twoCost) => setTwoCost(twoCost))
+    socialNFT.elementaryCost().then((oneCost) => setOneCost(oneCost))
+    socialNFT.advancedCost().then((twoCost) => setTwoCost(twoCost))
   }, [account, balance])
   const dfsAddress = getDFSAddress()
   const DFS = useERC20(dfsAddress)
 
-  const NFTMint = useNFTMintContract()
-  const dfsMining = useDFSMiningContract()
   const bond = useBondContract()
 
   useEffect(() => {
@@ -94,9 +93,9 @@ const Mint = () => {
         .catch((error) => {
           console.log(error)
         })
-      DFS.allowance(account, nftMintAddress)
+      DFS.allowance(account, socialNFT.address)
         .then((res) => {
-          if (!res.eq(allowance)) setAllowance(res)
+          setAllowance(res)
         })
         .catch((error) => {
           console.log(error)
@@ -112,13 +111,11 @@ const Mint = () => {
     }
   }, [account, mintBoxModalVisible, ordinaryPrice, seniorPrice])
 
-  const socialNFT = useDFSNftContract()
   const mint = async (type: string, useBond: boolean) => {
     if (!account) {
       onPresentConnectModal()
       return
     }
-    console.log(useBond, formatBigNumber(bondPayout), formatBigNumber(balance), type)
     if (type === 'ordinary') {
       if (useBond) {
         if (bondPayout.lt(ordinaryPrice.mul(ordinaryCount))) {
@@ -148,8 +145,8 @@ const Mint = () => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const res =
         type === 'ordinary'
-          ? await NFTMint.mintOne(ordinaryCount, useBond)
-          : await NFTMint.mintTwo(seniorCount, useBond)
+          ? await socialNFT.mintElementary(ordinaryCount, useBond)
+          : await socialNFT.mintAdvanced(seniorCount, useBond)
       const receipt = await res.wait()
       const { logs } = receipt
       // eslint-disable-next-line prefer-const
@@ -160,7 +157,7 @@ const Mint = () => {
           const id = BigNumber.from(logs[i]?.topics[3])
           const tokenId = id.toString()
           // eslint-disable-next-line no-await-in-loop
-          const level = await socialNFT.getItems(tokenId)
+          const level = await database.getCollectionTokenLevel(socialNFT.address, tokenId)
           if (!levelTokenIds[level]) levelTokenIds[level] = []
           levelTokenIds[level].push(tokenId)
         }
@@ -266,27 +263,12 @@ const Mint = () => {
                       {t('Max')}
                     </DrawBlindBoxTextBtn>
                   </ActionLeft>
-                  {/* <ActionRight>
-                    {allowance.eq(0) ? (
-                      <DrawBlindBoxPrimaryBtn
-                        className="orangeBtn"
-                        style={{ width: '80px' }}
-                        onClick={async () => {
-                          await DFS.approve(nftMintAddress, MaxUint256)
-                        }}
-                      >
-                        {t('Approve')}
-                      </DrawBlindBoxPrimaryBtn>
-                    ) : (
-                      <></>
-                    )}
-                  </ActionRight> */}
                 </ActionWrap>
                 <DrawBlindBoxPrimaryBtn
                   className="orangeBtn"
                   onClick={async () => {
                     if (allowance.eq(0)) {
-                      const receipt = await DFS.approve(nftMintAddress, MaxUint256)
+                      const receipt = await DFS.approve(socialNFT.address, MaxUint256)
                       await receipt.wait()
                     }
                     mint('senior', false)
@@ -381,27 +363,12 @@ const Mint = () => {
                       {t('Max')}
                     </DrawBlindBoxTextBtn>
                   </ActionLeft>
-                  {/* <ActionRight>
-                    {allowance.eq(0) ? (
-                      <DrawBlindBoxPrimaryBtn
-                        className="purpleBtn"
-                        onClick={async () => {
-                          await DFS.approve(nftMintAddress, MaxUint256)
-                        }}
-                        style={{ width: '80px' }}
-                      >
-                        {t('Approve')}
-                      </DrawBlindBoxPrimaryBtn>
-                    ) : (
-                      <></>
-                    )}
-                  </ActionRight> */}
                 </ActionWrap>
                 <DrawBlindBoxPrimaryBtn
                   className="purpleBtn"
                   onClick={async () => {
                     if (allowance.eq(0)) {
-                      const receipt = await DFS.approve(nftMintAddress, MaxUint256)
+                      const receipt = await DFS.approve(socialNFT.address, MaxUint256)
                       await receipt.wait()
                     }
                     mint('ordinary', false)

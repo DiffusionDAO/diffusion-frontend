@@ -57,8 +57,6 @@ import {
   getTradingCompetitionContractMobox,
   getTradingCompetitionContractMoD,
   getNftMarketContract,
-  getNftComposeContract,
-  getNftDrawContract,
   getDFSNFTContract,
   getMineContract,
   getDFSContract,
@@ -376,17 +374,7 @@ export function useBCakeProxyContract(proxyContractAddress: string, withSignerIf
   )
 }
 
-export const useNftComposeContract = (withSignerIfPossible = true) => {
-  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getNftComposeContract(providerOrSigner), [providerOrSigner])
-}
-
-export const useNFTMintContract = (withSignerIfPossible = true) => {
-  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getNftDrawContract(providerOrSigner), [providerOrSigner])
-}
-
-export const useDFSNftContract = (withSignerIfPossible = true) => {
+export const useSocialNftContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
   return useMemo(() => getDFSNFTContract(providerOrSigner), [providerOrSigner])
 }

@@ -237,7 +237,6 @@ export const useCollectionNfts = (collectionAddress: string) => {
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
         const marketItems = await nftMarketContract.fetchMarketItems()
-        console.log(marketItems)
         const marketTokenIds = marketItems
           .filter((item) => item.collection === collectionAddress)
           .map((item) => item.tokenId)

@@ -121,9 +121,6 @@ export const getBCakeFarmBoosterProxyFactoryAddress = () => {
 export const getNftMarketAddress = () => {
   return getAddress(addresses.nftMarket)
 }
-export const getNFTComposeAddress = () => {
-  return getAddress(addresses.composeNft)
-}
 export const getUSDTAddress = () => {
   return getAddress(addresses.usdt)
 }
@@ -141,9 +138,6 @@ export const getBondAddress = () => {
 }
 export const getMiningAddress = () => {
   return getAddress(addresses.dfsMining)
-}
-export const getNftMintAddress = () => {
-  return getAddress(addresses.mintNFT)
 }
 export const getIDOAddress = () => {
   return getAddress(addresses.pdfs)
