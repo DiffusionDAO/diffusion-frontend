@@ -292,7 +292,7 @@ function NftProfilePage() {
       if (selectedTokenIds?.length === 3) {
         tx = await socialNFT.ComposeLv0(selectedTokenIds)
       } else {
-        tx = await socialNFT.ComposeLvX(selectedTokenIds, value)
+        tx = await socialNFT.ComposeLvX(selectedTokenIds)
       }
       const recipient = await tx.wait()
       const id = BigNumber.from(recipient.events.slice(-1)[0].topics[3])
