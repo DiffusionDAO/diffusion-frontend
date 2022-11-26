@@ -45,7 +45,6 @@ import {
   useNFTDatabaseContract,
   useDFSMiningContract,
   useSocialNftContract,
-  useNftComposeContract,
   useNftMarketContract,
 } from 'hooks/useContract'
 import useSWR from 'swr'
@@ -201,10 +200,8 @@ function NftProfilePage() {
   const nftDatabase = useNFTDatabaseContract()
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
-  const composeNFT = useNftComposeContract()
   const socialNFT = useSocialNftContract()
   const mine = useDFSMiningContract()
-  const market = useNftMarketContract()
 
   const getProfileToken = async () => {
     const collectionAddresses = await nftDatabase.getCollectionAddresses()
