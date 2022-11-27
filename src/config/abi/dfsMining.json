@@ -20,11 +20,6 @@
         "internalType": "address",
         "name": "_nft",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_database",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -163,19 +158,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "database",
-    "outputs": [
-      {
-        "internalType": "contract INFTDatabase",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -698,19 +680,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_database",
-        "type": "address"
-      }
-    ],
-    "name": "setDatabase",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_dfs",
         "type": "address"
       }
@@ -871,11 +840,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "collection",
-        "type": "address"
-      },
-      {
         "internalType": "uint32[]",
         "name": "_tokenIds",
         "type": "uint32[]"
@@ -907,11 +871,6 @@
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
@@ -936,11 +895,6 @@
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
         "internalType": "uint32",
         "name": "",
         "type": "uint32"
@@ -952,6 +906,25 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "name": "staker",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -1075,11 +1048,6 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_collection",
-        "type": "address"
-      },
       {
         "internalType": "uint32",
         "name": "_tokenId",
