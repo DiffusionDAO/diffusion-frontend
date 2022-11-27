@@ -40,7 +40,7 @@ import ComposeConfirmModal from 'views/Nft/market/Profile/components/ComposeConf
 import ComposeSuccessModal from 'views/Nft/market/Profile/components/ComposeSuccessModal'
 import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
-import { getDFSNFTAddress, getMiningAddress } from 'utils/addressHelpers'
+import { getSocialNFTAddress, getMiningAddress } from 'utils/addressHelpers'
 import {
   useNFTDatabaseContract,
   useDFSMiningContract,
@@ -166,7 +166,7 @@ export const nftToNftToken = (nft: NFT, t) => {
 }
 function NftProfilePage() {
   const { account } = useWeb3React()
-  const dfsNFTAddress = getDFSNFTAddress()
+  const dfsNFTAddress = getSocialNFTAddress()
   const { t, currentLanguage } = useTranslation()
   const [stakedNFTs, setStakedNFTs] = useState<NftToken[]>()
   const [unstakedNFTs, setUnstakedNFTs] = useState<NftToken[]>()

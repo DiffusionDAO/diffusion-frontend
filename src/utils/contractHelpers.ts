@@ -41,7 +41,7 @@ import {
   getBCakeFarmBoosterAddress,
   getBCakeFarmBoosterProxyFactoryAddress,
   getNftMarketAddress,
-  getDFSNFTAddress,
+  getSocialNFTAddress,
   getStarlightAddress,
   getIDOAddress,
   getNFTDatabaseAddress,
@@ -103,7 +103,7 @@ import bCakeFarmBoosterProxyFactoryAbi from 'config/abi/bCakeFarmBoosterProxyFac
 import bCakeProxyAbi from 'config/abi/bCakeProxy.json'
 
 import nftMarketAbi from 'config/abi/nftMarket.json'
-import dfsNFTAbi from 'config/abi/dfsNFTAbi.json'
+import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import dfsAbi from 'config/abi/dfsAbi.json'
 import pdfsAbi from 'config/abi/pdfsAbi.json'
 import starlightAbi from 'config/abi/starlight.json'
@@ -389,7 +389,7 @@ export const getStarlightContract = (signer?: Signer | Provider) => {
   return getContract({ abi: starlightAbi, address: getStarlightAddress(), signer })
 }
 export const getDFSNFTContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: dfsNFTAbi, address: getDFSNFTAddress(), signer })
+  return getContract({ abi: socialNFTAbi, address: getSocialNFTAddress(), signer })
 }
 export const getDFSContract = (signer?: Signer | Provider) => {
   return getContract({ abi: dfsAbi, address: getDFSAddress(), signer })

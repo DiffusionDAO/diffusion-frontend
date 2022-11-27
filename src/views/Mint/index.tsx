@@ -11,7 +11,7 @@ import {
   useTokenContract,
   useNFTDatabaseContract,
 } from 'hooks/useContract'
-import { getDFSAddress, getDFSNFTAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getSocialNFTAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'

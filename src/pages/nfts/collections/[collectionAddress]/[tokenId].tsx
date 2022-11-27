@@ -4,9 +4,10 @@ import { getCollection, getNftApi, getCollectionApi } from 'state/nftMarket/help
 import { ApiCollection, Collection, NftToken } from 'state/nftMarket/types'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
-import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
+import { getSocialNFTAddress, getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
 import { getContract } from 'utils/contractHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
+import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import { formatBigNumber } from 'utils/formatBalance'
 import { CollectionData, levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
@@ -39,10 +40,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
 
-  const nftDatabaseAddress = getNFTDatabaseAddress()
-  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
+  const socianNFTAddress = getSocialNFTAddress()
+  const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC_TESTNET })
   const nft: NFT = await socialNFT.getToken(collectionAddress, tokenId)
-  const name = await nftDatabase.getCollectionName(collectionAddress)
+  // const name = await nftDatabase.getCollectionName(collectionAddress)
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
 
@@ -58,12 +59,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
   }
   const level = nft?.level?.toString()
-  const token: NftToken = {
+  const token = {
     tokenId,
     collectionAddress,
-    collectionName: name,
     name: `${levelToName[level]}#${tokenId}`,
-    description: name,
     image: { original: 'string', thumbnail },
     attributes: [
       {

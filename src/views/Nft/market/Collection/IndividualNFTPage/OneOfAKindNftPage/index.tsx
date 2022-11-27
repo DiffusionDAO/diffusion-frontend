@@ -7,7 +7,7 @@ import PageLoader from 'components/Loader/PageLoader'
 import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
 import { NftToken } from 'state/nftMarket/types'
 
-import { useNFTDatabaseContract } from 'hooks/useContract'
+import { useNFTDatabaseContract, useSocialNftContract } from 'hooks/useContract'
 import { formatBigNumber } from 'utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { levelToName, levelToSPOS } from 'pages/profile/[accountAddress]'
@@ -49,9 +49,9 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const bgOffset = !isMobile ? '40px' : '80px'
   const [nft, setNFT] = useState<NftToken>()
   const collection = useGetCollection(collectionAddress)
-  const nftDatabase = useNFTDatabaseContract()
+  const socialNFT = useSocialNftContract()
   useEffect(() => {
-    socialNFT.getToken(collectionAddress, tokenId).then((res) => {
+    socialNFT.getToken(tokenId).then((res) => {
       let thumbnail = `/images/nfts/socialnft/${res.level.toString()}`
       const starLightAddress = getStarlightAddress()
       if (res.collectionAddress === starLightAddress) {

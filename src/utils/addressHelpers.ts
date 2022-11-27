@@ -142,7 +142,7 @@ export const getMiningAddress = () => {
 export const getIDOAddress = () => {
   return getAddress(addresses.pdfs)
 }
-export const getDFSNFTAddress = () => {
+export const getSocialNFTAddress = () => {
   return getAddress(addresses.socialNFT)
 }
 export const getStarlightAddress = () => {

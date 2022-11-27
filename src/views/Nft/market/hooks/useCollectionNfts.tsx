@@ -31,8 +31,14 @@ import uniqBy from 'lodash/uniqBy'
 import fromPairs from 'lodash/fromPairs'
 import { getContract } from 'utils/contractHelpers'
 import { useNftMarketContract } from 'hooks/useContract'
-import { getDFSNFTAddress, getNFTDatabaseAddress, getNftMarketAddress, getStarlightAddress } from 'utils/addressHelpers'
+import {
+  getSocialNFTAddress,
+  getNFTDatabaseAddress,
+  getNftMarketAddress,
+  getStarlightAddress,
+} from 'utils/addressHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
+import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import { levelToName, CollectionData, NFT, nftToNftToken, levelToSPOS } from 'pages/profile/[accountAddress]'
 import useSWR from 'swr'
 import { useTranslation } from '@pancakeswap/localization'
@@ -130,21 +136,21 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const isLastPage = useRef(false)
   const { t } = useTranslation()
   const [tokens, setTokens] = useState<any[]>()
-  const nftDatabaseAddress = getNFTDatabaseAddress()
-  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
+  const socianNFTAddress = getSocialNFTAddress()
+  const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC_TESTNET })
   const { data: collection, status: collectionStatus } = useSWR('collections', async () => {
     const collection: any = getCollection(collectionAddress)
 
-    const tokenIds = await nftDatabase.getCollectionTokenIds(collectionAddress)
+    const tokenIds = await socialNFT.getCollectionTokenIds(collectionAddress)
     const getTokens = await Promise.all(
       tokenIds.map(async (tokenId) => {
         const tokenIdString = tokenId.toString()
-        const nft: NFT = await socialNFT.getToken(collectionAddress, tokenIdString)
+        const nft: NFT = await socialNFT.getToken(tokenIdString)
         const level = nft.level.toString()
         let thumbnail
         let name
         const starLightAddress = getStarlightAddress()
-        const dfsNFTAddress = getDFSNFTAddress()
+        const dfsNFTAddress = getSocialNFTAddress()
         if (collectionAddress === starLightAddress) {
           thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
           name = `StarLight#${tokenId}`
