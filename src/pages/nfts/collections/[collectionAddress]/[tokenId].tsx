@@ -41,7 +41,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const nftDatabaseAddress = getNFTDatabaseAddress()
   const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
-  const nft: NFT = await nftDatabase.getToken(collectionAddress, tokenId)
+  const nft: NFT = await socialNFT.getToken(collectionAddress, tokenId)
   const name = await nftDatabase.getCollectionName(collectionAddress)
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))

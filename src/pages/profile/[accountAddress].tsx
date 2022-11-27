@@ -202,43 +202,36 @@ function NftProfilePage() {
   const socialNFT = useSocialNftContract()
 
   const getProfileToken = async () => {
-    const collectionAddresses = await nftDatabase.getCollectionAddresses()
+    // const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
+      let tokenIds = await socialNFT.getTokenIdsOfOwner(account)
+      console.log('tokenIds:', tokenIds)
       await Promise.all(
-        collectionAddresses.map(async (collectionAddress) => {
-          const nfts = await nftDatabase.getTokensOfOwner(collectionAddress, account)
-          // console.log("nfts:", nfts)
-          nfts
-            .filter((nft) => nft.collectionAddress === dfsNFTAddress && nft.owner === account)
-            .map((nft) => tokens.unstaked.push(nftToNftToken(nft, t)))
+        tokenIds.map(async (tokenId) => {
+          const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
+          const token = await socialNFT.getToken(tokenId)
+          const nft = { ...token, ...sellPrice }
+          tokens.unstaked.push(nftToNftToken(nft, t))
         }),
       )
+      tokenIds = await socialNFT.getTokenIdsOfOwner(nftMarket.address)
       await Promise.all(
-        collectionAddresses.map(async (collection) => {
-          const tokenIds = await nftDatabase.getTokenIdsOfOwner(collection, nftMarket.address)
-          await Promise.all(
-            tokenIds.map(async (tokenId) => {
-              const token = await nftDatabase.getToken(collection, tokenId)
-              if (token.seller === account) {
-                tokens.onSale.push(nftToNftToken(token, t))
-              }
-            }),
-          )
+        tokenIds.map(async (tokenId) => {
+          const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
+          const token = await socialNFT.getToken(tokenId)
+          const nft = { ...token, ...sellPrice }
+          if (nft.seller === account) {
+            tokens.onSale.push(nftToNftToken(nft, t))
+          }
         }),
       )
 
+      const staked = await dfsMining.getTokensStakedByOwner(dfsNFTAddress, account)
       await Promise.all(
-        collectionAddresses.map(async (collectionAddress) => {
-          const staked = await dfsMining.getTokensStakedByOwner(dfsNFTAddress, account)
-          await Promise.all(
-            staked.map(async (tokenId) => {
-              const token = await nftDatabase.getToken(collectionAddress, tokenId)
-              if (token.collectionAddress === dfsNFTAddress) {
-                tokens.staked.push(nftToNftToken(token, t))
-              }
-            }),
-          )
+        staked.map(async (tokenId) => {
+          const token = await socialNFT.getToken(tokenId)
+          tokens.staked.push(nftToNftToken(token, t))
         }),
       )
       return tokens

@@ -51,7 +51,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const collection = useGetCollection(collectionAddress)
   const nftDatabase = useNFTDatabaseContract()
   useEffect(() => {
-    nftDatabase.getToken(collectionAddress, tokenId).then((res) => {
+    socialNFT.getToken(collectionAddress, tokenId).then((res) => {
       let thumbnail = `/images/nfts/socialnft/${res.level.toString()}`
       const starLightAddress = getStarlightAddress()
       if (res.collectionAddress === starLightAddress) {
