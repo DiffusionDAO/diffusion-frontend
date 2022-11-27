@@ -17,6 +17,7 @@ const CollectibleCardBody: React.FC<React.PropsWithChildren<CollectibleCardProps
 }) => {
   const { t } = useTranslation()
   const { name } = nft
+  // console.log(name)
   const bnbBusdPrice = useBNBBusdPrice()
   const translatedName = `${t(name?.split('#')[0])}#${name?.split('#')[1]}`
   return (

@@ -103,6 +103,7 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
     const nftDatabaseAddress = getNFTDatabaseAddress()
     const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
     const collectionData: CollectionData = await nftDatabase.collections(collectionAddress)
+    // console.log(collectionData)
     return {
       [collectionAddress]: {
         name: collectionData.name,

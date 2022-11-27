@@ -549,6 +549,11 @@
             "type": "address"
           },
           {
+            "internalType": "string",
+            "name": "collectionName",
+            "type": "string"
+          },
+          {
             "internalType": "bool",
             "name": "sold",
             "type": "bool"
@@ -637,6 +642,11 @@
             "internalType": "address",
             "name": "collectionAddress",
             "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "collectionName",
+            "type": "string"
           },
           {
             "internalType": "bool",

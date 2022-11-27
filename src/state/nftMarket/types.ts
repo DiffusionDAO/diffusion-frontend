@@ -81,6 +81,7 @@ export interface NftToken {
   staker?: string
   owner?: string
   itemId?: string
+  seller?: string
 }
 
 export interface NftFilter {

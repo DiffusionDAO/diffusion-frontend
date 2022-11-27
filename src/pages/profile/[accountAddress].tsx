@@ -65,6 +65,7 @@ export interface NFT {
   seller: string
   price: BigNumber
   itemId: BigNumber
+  collectionName: string
   collectionAddress: string
 }
 export interface CollectionData {
@@ -123,9 +124,11 @@ export const nftToNftToken = (nft: NFT, t) => {
   const tokenId = nft?.tokenId?.toString()
   const level = nft?.level?.toString()
   const translatedName = `${t(levelToName[level])}#${tokenId}`
-  const token = {
+  const token: NftToken = {
     tokenId,
     name: translatedName,
+    collectionName: nft.collectionName,
+    description: nft.collectionName,
     collectionAddress: nft.collectionAddress,
     image: {
       original: 'string',
@@ -204,7 +207,8 @@ function NftProfilePage() {
     if (account) {
       await Promise.all(
         collectionAddresses.map(async (collectionAddress) => {
-          const nfts: NFT[] = await nftDatabase.getTokensOfOwner(collectionAddress, account)
+          const nfts = await nftDatabase.getTokensOfOwner(collectionAddress, account)
+          // console.log("nfts:", nfts)
           nfts
             .filter((nft) => nft.collectionAddress === dfsNFTAddress && nft.owner === account)
             .map((nft) => tokens.unstaked.push(nftToNftToken(nft, t)))
@@ -389,7 +393,6 @@ function NftProfilePage() {
 
   const confirmOpt = async () => {
     const selected = unstakedNFTs.filter((item) => item.selected)
-    setSelectedNFTs(selected)
     if (!selected?.length) {
       setNoteContent({
         title: t('Note'),
@@ -474,10 +477,7 @@ function NftProfilePage() {
       {!isMobile && (
         <BackgroundWrap isMobile={isMobile}>
           <BackgroundText>
-            <BackgroundTitle>
-              Diffusion DAO
-              {/* <Typed strings={['Diffusion DAO']} typeSpeed={50} cursorChar="" /> */}
-            </BackgroundTitle>
+            <BackgroundTitle>Diffusion DAO</BackgroundTitle>
             <BackgroundDes>
               {t(
                 'This is your digital asset treasure silo, stake or compose NFTs to explore more possibilities where you can obtain more fulfilling rewards',
@@ -506,9 +506,6 @@ function NftProfilePage() {
           />
 
           <SubMenuRight>
-            {/* <SelectWrap>
-              <Cascader options={sortByItems} style={{ width: '200px' }} />
-            </SelectWrap> */}
             {activeTab === 'WithoutStake' && (
               <Button type="primary" style={{ marginLeft: '10px' }} size="middle" onClick={startStake}>
                 {t('Stake')}
