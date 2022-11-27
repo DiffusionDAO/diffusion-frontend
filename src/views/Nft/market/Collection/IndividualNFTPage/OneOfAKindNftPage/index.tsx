@@ -52,7 +52,6 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const nftDatabase = useNFTDatabaseContract()
   useEffect(() => {
     nftDatabase.getToken(collectionAddress, tokenId).then((res) => {
-      // console.log("IndividualNFTPage:", res)
       let thumbnail = `/images/nfts/socialnft/${res.level.toString()}`
       const starLightAddress = getStarlightAddress()
       if (res.collectionAddress === starLightAddress) {
@@ -72,7 +71,6 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
         ],
         staker: res.staker,
         owner: res.owner,
-        itemId: res.itemId.toString(),
         marketData: {
           tokenId,
           collection: {
