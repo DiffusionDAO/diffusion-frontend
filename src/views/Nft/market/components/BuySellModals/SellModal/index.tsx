@@ -193,7 +193,8 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
     onConfirm: () => {
       if (stage === SellingStage.CONFIRM_REMOVE_FROM_MARKET) {
         const transactionResponse: Promise<TransactionResponse> = callWithGasPrice(nftMarketContract, 'offshelf', [
-          nftToSell.itemId,
+          nftToSell.collectionAddress,
+          nftToSell.tokenId,
         ])
         transactionResponse.then((response) => {
           response.wait().then((res) => {
@@ -239,7 +240,6 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
           transactionResponse.then((response) => {
             response.wait().then((res) => {
               database.getToken(nftToSell.collectionAddress, nftToSell.tokenId).then((nft: NFT) => {
-                nftToSell.itemId = nft.itemId.toString()
                 nftToSell.marketData.currentAskPrice = price
                 nftToSell.marketData.isTradable = true
                 nftToSell.marketData.currentSeller = account

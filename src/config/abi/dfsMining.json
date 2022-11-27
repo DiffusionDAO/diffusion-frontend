@@ -23,7 +23,7 @@
       },
       {
         "internalType": "address",
-        "name": "_router",
+        "name": "_database",
         "type": "address"
       }
     ],
@@ -256,9 +256,9 @@
     "name": "getTokensStakedByOwner",
     "outputs": [
       {
-        "internalType": "uint256[]",
+        "internalType": "uint32[]",
         "name": "",
-        "type": "uint256[]"
+        "type": "uint32[]"
       }
     ],
     "stateMutability": "view",
@@ -470,19 +470,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "pancakeswapV2Router",
-    "outputs": [
-      {
-        "internalType": "contract IPancakeswapV2Router02",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -557,9 +544,9 @@
         "type": "address"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "powerRewardDetails",
@@ -692,6 +679,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_bond",
+        "type": "address"
+      }
+    ],
+    "name": "setBondAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -876,9 +876,9 @@
         "type": "address"
       },
       {
-        "internalType": "uint256[]",
+        "internalType": "uint32[]",
         "name": "_tokenIds",
-        "type": "uint256[]"
+        "type": "uint32[]"
       }
     ],
     "name": "stakeNFT",
@@ -920,9 +920,9 @@
     "name": "stakedByOwner",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -941,9 +941,9 @@
         "type": "address"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "stakedByOwnerIndex",
@@ -1081,9 +1081,9 @@
         "type": "address"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "_tokenId",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "unstakeNFT",
