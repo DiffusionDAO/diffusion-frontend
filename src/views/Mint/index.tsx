@@ -93,13 +93,7 @@ const Mint = () => {
         .catch((error) => {
           console.log(error)
         })
-      DFS.allowance(account, socialNFT.address)
-        .then((res) => {
-          setAllowance(res)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+
       if (ordinaryPrice.gt(0)) {
         const maxOrd = balance.div(ordinaryPrice)
         setMaxOrdinary(maxOrd)
@@ -267,6 +261,7 @@ const Mint = () => {
                 <DrawBlindBoxPrimaryBtn
                   className="orangeBtn"
                   onClick={async () => {
+                    const allowance = await DFS.allowance(account, socialNFT.address)
                     if (allowance.eq(0)) {
                       const receipt = await DFS.approve(socialNFT.address, MaxUint256)
                       await receipt.wait()
@@ -367,6 +362,7 @@ const Mint = () => {
                 <DrawBlindBoxPrimaryBtn
                   className="purpleBtn"
                   onClick={async () => {
+                    const allowance = await DFS.allowance(account, socialNFT.address)
                     if (allowance.eq(0)) {
                       const receipt = await DFS.approve(socialNFT.address, MaxUint256)
                       await receipt.wait()
