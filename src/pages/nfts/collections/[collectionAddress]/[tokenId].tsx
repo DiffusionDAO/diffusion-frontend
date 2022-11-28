@@ -4,18 +4,11 @@ import { getCollection, getNftApi, getCollectionApi } from 'state/nftMarket/help
 import { ApiCollection, Collection, NftToken } from 'state/nftMarket/types'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
-import {
-  getSocialNFTAddress,
-  getNFTDatabaseAddress,
-  getStarlightAddress,
-  getNftMarketAddress,
-  getMiningAddress,
-} from 'utils/addressHelpers'
+import { getSocialNFTAddress, getStarlightAddress, getNftMarketAddress, getMiningAddress } from 'utils/addressHelpers'
 import { getContract } from 'utils/contractHelpers'
 import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import dfsMiningAbi from 'config/abi/dfsMining.json'
-import { formatBigNumber } from 'utils/formatBalance'
 import { CollectionData, levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
 import { formatUnits } from '@ethersproject/units'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
