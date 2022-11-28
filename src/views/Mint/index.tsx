@@ -151,9 +151,9 @@ const Mint = () => {
           const id = BigNumber.from(logs[i]?.topics[3])
           const tokenId = id.toString()
           // eslint-disable-next-line no-await-in-loop
-          const level = await socialNFT.getToken(tokenId)
-          if (!levelTokenIds[level]) levelTokenIds[level] = []
-          levelTokenIds[level].push(tokenId)
+          const getToken = await socialNFT.getToken(tokenId)
+          if (!levelTokenIds[getToken.level]) levelTokenIds[getToken.level] = []
+          levelTokenIds[getToken.level].push(tokenId)
         }
       }
       const data = Object.keys(levelTokenIds).map((level) => {
