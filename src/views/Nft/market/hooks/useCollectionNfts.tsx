@@ -250,7 +250,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
           .map((item) => item.tokenId)
         newNfts = await Promise.all(
           marketTokenIds.map(async (tokenId) => {
-            const token = await socialNFT.getToken(collectionAddress, tokenId)
+            const token = await socialNFT.getToken(tokenId)
             const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
             const name = `${t(levelToName[token.level])}#${token.tokenId}`
             const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }

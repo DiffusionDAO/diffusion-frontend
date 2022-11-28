@@ -7,7 +7,12 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { responsePathAsArray } from 'graphql'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useErc721CollectionContract, useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
+import {
+  useErc721CollectionContract,
+  useNFTDatabaseContract,
+  useNftMarketContract,
+  useSocialNftContract,
+} from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { useRouter } from 'next/router'
 import { NFT, nftToNftToken, zeroAddress } from 'pages/profile/[accountAddress]'
@@ -100,7 +105,7 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
     nftToSell.collectionAddress,
   )
   const nftMarketContract = useNftMarketContract()
-  const database = useNFTDatabaseContract()
+  const socialNFT = useSocialNftContract()
   const isInvalidTransferAddress = transferAddress.length > 0 && !isAddress(transferAddress)
   const router = useRouter()
 
@@ -239,7 +244,7 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
           ])
           transactionResponse.then((response) => {
             response.wait().then((res) => {
-              database.getToken(nftToSell.collectionAddress, nftToSell.tokenId).then((nft: NFT) => {
+              socialNFT.getToken(nftToSell.tokenId).then((nft: NFT) => {
                 nftToSell.marketData.currentAskPrice = price
                 nftToSell.marketData.isTradable = true
                 nftToSell.marketData.currentSeller = account
@@ -255,8 +260,8 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
           ])
           transactionResponse.then((response) => {
             response.wait().then((res) => {
-              database
-                .getToken(nftToSell.collectionAddress, nftToSell.tokenId)
+              socialNFT
+                .getToken(nftToSell.tokenId)
                 .then((nft: NFT) => (nftToSell.marketData.currentAskPrice = formatBigNumber(nft?.price, 3)))
             })
           })

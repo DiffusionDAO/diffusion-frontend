@@ -210,11 +210,15 @@ function NftProfilePage() {
       console.log('tokenIds:', tokenIds, collectionName)
       await Promise.all(
         tokenIds.map(async (tokenId) => {
-          const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
-          const token = await socialNFT.getToken(tokenId)
-          const name = `${t(levelToName[token.level])}#${token.tokenId}`
-          const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
-          tokens.unstaked.push(nftToNftToken(nft))
+          try {
+            const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
+            const token = await socialNFT.getToken(tokenId)
+            const name = `${t(levelToName[token.level])}#${token.tokenId}`
+            const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
+            tokens.unstaked.push(nftToNftToken(nft))
+          } catch (error: any) {
+            console.log(tokenId, error.reason ?? error.data?.message ?? error.message)
+          }
         }),
       )
       tokenIds = await socialNFT.getTokenIdsOfOwner(nftMarket.address)
@@ -308,7 +312,7 @@ function NftProfilePage() {
       const recipient = await tx.wait()
       const id = BigNumber.from(recipient.events.slice(-1)[0].topics[3])
       const composedTokenId = id.toString()
-      const level = await nftDatabase.getCollectionTokenLevel(socialNFT.address, composedTokenId)
+      const { level } = await socialNFT.getToken(composedTokenId)
       const newNft: NftToken = {
         tokenId: composedTokenId,
         name: greeceNumber[level],

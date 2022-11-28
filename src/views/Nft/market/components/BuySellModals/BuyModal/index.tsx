@@ -10,7 +10,13 @@ import BigNumber from 'bignumber.js'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useDFSContract, useERC20, useNFTDatabaseContract, useNftMarketContract } from 'hooks/useContract'
+import {
+  useDFSContract,
+  useERC20,
+  useNFTDatabaseContract,
+  useNftMarketContract,
+  useSocialNftContract,
+} from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { NFT, zeroAddress } from 'pages/profile/[accountAddress]'
@@ -58,7 +64,7 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
 
   const database = useNFTDatabaseContract()
   const dfsContract = useERC20(dfsAddress)
-
+  const socialNFT = useSocialNftContract()
   // useEffect(() => {
   //   dfsContract.allowance(account, nftMarketContract.address).then(allowance => {
   //     if (allowance.lt(parseUnits(nftToBuy.marketData.currentAskPrice,"ether"))) {
@@ -113,7 +119,7 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
       transactionResponse
         .then((response) => {
           response.wait().then((res) => {
-            database.getToken(nftToBuy.collectionAddress, nftToBuy.tokenId).then((nft: NFT) => {
+            socialNFT.getToken(nftToBuy.tokenId).then((nft: NFT) => {
               nftToBuy.owner = nft.owner
               nftToBuy.marketData.isTradable = false
               nftToBuy.marketData.currentAskPrice = '0'
