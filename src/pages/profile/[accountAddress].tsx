@@ -59,14 +59,14 @@ interface noteProps {
 
 export interface NFT {
   tokenId: BigNumber
-  owner: string
-  staker: string
   level: BigNumber
-  seller: string
-  price: BigNumber
-  itemId: BigNumber
+  owner: string
+  name: string
   collectionName: string
   collectionAddress: string
+  seller?: string
+  price?: BigNumber
+  staker?: string
 }
 export interface CollectionData {
   collectionAddress: string
@@ -120,14 +120,13 @@ export const levelToSPOS = {
     unlockableSPOS: 4450,
   },
 }
-export const nftToNftToken = (nft: NFT, t) => {
+export const nftToNftToken = (nft: NFT) => {
   const tokenId = nft?.tokenId?.toString()
   const level = nft?.level?.toString()
   const price = nft?.price ?? BigNumber.from(0)
-  const translatedName = `${t(levelToName[level])}#${tokenId}`
   const token: NftToken = {
     tokenId,
-    name: translatedName,
+    name: nft.name,
     collectionName: nft.collectionName,
     description: nft.collectionName,
     collectionAddress: nft.collectionAddress,
@@ -206,14 +205,16 @@ function NftProfilePage() {
     // const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
-      let tokenIds = await socialNFT.getTokenIdsOfOwner(account)
-      console.log('tokenIds:', tokenIds)
+      const tokenIds = await socialNFT.getTokenIdsOfOwner(account)
+      const collectionName = await socialNFT.name()
+      console.log('tokenIds:', tokenIds, collectionName)
       await Promise.all(
         tokenIds.map(async (tokenId) => {
           const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
           const token = await socialNFT.getToken(tokenId)
-          const nft = { ...token, ...sellPrice }
-          tokens.unstaked.push(nftToNftToken(nft, t))
+          const name = `${t(levelToName[token.level])}#${token.tokenId}`
+          const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
+          tokens.unstaked.push(nftToNftToken(nft))
         }),
       )
       tokenIds = await socialNFT.getTokenIdsOfOwner(nftMarket.address)
@@ -221,9 +222,10 @@ function NftProfilePage() {
         tokenIds.map(async (tokenId) => {
           const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
           const token = await socialNFT.getToken(tokenId)
-          const nft = { ...token, ...sellPrice }
+          const name = `${t(levelToName[token.level])}#${token.tokenId}`
+          const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
           if (nft.seller === account) {
-            tokens.onSale.push(nftToNftToken(nft, t))
+            tokens.onSale.push(nftToNftToken(nft))
           }
         }),
       )
@@ -232,25 +234,32 @@ function NftProfilePage() {
       await Promise.all(
         staked.map(async (tokenId) => {
           const token = await socialNFT.getToken(tokenId)
-          tokens.staked.push(nftToNftToken(token, t))
+          const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
+          const name = `${t(levelToName[token.level])}#${token.tokenId}`
+          const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
+          tokens.staked.push(nftToNftToken(nft))
         }),
       )
       return tokens
     }
     return { unstaked: [], staked: [], onSale: [] }
   }
-  const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], getProfileToken)
+  const { data, status, mutate } = useSWR(['getProfileToken'], getProfileToken)
   useEffect(() => {
-    setUnstakedNFTs([])
-    setStakedNFTs([])
-    setOnSaleNFT([])
-    mutate(getProfileToken())
+    const data = getProfileToken()
+    mutate(data)
   }, [account, t, accountAddress])
 
   useEffect(() => {
-    setUnstakedNFTs(data?.unstaked)
-    setStakedNFTs(data?.staked)
-    setOnSaleNFT(data?.onSale)
+    if (unstakedNFTs !== data?.unstaked) {
+      setUnstakedNFTs(data?.unstaked)
+    }
+    if (stakedNFTs !== data?.staked) {
+      setStakedNFTs(data?.staked)
+    }
+    if (onSaleNFTs !== data?.onSale) {
+      setOnSaleNFT(data?.onSale)
+    }
   }, [data])
 
   const resetPage = () => {

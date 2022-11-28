@@ -30,7 +30,7 @@ import isEmpty from 'lodash/isEmpty'
 import uniqBy from 'lodash/uniqBy'
 import fromPairs from 'lodash/fromPairs'
 import { getContract } from 'utils/contractHelpers'
-import { useNftMarketContract } from 'hooks/useContract'
+import { useERC721, useNftMarketContract } from 'hooks/useContract'
 import {
   getSocialNFTAddress,
   getNFTDatabaseAddress,
@@ -224,9 +224,10 @@ export const useCollectionNfts = (collectionAddress: string) => {
     isLastPage.current = false
   }, [field, direction, showOnlyNftsOnSale, filtersJson])
 
-  const nftMarketContract = useNftMarketContract()
+  const nftMarket = useNftMarketContract()
   // const nftMarketAddress = getNftMarketAddress()
-  // const nftMarketContract = new Contract(nftMarketAddress, nftMarketAbi, signer)
+  const collectionContract = await useERC721(collection?.address)
+
   const {
     data: nfts,
     status,
@@ -240,16 +241,20 @@ export const useCollectionNfts = (collectionAddress: string) => {
     async (address, settingsJson, page) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
+      const collectionName = await collectionContract.name()
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
-        const marketItems = await nftMarketContract.fetchMarketItems()
+        const marketItems = await nftMarket.fetchMarketItems()
         const marketTokenIds = marketItems
           .filter((item) => item.collection === collectionAddress)
           .map((item) => item.tokenId)
         newNfts = await Promise.all(
           marketTokenIds.map(async (tokenId) => {
             const token = await socialNFT.getToken(collectionAddress, tokenId)
-            return nftToNftToken(token, t)
+            const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
+            const name = `${t(levelToName[token.level])}#${token.tokenId}`
+            const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
+            return nftToNftToken(token)
           }),
         )
 
