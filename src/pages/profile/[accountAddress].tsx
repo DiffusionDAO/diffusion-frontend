@@ -123,6 +123,7 @@ export const levelToSPOS = {
 export const nftToNftToken = (nft: NFT, t) => {
   const tokenId = nft?.tokenId?.toString()
   const level = nft?.level?.toString()
+  const price = nft?.price ?? BigNumber.from(0)
   const translatedName = `${t(levelToName[level])}#${tokenId}`
   const token: NftToken = {
     tokenId,
@@ -154,7 +155,7 @@ export const nftToNftToken = (nft: NFT, t) => {
       collection: {
         id: tokenId,
       },
-      currentAskPrice: formatBigNumber(nft?.price, 3),
+      currentAskPrice: formatBigNumber(price, 3),
       currentSeller: nft?.seller,
       isTradable: true,
     },
