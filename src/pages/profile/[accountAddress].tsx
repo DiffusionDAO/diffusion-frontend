@@ -196,11 +196,13 @@ function NftProfilePage() {
   })
   const [activeTab, setActiveTab] = useState<string>('WithoutStake')
 
+  const nftDatabase = useNFTDatabaseContract()
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
   const socialNFT = useSocialNftContract()
 
   const getProfileToken = async () => {
+    // const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
       let tokenIds = await socialNFT.getTokenIdsOfOwner(account)
@@ -236,7 +238,7 @@ function NftProfilePage() {
     }
     return { unstaked: [], staked: [], onSale: [] }
   }
-  const { data, status, mutate } = useSWR(['getCollectionTokenIds.getToken'], getProfileToken)
+  const { data, status, mutate } = useSWR(['nftDatabase.getCollectionTokenIds.getToken'], getProfileToken)
   useEffect(() => {
     setUnstakedNFTs([])
     setStakedNFTs([])
