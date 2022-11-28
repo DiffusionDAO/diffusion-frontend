@@ -245,7 +245,7 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
           transactionResponse.then((response) => {
             response.wait().then((res) => {
               socialNFT.getToken(nftToSell.tokenId).then((nft: NFT) => {
-                nftToSell.marketData.currentAskPrice = price
+                nftToSell.marketData.currentAskPrice = formatUnits(nft?.price)
                 nftToSell.marketData.isTradable = true
                 nftToSell.marketData.currentSeller = account
               })
@@ -263,7 +263,7 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
             response.wait().then((res) => {
               socialNFT
                 .getToken(nftToSell.tokenId)
-                .then((nft: NFT) => (nftToSell.marketData.currentAskPrice = formatBigNumber(nft?.price, 3)))
+                .then((nft: NFT) => (nftToSell.marketData.currentAskPrice = formatUnits(nft?.price)))
             })
           })
           return transactionResponse
