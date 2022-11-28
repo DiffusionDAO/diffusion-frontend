@@ -226,7 +226,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
 
   const nftMarket = useNftMarketContract()
   // const nftMarketAddress = getNftMarketAddress()
-  const collectionContract = await useERC721(collection?.address)
+  const collectionContract = useERC721(collection?.address)
 
   const {
     data: nfts,
