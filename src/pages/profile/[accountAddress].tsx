@@ -58,8 +58,8 @@ interface noteProps {
 }
 
 export interface NFT {
-  tokenId: BigNumber
-  level: BigNumber
+  tokenId: number
+  level: number
   owner: string
   name: string
   collectionName: string

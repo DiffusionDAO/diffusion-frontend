@@ -7,11 +7,18 @@ import PageLoader from 'components/Loader/PageLoader'
 import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
 import { NftToken } from 'state/nftMarket/types'
 
-import { useNFTDatabaseContract, useSocialNftContract } from 'hooks/useContract'
+import {
+  useDFSMiningContract,
+  useNFTDatabaseContract,
+  useNftMarketContract,
+  useSocialNftContract,
+} from 'hooks/useContract'
 import { formatBigNumber } from 'utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { levelToName, levelToSPOS } from 'pages/profile/[accountAddress]'
+import { levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
 
+import { formatUnits } from '@ethersproject/units'
+import useSWR from 'swr'
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
@@ -47,49 +54,54 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const { isMobile } = useMatchBreakpoints()
   const bgImg = isMobile ? "url('/images/nfts/mretc.png')" : "url('/images/nfts/smxl.png')"
   const bgOffset = !isMobile ? '40px' : '80px'
-  const [nft, setNFT] = useState<NftToken>()
+  const [nft, setNFT] = useState<NFT>()
   const collection = useGetCollection(collectionAddress)
   const socialNFT = useSocialNftContract()
-  useEffect(() => {
-    socialNFT.getToken(tokenId).then((res) => {
-      let thumbnail = `/images/nfts/socialnft/${res.level.toString()}`
-      const starLightAddress = getStarlightAddress()
-      if (res.collectionAddress === starLightAddress) {
-        thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
-      }
-      const level = res.level.toString()
-      const nft: NftToken = {
+  const nftMarket = useNftMarketContract()
+  const dfsMining = useDFSMiningContract()
+  const { data: nftToken, status } = useSWR('IndividualNFTPage', async () => {
+    const getToken = await socialNFT.getToken(tokenId)
+    const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
+    const staker = await dfsMining.staker(tokenId)
+    const nft = { ...getToken, ...sellPrice, staker }
+    let thumbnail = `/images/nfts/socialnft/${nft?.level}`
+    const starLightAddress = getStarlightAddress()
+    if (collectionAddress === starLightAddress) {
+      thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
+    }
+    const level = nft?.level
+    const nftToken: NftToken = {
+      tokenId,
+      collectionAddress,
+      collectionName: t(collection.name),
+      name: `${t(levelToName[level])}#${tokenId}`,
+      description: t(nft?.collectionName),
+      image: { original: 'string', thumbnail },
+      attributes: [
+        { traitType: t('Valid SPOS'), value: levelToSPOS[level].validSPOS, displayType: '' },
+        { traitType: t('Unlockable SPOS'), value: levelToSPOS[level].unlockableSPOS, displayType: '' },
+      ],
+      staker: nft?.staker,
+      owner: nft?.owner,
+      marketData: {
         tokenId,
-        collectionAddress,
-        collectionName: t(collection.name),
-        name: `${t(levelToName[res.level])}#${tokenId}`,
-        description: t(res.collectionNamet),
-        image: { original: 'string', thumbnail },
-        attributes: [
-          { traitType: t('Valid SPOS'), value: levelToSPOS[level].validSPOS, displayType: '' },
-          { traitType: t('Unlockable SPOS'), value: levelToSPOS[level].unlockableSPOS, displayType: '' },
-        ],
-        staker: res.staker,
-        owner: res.owner,
-        marketData: {
-          tokenId,
-          collection: {
-            id: tokenId,
-          },
-          currentAskPrice: formatBigNumber(res?.price, 3),
-          currentSeller: res?.seller,
-          isTradable: res?.price.gt(0) ?? false,
+        collection: {
+          id: tokenId,
         },
-      }
-      setNFT(nft)
-    })
-  }, [account, t])
+        currentAskPrice: formatUnits(nft?.price),
+        currentSeller: nft?.seller,
+        isTradable: nft?.price.gt(0) ?? false,
+      },
+    }
+    return nftToken
+  })
 
-  const properties = nft?.attributes
-  if (!nft || !collection) {
+  const properties = nftToken?.attributes
+  if (!nftToken || !collection) {
     return <PageLoader />
   }
-  const isOwnNft = nft?.marketData?.currentSeller === account || nft?.owner === account || nft?.staker === account
+  const isOwnNft =
+    nftToken?.marketData?.currentSeller === account || nftToken?.owner === account || nftToken?.staker === account
   const nftIsProfilePic = false
   return (
     <PageWrap>
@@ -100,17 +112,12 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
           backgroundPosition: `4px ${bgOffset}`,
         }}
       >
-        <MainNFTCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={nftIsProfilePic} onSuccess={noop} />
+        <MainNFTCard nft={nftToken} isOwnNft={isOwnNft} nftIsProfilePic={nftIsProfilePic} onSuccess={noop} />
         <TwoColumnsContainer flexDirection={['column', 'column', 'column', 'column', 'row']}>
           <Flex flexDirection="column" width="100%">
-            {/* <ManageNFTsCard collection={collection} tokenId={tokenId} onSuccess={noop} /> */}
             <PropertiesCard properties={properties} rarity={{}} />
-            <DetailsCard contractAddress={collectionAddress} ipfsJson={nft?.marketData?.metadataUrl} />
+            <DetailsCard contractAddress={collectionAddress} ipfsJson={nftToken?.marketData?.metadataUrl} />
           </Flex>
-          {/* <OwnerActivityContainer flexDirection="column" width="100%">
-            <OwnerCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={nftIsProfilePic} onSuccess={noop} />
-            <ActivityCard nft={nft} />
-          </OwnerActivityContainer> */}
         </TwoColumnsContainer>
       </div>
     </PageWrap>
