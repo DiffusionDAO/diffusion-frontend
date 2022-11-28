@@ -205,7 +205,7 @@ function NftProfilePage() {
     // const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
-      const tokenIds = await socialNFT.getTokenIdsOfOwner(account)
+      let tokenIds = await socialNFT.getTokenIdsOfOwner(account)
       const collectionName = await socialNFT.name()
       console.log('tokenIds:', tokenIds, collectionName)
       await Promise.all(
@@ -246,9 +246,12 @@ function NftProfilePage() {
   }
   const { data, status, mutate } = useSWR(['getProfileToken'], getProfileToken)
   useEffect(() => {
+    setUnstakedNFTs([])
+    setStakedNFTs([])
+    setOnSaleNFT([])
     const data = getProfileToken()
     mutate(data)
-  }, [account, t, accountAddress])
+  }, [account, accountAddress])
 
   useEffect(() => {
     if (unstakedNFTs !== data?.unstaked) {
