@@ -227,7 +227,7 @@ function NftProfilePage() {
         }),
       )
 
-      const staked = await dfsMining.getTokensStakedByOwner(dfsNFTAddress, account)
+      const staked = await dfsMining.getTokensStakedByOwner(account)
       await Promise.all(
         staked.map(async (tokenId) => {
           const token = await socialNFT.getToken(tokenId)

@@ -35,15 +35,17 @@ const UserNfts: React.FC<{
           {nfts?.sort().map((nft) => {
             const { marketData, location } = nft
             return (
-              <CollectibleLinkCard
-                isSelected={isSelected}
-                onClick={() => handleCollectibleClick(nft, location)}
-                key={`${nft?.tokenId}-${nft?.collectionName}`}
-                nft={nft}
-                currentAskPrice={
-                  marketData?.currentAskPrice && marketData?.isTradable && parseFloat(marketData?.currentAskPrice)
-                }
-              />
+              nft?.tokenId && (
+                <CollectibleLinkCard
+                  isSelected={isSelected}
+                  onClick={() => handleCollectibleClick(nft, location)}
+                  key={`${nft?.tokenId}-${nft?.collectionName}`}
+                  nft={nft}
+                  currentAskPrice={
+                    marketData?.currentAskPrice && marketData?.isTradable && parseFloat(marketData?.currentAskPrice)
+                  }
+                />
+              )
             )
           })}
         </Grid>

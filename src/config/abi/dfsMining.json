@@ -226,11 +226,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_collection",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_owner",
         "type": "address"
       }
