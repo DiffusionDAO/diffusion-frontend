@@ -20,6 +20,7 @@ import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelp
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import { escapeRegExp } from 'utils'
 import { useRouterContract } from 'utils/exchange'
+import { estimateGas } from 'utils/calls'
 
 import {
   StyledModal,
@@ -221,6 +222,8 @@ const BondModal: React.FC<BondModalProps> = ({
       await receipt.wait()
     }
     try {
+      const gasEstimation = await estimateGas(bond, 'deposit', [parseUnits(amount, 'ether'), referral], {}, 1000)
+      console.log('gasEstimation:', gasEstimation.toNumber())
       const receipt = await bond.deposit(parseUnits(amount, 'ether'), referral)
       await receipt.wait()
     } catch (error: any) {

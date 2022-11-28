@@ -18,6 +18,8 @@ import { formatUnits } from '@ethersproject/units'
 import { useWallet } from 'hooks/useWallet'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { formatBigNumber } from 'utils/formatBalance'
+import { estimateGas } from 'utils/calls'
+
 import {
   BondPageWrap,
   DrawBlindBoxList,
@@ -69,7 +71,6 @@ const Mint = () => {
   const [bondUsed, setBondUsed] = useState<BigNumber>(BigNumber.from(0))
 
   const socialNFT = useSocialNftContract()
-  const database = useNFTDatabaseContract()
 
   useEffect(() => {
     socialNFT.elementaryCost().then((oneCost) => setOneCost(oneCost))
@@ -135,12 +136,17 @@ const Mint = () => {
     setGifUrl(`/images/mint/${type}.gif`)
     setPlayBindBoxModalVisible(true)
 
+    const gasEstimation =
+      type === 'ordinary'
+        ? await estimateGas(socialNFT, 'mintElementary', [ordinaryCount, useBond], {}, 1000)
+        : await estimateGas(socialNFT, 'mintAdvanced', [seniorCount, useBond], {}, 1000)
+    console.log('gasEstimation:', gasEstimation.toNumber())
     try {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const res =
         type === 'ordinary'
-          ? await socialNFT.mintElementary(ordinaryCount, useBond)
-          : await socialNFT.mintAdvanced(seniorCount, useBond)
+          ? await socialNFT.mintElementary(ordinaryCount, useBond, { gasLimit: gasEstimation })
+          : await socialNFT.mintAdvanced(seniorCount, useBond, { gasLimit: gasEstimation })
       const receipt = await res.wait()
       const { logs } = receipt
       // eslint-disable-next-line prefer-const
