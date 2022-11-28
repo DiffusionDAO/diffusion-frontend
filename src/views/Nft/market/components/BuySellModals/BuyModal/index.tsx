@@ -114,7 +114,7 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
       const transactionResponse: Promise<TransactionResponse> = callWithGasPrice(
         nftMarketContract,
         'createMarketSaleByERC20',
-        [nftToBuy.itemId],
+        [nftToBuy.collectionAddress, nftToBuy.tokenId],
       )
       transactionResponse
         .then((response) => {

@@ -140,7 +140,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC_TESTNET })
   const { data: collection, status: collectionStatus } = useSWR('collections', async () => {
     const collection: any = getCollection(collectionAddress)
-
+    console.log('collection:', collection)
     const tokenIds = await socialNFT.getCollectionTokenIds(collectionAddress)
     const getTokens = await Promise.all(
       tokenIds.map(async (tokenId) => {

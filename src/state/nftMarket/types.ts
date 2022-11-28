@@ -80,7 +80,6 @@ export interface NftToken {
   selected?: boolean
   staker?: string
   owner?: string
-  itemId?: string
   seller?: string
 }
 
@@ -128,8 +127,8 @@ export interface Collection {
   owner?: string
   totalSupply: string
   verified?: boolean
-  avatar: string
-  banner: {
+  avatar?: string
+  banner?: {
     large: string
     small: string
   }

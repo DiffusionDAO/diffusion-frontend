@@ -100,23 +100,25 @@ export const getCollections = async (): Promise<Record<string, any>> => {
 
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
-    const nftDatabaseAddress = getNFTDatabaseAddress()
-    const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
-    const collectionData: CollectionData = await nftDatabase.collections(collectionAddress)
-    // console.log(collectionData)
+    const nftMarketAddress = getNftMarketAddress()
+    const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
+    const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
+    const name = await erc721.name()
+    const totalSupply = await erc721.totalSupply()
+    const totalVolume = await nftMarket.totalVolume(collectionAddress)
     return {
       [collectionAddress]: {
-        name: collectionData.name,
-        address: collectionData.collectionAddress,
+        name,
+        address: collectionAddress,
         owner: '',
         verified: true,
         id: '',
         symbol: '',
         active: true,
-        totalVolume: formatUnits(BigNumber.from(collectionData?.totalVolume), 'ether'),
-        totalSupply: collectionData?.totalSupply,
-        avatar: collectionData.avatar,
-        banner: { large: collectionData.banner.large, small: collectionData.banner.small },
+        totalVolume: formatUnits(BigNumber.from(totalVolume), 'ether'),
+        totalSupply,
+        // avatar: collectionData.avatar,
+        // banner: { large: collectionData.banner.large, small: collectionData.banner.small },
       },
     }
 

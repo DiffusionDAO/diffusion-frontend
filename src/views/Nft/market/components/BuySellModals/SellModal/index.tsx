@@ -255,7 +255,8 @@ const SellModal: React.FC<React.PropsWithChildren<SellModalProps>> = ({
         }
         if (methodName === 'adjustPrice') {
           const transactionResponse: Promise<TransactionResponse> = callWithGasPrice(nftMarketContract, methodName, [
-            nftToSell.itemId,
+            nftToSell.collectionAddress,
+            nftToSell.tokenId,
             askPrice,
           ])
           transactionResponse.then((response) => {
