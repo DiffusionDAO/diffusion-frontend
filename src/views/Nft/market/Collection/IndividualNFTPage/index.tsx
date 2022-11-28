@@ -5,7 +5,6 @@ import IndividualNFTPage from './OneOfAKindNftPage'
 const IndividualNFTPageRouter = () => {
   const router = useRouter()
   const { collectionAddress, tokenId } = router.query
-  console.log('IndividualNFTPageRouter:', collectionAddress, tokenId)
   if (router.isFallback) {
     return <PageLoader />
   }
