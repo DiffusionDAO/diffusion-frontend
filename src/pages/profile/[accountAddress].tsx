@@ -301,7 +301,8 @@ function NftProfilePage() {
 
   const submitCompose = async () => {
     const selectedTokenIds = selectedNFTs.filter((nft) => nft.selected).map((nft) => nft.tokenId)
-    const value = selectedNFTs[0].attributes[0].value
+    console.log('selectedTokenIds:', selectedTokenIds)
+    // const value = selectedNFTs[0].attributes[0].value
     let tx
     try {
       if (selectedTokenIds?.length === 3) {

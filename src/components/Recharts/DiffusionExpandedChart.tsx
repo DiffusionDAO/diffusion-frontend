@@ -28,7 +28,7 @@ function DiffusionExpandedChart({
 }) {
   return (
     <Modal
-      visible={open}
+      open={open}
       onCancel={handleClose}
       width="calc(100% - 40px)"
       style={{
