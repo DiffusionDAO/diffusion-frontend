@@ -110,7 +110,6 @@ const Reward = () => {
   const [bondRewardUnpaid, setBondRewardUnpaid] = useState<BigNumber>(BigNumber.from(0))
   const [children, setChildren] = useState<string[]>()
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
-  const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
   const [socialRewardInterest, setSocialRewardInterest] = useState<number>(0)
   const [savingRewardInterest, setSavingRewardInterest] = useState<number>(0)
   const [requireRefresh, setRefresh] = useState<boolean>(false)
@@ -160,7 +159,6 @@ const Reward = () => {
     setSavingInterestEpochLength(savingInterestEpochLength)
     setSocialRewardInterest((await dfsMining.socialRewardInterest()).toNumber())
     setSavingRewardInterest((await dfsMining.savingRewardInterest()).toNumber())
-    setTotalSocialReward(await dfsMining.totalSocialReward())
     setTotalPower(await dfsMining.totalPower())
     setTotalStakedSavings(await dfsMining.totalStakedSavings())
     if (account) {
