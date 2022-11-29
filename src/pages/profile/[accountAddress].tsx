@@ -272,8 +272,8 @@ function NftProfilePage() {
   }
   const startCompose = () => {
     setIsSelected(true)
-    setUnstakedNFTs(unstakedNFTs)
-    setSelectedNFTs(unstakedNFTs)
+    setUnstakedNFTs(data?.unstaked)
+    setSelectedNFTs(data?.unstaked)
     setOption('compose')
   }
 
@@ -283,7 +283,7 @@ function NftProfilePage() {
   }
 
   const closeComposeSuccessModal = () => {
-    setUnstakedNFTs(unstakedNFTs)
+    setUnstakedNFTs(data?.unstaked)
     setSuccessModalVisible(false)
     resetPage()
   }
@@ -351,8 +351,8 @@ function NftProfilePage() {
 
   const startStake = async () => {
     setIsSelected(true)
-    setUnstakedNFTs(unstakedNFTs)
-    setSelectedNFTs(unstakedNFTs)
+    setUnstakedNFTs(data?.unstaked)
+    setSelectedNFTs(data?.unstaked)
     setOption('stake')
   }
 
