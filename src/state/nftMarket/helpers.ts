@@ -4,7 +4,6 @@ import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
 import { multicallv2 } from 'utils/multicall'
 import erc721Abi from 'config/abi/erc721.json'
 import range from 'lodash/range'
-import groupBy from 'lodash/groupBy'
 import { BigNumber } from '@ethersproject/bignumber'
 import { getNftMarketContract, getContract } from 'utils/contractHelpers'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
@@ -14,7 +13,6 @@ import fromPairs from 'lodash/fromPairs'
 import { getNFTDatabaseAddress, getNftMarketAddress } from 'utils/addressHelpers'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
-import { CollectionData } from 'pages/profile/[accountAddress]'
 import { formatUnits } from '@ethersproject/units'
 
 import {
@@ -44,44 +42,35 @@ import { ChainId } from '../../../packages/swap-sdk/src/constants'
 
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const nftDatabaseAddress = getNFTDatabaseAddress()
+  const nftMarketAddress = getNftMarketAddress()
+
   const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
-  const collectionAddresses = await nftDatabase.getCollectionAddresses()
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
+  const collectionAddresses = await nftDatabase.getCollections()
   const data: ApiCollection[] = await Promise.all(
     collectionAddresses.map(async (collectionAddress) => {
-      const collection: CollectionData = await nftDatabase.collections(collectionAddress)
+      const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
+      const totalSupply = await erc721.totalSupply()
+      const name = await erc721.name()
+      const totalVolume = await nftMarket.totalVolume(collectionAddress)
       const apiCollection: ApiCollection = {
-        name: collection.name,
-        address: collection.collectionAddress,
-        avatar: collection.avatar,
-        banner: collection.banner,
-        totalSupply: collection.totalSupply,
-        totalVolume: collection.totalVolume,
+        name,
+        address: collectionAddress,
+        totalSupply: formatUnits(totalSupply),
+        totalVolume: formatUnits(totalVolume),
+        avatar: `/images/nfts/${name.toLowerCase()}/avatar.jpg`,
+        banner: {
+          small: `/images/nfts/${name.toLowerCase()}/large.jpg`,
+          large: `/images/nfts/${name.toLowerCase()}/large.jpg`,
+        },
       }
+
       return apiCollection
     }),
   )
   const response: ApiCollectionsResponse = { total: data.length, data }
   console.log('getCollectionsApi:', response)
   return response
-}
-
-const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promise<number[]> => {
-  const totalSupplyCalls = collections
-    .filter((collection) => collection?.address)
-    .map((collection) => ({
-      address: collection.address.toLowerCase(),
-      name: 'totalSupply',
-    }))
-  if (totalSupplyCalls.length > 0) {
-    const totalSupplyRaw = await multicallv2({
-      abi: erc721Abi,
-      calls: totalSupplyCalls,
-      options: { requireSuccess: false },
-    })
-    const totalSupply = totalSupplyRaw.flat()
-    return totalSupply.map((totalCount) => (totalCount ? totalCount.toNumber() : 0))
-  }
-  return []
 }
 
 export const getCollections = async (): Promise<Record<string, any>> => {
@@ -106,6 +95,7 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
     const name = await erc721.name()
     const totalSupply = await erc721.totalSupply()
     const totalVolume = await nftMarket.totalVolume(collectionAddress)
+    console.log('getCollection:', collectionAddress)
     return {
       [collectionAddress]: {
         name,
@@ -117,28 +107,17 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
         active: true,
         totalVolume: formatUnits(BigNumber.from(totalVolume), 'ether'),
         totalSupply,
-        // avatar: collectionData.avatar,
-        // banner: { large: collectionData.banner.large, small: collectionData.banner.small },
+        avatar: `/images/nfts/${name.toLowerCase()}/avatar.jpg`,
+        banner: {
+          small: `/images/nfts/${name.toLowerCase()}/large.jpg`,
+          large: `/images/nfts/${name.toLowerCase()}/large.jpg`,
+        },
       },
     }
-
-    // const collection = await getCollectionApi(collectionAddress)
-    // const collectionData = { [collectionAddress]: collection[collectionAddress] }
-    // return collectionData
   } catch (error) {
     console.error('getCollection Unable to fetch data:', error)
     return null
   }
-}
-
-export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
-  const nftDatabaseAddress = getNFTDatabaseAddress()
-  console.log(nftDatabaseAddress)
-  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
-  const data: CollectionData = await nftDatabase.collections(collectionAddress)
-  console.log('getCollectionApi:', data)
-
-  return null
 }
 
 export const getNftsFromCollectionApi = async (

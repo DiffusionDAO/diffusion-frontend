@@ -56,9 +56,7 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
                 <Text fontSize="12px" color="textSubtle">
                   {t('Volume')}
                 </Text>
-                <DFSAmountLabel
-                  amount={collection?.totalVolume ? Number(formatUnits(collection?.totalVolume, 'ether')) : 0}
-                />
+                <DFSAmountLabel amount={collection?.totalVolume} />
               </Flex>
             </CollectionCard>
           )

@@ -7,7 +7,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRouter } from 'next/router'
-import { useProfileForAddress } from 'state/profile/hooks'
 import Typed from 'react-typed'
 import { Cascader, Tabs, Button, message } from 'antd'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
@@ -68,17 +67,7 @@ export interface NFT {
   price?: BigNumber
   staker?: string
 }
-export interface CollectionData {
-  collectionAddress: string
-  name: string
-  totalVolume: string
-  totalSupply: string
-  avatar: string
-  banner: {
-    large: string
-    small: string
-  }
-}
+
 export const zeroAddress = '0x0000000000000000000000000000000000000000'
 export const levelToName = {
   '0': 'Wiseman fragment',
@@ -205,9 +194,9 @@ function NftProfilePage() {
     // const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
-      let tokenIds = await socialNFT.getTokenIdsOfOwner(account)
+      let tokenIds = await socialNFT.tokensOfOwner(account)
       const collectionName = await socialNFT.name()
-      console.log('tokenIds:', tokenIds, collectionName)
+      console.log('tokenIds:', tokenIds)
       await Promise.all(
         tokenIds.map(async (tokenId) => {
           try {
@@ -221,7 +210,7 @@ function NftProfilePage() {
           }
         }),
       )
-      tokenIds = await socialNFT.getTokenIdsOfOwner(nftMarket.address)
+      tokenIds = await socialNFT.tokensOfOwner(nftMarket.address)
       await Promise.all(
         tokenIds.map(async (tokenId) => {
           const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)

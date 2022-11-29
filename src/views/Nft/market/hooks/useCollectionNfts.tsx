@@ -1,30 +1,8 @@
 import { useEffect, useState, useRef, useMemo } from 'react'
-import {
-  ApiResponseCollectionTokens,
-  ApiSingleTokenData,
-  NftAttribute,
-  NftToken,
-  Collection,
-  NftLocation,
-} from 'state/nftMarket/types'
-import {
-  useGetNftFilters,
-  useGetNftOrdering,
-  useGetNftShowOnlyOnSale,
-  useGetCollection,
-  useGetCollections,
-} from 'state/nftMarket/hooks'
+import { NftAttribute, NftToken, Collection, NftLocation } from 'state/nftMarket/types'
+import { useGetNftFilters, useGetNftOrdering, useGetNftShowOnlyOnSale } from 'state/nftMarket/hooks'
 import { FetchStatus } from 'config/constants/types'
-import {
-  fetchNftsFiltered,
-  getCollection,
-  getCollectionApi,
-  getCollectionsApi,
-  getMarketDataForTokenIds,
-  getNftApi,
-  getNftsFromCollectionApi,
-  getNftsMarketData,
-} from 'state/nftMarket/helpers'
+import { fetchNftsFiltered, getNftApi, getNftsMarketData } from 'state/nftMarket/helpers'
 import useSWRInfinite from 'swr/infinite'
 import isEmpty from 'lodash/isEmpty'
 import uniqBy from 'lodash/uniqBy'
@@ -36,10 +14,15 @@ import {
   getNFTDatabaseAddress,
   getNftMarketAddress,
   getStarlightAddress,
+  getMiningAddress,
 } from 'utils/addressHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import socialNFTAbi from 'config/abi/socialNFTAbi.json'
-import { levelToName, CollectionData, NFT, nftToNftToken, levelToSPOS } from 'pages/profile/[accountAddress]'
+import nftMarketAbi from 'config/abi/nftMarket.json'
+import dfsMiningAbi from 'config/abi/dfsMining.json'
+
+import erc721Abi from 'config/abi/erc721.json'
+import { levelToName, NFT, nftToNftToken, levelToSPOS } from 'pages/profile/[accountAddress]'
 import useSWR from 'swr'
 import { useTranslation } from '@pancakeswap/localization'
 import { formatUnits, parseUnits } from '@ethersproject/units'
@@ -138,14 +121,29 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const [tokens, setTokens] = useState<any[]>()
   const socianNFTAddress = getSocialNFTAddress()
   const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC_TESTNET })
+
+  const nftMarketAddress = getNftMarketAddress()
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
+
+  const dfsMiningAddress = getMiningAddress()
+  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
+
   const { data: collection, status: collectionStatus } = useSWR('collections', async () => {
-    const collection: any = getCollection(collectionAddress)
-    console.log('collection:', collection)
-    const tokenIds = await socialNFT.getCollectionTokenIds(collectionAddress)
+    const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
+    const getTokenContract = getContract({
+      abi: socialNFTAbi,
+      address: collectionAddress,
+      chainId: ChainId.BSC_TESTNET,
+    })
+    const collectionName = await erc721.name()
+    const tokenIds = await getTokenContract.allTokens()
     const getTokens = await Promise.all(
       tokenIds.map(async (tokenId) => {
         const tokenIdString = tokenId.toString()
-        const nft: NFT = await socialNFT.getToken(tokenIdString)
+        const getToken = await getTokenContract.getToken(tokenId)
+        const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
+        const staker = await dfsMining.staker(tokenId)
+        const nft: NFT = { ...getToken, ...sellPrice, staker }
         const level = nft.level.toString()
         let thumbnail
         let name
@@ -162,8 +160,8 @@ export const useCollectionNfts = (collectionAddress: string) => {
           tokenId: tokenIdString,
           name,
           description: name,
-          collectionName: collection[collectionAddress].name,
-          collectionAddress: nft.collectionAddress,
+          collectionName,
+          collectionAddress,
           image: {
             original: 'string',
             thumbnail,
@@ -224,9 +222,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
     isLastPage.current = false
   }, [field, direction, showOnlyNftsOnSale, filtersJson])
 
-  const nftMarket = useNftMarketContract()
-  // const nftMarketAddress = getNftMarketAddress()
-  const collectionContract = useERC721(collection?.address)
+  const collectionContract = useERC721(collectionAddress)
 
   const {
     data: nfts,
@@ -240,7 +236,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
     },
     async (address, settingsJson, page) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
-      const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
+      const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collectionAddress, settings)
       const collectionName = await collectionContract.name()
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
@@ -260,22 +256,6 @@ export const useCollectionNfts = (collectionAddress: string) => {
 
         // eslint-disable-next-line no-return-assign, no-param-reassign
       } else {
-        // const {
-        //   nfts: allNewNfts,
-        //   fallbackMode: newFallbackMode,
-        //   fallbackPage: newFallbackPage,
-        // } = await fetchAllNfts(
-        //   collection,
-        //   settings,
-        //   page,
-        //   [],
-        //   fetchedNfts.current,
-        //   fallbackMode.current,
-        //   fallbackModePage.current,
-        // )
-        // newNfts = allNewNfts
-        // fallbackMode.current = newFallbackMode
-        // fallbackModePage.current = newFallbackPage
         newNfts = tokens.slice(page * REQUEST_SIZE, (page + 1) * REQUEST_SIZE)
       }
       if (newNfts.length < REQUEST_SIZE) {

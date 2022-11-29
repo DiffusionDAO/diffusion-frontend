@@ -24,7 +24,6 @@ const CollectionNfts: React.FC<React.PropsWithChildren<CollectionNftsProps>> = (
   if ((!nfts || nfts?.length === 0) && isFetchingNfts) {
     return <GridPlaceholder />
   }
-  console.log('nfts:', nfts)
   return (
     <>
       {resultSize && (

@@ -1,11 +1,8 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
-import { getCollection, getCollectionApi } from 'state/nftMarket/helpers'
+import { getCollection } from 'state/nftMarket/helpers'
 import CollectionPageRouter from 'views/Nft/market/Collection/CollectionPageRouter'
-import { useNftStorage } from 'state/nftMarket/storage'
-import Collection from 'views/Nft/market/Collection'
-import toBuffer from 'it-to-buffer'
 import { create } from 'ipfs-http-client'
 
 const ipfs = create({

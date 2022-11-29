@@ -1,6 +1,6 @@
 import IndividualNFT from 'views/Nft/market/Collection/IndividualNFTPage'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
-import { getCollection, getNftApi, getCollectionApi } from 'state/nftMarket/helpers'
+import { getCollection } from 'state/nftMarket/helpers'
 import { ApiCollection, Collection, NftToken } from 'state/nftMarket/types'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
@@ -9,7 +9,7 @@ import { getContract } from 'utils/contractHelpers'
 import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import dfsMiningAbi from 'config/abi/dfsMining.json'
-import { CollectionData, levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
+import { levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
 import { formatUnits } from '@ethersproject/units'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 

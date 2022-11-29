@@ -163,8 +163,8 @@ export interface ApiCollection {
   verified?: boolean
   createdAt?: string
   updatedAt?: string
-  avatar: string
-  banner: {
+  avatar?: string
+  banner?: {
     large: string
     small: string
   }
