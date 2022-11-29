@@ -15,6 +15,18 @@ const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const router = useRouter()
+  let continuousTokenId
+  for (let i = 0; i < data.length; ++i) {
+    let startTokenId = data[i].tokenIds[0]
+    continuousTokenId[data[i]] = []
+    for (let j = 0; j < data[i].tokenIds.length; ++j) {
+      if (data[i].tokenIds[j + 1] - data[i].tokenIds[j] > 1) {
+        continuousTokenId[data[i]].push(`${startTokenId}-${data[i].tokenIds[j]}`)
+        startTokenId = data[i].tokenIds[j + 1]
+      }
+    }
+  }
+  console.log(continuousTokenId)
   return (
     <StyledModal width={528} onCancel={onClose} open centered maskClosable={false} footer={[]}>
       <ContentWrap>
@@ -27,7 +39,7 @@ const MintBoxModal: React.FC<BondModalProps> = ({ data, onClose }) => {
                     <CardImg src={`/images/nfts/socialnft/${card.level}`} />
                     <CardText>
                       {t('amount')}: {card.tokenIds.length} {t(levelToName[card.level])}{' '}
-                      {card.tokenIds.length > 1
+                      {card.tokenIds.length > 10
                         ? `#${card.tokenIds[0]}-#${card.tokenIds[card.tokenIds.length - 1]}`
                         : card.tokenIds.map((tokenId) => `#${tokenId}`)}
                     </CardText>
