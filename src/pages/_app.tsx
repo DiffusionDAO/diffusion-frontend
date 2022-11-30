@@ -1,7 +1,5 @@
 import { ResetCSS, ToastListener } from '@pancakeswap/uikit'
-import GlobalCheckClaimStatus from 'components/GlobalCheckClaimStatus'
 import { NetworkModal } from 'components/NetworkModal'
-import { FixedSubgraphHealthIndicator } from 'components/SubgraphHealthIndicator/FixedSubgraphHealthIndicator'
 import { useAccountEventListener } from 'hooks/useAccountEventListener'
 import useEagerConnect from 'hooks/useEagerConnect'
 import useEagerConnectMP from 'hooks/useEagerConnect.bmp'
@@ -10,16 +8,13 @@ import useThemeCookie from 'hooks/useThemeCookie'
 import useUserAgent from 'hooks/useUserAgent'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import Script from 'next/script'
 import { Fragment, useState, useEffect } from 'react'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, useStore } from 'state'
 import { useDFSMiningContract } from 'hooks/useContract'
 import { useRouter } from 'next/router'
 
-import { usePollBlockNumber } from 'state/block/hooks'
 import { Blocklist, Updaters } from '..'
 import { SentryErrorBoundary } from '../components/ErrorBoundary'
 import Halo from '../components/Halo'
@@ -89,14 +84,8 @@ function MyApp(props: AppProps<{ initialReduxState: any }>) {
 
 type NextPageWithLayout = NextPage & {
   Layout?: React.FC<React.PropsWithChildren<unknown>>
-  /** render component without all layouts */
   pure?: true
-  /** is mini program */
   mp?: boolean
-  /**
-   * allow chain per page, empty array bypass chain block modal
-   * @default [ChainId.BSC]
-   * */
   chains?: number[]
 }
 
