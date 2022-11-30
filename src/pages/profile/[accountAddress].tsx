@@ -190,12 +190,10 @@ function NftProfilePage() {
   const socialNFT = useSocialNftContract()
 
   const getProfileToken = async () => {
-    // const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
       const tokenIds = await socialNFT.tokensOfOwner(account)
       const collectionName = await socialNFT.name()
-      console.log('tokenIds:', tokenIds)
       await Promise.all(
         tokenIds.map(async (tokenId) => {
           try {
@@ -379,7 +377,7 @@ function NftProfilePage() {
   }
 
   const confirmOpt = async () => {
-    const selected = unstakedNFTs.filter((item) => item.selected)
+    const selected = data.unstaked.filter((item) => item.selected)
     if (!selected?.length) {
       setNoteContent({
         title: t('Note'),
@@ -401,7 +399,7 @@ function NftProfilePage() {
     }
   }
 
-  const selectNft = (nft) => {
+  const selectNft = (nft: NftToken) => {
     if (option === 'compose') {
       const level = nft.attributes[0].value
       const data = selectedNFTs.filter((nft) => nft.attributes[0].value === level)
@@ -445,8 +443,8 @@ function NftProfilePage() {
     } else if (option === 'stake') {
       nft.selected = !nft.selected
     }
-    const selected = selectedNFTs.filter((item) => item.selected)
-    setSelectedCount(selected?.length)
+    // const selected = selectedNFTs.filter((item) => item.selected)
+    // setSelectedCount(selected?.length)
   }
   const tabs = [
     { key: 'WithoutStake', label: t('Not Staked'), length: unstakedNFTs?.length ?? 0 },
