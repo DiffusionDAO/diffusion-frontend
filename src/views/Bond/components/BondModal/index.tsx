@@ -275,7 +275,7 @@ const BondModal: React.FC<BondModalProps> = ({
               <ToImg src={bondData?.to} />
             </ImgWrap>
             <BondName>{bondData?.name}</BondName>
-            <BondTime>{vestingTerms}</BondTime>
+            <BondTime>{`${vestingTerms.split(' ')[0]} ${t(vestingTerms.split(' ')[1])}`}</BondTime>
           </BondListItemHeader>
           <BondListItemContent>
             <ContentCell>
@@ -388,7 +388,7 @@ const BondModal: React.FC<BondModalProps> = ({
         </ListItem>
         <ListItem>
           <ListLable>{t('Duration')}</ListLable>
-          <ListContent>{vestingTerms}</ListContent>
+          <ListContent>{`${vestingTerms.split(' ')[0]} ${t(vestingTerms.split(' ')[1])}`}</ListContent>
         </ListItem>
       </ContentWrap>
     </StyledModal>

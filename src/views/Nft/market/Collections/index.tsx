@@ -350,9 +350,7 @@ const Collectible = () => {
                         <Text fontSize="12px" color="textSubtle">
                           {t('Volume')}
                         </Text>
-                        <DFSAmountLabel
-                          amount={data?.totalVolume ? parseFloat(formatUnits(data?.totalVolume, 18)) : 0}
-                        />
+                        <DFSAmountLabel amount={data?.totalVolume} />
                       </Flex>
                     </CollectionCard>
                   )

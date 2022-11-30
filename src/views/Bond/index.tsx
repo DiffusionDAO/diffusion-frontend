@@ -227,7 +227,7 @@ const Bond = () => {
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Duration')}</CellTitle>
-                  <CellText>{item.duration}</CellText>
+                  <CellText>{`${item.duration.split(' ')[0]} ${t(item.duration.split(' ')[1])}`}</CellText>
                 </ContentCell>
               </BondListItemContent>
               {item.status === 'opened' ? (
