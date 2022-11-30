@@ -1,5 +1,4 @@
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { getAchievements } from 'state/achievements/helpers'
 import { FetchStatus } from 'config/constants/types'
 import useSWR, { KeyedMutator } from 'swr'
 import { localStorageMiddleware } from 'hooks/useSWRContract'
@@ -32,18 +31,6 @@ export const useProfileForAddress = (
     profile,
     isFetching: status === FetchStatus.Fetching,
     isValidating,
-    refresh: mutate,
-  }
-}
-
-export const useAchievementsForAddress = (address: string) => {
-  const { data, status, mutate } = useSWRImmutable(address ? [address, 'achievements'] : null, () =>
-    getAchievements(address),
-  )
-
-  return {
-    achievements: data || [],
-    isFetching: status === FetchStatus.Fetching,
     refresh: mutate,
   }
 }
