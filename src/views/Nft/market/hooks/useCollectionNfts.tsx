@@ -118,6 +118,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const fallbackModePage = useRef(0)
   const isLastPage = useRef(false)
   const { t } = useTranslation()
+  const [tokenIds, setTokenIds] = useState<any[]>()
   const [tokens, setTokens] = useState<any[]>()
   const socianNFTAddress = getSocialNFTAddress()
   const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC_TESTNET })
@@ -128,66 +129,16 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const dfsMiningAddress = getMiningAddress()
   const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
 
+  const erc721 = useERC721(collectionAddress)
+
   const { data: collection, status: collectionStatus } = useSWR('collections', async () => {
-    const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
     const getTokenContract = getContract({
       abi: socialNFTAbi,
       address: collectionAddress,
       chainId: ChainId.BSC_TESTNET,
     })
-    const collectionName = await erc721.name()
     const tokenIds = await getTokenContract.allTokens()
-    const getTokens = await Promise.all(
-      tokenIds.map(async (tokenId) => {
-        const tokenIdString = tokenId.toString()
-        const getToken = await getTokenContract.getToken(tokenId)
-        const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
-        const staker = await dfsMining.staker(tokenId)
-        const nft: NFT = { ...getToken, ...sellPrice, staker }
-        const level = nft.level.toString()
-        let thumbnail
-        let name
-        const starLightAddress = getStarlightAddress()
-        const dfsNFTAddress = getSocialNFTAddress()
-        if (collectionAddress === starLightAddress) {
-          thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
-          name = `StarLight#${tokenId}`
-        } else if (collectionAddress === dfsNFTAddress) {
-          thumbnail = `/images/nfts/socialnft/${level}`
-          name = `${t(levelToName[level])}#${tokenId}`
-        }
-        const token = {
-          tokenId: tokenIdString,
-          name,
-          description: name,
-          collectionName,
-          collectionAddress,
-          image: {
-            original: 'string',
-            thumbnail,
-          },
-          attributes: [{ traitType: 'SPOS', value: levelToSPOS[level], displayType: '' }],
-          createdAt: '',
-          updatedAt: '',
-          location: NftLocation.FORSALE,
-          marketData: {
-            tokenId: tokenIdString,
-            collection: {
-              id: tokenIdString,
-            },
-            currentAskPrice: formatUnits(nft.price, 'ether'),
-            currentSeller: nft?.seller,
-            isTradable: true,
-          },
-          staker: nft?.staker,
-          owner: nft?.owner,
-          seller: nft?.seller,
-        }
-        return token
-      }),
-    )
-    setTokens(getTokens)
-    return collection
+    setTokenIds(tokenIds)
   })
   const { field, direction } = useGetNftOrdering(collectionAddress)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(collectionAddress)
@@ -200,11 +151,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
   })
 
   const resultSize =
-    !Object.keys(nftFilters).length && collection
-      ? showOnlyNftsOnSale
-        ? collection?.numberTokensListed
-        : collection?.totalSupply
-      : null
+    !Object.keys(nftFilters).length && tokenIds ? (showOnlyNftsOnSale ? tokenIds.length : tokenIds.length) : null
 
   const itemListingSettingsJson = JSON.stringify(itemListingSettings)
   const filtersJson = JSON.stringify(nftFilters)
@@ -222,8 +169,6 @@ export const useCollectionNfts = (collectionAddress: string) => {
     isLastPage.current = false
   }, [field, direction, showOnlyNftsOnSale, filtersJson])
 
-  const collectionContract = useERC721(collectionAddress)
-
   const {
     data: nfts,
     status,
@@ -235,9 +180,64 @@ export const useCollectionNfts = (collectionAddress: string) => {
       return [collectionAddress, itemListingSettingsJson, pageIndex, 'collectionNfts']
     },
     async (address, settingsJson, page) => {
+      const collectionName = await erc721.name()
+      const getTokenContract = getContract({
+        abi: socialNFTAbi,
+        address: collectionAddress,
+        chainId: ChainId.BSC_TESTNET,
+      })
+      const tokens = await Promise.all(
+        tokenIds.slice(page * REQUEST_SIZE, (page + 1) * REQUEST_SIZE).map(async (tokenId) => {
+          const tokenIdString = tokenId.toString()
+          const getToken = await getTokenContract.getToken(tokenId)
+          const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
+          const staker = await dfsMining.staker(tokenId)
+          const nft: NFT = { ...getToken, ...sellPrice, staker }
+          const level = nft.level.toString()
+          let thumbnail
+          let name
+          const starLightAddress = getStarlightAddress()
+          const dfsNFTAddress = getSocialNFTAddress()
+          if (collectionAddress === starLightAddress) {
+            thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
+            name = `StarLight#${tokenId}`
+          } else if (collectionAddress === dfsNFTAddress) {
+            thumbnail = `/images/nfts/socialnft/${level}`
+            name = `${t(levelToName[level])}#${tokenId}`
+          }
+          const token = {
+            tokenId: tokenIdString,
+            name,
+            description: name,
+            collectionName,
+            collectionAddress,
+            image: {
+              original: 'string',
+              thumbnail,
+            },
+            attributes: [{ traitType: 'SPOS', value: levelToSPOS[level], displayType: '' }],
+            createdAt: '',
+            updatedAt: '',
+            location: NftLocation.FORSALE,
+            marketData: {
+              tokenId: tokenIdString,
+              collection: {
+                id: tokenIdString,
+              },
+              currentAskPrice: formatUnits(nft.price, 'ether'),
+              currentSeller: nft?.seller,
+              isTradable: true,
+            },
+            staker: nft?.staker,
+            owner: nft?.owner,
+            seller: nft?.seller,
+          }
+          return token
+        }),
+      )
       const settings: ItemListingSettings = JSON.parse(settingsJson)
       const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collectionAddress, settings)
-      const collectionName = await collectionContract.name()
+
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
         const marketItems = await nftMarket.fetchMarketItems()
@@ -250,13 +250,13 @@ export const useCollectionNfts = (collectionAddress: string) => {
             const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
             const name = `${t(levelToName[token.level])}#${token.tokenId}`
             const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
-            return nftToNftToken(token)
+            return nftToNftToken(nft)
           }),
         )
 
         // eslint-disable-next-line no-return-assign, no-param-reassign
       } else {
-        newNfts = tokens.slice(page * REQUEST_SIZE, (page + 1) * REQUEST_SIZE)
+        newNfts = tokens
       }
       if (newNfts.length < REQUEST_SIZE) {
         isLastPage.current = true
