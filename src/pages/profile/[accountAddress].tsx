@@ -214,10 +214,10 @@ function NftProfilePage() {
       await Promise.all(
         tokenIds.map(async (tokenId) => {
           const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
-          const token = await socialNFT.getToken(tokenId)
-          const name = `${t(levelToName[token.level])}#${token.tokenId}`
-          const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
-          if (nft.seller === account) {
+          if (sellPrice.seller === account) {
+            const token = await socialNFT.getToken(tokenId)
+            const name = `${t(levelToName[token.level])}#${token.tokenId}`
+            const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
             tokens.onSale.push(nftToNftToken(nft))
           }
         }),
