@@ -1,14 +1,12 @@
 import { FC } from 'react'
 import { useRouter } from 'next/router'
 import { isAddress } from 'utils'
-import { useAchievementsForAddress, useProfileForAddress } from 'state/profile/hooks'
 import { Box, Flex, Text } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import MarketPageHeader from '../components/MarketPageHeader'
-import ProfileHeader from './components/ProfileHeader'
-import NoNftsImage from '../components/Activity/NoNftsImage'
+// import NoNftsImage from '../components/Activity/NoNftsImage'
 import { useNftsForAddress } from '../hooks/useNftsForAddress'
 import TabMenu from './components/TabMenu'
 
@@ -30,23 +28,12 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
 
   const invalidAddress = !accountAddress || isAddress(accountAddress) === false
 
-  const {
-    profile,
-    isValidating: isProfileValidating,
-    isFetching: isProfileFetching,
-    refresh: refreshProfile,
-  } = useProfileForAddress(accountAddress, {
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  })
-
   if (invalidAddress) {
     return (
       <>
         <div style={{ minHeight: 'auto', margin: '20px' }}>
           <Flex p="24px" flexDirection="column" alignItems="center">
-            <NoNftsImage />
+            {/* <NoNftsImage /> */}
             <Text textAlign="center" maxWidth="420px" pt="8px" bold>
               {t('Please enter a valid address, or connect your wallet to view your profile')}
             </Text>

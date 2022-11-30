@@ -21,7 +21,7 @@ import { multiplyPriceByAmount } from 'utils/prices'
 import useNftOwner from 'views/Nft/market/hooks/useNftOwner'
 import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
-import ProfileCell from '../../../components/ProfileCell'
+// import ProfileCell from '../../../components/ProfileCell'
 import { ButtonContainer, TableHeading } from '../shared/styles'
 
 const StyledCard = styled(Card)`
@@ -112,11 +112,11 @@ const OwnerCard: React.FC<React.PropsWithChildren<OwnerCardProps>> = ({
                 </Flex>
               )}
             </Box>
-            <Box>
+            {/* <Box>
               <Flex width="max-content" alignItems="center">
                 <ProfileCell accountAddress={owner.toLowerCase()} />
               </Flex>
-            </Box>
+            </Box> */}
             <ButtonContainer>
               {isOwnNft ? (
                 <Button

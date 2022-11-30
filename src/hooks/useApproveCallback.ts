@@ -7,11 +7,8 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { ROUTER_ADDRESS } from 'config/constants/exchange'
 import { useCallback, useMemo } from 'react'
 import { logError } from 'utils/sentry'
-import { Field } from '../state/swap/actions'
 import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin } from '../utils'
-import { computeSlippageAdjustedAmounts } from '../utils/exchange'
-import useGelatoLimitOrdersLib from './limitOrders/useGelatoLimitOrdersLib'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
 import { useTokenContract } from './useContract'
 import useTokenAllowance from './useTokenAllowance'
@@ -122,23 +119,9 @@ export function useApproveCallback(
   return [approvalState, approve]
 }
 
-// wraps useApproveCallback in the context of a swap
-export function useApproveCallbackFromTrade(
-  trade?: Trade<Currency, Currency, TradeType>,
-  allowedSlippage = 0,
-  chainId?: number,
-) {
-  const amountToApprove = useMemo(
-    () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
-    [trade, allowedSlippage],
-  )
-
-  return useApproveCallback(amountToApprove, ROUTER_ADDRESS[chainId])
-}
-
 // Wraps useApproveCallback in the context of a Gelato Limit Orders
 export function useApproveCallbackFromInputCurrencyAmount(currencyAmountIn: CurrencyAmount<Currency> | undefined) {
-  const gelatoLibrary = useGelatoLimitOrdersLib()
+  // const gelatoLibrary = useGelatoLimitOrdersLib()
 
-  return useApproveCallback(currencyAmountIn, gelatoLibrary?.erc20OrderRouter.address ?? undefined)
+  return useApproveCallback(currencyAmountIn, undefined)
 }

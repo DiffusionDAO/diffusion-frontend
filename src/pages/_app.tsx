@@ -20,7 +20,6 @@ import { useDFSMiningContract } from 'hooks/useContract'
 import { useRouter } from 'next/router'
 
 import { usePollBlockNumber } from 'state/block/hooks'
-import { usePollCoreFarmData } from 'state/farms/hooks'
 import { Blocklist, Updaters } from '..'
 import { SentryErrorBoundary } from '../components/ErrorBoundary'
 import Halo from '../components/Halo'
@@ -36,15 +35,8 @@ import './DiffusionChart.scss'
 import './Dashboard.scss'
 import { useWeb3React } from '../../packages/wagmi/src/useWeb3React'
 
-// BigNumber.config({
-//   EXPONENTIAL_AT: 1000,
-//   DECIMAL_PLACES: 80,
-// })
-
 function GlobalHooks() {
-  // usePollBlockNumber()
   useEagerConnect()
-  // usePollCoreFarmData()
   useUserAgent()
   useAccountEventListener()
   useSentryUser()
@@ -53,9 +45,7 @@ function GlobalHooks() {
 }
 
 function MPGlobalHooks() {
-  // usePollBlockNumber()
   useEagerConnectMP()
-  // usePollCoreFarmData()
   useUserAgent()
   useAccountEventListener()
   useSentryUser()

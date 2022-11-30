@@ -11,7 +11,6 @@ import {
 } from 'state/user/hooks'
 import { ChainId } from '@pancakeswap/sdk'
 import { SUPPORT_ZAP } from 'config/constants/supportChains'
-import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
@@ -62,7 +61,6 @@ const SettingsModal: React.FC<React.PropsWithChildren<InjectedModalProps>> = ({ 
   const [audioPlay, toggleSetAudioMode] = useAudioModeManager()
   const [zapMode, toggleZapMode] = useZapModeManager()
   const [subgraphHealth, setSubgraphHealth] = useSubgraphHealthIndicatorManager()
-  const { onChangeRecipient } = useSwapActionHandlers()
   const { chainId } = useActiveChainId()
 
   const { t } = useTranslation()
@@ -80,10 +78,8 @@ const SettingsModal: React.FC<React.PropsWithChildren<InjectedModalProps>> = ({ 
 
   const handleExpertModeToggle = () => {
     if (expertMode) {
-      onChangeRecipient(null)
       toggleExpertMode()
     } else if (!showExpertModeAcknowledgement) {
-      onChangeRecipient(null)
       toggleExpertMode()
     } else {
       setShowConfirmExpertModal(true)

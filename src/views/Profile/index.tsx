@@ -1,14 +1,12 @@
 import { FC, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import { isAddress } from 'utils'
-import { useAchievementsForAddress, useProfileForAddress } from 'state/profile/hooks'
 import { Box, Flex, Text } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import MarketPageHeader from '../Nft/market/components/MarketPageHeader'
-import ProfileHeader from './components/ProfileHeader'
-import NoNftsImage from '../Nft/market/components/Activity/NoNftsImage'
+// import NoNftsImage from '../Nft/market/components/Activity/NoNftsImage'
 import TabMenu from './components/TabMenu'
 import { useNftsForAddress } from '../Nft/market/hooks/useNftsForAddress'
 
@@ -35,7 +33,7 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
       <>
         <Page style={{ minHeight: 'auto' }}>
           <Flex p="24px" flexDirection="column" alignItems="center">
-            <NoNftsImage />
+            {/* <NoNftsImage /> */}
             <Text textAlign="center" maxWidth="420px" pt="8px" bold>
               {t('Please enter a valid address, or connect your wallet to view your profile')}
             </Text>

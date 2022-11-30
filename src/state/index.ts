@@ -12,7 +12,7 @@ import { updateVersion } from './global/actions'
 // import mint from './mint/reducer'
 import multicall from './multicall/reducer'
 // import poolsReducer from './pools'
-import swap from './swap/reducer'
+// import swap from './swap/reducer'
 import transactions from './transactions/reducer'
 import user from './user/reducer'
 // import limitOrders from './limitOrders/reducer'
@@ -43,7 +43,7 @@ const persistedReducer = persistReducer(
     // Exchange
     user,
     transactions,
-    swap,
+    // swap,
     // mint,
     burn,
     multicall,

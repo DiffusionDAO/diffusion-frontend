@@ -5,7 +5,6 @@ import { NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBscScanLinkForNft } from 'utils'
 import { HorizontalDivider, RoundedImage } from './BuySellModals/shared/styles'
-import EditProfileModal from '../../../Profile/components/EditProfileModal'
 import { nftsBaseUrl, pancakeBunniesAddress } from '../constants'
 
 export const StyledModal = styled(Modal)`
@@ -24,7 +23,6 @@ interface ProfileNftModalProps extends InjectedModalProps {
 }
 
 const ProfileNftModal: React.FC<React.PropsWithChildren<ProfileNftModalProps>> = ({ nft, onDismiss, onSuccess }) => {
-  const [onEditProfileModal] = useModal(<EditProfileModal onSuccess={onSuccess} />, false)
   const { t } = useTranslation()
   const { theme } = useTheme()
 
@@ -76,11 +74,6 @@ const ProfileNftModal: React.FC<React.PropsWithChildren<ProfileNftModalProps>> =
             {t('Go to your profile page to continue.')}
           </Text>
         </TextWrapper>
-        <Flex flexDirection="column" py="16px" px="16px">
-          <Button onClick={onEditProfileModal} width="100%" variant="secondary">
-            {t('Remove Profile Pic')}
-          </Button>
-        </Flex>
       </Flex>
     </StyledModal>
   )

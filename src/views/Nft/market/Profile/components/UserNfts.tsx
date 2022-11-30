@@ -3,7 +3,7 @@ import { NftLocation, NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { CollectibleLinkCard, CollectibleActionCard } from '../../components/CollectibleCard'
 import GridPlaceholder from '../../components/GridPlaceholder'
-import NoNftsImage from '../../components/Activity/NoNftsImage'
+// import NoNftsImage from '../../components/Activity/NoNftsImage'
 
 const UserNfts: React.FC<{
   isSelected: boolean
@@ -21,7 +21,7 @@ const UserNfts: React.FC<{
     <>
       {nfts?.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
-          <NoNftsImage />
+          {/* <NoNftsImage /> */}
           <Text pt="8px" bold>
             {t('No NFTs found')}
           </Text>
