@@ -490,7 +490,7 @@ const Reward = () => {
                   />
                   <DataCell
                     label={t('Next payout rate')}
-                    value={`${(savingRewardInterest / 10).toPrecision(5)}%`}
+                    value={`${(savingRewardInterest / 100).toPrecision(5)}%`}
                     position="horizontal"
                     valueDivStyle={{ fontSize: '14px' }}
                   />
