@@ -185,7 +185,6 @@ function NftProfilePage() {
   })
   const [activeTab, setActiveTab] = useState<string>('WithoutStake')
 
-  const nftDatabase = useNFTDatabaseContract()
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
   const socialNFT = useSocialNftContract()
@@ -194,7 +193,7 @@ function NftProfilePage() {
     // const collectionAddresses = await nftDatabase.getCollectionAddresses()
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
-      let tokenIds = await socialNFT.tokensOfOwner(account)
+      const tokenIds = await socialNFT.tokensOfOwner(account)
       const collectionName = await socialNFT.name()
       console.log('tokenIds:', tokenIds)
       await Promise.all(
@@ -207,18 +206,6 @@ function NftProfilePage() {
             tokens.unstaked.push(nftToNftToken(nft))
           } catch (error: any) {
             console.log(tokenId, error.reason ?? error.data?.message ?? error.message)
-          }
-        }),
-      )
-      tokenIds = await socialNFT.tokensOfOwner(nftMarket.address)
-      await Promise.all(
-        tokenIds.map(async (tokenId) => {
-          const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
-          if (sellPrice.seller === account) {
-            const token = await socialNFT.getToken(tokenId)
-            const name = `${t(levelToName[token.level])}#${token.tokenId}`
-            const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
-            tokens.onSale.push(nftToNftToken(nft))
           }
         }),
       )

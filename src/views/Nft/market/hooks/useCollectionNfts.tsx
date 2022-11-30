@@ -118,7 +118,8 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const fallbackModePage = useRef(0)
   const isLastPage = useRef(false)
   const { t } = useTranslation()
-  const [tokenIds, setTokenIds] = useState<any[]>()
+  const [tokenIds, setTokenIds] = useState<number[]>()
+  const [tokenIdsOnSale, setTokenIdsOnSale] = useState<number[]>()
   const [tokens, setTokens] = useState<any[]>()
   const socianNFTAddress = getSocialNFTAddress()
   const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC_TESTNET })
@@ -131,7 +132,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
 
   const erc721 = useERC721(collectionAddress)
 
-  const { data: collection, status: collectionStatus } = useSWR('collections', async () => {
+  useSWR('collections', async () => {
     const getTokenContract = getContract({
       abi: socialNFTAbi,
       address: collectionAddress,
@@ -139,6 +140,8 @@ export const useCollectionNfts = (collectionAddress: string) => {
     })
     const tokenIds = await getTokenContract.allTokens()
     setTokenIds(tokenIds)
+    const tokenIdsOnSale = await getTokenContract.tokensOfOwner(nftMarket.address)
+    setTokenIdsOnSale(tokenIdsOnSale)
   })
   const { field, direction } = useGetNftOrdering(collectionAddress)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(collectionAddress)
@@ -151,7 +154,11 @@ export const useCollectionNfts = (collectionAddress: string) => {
   })
 
   const resultSize =
-    !Object.keys(nftFilters).length && tokenIds ? (showOnlyNftsOnSale ? tokenIds.length : tokenIds.length) : null
+    !Object.keys(nftFilters).length && tokenIds
+      ? showOnlyNftsOnSale
+        ? tokenIdsOnSale?.length
+        : tokenIds?.length
+      : null
 
   const itemListingSettingsJson = JSON.stringify(itemListingSettings)
   const filtersJson = JSON.stringify(nftFilters)
@@ -240,9 +247,8 @@ export const useCollectionNfts = (collectionAddress: string) => {
 
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
-        const marketTokenIds = await socialNFT.tokensOfOwner(nftMarket.address)
         newNfts = await Promise.all(
-          marketTokenIds.map(async (tokenId) => {
+          tokenIdsOnSale.map(async (tokenId) => {
             const token = await socialNFT.getToken(tokenId)
             const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
             const name = `${t(levelToName[token.level])}#${token.tokenId}`
