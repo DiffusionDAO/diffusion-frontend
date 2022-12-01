@@ -409,10 +409,10 @@ function NftProfilePage() {
     try {
       receipt = await dfsMining.stakeNFT(tokenIds)
       await receipt.wait()
-      // mutate(getProfileToken())
-      // selected.map((item) => (item.staker = !item.staker))
-      // selected.map((item) => (item.selected = !item.selected))
-      // resetPage()
+      mutate(getProfileToken())
+      selected.map((item) => (item.staker = !item.staker))
+      selected.map((item) => (item.selected = !item.selected))
+      resetPage()
       message.success('Stake success')
     } catch (error: any) {
       window.alert(error.reason ?? error.data?.message ?? error.message)
