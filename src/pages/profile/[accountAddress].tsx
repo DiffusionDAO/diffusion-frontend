@@ -112,6 +112,7 @@ export const levelToSPOS = {
 }
 
 const SORT_FIELD_INDEX_MAP = new Map([
+  ['All', 0],
   [levelToName['0'], 1],
   [levelToName['1'], 2],
   [levelToName['2'], 3],
@@ -202,6 +203,7 @@ function NftProfilePage() {
 
   const options = useMemo(() => {
     return [
+      { label: t('All'), value: 8 },
       { label: t('Wiseman fragment'), value: 0 },
       { label: t('Wiseman'), value: 1 },
       { label: t('Wiseman Gold'), value: 2 },
@@ -275,7 +277,11 @@ function NftProfilePage() {
   const handleSort = useCallback(
     (level: number) => {
       const filtered = data?.unstaked.filter((nft: NftToken) => nft.level === level)
-      setUnstakedNFTs(filtered)
+      if (filtered.length > 0) {
+        setUnstakedNFTs(filtered)
+      } else {
+        setUnstakedNFTs(unstakedNFTs)
+      }
     },
     [sortField, data],
   )
