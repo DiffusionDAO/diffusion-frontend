@@ -10,17 +10,12 @@ const UserNfts: React.FC<
     isSelected: boolean
     nfts: NftToken[]
     isLoading: boolean
-    selectNft: (param: NftToken) => void
+    selectNft: (param: NftToken, index: number) => void
     onSuccessSale?: () => void
     onSuccessEditProfile?: () => void
   }>
 > = ({ isSelected, nfts, isLoading, selectNft, onSuccessSale, onSuccessEditProfile }) => {
   const { t } = useTranslation()
-  const handleCollectibleClick = (nft: NftToken, location: NftLocation) => {
-    if (isSelected) {
-      selectNft(nft)
-    }
-  }
   return (
     <>
       {nfts?.length === 0 && !isLoading ? (
@@ -36,13 +31,13 @@ const UserNfts: React.FC<
           gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
           alignItems="start"
         >
-          {nfts?.map((nft) => {
+          {nfts?.map((nft, i) => {
             const { marketData, location } = nft
             return (
               <CollectibleLinkCard
                 isSelected={isSelected}
                 isUserNft
-                onClick={() => handleCollectibleClick(nft, location)}
+                onClick={() => selectNft(nft, i)}
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
                 nft={nft}
                 currentAskPrice={

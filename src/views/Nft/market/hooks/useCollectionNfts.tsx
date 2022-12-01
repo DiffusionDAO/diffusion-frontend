@@ -222,6 +222,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
               original: 'string',
               thumbnail,
             },
+            level,
             attributes: [{ traitType: 'SPOS', value: levelToSPOS[level], displayType: '' }],
             createdAt: '',
             updatedAt: '',

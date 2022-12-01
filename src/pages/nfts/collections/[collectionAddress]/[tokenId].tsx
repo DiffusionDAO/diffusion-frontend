@@ -78,15 +78,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     collectionAddress,
     name,
     image: { original: 'string', thumbnail },
-    attributes: [
-      {
-        traitType: 'Level',
-        value: level,
-        displayType: '',
-      },
-    ],
     staker: nft.staker,
     owner: nft.owner,
+    level: nft.level,
     marketData: {
       tokenId,
       collection: {
