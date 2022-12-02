@@ -476,7 +476,7 @@ function NftProfilePage() {
           return
         }
         sameLevel.map((item: NftToken) => {
-          if (item.level === nft.level) {
+          if (item.tokenId === nft.tokenId) {
             item.selected = !item.selected
           }
         })
@@ -498,7 +498,7 @@ function NftProfilePage() {
         }
         sameLevel = sameLevel.slice(i, i + 2)
         sameLevel.map((item: NftToken) => {
-          if (item.level === level) {
+          if (item.tokenId === nft.tokenId) {
             item.selected = !item.selected
           }
         })
