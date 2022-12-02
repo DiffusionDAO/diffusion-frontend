@@ -479,7 +479,7 @@ function NftProfilePage() {
             item.selected = !item.selected
           }
         })
-        setSelectedNFTs(sameLevel)
+        setSelectedNFTs(toBeComposed)
       } else if (level === 6) {
         setNoteContent({
           title: t('Note'),
@@ -501,7 +501,7 @@ function NftProfilePage() {
             item.selected = !item.selected
           }
         })
-        setSelectedNFTs(sameLevel)
+        setSelectedNFTs(toBeComposed)
       }
     } else if (option === 'stake') {
       nft.selected = !nft.selected
