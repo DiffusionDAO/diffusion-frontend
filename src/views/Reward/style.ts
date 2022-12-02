@@ -441,6 +441,7 @@ export const MySposRewardBg = styled.img`
 `
 
 export const CardWrap = styled.div`
+  border: 2px solid #e972ff;
   padding: 24px;
   background: rgba(171, 182, 255, 0.05);
   border-radius: 16px;
