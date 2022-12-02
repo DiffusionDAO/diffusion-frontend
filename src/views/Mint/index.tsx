@@ -138,8 +138,8 @@ const Mint = () => {
 
     const gasEstimation =
       type === 'ordinary'
-        ? await estimateGas(socialNFT, 'mintElementary', [ordinaryCount, useBond], {}, 1000)
-        : await estimateGas(socialNFT, 'mintAdvanced', [seniorCount, useBond], {}, 1000)
+        ? await estimateGas(socialNFT, 'mintElementary', [ordinaryCount, useBond], {}, 1500)
+        : await estimateGas(socialNFT, 'mintAdvanced', [seniorCount, useBond], {}, 1500)
     console.log('gasEstimation:', gasEstimation.toNumber())
     try {
       // eslint-disable-next-line react-hooks/rules-of-hooks
