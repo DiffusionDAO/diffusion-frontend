@@ -50,6 +50,8 @@ import { formatBigNumber } from 'utils/formatBalance'
 import { ZHCN } from '@pancakeswap/localization/src/config/languages'
 import { Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Select, { OptionProps } from 'components/Select/Select'
+import { createPortal } from 'react-dom'
+import ScrollToTopButton from 'components/ScrollToTopButton'
 
 interface noteProps {
   title: string
@@ -460,10 +462,10 @@ function NftProfilePage() {
     }
   }
 
-  const selectNft = (nft: NftToken, i: number) => {
+  const selectNft = (nft: NftToken, index: number) => {
     if (option === 'compose') {
       const level = nft.level
-      const sameLevel = unstakedNFTs.filter((nft) => nft.level === level)
+      const sameLevel = unstakedNFTs.filter((nft, i) => nft.level === level && i >= index)
       if (level === 0) {
         const toBeComposed = sameLevel.slice(0, 3)
         if (toBeComposed?.length < 3) {
@@ -645,6 +647,7 @@ function NftProfilePage() {
         />
       ) : null}
       {successModalVisible ? <ComposeSuccessModal nfts={composedNFT} onClose={closeComposeSuccessModal} /> : null}
+      {createPortal(<ScrollToTopButton />, document.body)}
     </AccountNftWrap>
   )
 }
