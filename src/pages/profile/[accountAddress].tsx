@@ -558,9 +558,6 @@ function NftProfilePage() {
             >
               {/* <ToggleView idPrefix="clickCollection" viewMode={viewMode} onToggle={setViewMode} /> */}
               <Flex width="max-content" style={{ gap: '4px' }} flexDirection="column">
-                <Text fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600}>
-                  {t('Sort By')}
-                </Text>
                 <Select
                   options={options}
                   placeHolderText={t('Select')}
