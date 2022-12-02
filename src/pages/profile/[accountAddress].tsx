@@ -463,11 +463,10 @@ function NftProfilePage() {
   const selectNft = (nft: NftToken, i: number) => {
     if (option === 'compose') {
       const level = nft.level
-      let sameLevel = unstakedNFTs.filter((nft) => nft.level === level)
+      const sameLevel = unstakedNFTs.filter((nft) => nft.level === level)
       if (level === 0) {
-        sameLevel = sameLevel.slice(i, i + 3)
-        console.log('sameLevel:', sameLevel)
-        if (sameLevel?.length < 3) {
+        const toBeComposed = sameLevel.slice(0, 3)
+        if (toBeComposed?.length < 3) {
           setNoteContent({
             title: t('Note'),
             description: t('Need 3 pieces'),
@@ -475,8 +474,8 @@ function NftProfilePage() {
           })
           return
         }
-        sameLevel.map((item: NftToken) => {
-          if (item.tokenId === nft.tokenId) {
+        toBeComposed.map((item: NftToken) => {
+          if (item.level === level) {
             item.selected = !item.selected
           }
         })
@@ -488,7 +487,8 @@ function NftProfilePage() {
           visible: true,
         })
       } else {
-        if (sameLevel?.length < 2) {
+        const toBeComposed = sameLevel.slice(0, 2)
+        if (toBeComposed?.length < 2) {
           setNoteContent({
             title: t('Note'),
             description: t('Need 2') + t(levelToName[Number(sameLevel[0].level)]),
@@ -496,9 +496,8 @@ function NftProfilePage() {
           })
           return
         }
-        sameLevel = sameLevel.slice(i, i + 2)
-        sameLevel.map((item: NftToken) => {
-          if (item.tokenId === nft.tokenId) {
+        toBeComposed.map((item: NftToken) => {
+          if (item.level === level) {
             item.selected = !item.selected
           }
         })
