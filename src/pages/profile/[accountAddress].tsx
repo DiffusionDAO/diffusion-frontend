@@ -258,9 +258,21 @@ function NftProfilePage() {
           }
         }),
       )
-      setUnstakedNFTs(tokens.unstaked)
-      setStakedNFTs(tokens.staked)
-      setOnSaleNFT(tokens.onSale)
+      setUnstakedNFTs(
+        tokens.unstaked.sort((token1, token2) => {
+          return token1.tokenId > token2.tokenId ? 1 : -1
+        }),
+      )
+      setStakedNFTs(
+        tokens.staked.sort((token1, token2) => {
+          return token1.tokenId > token2.tokenId ? 1 : -1
+        }),
+      )
+      setOnSaleNFT(
+        tokens.onSale.sort((token1, token2) => {
+          return token1.tokenId > token2.tokenId ? 1 : -1
+        }),
+      )
       return tokens
     }
     return { unstaked: [], staked: [], onSale: [] }
@@ -276,7 +288,7 @@ function NftProfilePage() {
 
   const handleSort = useCallback(
     (level: number) => {
-      const filtered = data?.unstaked.filter((nft: NftToken) => nft.level === level)
+      const filtered = unstakedNFTs.filter((nft: NftToken) => nft.level === level)
       if (filtered.length > 0) {
         setUnstakedNFTs(filtered)
       } else {
@@ -312,7 +324,7 @@ function NftProfilePage() {
   }
 
   const closeComposeSuccessModal = () => {
-    setUnstakedNFTs(data?.unstaked)
+    setUnstakedNFTs(unstakedNFTs)
     setSuccessModalVisible(false)
     resetPage()
   }
@@ -451,7 +463,7 @@ function NftProfilePage() {
   const selectNft = (nft: NftToken, i: number) => {
     if (option === 'compose') {
       const level = nft.level
-      let sameLevel = unstakedNFTs.filter((nft) => nft.level === level)
+      let sameLevel = data.unstaked.filter((nft) => nft.level === level)
       if (level === 0) {
         sameLevel = sameLevel.slice(i, i + 3)
         console.log('sameLevel:', sameLevel)
@@ -464,7 +476,7 @@ function NftProfilePage() {
           return
         }
         sameLevel.map((item: NftToken) => {
-          if (item.attributes[0].value === nft.attributes[0].value) {
+          if (item.level === nft.level) {
             item.selected = !item.selected
           }
         })
@@ -479,14 +491,14 @@ function NftProfilePage() {
         if (sameLevel?.length < 2) {
           setNoteContent({
             title: t('Note'),
-            description: t('Need 2') + t(levelToName[Number(sameLevel[0].attributes[0].value)]),
+            description: t('Need 2') + t(levelToName[Number(sameLevel[0].level)]),
             visible: true,
           })
           return
         }
         sameLevel = sameLevel.slice(i, i + 2)
         sameLevel.map((item: NftToken) => {
-          if (item.attributes[0].value === nft.attributes[0].value) {
+          if (item.level === level) {
             item.selected = !item.selected
           }
         })
@@ -537,32 +549,32 @@ function NftProfilePage() {
           />
 
           <SubMenuRight>
+            <Flex
+              justifyContent="space-between"
+              alignItems="center"
+              pr={[null, null, '4px']}
+              pl={['4px', null, '0']}
+              mb="8px"
+            >
+              {/* <ToggleView idPrefix="clickCollection" viewMode={viewMode} onToggle={setViewMode} /> */}
+              <Flex width="max-content" style={{ gap: '4px' }} flexDirection="column">
+                <Text fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600}>
+                  {t('Sort By')}
+                </Text>
+                <Select
+                  options={options}
+                  placeHolderText={t('Select')}
+                  defaultOptionIndex={SORT_FIELD_INDEX_MAP.get(sortField)}
+                  onOptionChange={(option: OptionProps) => handleSort(option.value)}
+                />
+              </Flex>
+            </Flex>
             {activeTab === 'Unstaked' && (
               <Button type="primary" style={{ marginLeft: '10px' }} size="middle" onClick={startStake}>
                 {t('Stake')}
               </Button>
             )}
           </SubMenuRight>
-          <Flex
-            justifyContent="space-between"
-            alignItems="center"
-            pr={[null, null, '4px']}
-            pl={['4px', null, '0']}
-            mb="8px"
-          >
-            {/* <ToggleView idPrefix="clickCollection" viewMode={viewMode} onToggle={setViewMode} /> */}
-            <Flex width="max-content" style={{ gap: '4px' }} flexDirection="column">
-              <Text fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600}>
-                {t('Sort By')}
-              </Text>
-              <Select
-                options={options}
-                placeHolderText={t('Select')}
-                defaultOptionIndex={SORT_FIELD_INDEX_MAP.get(sortField)}
-                onOptionChange={(option: OptionProps) => handleSort(option.value)}
-              />
-            </Flex>
-          </Flex>
         </SubMenuWrap>
         {activeTab === 'Unstaked' && (
           <ComposeBtnWrap isSelected={isSelected}>
