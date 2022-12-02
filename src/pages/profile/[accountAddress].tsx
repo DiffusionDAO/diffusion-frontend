@@ -463,7 +463,7 @@ function NftProfilePage() {
   const selectNft = (nft: NftToken, i: number) => {
     if (option === 'compose') {
       const level = nft.level
-      let sameLevel = data.unstaked.filter((nft) => nft.level === level)
+      let sameLevel = unstakedNFTs.filter((nft) => nft.level === level)
       if (level === 0) {
         sameLevel = sameLevel.slice(i, i + 3)
         console.log('sameLevel:', sameLevel)
