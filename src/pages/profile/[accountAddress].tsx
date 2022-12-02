@@ -333,12 +333,10 @@ function NftProfilePage() {
 
   const submitCompose = async () => {
     const selected = selectedNFTs.filter((nft) => nft.selected)
-    console.log('selected:', selected)
     try {
       let tx
       if (selected[0]?.level === 0 && selected?.length === 3) {
         const selectedTokenIds = selected.map((x) => x.tokenId)
-        console.log('selectedTokenIds:', selectedTokenIds)
         tx = await socialNFT.ComposeLv0(selectedTokenIds)
       } else if (selected[0]?.level !== 0 && selected?.length === 2) {
         const selectedTokenIds = selected.map((x) => x.tokenId)
@@ -419,7 +417,6 @@ function NftProfilePage() {
   const submitStake = async (selected) => {
     const mineAddress = getMiningAddress()
     const tokenIds = selected.map((item) => item.tokenId)
-    console.log('tokenIds:', tokenIds)
     const approved = await socialNFT.isApprovedForAll(account, mineAddress)
     let receipt
     if (!approved) {
