@@ -116,7 +116,6 @@ const Private = () => {
   const dfs = useDFSContract()
   const hdfs = useHDFSContract()
   const hbond = useHBondContract()
-  const hdfs = useERC20(getHDFSAddress())
 
   const n = (24 * 3600) / savingInterestEpochLength
 
