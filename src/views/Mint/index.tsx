@@ -284,7 +284,7 @@ const Mint = () => {
                   }}
                   style={{ marginTop: '20px' }}
                 >
-                  {t('Payout Mint')}
+                  {t('Unsed Mint')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>
             </DrawBlindBoxItem>
@@ -385,7 +385,7 @@ const Mint = () => {
                   }}
                   style={{ marginTop: '20px' }}
                 >
-                  {t('Payout Mint')}
+                  {t('Unsed Mint')}
                 </DrawBlindBoxPrimaryBtn>
               </ContentWrap>
             </DrawBlindBoxItem>
