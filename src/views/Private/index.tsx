@@ -20,7 +20,7 @@ import {
 import { BigNumber } from '@ethersproject/bignumber'
 import { useSWRContract, useSWRMulticall } from 'hooks/useSWRContract'
 import { MaxUint256 } from '@ethersproject/constants'
-import { getMiningAddress, getUSDTAddress } from 'utils/addressHelpers'
+import { getHDFSAddress, getMiningAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import { formatBigNumber, formatBigNumberToFixed, formatNumber } from 'utils/formatBalance'
 import useSWR from 'swr'
@@ -116,7 +116,7 @@ const Private = () => {
   const dfs = useDFSContract()
   const hdfs = useHDFSContract()
   const hbond = useHBondContract()
-  const usdt = useERC20(getUSDTAddress())
+  const hdfs = useERC20(getHDFSAddress())
 
   const n = (24 * 3600) / savingInterestEpochLength
 
@@ -257,9 +257,9 @@ const Private = () => {
 
   const buySubmit = async () => {
     if (account) {
-      const allowance = await usdt.allowance(account, hbond.address)
+      const allowance = await hdfs.allowance(account, hbond.address)
       if (allowance.eq(0)) {
-        const receipt = await usdt.approve(hbond.address, MaxUint256)
+        const receipt = await hdfs.approve(hbond.address, MaxUint256)
         await receipt.wait()
       }
       try {
