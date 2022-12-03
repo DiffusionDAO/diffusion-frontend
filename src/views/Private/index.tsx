@@ -163,8 +163,10 @@ const Private = () => {
         //   const referral = await bond.addressToReferral(parent)
         count.withdrawable = count?.withdrawable.add(referralBond?.bondReward).add(pendingBondReward)
         count.unpaid = count?.unpaid.add(referralBond?.bondRewardUnpaid.sub(pendingBondReward))
-        console.log('pendingBondReward:', formatUnits(pendingBondReward))
-        console.log('withdrawable:', buyer, formatUnits(count.withdrawable, 18), formatUnits(count.unpaid, 18))
+        if (pendingBondReward.gt(0)) console.log('pendingBondReward:', formatUnits(pendingBondReward))
+        if (count.withdrawable.gt(0)) console.log('withdrawable:', buyer, formatUnits(count.withdrawable, 18))
+        if (count.unpaid.gt(0)) console.log('unpaid:', formatUnits(count.unpaid, 18))
+
         // })
       }),
     )
