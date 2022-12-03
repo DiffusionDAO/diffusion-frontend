@@ -154,20 +154,18 @@ const Private = () => {
     await Promise.all(
       buyers.map(async (buyer) => {
         const parents = await bond.getParents(buyer)
-        // console.log(parents)
         const referralBond = await bond.addressToReferral(buyer)
         count.bondUsed = count.bondUsed.add(referralBond.bondUsed)
-        // console.log('bondUsed:', buyer, formatUnits(count.bondUsed, 18), formatUnits(referralBond.bondUsed, 18))
         count.withdrawed = count.withdrawed.add(referralBond.bondRewardWithdrawed)
 
         const pendingBondReward = await bond.pendingBondReward(buyer)
-        parents.map(async (parent) => {
-          const referral = await bond.addressToReferral(parent)
-          count.unpaid = count?.unpaid.add(referral?.bondRewardUnpaid)
-          console.log('pendingBondReward:', pendingBondReward)
-          count.withdrawable = count?.withdrawable.add(pendingBondReward.add(referral?.bondReward))
-          console.log('withdrawed:', buyer, formatUnits(count.withdrawable, 18), formatUnits(count.unpaid, 18))
-        })
+        // parents.map(async (parent) => {
+        //   const referral = await bond.addressToReferral(parent)
+        count.withdrawable = count?.withdrawable.add(referralBond?.bondReward).add(pendingBondReward)
+        count.unpaid = count?.unpaid.add(referralBond?.bondRewardUnpaid.sub(pendingBondReward))
+        console.log('pendingBondReward:', formatUnits(pendingBondReward))
+        console.log('withdrawable:', buyer, formatUnits(count.withdrawable, 18), formatUnits(count.unpaid, 18))
+        // })
       }),
     )
     setTotalBondUsed(count.bondUsed)
