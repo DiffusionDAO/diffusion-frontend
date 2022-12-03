@@ -256,6 +256,7 @@ const Private = () => {
 
   const buySubmit = async () => {
     if (account) {
+      console.log('hdfs:', hdfs.address, hbond.address)
       const allowance = await hdfs.allowance(account, hbond.address)
       if (allowance.eq(0)) {
         const receipt = await hdfs.approve(hbond.address, MaxUint256)
