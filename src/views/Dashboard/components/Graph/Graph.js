@@ -27,14 +27,14 @@ export const OneGraph = () => {
       data={dashboardData}
       menuItemData={menuItemData}
       itemType={itemType.dollar}
-      itemNames={tooltipItems.one}
-      dataKey={dataKey().one}
-      headerText={t(headerText().one)}
+      itemNames={tooltipItems.tvl}
+      dataKey={dataKey().tvl}
+      headerText={t(headerText().tvl)}
       stroke={['#0031FF']}
-      bulletpointColors={bulletpoints.one}
-      infoTooltipMessage={t(tooltipInfoMessages().one)}
+      bulletpointColors={bulletpoints.tvl}
+      infoTooltipMessage={t(tooltipInfoMessages().tvl)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
-      headerSubText={`${dashboardData && formatCurrency(dashboardData[0]?.one)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0]?.tvl)}`}
     />
   )
 }

@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 
 export const dashboardMock = Mock.mock({
   OverviewData: {
-    'one|1-100': 1,
+    'tvl|1-100': 1,
     'two|1-100': 1,
     'three|1-100': 1,
     'four|1-100': 1,

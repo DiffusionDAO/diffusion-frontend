@@ -4,7 +4,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useState } from 'react'
 import useSWR from 'swr'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useDFSMiningContract } from 'hooks/useContract'
+import { useBondContract, useDFSContract, useDFSMiningContract, usePairContract } from 'hooks/useContract'
+import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
+import { BigNumber } from '@ethersproject/bignumber'
+import { formatUnits, parseEther } from '@ethersproject/units'
+import { formatBigNumber, formatNumber } from 'utils/formatBalance'
 import { Paper } from './style'
 import { DataCell } from './components/DataCell/DataCell'
 import {
@@ -42,21 +46,128 @@ const mediumLink = 'https://medium.com/@getdiffusion?format=json'
 const { one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen } =
   dashboardMock.OverviewData
 
+const dao = [
+  '0x31637FbB726314F01Aab2010Be0D4D0e1991fADD',
+  '0xAdFe4B22487FC68Ad95fe99081F3BB4D08bBe5f2',
+  '0x4cFE2C39Aab2788A396E67F7629a338944C35069',
+  '0x02bC8e16B0c5d8D7743A866978773dd7837Bd173',
+]
+const foundation = '0x1D922cB80505811206E745B91078AFBFA7d0EE4D'
+const unstakeNFTAddress = '0xF04750aba81ED3aa683794D3816f61436c6B3FC6'
+const nftMarketDestroyAddress = '0x214DB1d773f09160666d107962BA21e35d97018E'
+const elementaryPayoutMintAddress = '0xC548Ee5760aA01897eF3907AFD4fe6E45ba22fE3'
+const advancedPayoutMintAddress = '0x94cE75eE2e9671FEEb7c9D4ccA54cb6bf7420D7B'
+
+const elementaryMintAddress = '0x61B93D8A4EBA34e1A49f5Da6d0Ac7c18bc618bEd'
+const advancedMintAddress = '0xF8c23DA851a7E402cc91b822a16F40bdC104c532'
+
 const Dashboard = () => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const classes = useStyles()
   const [activeTab, setActiveTab] = useState<string>('Overview')
   const [callFactor, setCallfactor] = useState<number>(0)
+  const [tvl, setTvl] = useState<BigNumber>(BigNumber.from(0))
+  const [innerReserve, setInnerReserve] = useState<number>(0)
+  const [totalCirculation, setTotalCirculation] = useState<BigNumber>(BigNumber.from(0))
+  const [circulationSupply, setCirculationSupply] = useState<BigNumber>(BigNumber.from(0))
+  const [foundationDFS, setFoundationDFS] = useState<BigNumber>(BigNumber.from(0))
+  const [totalBondUsed, setTotalBondUsed] = useState<BigNumber>(BigNumber.from(0))
+  const [debtRatio, setDebtRatio] = useState<number>(0)
+
   const clickTab = (tab: string) => {
     setActiveTab(tab)
   }
   const dfsMineContract = useDFSMiningContract()
-
+  const dfs = useDFSContract()
+  const bond = useBondContract()
   const { data } = useSWR('dashboard', async () => {
     const callFactor = await dfsMineContract.totalCalls()
     setCallfactor(callFactor.toNumber())
-    console.log('callFactor:', callFactor.toNumber())
+    // console.log('callFactor:', callFactor.toNumber())
+
+    const reserves = await pair.getReserves()
+    const [numerator, denominator] =
+      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+    setTvl(numerator.mul(2))
+
+    const foundationDFS = await dfs.balanceOf(foundation)
+    // console.log("foundationDFS:",formatUnits(foundationDFS))
+    setFoundationDFS(foundationDFS)
+    const dfsTotalSupply = await dfs.totalSupply()
+    // console.log("dfsTotalSupply:",formatUnits(dfsTotalSupply))
+
+    const totalPayout = await bond.totalPayout()
+
+    const unstakeNFTDFS = await dfs.balanceOf(unstakeNFTAddress)
+
+    const nftMarketDestroyedDFS = await dfs.balanceOf(nftMarketDestroyAddress)
+
+    const elementaryPayoutMintAddressDfs = await dfs.balanceOf(elementaryPayoutMintAddress)
+    const advancedPayoutMintAddressDfs = await dfs.balanceOf(advancedPayoutMintAddress)
+    const elementaryMintAddressDfs = await dfs.balanceOf(elementaryMintAddress)
+    const advancedMintAddressDfs = await dfs.balanceOf(advancedMintAddress)
+    const daoDFS = (await Promise.all(dao.map(async (d) => dfs.balanceOf(d)))).reduce((accum, curr) => {
+      // eslint-disable-next-line no-return-assign, no-param-reassign
+      accum = accum.add(curr)
+      return accum
+    }, BigNumber.from(0))
+
+    console.log('daoDFS:', formatUnits(daoDFS))
+
+    const bondDfs = await dfs.balanceOf(bond.address)
+    const circulationSupply = dfsTotalSupply
+      .sub(daoDFS)
+      .sub(foundationDFS)
+      .sub(bondDfs)
+      .sub(unstakeNFTDFS)
+      .sub(nftMarketDestroyedDFS)
+      .sub(elementaryPayoutMintAddressDfs)
+      .sub(advancedPayoutMintAddressDfs)
+      .sub(elementaryMintAddressDfs)
+      .sub(advancedMintAddressDfs)
+
+    setCirculationSupply(circulationSupply)
+
+    console.log('circulatingSupply:', formatUnits(circulationSupply))
+
+    const innerReserve = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(circulationSupply))
+    console.log('innerReserve:', innerReserve)
+    setInnerReserve(innerReserve)
+
+    const withdrawedSocialReward = await dfsMineContract.withdrawedSocialReward()
+    const withdrawedSavingReward = await dfsMineContract.withdrawedSavingReward()
+
+    const initialMintAmount = parseEther('375')
+    const totalCirculation = totalPayout
+      .mul(1250)
+      .div(1000)
+      .add(withdrawedSocialReward)
+      .add(withdrawedSavingReward)
+      .add(initialMintAmount)
+    setTotalCirculation(totalCirculation)
+
+    const buyers = await bond.getBuyers()
+
+    const bondUsed = await Promise.all(
+      buyers.map(async (buyer) => {
+        const referralBond = await bond.addressToReferral(buyer)
+        return referralBond.bondUsed
+      }),
+    )
+    const totalBondUsed = bondUsed.reduce((accum, curr) => {
+      // eslint-disable-next-line no-return-assign, no-param-reassign
+      accum = accum.add(curr)
+      return accum
+    }, BigNumber.from(0))
+
+    setTotalBondUsed(totalBondUsed)
+
+    const debtRatio =
+      (parseFloat(formatUnits(totalPayout.sub(totalBondUsed))) * 100) / parseFloat(formatUnits(circulationSupply))
+    console.log('debtRatio:', debtRatio)
+    setDebtRatio(debtRatio)
+    // console.log("totalCirculation:",formatUnits(totalCirculation))
 
     // const telegram = await fetch(telegramLink)
     // const telegramJson = await telegram.json()
@@ -100,6 +211,12 @@ const Dashboard = () => {
   const avgConentraction = conentractions.reduce((acc, cur) => (acc += cur), 0) / conentractions.length
   const coefficient = avgConentraction + callFactor
   const time = new Date()
+
+  const pair = usePairContract(getPairAddress())
+
+  const usdtAddress = getUSDTAddress()
+  const dfsAddress = getDFSAddress()
+
   return (
     <div className="dashboard-view">
       <Typography variant="h4" style={{ fontWeight: 700, overflow: 'hidden', color: '#fff' }}>
@@ -137,24 +254,31 @@ const Dashboard = () => {
                       <Grid container spacing={0}>
                         <Grid item lg={4} md={4} sm={12} xs={12}>
                           <div className="cell-sub-item">
-                            <DataCell title={t('TVL')} data={`$${one}M`} style={{ fontSize: '32px' }} />
+                            <DataCell title={t('TVL')} data={`$${formatUnits(tvl)}`} style={{ fontSize: '32px' }} />
                             <DataCell title="" data="" imgUrl="/images/dashboard/tvl.svg" />
                           </div>
                         </Grid>
                         <Grid item lg={4} md={4} sm={12} xs={12}>
                           <div className={`${classes.hasRLBorder} cell-sub-item`}>
-                            <DataCell title={t('Total circulation')} data={`$${two}M`} />
-                            <DataCell title={t('Internal Reserves')} data={`$${three}M`} />
+                            <DataCell
+                              title={t('Total circulation')}
+                              data={`$${formatBigNumber(totalCirculation, 5)}`}
+                            />
+                            <DataCell title={t('Internal Reserves')} data={`$${formatNumber(innerReserve, 2)}`} />
                           </div>
                         </Grid>
                         <Grid item lg={4} md={4} sm={12} xs={12}>
                           <div className="cell-sub-item">
                             <DataCell
                               title={t('Current circulation volume')}
-                              data={`$${four}M`}
+                              data={`$${formatBigNumber(circulationSupply, 2)}`}
                               imgUrl="/images/dashboard/rf.svg"
                             />
-                            <DataCell title={t('Reserve Fund')} data={`$${five}M`} imgUrl="/images/dashboard/rm.svg" />
+                            <DataCell
+                              title={t('Reserve Fund')}
+                              data={`$${formatBigNumber(foundationDFS, 5)}`}
+                              imgUrl="/images/dashboard/rm.svg"
+                            />
                           </div>
                         </Grid>
                       </Grid>
@@ -185,9 +309,9 @@ const Dashboard = () => {
                             }}
                             value={parseInt(six)}
                           />
-                          <div className="ctir-data">{six}</div>
+                          <div className="ctir-data">{8}%</div>
                         </div>
-                        <div className="ctir-title">{t('Current inflation rate target')}</div>
+                        <div className="ctir-title">{t('Target inflation rate')}</div>
                       </div>
                     </div>
                   </Grid>
@@ -199,7 +323,7 @@ const Dashboard = () => {
                             className="cell-sub-item"
                             style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}
                           >
-                            <DataCell title={t('Household savings rate')} data={`${seven}%`} progressColor="#f200ff" />
+                            <DataCell title={t('Household savings rate')} data={`${91.34}%`} progressColor="#f200ff" />
                           </div>
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -207,7 +331,7 @@ const Dashboard = () => {
                             className="cell-sub-item"
                             style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}
                           >
-                            <DataCell title={t('DSGE suitability')} data={`${eight}%`} progressColor="#01ffed" />
+                            <DataCell title={t('DSGE suitability')} data={`${89.12}%`} progressColor="#01ffed" />
                           </div>
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -217,7 +341,11 @@ const Dashboard = () => {
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
                           <div className="cell-sub-item">
-                            <DataCell title={t('Debt ratio')} data={`${ten}%`} progressColor="#0131ff" />
+                            <DataCell
+                              title={t('Debt ratio')}
+                              data={`${formatNumber(debtRatio, 2)}%`}
+                              progressColor="#0131ff"
+                            />
                           </div>
                         </Grid>
                       </Grid>
@@ -264,7 +392,11 @@ const Dashboard = () => {
                   <Grid item lg={12} md={12} sm={12} xs={12}>
                     <div className="cell-box cell-item5">
                       <div className="cell-sub-item">
-                        <DataCell title={t('Reserve Fund')} data={`$${fourteen}M`} imgUrl="/images/dashboard/rz.svg" />
+                        <DataCell
+                          title={t('Reserve Fund')}
+                          data={`$${formatBigNumber(foundationDFS, 5)}`}
+                          imgUrl="/images/dashboard/rz.svg"
+                        />
                       </div>
                     </div>
                   </Grid>

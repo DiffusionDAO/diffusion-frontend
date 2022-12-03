@@ -48,9 +48,8 @@ query {
 }
 `
 
-// tootip样式配置
 export const bulletpoints = {
-  one: [
+  tvl: [
     {
       right: 20,
       top: -12,
@@ -251,7 +250,7 @@ export const bulletpoints = {
 
 // 悬浮charts后的文字显示
 export const tooltipItems = {
-  one: [`Tvl`],
+  tvl: [`Tvl`],
   two: [`Tvl`],
   three: ['Reserve fund size'],
   four: [`Tvl`],
@@ -275,7 +274,7 @@ export const tooltipItems = {
 // 数据字段
 export const dataKey = () => {
   return {
-    one: ['one'],
+    tvl: ['tvl'],
     two: ['two'],
     // three: ["three1", "three2"],
     three: ['three1'],
@@ -297,7 +296,7 @@ export const dataKey = () => {
 
 export const headerText = () => {
   return {
-    one: `TVL`,
+    tvl: `TVL`,
     two: `Single currency intertemporal inflation`,
     three: `Savings reserve`,
     four: `Total circulation`,
@@ -317,7 +316,7 @@ export const headerText = () => {
 
 export const tooltipInfoMessages = () => {
   return {
-    one: `TVL is an encryption instruction, used for assessing the total asset value agreement stored in DiffusionDAO`,
+    tvl: `TVL is an encryption instruction, used for assessing the total asset value agreement stored in DiffusionDAO`,
     two: `The ratio of the difference between the current market price and the intrinsic reserve price to the reserve fund`,
     three: `Value digital asset support for redemption of DFS`,
     four: `The total amount of DFS tokens issued by DiffusionDao`,

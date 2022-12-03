@@ -146,6 +146,7 @@ const Private = () => {
       unpaid: BigNumber.from(0),
       withdrawable: BigNumber.from(0),
       withdrawed: BigNumber.from(0),
+      pending: BigNumber.from(0),
     }
     const buyers = await bond.getBuyers()
     setTotalBondReward(await bond.totalBondReward())
@@ -159,11 +160,12 @@ const Private = () => {
         count.withdrawed = count.withdrawed.add(referralBond.bondRewardWithdrawed)
 
         const pendingBondReward = await bond.pendingBondReward(buyer)
+        count.pending = count.pending.add(pendingBondReward)
         // parents.map(async (parent) => {
         //   const referral = await bond.addressToReferral(parent)
-        count.withdrawable = count?.withdrawable.add(referralBond?.bondReward).add(pendingBondReward)
+        count.withdrawable = count?.withdrawable.add(pendingBondReward).add(referralBond?.bondReward)
         count.unpaid = count?.unpaid.add(referralBond?.bondRewardUnpaid.sub(pendingBondReward))
-        if (pendingBondReward.gt(0)) console.log('pendingBondReward:', formatUnits(pendingBondReward))
+        if (count?.pending.gt(0)) console.log('pendingBondReward:', formatUnits(count?.pending))
         if (count.withdrawable.gt(0)) console.log('withdrawable:', buyer, formatUnits(count.withdrawable, 18))
         if (count.unpaid.gt(0)) console.log('unpaid:', formatUnits(count.unpaid, 18))
 
