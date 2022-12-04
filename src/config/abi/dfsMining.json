@@ -304,30 +304,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "_array",
-        "type": "address[]"
-      },
-      {
-        "internalType": "address",
-        "name": "_element",
-        "type": "address"
-      }
-    ],
-    "name": "includes",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "level0Staked",
     "outputs": [
@@ -691,6 +667,19 @@
   {
     "inputs": [
       {
+        "internalType": "address[]",
+        "name": "_admins",
+        "type": "address[]"
+      }
+    ],
+    "name": "setAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_bond",
         "type": "address"
@@ -704,12 +693,38 @@
   {
     "inputs": [
       {
+        "internalType": "string",
+        "name": "_dsge",
+        "type": "string"
+      }
+    ],
+    "name": "setDSEG",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_dfs",
         "type": "address"
       }
     ],
     "name": "setDfsAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "rate",
+        "type": "string"
+      }
+    ],
+    "name": "setHouseHoldSavingRate",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
