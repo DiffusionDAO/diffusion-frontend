@@ -54,6 +54,7 @@ import {
   ReferralLable,
   ReferralInput,
 } from './styles'
+import { useWeb3React } from '../../../../../packages/wagmi/src/useWeb3React'
 
 const { confirm } = Modal
 

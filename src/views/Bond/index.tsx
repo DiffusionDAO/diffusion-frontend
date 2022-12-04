@@ -106,18 +106,18 @@ const Bond = () => {
 
   const getApprove = () => {
     usdt
-      .approve(pancakeRouter.address, MaxUint256)
+      .approve(bond.address, MaxUint256)
       .then((receipt) =>
-        dfsContract
-          .approve(pancakeRouter.address, MaxUint256)
-          .then((res) => res.wait().then((res) => setIsApprove(true))),
+        dfsContract.approve(bond.address, MaxUint256).then((res) => res.wait().then((res) => setIsApprove(true))),
       )
   }
   useEffect(() => {
     if (account) {
-      usdt.allowance(account, pancakeRouter.address).then((res) => {
+      usdt.allowance(account, bond.address).then((res) => {
         if (res.gt(0)) {
           setIsApprove(true)
+        } else {
+          setIsApprove(false)
         }
       })
     }
