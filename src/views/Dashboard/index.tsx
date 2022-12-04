@@ -75,6 +75,8 @@ const Dashboard = () => {
   const [totalBondUsed, setTotalBondUsed] = useState<BigNumber>(BigNumber.from(0))
   const [debtRatio, setDebtRatio] = useState<number>(0)
   const [holderLength, setHolderLength] = useState<number>(0)
+  const [initialSupply, setInitialSupply] = useState<number>(0)
+  const [inflation, setInflation] = useState<number>(0)
 
   const clickTab = (tab: string) => {
     setActiveTab(tab)
@@ -87,14 +89,19 @@ const Dashboard = () => {
     setCallfactor(callFactor.toNumber())
     // console.log('callFactor:', callFactor.toNumber())
 
+    const initialSupply = await dfs.initialSupply()
+    console.log('initialSupply:', formatUnits(initialSupply))
+    setInitialSupply(initialSupply)
+
     const reserves = await pair.getReserves()
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
     setTvl(numerator.mul(2))
 
     const foundationDFS = await dfs.balanceOf(foundation)
-    // console.log("foundationDFS:",formatUnits(foundationDFS))
+    console.log('foundationDFS:', formatUnits(foundationDFS))
     setFoundationDFS(foundationDFS)
+
     const dfsTotalSupply = await dfs.totalSupply()
     // console.log("dfsTotalSupply:",formatUnits(dfsTotalSupply))
 
@@ -138,13 +145,18 @@ const Dashboard = () => {
     const withdrawedSocialReward = await dfsMineContract.withdrawedSocialReward()
     const withdrawedSavingReward = await dfsMineContract.withdrawedSavingReward()
 
-    const initialSupply = await dfs.initialSupply()
+    const price = await bond.getPriceInUSDT()
+
+    const inflation = price.mul(97).div(100).sub(singleCurrencyReserves).div(price.mul(97).div(100))
+    setInflation(inflation.mul(100))
+
     const totalCirculation = totalPayout
       .mul(1250)
       .div(1000)
       .add(withdrawedSocialReward)
       .add(withdrawedSavingReward)
       .add(initialSupply)
+
     setTotalCirculation(totalCirculation)
 
     const buyers = await bond.getBuyers()
@@ -340,7 +352,7 @@ const Dashboard = () => {
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
                           <div className="cell-sub-item">
-                            <DataCell title={t('Inflation')} data={`${nine}%`} progressColor="#f5d700" />
+                            <DataCell title={t('Inflation')} data={`${inflation}%`} progressColor="#f5d700" />
                           </div>
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
