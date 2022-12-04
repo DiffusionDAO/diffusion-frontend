@@ -724,7 +724,7 @@
         "type": "string"
       }
     ],
-    "name": "setHouseHoldSavingRate",
+    "name": "setHouseHoldSavingsRate",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -78,6 +78,8 @@ const Dashboard = () => {
   const [initialSupply, setInitialSupply] = useState<number>(0)
   const [inflation, setInflation] = useState<number>(0)
   const [marketPrice, setMarketPrice] = useState<number>(0)
+  const [HouseHoldSavingsRate, setHouseHoldSavingsRate] = useState<string>('0')
+  const [DSGE, setDSGE] = useState<string>('0')
 
   const clickTab = (tab: string) => {
     setActiveTab(tab)
@@ -91,6 +93,12 @@ const Dashboard = () => {
 
     const initialSupply = await dfs.initialSupply()
     setInitialSupply(initialSupply)
+
+    const DSGE = await dfsMining.DSGE()
+    setDSGE(DSGE)
+
+    const HouseHoldSavingsRate = await dfsMining.HouseHoldSavingsRate()
+    setHouseHoldSavingsRate(HouseHoldSavingsRate)
 
     const reserves = await pair.getReserves()
     const [numerator, denominator] =
@@ -350,7 +358,11 @@ const Dashboard = () => {
                             className="cell-sub-item"
                             style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}
                           >
-                            <DataCell title={t('Household savings rate')} data={`${91.34}%`} progressColor="#f200ff" />
+                            <DataCell
+                              title={t('Household savings rate')}
+                              data={`${HouseHoldSavingsRate}%`}
+                              progressColor="#f200ff"
+                            />
                           </div>
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -358,7 +370,7 @@ const Dashboard = () => {
                             className="cell-sub-item"
                             style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}
                           >
-                            <DataCell title={t('DSGE suitability')} data={`${89.12}%`} progressColor="#01ffed" />
+                            <DataCell title={t('DSGE suitability')} data={`${DSGE}%`} progressColor="#01ffed" />
                           </div>
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
