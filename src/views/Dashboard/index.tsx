@@ -77,26 +77,32 @@ const Dashboard = () => {
   const [holderLength, setHolderLength] = useState<number>(0)
   const [initialSupply, setInitialSupply] = useState<number>(0)
   const [inflation, setInflation] = useState<number>(0)
+  const [marketPrice, setMarketPrice] = useState<number>(0)
 
   const clickTab = (tab: string) => {
     setActiveTab(tab)
   }
-  const dfsMineContract = useDFSMiningContract()
+  const dfsMining = useDFSMiningContract()
   const dfs = useDFSContract()
   const bond = useBondContract()
   const { data } = useSWR('dashboard', async () => {
-    const callFactor = await dfsMineContract.totalCalls()
+    const callFactor = await dfsMining.totalCalls()
     setCallfactor(callFactor.toNumber())
-    // console.log('callFactor:', callFactor.toNumber())
 
     const initialSupply = await dfs.initialSupply()
-    console.log('initialSupply:', formatUnits(initialSupply))
     setInitialSupply(initialSupply)
 
     const reserves = await pair.getReserves()
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
     setTvl(numerator.mul(2))
+
+    const discount = await bond.discount()
+    const price = await bond.getPriceInUSDT()
+
+    const marketPrice = (parseFloat(formatUnits(price)) * (100 - discount.toNumber())) / 100
+
+    setMarketPrice(marketPrice)
 
     const foundationDFS = await dfs.balanceOf(foundation)
     console.log('foundationDFS:', formatUnits(foundationDFS))
@@ -142,14 +148,15 @@ const Dashboard = () => {
     const singleCurrencyReserves = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(circulationSupply))
     setSingleCurrencyReserves(singleCurrencyReserves)
 
-    const withdrawedSocialReward = await dfsMineContract.withdrawedSocialReward()
-    const withdrawedSavingReward = await dfsMineContract.withdrawedSavingReward()
+    const inflation = marketPrice - singleCurrencyReserves / marketPrice
+    setInflation(inflation)
 
-    const price = await bond.getPriceInUSDT()
+    console.log('totalPayout:', formatUnits(totalPayout))
 
-    const inflation = price.mul(97).div(100).sub(singleCurrencyReserves).div(price.mul(97).div(100))
-    setInflation(inflation.mul(100))
+    const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
+    const withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
 
+    console.log('withdrawedSocialReward:', withdrawedSavingReward, withdrawedSocialReward)
     const totalCirculation = totalPayout
       .mul(1250)
       .div(1000)
@@ -267,7 +274,11 @@ const Dashboard = () => {
                       <Grid container spacing={0}>
                         <Grid item lg={4} md={4} sm={12} xs={12}>
                           <div className="cell-sub-item">
-                            <DataCell title={t('TVL')} data={`$${formatUnits(tvl)}`} style={{ fontSize: '32px' }} />
+                            <DataCell
+                              title={t('TVL')}
+                              data={`$${formatBigNumber(tvl, 5)}`}
+                              style={{ fontSize: '32px' }}
+                            />
                             <DataCell title="" data="" imgUrl="/images/dashboard/tvl.svg" />
                           </div>
                         </Grid>
@@ -292,7 +303,7 @@ const Dashboard = () => {
                             />
                             <DataCell
                               title={t('Expansion Fund')}
-                              data={`$${formatBigNumber(foundationDFS, 5)}`}
+                              data={`$${(parseFloat(formatUnits(foundationDFS)) * marketPrice).toFixed(5)}`}
                               imgUrl="/images/dashboard/rm.svg"
                             />
                           </div>
@@ -352,7 +363,11 @@ const Dashboard = () => {
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
                           <div className="cell-sub-item">
-                            <DataCell title={t('Inflation')} data={`${inflation}%`} progressColor="#f5d700" />
+                            <DataCell
+                              title={t('Inflation')}
+                              data={`${inflation.toFixed(5)}%`}
+                              progressColor="#f5d700"
+                            />
                           </div>
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
