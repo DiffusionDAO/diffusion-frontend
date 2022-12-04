@@ -18,16 +18,16 @@ const InsufficientBalance: React.FC<JumpModalProps> = ({ onClose }) => {
       <JumpWrap>
         <JumpTitle>{t('Insufficient balance')}</JumpTitle>
         <JumpDes>{t('There are several ways to receive DFS')}</JumpDes>
-        <TakeCardBtn onClick={onClose}>
+        <TakeCardBtn onClick={() => router.push('/bond')}>
           <JumpBtnCont>{t('Insufficient balance? Go buy bonds')}</JumpBtnCont>
         </TakeCardBtn>
-        <TakeCardBtn onClick={() => router.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)}>
+        <TakeCardBtn onClick={() => router.push(`/profile/${account.toLowerCase()}`)}>
           <JumpBtnCont>{t('Insufficient balance? Compose/stake NFT')}</JumpBtnCont>
         </TakeCardBtn>
-        <TakeCardBtn onClick={onClose}>
+        <TakeCardBtn onClick={() => router.push('/reward')}>
           <JumpBtnCont>{t('Insufficient balance? Withdraw/stake DFS')}</JumpBtnCont>
         </TakeCardBtn>
-        <JumpInvite href="">{t('You should invite your friends to purchase bonds for DFS')}</JumpInvite>
+        {/* <JumpInvite href="">{t('You should invite your friends to purchase bonds for DFS')}</JumpInvite> */}
       </JumpWrap>
     </StyledModal>
   )
