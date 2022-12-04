@@ -12,6 +12,7 @@ import { useRouterContract } from 'utils/exchange'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
 import useSWR from 'swr'
+import { foundation } from 'views/Dashboard'
 
 import {
   BondPageWrap,
@@ -57,6 +58,9 @@ const Bond = () => {
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false)
 
   const [usdtAmount, setUsdtAmount] = useState<BigNumber>(BigNumber.from(0))
+  const [bondDFS, setBondDFS] = useState<BigNumber>(BigNumber.from(0))
+  const [foundationDFS, setFoundationDFS] = useState<BigNumber>(BigNumber.from(0))
+
   const [isApprove, setIsApprove] = useState<boolean>(false)
   const [bondItem, setBondItem] = useState<any>(null)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
@@ -73,15 +77,21 @@ const Bond = () => {
   const dfsAddress = getDFSAddress()
 
   const { data, status } = useSWR('dfsBond', async () => {
+    const bondDFS = await dfs.balanceOf(bond.address)
+    setBondDFS(bondDFS)
+
+    const foundationDFS = await dfs.balanceOf(foundation)
+    setFoundationDFS(foundationDFS)
+
     const price = await bond.getPriceInUSDT()
     bondDatas[0].price = formatBigNumber(price.mul(97).div(100), 5)
-
-    const [reserve0, reserve1] = await pair.getReserves()
-    const [numerator, denominator] =
-      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserve0, reserve1] : [reserve1, reserve0]
-    const marketPrice = parseFloat(formatUnits(numerator, 18)) / parseFloat(formatUnits(denominator, 18))
-    setUsdtAmount(numerator)
-    setMarketPrice(marketPrice.toFixed(5))
+    // console.log("price:",price)
+    // const [reserve0, reserve1] = await pair.getReserves()
+    // const [numerator, denominator] =
+    //   usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserve0, reserve1] : [reserve1, reserve0]
+    // const marketPrice = parseFloat(formatUnits(numerator, 18)) / parseFloat(formatUnits(denominator, 18))
+    // setUsdtAmount(numerator)
+    setMarketPrice(formatBigNumber(price, 5))
   })
 
   useEffect(() => {
@@ -168,7 +178,7 @@ const Bond = () => {
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
             <OverviewCardItemContent isMobile={isMobile}>
-              ${parseFloat(formatBigNumber(usdtAmount, 5)) * 2}
+              ${(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * parseFloat(marketPrice)).toFixed(5)}
             </OverviewCardItemContent>
           </OverviewCardItem>
           <OverviewCardItem>

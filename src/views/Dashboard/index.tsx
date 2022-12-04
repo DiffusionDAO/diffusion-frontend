@@ -46,13 +46,13 @@ const mediumLink = 'https://medium.com/@getdiffusion?format=json'
 const { one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen } =
   dashboardMock.OverviewData
 
-const dao = [
+export const dao = [
   '0x31637FbB726314F01Aab2010Be0D4D0e1991fADD',
   '0xAdFe4B22487FC68Ad95fe99081F3BB4D08bBe5f2',
   '0x4cFE2C39Aab2788A396E67F7629a338944C35069',
   '0x02bC8e16B0c5d8D7743A866978773dd7837Bd173',
 ]
-const foundation = '0x1D922cB80505811206E745B91078AFBFA7d0EE4D'
+export const foundation = '0x1D922cB80505811206E745B91078AFBFA7d0EE4D'
 const unstakeNFTAddress = '0xF04750aba81ED3aa683794D3816f61436c6B3FC6'
 const nftMarketDestroyAddress = '0x214DB1d773f09160666d107962BA21e35d97018E'
 const elementaryPayoutMintAddress = '0xC548Ee5760aA01897eF3907AFD4fe6E45ba22fE3'
@@ -74,6 +74,7 @@ const Dashboard = () => {
   const [foundationDFS, setFoundationDFS] = useState<BigNumber>(BigNumber.from(0))
   const [totalBondUsed, setTotalBondUsed] = useState<BigNumber>(BigNumber.from(0))
   const [debtRatio, setDebtRatio] = useState<number>(0)
+  const [holderLength, setHolderLength] = useState<number>(0)
 
   const clickTab = (tab: string) => {
     setActiveTab(tab)
@@ -115,6 +116,8 @@ const Dashboard = () => {
 
     console.log('daoDFS:', formatUnits(daoDFS))
 
+    const holderLength = await dfs.getHoldersLength()
+    setHolderLength(holderLength)
     const bondDfs = await dfs.balanceOf(bond.address)
     const circulationSupply = dfsTotalSupply
       .sub(daoDFS)
@@ -209,6 +212,7 @@ const Dashboard = () => {
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign
   const avgConentraction = conentractions.reduce((acc, cur) => (acc += cur), 0) / conentractions.length
+
   const coefficient = avgConentraction + callFactor
   const time = new Date()
 
@@ -307,7 +311,7 @@ const Dashboard = () => {
                               left: 0,
                               top: 0,
                             }}
-                            value={parseInt(six)}
+                            value={8}
                           />
                           <div className="ctir-data">{8}%</div>
                         </div>
@@ -371,7 +375,7 @@ const Dashboard = () => {
                         {/* {/* <h3 className="di-content">{eleven}</h3> */}
                         <DataCell
                           title={t('Diffusion Coefficient')}
-                          data={Number.isNaN(coefficient) ? '0' : coefficient.toString()}
+                          data={holderLength.toString()}
                           titleStyle={{ color: '#ABB6FF' }}
                         />
                         <DataCell
