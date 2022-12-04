@@ -68,7 +68,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<string>('Overview')
   const [callFactor, setCallfactor] = useState<number>(0)
   const [tvl, setTvl] = useState<BigNumber>(BigNumber.from(0))
-  const [innerReserve, setInnerReserve] = useState<number>(0)
+  const [singleCurrencyReserves, setSingleCurrencyReserves] = useState<number>(0)
   const [totalCirculation, setTotalCirculation] = useState<BigNumber>(BigNumber.from(0))
   const [circulationSupply, setCirculationSupply] = useState<BigNumber>(BigNumber.from(0))
   const [foundationDFS, setFoundationDFS] = useState<BigNumber>(BigNumber.from(0))
@@ -132,22 +132,19 @@ const Dashboard = () => {
 
     setCirculationSupply(circulationSupply)
 
-    console.log('circulatingSupply:', formatUnits(circulationSupply))
-
-    const innerReserve = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(circulationSupply))
-    console.log('innerReserve:', innerReserve)
-    setInnerReserve(innerReserve)
+    const singleCurrencyReserves = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(circulationSupply))
+    setSingleCurrencyReserves(singleCurrencyReserves)
 
     const withdrawedSocialReward = await dfsMineContract.withdrawedSocialReward()
     const withdrawedSavingReward = await dfsMineContract.withdrawedSavingReward()
 
-    const initialMintAmount = parseEther('375')
+    const initialSupply = await dfs.initialSupply()
     const totalCirculation = totalPayout
       .mul(1250)
       .div(1000)
       .add(withdrawedSocialReward)
       .add(withdrawedSavingReward)
-      .add(initialMintAmount)
+      .add(initialSupply)
     setTotalCirculation(totalCirculation)
 
     const buyers = await bond.getBuyers()
@@ -266,20 +263,23 @@ const Dashboard = () => {
                           <div className={`${classes.hasRLBorder} cell-sub-item`}>
                             <DataCell
                               title={t('Total circulation')}
-                              data={`$${formatBigNumber(totalCirculation, 5)}`}
+                              data={`${formatBigNumber(totalCirculation, 5)} DFS`}
                             />
-                            <DataCell title={t('Internal Reserves')} data={`$${formatNumber(innerReserve, 2)}`} />
+                            <DataCell
+                              title={t('Solitary Reserve')}
+                              data={`$${formatNumber(singleCurrencyReserves, 2)}`}
+                            />
                           </div>
                         </Grid>
                         <Grid item lg={4} md={4} sm={12} xs={12}>
                           <div className="cell-sub-item">
                             <DataCell
                               title={t('Current circulation volume')}
-                              data={`$${formatBigNumber(circulationSupply, 2)}`}
+                              data={`${formatBigNumber(circulationSupply, 2)} DFS`}
                               imgUrl="/images/dashboard/rf.svg"
                             />
                             <DataCell
-                              title={t('Reserve Fund')}
+                              title={t('Expansion Fund')}
                               data={`$${formatBigNumber(foundationDFS, 5)}`}
                               imgUrl="/images/dashboard/rm.svg"
                             />
@@ -397,7 +397,7 @@ const Dashboard = () => {
                     <div className="cell-box cell-item5">
                       <div className="cell-sub-item">
                         <DataCell
-                          title={t('Reserve Fund')}
+                          title={t('Expansion Fund')}
                           data={`$${formatBigNumber(foundationDFS, 5)}`}
                           imgUrl="/images/dashboard/rz.svg"
                         />

@@ -303,7 +303,7 @@ export const headerText = () => {
     five: `Attention Factor`,
     six: `Diffusion index`,
     seven: `Call factor`,
-    eight: `Single currency reserves`,
+    eight: `Solitary Reserve`,
     nine: `Current inflation rate target`,
     ten: `DSGE suitability`,
     eleven: `Debt ratio`,
