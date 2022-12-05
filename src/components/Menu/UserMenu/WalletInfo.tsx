@@ -163,7 +163,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
         )}
       </Flex>
       <Button variant="secondary" width="100%" onClick={async () => swap(account)}>
-        {t('Swap')}
+        {t('Release PDFS')}
       </Button>
       <Button variant="secondary" width="100%" onClick={handleLogout}>
         {t('Disconnect Wallet')}
