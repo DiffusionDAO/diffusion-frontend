@@ -108,7 +108,7 @@ const Dashboard = () => {
     const discount = await bond.discount()
     const price = await bond.getPriceInUSDT()
 
-    const marketPrice = (parseFloat(formatUnits(price)) * (100 - discount.toNumber())) / 100
+    const marketPrice = (parseFloat(formatUnits(price)) * (10000 - discount.toNumber())) / 10000
 
     setMarketPrice(marketPrice)
 

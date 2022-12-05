@@ -159,7 +159,7 @@ const BondModal: React.FC<BondModalProps> = ({
       })
       .catch((error) => console.log(error))
     bond.getPriceInUSDT().then((res) => {
-      setBondPrice(formatBigNumber(res.mul(100 - bondData.discount).div(100), 5))
+      setBondPrice(formatBigNumber(res.mul(10000 - bondData.discount).div(10000), 5))
     })
 
     if (account) {
@@ -384,7 +384,7 @@ const BondModal: React.FC<BondModalProps> = ({
         <ListItem>
           <ListLable>{t('Discount')}</ListLable>
           <ListContent>
-            <TextColor isRise={bondData.discount > 0}>{formatNumber(bondData.discount, 2)}%</TextColor>
+            <TextColor isRise={bondData.discount > 0}>{formatNumber(bondData.discount / 100, 2)}%</TextColor>
           </ListContent>
         </ListItem>
         <ListItem>

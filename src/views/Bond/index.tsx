@@ -232,7 +232,7 @@ const Bond = () => {
                 <ContentCell isMobile={isMobile}>
                   <CellTitle>{t('Discount')}</CellTitle>
                   <CellText>
-                    <TextColor isRise={item.discount > 0}>{formatNumber(item.discount, 2)}%</TextColor>
+                    <TextColor isRise={item.discount > 0}>{formatNumber(item.discount / 100, 2)}%</TextColor>
                   </CellText>
                 </ContentCell>
                 <ContentCell isMobile={isMobile}>
