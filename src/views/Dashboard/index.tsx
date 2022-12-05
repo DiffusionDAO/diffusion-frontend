@@ -156,7 +156,7 @@ const Dashboard = () => {
     const singleCurrencyReserves = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(circulationSupply))
     setSingleCurrencyReserves(singleCurrencyReserves)
 
-    const inflation = marketPrice - singleCurrencyReserves / marketPrice
+    const inflation = ((marketPrice - singleCurrencyReserves) * 100) / marketPrice
     setInflation(inflation)
 
     console.log('totalPayout:', formatUnits(totalPayout))
