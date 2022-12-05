@@ -815,6 +815,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_denominator",
+        "type": "uint256"
+      }
+    ],
+    "name": "setSavingInterestDenominator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint32",
         "name": "_length",
         "type": "uint32"
@@ -834,6 +847,19 @@
       }
     ],
     "name": "setSavingRewardInterest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_denominator",
+        "type": "uint256"
+      }
+    ],
+    "name": "setSocialInterestDenominator",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
