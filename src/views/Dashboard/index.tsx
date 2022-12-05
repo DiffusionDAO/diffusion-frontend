@@ -192,7 +192,6 @@ const Dashboard = () => {
 
     const debtRatio =
       (parseFloat(formatUnits(totalPayout.sub(totalBondUsed))) * 100) / parseFloat(formatUnits(circulationSupply))
-    console.log('debtRatio:', debtRatio)
     setDebtRatio(debtRatio)
     // console.log("totalCirculation:",formatUnits(totalCirculation))
 
@@ -237,7 +236,6 @@ const Dashboard = () => {
   // eslint-disable-next-line no-return-assign, no-param-reassign
   const avgConentraction = conentractions.reduce((acc, cur) => (acc += cur), 0) / conentractions.length
 
-  const coefficient = avgConentraction + callFactor
   const time = new Date()
 
   const pair = usePairContract(getPairAddress())
