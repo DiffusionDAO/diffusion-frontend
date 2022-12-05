@@ -57,7 +57,7 @@ const WalletModal: React.FC<React.PropsWithChildren<WalletModalProps>> = ({
   }
 
   return (
-    <ModalContainer title={t('Welcome!')} $minWidth="320px">
+    <ModalContainer $minWidth="320px">
       <ModalHeader>
         <ModalTitle>
           <Heading>{t('Your Wallet')}</Heading>
