@@ -23,7 +23,6 @@ import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
 import DetailsCard from '../shared/DetailsCard'
-
 import { useWeb3React } from '../../../../../../../packages/wagmi/src/useWeb3React'
 
 interface IndividualNFTPageProps {
