@@ -65,7 +65,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const dfs = useDFSContract()
   const ido = useIDOContract()
 
-  const swap = async (account) => {
+  const release = async (account) => {
     try {
       const released = await ido.release(account)
     } catch (error: any) {
@@ -162,7 +162,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
           <Text>{formatUnits(dfsBalance)}</Text>
         )}
       </Flex>
-      <Button variant="secondary" width="100%" onClick={async () => swap(account)}>
+      <Button variant="secondary" width="100%" onClick={async () => release(account)}>
         {t('Release PDFS')}
       </Button>
       <Button variant="secondary" width="100%" onClick={handleLogout}>
