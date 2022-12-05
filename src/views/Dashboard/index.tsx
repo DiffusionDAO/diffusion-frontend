@@ -282,7 +282,7 @@ const Dashboard = () => {
                           <div className="cell-sub-item">
                             <DataCell
                               title={t('TVL')}
-                              data={`$${formatBigNumber(tvl, 5)}`}
+                              data={`$${formatBigNumber(tvl, 2)}`}
                               style={{ fontSize: '32px' }}
                             />
                             <DataCell title="" data="" imgUrl="/images/dashboard/tvl.svg" />
@@ -292,7 +292,7 @@ const Dashboard = () => {
                           <div className={`${classes.hasRLBorder} cell-sub-item`}>
                             <DataCell
                               title={t('Total circulation')}
-                              data={`${formatBigNumber(totalCirculation, 5)} DFS`}
+                              data={`${formatBigNumber(totalCirculation, 2)} DFS`}
                             />
                             <DataCell
                               title={t('Solitary Reserve')}
@@ -309,7 +309,7 @@ const Dashboard = () => {
                             />
                             <DataCell
                               title={t('Expansion Fund')}
-                              data={`$${(parseFloat(formatUnits(foundationDFS)) * marketPrice).toFixed(5)}`}
+                              data={`$${(parseFloat(formatUnits(foundationDFS)) * marketPrice).toFixed(2)}`}
                               imgUrl="/images/dashboard/rm.svg"
                             />
                           </div>
@@ -375,7 +375,7 @@ const Dashboard = () => {
                           <div className="cell-sub-item">
                             <DataCell
                               title={t('Inflation')}
-                              data={`${inflation.toFixed(5)}%`}
+                              data={`${inflation.toFixed(2)}%`}
                               progressColor="#f5d700"
                             />
                           </div>
@@ -435,7 +435,7 @@ const Dashboard = () => {
                       <div className="cell-sub-item">
                         <DataCell
                           title={t('Expansion Fund')}
-                          data={`$${formatBigNumber(foundationDFS, 5)}`}
+                          data={`$${formatBigNumber(foundationDFS, 2)}`}
                           imgUrl="/images/dashboard/rz.svg"
                         />
                       </div>
