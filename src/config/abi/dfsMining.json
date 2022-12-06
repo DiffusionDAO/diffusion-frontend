@@ -666,6 +666,19 @@
   },
   {
     "inputs": [],
+    "name": "savingInterestDenominator",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "savingInterestEpochLength",
     "outputs": [
       {
@@ -854,12 +867,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_denominator",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_nft",
+        "type": "address"
       }
     ],
-    "name": "setSocialInterestDenominator",
+    "name": "setSocialNFT",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -867,12 +880,12 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_nft",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "_denominator",
+        "type": "uint256"
       }
     ],
-    "name": "setSocialNFT",
+    "name": "setSocialRewardDenominator",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -937,6 +950,19 @@
         "internalType": "contract ISocialNFT",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "socialRewardDenominator",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

@@ -115,6 +115,8 @@ const Reward = () => {
   const [requireRefresh, setRefresh] = useState<boolean>(false)
   const [savingInterestEpochLength, setSavingInterestEpochLength] = useState<number>(1)
   const [stakedSavings, setStakedSavings] = useState<BigNumber>(BigNumber.from(0))
+  const [savingInterestDenominator, setSavingInterestDenominator] = useState<BigNumber>(BigNumber.from(0))
+  const [socialRewardDenominator, setSocialRewardDenominator] = useState<BigNumber>(BigNumber.from(0))
 
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
   const [activeIndex, setActiveIndex] = useState(1)
@@ -161,6 +163,8 @@ const Reward = () => {
     setSavingRewardInterest((await dfsMining.savingRewardInterest()).toNumber())
     setTotalPower(await dfsMining.totalPower())
     setTotalStakedSavings(await dfsMining.totalStakedSavings())
+    setSavingInterestDenominator(await dfsMining.savingInterestDenominator())
+    setSocialRewardDenominator(await dfsMining.socialRewardDenominator())
     if (account) {
       const referralStake = await dfsMining.addressToReferral(account)
       const referralBond = await bond.addressToReferral(account)
@@ -270,14 +274,15 @@ const Reward = () => {
     .slice(0, 8)}`
 
   const totalPowerNumber = totalPower.toNumber() / 100
-  const socialRewardfiveDayROI = (5 * socialRewardInterest) / 10
-  const sposAPY = (365 * socialRewardInterest) / 10
+  const socialRewardfiveDayROI = (5 * socialRewardInterest) / socialRewardDenominator.toNumber()
+  const sposAPY = (365 * socialRewardInterest) / socialRewardDenominator.toNumber()
   const n = (24 * 3600) / savingInterestEpochLength
-  const savingsfiveDayROI = (savingRewardInterest * n * 5 * 100) / 10000
+  const savingsfiveDayROI = (savingRewardInterest * n * 5 * 100) / savingInterestDenominator.toNumber()
   const myLockedPower = (referralStake?.power?.toNumber() * 2 - referralStake?.unlockedPower?.toNumber()) / 100
   const myTotalPower = (referralStake?.power?.toNumber() + referralStake?.unlockedPower?.toNumber()) / 100
   const greenPower = referralStake?.power.toNumber() / 100
-  const nextRewardSavingNumber = (parseFloat(formatUnits(stakedSavings, 18)) * savingRewardInterest) / 10000
+  const nextRewardSavingNumber =
+    (parseFloat(formatUnits(stakedSavings, 18)) * savingRewardInterest) / savingInterestDenominator.toNumber()
 
   const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
     if (newActiveIndex !== undefined) setActiveIndex(Math.ceil(newActiveIndex / slidesPerView))
@@ -366,14 +371,17 @@ const Reward = () => {
                   <MySposOveviewItem>
                     <DataCell
                       label={t('ROI (5 days)')}
-                      value={`${formatNumber(Number.isNaN(socialRewardfiveDayROI) ? 0 : socialRewardfiveDayROI, 2)}%`}
+                      value={`${formatNumber(
+                        Number.isNaN(socialRewardfiveDayROI) ? 0 : socialRewardfiveDayROI * 100,
+                        2,
+                      )}%`}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>
                   <MySposOveviewItem>
                     <DataCell
                       label={t('APY')}
-                      value={`${formatNumber(Number.isNaN(sposAPY) ? 0 : sposAPY, 2)}%`}
+                      value={`${formatNumber(Number.isNaN(sposAPY) ? 0 : sposAPY * 100, 2)}%`}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>
@@ -490,7 +498,7 @@ const Reward = () => {
                   />
                   <DataCell
                     label={t('Next payout rate')}
-                    value={`${(savingRewardInterest / 100).toPrecision(5)}%`}
+                    value={`${(savingRewardInterest / 10000).toPrecision(3)}%`}
                     position="horizontal"
                     valueDivStyle={{ fontSize: '14px' }}
                   />
