@@ -80,8 +80,8 @@ const Bond = () => {
     setFoundationDFS(foundationDFS)
 
     const price = await bond.getPriceInUSDT()
-    bondDatas[0].price = formatBigNumber(price.mul(97).div(100), 5)
-    setMarketPrice(formatBigNumber(price, 5))
+    bondDatas[0].price = formatBigNumber(price.mul(97).div(100), 2)
+    setMarketPrice(formatBigNumber(price, 2))
   })
 
   useEffect(() => {
@@ -168,7 +168,7 @@ const Bond = () => {
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
             <OverviewCardItemContent isMobile={isMobile}>
-              ${(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * parseFloat(marketPrice)).toFixed(5)}
+              ${(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * parseFloat(marketPrice)).toFixed(2)}
             </OverviewCardItemContent>
           </OverviewCardItem>
           <OverviewCardItem>
