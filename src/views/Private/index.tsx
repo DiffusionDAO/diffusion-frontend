@@ -176,7 +176,7 @@ const Private = () => {
     setTotalBondUsed(count.bondUsed)
     setTotalBondRewardWithdrawed(count.withdrawed)
     setTotalBondRewardUnpaid(count.unpaid)
-    setTotalBondRewardWithdrawable(count.withdrawable)
+    setTotalBondRewardWithdrawable(totalBondReward.sub(totalBondRewardWithdrawed).sub(count.unpaid))
 
     const stakers = await dfsMining.getStakers()
     setStakers(stakers)
