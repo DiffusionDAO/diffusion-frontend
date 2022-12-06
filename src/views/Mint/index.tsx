@@ -96,12 +96,18 @@ const Mint = () => {
         })
 
       if (ordinaryPrice.gt(0)) {
-        const maxOrd = balance.div(ordinaryPrice)
-        setMaxOrdinary(maxOrd)
+        if (balance.gt(0)) {
+          setMaxOrdinary(balance.div(ordinaryPrice))
+        } else if (bondPayout.gt(0)) {
+          setMaxOrdinary(bondPayout.div(ordinaryPrice))
+        }
       }
       if (seniorPrice.gt(0)) {
-        const maxSen = balance.div(seniorPrice)
-        setMaxSenior(maxSen)
+        if (balance.gt(0)) {
+          setMaxSenior(balance.div(seniorPrice))
+        } else if (bondPayout.gt(0)) {
+          setMaxSenior(bondPayout.div(seniorPrice))
+        }
       }
     }
   }, [account, mintBoxModalVisible, ordinaryPrice, seniorPrice])

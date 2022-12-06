@@ -74,44 +74,15 @@ const Private = () => {
       setAmount(nextUserInput)
     }
   }
-
   const [totalStakedSavings, setTotalStakedSavings] = useState<BigNumber>(BigNumber.from(0))
-  const [savingRewardEpoch, setSavingRewardEpoch] = useState<any>({})
   const [totalPower, setTotalPower] = useState<BigNumber>(BigNumber.from(0))
-  // const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
-  const [socialRewardInterest, setSocialRewardInterest] = useState<number>(0)
-  const [savingRewardInterest, setSavingRewardInterest] = useState<number>(0)
-  const [dfsRewardBalance, setDfsRewardBalance] = useState<BigNumber>(BigNumber.from(0))
-  const [withdrawedSocialReward, setWithdrawedSocialReward] = useState<BigNumber>(BigNumber.from(0))
-  const [withdrawedSavingReward, setWithdrawedSavingReward] = useState<BigNumber>(BigNumber.from(0))
+
   const [runway, setRunway] = useState<number>(0)
   const [savingInterestEpochLength, setSavingInterestEpochLength] = useState<number>(1)
   const [dfsBalance, setDfsBalance] = useState<BigNumber>(BigNumber.from(0))
 
-  const [level0Staked, setLevel0Staked] = useState<BigNumber>(BigNumber.from(0))
-  const [level1Staked, setLevel1Staked] = useState<BigNumber>(BigNumber.from(0))
-  const [level2Staked, setLevel2Staked] = useState<BigNumber>(BigNumber.from(0))
-  const [level3Staked, setLevel3Staked] = useState<BigNumber>(BigNumber.from(0))
-  const [level4Staked, setLevel4Staked] = useState<BigNumber>(BigNumber.from(0))
-  const [level5Staked, setLevel5Staked] = useState<BigNumber>(BigNumber.from(0))
-  const [level6Staked, setLevel6Staked] = useState<BigNumber>(BigNumber.from(0))
-
   const [stakers, setStakers] = useState<string[]>([])
-  const [totalPayout, setTotalPayout] = useState<BigNumber>(BigNumber.from(0))
-  const [pdfsUsed, setPdfsUsed] = useState<BigNumber>(BigNumber.from(0))
-  const [totalBondReward, setTotalBondReward] = useState<BigNumber>(BigNumber.from(0))
-  const [totalBondRewardUnpaid, setTotalBondRewardUnpaid] = useState<BigNumber>(BigNumber.from(0))
-  const [totalBondRewardWithdrawed, setTotalBondRewardWithdrawed] = useState<BigNumber>(BigNumber.from(0))
-  const [totalBondRewardWithdrawable, setTotalBondRewardWithdrawable] = useState<BigNumber>(BigNumber.from(0))
-  const [totalBondRewardUnwithdrawed, setTotalBondRewardUnwithdrawed] = useState<BigNumber>(BigNumber.from(0))
 
-  const [totalSocialReward, setTotalSocialReward] = useState<BigNumber>(BigNumber.from(0))
-  const [totalSavingInterest, setTotalSavingInterest] = useState<BigNumber>(BigNumber.from(0))
-  const [totalPendingSocialReward, setTotalPendingSocialReward] = useState<BigNumber>(BigNumber.from(0))
-  const [totalPendingSavingInterest, setTotalPendingSavingInterest] = useState<BigNumber>(BigNumber.from(0))
-  const [totalBondUsed, setTotalBondUsed] = useState<BigNumber>(BigNumber.from(0))
-
-  const dfsMineAddress = getMiningAddress()
   const dfsMining = useDFSMiningContract()
   const bond = useBondContract()
   const dfs = useDFSContract()
@@ -253,8 +224,8 @@ const Private = () => {
 
     count.dfsRewardBalance = await dfs.balanceOf(bond.address)
 
-    setSocialRewardInterest((await dfsMining.socialRewardInterest()).toNumber())
-    setSavingRewardInterest((await dfsMining.savingRewardInterest()).toNumber())
+    // setSocialRewardInterest((await dfsMining.socialRewardInterest()).toNumber())
+    // setSavingRewardInterest((await dfsMining.savingRewardInterest()).toNumber())
     setTotalPower(await dfsMining.totalPower())
     setTotalStakedSavings(await dfsMining.totalStakedSavings())
 
@@ -275,7 +246,7 @@ const Private = () => {
   const totalRewardNumber = parseFloat(formatUnits(totalReward ?? 0))
   const spos = totalPower.toNumber() / 100
 
-  // console.log(data)
+  console.log(totalRewardNumber)
   const buySubmit = async () => {
     if (account) {
       const allowance = await hdfs.allowance(account, hbond.address)
