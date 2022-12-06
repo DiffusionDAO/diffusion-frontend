@@ -120,17 +120,10 @@ const Private = () => {
 
   const n = (24 * 3600) / savingInterestEpochLength
 
-  const totalReward = dfsRewardBalance
-    .sub(totalBondUsed)
-    .sub(withdrawedSavingReward.add(withdrawedSocialReward))
-    .sub(totalSocialReward.add(totalPendingSocialReward))
-    .sub(totalSavingInterest.add(totalPendingSavingInterest))
-    .sub(totalStakedSavings)
-
-  const totalRewardNumber = parseFloat(formatUnits(totalReward, 18))
-  const spos = totalPower.toNumber() / 100
-
   const refresh = async () => {
+    const stakers = await dfsMining.getStakers()
+    setStakers(stakers)
+
     const count = {
       s0: 0,
       s1: 0,
@@ -148,10 +141,34 @@ const Private = () => {
       withdrawable: BigNumber.from(0),
       withdrawed: BigNumber.from(0),
       pending: BigNumber.from(0),
+      totalBondReward: BigNumber.from(0),
+      totalBondRewardUnwithdrawed: BigNumber.from(0),
+      totalBondUsed: BigNumber.from(0),
+      totalBondRewardWithdrawed: BigNumber.from(0),
+      totalBondRewardUnpaid: BigNumber.from(0),
+      totalBondRewardWithdrawable: BigNumber.from(0),
+      totalPendingSocialReward: BigNumber.from(0),
+      totalPendingSavingInterest: BigNumber.from(0),
+      totalSocialReward: BigNumber.from(0),
+      totalSavingInterest: BigNumber.from(0),
+      level0Staked: BigNumber.from(0),
+      level1Staked: BigNumber.from(0),
+      level2Staked: BigNumber.from(0),
+      level3Staked: BigNumber.from(0),
+      level4Staked: BigNumber.from(0),
+      level5Staked: BigNumber.from(0),
+      level6Staked: BigNumber.from(0),
+      pdfsUsed: BigNumber.from(0),
+      totalPayout: BigNumber.from(0),
+      withdrawedSavingReward: BigNumber.from(0),
+      withdrawedSocialReward: BigNumber.from(0),
+      dfsRewardBalance: BigNumber.from(0),
     }
     const buyers = await bond.getBuyers()
-    setTotalBondReward(await bond.totalBondReward())
-    setTotalBondRewardUnwithdrawed(totalBondReward.sub(totalBondRewardWithdrawed))
+    count.totalBondReward = await bond.totalBondReward()
+    count.totalBondRewardUnwithdrawed = count.totalBondReward.sub(count.totalBondRewardWithdrawed)
+    // setTotalBondReward(await bond.totalBondReward())
+    // setTotalBondRewardUnwithdrawed(totalBondReward.sub(totalBondRewardWithdrawed))
 
     await Promise.all(
       buyers.map(async (buyer) => {
@@ -169,13 +186,10 @@ const Private = () => {
         if (count.unpaid.gt(0)) console.log('unpaid:', formatUnits(count.unpaid, 18))
       }),
     )
-    setTotalBondUsed(count.bondUsed)
-    setTotalBondRewardWithdrawed(count.withdrawed)
-    setTotalBondRewardUnpaid(count.unpaid)
-    setTotalBondRewardWithdrawable(totalBondReward.sub(totalBondRewardWithdrawed).sub(count.unpaid))
-
-    const stakers = await dfsMining.getStakers()
-    setStakers(stakers)
+    count.totalBondUsed = count.bondUsed
+    count.totalBondRewardWithdrawed = count.withdrawed
+    count.totalBondRewardUnpaid = count.unpaid
+    count.totalBondRewardWithdrawable = count.totalBondReward.sub(count.totalBondRewardWithdrawed).sub(count.unpaid)
 
     let socialReward = BigNumber.from(0)
     let savingInterest = BigNumber.from(0)
@@ -210,24 +224,26 @@ const Private = () => {
         }
       }),
     )
-    setTotalPendingSocialReward(pendingSocialReward)
-    setTotalPendingSavingInterest(pendingSavingInterest)
-    setTotalSocialReward(socialReward)
-    setTotalSavingInterest(savingInterest)
+    count.totalPendingSocialReward = pendingSocialReward
+    count.totalPendingSavingInterest = pendingSavingInterest
+    count.totalSocialReward = socialReward
+    count.totalSavingInterest = savingInterest
 
-    setLevel0Staked(await dfsMining.level0Staked())
-    setLevel1Staked(await dfsMining.level1Staked())
-    setLevel2Staked(await dfsMining.level2Staked())
-    setLevel3Staked(await dfsMining.level3Staked())
-    setLevel4Staked(await dfsMining.level4Staked())
-    setLevel5Staked(await dfsMining.level5Staked())
-    setLevel6Staked(await dfsMining.level6Staked())
+    count.level0Staked = await dfsMining.level0Staked()
+    count.level1Staked = await dfsMining.level1Staked()
+    count.level2Staked = await dfsMining.level2Staked()
+    count.level3Staked = await dfsMining.level3Staked()
+    count.level4Staked = await dfsMining.level4Staked()
+    count.level5Staked = await dfsMining.level5Staked()
+    count.level6Staked = await dfsMining.level6Staked()
 
-    const pdfsUsed = await bond.pdfsUsed()
-    setPdfsUsed(pdfsUsed)
+    count.pdfsUsed = await bond.pdfsUsed()
 
-    const totalPayout = await bond.totalPayout()
-    setTotalPayout(totalPayout)
+    count.totalPayout = await bond.totalPayout()
+
+    count.withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
+
+    count.withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
 
     const dfsBalance = await dfs.balanceOf(account)
     setDfsBalance(dfsBalance)
@@ -235,14 +251,7 @@ const Private = () => {
     const savingInterestEpochLength = await dfsMining.savingInterestEpochLength()
     setSavingInterestEpochLength(savingInterestEpochLength)
 
-    const dfsRewardBalance = await dfs.balanceOf(bond.address)
-    setDfsRewardBalance(dfsRewardBalance)
-
-    const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
-    setWithdrawedSocialReward(withdrawedSocialReward)
-
-    const withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
-    setWithdrawedSavingReward(withdrawedSavingReward)
+    count.dfsRewardBalance = await dfs.balanceOf(bond.address)
 
     setSocialRewardInterest((await dfsMining.socialRewardInterest()).toNumber())
     setSavingRewardInterest((await dfsMining.savingRewardInterest()).toNumber())
@@ -256,6 +265,17 @@ const Private = () => {
     refreshMutate(refresh())
   }, [account, runway])
 
+  const totalReward = data?.dfsRewardBalance
+    .sub(data?.totalBondUsed)
+    .sub(data?.withdrawedSavingReward?.add(data?.withdrawedSocialReward))
+    .sub(data?.totalSocialReward.add(data?.totalPendingSocialReward))
+    .sub(data?.totalSavingInterest.add(data?.totalPendingSavingInterest))
+    .sub(totalStakedSavings)
+
+  const totalRewardNumber = parseFloat(formatUnits(totalReward ?? 0))
+  const spos = totalPower.toNumber() / 100
+
+  // console.log(data)
   const buySubmit = async () => {
     if (account) {
       const allowance = await hdfs.allowance(account, hbond.address)
@@ -276,55 +296,57 @@ const Private = () => {
 
   return (
     <StyledModal width={500} style={{ color: 'white' }} className="no-header" open closable maskClosable footer={[]}>
-      <span>DFS奖励池总余额:{formatUnits(totalReward)}</span>
+      <span>DFS奖励池总余额:{formatUnits(totalReward ?? 0)}</span>
       <br />
       <span>DFS奖励池已领取:</span>
-      <span>{formatUnits(withdrawedSavingReward.add(withdrawedSocialReward))}</span>
+      <span>{formatUnits(data?.withdrawedSavingReward.add(data?.withdrawedSocialReward) ?? 0)}</span>
       <br />
-      <span>债券总销售量: {formatUnits(totalPayout, 18)}</span>
+      <span>债券总销售量: {formatUnits(data?.totalPayout ?? 0)}</span>
       <br />
-      <span>债券已使用:{formatUnits(totalBondUsed, 18)}</span>
+      <span>债券已使用:{formatUnits(data?.totalBondUsed ?? 0)}</span>
       <br />
-      <span>PDFS已使用:{formatUnits(pdfsUsed)}</span>
+      <span>PDFS已使用:{formatUnits(data?.pdfsUsed ?? 0)}</span>
       <br />
-      <span>债券未使用:{formatUnits(totalPayout.sub(totalBondUsed), 18)}</span>
+      <span>债券未使用:{formatUnits(data?.totalPayout.sub(data?.totalBondUsed) ?? 0)}</span>
       <br />
-      <span>债券奖励总额: {formatUnits(totalBondReward, 18)}</span>
+      <span>债券奖励总额: {formatUnits(data?.totalBondReward ?? 0)}</span>
       <br />
-      <span>债券奖励已领取: {formatUnits(totalBondRewardWithdrawed, 18)}</span>
+      <span>债券奖励已领取: {formatUnits(data?.totalBondRewardWithdrawed ?? 0)}</span>
       <br />
-      <span>债券奖励未领取: {formatUnits(totalBondRewardUnwithdrawed, 18)}</span>
+      <span>债券奖励未领取: {formatUnits(data?.totalBondRewardUnwithdrawed ?? 0)}</span>
       <br />
-      <span>债券奖励可领取: {formatUnits(totalBondRewardWithdrawable, 18)}</span>
+      <span>债券奖励可领取: {formatUnits(data?.totalBondRewardWithdrawable ?? 0)}</span>
       <br />
-      <span>债券奖励未支付: {formatUnits(totalBondRewardUnpaid, 18)}</span>
+      <span>债券奖励未支付: {formatUnits(data?.totalBondRewardUnpaid ?? 0)}</span>
       <br />
 
       <span>社交奖励总余额:</span>
-      <span>{parseFloat(formatUnits(totalReward)) * 0.95}</span>
+      <span>{parseFloat(formatUnits(totalReward ?? 0)) * 0.95}</span>
       <br />
-      <span>社交奖励已领取:{formatUnits(withdrawedSocialReward, 18)}</span>
+      <span>社交奖励已领取:{formatUnits(data?.withdrawedSocialReward ?? 0)}</span>
       <br />
-      <span>社交奖励未领取:{formatUnits(totalSocialReward.add(totalPendingSocialReward))}</span>
+      <span>社交奖励未领取:{formatUnits(data?.totalSocialReward.add(data?.totalPendingSocialReward) ?? 0)}</span>
       <br />
       <span>零钱奖励总余额:</span>
-      <span>{parseFloat(formatUnits(totalReward)) * 0.05}</span>
+      <span>{parseFloat(formatUnits(totalReward ?? 0)) * 0.05}</span>
       <br />
-      <span>零钱奖励已领取:{formatUnits(withdrawedSavingReward, 18)}</span>
+      <span>零钱奖励已领取:{formatUnits(data?.withdrawedSavingReward ?? 0)}</span>
       <br />
-      <span>零钱奖励未领取部分:{formatUnits(totalSavingInterest.add(totalPendingSavingInterest))}</span>
+      <span>
+        零钱奖励未领取部分:{formatUnits(data?.totalSavingInterest.add(data?.totalPendingSavingInterest) ?? 0)}
+      </span>
       <br />
-      <span>零钱罐质押DFS:{formatUnits(totalStakedSavings, 18)}</span>
+      <span>零钱罐质押DFS:{formatUnits(totalStakedSavings)}</span>
       <br />
       <span>系统内总质押NFT:</span>
       <br />
-      <span>智者碎片:{level0Staked.toNumber()} </span>
-      <span>智者:{level1Staked.toNumber()} </span>
-      <span>金色智者:{level2Staked.toNumber()} </span>
-      <span>将军:{level3Staked.toNumber()} </span>
-      <span>金色将军:{level4Staked.toNumber()} </span>
-      <span>议员:{level5Staked.toNumber()} </span>
-      <span>皇冠议员:{level6Staked.toNumber()} </span>
+      <span>智者碎片:{data?.level0Staked.toNumber()} </span>
+      <span>智者:{data?.level1Staked.toNumber()} </span>
+      <span>金色智者:{data?.level2Staked.toNumber()} </span>
+      <span>将军:{data?.level3Staked.toNumber()} </span>
+      <span>金色将军:{data?.level4Staked.toNumber()} </span>
+      <span>议员:{data?.level5Staked.toNumber()} </span>
+      <span>皇冠议员:{data?.level6Staked.toNumber()} </span>
       <br />
       <span>生态总用户数:{stakers.length}</span>
       <br />
