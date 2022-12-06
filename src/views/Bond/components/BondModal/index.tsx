@@ -84,7 +84,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [amount, setAmount] = useState<string>('')
   const [activeTab, setActiveTab] = useState<string>('mint')
   const [bondPrice, setBondPrice] = useState<string>('0')
-  const [marketPrice, setMarketPrice] = useState<string>('0')
+  const [marketPrice, setMarketPrice] = useState<BigNumber>(BigNumber.from(0))
   const [dfsBalance, setDfsBalance] = useState<string>()
   const [minPrice, setMinPrice] = useState<BigNumber>()
   const [vestingTerms, setVestingTerms] = useState<string>('')
@@ -159,7 +159,8 @@ const BondModal: React.FC<BondModalProps> = ({
       })
       .catch((error) => console.log(error))
     bond.getPriceInUSDT().then((res) => {
-      setBondPrice(formatBigNumber(res.mul(10000 - bondData.discount).div(10000), 5))
+      setMarketPrice(res)
+      setBondPrice(formatBigNumber(res.mul(10000 - bondData.discount).div(10000), 2))
     })
 
     if (account) {
@@ -189,12 +190,6 @@ const BondModal: React.FC<BondModalProps> = ({
         setPdfsBalance(res.balance)
       })
     }
-    pair.getReserves().then((reserves: any) => {
-      const [numerator, denominator] =
-        usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
-      const marketPrice = numerator / denominator
-      setMarketPrice(marketPrice.toFixed(5))
-    })
   }, [account, amount, refresh, activeTab])
 
   const buy = () => {
@@ -285,7 +280,7 @@ const BondModal: React.FC<BondModalProps> = ({
             </ContentCell>
             <ContentCell>
               <CellTitle>{t('Market price')}</CellTitle>
-              <CellText>${marketPrice ?? 0}</CellText>
+              <CellText>${formatBigNumber(marketPrice, 2) ?? 0}</CellText>
             </ContentCell>
           </BondListItemContent>
         </BondListItem>
