@@ -66,15 +66,11 @@ const Bond = () => {
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
   const [marketPrice, setMarketPrice] = useState<string>()
   const bond = useBondContract()
-  const miningAddress = getMiningAddress()
   const dfs = useDFSContract()
   const usdtAddress = getUSDTAddress()
   const usdt = useERC20(usdtAddress, true)
   const pairAddress = getPairAddress()
   const pair = usePairContract(pairAddress)
-  const dfsContract = useDFSContract()
-  const pancakeRouter = useRouterContract()
-  const dfsAddress = getDFSAddress()
 
   const { data, status } = useSWR('dfsBond', async () => {
     const bondDFS = await dfs.balanceOf(bond.address)
@@ -85,12 +81,6 @@ const Bond = () => {
 
     const price = await bond.getPriceInUSDT()
     bondDatas[0].price = formatBigNumber(price.mul(97).div(100), 5)
-    // console.log("price:",price)
-    // const [reserve0, reserve1] = await pair.getReserves()
-    // const [numerator, denominator] =
-    //   usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserve0, reserve1] : [reserve1, reserve0]
-    // const marketPrice = parseFloat(formatUnits(numerator, 18)) / parseFloat(formatUnits(denominator, 18))
-    // setUsdtAmount(numerator)
     setMarketPrice(formatBigNumber(price, 5))
   })
 
@@ -118,7 +108,7 @@ const Bond = () => {
     usdt
       .approve(bond.address, MaxUint256)
       .then((receipt) =>
-        dfsContract.approve(bond.address, MaxUint256).then((res) => res.wait().then((res) => setIsApprove(true))),
+        dfs.approve(bond.address, MaxUint256).then((res) => res.wait().then((res) => setIsApprove(true))),
       )
   }
   useEffect(() => {
@@ -150,7 +140,7 @@ const Bond = () => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
     setBondData([dfsUsdt, ...bondDatas.slice(1)])
-    dfsContract
+    dfs
       .totalSupply()
       .then((res) => setDfsTotalSupply(res * parseFloat(marketPrice)))
       .catch((error) => {

@@ -98,6 +98,7 @@ const Private = () => {
 
   const [stakers, setStakers] = useState<string[]>([])
   const [totalPayout, setTotalPayout] = useState<BigNumber>(BigNumber.from(0))
+  const [pdfsUsed, setPdfsUsed] = useState<BigNumber>(BigNumber.from(0))
   const [totalBondReward, setTotalBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [totalBondRewardUnpaid, setTotalBondRewardUnpaid] = useState<BigNumber>(BigNumber.from(0))
   const [totalBondRewardWithdrawed, setTotalBondRewardWithdrawed] = useState<BigNumber>(BigNumber.from(0))
@@ -226,6 +227,9 @@ const Private = () => {
     setLevel5Staked(await dfsMining.level5Staked())
     setLevel6Staked(await dfsMining.level6Staked())
 
+    const pdfsUsed = await bond.pdfsUsed()
+    setPdfsUsed(pdfsUsed)
+
     const totalPayout = await bond.totalPayout()
     setTotalPayout(totalPayout)
 
@@ -258,7 +262,6 @@ const Private = () => {
 
   const buySubmit = async () => {
     if (account) {
-      console.log('hdfs:', hdfs.address, hbond.address)
       const allowance = await hdfs.allowance(account, hbond.address)
       if (allowance.eq(0)) {
         const receipt = await hdfs.approve(hbond.address, MaxUint256)
@@ -285,6 +288,8 @@ const Private = () => {
       <span>债券总销售量: {formatUnits(totalPayout, 18)}</span>
       <br />
       <span>债券已使用:{formatUnits(totalBondUsed, 18)}</span>
+      <br />
+      <span>PDFS已使用:{formatUnits(pdfsUsed)}</span>
       <br />
       <span>债券未使用:{formatUnits(totalPayout.sub(totalBondUsed), 18)}</span>
       <br />

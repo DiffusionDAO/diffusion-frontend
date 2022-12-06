@@ -107,7 +107,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const router = useRouter()
-  const dfsMineContract = useDFSMiningContract()
+  const dfsMining = useDFSMiningContract()
   const dfsContract = useDFSContract()
   const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ?? '0'
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
@@ -132,18 +132,19 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
           nft?.staker === zeroAddress
             ? onPresentSellModal
             : async () => {
+                const unstakeFee = await dfsMining.unstakeFee()
                 setNoteContent({
                   title: t('Note'),
-                  description: t('2% fees will be charged for unstaking'),
+                  description: t(`${unstakeFee.toString()}% fees will be charged for unstaking`),
                   visible: true,
                 })
                 try {
-                  const allowance = await dfsContract.allowance(account, dfsMineContract.address)
+                  const allowance = await dfsContract.allowance(account, dfsMining.address)
                   if (allowance.eq(0)) {
-                    const receipt = await dfsContract.approve(dfsMineContract.address, MaxUint256)
+                    const receipt = await dfsContract.approve(dfsMining.address, MaxUint256)
                     await receipt.wait()
                   }
-                  const receipt = await dfsMineContract.unstakeNFT(nft?.tokenId)
+                  const receipt = await dfsMining.unstakeNFT(nft?.tokenId)
                   await receipt.wait()
                   router.push(`/profile/${account}`)
                 } catch (error: any) {
