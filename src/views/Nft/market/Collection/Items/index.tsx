@@ -12,11 +12,6 @@ const Items = () => {
   const { t } = useTranslation()
   const collection = useGetCollection(collectionAddress)
 
-  const sortByItems = [
-    { label: t('Recently listed'), value: 'updatedAt' },
-    { label: t('Lowest price'), value: 'currentAskPrice' },
-  ]
-
   const handleChange = (newOption: OptionProps) => {
     setSortBy(newOption.value)
   }

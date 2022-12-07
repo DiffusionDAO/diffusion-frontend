@@ -439,7 +439,7 @@ const Dashboard = () => {
                       <div className="cell-sub-item">
                         <DataCell
                           title={t('Expansion Fund')}
-                          data={`$${formatBigNumber(foundationDFS, 2)}`}
+                          data={`$${(parseFloat(formatUnits(foundationDFS)) * marketPrice).toFixed(2)}`}
                           imgUrl="/images/dashboard/rz.svg"
                         />
                       </div>

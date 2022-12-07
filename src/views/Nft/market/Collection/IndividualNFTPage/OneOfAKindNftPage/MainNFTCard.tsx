@@ -8,20 +8,19 @@ import {
   Flex,
   Text,
   useModal,
+  useToast,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
-import { formatUnits, parseUnits } from '@ethersproject/units'
-import { BigNumber } from '@ethersproject/bignumber'
 import { NftToken } from 'state/nftMarket/types'
 import styled, { css } from 'styled-components'
 import { useDFSContract, useDFSMiningContract } from 'hooks/useContract'
-import { formatNumber } from 'utils/formatBalance'
 import NFTMedia from 'views/Nft/market/components/NFTMedia'
 import { MaxUint256 } from '@ethersproject/constants'
+import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
+
 import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
 import { nftsBaseUrl } from '../../../constants'
@@ -108,7 +107,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   const { account } = useWeb3React()
   const router = useRouter()
   const dfsMining = useDFSMiningContract()
-  const dfsContract = useDFSContract()
+  const dfs = useDFSContract()
   const currentAskPriceAsNumber = nft?.marketData?.currentAskPrice ?? '0'
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
@@ -120,6 +119,27 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
     visible: false,
   })
   const { isMobile } = useMatchBreakpoints()
+
+  const unstakeNFT = async () => {
+    setNoteContent({
+      title: '',
+      description: '',
+      visible: false,
+    })
+    try {
+      const allowance = await dfs.allowance(account, dfsMining.address)
+      if (allowance.eq(0)) {
+        const receipt = await dfs.approve(dfsMining.address, MaxUint256)
+        await receipt.wait()
+      }
+      const receipt = await dfsMining.unstakeNFT(nft?.tokenId)
+      await receipt.wait()
+      router.push(`/profile/${account}`)
+    } catch (error: any) {
+      window.alert(error.reason ?? error.data?.message ?? error.message)
+    }
+  }
+
   const ownerButtons = (
     <Flex flexDirection={['column', 'column', 'row']}>
       <BtnB
@@ -133,23 +153,15 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
             ? onPresentSellModal
             : async () => {
                 const unstakeFee = await dfsMining.unstakeFee()
+                console.log('unstakeFee:', unstakeFee)
                 setNoteContent({
                   title: t('Note'),
-                  description: t(`${unstakeFee.toString()}% fees will be charged for unstaking`),
+                  description: t(
+                    `%unstakeFee%% fees based on SPOS providede by current staked NFT will be charged for unstaking`,
+                    { unstakeFee: unstakeFee.toString() },
+                  ),
                   visible: true,
                 })
-                try {
-                  const allowance = await dfsContract.allowance(account, dfsMining.address)
-                  if (allowance.eq(0)) {
-                    const receipt = await dfsContract.approve(dfsMining.address, MaxUint256)
-                    await receipt.wait()
-                  }
-                  const receipt = await dfsMining.unstakeNFT(nft?.tokenId)
-                  await receipt.wait()
-                  router.push(`/profile/${account}`)
-                } catch (error: any) {
-                  window.alert(error.reason ?? error.data?.message ?? error.message)
-                }
               }
         }
       >
@@ -241,6 +253,14 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
               </div>
             </Box>
           </Flex>
+          {noteContent.visible ? (
+            <CustomModal
+              title={noteContent.title}
+              description={noteContent.description}
+              onClose={() => setNoteContent({ title: '', description: '', visible: false })}
+              onConfirm={unstakeNFT}
+            />
+          ) : null}
           <Flex
             flex="2"
             justifyContent={['center', null, 'flex-end']}

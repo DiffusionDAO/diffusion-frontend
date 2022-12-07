@@ -58,7 +58,8 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const socialNFT = useSocialNftContract()
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
-  const { data: nftToken, status } = useSWR('IndividualNFTPage', async () => {
+
+  const getToken = async () => {
     const getToken = await socialNFT.getToken(tokenId)
     const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
     const staker = await dfsMining.staker(tokenId)
@@ -94,7 +95,12 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
       },
     }
     return nftToken
-  })
+  }
+  const { data: nftToken, status, mutate } = useSWR('IndividualNFTPage', getToken)
+
+  useEffect(() => {
+    mutate(getToken())
+  }, [t])
 
   const properties = nftToken?.attributes
   if (!nftToken || !collection) {

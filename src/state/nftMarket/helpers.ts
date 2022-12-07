@@ -69,7 +69,6 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
     }),
   )
   const response: ApiCollectionsResponse = { total: data.length, data }
-  console.log('getCollectionsApi:', response)
   return response
 }
 

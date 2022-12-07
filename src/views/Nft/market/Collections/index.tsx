@@ -216,10 +216,9 @@ const Collectible = () => {
               pl={['4px', null, '0']}
               mb="8px"
             >
-              {/* <ToggleView idPrefix="clickCollection" viewMode={viewMode} onToggle={setViewMode} /> */}
               <Flex width="max-content" style={{ gap: '4px' }} flexDirection="column">
                 <Text fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600}>
-                  {t('Sort By')}
+                  {t('Sort by')}
                 </Text>
                 <Select
                   options={options}
