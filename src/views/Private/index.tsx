@@ -137,9 +137,6 @@ const Private = () => {
     }
     const buyers = await bond.getBuyers()
     count.totalBondReward = await bond.totalBondReward()
-    count.totalBondRewardUnwithdrawed = count.totalBondReward.sub(count.totalBondRewardWithdrawed)
-    // setTotalBondReward(await bond.totalBondReward())
-    // setTotalBondRewardUnwithdrawed(totalBondReward.sub(totalBondRewardWithdrawed))
 
     await Promise.all(
       buyers.map(async (buyer) => {
@@ -152,15 +149,13 @@ const Private = () => {
         count.pending = count.pending.add(pendingBondReward)
         count.withdrawable = count?.withdrawable.add(pendingBondReward).add(referralBond?.bondReward)
         count.unpaid = count?.unpaid.add(referralBond?.bondRewardUnpaid.sub(pendingBondReward))
-        if (count?.pending.gt(0)) console.log('pendingBondReward:', formatUnits(count?.pending))
-        if (count.withdrawable.gt(0)) console.log('withdrawable:', buyer, formatUnits(count.withdrawable, 18))
-        if (count.unpaid.gt(0)) console.log('unpaid:', formatUnits(count.unpaid, 18))
       }),
     )
     count.totalBondUsed = count.bondUsed
     count.totalBondRewardWithdrawed = count.withdrawed
     count.totalBondRewardUnpaid = count.unpaid
     count.totalBondRewardWithdrawable = count.totalBondReward.sub(count.totalBondRewardWithdrawed).sub(count.unpaid)
+    count.totalBondRewardUnwithdrawed = count.totalBondReward.sub(count.totalBondRewardWithdrawed)
 
     let socialReward = BigNumber.from(0)
     let savingInterest = BigNumber.from(0)
@@ -246,7 +241,6 @@ const Private = () => {
   const totalRewardNumber = parseFloat(formatUnits(totalReward ?? 0))
   const spos = totalPower.toNumber() / 100
 
-  console.log(totalRewardNumber)
   const buySubmit = async () => {
     if (account) {
       const allowance = await hdfs.allowance(account, hbond.address)
