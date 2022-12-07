@@ -1,6 +1,6 @@
 {
   "Insufficent DFS balance for unstaking NFT requirement": "解质押NFT需要的DFS余额不足",
-  "%unstakeFee%% fees based on SPOS providede by current staked NFT will be charged for unstaking": "将收取基于当前质押NFT提供的SPOS值的%unstakeFee%%手续费",
+  "%unstakeFee%%(%unstakeNeed% DFS) fees based on SPOS providede by current staked NFT will be charged for unstaking": "将收取基于当前质押NFT提供的SPOS值的%unstakeFee%%(%unstakeNeed% DFS)手续费",
   "Sort by": "排序",
   "Sort By": "排序",
   "That’s not a wallet address.": "不是一个钱包地址",

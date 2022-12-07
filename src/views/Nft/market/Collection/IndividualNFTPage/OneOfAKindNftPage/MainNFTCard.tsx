@@ -9,10 +9,11 @@ import {
   Text,
   useModal,
   useToast,
+  useIsomorphicEffect,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/nftMarket/types'
 import styled, { css } from 'styled-components'
@@ -23,7 +24,7 @@ import CustomModal from 'views/Nft/market/Profile/components/CustomModal'
 import { levelToSPOS } from 'pages/profile/[accountAddress]'
 import { getDFSAddress } from 'utils/addressHelpers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { parseEther } from '@ethersproject/units'
+import { formatUnits, parseEther } from '@ethersproject/units'
 
 import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
@@ -126,6 +127,13 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   const [dfsBalance, setDfsBalance] = useState<BigNumber>(BigNumber.from(0))
   const { isMobile } = useMatchBreakpoints()
 
+  useEffect(() => {
+    const dfsAddress = getDFSAddress()
+    dfs.balanceOf(account).then((res) => {
+      setDfsBalance(res)
+    })
+  }, [account])
+
   const unstakeNeed = parseEther(((levelToSPOS[nft.level].validSPOS * 2) / 100).toString())
   const unstakeNFT = async () => {
     setNoteContent({
@@ -134,8 +142,6 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
       visible: false,
     })
     try {
-      const balance = await dfs.balanceOf(getDFSAddress())
-      setDfsBalance(balance)
       const allowance = await dfs.allowance(account, dfsMining.address)
       if (allowance.eq(0)) {
         const receipt = await dfs.approve(dfsMining.address, MaxUint256)
@@ -161,16 +167,19 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
           nft?.staker === zeroAddress
             ? onPresentSellModal
             : async () => {
+                const unstakeFee = await dfsMining.unstakeFee()
+                const unstakeFeeDenominator = await dfsMining.unstakeFeeDenominator()
                 if (dfsBalance.gt(unstakeNeed)) {
                   setNoteContent({
                     title: t('Note'),
                     description: t(
-                      `%unstakeFee%% fees based on SPOS providede by current staked NFT will be charged for unstaking`,
-                      { unstakeFee: unstakeNeed.toString() },
+                      `%unstakeFee%%(%unstakeNeed% DFS) fees based on SPOS providede by current staked NFT will be charged for unstaking`,
+                      { unstakeFee: unstakeFee.toString(), unstakeNeed: formatUnits(unstakeNeed) },
                     ),
                     visible: true,
                   })
                 } else {
+                  console.log('dfsBalance:', formatUnits(dfsBalance), 'unstakeNeed', formatUnits(unstakeNeed))
                   toastError(t('Insufficent DFS balance for unstaking NFT requirement'))
                 }
               }
