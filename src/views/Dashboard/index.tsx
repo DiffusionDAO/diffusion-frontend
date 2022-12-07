@@ -116,9 +116,6 @@ const Dashboard = () => {
     console.log('foundationDFS:', formatUnits(foundationDFS))
     setFoundationDFS(foundationDFS)
 
-    const dfsTotalSupply = await dfs.totalSupply()
-    // console.log("dfsTotalSupply:",formatUnits(dfsTotalSupply))
-
     const totalPayout = await bond.totalPayout()
 
     const unstakeNFTDFS = await dfs.balanceOf(unstakeNFTAddress)
@@ -140,6 +137,8 @@ const Dashboard = () => {
     const holderLength = await dfs.getHoldersLength()
     setHolderLength(holderLength)
     const bondDfs = await dfs.balanceOf(bond.address)
+
+    const dfsTotalSupply = await dfs.totalSupply()
     const circulationSupply = dfsTotalSupply
       .sub(daoDFS)
       .sub(foundationDFS)
@@ -159,29 +158,32 @@ const Dashboard = () => {
     const inflation = ((marketPrice - singleCurrencyReserves) * 100) / marketPrice
     setInflation(inflation)
 
-    console.log('totalPayout:', formatUnits(totalPayout))
-
     const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
     const withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
+    const addLiquiditySupply = await bond.addLiquiditySupply()
+    const customSupply = await bond.customSupply()
 
-    console.log('withdrawedSocialReward:', withdrawedSavingReward, withdrawedSocialReward)
+    const buyers = await bond.getBuyers()
+
+    let bondRewardWithdrawed
+    const bondUsed = await Promise.all(
+      buyers.map(async (buyer) => {
+        const referralBond = await bond.addressToReferral(buyer)
+        bondRewardWithdrawed = bondRewardWithdrawed.add(referralBond.bondRewardWithdrawed)
+        return referralBond.bondUsed
+      }),
+    )
     const totalCirculation = totalPayout
       .mul(1250)
       .div(1000)
       .add(withdrawedSocialReward)
       .add(withdrawedSavingReward)
-      .add(initialSupply)
+      .add(bondRewardWithdrawed)
+      .add(addLiquiditySupply)
+      .add(customSupply)
 
     setTotalCirculation(totalCirculation)
 
-    const buyers = await bond.getBuyers()
-
-    const bondUsed = await Promise.all(
-      buyers.map(async (buyer) => {
-        const referralBond = await bond.addressToReferral(buyer)
-        return referralBond.bondUsed
-      }),
-    )
     const totalBondUsed = bondUsed.reduce((accum, curr) => {
       // eslint-disable-next-line no-return-assign, no-param-reassign
       accum = accum.add(curr)

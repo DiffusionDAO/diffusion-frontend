@@ -136,8 +136,6 @@ const Private = () => {
       dfsRewardBalance: BigNumber.from(0),
     }
     const buyers = await bond.getBuyers()
-    count.totalBondReward = await bond.totalBondReward()
-
     await Promise.all(
       buyers.map(async (buyer) => {
         const parents = await bond.getParents(buyer)
@@ -151,6 +149,7 @@ const Private = () => {
         count.unpaid = count?.unpaid.add(referralBond?.bondRewardUnpaid.sub(pendingBondReward))
       }),
     )
+    count.totalBondReward = await bond.totalBondReward()
     count.totalBondUsed = count.bondUsed
     count.totalBondRewardWithdrawed = count.withdrawed
     count.totalBondRewardUnpaid = count.unpaid

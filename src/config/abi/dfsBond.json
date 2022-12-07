@@ -130,6 +130,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "addLiquiditySupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -398,6 +411,19 @@
     "name": "claimOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "customSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -924,6 +950,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_supply",
+        "type": "uint256"
+      }
+    ],
+    "name": "setAddLiquiditySupply",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_addressLP",
         "type": "address"
@@ -979,6 +1018,19 @@
       }
     ],
     "name": "setBondTerms",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_supply",
+        "type": "uint256"
+      }
+    ],
+    "name": "setCustomSupply",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
