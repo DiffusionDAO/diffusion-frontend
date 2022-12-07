@@ -143,6 +143,7 @@ const Dashboard = () => {
     const addLiquiditySupply = await bond.addLiquiditySupply()
     setAddLiquiditySupply(addLiquiditySupply)
 
+    const customSupply = await bond.customSupply()
     const dfsTotalSupply = await dfs.totalSupply()
     const circulationSupply = dfsTotalSupply
       .sub(daoDFS)
@@ -168,34 +169,33 @@ const Dashboard = () => {
     const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
     const withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
 
-    const customSupply = await bond.customSupply()
-
     const buyers = await bond.getBuyers()
 
-    const count = { bondUsed: BigNumber.from(0), withdrawed: BigNumber.from(0) }
+    const bondStatistic = { bondUsed: BigNumber.from(0), withdrawed: BigNumber.from(0) }
     await Promise.all(
       buyers.map(async (buyer) => {
         const referralBond = await bond.addressToReferral(buyer)
-        count.bondUsed = count.bondUsed.add(referralBond.bondUsed)
-        count.withdrawed = count.withdrawed.add(referralBond.bondRewardWithdrawed)
+        bondStatistic.bondUsed = bondStatistic.bondUsed.add(referralBond.bondUsed)
+        bondStatistic.withdrawed = bondStatistic.withdrawed.add(referralBond.bondRewardWithdrawed)
       }),
     )
-    setBondRewardWithdrawed(count.withdrawed)
+    setBondRewardWithdrawed(bondStatistic.withdrawed)
     const totalCirculation = totalPayout
       .mul(1250)
       .div(1000)
       .add(withdrawedSocialReward)
       .add(withdrawedSavingReward)
-      .add(count.withdrawed)
+      .add(bondStatistic.withdrawed)
       .add(addLiquiditySupply)
       .add(customSupply)
 
     setTotalCirculation(totalCirculation)
 
-    setTotalBondUsed(count.bondUsed)
+    setTotalBondUsed(bondStatistic.bondUsed)
 
     const debtRatio =
-      (parseFloat(formatUnits(totalPayout.sub(count.bondUsed))) * 100) / parseFloat(formatUnits(circulationSupply))
+      (parseFloat(formatUnits(totalPayout.sub(bondStatistic.bondUsed))) * 100) /
+      parseFloat(formatUnits(circulationSupply))
     setDebtRatio(debtRatio)
     // console.log("totalCirculation:",formatUnits(totalCirculation))
 
