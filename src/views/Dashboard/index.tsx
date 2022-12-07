@@ -68,7 +68,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<string>('Overview')
   const [callFactor, setCallfactor] = useState<number>(0)
   const [tvl, setTvl] = useState<BigNumber>(BigNumber.from(0))
-  const [singleCurrencyReserves, setSingleCurrencyReserves] = useState<number>(0)
+  const [solitaryReserves, setSingleCurrencyReserves] = useState<number>(0)
   const [totalCirculation, setTotalCirculation] = useState<BigNumber>(BigNumber.from(0))
   const [circulationSupply, setCirculationSupply] = useState<BigNumber>(BigNumber.from(0))
   const [foundationDFS, setFoundationDFS] = useState<BigNumber>(BigNumber.from(0))
@@ -93,14 +93,11 @@ const Dashboard = () => {
     const callFactor = await dfsMining.totalCalls()
     setCallfactor(callFactor.toNumber())
 
-    const initialSupply = await dfs.initialSupply()
-    setInitialSupply(initialSupply)
+    setInitialSupply(await dfs.initialSupply())
 
-    const DSGE = await dfsMining.DSGE()
-    setDSGE(DSGE)
+    setDSGE(await dfsMining.DSGE())
 
-    const HouseHoldSavingsRate = await dfsMining.HouseHoldSavingsRate()
-    setHouseHoldSavingsRate(HouseHoldSavingsRate)
+    setHouseHoldSavingsRate(await dfsMining.HouseHoldSavingsRate())
 
     const reserves = await pair.getReserves()
     const [numerator, denominator] =
@@ -108,9 +105,8 @@ const Dashboard = () => {
     setTvl(numerator.mul(2))
 
     const discount = await bond.discount()
-    const price = await bond.getPriceInUSDT()
-
-    const marketPrice = (parseFloat(formatUnits(price)) * (10000 - discount.toNumber())) / 10000
+    const marketPrice = parseFloat(formatUnits(await bond.getPriceInUSDT()))
+    console.log('marketPrice:', marketPrice)
 
     setMarketPrice(marketPrice)
 
@@ -134,18 +130,15 @@ const Dashboard = () => {
       return accum
     }, BigNumber.from(0))
 
-    console.log('daoDFS:', formatUnits(daoDFS))
-
-    const holderLength = await dfs.getHoldersLength()
-    setHolderLength(holderLength)
+    setHolderLength(await dfs.getHoldersLength())
     const bondDfs = await dfs.balanceOf(bond.address)
 
-    const addLiquiditySupply = await bond.addLiquiditySupply()
-    setAddLiquiditySupply(addLiquiditySupply)
+    setAddLiquiditySupply(await bond.addLiquiditySupply())
 
     const customSupply = await bond.customSupply()
     const dfsTotalSupply = await dfs.totalSupply()
-    const circulationSupply = dfsTotalSupply
+    console.log('dfsTotalSupply:', formatUnits(dfsTotalSupply))
+    const currentCirculationSupply = dfsTotalSupply
       .sub(daoDFS)
       .sub(foundationDFS)
       .sub(bondDfs)
@@ -156,15 +149,13 @@ const Dashboard = () => {
       .sub(elementaryMintAddressDfs)
       .sub(advancedMintAddressDfs)
       .sub(initialSupply)
-      .add(addLiquiditySupply)
+      .add(denominator)
 
-    setCirculationSupply(circulationSupply)
+    setCirculationSupply(currentCirculationSupply)
 
-    const singleCurrencyReserves = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(circulationSupply))
-    setSingleCurrencyReserves(singleCurrencyReserves)
+    setSingleCurrencyReserves(parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(circulationSupply)))
 
-    const inflation = ((marketPrice - singleCurrencyReserves) * 100) / marketPrice
-    setInflation(inflation)
+    setInflation(((marketPrice - solitaryReserves) * 100) / marketPrice)
 
     const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
     const withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
@@ -186,7 +177,7 @@ const Dashboard = () => {
       .add(withdrawedSocialReward)
       .add(withdrawedSavingReward)
       .add(bondStatistic.withdrawed)
-      .add(addLiquiditySupply)
+      .add(denominator)
       .add(customSupply)
 
     setTotalCirculation(totalCirculation)
@@ -298,10 +289,7 @@ const Dashboard = () => {
                               title={t('Total circulation')}
                               data={`${formatBigNumber(totalCirculation, 2)} DFS`}
                             />
-                            <DataCell
-                              title={t('Solitary Reserve')}
-                              data={`$${formatNumber(singleCurrencyReserves, 2)}`}
-                            />
+                            <DataCell title={t('Solitary Reserve')} data={`$${formatNumber(solitaryReserves, 2)}`} />
                           </div>
                         </Grid>
                         <Grid item lg={4} md={4} sm={12} xs={12}>

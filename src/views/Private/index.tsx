@@ -112,7 +112,7 @@ const Private = () => {
       withdrawable: BigNumber.from(0),
       withdrawed: BigNumber.from(0),
       pending: BigNumber.from(0),
-      totalBondReward: BigNumber.from(0),
+      totalBondReward: await bond.totalBondReward(),
       totalBondRewardUnwithdrawed: BigNumber.from(0),
       totalBondUsed: BigNumber.from(0),
       totalBondRewardWithdrawed: BigNumber.from(0),
@@ -122,18 +122,18 @@ const Private = () => {
       totalPendingSavingInterest: BigNumber.from(0),
       totalSocialReward: BigNumber.from(0),
       totalSavingInterest: BigNumber.from(0),
-      level0Staked: BigNumber.from(0),
-      level1Staked: BigNumber.from(0),
-      level2Staked: BigNumber.from(0),
-      level3Staked: BigNumber.from(0),
-      level4Staked: BigNumber.from(0),
-      level5Staked: BigNumber.from(0),
-      level6Staked: BigNumber.from(0),
-      pdfsUsed: BigNumber.from(0),
-      totalPayout: BigNumber.from(0),
-      withdrawedSavingReward: BigNumber.from(0),
-      withdrawedSocialReward: BigNumber.from(0),
-      dfsRewardBalance: BigNumber.from(0),
+      level0Staked: await dfsMining.level0Staked(),
+      level1Staked: await dfsMining.level1Staked(),
+      level2Staked: await dfsMining.level2Staked(),
+      level3Staked: await dfsMining.level3Staked(),
+      level4Staked: await dfsMining.level4Staked(),
+      level5Staked: await dfsMining.level5Staked(),
+      level6Staked: await dfsMining.level6Staked(),
+      pdfsUsed: await bond.pdfsUsed(),
+      totalPayout: await bond.totalPayout(),
+      withdrawedSavingReward: await dfsMining.withdrawedSavingReward(),
+      withdrawedSocialReward: await dfsMining.withdrawedSocialReward(),
+      dfsRewardBalance: await dfs.balanceOf(bond.address),
     }
     const buyers = await bond.getBuyers()
     await Promise.all(
@@ -148,26 +148,23 @@ const Private = () => {
         count.unpaid = count?.unpaid.add(referralBond?.bondRewardUnpaid.sub(pendingBondReward))
       }),
     )
-    count.totalBondReward = await bond.totalBondReward()
     count.totalBondUsed = count.bondUsed
     count.totalBondRewardWithdrawed = count.withdrawed
     count.totalBondRewardUnpaid = count.unpaid
     count.totalBondRewardWithdrawable = count.totalBondReward.sub(count.totalBondRewardWithdrawed).sub(count.unpaid)
     count.totalBondRewardUnwithdrawed = count.totalBondReward.sub(count.totalBondRewardWithdrawed)
 
-    let socialReward = BigNumber.from(0)
-    let savingInterest = BigNumber.from(0)
-    let pendingSocialReward = BigNumber.from(0)
-    let pendingSavingInterest = BigNumber.from(0)
     await Promise.all(
       stakers.map(async (staker) => {
-        pendingSocialReward = pendingSocialReward.add(await dfsMining.pendingSocialReward(staker))
-        pendingSavingInterest = pendingSavingInterest.add(await dfsMining.pendingSavingInterest(staker))
+        count.totalPendingSocialReward = count.totalPendingSocialReward.add(await dfsMining.pendingSocialReward(staker))
+        count.totalPendingSavingInterest = count.totalPendingSavingInterest.add(
+          await dfsMining.pendingSavingInterest(staker),
+        )
 
         const referralStake = await dfsMining.addressToReferral(staker)
         const level = referralStake.level
-        socialReward = socialReward.add(referralStake?.socialReward)
-        savingInterest = savingInterest.add(referralStake?.savingInterest)
+        count.totalSocialReward = count.totalSocialReward.add(referralStake?.socialReward)
+        count.totalSavingInterest = count.totalSavingInterest.add(referralStake?.savingInterest)
         switch (level.toNumber()) {
           case 0:
             return count.s0++
@@ -188,37 +185,12 @@ const Private = () => {
         }
       }),
     )
-    count.totalPendingSocialReward = pendingSocialReward
-    count.totalPendingSavingInterest = pendingSavingInterest
-    count.totalSocialReward = socialReward
-    count.totalSavingInterest = savingInterest
-
-    count.level0Staked = await dfsMining.level0Staked()
-    count.level1Staked = await dfsMining.level1Staked()
-    count.level2Staked = await dfsMining.level2Staked()
-    count.level3Staked = await dfsMining.level3Staked()
-    count.level4Staked = await dfsMining.level4Staked()
-    count.level5Staked = await dfsMining.level5Staked()
-    count.level6Staked = await dfsMining.level6Staked()
-
-    count.pdfsUsed = await bond.pdfsUsed()
-
-    count.totalPayout = await bond.totalPayout()
-
-    count.withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
-
-    count.withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
-
     const dfsBalance = await dfs.balanceOf(account)
     setDfsBalance(dfsBalance)
 
     const savingInterestEpochLength = await dfsMining.savingInterestEpochLength()
     setSavingInterestEpochLength(savingInterestEpochLength)
 
-    count.dfsRewardBalance = await dfs.balanceOf(bond.address)
-
-    // setSocialRewardInterest((await dfsMining.socialRewardInterest()).toNumber())
-    // setSavingRewardInterest((await dfsMining.savingRewardInterest()).toNumber())
     setTotalPower(await dfsMining.totalPower())
     setTotalStakedSavings(await dfsMining.totalStakedSavings())
 
