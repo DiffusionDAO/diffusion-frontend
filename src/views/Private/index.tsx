@@ -138,7 +138,6 @@ const Private = () => {
     const buyers = await bond.getBuyers()
     await Promise.all(
       buyers.map(async (buyer) => {
-        const parents = await bond.getParents(buyer)
         const referralBond = await bond.addressToReferral(buyer)
         count.bondUsed = count.bondUsed.add(referralBond.bondUsed)
         count.withdrawed = count.withdrawed.add(referralBond.bondRewardWithdrawed)

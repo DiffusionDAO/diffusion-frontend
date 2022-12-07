@@ -80,6 +80,8 @@ const Dashboard = () => {
   const [marketPrice, setMarketPrice] = useState<number>(0)
   const [HouseHoldSavingsRate, setHouseHoldSavingsRate] = useState<string>('0')
   const [DSGE, setDSGE] = useState<string>('0')
+  const [addLiquiditySupply, setAddLiquiditySupply] = useState<BigNumber>(BigNumber.from(0))
+  const [bondRewardWithdrawed, setBondRewardWithdrawed] = useState<BigNumber>(BigNumber.from(0))
 
   const clickTab = (tab: string) => {
     setActiveTab(tab)
@@ -138,6 +140,9 @@ const Dashboard = () => {
     setHolderLength(holderLength)
     const bondDfs = await dfs.balanceOf(bond.address)
 
+    const addLiquiditySupply = await bond.addLiquiditySupply()
+    setAddLiquiditySupply(addLiquiditySupply)
+
     const dfsTotalSupply = await dfs.totalSupply()
     const circulationSupply = dfsTotalSupply
       .sub(daoDFS)
@@ -149,6 +154,8 @@ const Dashboard = () => {
       .sub(advancedPayoutMintAddressDfs)
       .sub(elementaryMintAddressDfs)
       .sub(advancedMintAddressDfs)
+      .sub(initialSupply)
+      .add(addLiquiditySupply)
 
     setCirculationSupply(circulationSupply)
 
@@ -160,40 +167,35 @@ const Dashboard = () => {
 
     const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
     const withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
-    const addLiquiditySupply = await bond.addLiquiditySupply()
+
     const customSupply = await bond.customSupply()
 
     const buyers = await bond.getBuyers()
 
-    let bondRewardWithdrawed
-    const bondUsed = await Promise.all(
+    const count = { bondUsed: BigNumber.from(0), withdrawed: BigNumber.from(0) }
+    await Promise.all(
       buyers.map(async (buyer) => {
         const referralBond = await bond.addressToReferral(buyer)
-        bondRewardWithdrawed = bondRewardWithdrawed.add(referralBond.bondRewardWithdrawed)
-        return referralBond.bondUsed
+        count.bondUsed = count.bondUsed.add(referralBond.bondUsed)
+        count.withdrawed = count.withdrawed.add(referralBond.bondRewardWithdrawed)
       }),
     )
+    setBondRewardWithdrawed(count.withdrawed)
     const totalCirculation = totalPayout
       .mul(1250)
       .div(1000)
       .add(withdrawedSocialReward)
       .add(withdrawedSavingReward)
-      .add(bondRewardWithdrawed)
+      .add(count.withdrawed)
       .add(addLiquiditySupply)
       .add(customSupply)
 
     setTotalCirculation(totalCirculation)
 
-    const totalBondUsed = bondUsed.reduce((accum, curr) => {
-      // eslint-disable-next-line no-return-assign, no-param-reassign
-      accum = accum.add(curr)
-      return accum
-    }, BigNumber.from(0))
-
-    setTotalBondUsed(totalBondUsed)
+    setTotalBondUsed(count.bondUsed)
 
     const debtRatio =
-      (parseFloat(formatUnits(totalPayout.sub(totalBondUsed))) * 100) / parseFloat(formatUnits(circulationSupply))
+      (parseFloat(formatUnits(totalPayout.sub(count.bondUsed))) * 100) / parseFloat(formatUnits(circulationSupply))
     setDebtRatio(debtRatio)
     // console.log("totalCirculation:",formatUnits(totalCirculation))
 
