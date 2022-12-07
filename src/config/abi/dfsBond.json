@@ -942,19 +942,6 @@
   },
   {
     "inputs": [],
-    "name": "recursiveChild",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "redeem",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -1038,9 +1025,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint32",
+        "internalType": "uint256",
         "name": "_supply",
-        "type": "uint32"
+        "type": "uint256"
       }
     ],
     "name": "setCostSupply",
@@ -1051,9 +1038,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint32",
+        "internalType": "uint256",
         "name": "_supply",
-        "type": "uint32"
+        "type": "uint256"
       }
     ],
     "name": "setCustomSupply",
@@ -1199,19 +1186,6 @@
   {
     "inputs": [
       {
-        "internalType": "bool",
-        "name": "_recursive",
-        "type": "bool"
-      }
-    ],
-    "name": "setRecursiveChild",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "_address",
         "type": "address"
@@ -1225,6 +1199,32 @@
     "name": "setReferral",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_rate",
+        "type": "string"
+      }
+    ],
+    "name": "setTargetInflationRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "targetInflationRate",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
