@@ -105,7 +105,7 @@ const Dashboard = () => {
       debtRatio: 0,
       currentCirculationSupply: BigNumber.from(0),
       totalCirculationSupply: BigNumber.from(0),
-      targetInflationRate: '0',
+      targetInflationRate: await bond.targetInflationRate(),
     }
 
     const reserves = await pair.getReserves()
