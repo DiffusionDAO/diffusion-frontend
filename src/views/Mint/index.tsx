@@ -59,13 +59,13 @@ const Mint = () => {
   const [playMintBoxModalVisible, setPlayBindBoxModalVisible] = useState<boolean>(false)
   const [gifUrl, setGifUrl] = useState<string>('/images/mint/ordinary.gif')
   const [seniorCount, setSeniorCount] = useState<number>(1)
-  const [maxSenior, setMaxSenior] = useState<BigNumber>(BigNumber.from(1))
+  const [maxSenior, setMaxSenior] = useState<number>(1)
   const [ordinaryCount, setOrdinaryCount] = useState<number>(1)
-  const [maxOrdinary, setMaxOrdinary] = useState<BigNumber>(BigNumber.from(1))
+  const [maxOrdinary, setMaxOrdinary] = useState<number>(1)
   const [mintNFTData, setMintNFTData] = useState<any>([])
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [allowance, setAllowance] = useState(BigNumber.from(0))
-  const [bondPayout, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
+  const [bondUnused, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
   const [ordinaryPrice, setOneCost] = useState<BigNumber>(BigNumber.from(0))
   const [seniorPrice, setTwoCost] = useState<BigNumber>(BigNumber.from(0))
   const [bondUsed, setBondUsed] = useState<BigNumber>(BigNumber.from(0))
@@ -96,18 +96,14 @@ const Mint = () => {
         })
 
       if (ordinaryPrice.gt(0)) {
-        if (balance.gt(0)) {
-          setMaxOrdinary(balance.div(ordinaryPrice))
-        } else if (bondPayout.gt(0)) {
-          setMaxOrdinary(bondPayout.div(ordinaryPrice))
-        }
+        const balanceCount = balance.gt(0) ? balance.div(ordinaryPrice).toNumber() : 0
+        const unusedCount = bondUnused.gt(0) ? bondUnused.div(ordinaryPrice).toNumber() : 0
+        setMaxOrdinary(Math.max(balanceCount, unusedCount))
       }
       if (seniorPrice.gt(0)) {
-        if (balance.gt(0)) {
-          setMaxSenior(balance.div(seniorPrice))
-        } else if (bondPayout.gt(0)) {
-          setMaxSenior(bondPayout.div(seniorPrice))
-        }
+        const balanceCount = balance.gt(0) ? balance.div(seniorPrice).toNumber() : 0
+        const unusedCount = bondUnused.gt(0) ? bondUnused.div(seniorPrice).toNumber() : 0
+        setMaxSenior(Math.max(balanceCount, unusedCount))
       }
     }
   }, [account, mintBoxModalVisible, ordinaryPrice, seniorPrice])
@@ -119,7 +115,7 @@ const Mint = () => {
     }
     if (type === 'ordinary') {
       if (useBond) {
-        if (bondPayout.lt(ordinaryPrice.mul(ordinaryCount))) {
+        if (bondUnused.lt(ordinaryPrice.mul(ordinaryCount))) {
           setInsufficientBalanceModalVisible(true)
           return
         }
@@ -129,7 +125,7 @@ const Mint = () => {
       }
     } else if (type === 'senior') {
       if (useBond) {
-        if (bondPayout.lt(seniorPrice.mul(seniorCount))) {
+        if (bondUnused.lt(seniorPrice.mul(seniorCount))) {
           setInsufficientBalanceModalVisible(true)
           return
         }
@@ -232,7 +228,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Unused')}: {formatBigNumber(bondPayout, 2)} DFS
+                    {t('Unused')}: {formatBigNumber(bondUnused, 2)} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -255,7 +251,7 @@ const Mint = () => {
                     <DrawBlindBoxTextBtn
                       className="orangeBtn"
                       onClick={() => {
-                        if (seniorCount < maxSenior.toNumber()) setSeniorCount(seniorCount + 1)
+                        if (seniorCount < maxSenior) setSeniorCount(seniorCount + 1)
                       }}
                     >
                       +
@@ -263,7 +259,7 @@ const Mint = () => {
                     <DrawBlindBoxTextBtn
                       className="orangeBtn"
                       onClick={() => {
-                        setSeniorCount(maxSenior.toNumber())
+                        setSeniorCount(maxSenior)
                       }}
                     >
                       {t('Max')}
@@ -332,7 +328,7 @@ const Mint = () => {
                     {t('Balance')}: {balance ? formatBigNumber(balance, 2) : 0} DFS
                   </AvailableCount>
                   <UnWithdrawCount>
-                    {t('Unused')}: {formatBigNumber(bondPayout, 2)} DFS
+                    {t('Unused')}: {formatBigNumber(bondUnused, 2)} DFS
                   </UnWithdrawCount>
                 </CountWrap>
                 <ActionWrap>
@@ -355,8 +351,7 @@ const Mint = () => {
                     <DrawBlindBoxTextBtn
                       className="purpleBtn"
                       onClick={() => {
-                        if (maxOrdinary.gt(1) && ordinaryCount < maxOrdinary.toNumber())
-                          setOrdinaryCount(ordinaryCount + 1)
+                        if (maxOrdinary > 1 && ordinaryCount < maxOrdinary) setOrdinaryCount(ordinaryCount + 1)
                       }}
                     >
                       +
@@ -364,7 +359,7 @@ const Mint = () => {
                     <DrawBlindBoxTextBtn
                       className="purpleBtn"
                       onClick={() => {
-                        setOrdinaryCount(maxOrdinary.toNumber())
+                        setOrdinaryCount(maxOrdinary)
                       }}
                     >
                       {t('Max')}
