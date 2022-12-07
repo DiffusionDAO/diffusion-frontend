@@ -415,6 +415,19 @@
   },
   {
     "inputs": [],
+    "name": "costSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "customSupply",
     "outputs": [
       {
@@ -1025,9 +1038,22 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "_supply",
-        "type": "uint256"
+        "type": "uint32"
+      }
+    ],
+    "name": "setCostSupply",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_supply",
+        "type": "uint32"
       }
     ],
     "name": "setCustomSupply",

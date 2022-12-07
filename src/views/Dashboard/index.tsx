@@ -82,6 +82,7 @@ const Dashboard = () => {
   const [DSGE, setDSGE] = useState<string>('0')
   const [addLiquiditySupply, setAddLiquiditySupply] = useState<BigNumber>(BigNumber.from(0))
   const [bondRewardWithdrawed, setBondRewardWithdrawed] = useState<BigNumber>(BigNumber.from(0))
+  const [costSupply, setCostSupply] = useState<BigNumber>(BigNumber.from(0))
 
   const clickTab = (tab: string) => {
     setActiveTab(tab)
@@ -137,7 +138,7 @@ const Dashboard = () => {
 
     const customSupply = await bond.customSupply()
     const dfsTotalSupply = await dfs.totalSupply()
-    console.log('dfsTotalSupply:', formatUnits(dfsTotalSupply))
+
     const currentCirculationSupply = dfsTotalSupply
       .sub(daoDFS)
       .sub(foundationDFS)
@@ -149,7 +150,8 @@ const Dashboard = () => {
       .sub(elementaryMintAddressDfs)
       .sub(advancedMintAddressDfs)
       .sub(initialSupply)
-      .add(denominator)
+      .add(addLiquiditySupply)
+      .add(costSupply)
 
     setCirculationSupply(currentCirculationSupply)
 
@@ -177,8 +179,9 @@ const Dashboard = () => {
       .add(withdrawedSocialReward)
       .add(withdrawedSavingReward)
       .add(bondStatistic.withdrawed)
-      .add(denominator)
+      .add(addLiquiditySupply)
       .add(customSupply)
+      .add(costSupply)
 
     setTotalCirculation(totalCirculation)
 
