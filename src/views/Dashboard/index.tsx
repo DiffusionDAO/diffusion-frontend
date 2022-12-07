@@ -94,7 +94,8 @@ const Dashboard = () => {
     const callFactor = await dfsMining.totalCalls()
     setCallfactor(callFactor.toNumber())
 
-    setInitialSupply(await dfs.initialSupply())
+    const initialSupply = await dfs.initialSupply()
+    setInitialSupply(initialSupply)
 
     setDSGE(await dfsMining.DSGE())
 
@@ -105,14 +106,11 @@ const Dashboard = () => {
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
     setTvl(numerator.mul(2))
 
-    const discount = await bond.discount()
     const marketPrice = parseFloat(formatUnits(await bond.getPriceInUSDT()))
-    console.log('marketPrice:', marketPrice)
 
     setMarketPrice(marketPrice)
 
     const foundationDFS = await dfs.balanceOf(foundation)
-    console.log('foundationDFS:', formatUnits(foundationDFS))
     setFoundationDFS(foundationDFS)
 
     const totalPayout = await bond.totalPayout()
@@ -134,11 +132,13 @@ const Dashboard = () => {
     setHolderLength(await dfs.getHoldersLength())
     const bondDfs = await dfs.balanceOf(bond.address)
 
-    setAddLiquiditySupply(await bond.addLiquiditySupply())
-
+    const addLiquiditySupply = await bond.addLiquiditySupply()
+    setAddLiquiditySupply(addLiquiditySupply)
+    // console.log(formatUnits(addLiquiditySupply))
     const customSupply = await bond.customSupply()
     const dfsTotalSupply = await dfs.totalSupply()
-
+    const costSupply = await bond.costSupply()
+    setCostSupply(costSupply)
     const currentCirculationSupply = dfsTotalSupply
       .sub(daoDFS)
       .sub(foundationDFS)
@@ -155,9 +155,14 @@ const Dashboard = () => {
 
     setCirculationSupply(currentCirculationSupply)
 
-    setSingleCurrencyReserves(parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(circulationSupply)))
+    if (circulationSupply.gt(0)) {
+      const solitaryReserves = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(circulationSupply))
+      setSingleCurrencyReserves(solitaryReserves)
 
-    setInflation(((marketPrice - solitaryReserves) * 100) / marketPrice)
+      if (marketPrice > 0 && solitaryReserves > 0) {
+        setInflation((marketPrice - solitaryReserves) / marketPrice)
+      }
+    }
 
     const withdrawedSocialReward = await dfsMining.withdrawedSocialReward()
     const withdrawedSavingReward = await dfsMining.withdrawedSavingReward()
@@ -187,10 +192,12 @@ const Dashboard = () => {
 
     setTotalBondUsed(bondStatistic.bondUsed)
 
-    const debtRatio =
-      (parseFloat(formatUnits(totalPayout.sub(bondStatistic.bondUsed))) * 100) /
-      parseFloat(formatUnits(circulationSupply))
-    setDebtRatio(debtRatio)
+    if (circulationSupply.gt(0)) {
+      const debtRatio =
+        (parseFloat(formatUnits(totalPayout.sub(bondStatistic.bondUsed))) * 100) /
+        parseFloat(formatUnits(circulationSupply))
+      setDebtRatio(debtRatio)
+    }
     // console.log("totalCirculation:",formatUnits(totalCirculation))
 
     // const telegram = await fetch(telegramLink)
@@ -370,7 +377,7 @@ const Dashboard = () => {
                           <div className="cell-sub-item">
                             <DataCell
                               title={t('Inflation')}
-                              data={`${inflation.toFixed(2)}%`}
+                              data={`${(inflation * 100).toFixed(2)}%`}
                               progressColor="#f5d700"
                             />
                           </div>
