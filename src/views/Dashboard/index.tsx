@@ -332,7 +332,7 @@ const Dashboard = () => {
                           {data?.targetInflationRate ? (
                             <div className="ctir-data">{data?.targetInflationRate}%</div>
                           ) : (
-                            <Skeleton witdh={100} />
+                            <Skeleton width={100} />
                           )}
                         </div>
                         <div className="ctir-title">{t('Target inflation rate')}</div>
