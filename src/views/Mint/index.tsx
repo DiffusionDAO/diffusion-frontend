@@ -3,14 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
-import {
-  useBondContract,
-  useDFSMiningContract,
-  useSocialNftContract,
-  useERC20,
-  useTokenContract,
-  useNFTDatabaseContract,
-} from 'hooks/useContract'
+import { useBondContract, useSocialNftContract, useERC20 } from 'hooks/useContract'
 import { getDFSAddress, getSocialNFTAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -64,7 +57,6 @@ const Mint = () => {
   const [maxOrdinary, setMaxOrdinary] = useState<number>(1)
   const [mintNFTData, setMintNFTData] = useState<any>([])
   const [balance, setBalance] = useState(BigNumber.from(0))
-  const [allowance, setAllowance] = useState(BigNumber.from(0))
   const [bondUnused, setBondPayout] = useState<BigNumber>(BigNumber.from(0))
   const [ordinaryPrice, setOneCost] = useState<BigNumber>(BigNumber.from(0))
   const [seniorPrice, setTwoCost] = useState<BigNumber>(BigNumber.from(0))
