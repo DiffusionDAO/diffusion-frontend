@@ -42,18 +42,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   const socianNFTAddress = getSocialNFTAddress()
-  const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC_TESTNET })
+  const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC })
 
   const getToken = await socialNFT.getToken(tokenId)
   const level = getToken?.level?.toString()
   const name = `${levelToName[level]}#${getToken.tokenId}`
 
   const nftMarketAddress = getNftMarketAddress()
-  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
   const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
 
   const dfsMiningAddress = getMiningAddress()
-  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
+  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC })
   const staker = await dfsMining.staker(tokenId)
 
   const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, name, staker }

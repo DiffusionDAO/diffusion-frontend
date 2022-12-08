@@ -99,7 +99,7 @@ const Dashboard = () => {
       withdrawedSocialReward: await dfsMining.withdrawedSocialReward(),
       withdrawedSavingReward: await dfsMining.withdrawedSavingReward(),
       bondUsed: BigNumber.from(0),
-      withdrawed: BigNumber.from(0),
+      bondRewardWithdrawed: BigNumber.from(0),
       solitaryReserves: 0,
       inflationRate: 0,
       debtRatio: 0,
@@ -127,7 +127,7 @@ const Dashboard = () => {
       buyers.map(async (buyer) => {
         const referral = await bond.addressToReferral(buyer)
         dashboard.bondUsed = dashboard.bondUsed.add(referral.bondUsed)
-        dashboard.withdrawed = dashboard.withdrawed.add(referral.bondRewardWithdrawed)
+        dashboard.bondRewardWithdrawed = dashboard.bondRewardWithdrawed.add(referral.bondRewardWithdrawed)
       }),
     )
     dashboard.currentCirculationSupply = dashboard.dfsTotalSupply
@@ -149,8 +149,7 @@ const Dashboard = () => {
       .div(1000)
       .add(dashboard.withdrawedSocialReward)
       .add(dashboard.withdrawedSavingReward)
-      .add(dashboard.withdrawed)
-      .add(dashboard.addLiquiditySupply)
+      .add(denominator)
       .add(dashboard.customSupply)
       .add(dashboard.costSupply)
 
@@ -203,11 +202,10 @@ const Dashboard = () => {
 
     const response = await fetch('https://middle.diffusiondao.org/dashboard')
     const json = await response.json()
-    console.log(dashboard)
     return { ...dashboard, ...json }
   })
 
-  // console.log('data:', data)
+  console.log('data:', data)
 
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign

@@ -7,7 +7,7 @@ const bondDatas = [
     to: '/images/bond/usdt.png',
     price: '0',
     discount: 3,
-    duration: '5 Days',
+    duration: '10 Days',
     balance: 0,
     maxFee: '0',
     getFee: '0',

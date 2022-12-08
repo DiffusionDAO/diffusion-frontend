@@ -3,7 +3,7 @@ import Typed from 'react-typed'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { getUSDTAddress, getMiningAddress, getDFSAddress, getPairAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useBondContract, useDFSContract, useDFSMiningContract, useERC20, usePairContract } from 'hooks/useContract'
@@ -60,11 +60,12 @@ const Bond = () => {
   const [usdtAmount, setUsdtAmount] = useState<BigNumber>(BigNumber.from(0))
   const [bondDFS, setBondDFS] = useState<BigNumber>(BigNumber.from(0))
   const [foundationDFS, setFoundationDFS] = useState<BigNumber>(BigNumber.from(0))
+  const [discount, setDiscount] = useState<number>(0)
 
   const [isApprove, setIsApprove] = useState<boolean>(false)
   const [bondItem, setBondItem] = useState<any>(null)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
-  const [marketPrice, setMarketPrice] = useState<string>()
+  const [marketPrice, setMarketPrice] = useState<BigNumber>(BigNumber.from(0))
   const bond = useBondContract()
   const dfs = useDFSContract()
   const usdtAddress = getUSDTAddress()
@@ -79,16 +80,16 @@ const Bond = () => {
     const foundationDFS = await dfs.balanceOf(foundation)
     setFoundationDFS(foundationDFS)
 
-    const price = await bond.getPriceInUSDT()
-    bondDatas[0].price = formatBigNumber(price.mul(97).div(100), 2)
-    setMarketPrice(formatBigNumber(price, 2))
-  })
+    const discount = await bond.discount()
+    console.log('discount:', discount)
+    setDiscount(discount.toNumber())
 
-  useEffect(() => {
-    bond.discount().then((res) => {
-      bondDatas[0].discount = res
-    })
-  }, [account])
+    bondDatas[0].discount = discount
+
+    const marketPrice = await bond.getPriceInUSDT()
+    bondDatas[0].price = formatBigNumber(marketPrice.mul(10000 - discount).div(10000), 2)
+    setMarketPrice(marketPrice)
+  })
 
   const openBondModal = (item) => {
     setBondItem(item)
@@ -142,7 +143,7 @@ const Bond = () => {
     setBondData([dfsUsdt, ...bondDatas.slice(1)])
     dfs
       .totalSupply()
-      .then((res) => setDfsTotalSupply(res * parseFloat(marketPrice)))
+      .then((res) => setDfsTotalSupply(res * parseFloat(formatUnits(marketPrice))))
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
@@ -167,13 +168,24 @@ const Bond = () => {
         <OverviewCard isMobile={isMobile}>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
-            <OverviewCardItemContent isMobile={isMobile}>
-              ${(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * parseFloat(marketPrice)).toFixed(2)}
-            </OverviewCardItemContent>
+            {foundationDFS && bondDFS && marketPrice.gt(0) ? (
+              <OverviewCardItemContent isMobile={isMobile}>
+                $
+                {(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * parseFloat(formatUnits(marketPrice))).toFixed(
+                  2,
+                )}
+              </OverviewCardItemContent>
+            ) : (
+              <Skeleton />
+            )}
           </OverviewCardItem>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Price of DFS')}</OverviewCardItemTitle>
-            <OverviewCardItemContent isMobile={isMobile}>${marketPrice ?? 0}</OverviewCardItemContent>
+            {marketPrice.gt(0) ? (
+              <OverviewCardItemContent isMobile={isMobile}>${formatBigNumber(marketPrice, 2)}</OverviewCardItemContent>
+            ) : (
+              <Skeleton />
+            )}
           </OverviewCardItem>
         </OverviewCard>
         {isMobile ? (

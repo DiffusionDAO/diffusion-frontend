@@ -74,8 +74,8 @@ export const bsc: Chain = {
   name: 'BNB Smart Chain',
   network: 'bsc',
   rpcUrls: {
-    public: 'https://bsc-dataseed1.binance.org',
-    default: 'https://bsc-dataseed1.binance.org',
+    public: 'https://bsc-dataseed2.defibit.io',
+    default: 'https://bsc-dataseed2.defibit.io',
   },
   blockExplorers: {
     default: bscExplorer,
