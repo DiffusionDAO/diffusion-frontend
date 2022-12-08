@@ -1,0 +1,134 @@
+import { ResetCSS, ToastListener } from '@pancakeswap/uikit'
+import { NetworkModal } from 'components/NetworkModal'
+import { useAccountEventListener } from 'hooks/useAccountEventListener'
+import useEagerConnect from 'hooks/useEagerConnect'
+import useEagerConnectMP from 'hooks/useEagerConnect.bmp'
+import useSentryUser from 'hooks/useSentryUser'
+import useThemeCookie from 'hooks/useThemeCookie'
+import useUserAgent from 'hooks/useUserAgent'
+import { NextPage } from 'next'
+import type { AppProps } from 'next/app'
+import Head from 'next/head'
+import { Fragment, useState, useEffect } from 'react'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistor, useStore } from 'state'
+import { useDFSMiningContract } from 'hooks/useContract'
+import { useRouter } from 'next/router'
+
+import { Blocklist, Updaters } from '..'
+import { SentryErrorBoundary } from '../components/ErrorBoundary'
+import Halo from '../components/Halo'
+import Menu from '../components/Menu'
+import Providers from '../Providers'
+import GlobalStyle from '../style/Global'
+import 'antd/dist/antd.css'
+import './ido.scss'
+import './index.scss'
+import './animation.scss'
+import './cover.scss'
+import './DiffusionChart.scss'
+import './Dashboard.scss'
+import { useWeb3React } from '../../packages/wagmi/src/useWeb3React'
+
+function GlobalHooks() {
+  useEagerConnect()
+  useUserAgent()
+  useAccountEventListener()
+  useSentryUser()
+  useThemeCookie()
+  return null
+}
+
+function MPGlobalHooks() {
+  useEagerConnectMP()
+  useUserAgent()
+  useAccountEventListener()
+  useSentryUser()
+  return null
+}
+
+function MyApp(props: AppProps<{ initialReduxState: any }>) {
+  const { pageProps, Component } = props
+  const store = useStore(pageProps.initialReduxState)
+
+  return (
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1, viewport-fit=cover"
+        />
+        <meta name="description" content="Diffusion" />
+
+        <title>Diffusion</title>
+        {(Component as NextPageWithLayout).mp && (
+          // eslint-disable-next-line @next/next/no-sync-scripts
+          <script src="https://public.bnbstatic.com/static/js/mp-webview-sdk/webview-v1.0.0.min.js" id="mp-webview" />
+        )}
+      </Head>
+      <Providers store={store}>
+        <Blocklist>
+          {(Component as NextPageWithLayout).mp ? <MPGlobalHooks /> : <GlobalHooks />}
+          <ResetCSS />
+          <GlobalStyle />
+          {/* <GlobalCheckClaimStatus excludeLocations={[]} /> */}
+          <PersistGate loading={null} persistor={persistor}>
+            <Updaters />
+            <App {...props} />
+          </PersistGate>
+        </Blocklist>
+      </Providers>
+    </>
+  )
+}
+
+type NextPageWithLayout = NextPage & {
+  Layout?: React.FC<React.PropsWithChildren<unknown>>
+  pure?: true
+  mp?: boolean
+  chains?: number[]
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+const ProductionErrorBoundary = process.env.NODE_ENV === 'production' ? SentryErrorBoundary : Fragment
+
+const App = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const router = useRouter()
+  const [whitelist, setWhitelist] = useState<string[]>([])
+  const { account } = useWeb3React()
+  const dfsMining = useDFSMiningContract()
+  useEffect(() => {
+    dfsMining
+      .getPrivateWhitelist()
+      .then((res) => setWhitelist(res))
+      .catch((error) => console.log(error))
+  }, [account, dfsMining])
+  if (router.pathname === '/private' && !whitelist.includes(account)) {
+    return <></>
+  }
+
+  if (Component.pure) {
+    return <Component {...pageProps} />
+  }
+
+  // Use the layout defined at the page level, if available
+  const Layout = Component.Layout || Fragment
+  const ShowMenu = Component.mp ? Fragment : Menu
+  return (
+    <ProductionErrorBoundary>
+      <ShowMenu>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ShowMenu>
+      <Halo />
+      <ToastListener />
+      <NetworkModal pageSupportedChains={Component.chains} />
+    </ProductionErrorBoundary>
+  )
+}
+
+export default MyApp

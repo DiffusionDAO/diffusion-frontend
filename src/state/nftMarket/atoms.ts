@@ -1,0 +1,6 @@
+import { atom } from 'jotai'
+
+export const nftMarketFiltersAtom = atom({})
+export const nftMarketActivityFiltersAtom = atom({})
+export const nftMarketCollectionAtom = atom({})
+export const tryVideoNftMediaAtom = atom(true)
