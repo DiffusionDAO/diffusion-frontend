@@ -1,5 +1,6 @@
 import { CSSProperties } from '@material-ui/core/styles/withStyles'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { Skeleton } from '@pancakeswap/uikit'
 
 interface Props {
   title: string
@@ -9,6 +10,7 @@ interface Props {
   titleStyle?: CSSProperties
   imgUrl?: string
   progressColor?: string
+  isLoading?: boolean
 }
 export const DataCell: React.FC<Props> = (props) => {
   return (
@@ -17,7 +19,11 @@ export const DataCell: React.FC<Props> = (props) => {
         <div className="data-cell-title" style={props.titleStyle}>
           {props.title}
         </div>
-        <div className="data-cell-content">{props.data}</div>
+        {props.data !== undefined && props.data !== 'NaN' ? (
+          <div className="data-cell-content">{props.data}</div>
+        ) : (
+          <Skeleton width={100} />
+        )}
       </div>
       {props.imgUrl && (
         <div className="data-cell-img">

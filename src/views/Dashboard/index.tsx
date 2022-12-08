@@ -3,7 +3,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { makeStyles } from '@material-ui/core/styles'
 import { useState } from 'react'
 import useSWR from 'swr'
-import { Spinner, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useBondContract, useDFSContract, useDFSMiningContract, usePairContract } from 'hooks/useContract'
 import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -66,7 +66,7 @@ const Dashboard = () => {
   const { isMobile } = useMatchBreakpoints()
   const classes = useStyles()
   const [activeTab, setActiveTab] = useState<string>('Overview')
-  const [holderLength, setHolderLength] = useState<number>(0)
+  const [holderLength, setHolderLength] = useState<number>(undefined)
 
   const clickTab = (tab: string) => {
     setActiveTab(tab)
@@ -207,7 +207,7 @@ const Dashboard = () => {
     return { ...dashboard, ...json }
   })
 
-  console.log('data:', data)
+  // console.log('data:', data)
 
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign
@@ -221,9 +221,9 @@ const Dashboard = () => {
   const dfsAddress = getDFSAddress()
 
   const expansionFund =
-    data?.foundationDFS && data?.marketPrice
-      ? (parseFloat(formatUnits(data?.foundationDFS)) * data?.marketPrice).toFixed(2)
-      : 0
+    data?.foundationDFS &&
+    data?.marketPrice &&
+    (parseFloat(formatUnits(data?.foundationDFS)) * data?.marketPrice).toFixed(2)
   return (
     <div className="dashboard-view">
       <Typography variant="h4" style={{ fontWeight: 700, overflow: 'hidden', color: '#fff' }}>
@@ -263,7 +263,7 @@ const Dashboard = () => {
                           <div className="cell-sub-item">
                             <DataCell
                               title={t('TVL')}
-                              data={`$${formatBigNumber(data?.tvl ?? BigNumber.from(0), 2)}`}
+                              data={data?.tvl && `$${formatBigNumber(data?.tvl, 2)}`}
                               style={{ fontSize: '32px' }}
                             />
                             <DataCell title="" data="" imgUrl="/images/dashboard/tvl.svg" />
@@ -273,11 +273,14 @@ const Dashboard = () => {
                           <div className={`${classes.hasRLBorder} cell-sub-item`}>
                             <DataCell
                               title={t('Total circulation')}
-                              data={`${formatBigNumber(data?.totalCirculationSupply ?? BigNumber.from(0), 2)} DFS`}
+                              data={
+                                data?.totalCirculationSupply &&
+                                `${formatBigNumber(data?.totalCirculationSupply, 2)} DFS`
+                              }
                             />
                             <DataCell
                               title={t('Solitary Reserve')}
-                              data={`$${formatNumber(data?.solitaryReserves ?? 0, 2)}`}
+                              data={data?.solitaryReserves && `$${formatNumber(data?.solitaryReserves, 2)}`}
                             />
                           </div>
                         </Grid>
@@ -285,12 +288,15 @@ const Dashboard = () => {
                           <div className="cell-sub-item">
                             <DataCell
                               title={t('Current circulation volume')}
-                              data={`${formatBigNumber(data?.currentCirculationSupply ?? BigNumber.from(0), 2)} DFS`}
+                              data={
+                                data?.currentCirculationSupply &&
+                                `${formatBigNumber(data?.currentCirculationSupply, 2)} DFS`
+                              }
                               imgUrl="/images/dashboard/rf.svg"
                             />
                             <DataCell
                               title={t('Expansion Fund')}
-                              data={`$${expansionFund}`}
+                              data={expansionFund && `$${expansionFund}`}
                               imgUrl="/images/dashboard/rm.svg"
                             />
                           </div>
@@ -323,7 +329,11 @@ const Dashboard = () => {
                             }}
                             value={8}
                           />
-                          <div className="ctir-data">{data?.targetInflationRate}%</div>
+                          {data?.targetInflationRate ? (
+                            <div className="ctir-data">{data?.targetInflationRate}%</div>
+                          ) : (
+                            <Skeleton witdh={100} />
+                          )}
                         </div>
                         <div className="ctir-title">{t('Target inflation rate')}</div>
                       </div>
@@ -339,7 +349,7 @@ const Dashboard = () => {
                           >
                             <DataCell
                               title={t('Household savings rate')}
-                              data={`${data?.houseHoldSavingsRate ?? 0}%`}
+                              data={data?.houseHoldSavingsRate && `${data?.houseHoldSavingsRate}%`}
                               progressColor="#f200ff"
                             />
                           </div>
@@ -351,7 +361,7 @@ const Dashboard = () => {
                           >
                             <DataCell
                               title={t('DSGE suitability')}
-                              data={`${data?.DSGE ?? 0}%`}
+                              data={data?.DSGE && `${data?.DSGE ?? 0}%`}
                               progressColor="#01ffed"
                             />
                           </div>
@@ -360,7 +370,7 @@ const Dashboard = () => {
                           <div className="cell-sub-item">
                             <DataCell
                               title={t('Inflation')}
-                              data={`${(data?.inflationRate ?? 0 * 100).toFixed(2)}%`}
+                              data={data?.inflationRate && `${(data?.inflationRate * 100).toFixed(2)}%`}
                               progressColor="#f5d700"
                             />
                           </div>
@@ -369,7 +379,7 @@ const Dashboard = () => {
                           <div className="cell-sub-item">
                             <DataCell
                               title={t('Debt ratio')}
-                              data={`${formatNumber(data?.debtRatio ?? 0, 2)}%`}
+                              data={data?.debtRatio && `${formatNumber(data?.debtRatio ?? 0, 2)}%`}
                               progressColor="#0131ff"
                             />
                           </div>
@@ -397,17 +407,17 @@ const Dashboard = () => {
                         {/* {/* <h3 className="di-content">{eleven}</h3> */}
                         <DataCell
                           title={t('Diffusion Coefficient')}
-                          data={holderLength.toString()}
+                          data={holderLength && holderLength.toString()}
                           titleStyle={{ color: '#ABB6FF' }}
                         />
                         <DataCell
                           title={t('Attention Factor')}
-                          data={conentractions.length ? avgConentraction?.toString() : '0'}
+                          data={conentractions && avgConentraction?.toString()}
                           titleStyle={{ color: '#ABB6FF' }}
                         />
                         <DataCell
                           title={t('Call Factor')}
-                          data={data?.callFactor.toString()}
+                          data={data?.callFactor && data?.callFactor.toString()}
                           imgUrl="/images/dashboard/cf.png"
                           titleStyle={{ color: '#ABB6FF' }}
                           imgStyle={{ height: '85px', width: '54px' }}
@@ -420,7 +430,7 @@ const Dashboard = () => {
                       <div className="cell-sub-item">
                         <DataCell
                           title={t('Expansion Fund')}
-                          data={`$${expansionFund}`}
+                          data={expansionFund && `$${expansionFund}`}
                           imgUrl="/images/dashboard/rz.svg"
                         />
                       </div>
@@ -432,8 +442,8 @@ const Dashboard = () => {
           </Grid>
         ) : null}
 
-        {/* echarts图表 */}
-        {!(isMobile && activeTab !== 'Chart') ? (
+        {/* echarts */}
+        {false && !(isMobile && activeTab !== 'Chart') ? (
           <>
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <Grid container spacing={2}>
