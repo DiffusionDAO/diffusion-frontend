@@ -21,7 +21,6 @@ const UserNfts: React.FC<{
     <>
       {nfts?.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
-          {/* <NoNftsImage /> */}
           <Text pt="8px" bold>
             {t('No NFTs found')}
           </Text>
@@ -50,6 +49,7 @@ const UserNfts: React.FC<{
           })}
         </Grid>
       ) : (
+        // null
         <GridPlaceholder />
       )}
     </>
