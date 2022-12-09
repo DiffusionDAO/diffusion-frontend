@@ -74,8 +74,8 @@ export const bsc: Chain = {
   name: 'BNB Smart Chain',
   network: 'bsc',
   rpcUrls: {
-    public: 'https://bsc-dataseed2.defibit.io',
-    default: 'https://bsc-dataseed2.defibit.io',
+    public: 'https://red-purple-meme.bsc.quiknode.pro/4dabd14fa4d6d0e7be2de8fb6b6d6519f68e43e7/',
+    default: 'https://red-purple-meme.bsc.quiknode.pro/4dabd14fa4d6d0e7be2de8fb6b6d6519f68e43e7/',
   },
   blockExplorers: {
     default: bscExplorer,
