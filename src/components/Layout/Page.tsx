@@ -7,8 +7,10 @@ import { useRouter } from 'next/router'
 import { DEFAULT_META, getCustomMeta } from 'config/constants/meta'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import { BigNumber } from '@ethersproject/bignumber'
-import { formatBigNumber } from 'utils/formatBalance'
-import { useBondContract, useDFSMiningContract } from 'hooks/useContract'
+import { formatBigNumber, formatNumber } from 'utils/formatBalance'
+import { useBondContract, useDFSMiningContract, usePairContract } from 'hooks/useContract'
+import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
+import { formatUnits } from '@ethersproject/units'
 import Container from './Container'
 
 const StyledPage = styled(Container)`
@@ -34,13 +36,25 @@ export const PageMeta: React.FC<React.PropsWithChildren<{ symbol?: string }>> = 
   } = useTranslation()
   const { pathname } = useRouter()
   const bond = useBondContract()
-  const [dfsPrice, setDfsPrice] = useState<BigNumber>(BigNumber.from(0))
-  bond.getPriceInUSDT().then((res) => {
-    setDfsPrice(res)
+  const [dfsPrice, setDfsPrice] = useState<number>(0)
+  const pairAddress = getPairAddress()
+
+  const dfsAddress = getDFSAddress()
+  const usdtAddress = getUSDTAddress()
+  const pair = usePairContract(pairAddress)
+  pair.getReserves().then(reserves=>{
+    const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+    const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
+    setDfsPrice(marketPrice)
   })
+    
+
+  // bond.getPriceInUSDT().then((res) => {
+  //   setDfsPrice(res)
+  // })
   const pageMeta = getCustomMeta(pathname, t, locale) || {}
   const { title, description, image } = { ...DEFAULT_META, ...pageMeta }
-  let pageTitle = dfsPrice ? [title, formatBigNumber(dfsPrice, 3)].join(' - ') : title
+  let pageTitle = dfsPrice ? [title, formatNumber(dfsPrice, 2)].join(' - ') : title
   if (symbol) {
     pageTitle = [symbol, title].join(' - ')
   }

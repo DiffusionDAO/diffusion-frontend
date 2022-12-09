@@ -67,6 +67,7 @@ const Dashboard = () => {
   const classes = useStyles()
   const [activeTab, setActiveTab] = useState<string>('Overview')
   const [holderLength, setHolderLength] = useState<number>(undefined)
+  const pair = usePairContract(getPairAddress())
 
   const clickTab = (tab: string) => {
     setActiveTab(tab)
@@ -75,13 +76,20 @@ const Dashboard = () => {
   const dfs = useDFSContract()
   const bond = useBondContract()
   const { data } = useSWR('dashboard', async () => {
+    const dfsAddress = getDFSAddress()
+    const usdtAddress = getUSDTAddress()
+    const reserves = await pair.getReserves()
+    const [numerator, denominator] =
+      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+    const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
+
     const dashboard = {
       callFactor: await dfsMining.totalCalls(),
       initialSupply: await dfs.initialSupply(),
       DSGE: await dfsMining.DSGE(),
       houseHoldSavingsRate: await dfsMining.HouseHoldSavingsRate(),
       tvl: BigNumber.from(0),
-      marketPrice: parseFloat(formatUnits(await bond.getPriceInUSDT())),
+      marketPrice,
       foundationDFS: await dfs.balanceOf(foundation),
       elementaryPayoutMintAddressDfs: await dfs.balanceOf(elementaryPayoutMintAddress),
       advancedPayoutMintAddressDfs: await dfs.balanceOf(advancedPayoutMintAddress),
@@ -108,10 +116,8 @@ const Dashboard = () => {
       targetInflationRate: await bond.targetInflationRate(),
     }
 
-    const reserves = await pair.getReserves()
-    const [numerator, denominator] =
-      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
     dashboard.tvl = numerator.mul(2)
+
 
     dashboard.daoDFS = (await Promise.all(dao.map(async (d) => dfs.balanceOf(d)))).reduce((accum, curr) => {
       // eslint-disable-next-line no-return-assign, no-param-reassign
@@ -212,8 +218,6 @@ const Dashboard = () => {
   const avgConentraction = conentractions.reduce((acc, cur) => (acc += cur), 0) / conentractions.length
 
   const time = new Date()
-
-  const pair = usePairContract(getPairAddress())
 
   const usdtAddress = getUSDTAddress()
   const dfsAddress = getDFSAddress()

@@ -84,7 +84,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [amount, setAmount] = useState<string>('')
   const [activeTab, setActiveTab] = useState<string>('mint')
   const [bondPrice, setBondPrice] = useState<string>('0')
-  const [marketPrice, setMarketPrice] = useState<BigNumber>(BigNumber.from(0))
+  const [marketPrice, setMarketPrice] = useState<number>(0)
   const [dfsBalance, setDfsBalance] = useState<string>()
   const [minPrice, setMinPrice] = useState<BigNumber>()
   const [vestingTerms, setVestingTerms] = useState<string>('')
@@ -158,10 +158,20 @@ const BondModal: React.FC<BondModalProps> = ({
         }
       })
       .catch((error) => console.log(error))
-    bond.getPriceInUSDT().then((res) => {
-      setMarketPrice(res)
-      setBondPrice(formatBigNumber(res.mul(10000 - bondData.discount).div(10000), 2))
-    })
+
+      const dfsAddress = getDFSAddress()
+      const usdtAddress = getUSDTAddress()
+      pair.getReserves().then(reserves=>{
+        const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+        const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
+        setMarketPrice(marketPrice)
+        setBondPrice(formatNumber(marketPrice * (10000 - bondData.discount) / 10000,2))
+      })
+        
+    // bond.getPriceInUSDT().then((res) => {
+    //   setMarketPrice(res)
+    //   setBondPrice(formatBigNumber(res.mul(10000 - bondData.discount).div(10000), 2))
+    // })
 
     if (account) {
       bond
@@ -280,7 +290,7 @@ const BondModal: React.FC<BondModalProps> = ({
             </ContentCell>
             <ContentCell>
               <CellTitle>{t('Market price')}</CellTitle>
-              <CellText>${formatBigNumber(marketPrice, 2) ?? 0}</CellText>
+              <CellText>${formatNumber(marketPrice, 2) ?? 0}</CellText>
             </ContentCell>
           </BondListItemContent>
         </BondListItem>

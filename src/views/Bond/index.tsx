@@ -65,7 +65,7 @@ const Bond = () => {
   const [isApprove, setIsApprove] = useState<boolean>(false)
   const [bondItem, setBondItem] = useState<any>(null)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
-  const [marketPrice, setMarketPrice] = useState<BigNumber>(BigNumber.from(0))
+  const [marketPrice, setMarketPrice] = useState<number>(0)
   const bond = useBondContract()
   const dfs = useDFSContract()
   const usdtAddress = getUSDTAddress()
@@ -80,15 +80,27 @@ const Bond = () => {
     const foundationDFS = await dfs.balanceOf(foundation)
     setFoundationDFS(foundationDFS)
 
+    const pairAddress = getPairAddress()
+    const dfsAddress = getDFSAddress()
+    const usdtAddress = getUSDTAddress()
+    console.log("pairAddress:",pairAddress, dfsAddress ,usdtAddress)
+    console.log("pair:",pair)
+    const reserves = await pair.getReserves()
+    console.log("reserves:",reserves, pairAddress)
+    const [numerator, denominator] =
+      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+    const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
+    bondDatas[0].price = formatNumber(marketPrice,2)
+    console.log('numerator:', numerator, denominator)
+    setMarketPrice(marketPrice)
+
     const discount = await bond.discount()
-    console.log('discount:', discount)
+    console.log('discount:', discount.toNumber())
     setDiscount(discount.toNumber())
 
     bondDatas[0].discount = discount
 
-    const marketPrice = await bond.getPriceInUSDT()
-    bondDatas[0].price = formatBigNumber(marketPrice.mul(10000 - discount).div(10000), 2)
-    setMarketPrice(marketPrice)
+
   })
 
   const openBondModal = (item) => {
@@ -143,7 +155,7 @@ const Bond = () => {
     setBondData([dfsUsdt, ...bondDatas.slice(1)])
     dfs
       .totalSupply()
-      .then((res) => setDfsTotalSupply(res * parseFloat(formatUnits(marketPrice))))
+      .then((res) => setDfsTotalSupply(res * marketPrice))
       .catch((error) => {
         console.log(error.reason ?? error.data?.message ?? error.message)
       })
@@ -168,10 +180,10 @@ const Bond = () => {
         <OverviewCard isMobile={isMobile}>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
-            {foundationDFS && bondDFS && marketPrice.gt(0) ? (
+            {foundationDFS && bondDFS && marketPrice > 0 ? (
               <OverviewCardItemContent isMobile={isMobile}>
                 $
-                {(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * parseFloat(formatUnits(marketPrice))).toFixed(
+                {(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * marketPrice).toFixed(
                   2,
                 )}
               </OverviewCardItemContent>
@@ -181,8 +193,8 @@ const Bond = () => {
           </OverviewCardItem>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Price of DFS')}</OverviewCardItemTitle>
-            {marketPrice.gt(0) ? (
-              <OverviewCardItemContent isMobile={isMobile}>${formatBigNumber(marketPrice, 2)}</OverviewCardItemContent>
+            {marketPrice > 0 ? (
+              <OverviewCardItemContent isMobile={isMobile}>${formatNumber(marketPrice, 2)}</OverviewCardItemContent>
             ) : (
               <Skeleton />
             )}

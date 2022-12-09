@@ -43,6 +43,7 @@ const useTokenBalance = (tokenAddress: string, forceBSC?: boolean) => {
 export const useGetBnbBalance = () => {
   const { account } = useWeb3React()
   const { status, data, mutate } = useSWR([account, 'bnbBalance'], async () => {
+    
     return bscRpcProvider.getBalance(account)
   })
 

@@ -11,26 +11,26 @@ const useBlockCountdown = (blockNumber: number) => {
 
   useEffect(() => {
     const startCountdown = async () => {
-      const currentBlock = await bscRpcProvider.getBlockNumber()
+      // const currentBlock = await bscRpcProvider.getBlockNumber()
 
-      if (blockNumber > currentBlock) {
-        setSecondsRemaining((blockNumber - currentBlock) * BSC_BLOCK_TIME)
+      // if (blockNumber > currentBlock) {
+      //   setSecondsRemaining((blockNumber - currentBlock) * BSC_BLOCK_TIME)
 
-        // Clear previous interval
-        if (timer.current) {
-          clearInterval(timer.current)
-        }
+      //   // Clear previous interval
+      //   if (timer.current) {
+      //     clearInterval(timer.current)
+      //   }
 
-        timer.current = setInterval(() => {
-          setSecondsRemaining((prevSecondsRemaining) => {
-            if (prevSecondsRemaining === 1) {
-              clearInterval(timer.current)
-            }
+      //   timer.current = setInterval(() => {
+      //     setSecondsRemaining((prevSecondsRemaining) => {
+      //       if (prevSecondsRemaining === 1) {
+      //         clearInterval(timer.current)
+      //       }
 
-            return prevSecondsRemaining - 1
-          })
-        }, 1000)
-      }
+      //       return prevSecondsRemaining - 1
+      //     })
+      //   }, 1000)
+      // }
     }
 
     startCountdown()
