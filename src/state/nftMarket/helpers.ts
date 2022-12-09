@@ -94,7 +94,6 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
     const name = await erc721.name()
     const totalSupply = await erc721.totalSupply()
     const totalVolume = await nftMarket.totalVolume(collectionAddress)
-    console.log('getCollection:', collectionAddress)
     return {
       [collectionAddress]: {
         name,

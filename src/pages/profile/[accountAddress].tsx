@@ -124,6 +124,7 @@ const SORT_FIELD_INDEX_MAP = new Map([
   [levelToName['6'], 7],
 ])
 export const nftToNftToken = (nft: NFT) => {
+  const socialNFTAddress = getSocialNFTAddress()
   const tokenId = nft?.tokenId?.toString()
   const level = nft?.level
   const price = nft?.price ?? BigNumber.from(0)
@@ -138,7 +139,7 @@ export const nftToNftToken = (nft: NFT) => {
       thumbnail: `/images/nfts/socialnft/${level}`,
     },
     level,
-    attributes: [
+    attributes: [ nft.collectionAddress === socialNFTAddress &&
       {
         traitType: 'SPOS',
         value: levelToSPOS[level].validSPOS,

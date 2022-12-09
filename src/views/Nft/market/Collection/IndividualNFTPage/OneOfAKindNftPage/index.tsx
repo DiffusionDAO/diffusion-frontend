@@ -4,7 +4,7 @@ import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import noop from 'lodash/noop'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import PageLoader from 'components/Loader/PageLoader'
-import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
+import { getNFTDatabaseAddress, getSocialNFTAddress, getStarlightAddress } from 'utils/addressHelpers'
 import { NftToken } from 'state/nftMarket/types'
 
 import {
@@ -16,14 +16,17 @@ import {
 import { formatBigNumber } from 'utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
+import { getContract } from 'utils/contractHelpers'
 
 import { formatUnits } from '@ethersproject/units'
 import useSWR from 'swr'
+import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
 import DetailsCard from '../shared/DetailsCard'
 import { useWeb3React } from '../../../../../../../packages/wagmi/src/useWeb3React'
+import { ChainId } from '../../../../../../../packages/swap-sdk/src/constants'
 
 interface IndividualNFTPageProps {
   collectionAddress: string
@@ -55,12 +58,14 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const bgOffset = !isMobile ? '40px' : '80px'
   const [nft, setNFT] = useState<NFT>()
   const collection = useGetCollection(collectionAddress)
-  const socialNFT = useSocialNftContract()
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
+  const socialNFTAddress = getSocialNFTAddress()
 
+  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC })
+  
   const getToken = async () => {
-    const getToken = await socialNFT.getToken(tokenId)
+    const getToken = await erc721a.getToken(tokenId)
     const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
     const staker = await dfsMining.staker(tokenId)
     const nft = { ...getToken, ...sellPrice, staker }
@@ -69,16 +74,18 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
     if (collectionAddress === starLightAddress) {
       thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
     }
+    const name = collectionAddress === socialNFTAddress ? `${levelToName[nft?.level]}#${nft?.tokenId}` : `StarLight#${nft?.tokenId}`
+
     const level = nft?.level
     const nftToken: NftToken = {
       tokenId,
       collectionAddress,
       collectionName: t(collection.name),
-      name: `${t(levelToName[level])}#${tokenId}`,
+      name,
       description: t(nft?.collectionName),
       image: { original: 'string', thumbnail },
       level,
-      attributes: [
+      attributes: collectionAddress === socialNFTAddress && [
         { traitType: t('Valid SPOS'), value: levelToSPOS[level].validSPOS, displayType: '' },
         { traitType: t('Unlockable SPOS'), value: levelToSPOS[level].unlockableSPOS, displayType: '' },
       ],

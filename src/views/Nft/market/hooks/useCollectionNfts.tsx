@@ -121,8 +121,11 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const [tokenIds, setTokenIds] = useState<number[]>()
   const [tokenIdsOnSale, setTokenIdsOnSale] = useState<number[]>()
   const [tokens, setTokens] = useState<any[]>()
-  const socianNFTAddress = getSocialNFTAddress()
-  const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC })
+  const socialNFTAddress = getSocialNFTAddress()
+  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC })
+
+  const starlightAddress = getStarlightAddress()
+  const starlight = getContract({ abi: socialNFTAbi, address: starlightAddress, chainId: ChainId.BSC })
 
   const nftMarketAddress = getNftMarketAddress()
   const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
@@ -204,11 +207,10 @@ export const useCollectionNfts = (collectionAddress: string) => {
           let thumbnail
           let name
           const starLightAddress = getStarlightAddress()
-          const dfsNFTAddress = getSocialNFTAddress()
           if (collectionAddress === starLightAddress) {
             thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
             name = `StarLight#${tokenId}`
-          } else if (collectionAddress === dfsNFTAddress) {
+          } else if (collectionAddress === socialNFTAddress) {
             thumbnail = `/images/nfts/socialnft/${level}`
             name = `${t(levelToName[level])}#${tokenId}`
           }
@@ -223,7 +225,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
               thumbnail,
             },
             level,
-            attributes: [{ traitType: 'SPOS', value: levelToSPOS[level], displayType: '' }],
+            attributes: [collectionAddress === socialNFTAddress && { traitType: 'SPOS', value: levelToSPOS[level], displayType: '' }],
             createdAt: '',
             updatedAt: '',
             location: NftLocation.FORSALE,
@@ -250,9 +252,9 @@ export const useCollectionNfts = (collectionAddress: string) => {
       if (settings.showOnlyNftsOnSale) {
         newNfts = await Promise.all(
           tokenIdsOnSale.map(async (tokenId) => {
-            const token = await socialNFT.getToken(tokenId)
+            const token = collectionAddress === socialNFTAddress ? await socialNFT.getToken(tokenId) : await starlight.getToken(tokenId) 
             const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
-            const name = `${t(levelToName[token.level])}#${token.tokenId}`
+            const name = collectionAddress === socialNFTAddress ? `${levelToName[token.level]}#${token.tokenId}` : `StarLight#${token.tokenId}`
             const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
             return nftToNftToken(nft)
           }),

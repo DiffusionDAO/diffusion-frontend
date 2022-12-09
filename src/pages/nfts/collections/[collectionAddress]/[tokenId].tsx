@@ -41,12 +41,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
 
-  const socianNFTAddress = getSocialNFTAddress()
-  const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC })
+  const socialNFTAddress = getSocialNFTAddress()
+  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC })
+  // const starlight = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC })
 
-  const getToken = await socialNFT.getToken(tokenId)
+  const getToken = await erc721a.getToken(tokenId) 
   const level = getToken?.level?.toString()
-  const name = `${levelToName[level]}#${getToken.tokenId}`
+  const name = collectionAddress === socialNFTAddress ? `${levelToName[level]}#${getToken.tokenId}` : `StarLight#${getToken.tokenId}`
 
   const nftMarketAddress = getNftMarketAddress()
   const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
