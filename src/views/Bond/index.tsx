@@ -183,7 +183,7 @@ const Bond = () => {
             {foundationDFS && bondDFS && marketPrice > 0 ? (
               <OverviewCardItemContent isMobile={isMobile}>
                 $
-                {(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * marketPrice).toFixed(
+                {(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * marketPrice + 10000).toFixed(
                   2,
                 )}
               </OverviewCardItemContent>
