@@ -47,19 +47,19 @@ const { one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelv
   dashboardMock.OverviewData
 
 export const dao = [
-  '0x31637FbB726314F01Aab2010Be0D4D0e1991fADD',
-  '0xAdFe4B22487FC68Ad95fe99081F3BB4D08bBe5f2',
-  '0x4cFE2C39Aab2788A396E67F7629a338944C35069',
-  '0x02bC8e16B0c5d8D7743A866978773dd7837Bd173',
+  '0x18d22D226C113390C6e5dA47B5b5F80Bc7c1f2f2',
+  '0x139Ffb31d9F366333fDAd40B9CCDF9E12E078b0B',
+  '0x364abbFa8f7B8F7833BB09c0495aC70B9AbaD2c9',
+  '0x3db2C1e3C0F8AfE930029cC673073018A9C8C84F',
 ]
-export const foundation = '0x1D922cB80505811206E745B91078AFBFA7d0EE4D'
-const unstakeNFTAddress = '0xF04750aba81ED3aa683794D3816f61436c6B3FC6'
-const nftMarketDestroyAddress = '0x214DB1d773f09160666d107962BA21e35d97018E'
-const elementaryPayoutMintAddress = '0xC548Ee5760aA01897eF3907AFD4fe6E45ba22fE3'
-const advancedPayoutMintAddress = '0x94cE75eE2e9671FEEb7c9D4ccA54cb6bf7420D7B'
+export const foundation = '0xd4d98c31fA42cAA1Ca5f4041114114aEF2796617'
+const unstakeNFTAddress = '0xADdD2f688cdF4CaBF2b659DB1A4e577FE133B61D'
+const nftMarketDestroyAddress = '0x9d32D02f15E0802a8C54d46A5Ca379875401645B'
+const elementaryPayoutMintAddress = '0xE097af0b6581EcA559abE850105F394f49EDBD3c'
+const advancedPayoutMintAddress = '0x2dF7d9751A041BBF437e6601476cc9644f63ce62'
 
-const elementaryMintAddress = '0x61B93D8A4EBA34e1A49f5Da6d0Ac7c18bc618bEd'
-const advancedMintAddress = '0xF8c23DA851a7E402cc91b822a16F40bdC104c532'
+const elementaryMintAddress = '0x3CF82399627C8c607f751e6aCE7DB6749Adb748d'
+const advancedMintAddress = '0xA5bDF766410C3846B8e782a1C6bcD2368DDc674b'
 
 const Dashboard = () => {
   const { t } = useTranslation()
