@@ -13,7 +13,7 @@ import { UNSUPPORTED_LIST_URLS, WARNING_LIST_URLS } from '../../config/constants
 import DEFAULT_TOKEN_LIST from '../../config/constants/tokenLists/pancake-default.tokenlist.json'
 import UNSUPPORTED_TOKEN_LIST from '../../config/constants/tokenLists/pancake-unsupported.tokenlist.json'
 import WARNING_TOKEN_LIST from '../../config/constants/tokenLists/pancake-warning.tokenlist.json'
-import { listsAtom } from './lists'
+// import { listsAtom } from './lists'
 
 // use ordering of default list of lists to assign priority
 function sortByListPriority(urlA: string, urlB: string) {
@@ -33,13 +33,13 @@ function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
 // -------------------------------------
 //   Selectors
 // -------------------------------------
-const selectorActiveUrlsAtom = atom((get) => get(listsAtom)?.activeListUrls ?? [])
-export const selectorByUrlsAtom = atom((get) => get(listsAtom)?.byUrl ?? {})
+// const selectorActiveUrlsAtom = atom((get) => get(listsAtom)?.activeListUrls ?? [])
+// export const selectorByUrlsAtom = atom((get) => get(listsAtom)?.byUrl ?? {})
 
-const activeListUrlsAtom = atom((get) => {
-  const urls = get(selectorActiveUrlsAtom)
-  return urls?.filter((url) => !UNSUPPORTED_LIST_URLS.includes(url))
-})
+// const activeListUrlsAtom = atom((get) => {
+//   const urls = get(selectorActiveUrlsAtom)
+//   return urls?.filter((url) => !UNSUPPORTED_LIST_URLS.includes(url))
+// })
 
 const combineTokenMapsWithDefault = (lists: ListsState['byUrl'], urls: string[]) => {
   const defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST)
@@ -68,66 +68,66 @@ const combineTokenMaps = (lists: ListsState['byUrl'], urls: string[]) => {
   )
 }
 
-export const combinedTokenMapFromActiveUrlsAtom = atom((get) => {
-  const [selectorByUrls, selectorActiveUrls] = [get(selectorByUrlsAtom), get(selectorActiveUrlsAtom)]
-  return combineTokenMapsWithDefault(selectorByUrls, selectorActiveUrls)
-})
+// export const combinedTokenMapFromActiveUrlsAtom = atom((get) => {
+//   const [selectorByUrls, selectorActiveUrls] = [get(selectorByUrlsAtom), get(selectorActiveUrlsAtom)]
+//   return combineTokenMapsWithDefault(selectorByUrls, selectorActiveUrls)
+// })
 
-const inactiveUrlAtom = atom((get) => {
-  const [lists, urls] = [get(selectorByUrlsAtom), get(selectorActiveUrlsAtom)]
-  return Object.keys(lists).filter((url) => !urls?.includes(url) && !UNSUPPORTED_LIST_URLS.includes(url))
-})
+// const inactiveUrlAtom = atom((get) => {
+//   const [lists, urls] = [get(selectorByUrlsAtom), get(selectorActiveUrlsAtom)]
+//   return Object.keys(lists).filter((url) => !urls?.includes(url) && !UNSUPPORTED_LIST_URLS.includes(url))
+// })
 
-export const combinedTokenMapFromInActiveUrlsAtom = atom((get) => {
-  const [lists, inactiveUrl] = [get(selectorByUrlsAtom), get(inactiveUrlAtom)]
-  return combineTokenMaps(lists, inactiveUrl)
-})
+// export const combinedTokenMapFromInActiveUrlsAtom = atom((get) => {
+//   const [lists, inactiveUrl] = [get(selectorByUrlsAtom), get(inactiveUrlAtom)]
+//   return combineTokenMaps(lists, inactiveUrl)
+// })
 
-export const combinedTokenMapFromOfficialsUrlsAtom = atom((get) => {
-  const lists = get(selectorByUrlsAtom)
-  return combineTokenMapsWithDefault(lists, OFFICIAL_LISTS)
-})
+// export const combinedTokenMapFromOfficialsUrlsAtom = atom((get) => {
+//   const lists = get(selectorByUrlsAtom)
+//   return combineTokenMapsWithDefault(lists, OFFICIAL_LISTS)
+// })
 
-export const tokenListFromOfficialsUrlsAtom = atom((get) => {
-  const lists: ListsState['byUrl'] = get(selectorByUrlsAtom)
+// export const tokenListFromOfficialsUrlsAtom = atom((get) => {
+//   const lists: ListsState['byUrl'] = get(selectorByUrlsAtom)
 
-  const mergedTokenLists: TokenInfo[] = OFFICIAL_LISTS.reduce((acc, url) => {
-    if (lists?.[url]?.current?.tokens) {
-      acc.push(...lists?.[url]?.current.tokens)
-    }
-    return acc
-  }, [])
+//   const mergedTokenLists: TokenInfo[] = OFFICIAL_LISTS.reduce((acc, url) => {
+//     if (lists?.[url]?.current?.tokens) {
+//       acc.push(...lists?.[url]?.current.tokens)
+//     }
+//     return acc
+//   }, [])
 
-  const mergedList =
-    mergedTokenLists.length > 0 ? [...DEFAULT_TOKEN_LIST.tokens, ...mergedTokenLists] : DEFAULT_TOKEN_LIST.tokens
-  return mapValues(
-    groupBy(
-      uniqBy(mergedList, (tokenInfo) => `${tokenInfo.chainId}#${tokenInfo.address}`),
-      'chainId',
-    ),
-    (tokenInfos) => keyBy(tokenInfos, 'address'),
-  )
-})
+//   const mergedList =
+//     mergedTokenLists.length > 0 ? [...DEFAULT_TOKEN_LIST.tokens, ...mergedTokenLists] : DEFAULT_TOKEN_LIST.tokens
+//   return mapValues(
+//     groupBy(
+//       uniqBy(mergedList, (tokenInfo) => `${tokenInfo.chainId}#${tokenInfo.address}`),
+//       'chainId',
+//     ),
+//     (tokenInfos) => keyBy(tokenInfos, 'address'),
+//   )
+// })
 
-export const combinedTokenMapFromUnsupportedUrlsAtom = atom((get) => {
-  const lists = get(selectorByUrlsAtom)
-  // get hard coded unsupported tokens
-  const localUnsupportedListMap = listToTokenMap(UNSUPPORTED_TOKEN_LIST)
-  // get any loaded unsupported tokens
-  const loadedUnsupportedListMap = combineTokenMaps(lists, UNSUPPORTED_LIST_URLS)
+// export const combinedTokenMapFromUnsupportedUrlsAtom = atom((get) => {
+//   const lists = get(selectorByUrlsAtom)
+//   // get hard coded unsupported tokens
+//   const localUnsupportedListMap = listToTokenMap(UNSUPPORTED_TOKEN_LIST)
+//   // get any loaded unsupported tokens
+//   const loadedUnsupportedListMap = combineTokenMaps(lists, UNSUPPORTED_LIST_URLS)
 
-  return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap)
-})
+//   return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap)
+// })
 
-export const combinedTokenMapFromWarningUrlsAtom = atom((get) => {
-  const lists = get(selectorByUrlsAtom)
-  // get hard coded unsupported tokens
-  const localUnsupportedListMap = listToTokenMap(WARNING_TOKEN_LIST)
-  // get any loaded unsupported tokens
-  const loadedUnsupportedListMap = combineTokenMaps(lists, WARNING_LIST_URLS)
+// export const combinedTokenMapFromWarningUrlsAtom = atom((get) => {
+//   const lists = get(selectorByUrlsAtom)
+//   // get hard coded unsupported tokens
+//   const localUnsupportedListMap = listToTokenMap(WARNING_TOKEN_LIST)
+//   // get any loaded unsupported tokens
+//   const loadedUnsupportedListMap = combineTokenMaps(lists, WARNING_LIST_URLS)
 
-  return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap)
-})
+//   return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap)
+// })
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
   typeof WeakMap !== 'undefined' ? new WeakMap<TokenList, TokenAddressMap>() : null
@@ -173,16 +173,16 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
 // -------------------------------------
 //   Hooks
 // -------------------------------------
-export function useAllLists(): {
-  readonly [url: string]: {
-    readonly current: TokenList | null
-    readonly pendingUpdate: TokenList | null
-    readonly loadingRequestId: string | null
-    readonly error: string | null
-  }
-} {
-  return useAtomValue(selectorByUrlsAtom)
-}
+// export function useAllLists(): {
+//   readonly [url: string]: {
+//     readonly current: TokenList | null
+//     readonly pendingUpdate: TokenList | null
+//     readonly loadingRequestId: string | null
+//     readonly error: string | null
+//   }
+// } {
+//   return useAtomValue(selectorByUrlsAtom)
+// }
 
 function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddressMap {
   return {
@@ -195,36 +195,36 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
 }
 
 // filter out unsupported lists
-export function useActiveListUrls(): string[] | undefined {
-  return useAtomValue(activeListUrlsAtom)
-}
+// export function useActiveListUrls(): string[] | undefined {
+//   return useAtomValue(activeListUrlsAtom)
+// }
 
-export function useInactiveListUrls() {
-  return useAtomValue(inactiveUrlAtom)
-}
+// export function useInactiveListUrls() {
+//   return useAtomValue(inactiveUrlAtom)
+// }
 
 // get all the tokens from active lists, combine with local default tokens
-export function useCombinedActiveList(): TokenAddressMap {
-  const activeTokens = useAtomValue(combinedTokenMapFromActiveUrlsAtom)
-  return activeTokens
-}
+// export function useCombinedActiveList(): TokenAddressMap {
+//   const activeTokens = useAtomValue(combinedTokenMapFromActiveUrlsAtom)
+//   return activeTokens
+// }
 
 // all tokens from inactive lists
-export function useCombinedInactiveList(): TokenAddressMap {
-  return useAtomValue(combinedTokenMapFromInActiveUrlsAtom)
-}
+// export function useCombinedInactiveList(): TokenAddressMap {
+//   return useAtomValue(combinedTokenMapFromInActiveUrlsAtom)
+// }
 
 // list of tokens not supported on interface, used to show warnings and prevent swaps and adds
-export function useUnsupportedTokenList(): TokenAddressMap {
-  return useAtomValue(combinedTokenMapFromUnsupportedUrlsAtom)
-}
+// export function useUnsupportedTokenList(): TokenAddressMap {
+//   return useAtomValue(combinedTokenMapFromUnsupportedUrlsAtom)
+// }
 
 // list of warning tokens on interface, used to show warnings and prevent adds
-export function useWarningTokenList(): TokenAddressMap {
-  return useAtomValue(combinedTokenMapFromWarningUrlsAtom)
-}
+// export function useWarningTokenList(): TokenAddressMap {
+//   return useAtomValue(combinedTokenMapFromWarningUrlsAtom)
+// }
 
-export function useIsListActive(url: string): boolean {
-  const activeListUrls = useActiveListUrls()
-  return useMemo(() => Boolean(activeListUrls?.includes(url)), [activeListUrls, url])
-}
+// export function useIsListActive(url: string): boolean {
+//   const activeListUrls = useActiveListUrls()
+//   return useMemo(() => Boolean(activeListUrls?.includes(url)), [activeListUrls, url])
+// }

@@ -4,7 +4,6 @@ import { ButtonMenu, ButtonMenuItem, ModalBody } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { TokenList } from '@uniswap/token-lists'
 import { useTranslation } from '@pancakeswap/localization'
-import ManageLists from './ManageLists'
 import ManageTokens from './ManageTokens'
 import { CurrencyModalView } from './types'
 
@@ -39,11 +38,7 @@ export default function Manage({
         <ButtonMenuItem width="50%">{t('Lists')}</ButtonMenuItem>
         <ButtonMenuItem width="50%">{t('Tokens')}</ButtonMenuItem>
       </StyledButtonMenu>
-      {showLists ? (
-        <ManageLists setModalView={setModalView} setImportList={setImportList} setListUrl={setListUrl} />
-      ) : (
-        <ManageTokens setModalView={setModalView} setImportToken={setImportToken} />
-      )}
+
     </ModalBody>
   )
 }

@@ -1,6 +1,6 @@
 import { Token, CurrencyAmount } from '@pancakeswap/sdk'
 import { useMemo } from 'react'
-import { useAllTokenBalances } from '../../state/wallet/hooks'
+// import { useAllTokenBalances } from '../../state/wallet/hooks'
 
 // compare two token amounts with highest one coming first
 function balanceComparator(balanceA?: CurrencyAmount<Token>, balanceB?: CurrencyAmount<Token>) {
@@ -38,15 +38,15 @@ function getTokenComparator(balances: {
   }
 }
 
-function useTokenComparator(inverted: boolean): (tokenA: Token, tokenB: Token) => number {
-  const balances = useAllTokenBalances()
-  const comparator = useMemo(() => getTokenComparator(balances ?? {}), [balances])
-  return useMemo(() => {
-    if (inverted) {
-      return (tokenA: Token, tokenB: Token) => comparator(tokenA, tokenB) * -1
-    }
-    return comparator
-  }, [inverted, comparator])
-}
+// function useTokenComparator(inverted: boolean): (tokenA: Token, tokenB: Token) => number {
+//   const balances = useAllTokenBalances()
+//   const comparator = useMemo(() => getTokenComparator(balances ?? {}), [balances])
+//   return useMemo(() => {
+//     if (inverted) {
+//       return (tokenA: Token, tokenB: Token) => comparator(tokenA, tokenB) * -1
+//     }
+//     return comparator
+//   }, [inverted, comparator])
+// }
 
-export default useTokenComparator
+// export default useTokenComparator

@@ -3,7 +3,6 @@ import { Token } from '@pancakeswap/sdk'
 import { Text, Button, CloseIcon, IconButton, LinkExternal, Input, Link } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import Row, { RowBetween, RowFixed } from 'components/Layout/Row'
-import { useToken } from 'hooks/Tokens'
 import { useRemoveUserAddedToken } from 'state/user/hooks'
 import useUserAddedTokens from 'state/user/hooks/useUserAddedTokens'
 import { CurrencyLogo } from 'components/Logo'
@@ -11,7 +10,6 @@ import { getBlockExploreLink, isAddress } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from '@pancakeswap/localization'
 import Column, { AutoColumn } from '../Layout/Column'
-import ImportRow from './ImportRow'
 import { CurrencyModalView } from './types'
 
 const Wrapper = styled.div`
@@ -52,7 +50,7 @@ export default function ManageTokens({
   }, [])
 
   // if they input an address, use it
-  const searchToken = useToken(searchQuery)
+  // const searchToken = useToken(searchQuery)
 
   // all tokens for local list
   const userAddedTokens: Token[] = useUserAddedTokens()
@@ -107,14 +105,14 @@ export default function ManageTokens({
             />
           </Row>
           {!isAddressValid && <Text color="failure">{t('Enter valid token address')}</Text>}
-          {searchToken && (
+          {/* {searchToken && (
             <ImportRow
               token={searchToken}
               showImportView={() => setModalView(CurrencyModalView.importToken)}
               setImportToken={setImportToken}
               style={{ height: 'fit-content' }}
             />
-          )}
+          )} */}
         </AutoColumn>
         {tokenList}
         <Footer>

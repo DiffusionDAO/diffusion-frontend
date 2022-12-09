@@ -10,7 +10,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import { useCombinedActiveList } from '../../state/lists/hooks'
+// import { useCombinedActiveList } from '../../state/lists/hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useIsUserAddedToken } from '../../hooks/Tokens'
 import Column from '../Layout/Column'
@@ -18,7 +18,7 @@ import { RowFixed, RowBetween } from '../Layout/Row'
 import { CurrencyLogo } from '../Logo'
 import CircleLoader from '../Loader/CircleLoader'
 import { isTokenOnList } from '../../utils'
-import ImportRow from './ImportRow'
+// import ImportRow from './ImportRow'
 
 function currencyKey(currency: Currency): string {
   return currency?.isToken ? currency.address : currency?.isNative ? currency.symbol : ''
@@ -73,8 +73,8 @@ function CurrencyRow({
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const key = currencyKey(currency)
-  const selectedTokenList = useCombinedActiveList()
-  const isOnSelectedList = isTokenOnList(selectedTokenList, currency)
+  // const selectedTokenList = useCombinedActiveList()
+  // const isOnSelectedList = isTokenOnList(selectedTokenList, currency)
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
 
@@ -90,9 +90,9 @@ function CurrencyRow({
       <CurrencyLogo currency={currency} size="24px" />
       <Column>
         <Text bold>{currency.symbol}</Text>
-        <Text color="textSubtle" small ellipsis maxWidth="200px">
+        {/* <Text color="textSubtle" small ellipsis maxWidth="200px">
           {!isOnSelectedList && customAdded && `${t('Added by user')} •`} {currency.name}
-        </Text>
+        </Text> */}
       </Column>
       <RowFixed style={{ justifySelf: 'flex-end' }}>
         {balance ? <Balance balance={balance} /> : account ? <CircleLoader /> : null}
@@ -171,11 +171,11 @@ export default function CurrencyList({
         )
       }
 
-      if (showImport && token) {
-        return (
-          <ImportRow style={style} token={token} showImportView={showImportView} setImportToken={setImportToken} dim />
-        )
-      }
+      // if (showImport && token) {
+      //   return (
+      //     <ImportRow style={style} token={token} showImportView={showImportView} setImportToken={setImportToken} dim />
+      //   )
+      // }
       return (
         <CurrencyRow
           style={style}

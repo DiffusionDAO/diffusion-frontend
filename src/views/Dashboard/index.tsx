@@ -202,11 +202,10 @@ const Dashboard = () => {
 
     const response = await fetch('https://middle.diffusiondao.org/dashboard')
     const json = await response.json()
-    console.log(dashboard)
     return { ...dashboard, ...json }
   })
 
-  // console.log('data:', data)
+  console.log('data:', data)
 
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign
@@ -328,7 +327,7 @@ const Dashboard = () => {
                             }}
                             value={8}
                           />
-                          {data?.targetInflationRate != "" ? (
+                          {data?.targetInflationRate ? (
                             <div className="ctir-data">{data?.targetInflationRate}%</div>
                           ) : (
                             <Skeleton width={100} />

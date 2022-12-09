@@ -8,7 +8,7 @@ import { CurrencyLogo } from 'components/Logo'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { getBlockExploreLink } from 'utils'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
-import { useUnsupportedTokens } from '../hooks/Tokens'
+// import { useUnsupportedTokens } from '../hooks/Tokens'
 
 interface Props extends InjectedModalProps {
   currencies: (Currency | undefined)[]
@@ -35,12 +35,12 @@ const UnsupportedModal: React.FC<React.PropsWithChildren<Props>> = ({ currencies
         })
       : []
 
-  const unsupportedTokens: { [address: string]: Token } = useUnsupportedTokens()
+  // const unsupportedTokens: { [address: string]: Token } = useUnsupportedTokens()
 
   return (
     <Modal title={t('Unsupported Assets')} maxWidth="420px" onDismiss={onDismiss}>
       <AutoColumn gap="lg">
-        {tokens.map((token) => {
+        {/* {tokens.map((token) => {
           return (
             token &&
             unsupportedTokens &&
@@ -63,7 +63,7 @@ const UnsupportedModal: React.FC<React.PropsWithChildren<Props>> = ({ currencies
               </AutoColumn>
             )
           )
-        })}
+        })} */}
         <AutoColumn gap="lg">
           <Text>
             {t(
