@@ -51,6 +51,7 @@ import {
   getBondAddress,
   getHBondAddress,
   getHDFSAddress,
+  getDiffusionCatAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -104,6 +105,7 @@ import bCakeProxyAbi from 'config/abi/bCakeProxy.json'
 
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import socialNFTAbi from 'config/abi/socialNFTAbi.json'
+import diffusionAICatAbi from 'config/abi/diffusionAICat.json'
 import dfsAbi from 'config/abi/dfsAbi.json'
 import pdfsAbi from 'config/abi/pdfsAbi.json'
 import starlightAbi from 'config/abi/starlight.json'
@@ -388,8 +390,11 @@ export const getNftMarketContract = (signer?: Signer | Provider) => {
 export const getStarlightContract = (signer?: Signer | Provider) => {
   return getContract({ abi: starlightAbi, address: getStarlightAddress(), signer })
 }
-export const getDFSNFTContract = (signer?: Signer | Provider) => {
+export const getSocialNFTContract = (signer?: Signer | Provider) => {
   return getContract({ abi: socialNFTAbi, address: getSocialNFTAddress(), signer })
+}
+export const getDiffusionAICatContract = (signer?: Signer | Provider) => {
+  return getContract({ abi: diffusionAICatAbi, address: getDiffusionCatAddress(), signer })
 }
 export const getDFSContract = (signer?: Signer | Provider) => {
   return getContract({ abi: dfsAbi, address: getDFSAddress(), signer })

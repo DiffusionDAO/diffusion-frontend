@@ -212,11 +212,11 @@ export const useCollectionNfts = (collectionAddress: string) => {
           let thumbnail
           let name
           thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${tokenId}`
-          if (collectionAddress === starlightAddress) {
-            name = `StarLight#${tokenId}`
-          } else if (collectionAddress === socialNFTAddress) {
+          if (collectionAddress === socialNFTAddress) {
             thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${level}`
             name = `${t(levelToName[level])}#${tokenId}`
+          } else if (collectionAddress === starlightAddress) {
+            name = `StarLight#${tokenId}`
           } else if (collectionAddress === diffusionCatAddress) {
             name = `${tokenIdToName[tokenId]}`
           }
