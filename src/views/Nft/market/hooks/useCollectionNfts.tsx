@@ -298,7 +298,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
                 break
             }
             const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
-            const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress, name }
+            const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress, name, thumbnail }
             return nftToNftToken(nft)
           }),
         )
