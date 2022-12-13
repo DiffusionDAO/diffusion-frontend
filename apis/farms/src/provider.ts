@@ -10,7 +10,7 @@ export const bscProvider = new StaticJsonRpcProvider(
 
 export const bscTestnetProvider = new StaticJsonRpcProvider(
   {
-    url: 'https://data-seed-prebsc-1-s2.binance.org:8545',
+    url: 'https://data-seed-prebsc-1-s3.binance.org:8545',
     skipFetchSetup: true,
   },
   97,
