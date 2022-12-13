@@ -44,9 +44,13 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const nftDatabaseAddress = getNFTDatabaseAddress()
   const nftMarketAddress = getNftMarketAddress()
 
+  console.log('nftDatabaseAddress:', nftDatabaseAddress)
   const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
   const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
   const collectionAddresses = await nftDatabase.getCollections()
+  // 0x2b05Da23D405697211834441f91DEd37FD9F7ae7,0xF4879551d0e44fA54131F1319f9e9435189a0CB3,0x6543D3B7Dc01704dAFa9c8Cda1C9e062E2e7602B
+  // ['0x2b05Da23D405697211834441f91DEd37FD9F7ae7', '0x6543D3B7Dc01704dAFa9c8Cda1C9e062E2e7602B', '0x7BBA81d689Aa4C911e54984bC79559FC91B4A628']
+  console.log('collectionAddresses:', collectionAddresses)
   const data: ApiCollection[] = await Promise.all(
     collectionAddresses.map(async (collectionAddress) => {
       const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })

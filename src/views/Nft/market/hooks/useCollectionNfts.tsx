@@ -15,6 +15,7 @@ import {
   getNftMarketAddress,
   getStarlightAddress,
   getMiningAddress,
+  getDiffusionCatAddress,
 } from 'utils/addressHelpers'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import socialNFTAbi from 'config/abi/socialNFTAbi.json'
@@ -22,7 +23,7 @@ import nftMarketAbi from 'config/abi/nftMarket.json'
 import dfsMiningAbi from 'config/abi/dfsMining.json'
 
 import erc721Abi from 'config/abi/erc721.json'
-import { levelToName, NFT, nftToNftToken, levelToSPOS } from 'pages/profile/[accountAddress]'
+import { levelToName, NFT, nftToNftToken, levelToSPOS, tokenIdToName } from 'pages/profile/[accountAddress]'
 import useSWR from 'swr'
 import { useTranslation } from '@pancakeswap/localization'
 import { formatUnits, parseUnits } from '@ethersproject/units'
@@ -121,14 +122,19 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const [tokenIds, setTokenIds] = useState<number[]>()
   const [tokenIdsOnSale, setTokenIdsOnSale] = useState<number[]>()
   const [tokens, setTokens] = useState<any[]>()
-  const socianNFTAddress = getSocialNFTAddress()
-  const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC_TESTNET })
+  const socialNFTAddress = getSocialNFTAddress()
+  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC })
+
+  const starlightAddress = getStarlightAddress()
+  const starlight = getContract({ abi: socialNFTAbi, address: starlightAddress, chainId: ChainId.BSC })
+
+  const diffusionCatAddress = getDiffusionCatAddress()
 
   const nftMarketAddress = getNftMarketAddress()
-  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
 
   const dfsMiningAddress = getMiningAddress()
-  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
+  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC })
 
   const erc721 = useERC721(collectionAddress)
 
@@ -136,7 +142,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
     const getTokenContract = getContract({
       abi: socialNFTAbi,
       address: collectionAddress,
-      chainId: ChainId.BSC_TESTNET,
+      chainId: ChainId.BSC,
     })
     const tokenIds = await getTokenContract.allTokens()
     setTokenIds(tokenIds)
@@ -191,11 +197,12 @@ export const useCollectionNfts = (collectionAddress: string) => {
       const getTokenContract = getContract({
         abi: socialNFTAbi,
         address: collectionAddress,
-        chainId: ChainId.BSC_TESTNET,
+        chainId: ChainId.BSC,
       })
       const tokens = await Promise.all(
         tokenIds.slice(page * REQUEST_SIZE, (page + 1) * REQUEST_SIZE).map(async (tokenId) => {
           const tokenIdString = tokenId.toString()
+          const collectionName = await getTokenContract.name()
           const getToken = await getTokenContract.getToken(tokenId)
           const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
           const staker = await dfsMining.staker(tokenId)
@@ -204,13 +211,14 @@ export const useCollectionNfts = (collectionAddress: string) => {
           let thumbnail
           let name
           const starLightAddress = getStarlightAddress()
-          const dfsNFTAddress = getSocialNFTAddress()
+          thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${tokenId}`
           if (collectionAddress === starLightAddress) {
-            thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
             name = `StarLight#${tokenId}`
-          } else if (collectionAddress === dfsNFTAddress) {
-            thumbnail = `/images/nfts/socialnft/${level}`
+          } else if (collectionAddress === socialNFTAddress) {
+            thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${level}`
             name = `${t(levelToName[level])}#${tokenId}`
+          } else if (collectionAddress === diffusionCatAddress) {
+            name = `${tokenIdToName[tokenId]}`
           }
           const token = {
             tokenId: tokenIdString,
@@ -223,7 +231,13 @@ export const useCollectionNfts = (collectionAddress: string) => {
               thumbnail,
             },
             level,
-            attributes: [{ traitType: 'SPOS', value: levelToSPOS[level], displayType: '' }],
+            attributes: [
+              collectionAddress === socialNFTAddress && {
+                traitType: 'SPOS',
+                value: levelToSPOS[level],
+                displayType: '',
+              },
+            ],
             createdAt: '',
             updatedAt: '',
             location: NftLocation.FORSALE,
@@ -250,9 +264,15 @@ export const useCollectionNfts = (collectionAddress: string) => {
       if (settings.showOnlyNftsOnSale) {
         newNfts = await Promise.all(
           tokenIdsOnSale.map(async (tokenId) => {
-            const token = await socialNFT.getToken(tokenId)
+            const token =
+              collectionAddress === socialNFTAddress
+                ? await socialNFT.getToken(tokenId)
+                : await starlight.getToken(tokenId)
             const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
-            const name = `${t(levelToName[token.level])}#${token.tokenId}`
+            const name =
+              collectionAddress === socialNFTAddress
+                ? `${levelToName[token.level]}#${token.tokenId}`
+                : `StarLight#${token.tokenId}`
             const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
             return nftToNftToken(nft)
           }),

@@ -4,12 +4,18 @@ import { getCollection } from 'state/nftMarket/helpers'
 import { ApiCollection, Collection, NftToken } from 'state/nftMarket/types'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
-import { getSocialNFTAddress, getStarlightAddress, getNftMarketAddress, getMiningAddress } from 'utils/addressHelpers'
+import {
+  getSocialNFTAddress,
+  getStarlightAddress,
+  getNftMarketAddress,
+  getMiningAddress,
+  getDiffusionCatAddress,
+} from 'utils/addressHelpers'
 import { getContract } from 'utils/contractHelpers'
 import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import dfsMiningAbi from 'config/abi/dfsMining.json'
-import { levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
+import { levelToName, levelToSPOS, NFT, tokenIdToName } from 'pages/profile/[accountAddress]'
 import { formatUnits } from '@ethersproject/units'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 
@@ -41,12 +47,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
 
-  const socianNFTAddress = getSocialNFTAddress()
-  const socialNFT = getContract({ abi: socialNFTAbi, address: socianNFTAddress, chainId: ChainId.BSC_TESTNET })
+  const socialNFTAddress = getSocialNFTAddress()
+  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC_TESTNET })
 
   const getToken = await socialNFT.getToken(tokenId)
   const level = getToken?.level?.toString()
-  const name = `${levelToName[level]}#${getToken.tokenId}`
 
   const nftMarketAddress = getNftMarketAddress()
   const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
@@ -56,7 +61,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
   const staker = await dfsMining.staker(tokenId)
 
-  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, name, staker }
+  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, staker }
 
   console.log(nft)
   let collection = await getCollection(collectionAddress)
@@ -68,10 +73,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 1,
     }
   }
-  let thumbnail = `/images/nfts/socialnft/${nft?.level?.toString()}`
+  let name
+  let thumbnail
   const starLightAddress = getStarlightAddress()
-  if (collectionAddress === starLightAddress) {
-    thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
+  const diffusionCatAddress = getDiffusionCatAddress()
+  thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
+  if (collectionAddress === socialNFTAddress) {
+    thumbnail = `/images/nfts/${name.toLowerCase()}/${nft?.level?.toString()}`
+    name = `${levelToName[level]}#${getToken.tokenId}`
+  } else if (collectionAddress === diffusionCatAddress) {
+    name = `${tokenIdToName[tokenId]}`
+  } else if (collectionAddress === starLightAddress) {
+    name = `StarLight#${getToken.tokenId}`
   }
   const token = {
     tokenId,
