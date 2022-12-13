@@ -67,7 +67,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const diffusionCatAddress = getDiffusionAICatAddress()
   const socialNFTAddress = getSocialNFTAddress()
 
-  let name = ''
+  let name = collection.name
 
   const getToken = async () => {
     const getToken = await socialNFT.getToken(tokenId)
