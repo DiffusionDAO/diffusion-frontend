@@ -112,7 +112,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       isTradable: nft.price.gt(0) ?? false,
     },
   }
-  console.log('token:', token)
 
   return {
     props: {

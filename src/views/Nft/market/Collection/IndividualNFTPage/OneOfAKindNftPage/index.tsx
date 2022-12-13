@@ -123,6 +123,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const isOwnNft =
     nftToken?.marketData?.currentSeller === account || nftToken?.owner === account || nftToken?.staker === account
   const nftIsProfilePic = false
+  console.log('IndividualNFTPage getToken:', nftToken.image)
   return (
     <PageWrap>
       <div
