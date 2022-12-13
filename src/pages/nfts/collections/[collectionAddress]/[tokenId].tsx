@@ -17,6 +17,7 @@ import nftMarketAbi from 'config/abi/nftMarket.json'
 import dfsMiningAbi from 'config/abi/dfsMining.json'
 import { levelToName, levelToSPOS, NFT, tokenIdToName } from 'pages/profile/[accountAddress]'
 import { formatUnits } from '@ethersproject/units'
+import { erc721ABI } from 'wagmi'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 
 const IndividualNFTPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -47,6 +48,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
 
+  const erc721 = getContract({ abi: erc721ABI, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
   const socialNFTAddress = getSocialNFTAddress()
   const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC_TESTNET })
 
@@ -61,9 +63,27 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
   const staker = await dfsMining.staker(tokenId)
 
-  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, staker }
+  let name = await erc721.name()
+  let thumbnail
+  const starLightAddress = getStarlightAddress()
+  const diffusionCatAddress = getDiffusionAICatAddress()
+  thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
+  switch (collectionAddress) {
+    case socialNFTAddress:
+      thumbnail = `/images/nfts/${name.toLowerCase()}/${getToken?.level}`
+      name = `${levelToName[level]}#${getToken.tokenId}`
+      break
+    case diffusionCatAddress:
+      name = tokenIdToName[tokenId]
+      break
+    case starLightAddress:
+      name = `StarLight#${getToken.tokenId}`
+      break
+    default:
+      break
+  }
+  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, staker, thumbnail }
 
-  console.log('nft:', nft)
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
 
@@ -73,19 +93,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 1,
     }
   }
-  let name = collection[collectionAddress].name
-  let thumbnail
-  const starLightAddress = getStarlightAddress()
-  const diffusionCatAddress = getDiffusionAICatAddress()
-  thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
-  if (collectionAddress === socialNFTAddress) {
-    thumbnail = `/images/nfts/${name.toLowerCase()}/${nft?.level?.toString()}`
-    name = `${levelToName[level]}#${getToken.tokenId}`
-  } else if (collectionAddress === diffusionCatAddress) {
-    name = `${tokenIdToName[tokenId]}`
-  } else if (collectionAddress === starLightAddress) {
-    name = `StarLight#${getToken.tokenId}`
-  }
+
   const token = {
     tokenId,
     collectionAddress,
