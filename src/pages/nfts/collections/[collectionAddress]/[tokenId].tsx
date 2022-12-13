@@ -9,7 +9,7 @@ import {
   getStarlightAddress,
   getNftMarketAddress,
   getMiningAddress,
-  getDiffusionCatAddress,
+  getDiffusionAICatAddress,
 } from 'utils/addressHelpers'
 import { getContract } from 'utils/contractHelpers'
 import socialNFTAbi from 'config/abi/socialNFTAbi.json'
@@ -76,7 +76,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let name = collection[collectionAddress].name
   let thumbnail
   const starLightAddress = getStarlightAddress()
-  const diffusionCatAddress = getDiffusionCatAddress()
+  const diffusionCatAddress = getDiffusionAICatAddress()
   thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
   if (collectionAddress === socialNFTAddress) {
     thumbnail = `/images/nfts/${name.toLowerCase()}/${nft?.level?.toString()}`

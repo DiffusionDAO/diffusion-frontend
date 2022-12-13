@@ -51,7 +51,7 @@ import {
   getBondAddress,
   getHBondAddress,
   getHDFSAddress,
-  getDiffusionCatAddress,
+  getDiffusionAICatAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -394,7 +394,7 @@ export const getSocialNFTContract = (signer?: Signer | Provider) => {
   return getContract({ abi: socialNFTAbi, address: getSocialNFTAddress(), signer })
 }
 export const getDiffusionAICatContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: diffusionAICatAbi, address: getDiffusionCatAddress(), signer })
+  return getContract({ abi: diffusionAICatAbi, address: getDiffusionAICatAddress(), signer })
 }
 export const getDFSContract = (signer?: Signer | Provider) => {
   return getContract({ abi: dfsAbi, address: getDFSAddress(), signer })

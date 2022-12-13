@@ -158,6 +158,6 @@ export const getHDFSAddress = () => {
   return getAddress(addresses.hdfs)
 }
 
-export const getDiffusionCatAddress = () => {
+export const getDiffusionAICatAddress = () => {
   return getAddress(addresses.diffusionAICat)
 }

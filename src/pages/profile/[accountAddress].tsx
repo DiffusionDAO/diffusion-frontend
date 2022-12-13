@@ -504,7 +504,7 @@ function NftProfilePage() {
   }
   const startCompose = () => {
     setIsSelected(true)
-    setSelectedNFTs(unstakedNFTs)
+    setSelectedNFTs(unstakedNFTs.filter((nft) => nft.collectionAddress === socialNFTAddress))
     setOption('compose')
   }
 
@@ -587,7 +587,7 @@ function NftProfilePage() {
 
   const startStake = async () => {
     setIsSelected(true)
-    setSelectedNFTs(unstakedNFTs)
+    setSelectedNFTs(unstakedNFTs.filter((nft) => nft.collectionAddress === socialNFTAddress))
     setOption('stake')
   }
 

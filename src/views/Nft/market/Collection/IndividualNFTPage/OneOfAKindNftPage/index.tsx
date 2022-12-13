@@ -5,7 +5,7 @@ import noop from 'lodash/noop'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import PageLoader from 'components/Loader/PageLoader'
 import {
-  getDiffusionCatAddress,
+  getDiffusionAICatAddress,
   getNFTDatabaseAddress,
   getSocialNFTAddress,
   getStarlightAddress,
@@ -64,7 +64,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
   const starLightAddress = getStarlightAddress()
-  const diffusionCatAddress = getDiffusionCatAddress()
+  const diffusionCatAddress = getDiffusionAICatAddress()
   const socialNFTAddress = getSocialNFTAddress()
 
   let name = ''
