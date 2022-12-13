@@ -63,7 +63,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, staker }
 
-  console.log(nft)
+  console.log('nft:', nft)
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
 
@@ -73,7 +73,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 1,
     }
   }
-  let name
+  let name = collection[collectionAddress].name
   let thumbnail
   const starLightAddress = getStarlightAddress()
   const diffusionCatAddress = getDiffusionCatAddress()

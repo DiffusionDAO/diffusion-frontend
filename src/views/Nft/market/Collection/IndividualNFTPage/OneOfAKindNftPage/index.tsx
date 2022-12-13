@@ -4,7 +4,12 @@ import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import noop from 'lodash/noop'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import PageLoader from 'components/Loader/PageLoader'
-import { getNFTDatabaseAddress, getStarlightAddress } from 'utils/addressHelpers'
+import {
+  getDiffusionCatAddress,
+  getNFTDatabaseAddress,
+  getSocialNFTAddress,
+  getStarlightAddress,
+} from 'utils/addressHelpers'
 import { NftToken } from 'state/nftMarket/types'
 
 import {
@@ -15,7 +20,7 @@ import {
 } from 'hooks/useContract'
 import { formatBigNumber } from 'utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
+import { levelToName, levelToSPOS, NFT, tokenIdToName } from 'pages/profile/[accountAddress]'
 
 import { formatUnits } from '@ethersproject/units'
 import useSWR from 'swr'
@@ -58,27 +63,36 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const socialNFT = useSocialNftContract()
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
+  const starLightAddress = getStarlightAddress()
+  const diffusionCatAddress = getDiffusionCatAddress()
+  const socialNFTAddress = getSocialNFTAddress()
+
+  let name = collection.name
 
   const getToken = async () => {
     const getToken = await socialNFT.getToken(tokenId)
     const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
     const staker = await dfsMining.staker(tokenId)
     const nft = { ...getToken, ...sellPrice, staker }
-    let thumbnail = `/images/nfts/socialnft/${nft?.level}`
-    const starLightAddress = getStarlightAddress()
-    if (collectionAddress === starLightAddress) {
-      thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
+    let thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
+    if (collectionAddress === socialNFTAddress) {
+      thumbnail = `/images/nfts/${name.toLowerCase()}/${nft?.level?.toString()}`
+      name = `${levelToName[nft?.level]}#${tokenId}`
+    } else if (collectionAddress === diffusionCatAddress) {
+      name = `${tokenIdToName[tokenId]}`
+    } else if (collectionAddress === starLightAddress) {
+      name = `StarLight#${getToken.tokenId}`
     }
     const level = nft?.level
     const nftToken: NftToken = {
       tokenId,
       collectionAddress,
       collectionName: t(collection.name),
-      name: `${t(levelToName[level])}#${tokenId}`,
+      name,
       description: t(nft?.collectionName),
       image: { original: 'string', thumbnail },
       level,
-      attributes: [
+      attributes: collectionAddress === socialNFTAddress && [
         { traitType: t('Valid SPOS'), value: levelToSPOS[level].validSPOS, displayType: '' },
         { traitType: t('Unlockable SPOS'), value: levelToSPOS[level].unlockableSPOS, displayType: '' },
       ],
