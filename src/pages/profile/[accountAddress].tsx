@@ -237,7 +237,7 @@ export const nftToNftToken = (nft: NFT) => {
     collectionAddress: nft.collectionAddress,
     image: {
       original: 'string',
-      thumbnail: `/images/nfts/socialnft/${level}`,
+      thumbnail: `/images/nfts/${nft.collectionName.toLowerCase()}/${level}`,
     },
     level,
     attributes: [

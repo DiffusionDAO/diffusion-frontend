@@ -211,9 +211,8 @@ export const useCollectionNfts = (collectionAddress: string) => {
           const level = nft.level
           let thumbnail
           let name
-          const starLightAddress = getStarlightAddress()
           thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${tokenId}`
-          if (collectionAddress === starLightAddress) {
+          if (collectionAddress === starlightAddress) {
             name = `StarLight#${tokenId}`
           } else if (collectionAddress === socialNFTAddress) {
             thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${level}`
@@ -270,10 +269,14 @@ export const useCollectionNfts = (collectionAddress: string) => {
                 ? await socialNFT.getToken(tokenId)
                 : await starlight.getToken(tokenId)
             const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
-            const name =
-              collectionAddress === socialNFTAddress
-                ? `${levelToName[token.level]}#${token.tokenId}`
-                : `StarLight#${token.tokenId}`
+            let name
+            if (collectionAddress === socialNFTAddress) {
+              name = `${levelToName[token?.level]}#${tokenId}`
+            } else if (collectionAddress === diffusionCatAddress) {
+              name = `${tokenIdToName[tokenId]}`
+            } else if (collectionAddress === starlightAddress) {
+              name = `StarLight#${tokenId}`
+            }
             const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
             return nftToNftToken(nft)
           }),
