@@ -123,18 +123,18 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const [tokenIdsOnSale, setTokenIdsOnSale] = useState<number[]>()
   const [tokens, setTokens] = useState<any[]>()
   const socialNFTAddress = getSocialNFTAddress()
-  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC })
+  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC_TESTNET })
 
   const starlightAddress = getStarlightAddress()
-  const starlight = getContract({ abi: socialNFTAbi, address: starlightAddress, chainId: ChainId.BSC })
+  const starlight = getContract({ abi: socialNFTAbi, address: starlightAddress, chainId: ChainId.BSC_TESTNET })
 
   const diffusionCatAddress = getDiffusionCatAddress()
 
   const nftMarketAddress = getNftMarketAddress()
-  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
 
   const dfsMiningAddress = getMiningAddress()
-  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC })
+  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
 
   const erc721 = useERC721(collectionAddress)
 
@@ -142,13 +142,14 @@ export const useCollectionNfts = (collectionAddress: string) => {
     const getTokenContract = getContract({
       abi: socialNFTAbi,
       address: collectionAddress,
-      chainId: ChainId.BSC,
+      chainId: ChainId.BSC_TESTNET,
     })
     const tokenIds = await getTokenContract.allTokens()
     setTokenIds(tokenIds)
     const tokenIdsOnSale = await getTokenContract.tokensOfOwner(nftMarket.address)
     setTokenIdsOnSale(tokenIdsOnSale)
   })
+
   const { field, direction } = useGetNftOrdering(collectionAddress)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(collectionAddress)
   const nftFilters = useGetNftFilters(collectionAddress)
@@ -197,7 +198,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
       const getTokenContract = getContract({
         abi: socialNFTAbi,
         address: collectionAddress,
-        chainId: ChainId.BSC,
+        chainId: ChainId.BSC_TESTNET,
       })
       const tokens = await Promise.all(
         tokenIds.slice(page * REQUEST_SIZE, (page + 1) * REQUEST_SIZE).map(async (tokenId) => {
