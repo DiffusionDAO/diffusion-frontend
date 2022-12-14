@@ -59,7 +59,6 @@ const NFTMedia: FC<
       </AspectRatio>
     )
   }
-  console.log('NFTMedia:', nft.image)
   return (
     <RoundedImage
       width={width}
