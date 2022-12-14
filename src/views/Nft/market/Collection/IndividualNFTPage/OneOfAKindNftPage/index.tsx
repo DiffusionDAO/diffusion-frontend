@@ -58,7 +58,6 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const { isMobile } = useMatchBreakpoints()
   const bgImg = isMobile ? "url('/images/nfts/mretc.png')" : "url('/images/nfts/smxl.png')"
   const bgOffset = !isMobile ? '40px' : '80px'
-  const [nft, setNFT] = useState<NFT>()
   const collection = useGetCollection(collectionAddress)
   const socialNFT = useSocialNftContract()
   const nftMarket = useNftMarketContract()
@@ -75,14 +74,21 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
     const staker = await dfsMining.staker(tokenId)
     const nft = { ...getToken, ...sellPrice, staker }
     let thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
-    if (collectionAddress === socialNFTAddress) {
-      thumbnail = `/images/nfts/${name.toLowerCase()}/${nft?.level?.toString()}`
-      name = `${levelToName[nft?.level]}#${tokenId}`
-    } else if (collectionAddress === diffusionCatAddress) {
-      name = `${tokenIdToName[tokenId]}`
-    } else if (collectionAddress === starLightAddress) {
-      name = `StarLight#${getToken.tokenId}`
+    switch (collectionAddress) {
+      case socialNFTAddress:
+        thumbnail = `/images/nfts/${name.toLowerCase()}/${nft?.level?.toString()}`
+        name = `${levelToName[nft?.level]}#${tokenId}`
+        break
+      case diffusionCatAddress:
+        name = `${tokenIdToName[tokenId]}`
+        break
+      case starLightAddress:
+        name = `StarLight#${getToken.tokenId}`
+        break
+      default:
+        break
     }
+
     const level = nft?.level
     const nftToken: NftToken = {
       tokenId,
