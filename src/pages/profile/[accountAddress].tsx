@@ -748,24 +748,6 @@ function NftProfilePage() {
               pl={['4px', null, '0']}
               mb="8px"
             >
-              {/* <ToggleView idPrefix='clickCollection' viewMode={viewMode} onToggle={setViewMode} /> */}
-              <Flex width="max-content" style={{ gap: '4px' }} flexDirection="column">
-                <Select
-                  options={options}
-                  placeHolderText={t('Select')}
-                  defaultOptionIndex={SORT_FIELD_INDEX_MAP.get(sortField)}
-                  onOptionChange={(option: OptionProps) => handleSort(option.value)}
-                />
-              </Flex>
-            </Flex>
-            <Flex
-              justifyContent="space-between"
-              alignItems="center"
-              pr={[null, null, '4px']}
-              pl={['4px', null, '0']}
-              mb="8px"
-            >
-              {/* <ToggleView idPrefix='clickCollection' viewMode={viewMode} onToggle={setViewMode} /> */}
               <Flex width="max-content" style={{ gap: '4px' }} flexDirection="column">
                 <Select
                   options={options}
