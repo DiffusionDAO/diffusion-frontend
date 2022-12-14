@@ -18,9 +18,10 @@ import {
   useNftMarketContract,
   useSocialNftContract,
 } from 'hooks/useContract'
-import { formatBigNumber } from 'utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { levelToName, levelToSPOS, NFT, tokenIdToName } from 'pages/profile/[accountAddress]'
+import { getContract } from 'utils/contractHelpers'
+import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 
 import { formatUnits } from '@ethersproject/units'
 import useSWR from 'swr'
@@ -29,6 +30,7 @@ import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
 import DetailsCard from '../shared/DetailsCard'
 import { useWeb3React } from '../../../../../../../packages/wagmi/src/useWeb3React'
+import { ChainId } from '../../../../../../../packages/swap-sdk/src/constants'
 
 interface IndividualNFTPageProps {
   collectionAddress: string
@@ -65,11 +67,12 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const starLightAddress = getStarlightAddress()
   const diffusionCatAddress = getDiffusionAICatAddress()
   const socialNFTAddress = getSocialNFTAddress()
+  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
 
   let name = collection.name
 
   const getToken = async () => {
-    const getToken = await socialNFT.getToken(tokenId)
+    const getToken = await erc721a.getToken(tokenId)
     const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
     const staker = await dfsMining.staker(tokenId)
     const nft = { ...getToken, ...sellPrice, staker }
@@ -129,7 +132,6 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const isOwnNft =
     nftToken?.marketData?.currentSeller === account || nftToken?.owner === account || nftToken?.staker === account
   const nftIsProfilePic = false
-  console.log('IndividualNFTPage getToken:', nftToken.image)
   return (
     <PageWrap>
       <div

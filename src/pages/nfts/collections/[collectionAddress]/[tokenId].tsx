@@ -41,19 +41,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { collectionAddress, tokenId } = params
-
   if (typeof collectionAddress !== 'string' || typeof tokenId !== 'string') {
     return {
       notFound: true,
     }
   }
 
-  const erc721 = getContract({ abi: erc721ABI, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
+  console.log(collectionAddress, tokenId)
   const socialNFTAddress = getSocialNFTAddress()
-  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC_TESTNET })
-
-  const getToken = await socialNFT.getToken(tokenId)
-  const level = getToken?.level?.toString()
+  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
+  const getToken = await erc721a.getToken(tokenId)
+  const level = getToken?.level
 
   const nftMarketAddress = getNftMarketAddress()
   const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
@@ -63,14 +61,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
   const staker = await dfsMining.staker(tokenId)
 
-  let name = await erc721.name()
+  let name = await erc721a.name()
   let thumbnail
   const starLightAddress = getStarlightAddress()
   const diffusionCatAddress = getDiffusionAICatAddress()
   thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
   switch (collectionAddress) {
     case socialNFTAddress:
-      thumbnail = `/images/nfts/${name.toLowerCase()}/${getToken?.level}`
+      thumbnail = `/images/nfts/${name.toLowerCase()}/${level}`
       name = `${levelToName[level]}#${getToken.tokenId}`
       break
     case diffusionCatAddress:
@@ -82,7 +80,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     default:
       break
   }
-  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, staker, thumbnail }
+  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, staker, thumbnail, name }
 
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
