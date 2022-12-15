@@ -13,7 +13,7 @@ import {
   getMasterchefV1Contract,
   getSouschefContract,
   getNftMarketContract,
-  getDFSNFTContract,
+  getSocialNFTContract,
   getMineContract,
   getDFSContract,
   getPDFSContract,
@@ -22,6 +22,7 @@ import {
   getBondContract,
   getHBondContract,
   getHDFSContract,
+  getDiffusionAICatContract,
 } from 'utils/contractHelpers'
 import { useSigner } from 'wagmi'
 
@@ -141,9 +142,14 @@ export function useMulticallContract() {
   return useContract<Multicall>(getMulticallAddress(chainId), multiCallAbi, false)
 }
 
+export const useDiffusionAICatContract = (withSignerIfPossible = true) => {
+  const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
+  return useMemo(() => getDiffusionAICatContract(providerOrSigner), [providerOrSigner])
+}
+
 export const useSocialNftContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getDFSNFTContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getSocialNFTContract(providerOrSigner), [providerOrSigner])
 }
 export const useBondContract = (withSignerIfPossible = true) => {
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)

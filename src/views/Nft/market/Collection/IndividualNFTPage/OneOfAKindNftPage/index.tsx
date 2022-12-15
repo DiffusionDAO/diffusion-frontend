@@ -4,7 +4,12 @@ import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import noop from 'lodash/noop'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import PageLoader from 'components/Loader/PageLoader'
-import { getNFTDatabaseAddress, getSocialNFTAddress, getStarlightAddress } from 'utils/addressHelpers'
+import {
+  getDiffusionAICatAddress,
+  getNFTDatabaseAddress,
+  getSocialNFTAddress,
+  getStarlightAddress,
+} from 'utils/addressHelpers'
 import { NftToken } from 'state/nftMarket/types'
 
 import {
@@ -13,14 +18,13 @@ import {
   useNftMarketContract,
   useSocialNftContract,
 } from 'hooks/useContract'
-import { formatBigNumber } from 'utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
+import { levelToName, levelToSPOS, NFT, tokenIdToName } from 'pages/profile/[accountAddress]'
 import { getContract } from 'utils/contractHelpers'
+import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 
 import { formatUnits } from '@ethersproject/units'
 import useSWR from 'swr'
-import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
@@ -56,31 +60,43 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const { isMobile } = useMatchBreakpoints()
   const bgImg = isMobile ? "url('/images/nfts/mretc.png')" : "url('/images/nfts/smxl.png')"
   const bgOffset = !isMobile ? '40px' : '80px'
-  const [nft, setNFT] = useState<NFT>()
   const collection = useGetCollection(collectionAddress)
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
+  const starLightAddress = getStarlightAddress()
+  const diffusionCatAddress = getDiffusionAICatAddress()
   const socialNFTAddress = getSocialNFTAddress()
-
   const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC })
+
+  let name = collection.name
+
   
   const getToken = async () => {
     const getToken = await erc721a.getToken(tokenId)
     const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
     const staker = await dfsMining.staker(tokenId)
     const nft = { ...getToken, ...sellPrice, staker }
-    let thumbnail = `/images/nfts/socialnft/${nft?.level}`
-    const starLightAddress = getStarlightAddress()
-    if (collectionAddress === starLightAddress) {
-      thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
+    let thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
+    switch (collectionAddress) {
+      case socialNFTAddress:
+        thumbnail = `/images/nfts/${name.toLowerCase()}/${nft?.level?.toString()}`
+        name = `${levelToName[nft?.level]}#${tokenId}`
+        break
+      case diffusionCatAddress:
+        name = `${tokenIdToName[tokenId]}`
+        break
+      case starLightAddress:
+        name = `StarLight#${getToken.tokenId}`
+        break
+      default:
+        break
     }
-    const name = collectionAddress === socialNFTAddress ? `${levelToName[nft?.level]}#${nft?.tokenId}` : `StarLight#${nft?.tokenId}`
 
     const level = nft?.level
     const nftToken: NftToken = {
       tokenId,
       collectionAddress,
-      collectionName: t(collection.name),
+      collectionName: t(nft?.collectionName),
       name,
       description: t(nft?.collectionName),
       image: { original: 'string', thumbnail },

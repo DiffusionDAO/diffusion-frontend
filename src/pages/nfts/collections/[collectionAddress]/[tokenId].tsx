@@ -4,13 +4,20 @@ import { getCollection } from 'state/nftMarket/helpers'
 import { ApiCollection, Collection, NftToken } from 'state/nftMarket/types'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
-import { getSocialNFTAddress, getStarlightAddress, getNftMarketAddress, getMiningAddress } from 'utils/addressHelpers'
+import {
+  getSocialNFTAddress,
+  getStarlightAddress,
+  getNftMarketAddress,
+  getMiningAddress,
+  getDiffusionAICatAddress,
+} from 'utils/addressHelpers'
 import { getContract } from 'utils/contractHelpers'
 import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import dfsMiningAbi from 'config/abi/dfsMining.json'
-import { levelToName, levelToSPOS, NFT } from 'pages/profile/[accountAddress]'
+import { levelToName, levelToSPOS, NFT, tokenIdToName } from 'pages/profile/[accountAddress]'
 import { formatUnits } from '@ethersproject/units'
+import { erc721ABI } from 'wagmi'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
 
 const IndividualNFTPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -34,20 +41,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { collectionAddress, tokenId } = params
-
   if (typeof collectionAddress !== 'string' || typeof tokenId !== 'string') {
     return {
       notFound: true,
     }
   }
 
+  console.log(collectionAddress, tokenId)
   const socialNFTAddress = getSocialNFTAddress()
   const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC })
-  // const starlight = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC })
-
-  const getToken = await erc721a.getToken(tokenId) 
-  const level = getToken?.level?.toString()
-  const name = collectionAddress === socialNFTAddress ? `${levelToName[level]}#${getToken.tokenId}` : `StarLight#${getToken.tokenId}`
+  const getToken = await erc721a.getToken(tokenId)
+  const level = getToken?.level
 
   const nftMarketAddress = getNftMarketAddress()
   const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
@@ -57,9 +61,27 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC })
   const staker = await dfsMining.staker(tokenId)
 
-  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, name, staker }
+  let name = await erc721a.name()
+  let thumbnail
+  const starLightAddress = getStarlightAddress()
+  const diffusionCatAddress = getDiffusionAICatAddress()
+  thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
+  switch (collectionAddress) {
+    case socialNFTAddress:
+      thumbnail = `/images/nfts/${name.toLowerCase()}/${level}`
+      name = `${levelToName[level]}#${getToken.tokenId}`
+      break
+    case diffusionCatAddress:
+      name = tokenIdToName[tokenId]
+      break
+    case starLightAddress:
+      name = `StarLight#${getToken.tokenId}`
+      break
+    default:
+      break
+  }
+  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, staker, thumbnail, name }
 
-  console.log(nft)
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
 
@@ -69,11 +91,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 1,
     }
   }
-  let thumbnail = `/images/nfts/socialnft/${nft?.level?.toString()}`
-  const starLightAddress = getStarlightAddress()
-  if (collectionAddress === starLightAddress) {
-    thumbnail = `/images/nfts/starlight/starlight${tokenId}.gif`
-  }
+
   const token = {
     tokenId,
     collectionAddress,
@@ -92,7 +110,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       isTradable: nft.price.gt(0) ?? false,
     },
   }
-  console.log('token:', token)
 
   return {
     props: {

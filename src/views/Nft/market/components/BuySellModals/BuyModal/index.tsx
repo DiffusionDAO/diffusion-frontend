@@ -24,7 +24,9 @@ import { useEffect, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDFSAddress } from 'utils/addressHelpers'
 import { ethersToBigNumber } from 'utils/bigNumber'
+import { getContract } from 'utils/contractHelpers'
 import { formatBigNumber, formatNumber, getBalanceNumber } from 'utils/formatBalance'
+import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import { requiresApproval } from 'utils/requiresApproval'
 import ApproveAndConfirmStage from '../shared/ApproveAndConfirmStage'
 import ConfirmStage from '../shared/ConfirmStage'
@@ -65,6 +67,7 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
   const database = useNFTDatabaseContract()
   const dfsContract = useERC20(dfsAddress)
   const socialNFT = useSocialNftContract()
+  const erc721a = getContract({ abi: socialNFTAbi, address: nftToBuy.collectionAddress, chainId: ChainId.BSC_TESTNET })
   // useEffect(() => {
   //   dfsContract.allowance(account, nftMarketContract.address).then(allowance => {
   //     if (allowance.lt(parseUnits(nftToBuy.marketData.currentAskPrice,"ether"))) {
@@ -119,8 +122,8 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
       transactionResponse
         .then((response) => {
           response.wait().then((res) => {
-            socialNFT.getToken(nftToBuy.tokenId).then((nft: NFT) => {
-              nftToBuy.owner = nft.owner
+            erc721a.getToken(nftToBuy.tokenId).then((nft: NFT) => {
+              nftToBuy.owner = account
               nftToBuy.marketData.isTradable = false
               nftToBuy.marketData.currentAskPrice = '0'
               nftToBuy.marketData.currentSeller = nft.seller

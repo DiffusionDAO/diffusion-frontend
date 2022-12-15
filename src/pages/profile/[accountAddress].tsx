@@ -44,6 +44,7 @@ import {
   useDFSMiningContract,
   useSocialNftContract,
   useNftMarketContract,
+  useDiffusionAICatContract,
 } from 'hooks/useContract'
 import useSWR from 'swr'
 import { formatBigNumber } from 'utils/formatBalance'
@@ -69,9 +70,112 @@ export interface NFT {
   seller?: string
   price?: BigNumber
   staker?: string
+  thumbnail?: string
 }
 
 export const zeroAddress = '0x0000000000000000000000000000000000000000'
+export const tokenIdToName = {
+  0: 'Angel#1',
+  1: 'Angel#2',
+  2: 'Angel#3',
+  3: 'Angel#4',
+  4: 'Angel#5',
+  5: 'Angel#6',
+  6: 'Angel#7',
+  7: 'Angel#8',
+  8: 'Catman at DiffusionDAO on Mars',
+  9: 'Court General',
+  10: 'Court Hierarch',
+  11: 'Court King#1',
+  12: 'Court King#2',
+  13: 'Court King#3',
+  14: 'Court King#4',
+  15: 'Court King#5',
+  16: 'Court King#6',
+  17: 'Court King#7',
+  18: 'Court Nobility#1',
+  19: 'Court Nobility#2',
+  20: 'Court Nobility#3',
+  21: 'Court Nobility#4',
+  22: 'Court Nobility#5',
+  23: 'Court Nobility#6',
+  24: 'Court Queen#1',
+  25: 'Court Queen#2',
+  26: 'Court Queen#3',
+  27: 'Court Queen#4',
+  28: 'Court Queen#5',
+  29: 'Court Queen#6',
+  30: 'Court Queen#7',
+  31: 'Court Queen#8',
+  32: 'Court Queen#9',
+  33: 'Court Queen#10',
+  34: 'Court Nun#1',
+  35: 'Court Nun#2',
+  36: 'Court Nun#3',
+  37: 'Court Nun#4',
+  38: 'Court Nun#5',
+  39: 'Court Pet',
+  40: 'Cowboy#1',
+  41: 'Cowboy#2',
+  42: 'Cowboy#3',
+  43: 'Cowboy#4',
+  44: 'Cowboy#5',
+  45: 'Cowboy#6',
+  46: 'Cowboy#7',
+  47: 'Cowboy#8',
+  48: 'Cowboy#9',
+  49: 'Future Warrior#1',
+  50: 'Future Warrior#2',
+  51: 'Future Warrior#3',
+  52: 'Future Warrior#4',
+  53: 'Future Warrior#5',
+  54: 'Future Warrior#6',
+  55: 'Future Warrior#7',
+  56: 'Future Warrior#8',
+  57: 'Future Warrior#9',
+  58: 'Future Warrior#10',
+  59: 'Future Warrior#11',
+  60: 'Future Warrior#12',
+  61: 'Future Warrior#13',
+  62: 'Future Warrior#14',
+  63: 'Future Warrior#15',
+  64: 'Future Warrior#16',
+  65: 'Future Warrior#17',
+  66: 'Gentleman#1',
+  67: 'Gentleman#2',
+  68: 'Gentleman#3',
+  69: 'Gentleman#4',
+  70: 'Gentleman#5',
+  71: 'Gentleman#6',
+  72: 'Gentleman#7',
+  73: 'Gentleman#8',
+  74: 'Gentleman#9',
+  75: 'Gentleman#10',
+  76: 'Gentleman#11',
+  77: 'God of Thunder',
+  78: 'Knight under the stars',
+  79: 'Money#1',
+  80: 'Money#2',
+  81: 'Money#3',
+  82: 'Money#4',
+  83: 'Money#5',
+  84: 'Money#6',
+  85: 'Money#9',
+  86: 'Money#10',
+  87: 'Money#8888',
+  88: 'Purple space#1',
+  89: 'Purple space#2',
+  90: 'Purple space#3',
+  91: 'Purple space#4',
+  92: 'Purple space#5',
+  93: 'Purple space#6',
+  94: 'Purple space#7',
+  95: 'Teenager#1',
+  96: 'Teenager#2',
+  97: 'Tide#1',
+  98: 'Tide#2',
+  99: 'Tide#3',
+}
 export const levelToName = {
   '0': 'Wiseman fragment',
   '1': 'Wiseman',
@@ -123,6 +227,9 @@ const SORT_FIELD_INDEX_MAP = new Map([
   [levelToName['5'], 6],
   [levelToName['6'], 7],
 ])
+
+const socialNFTAddress = getSocialNFTAddress()
+
 export const nftToNftToken = (nft: NFT) => {
   const socialNFTAddress = getSocialNFTAddress()
   const tokenId = nft?.tokenId?.toString()
@@ -136,10 +243,10 @@ export const nftToNftToken = (nft: NFT) => {
     collectionAddress: nft.collectionAddress,
     image: {
       original: 'string',
-      thumbnail: `/images/nfts/socialnft/${level}`,
+      thumbnail: nft?.thumbnail,
     },
     level,
-    attributes: [ nft.collectionAddress === socialNFTAddress &&
+    attributes: nft.collectionAddress === socialNFTAddress && [
       {
         traitType: 'SPOS',
         value: levelToSPOS[level].validSPOS,
@@ -220,43 +327,124 @@ function NftProfilePage() {
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
   const socialNFT = useSocialNftContract()
+  const database = useNFTDatabaseContract()
+  const diffusionAICatContract = useDiffusionAICatContract()
 
   const getProfileToken = async () => {
     const tokens = { unstaked: [], staked: [], onSale: [] }
     if (account) {
+      const diffusionAICatTokenIds = await diffusionAICatContract.tokensOfOwner(account)
       const tokenIds = await socialNFT.tokensOfOwner(account)
-      const collectionName = await socialNFT.name()
       await Promise.all(
         tokenIds.map(async (tokenId) => {
           try {
+            const collectionName = await socialNFT.name()
             const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
             const token = await socialNFT.getToken(tokenId)
             const name = `${t(levelToName[token.level])}#${token.tokenId}`
-            const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
+            const thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${token?.level}`
+            const nft: NFT = {
+              ...token,
+              ...sellPrice,
+              collectionName,
+              collectionAddress: socialNFT.address,
+              name,
+              thumbnail,
+            }
             tokens.unstaked.push(nftToNftToken(nft))
           } catch (error: any) {
             console.log(tokenId, error.reason ?? error.data?.message ?? error.message)
           }
         }),
       )
+      await Promise.all(
+        diffusionAICatTokenIds.map(async (tokenId) => {
+          try {
+            const collectionName = await diffusionAICatContract.name()
+            const sellPrice = await nftMarket.sellPrice(diffusionAICatContract.address, tokenId)
+            const getToken = await diffusionAICatContract.getToken(tokenId)
+            let name = tokenIdToName[tokenId]
+            if (name.includes('#')) {
+              const splitted = tokenIdToName[tokenId].split('#')
+              name = `${splitted[0]}#${splitted[1]}`
+            }
+            const thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${tokenId}`
+
+            const nft: NFT = {
+              ...getToken,
+              ...sellPrice,
+              collectionName,
+              collectionAddress: diffusionAICatContract.address,
+              name,
+              thumbnail,
+            }
+            tokens.unstaked.push(nftToNftToken(nft))
+          } catch (error: any) {
+            console.log(tokenId, error.reason ?? error.data?.message ?? error.message)
+          }
+        }),
+      )
+
       const staked = await dfsMining.getTokensStakedByOwner(account)
       await Promise.all(
         staked.map(async (tokenId) => {
           const token = await socialNFT.getToken(tokenId)
           const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
           const name = `${t(levelToName[token.level])}#${token.tokenId}`
-          const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress: socialNFT.address, name }
+          const nft: NFT = {
+            ...token,
+            ...sellPrice,
+            collectionName: t('SocialNFT'),
+            collectionAddress: socialNFT.address,
+            name,
+          }
           tokens.staked.push(nftToNftToken(nft))
         }),
       )
       const onSaleTokenIds = await socialNFT.tokensOfOwner(nftMarket.address)
+      const onSaleDiffusionAICat = await diffusionAICatContract.tokensOfOwner(nftMarket.address)
       await Promise.all(
         onSaleTokenIds.map(async (tokenId) => {
           const { seller, price } = await nftMarket.sellPrice(socialNFT.address, tokenId)
           if (seller === account) {
+            const collectionName = await socialNFT.name()
             const getToken = await socialNFT.getToken(tokenId)
             const name = `${t(levelToName[getToken.level])}#${tokenId}`
-            const nft: NFT = { ...getToken, seller, price, name, collectionAddress: socialNFT.address, collectionName }
+            const thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${getToken?.level}`
+            const nft: NFT = {
+              ...getToken,
+              seller,
+              price,
+              name,
+              collectionAddress: socialNFT.address,
+              collectionName,
+              thumbnail,
+            }
+            tokens.onSale.push(nftToNftToken(nft))
+          }
+        }),
+      )
+      await Promise.all(
+        onSaleDiffusionAICat.map(async (tokenId) => {
+          const { seller, price } = await nftMarket.sellPrice(diffusionAICatContract.address, tokenId)
+          if (seller === account) {
+            const collectionName = await diffusionAICatContract.name()
+            const getToken = await diffusionAICatContract.getToken(tokenId)
+            let name = tokenIdToName[tokenId]
+            if (name.includes('#')) {
+              const splitted = tokenIdToName[tokenId].split('#')
+              name = `${splitted[0]}#${splitted[1]}`
+            }
+            const thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${tokenId}`
+            const nft: NFT = {
+              ...getToken,
+              seller,
+              price,
+              name,
+              collectionAddress: diffusionAICatContract.address,
+              collectionName,
+              thumbnail,
+            }
             tokens.onSale.push(nftToNftToken(nft))
           }
         }),
@@ -317,7 +505,7 @@ function NftProfilePage() {
   }
   const startCompose = () => {
     setIsSelected(true)
-    setSelectedNFTs(unstakedNFTs)
+    setSelectedNFTs(unstakedNFTs.filter((nft) => nft.collectionAddress === socialNFTAddress))
     setOption('compose')
   }
 
@@ -333,7 +521,7 @@ function NftProfilePage() {
   }
 
   const submitCompose = async () => {
-    const selected = selectedNFTs.filter((nft) => nft.selected)
+    const selected = selectedNFTs.filter((nft) => nft.collectionAddress === socialNFT.address && nft.selected)
     try {
       let tx
       if (selected[0]?.level === 0 && selected?.length === 3) {
@@ -400,7 +588,7 @@ function NftProfilePage() {
 
   const startStake = async () => {
     setIsSelected(true)
-    setSelectedNFTs(unstakedNFTs)
+    setSelectedNFTs(unstakedNFTs.filter((nft) => nft.collectionAddress === socialNFTAddress))
     setOption('stake')
   }
 
@@ -410,7 +598,7 @@ function NftProfilePage() {
       description: '',
       visible: false,
     })
-    const selected = selectedNFTs.filter((item) => item.selected)
+    const selected = selectedNFTs.filter((item) => item.collectionAddress === socialNFT.address && item.selected)
     setSelectedNFTs(selected)
     if (option === 'stake' && selectedCount > 0) await submitStake(selected)
   }
@@ -463,7 +651,9 @@ function NftProfilePage() {
   const selectNft = (nft: NftToken, index: number) => {
     if (option === 'compose') {
       const level = nft.level
-      const sameLevel = unstakedNFTs.filter((nft, i) => nft.level === level && i >= index)
+      const sameLevel = unstakedNFTs.filter(
+        (nft, i) => nft.collectionAddress === socialNFT.address && nft.level === level && i >= index,
+      )
       if (level === 0) {
         const toBeComposed = sameLevel.slice(0, 3)
         if (toBeComposed?.length < 3) {
@@ -506,8 +696,10 @@ function NftProfilePage() {
         setSelectedCount(toBeComposed.length)
       }
     } else if (option === 'stake') {
-      nft.selected = !nft.selected
-      setSelectedCount(selectedNFTs?.filter((nft) => nft.selected).length)
+      if (nft.collectionAddress === socialNFT.address) {
+        nft.selected = !nft.selected
+        setSelectedCount(selectedNFTs?.filter((nft) => nft.selected).length)
+      }
     }
   }
 
@@ -557,7 +749,6 @@ function NftProfilePage() {
               pl={['4px', null, '0']}
               mb="8px"
             >
-              {/* <ToggleView idPrefix="clickCollection" viewMode={viewMode} onToggle={setViewMode} /> */}
               <Flex width="max-content" style={{ gap: '4px' }} flexDirection="column">
                 <Select
                   options={options}

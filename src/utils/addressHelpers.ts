@@ -157,3 +157,7 @@ export const getHBondAddress = () => {
 export const getHDFSAddress = () => {
   return getAddress(addresses.hdfs)
 }
+
+export const getDiffusionAICatAddress = () => {
+  return getAddress(addresses.diffusionAICat)
+}

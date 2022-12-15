@@ -46,15 +46,16 @@ const PropertiesCard: React.FC<React.PropsWithChildren<PropertiesCardProps>> = (
   const { t } = useTranslation()
   const content = (
     <Box p="24px">
-      {properties && properties.map((property) => (
-        <SingleProperty
-          key={property.traitType}
-          description={property?.description}
-          title={property.traitType}
-          value={property.value}
-          rarity={rarity[property.traitType]}
-        />
-      ))}
+      {properties &&
+        properties?.map((property) => (
+          <SingleProperty
+            key={property.traitType}
+            description={property?.description}
+            title={property.traitType}
+            value={property.value}
+            rarity={rarity[property.traitType]}
+          />
+        ))}
     </Box>
   )
   return <ExpandableCard title={t('Properties')} icon={<SpaceIcon />} content={content} />
