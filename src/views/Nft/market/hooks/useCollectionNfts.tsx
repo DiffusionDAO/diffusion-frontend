@@ -276,22 +276,19 @@ export const useCollectionNfts = (collectionAddress: string) => {
       if (settings.showOnlyNftsOnSale) {
         newNfts = await Promise.all(
           tokenIdsOnSale.map(async (tokenId) => {
-            let token
+            const token = await getTokenContract.getToken(tokenId)
             let name
 
             let thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${tokenId}`
             switch (collectionAddress) {
               case socialNFTAddress:
-                token = await socialNFT.getToken(tokenId)
                 thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${token.level}`
                 name = `${levelToName[token?.level]}#${tokenId}`
                 break
               case diffusionAICatAddress:
-                token = await diffusionAICatContract.getToken(tokenId)
                 name = `${tokenIdToName[tokenId]}`
                 break
               case starlightAddress:
-                token = await starlight.getToken(tokenId)
                 name = `StarLight#${tokenId}`
                 break
               default:
