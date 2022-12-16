@@ -164,7 +164,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
         width={['100%', null, 'max-content']}
         mt="24px"
         onClick={
-          nft?.staker === zeroAddress
+          nft?.staker === zeroAddress || !nft?.staker
             ? onPresentSellModal
             : async () => {
                 const unstakeFee = await dfsMining.unstakeFee()
@@ -187,7 +187,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
       >
         {nft?.marketData?.isTradable
           ? t('Adjust price')
-          : nft?.staker === zeroAddress
+          : nft?.staker === zeroAddress || !nft?.staker
           ? t('List for sale')
           : t('Unstake')}
       </BtnB>

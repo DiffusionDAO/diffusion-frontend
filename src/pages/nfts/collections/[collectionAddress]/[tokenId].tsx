@@ -15,7 +15,7 @@ import { getContract } from 'utils/contractHelpers'
 import socialNFTAbi from 'config/abi/socialNFTAbi.json'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import dfsMiningAbi from 'config/abi/dfsMining.json'
-import { levelToName, levelToSPOS, NFT, tokenIdToName } from 'pages/profile/[accountAddress]'
+import { levelToName, levelToSPOS, NFT, tokenIdToName, zeroAddress } from 'pages/profile/[accountAddress]'
 import { formatUnits } from '@ethersproject/units'
 import { erc721ABI } from 'wagmi'
 import { ChainId } from '../../../../../packages/swap-sdk/src/constants'
@@ -59,7 +59,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const dfsMiningAddress = getMiningAddress()
   const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC })
-  const staker = await dfsMining.staker(tokenId)
+
 
   let name = await erc721a.name()
   let thumbnail
@@ -80,7 +80,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     default:
       break
   }
-  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, staker, thumbnail, name }
+  const nft: NFT = { ...getToken, ...sellPrice, collectionAddress, thumbnail, name }
+
+  if (collectionAddress === socialNFTAddress) {
+    nft.staker = await dfsMining.staker(tokenId)
+  }
 
   let collection = await getCollection(collectionAddress)
   collection = JSON.parse(JSON.stringify(collection))
@@ -111,6 +115,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     },
   }
 
+  console.log("token:",token)
   return {
     props: {
       fallback: {

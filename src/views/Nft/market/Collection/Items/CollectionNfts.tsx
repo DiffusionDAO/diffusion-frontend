@@ -16,7 +16,7 @@ const CollectionNfts: React.FC<React.PropsWithChildren<CollectionNftsProps>> = (
   const { address: collectionAddress } = collection || {}
   const { t } = useTranslation()
   const { nfts, isFetchingNfts, page, setPage, resultSize, isLastPage } = useCollectionNfts(collectionAddress)
-
+  console.log("CollectionNfts:",nfts)
   const handleLoadMore = useCallback(() => {
     setPage(page + 1)
   }, [setPage, page])
@@ -30,7 +30,7 @@ const CollectionNfts: React.FC<React.PropsWithChildren<CollectionNftsProps>> = (
         <Flex p="16px">
           <Text bold>
             {resultSize} {t('Results')}
-          </Text>
+          </Text> 
         </Flex>
       )}
       {nfts.length > 0 ? (

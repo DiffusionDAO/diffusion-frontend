@@ -74,8 +74,8 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const getToken = async () => {
     const getToken = await erc721a.getToken(tokenId)
     const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
-    const staker = await dfsMining.staker(tokenId)
-    const nft = { ...getToken, ...sellPrice, staker }
+    const nft = { ...getToken, ...sellPrice }
+    if (collectionAddress === socialNFTAddress) nft.staker = await dfsMining.staker(tokenId)
     let thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
     switch (collectionAddress) {
       case socialNFTAddress:

@@ -211,7 +211,6 @@ const Dashboard = () => {
     return { ...dashboard, ...json }
   })
 
-  console.log('data:', data)
 
   const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
   // eslint-disable-next-line no-return-assign, no-param-reassign

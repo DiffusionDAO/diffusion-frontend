@@ -212,8 +212,8 @@ export const useCollectionNfts = (collectionAddress: string) => {
           const collectionName = await getTokenContract.name()
           const getToken = await getTokenContract.getToken(tokenId)
           const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
-          const staker = await dfsMining.staker(tokenId)
-          const nft: NFT = { ...getToken, ...sellPrice, staker }
+          const nft: NFT = { ...getToken, ...sellPrice }
+          if (collectionAddress === socialNFTAddress) nft.staker = await dfsMining.staker(tokenId)
           const level = nft.level
           let name
           let thumbnail
