@@ -2,7 +2,7 @@
 import { bsc, bscTest } from '@pancakeswap/wagmi/chains'
 import Swap from '../views/Swap'
 
-const IndexPage = ({  }) => {
+const IndexPage = () => {
   return (
       <Swap />
   )
