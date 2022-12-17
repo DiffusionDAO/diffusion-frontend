@@ -19,6 +19,7 @@ import { formatBigNumber, formatBigNumberToFixed, formatNumber } from '@pancakes
 import { shorten } from 'helpers'
 import useSWR from 'swr'
 import WalletModal, { WalletView } from 'components/Menu/UserMenu/WalletModal'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 
 import {
   RewardPageWrap,
@@ -67,7 +68,6 @@ import {
 import DataCell from '../../components/ListDataCell'
 import DetailModal from './components/DetailModal'
 import NoPower from './components/NoPower'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 
 
 interface Referral {
