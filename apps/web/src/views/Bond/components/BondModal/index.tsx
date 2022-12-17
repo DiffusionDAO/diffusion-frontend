@@ -55,6 +55,7 @@ import {
   ReferralLable,
   ReferralInput,
 } from './styles'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 
 const { confirm } = Modal
 
@@ -76,7 +77,6 @@ const BondModal: React.FC<BondModalProps> = ({
   openSettingModal,
 }) => {
   const { t } = useTranslation()
-  const [onPresentWalletModal] = useModal(<WalletModal initialView={WalletView.WALLET_INFO} />)
   const router = useRouter()
 
   const [hasReferral, setHasReferral] = useState<boolean>(false)
@@ -255,10 +255,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const clickTab = (key) => {
     setActiveTab(key)
   }
-  const connectWallect = () => {
-    onClose()
-    onPresentWalletModal()
-  }
+
 
   return (
     <StyledModal width={500} className="no-header" onCancel={onClose} open centered maskClosable={false} footer={[]}>
@@ -353,7 +350,7 @@ const BondModal: React.FC<BondModalProps> = ({
               <InfoIcon width="20px" color="#ABB6FF" />
               <TipsText>{t('Your wallet has to be connected in order to perform this operation')}</TipsText>
             </TipsWrap>
-            <BondListItemBtn onClick={connectWallect}>{t('Connection')}</BondListItemBtn>
+            <ConnectWalletButton />
           </>
         )}
         <ListItem>

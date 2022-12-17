@@ -41,12 +41,12 @@ import DataCell from '../../components/ListDataCell'
 import MintBoxModal from './components/MintBoxModal'
 import InsufficientBalance from './components/InsufficientBalance'
 import PlayBindBoxModal from './components/PlayMintBoxModal'
+import { loadGetInitialProps } from 'next/dist/shared/lib/utils'
 
 const Mint = () => {
   const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
-  const [onPresentWalletModal] = useModal(<WalletModal initialView={WalletView.WALLET_INFO} />)
   
   const [mintBoxModalVisible, setMintBoxModalVisible] = useState<boolean>(false)
   const [InsufficientBalanceVisible, setInsufficientBalanceModalVisible] = useState<boolean>(false)
@@ -103,7 +103,7 @@ const Mint = () => {
 
   const mint = async (type: string, useBond: boolean) => {
     if (!account) {
-      onPresentWalletModal()
+      
       return
     }
     if (type === 'ordinary') {

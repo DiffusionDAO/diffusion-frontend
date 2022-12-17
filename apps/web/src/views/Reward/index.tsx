@@ -67,6 +67,7 @@ import {
 import DataCell from '../../components/ListDataCell'
 import DetailModal from './components/DetailModal'
 import NoPower from './components/NoPower'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 
 
 interface Referral {
@@ -123,7 +124,6 @@ const Reward = () => {
   const [activeIndex, setActiveIndex] = useState(1)
 
   const { isMobile } = useMatchBreakpoints()
-  const [onPresentWalletModal] = useModal(<WalletModal initialView={WalletView.WALLET_INFO} />)
   const dfsMining = useDFSMiningContract()
   const bond = useBondContract()
   const dfsContract = useDFSContract()
@@ -608,12 +608,13 @@ const Reward = () => {
         <DetailModal detailData={powerRewardDetailData} onClose={closeUnlockedDetailModal} />
       ) : null}
       {!account && (
-        <NoPower
-          title={t('You cannot view this page right now')}
-          description={t('Please connect your wallet')}
-          btnText={t('Connect')}
-          action={onPresentWalletModal}
-        />
+        <ConnectWalletButton />
+        // <NoPower
+        //   title={t('You cannot view this page right now')}
+        //   description={t('Please connect your wallet')}
+        //   btnText={t('Connect')}
+        //   action={onPresentWalletModal}
+        // />
       )}
       {account && !access && (
         <NoPower
