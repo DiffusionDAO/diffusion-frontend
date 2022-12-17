@@ -1,8 +1,7 @@
 import { Box, LinearProgress, Typography } from '@material-ui/core'
 import { useTranslation } from '@pancakeswap/localization'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import { formatUnits } from '@ethersproject/units'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
+import { formatCurrency, trim } from '../../../../helpers/dashboard'
 import DiffusionChart from '../../../../components/Recharts/DiffusionChart'
 import { bulletpoints, dataKey, headerText, itemType, tooltipInfoMessages, tooltipItems } from '../../dashboardData'
 import { dashboardMock } from '../../MockData'
@@ -35,7 +34,7 @@ export const OneGraph = () => {
       bulletpointColors={bulletpoints.tvl}
       infoTooltipMessage={t(tooltipInfoMessages().tvl)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0]?.tvl)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0]?.tvl)}`}
     />
   )
 }
@@ -50,7 +49,7 @@ export const TwoGraph = () => {
       stopColor={[['#3D72FD', '#3D72FD']]}
       stroke={['#3D72FD']}
       headerText={t(headerText().two)}
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0]?.two)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0]?.two)}`}
       bulletpointColors={bulletpoints.two}
       itemNames={tooltipItems.two}
       itemType={itemType.dollar}
@@ -76,7 +75,7 @@ export const ThreeGraph = () => {
               {t(item)}
             </Typography>
             <Typography variant="h5" style={{ fontWeight: 'bold', marginRight: 5, color: '#fff', fontSize: '20px' }}>
-              {`${dashboardData && formatUnits(dashboardData[0]?.one)}`}
+              {`${dashboardData && formatCurrency(dashboardData[0]?.one)}`}
             </Typography>
           </Box>
         ))}
@@ -95,7 +94,7 @@ export const ThreeGraph = () => {
       ]}
       stroke={['#3D72FD', '#F200FF']}
       headerText={t(headerText().three)}
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0]?.three1)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0]?.three1)}`}
       bulletpointColors={bulletpoints.three}
       itemNames={tooltipItems.three}
       itemType={itemType.dollar}
@@ -121,7 +120,7 @@ export const FourGraph = () => {
       bulletpointColors={bulletpoints.four}
       infoTooltipMessage={t(tooltipInfoMessages().four)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0]?.four)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0]?.four)}`}
     />
   )
 }
@@ -136,7 +135,7 @@ export const FiveGraph = () => {
       dataKey={dataKey().five}
       stroke={['#26E6C5']}
       headerText={t(headerText().five)}
-      headerSubText={`${dashboardData && formatNumber(dashboardData[0].five, 1)} Days`}
+      headerSubText={`${dashboardData && trim(dashboardData[0].five, 1)} Days`}
       dataFormat="days"
       bulletpointColors={bulletpoints.five}
       itemNames={tooltipItems.five}
@@ -158,7 +157,7 @@ export const SixGraph = () => {
       dataKey={dataKey().six}
       stroke={['#EC6EFF']}
       headerText={t(headerText().six)}
-      headerSubText={`${dashboardData && formatNumber(dashboardData[0].six, 1)} Days`}
+      headerSubText={`${dashboardData && trim(dashboardData[0].six, 1)} Days`}
       dataFormat="days"
       bulletpointColors={bulletpoints.six}
       itemNames={tooltipItems.six}
@@ -180,7 +179,7 @@ export const SevenGraph = () => {
       dataKey={dataKey().seven}
       stroke={['#DF741A']}
       headerText={t(headerText().seven)}
-      headerSubText={`${dashboardData && formatNumber(dashboardData[0].seven, 1)}`}
+      headerSubText={`${dashboardData && trim(dashboardData[0].seven, 1)}`}
       dataFormat="days"
       bulletpointColors={bulletpoints.seven}
       itemNames={tooltipItems.seven}
@@ -208,7 +207,7 @@ export const EightGraph = () => {
               {item}
             </Typography>
             <Typography variant="h5" style={{ fontWeight: 'bold', marginRight: 5, color: '#fff', fontSize: '20px' }}>
-              {`${dashboardData && formatUnits(dashboardData[0].one)}`}
+              {`${dashboardData && formatCurrency(dashboardData[0].one)}`}
             </Typography>
           </Box>
         ))}
@@ -228,7 +227,7 @@ export const EightGraph = () => {
       stroke={['#3D72FD', '#F200FF']}
       lineType="linear"
       headerText={t(headerText().eight)}
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0].eight1)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0].eight1)}`}
       bulletpointColors={bulletpoints.eight}
       itemNames={tooltipItems.eight}
       itemType={itemType.dollar}
@@ -284,7 +283,7 @@ export const NineGraph = () => {
       itemNames={tooltipItems.nine}
       infoTooltipMessage={t(tooltipInfoMessages().nine)}
       expandedGraphStrokeColor="rgba(171, 182, 255, 0.05)"
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0].nine)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0].nine)}`}
       // HeaderSuElement={<HeaderSuElement />}
     />
   )
@@ -302,7 +301,7 @@ export const TenGraph = () => {
       stroke={['#DF741A']}
       lineType="linear"
       headerText={t(headerText().ten)}
-      headerSubText={`${dashboardData && formatNumber(dashboardData[0].ten, 1)} Days`}
+      headerSubText={`${dashboardData && trim(dashboardData[0].ten, 1)} Days`}
       dataFormat="days"
       bulletpointColors={bulletpoints.ten}
       itemNames={tooltipItems.ten}
@@ -324,7 +323,7 @@ export const ElevenGraph = () => {
       stopColor={[['#FB0158', '#FB0158']]}
       stroke={['#FB0158']}
       headerText={t(headerText().eleven)}
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0].eleven)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0].eleven)}`}
       bulletpointColors={bulletpoints.eleven}
       itemNames={tooltipItems.eleven}
       itemType={itemType.dollar}
@@ -346,7 +345,7 @@ export const TwelveGraph = () => {
       stopColor={[['#DF741A', '#DF741A']]}
       stroke={['#DF741A']}
       headerText={t(headerText().twelve)}
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0].twelve)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0].twelve)}`}
       bulletpointColors={bulletpoints.twelve}
       itemNames={tooltipItems.twelve}
       itemType={itemType.dollar}
@@ -368,7 +367,7 @@ export const ThirteenGraph = () => {
       stopColor={[['#1C6CFF', '#1C6CFF']]}
       stroke={['#1C6CFF']}
       headerText={t(headerText().thirteen)}
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0].thirteen)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0].thirteen)}`}
       bulletpointColors={bulletpoints.thirteen}
       itemNames={tooltipItems.thirteen}
       itemType={itemType.dollar}
@@ -392,7 +391,7 @@ export const MarketValueGraph = () => {
       ]}
       stroke={['#c2efdb', '#bdd2fd']}
       headerText={t(headerText().coin)}
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0].treasuryDaiMarketValue)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0].treasuryDaiMarketValue)}`}
       bulletpointColors={bulletpoints.coin}
       itemNames={tooltipItems.coin}
       itemType={itemType.dollar}
@@ -412,7 +411,7 @@ export const AreaGraph = () => {
       dataKey={dataKey().coin}
       stopColor={[['#c2efdb', '#c2efdb']]}
       headerText={t(headerText().coin)}
-      headerSubText={`${dashboardData && formatUnits(dashboardData[0].treasuryDaiMarketValue)}`}
+      headerSubText={`${dashboardData && formatCurrency(dashboardData[0].treasuryDaiMarketValue)}`}
       bulletpointColors={bulletpoints.coin}
       itemNames={tooltipItems.coin}
       itemType={itemType.dollar}
@@ -432,7 +431,7 @@ export const RunwayAvailableGraph = () => {
       dataKey={dataKey().runway}
       stroke={['#5d91f9']}
       headerText={t(headerText().runway)}
-      headerSubText={`${dashboardData && formatNumber(dashboardData[0].runwayCurrent, 1)} Days`}
+      headerSubText={`${dashboardData && trim(dashboardData[0].runwayCurrent, 1)} Days`}
       dataFormat="days"
       bulletpointColors={bulletpoints.runway}
       itemNames={tooltipItems.runway}

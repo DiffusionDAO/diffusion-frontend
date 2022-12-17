@@ -1,7 +1,7 @@
 import { FC, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
-import { CloseIcon, CogIcon, InfoIcon, useModal } from '@pancakeswap/uikit'
+import {  useModal } from '@pancakeswap/uikit'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 import { parseUnits, formatUnits } from '@ethersproject/units'
@@ -22,6 +22,7 @@ import { useRouterContract } from 'utils/exchange'
 import { estimateGas } from 'utils/calls'
 import WalletModal, { WalletView } from 'components/Menu/UserMenu/WalletModal'
 import { USDT_BSC } from '@pancakeswap/tokens'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 
 import {
   StyledModal,
@@ -55,7 +56,6 @@ import {
   ReferralLable,
   ReferralInput,
 } from './styles'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 
 const { confirm } = Modal
 
