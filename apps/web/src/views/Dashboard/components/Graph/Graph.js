@@ -1,7 +1,6 @@
 import { Box, LinearProgress, Typography } from '@material-ui/core'
 import { useTranslation } from '@pancakeswap/localization'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import { formatCurrency, trim } from '../../../../helpers/dashboard'
 import DiffusionChart from '../../../../components/Recharts/DiffusionChart'
 import { bulletpoints, dataKey, headerText, itemType, tooltipInfoMessages, tooltipItems } from '../../dashboardData'
 import { dashboardMock } from '../../MockData'

@@ -43,7 +43,7 @@ import { baseNftFields, collectionBaseFields, baseTransactionFields } from './qu
 export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const nftDatabaseAddress = getNFTDatabaseAddress()
   const nftMarketAddress = getNftMarketAddress()
-
+  
   const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC })
   const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
   const collectionAddresses = await nftDatabase.getCollections()
