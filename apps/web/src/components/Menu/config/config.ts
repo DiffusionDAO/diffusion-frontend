@@ -57,7 +57,7 @@ const config: (
       label: t('Dashboard'),
       icon: DashboardIcon,
       fillIcon: DashboardFillIcon,
-      
+      supportChainIds: SUPPORT_ZAP,
       href: '/dashboard',
       showItemsOnMobile: false,
       items: [
@@ -66,7 +66,7 @@ const config: (
     {
       label: t('Bonds'),
       icon: BondIcon,
-      // supportChainIds: [],
+      supportChainIds: SUPPORT_ZAP,
       fillIcon: BondFillIcon,
       href: '/bond',
       showItemsOnMobile: false,
@@ -80,7 +80,7 @@ const config: (
       label: t('Mint'),
       href: '/mint',
       icon: MintIcon,
-      // supportChainIds: [],
+      supportChainIds: SUPPORT_ZAP,
       fillIcon: MintFillIcon,
       showItemsOnMobile: false,
       image: '/images/decorations/pe2.png',
@@ -91,7 +91,7 @@ const config: (
       label: t('Rewards'),
       href: '/reward',
       icon: RewardIcon,
-      // supportChainIds: [],
+      supportChainIds: SUPPORT_ZAP,
       fillIcon: RewardFillIcon,
       showItemsOnMobile: false,
       image: '/images/decorations/pe2.png',
@@ -102,7 +102,7 @@ const config: (
       label: t('NFT'),
       href: `${nftsBaseUrl}`,
       icon: NftMarketIcon,
-      // supportChainIds: [],
+      supportChainIds: SUPPORT_ZAP,
       fillIcon: NftMarketFillIcon,
       showItemsOnMobile: false,
       image: '/images/decorations/pe2.png',
@@ -114,6 +114,7 @@ const config: (
       icon: SwapIcon,
       fillIcon: SwapFillIcon,
       href: '/swap',
+      supportChainIds: SUPPORT_ZAP,
       showItemsOnMobile: false,
       items: [
         {
