@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="25px" viewBox="0 0 26 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>矩形</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" offset="28.3407998%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="99.1176792%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="NFT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="w-NFT3合成成功4" transform="translate(-683.000000, -518.000000)" fill="url(#linearGradient-1)">
+            <g id="编组-17" transform="translate(269.000000, 236.000000)">
+                <g id="编组-14" transform="translate(82.000000, 258.000000)">
+                    <path d="M335.597939,27.622506 C338.646132,30.4946073 341.701803,31.9227266 344.764951,31.9068639 C347.8281,31.8910012 350.898726,30.4311564 353.97683,27.5273296 C351.073003,30.6054336 349.613158,33.6760598 349.597296,36.7392082 C349.581433,39.8023566 351.009552,42.8580273 353.881653,45.9062202 C350.833461,43.0341189 347.77779,41.6059996 344.714641,41.6218624 C341.651493,41.6377251 338.580867,43.0975698 335.502763,46.0013966 C338.40659,42.9232926 339.866434,39.8526665 339.882297,36.789518 C339.89816,33.7263696 338.470041,30.6706989 335.597939,27.622506 Z" id="矩形" transform="translate(344.739796, 36.764363) rotate(-315.000000) translate(-344.739796, -36.764363) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
