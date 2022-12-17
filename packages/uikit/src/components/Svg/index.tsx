@@ -14,7 +14,6 @@ export { default as ArrowUpIcon } from "./Icons/ArrowUp";
 export { default as AutoRenewIcon } from "./Icons/AutoRenew";
 export { default as BackForwardIcon } from "./Icons/BackForwardIcon";
 export { default as BinanceChainIcon } from "./Icons/BinanceChain";
-export *  from "./Icons/Binance";
 export { default as BlockIcon } from "./Icons/Block";
 export { default as BnbUsdtPairTokenIcon } from "./Icons/BnbUsdtPairToken";
 export { default as BscScanIcon } from "./Icons/BscScan";
@@ -162,6 +161,8 @@ export { default as BraveIcon } from "./Icons/Brave";
 export { default as BloctoIcon } from "./Icons/Blocto";
 export { default as MartianWalletIcon } from "./Icons/MartianWallet";
 export { default as PetraWalletIcon } from "./Icons/PetraWallet";
+
+export *  from "./Icons/Binance";
 
 export { default as DashboardIcon } from "./Icons/Dashboard";
 export { default as DashboardFillIcon } from "./Icons/DashboardFill";
