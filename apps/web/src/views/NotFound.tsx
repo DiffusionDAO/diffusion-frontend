@@ -16,7 +16,7 @@ const NotFound = ({ statusCode = 404 }: { statusCode?: number }) => {
   const { t } = useTranslation()
 
   return (
-    <Page>
+    <Page title="404">
       <StyledNotFound>
         <Heading scale="xxl">{statusCode}</Heading>
         <Link href="/" passHref>
