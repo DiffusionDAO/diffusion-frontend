@@ -40,7 +40,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.RINKEBY]: [USDC[ChainId.RINKEBY], WNATIVE[ChainId.RINKEBY], BUSD[ChainId.RINKEBY]],
   [ChainId.GOERLI]: [USDC[ChainId.GOERLI], WNATIVE[ChainId.GOERLI], BUSD[ChainId.GOERLI]],
   [ChainId.BSC]: [bscTokens.usdt, bscTokens.dfs, bscTokens.busd],
-  [ChainId.BSC_TESTNET]: [bscTestnetTokens.usdt, USDT_TESTNET, BUSD_TESTNET, DFS_TESTNET],
+  [ChainId.BSC_TESTNET]: [bscTestnetTokens.usdt, BUSD_TESTNET, DFS_TESTNET],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
