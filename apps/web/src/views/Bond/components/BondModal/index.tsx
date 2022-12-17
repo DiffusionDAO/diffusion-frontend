@@ -1,7 +1,7 @@
 import { FC, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
-import {  useModal } from '@pancakeswap/uikit'
+import { CloseIcon, CogIcon, InfoIcon, useModal } from '@pancakeswap/uikit'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 import { parseUnits, formatUnits } from '@ethersproject/units'
