@@ -24,7 +24,7 @@ import {
   DropdownMenuItems
 } from '@pancakeswap/uikit'
 import { ContextApi } from '@pancakeswap/localization'
-import { SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
+import { SUPPORT_ONLY_BSC,SUPPORT_ZAP } from 'config/constants/supportChains'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boolean }
@@ -57,6 +57,7 @@ const config: (
       label: t('Dashboard'),
       icon: DashboardIcon,
       fillIcon: DashboardFillIcon,
+      
       href: '/dashboard',
       showItemsOnMobile: false,
       items: [

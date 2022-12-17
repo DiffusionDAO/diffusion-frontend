@@ -43,11 +43,11 @@ export function PageNetworkSupportModal() {
       <Grid style={{ gap: '16px' }} maxWidth="360px">
         <Text bold>{t('It’s a BNB Chain only feature')}</Text>
 
-        {image && (
+        {/* {image && (
           <Box mx="auto" my="8px" position="relative" width="100%" minHeight="250px">
             <Image src={image} alt="feature" fill style={{ objectFit: 'contain' }} unoptimized />
           </Box>
-        )}
+        )} */}
         {canSwitch ? (
           <Button
             variant={foundChain && lastValidPath ? 'secondary' : 'primary'}
