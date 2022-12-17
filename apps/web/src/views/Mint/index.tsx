@@ -11,7 +11,6 @@ import { formatUnits } from '@ethersproject/units'
 import { useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
 import { formatBigNumber } from '@pancakeswap/utils/formatBalance'
 import { estimateGas } from 'utils/calls'
-import WalletModal, { WalletView } from 'components/Menu/UserMenu/WalletModal'
 
 import {
   BondPageWrap,
@@ -41,7 +40,6 @@ import DataCell from '../../components/ListDataCell'
 import MintBoxModal from './components/MintBoxModal'
 import InsufficientBalance from './components/InsufficientBalance'
 import PlayBindBoxModal from './components/PlayMintBoxModal'
-import { loadGetInitialProps } from 'next/dist/shared/lib/utils'
 
 const Mint = () => {
   const { account } = useWeb3React()
