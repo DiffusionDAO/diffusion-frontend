@@ -127,16 +127,16 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const [tokenIds, setTokenIds] = useState<number[]>()
   const [tokenIdsOnSale, setTokenIdsOnSale] = useState<number[]>()
   const socialNFTAddress = getSocialNFTAddress()
-  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC })
+  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC_TESTNET })
 
   const starlightAddress = getStarlightAddress()
-  const starlight = getContract({ abi: socialNFTAbi, address: starlightAddress, chainId: ChainId.BSC })
+  const starlight = getContract({ abi: socialNFTAbi, address: starlightAddress, chainId: ChainId.BSC_TESTNET })
 
   const nftMarketAddress = getNftMarketAddress()
-  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
 
   const dfsMiningAddress = getMiningAddress()
-  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC })
+  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
 
   const diffusionAICatAddress = getDiffusionAICatAddress()
 

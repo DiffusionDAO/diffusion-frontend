@@ -66,7 +66,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const starLightAddress = getStarlightAddress()
   const diffusionCatAddress = getDiffusionAICatAddress()
   const socialNFTAddress = getSocialNFTAddress()
-  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC })
+  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
 
   let name = collection.name
 

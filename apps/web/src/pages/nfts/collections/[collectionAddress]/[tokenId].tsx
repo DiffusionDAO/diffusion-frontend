@@ -49,16 +49,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   console.log('getStaticProps:', collectionAddress, tokenId)
   const socialNFTAddress = getSocialNFTAddress()
-  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC })
+  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
   const getToken = await erc721a.getToken(tokenId)
   const level = getToken?.level
 
   const nftMarketAddress = getNftMarketAddress()
-  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
   const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
 
   const dfsMiningAddress = getMiningAddress()
-  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC })
+  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
 
   let name = await erc721a.name()
   let thumbnail

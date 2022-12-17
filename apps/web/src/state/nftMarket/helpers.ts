@@ -44,12 +44,12 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   const nftDatabaseAddress = getNFTDatabaseAddress()
   const nftMarketAddress = getNftMarketAddress()
   
-  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC })
-  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
+  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
   const collectionAddresses = await nftDatabase.getCollections()
   const data: ApiCollection[] = await Promise.all(
     collectionAddresses.map(async (collectionAddress) => {
-      const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC })
+      const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
       const totalSupply = await erc721.totalSupply()
       const name = await erc721.name()
       const totalVolume = await nftMarket.totalVolume(collectionAddress)
@@ -90,8 +90,8 @@ export const getCollections = async (): Promise<Record<string, any>> => {
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
     const nftMarketAddress = getNftMarketAddress()
-    const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC })
-    const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC })
+    const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
+    const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
     const name = await erc721.name()
     const totalSupply = await erc721.totalSupply()
     const totalVolume = await nftMarket.totalVolume(collectionAddress)
