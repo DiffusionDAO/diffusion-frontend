@@ -1,0 +1,155 @@
+nav {
+  background-color: rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(13px);
+  border-bottom: none !important;
+}
+.ant-tabs-tab .ant-tabs-tab-btn {
+  font-size: 16px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #ABB6FF;
+}
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  font-size: 16px;
+  font-family: HelveticaNeue-Medium, HelveticaNeue;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+.ant-tabs-ink-bar {
+  height: 4px !important;
+  background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+}
+.ant-tabs-top > .ant-tabs-nav::before {
+  border-bottom: none;
+}
+
+.ant-select-selector {
+  color: #ABB6FF;
+  border: none !important;
+  background-color: rgba(171, 182, 255, 0.2) !important;
+  border-radius: 8px;
+}
+.ant-select .ant-select-arrow {
+  color: #ABB6FF;
+}
+.ant-cascader-menus {
+  background-color: rgba(171, 182, 255, 0.2);
+}
+.ant-select:hover .ant-select-clear {
+  color: #ABB6FF;
+  background: none;
+}
+.MuiMenu-list {
+  background-color: rgb(33 12 129 / 90%);
+  color: #fff;
+}
+.ant-select-dropdown {
+  background-color: rgb(33 12 129 / 90%);
+  color: #fff;
+}
+.ant-cascader-menu {
+  border-right: 1px solid rgb(240 240 240 / 10%);
+  background-color: rgb(33 12 129 / 90%);
+  color: #fff;
+}
+.ant-cascader-menu-item-active:not(.ant-cascader-menu-item-disabled), .ant-cascader-menu-item-active:not(.ant-cascader-menu-item-disabled):hover {
+  background-color: rgb(230 247 255 / 10%);
+}
+.ant-cascader-menu-item-expand .ant-cascader-menu-item-expand-icon {
+  color: #fff;
+}
+.ant-cascader-menu-item:hover {
+  background: rgb(245 245 245 / 10%);
+}
+
+// button样式覆盖
+.ant-btn-primary {
+  border: none;
+  border-radius: 8px;
+  padding: 4px 20px;
+  background: linear-gradient(90deg, #3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+}
+.ant-btn-primary:hover, .ant-btn-primary:focus {
+  color: #fff;
+  background: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%);
+  opacity: 0.6;
+}
+// .ant-btn-default {
+//   border: 2px solid;
+//   border-image: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%) 4 4;
+//   color: #EC6EFF;
+//   background-color: rgba(255,255,255,0);
+//   border-radius: 8px;
+// }
+.ant-btn-default {
+  color: #EC6EFF;
+  background-color: rgba(0,0,0);
+  border-radius: 8px;
+  position: relative;
+  border: none;
+}
+.ant-btn-default:after {
+  content:'';
+  position: absolute;
+  top: -2px; 
+  bottom: -2px;
+  left: -2px; 
+  right: -2px;
+  border-radius: 8px;
+  z-index: -1;
+  background: linear-gradient(135deg,#3C00FF, #EC6EFF);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+}
+.ant-btn-default:hover, .ant-btn-default:focus {
+  color: #EC6EFF;
+  background-color: rgba(255,255,255,0);
+  border-image: linear-gradient(90deg, #3C00FF 0%, #EC6EFF 100%) 4 4;
+  opacity: 0.6;
+}
+.ant-modal-confirm-body {
+  .ant-modal-confirm-title {
+    color: #fff;
+  }
+}
+
+.ant-modal-content {
+  background: #141529;
+  border-radius: 15px; 
+  border: 0px solid rgba(87, 77, 102, 0.45);
+  .ant-modal-close {
+    color: #ABB6FF;
+  }
+  .ant-modal-header {
+    background: #141529;
+    border-radius: 15px;
+    border-bottom: none;
+    .ant-modal-title {
+      color: #fff;
+    }
+  }
+  .ant-modal-footer  {
+    display: none;
+  }
+}
+.no-header {
+  .ant-modal-content {
+    .ant-modal-close {
+      display: none;
+    }
+    .ant-modal-header {
+      display: none;
+    }
+  }
+}
+.star-bg {
+  .ant-modal-content {
+    background-image: url('/images/nfts/star-bg.png');
+    background-size: cover;
+  }
+}
