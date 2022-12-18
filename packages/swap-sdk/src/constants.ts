@@ -96,12 +96,12 @@ export const NATIVE: Record<
   [ChainId.RINKEBY]: { name: 'Rinkeby Ether', symbol: 'RIN', decimals: 18 },
   [ChainId.GOERLI]: { name: 'Goerli Ether', symbol: 'GOR', decimals: 18 },
   [ChainId.BSC]: {
-    name: 'Diffusion Chain Native Token',
+    name: 'Binance Smart Chain Native Token',
     symbol: 'BNB',
     decimals: 18,
   },
   [ChainId.BSC_TESTNET]: {
-    name: 'Binance Chain Native Token',
+    name: 'Binance Smart Chain Testnet Native Token',
     symbol: 'tBNB',
     decimals: 18,
   },

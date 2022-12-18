@@ -18,6 +18,7 @@ const getTokenLogoURL =
     if (token && token.address === DFS_MAINNET.address || token.address === DFS_TESTNET.address) {
       return `/images/dfs.png`
     } 
+    console.log(token)
     return null
   }
 
