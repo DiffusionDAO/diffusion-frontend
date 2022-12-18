@@ -5,6 +5,7 @@ import { DFS_MAINNET, DFS_TESTNET, USDT_BSC, USDT_TESTNET } from '@pancakeswap/t
 
 const mapping = {
   [ChainId.BSC]: 'smartchain',
+  [ChainId.BSC_TESTNET]: 'smartchain',
 }
 
 const getTokenLogoURL =

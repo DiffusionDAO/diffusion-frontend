@@ -18,7 +18,7 @@ import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
 import { createFilterToken, useSortedTokensByQuery } from './filtering'
 import useTokenComparator from './sorting'
-import { getSwapSound } from './swapSound'
+// import { getSwapSound } from './swapSound'
 
 import ImportRow from './ImportRow'
 
@@ -126,9 +126,9 @@ function CurrencySearch({
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
       onCurrencySelect(currency)
-      if (audioPlay) {
-        getSwapSound().play()
-      }
+      // if (audioPlay) {
+      //   getSwapSound().play()
+      // }
     },
     [audioPlay, onCurrencySelect],
   )

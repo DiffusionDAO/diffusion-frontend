@@ -31,9 +31,10 @@ export default function useWarningImport() {
     () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c?.isToken) ?? [],
     [loadedInputCurrency, loadedOutputCurrency],
   )
+  console.log("urlLoadedTokens:",urlLoadedTokens)
 
   const defaultTokens = useAllTokens()
-
+  console.log("defaultTokens:",defaultTokens)
   const importTokensNotInDefault =
     !isWrongNetwork && urlLoadedTokens
       ? urlLoadedTokens.filter((token: Token) => {

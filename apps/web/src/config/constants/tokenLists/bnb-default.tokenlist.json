@@ -7,9 +7,17 @@
     "patch": 0
   },
   "tags": {},
-  "logoURI": "https://pancakeswap.finance/logo.png",
+  "logoURI": "/images/dfs.png",
   "keywords": ["bnb", "default"],
   "tokens": [
-   
+    {
+      "name": "DFS",
+      "symbol": "DFS",
+      "address": "0x2B806e6D78D8111dd09C58943B9855910baDe005",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "/images/dfs.png"
+    }
+    
   ]
 }

@@ -22,7 +22,7 @@ export default function CurrencyLogo({
   size?: string
   style?: React.CSSProperties
 }) {
-  const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
+  // const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
 
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative) return []
@@ -31,14 +31,14 @@ export default function CurrencyLogo({
       const tokenLogoURL = getTokenLogoURL(currency)
 
       if (currency instanceof WrappedTokenInfo) {
-        if (!tokenLogoURL) return [...uriLocations]
-        return [...uriLocations, tokenLogoURL]
+        if (!tokenLogoURL) return []
+        return [tokenLogoURL]
       }
       if (!tokenLogoURL) return []
       return [tokenLogoURL]
     }
     return []
-  }, [currency, uriLocations])
+  }, [currency])
 
   if (currency?.isNative) {
     if (currency.chainId === ChainId.BSC) {
