@@ -607,23 +607,22 @@ const Reward = () => {
       {powerRewardDetailModalVisible ? (
         <DetailModal detailData={powerRewardDetailData} onClose={closeUnlockedDetailModal} />
       ) : null}
-      {!account && (
-        <ConnectWalletButton />
-        // <NoPower
-        //   title={t('You cannot view this page right now')}
-        //   description={t('Please connect your wallet')}
-        //   btnText={t('Connect')}
-        //   action={onPresentWalletModal}
-        // />
-      )}
-      {account && !access && (
+      {/* {!account && (
+        <NoPower
+          title={t('You cannot view this page right now')}
+          description={t('Please connect your wallet')}
+          btnText={t('Connect')}
+          action={onPresentWalletModal}
+        />
+      )} */}
+      {/* {account && !access && (
         <NoPower
           title={t('You cannot view this page right now')}
           description={t('Please check after bonds purchase')}
           btnText={t('Buy Bonds')}
           action={() => router.push(`/bond`)}
         />
-      )}
+      )} */}
     </RewardPageWrap>
   )
 }

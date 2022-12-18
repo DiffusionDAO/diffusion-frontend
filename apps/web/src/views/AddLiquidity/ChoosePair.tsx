@@ -81,9 +81,9 @@ export function ChoosePair({
         </Box>
       </CardBody>
       <CardFooter>
-        {!account ? (
+        {/* {!account ? (
           <ConnectWalletButton width="100%" />
-        ) : (
+        ) : ( */}
           <CommitButton
             data-test="choose-pair-next"
             width="100%"
@@ -93,7 +93,7 @@ export function ChoosePair({
           >
             {error ?? t('Add Liquidity')}
           </CommitButton>
-        )}
+        {/* )} */}
       </CardFooter>
     </>
   )
