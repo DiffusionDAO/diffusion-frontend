@@ -15,7 +15,7 @@ import {
 } from 'hooks/useContract'
 import { BigNumber } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
-import { getDFSAddress, getPairAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { formatBigNumber, formatNumber } from '@pancakeswap/utils/formatBalance'
 import { escapeRegExp } from 'utils'
 import { useRouterContract } from 'utils/exchange'
@@ -113,7 +113,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const dfsMining = useDFSMiningContract()
   const dfs = useDFSContract()
   const pdfs = usePDFSContract()
-  const usdtAddress = USDT_BSC.address
+  const usdtAddress = getUSDTAddress()
   const dfsAddress = getDFSAddress()
   const usdt = useERC20(usdtAddress, true)
   const pairAddress = getPairAddress()

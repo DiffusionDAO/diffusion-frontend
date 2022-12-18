@@ -7,7 +7,7 @@ import { useGetCollection } from 'state/nftMarket/hooks'
 import { usePairContract } from 'hooks/useContract'
 import useSWR from 'swr'
 import { BigNumber } from '@ethersproject/bignumber'
-import { getDFSAddress, getPairAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { USDT_BSC } from '@pancakeswap/tokens'
 import { Divider } from '../shared/styles'
 import { GreyedOutContainer, DfsAmountCell, RightAlignedInput, FeeAmountCell } from './styles'
@@ -50,11 +50,11 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
   // const bnbPrice = useBNBBusdPrice()
   const pairAddress = getPairAddress()
   const pair = usePairContract(pairAddress)
-
+  const usdtAddress = getUSDTAddress()
+  const dfsAddress = getDFSAddress()
   const { data: dfsPrice, status } = useSWR('getPriceInUSDT', async () => {
     const reserves: any = await pair.getReserves()
-    const usdtAddress = USDT_BSC.address
-    const dfsAddress = getDFSAddress()
+
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
 

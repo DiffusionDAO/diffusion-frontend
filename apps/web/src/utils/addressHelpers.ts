@@ -170,3 +170,7 @@ export const getHDFSAddress = () => {
 export const getDiffusionAICatAddress = () => {
   return getAddress(addresses.diffusionAICat)
 }
+
+export const getUSDTAddress = () => {
+  return getAddress(addresses.usdt)
+}

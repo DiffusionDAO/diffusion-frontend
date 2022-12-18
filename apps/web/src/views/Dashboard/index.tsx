@@ -5,7 +5,7 @@ import { useState } from 'react'
 import useSWR from 'swr'
 import { Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useBondContract, useDFSContract, useDFSMiningContract, usePairContract } from 'hooks/useContract'
-import { getDFSAddress, getPairAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits, parseEther } from '@ethersproject/units'
 import { formatBigNumber, formatNumber } from '@pancakeswap/utils/formatBalance'
@@ -76,9 +76,10 @@ const Dashboard = () => {
   const dfsMining = useDFSMiningContract()
   const dfs = useDFSContract()
   const bond = useBondContract()
+  const dfsAddress = getDFSAddress()
+  const usdtAddress = getUSDTAddress()
+
   const { data } = useSWR('dashboard', async () => {
-    const dfsAddress = getDFSAddress()
-    const usdtAddress = USDT_BSC.address
     const reserves = await pair.getReserves()
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
@@ -216,8 +217,6 @@ const Dashboard = () => {
   const avgConentraction = conentractions.reduce((acc, cur) => (acc += cur), 0) / conentractions.length
 
   const time = new Date()
-
-  const usdtAddress = USDT_BSC.address
 
   const expansionFund =
     data?.foundationDFS &&

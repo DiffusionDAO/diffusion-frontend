@@ -5,7 +5,7 @@ import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { usePairContract } from 'hooks/useContract'
 import useSWR from 'swr'
-import { getDFSAddress, getPairAddress } from 'utils/addressHelpers'
+import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { USDT_BSC } from '@pancakeswap/tokens'
 import { BuyingStage } from './types'
 
@@ -50,11 +50,11 @@ export const DfsAmountCell: React.FC<React.PropsWithChildren<DfsAmountCellProps>
 }) => {
   const pairAddress = getPairAddress()
   const pair = usePairContract(pairAddress)
-
+  const usdtAddress = getUSDTAddress()
+  const dfsAddress = getDFSAddress()
   const { data: dfsPrice, status } = useSWR('getPriceInUSDT', async () => {
     const reserves: any = await pair.getReserves()
-    const usdtAddress = USDT_BSC.address
-    const dfsAddress = getDFSAddress()
+
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
 

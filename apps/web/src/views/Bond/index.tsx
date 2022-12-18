@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { getMiningAddress, getDFSAddress, getPairAddress } from 'utils/addressHelpers'
+import { getMiningAddress, getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useBondContract, useDFSContract, useDFSMiningContract, useERC20, usePairContract } from 'hooks/useContract'
 import { formatBigNumber, formatNumber } from '@pancakeswap/utils/formatBalance'
@@ -69,7 +69,7 @@ const Bond = () => {
   const [marketPrice, setMarketPrice] = useState<number>(0)
   const bond = useBondContract()
   const dfs = useDFSContract()
-  const usdtAddress = USDT_BSC.address
+  const usdtAddress = getUSDTAddress()
   const usdt = useERC20(usdtAddress, true)
   const pairAddress = getPairAddress()
   const dfsAddress = getDFSAddress()
