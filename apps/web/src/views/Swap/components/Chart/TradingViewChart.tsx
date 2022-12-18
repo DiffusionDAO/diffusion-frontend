@@ -33,7 +33,7 @@ const LoadingWrapper = styled.div<{ $isDark: boolean }>`
 const bnbToWBNBSymbol = (sym: string) => (sym === 'BNB' ? 'WBNB' : sym)
 
 const ID = 'TV_SWAP_CHART'
-const SYMBOL_PREFIX = 'PANCAKESWAP:'
+const SYMBOL_PREFIX = 'DIFFUSIONSWAP:'
 
 const TradingViewChart = ({ outputSymbol, inputSymbol, isDark, onTwChartSymbol }: TradingViewChartProps) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -89,11 +89,11 @@ const TradingViewChart = ({ outputSymbol, inputSymbol, isDark, onTwChartSymbol }
           </Text>
         </Flex>
       )}
-      {(isLoading || debouncedLoading) && !hasNoData && (
+      {/* {(isLoading || debouncedLoading) && !hasNoData && (
         <LoadingWrapper $isDark={isDark}>
           <BarChartLoader />
         </LoadingWrapper>
-      )}
+      )} */}
       {!hasNoData && (
         <TradingViewWrapper $show={!isLoading}>
           {symbol && <TradingView id={ID} symbol={`${SYMBOL_PREFIX}${symbol}`} />}

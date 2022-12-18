@@ -3,7 +3,6 @@ import { gql } from 'graphql-request'
 import { useEffect, useState } from 'react'
 import mapValues from 'lodash/mapValues'
 import { PoolData, Block } from 'state/info/types'
-import { getChangeForPeriod } from 'utils/getChangeForPeriod'
 import { getLpFeesAndApr } from 'utils/getLpFeesAndApr'
 import { getDeltaTimestamps } from 'utils/getDeltaTimestamps'
 // import { useBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
@@ -149,12 +148,12 @@ interface PoolDatas {
 /**
  * Fetch top pools by liquidity
  */
-const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
-  const [fetchState, setFetchState] = useState<PoolDatas>({ error: false })
-  const [t24h, t48h, t7d, t14d] = getDeltaTimestamps()
-  const { blocks, error: blockError } = useBlocksFromTimestamps([t24h, t48h, t7d, t14d])
-  const [block24h, block48h, block7d, block14d] = blocks ?? []
-  const chainName = useGetChainName()
+// const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
+  // const [fetchState, setFetchState] = useState<PoolDatas>({ error: false })
+  // const [t24h, t48h, t7d, t14d] = getDeltaTimestamps()
+  // const { blocks, error: blockError } = useBlocksFromTimestamps([t24h, t48h, t7d, t14d])
+  // const [block24h, block48h, block7d, block14d] = blocks ?? []
+  // const chainName = useGetChainName()
 
   // useEffect(() => {
   //   const fetch = async () => {
@@ -251,8 +250,8 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
   //   }
   // }, [poolAddresses, block24h, block48h, block7d, block14d, blockError, chainName])
 
-  return fetchState
-}
+  // return fetchState
+// }
 
 // export const fetchAllPoolDataWithAddress = async (
 //   blocks: Block[],
@@ -348,4 +347,4 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
 //   return fetchAllPoolDataWithAddress(blocks, chainName, poolAddresses)
 // }
 
-export default usePoolDatas
+// export default usePoolDatas

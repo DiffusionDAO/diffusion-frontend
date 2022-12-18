@@ -50,7 +50,8 @@ const LineChart = ({ data, setHoverValue, setHoverDate, isChangePositive, timeWi
   const dateFormatting = dateFormattingByTimewindow[timeWindow]
 
   if (!data || data.length === 0) {
-    return <LineChartLoader />
+    // return <LineChartLoader />
+    return <></>
   }
   return (
     <ResponsiveContainer>

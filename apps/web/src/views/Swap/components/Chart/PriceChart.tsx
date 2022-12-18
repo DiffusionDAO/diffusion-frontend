@@ -16,7 +16,7 @@ import { CurrencyLogo, DoubleCurrencyLogo } from 'components/Logo'
 import { ChartViewMode } from 'state/user/actions'
 import { useExchangeChartViewManager } from 'state/user/hooks'
 // import styled from 'styled-components'
-import BasicChart from './BasicChart'
+// import BasicChart from './BasicChart'
 import { StyledPriceChart } from './styles'
 // import TradingViewChart from './TradingViewChart'
 // import PairPriceDisplay from '../../../../components/PairPriceDisplay'
@@ -109,7 +109,7 @@ const PriceChart = ({
           </Flex>
         )}
       </Flex>
-      {chartView === ChartViewMode.BASIC && (
+      {/* {chartView === ChartViewMode.BASIC && (
         <BasicChart
           token0Address={token0Address}
           token1Address={token1Address}
@@ -119,7 +119,7 @@ const PriceChart = ({
           isMobile={isMobile}
           currentSwapPrice={currentSwapPrice}
         />
-      )}
+      )} */}
       {/* {chartView === ChartViewMode.TRADING_VIEW && (
         <Flex
           flexDirection="column"

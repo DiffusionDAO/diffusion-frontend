@@ -3,7 +3,6 @@ import { ChainId } from '@pancakeswap/sdk'
 import { useActiveIfoWithBlocks } from 'hooks/useActiveIfoWithBlocks'
 import { useChainCurrentBlock } from 'state/block/hooks'
 import { PotteryDepositStatus } from 'state/types'
-import { getStatus } from 'views/Ifos/hooks/helpers'
 import { usePotteryStatus } from './usePotteryStatus'
 // import { useCompetitionStatus } from './useCompetitionStatus'
 
