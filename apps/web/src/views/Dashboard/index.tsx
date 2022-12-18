@@ -237,9 +237,9 @@ const Dashboard = () => {
           >
             {t('Overview')}
           </div>
-          <div aria-hidden="true" className={`${activeTab === 'Chart' && 'active'}`} onClick={() => clickTab('Chart')}>
+          {/* <div aria-hidden="true" className={`${activeTab === 'Chart' && 'active'}`} onClick={() => clickTab('Chart')}>
             {t('Chart')}
-          </div>
+          </div> */}
         </div>
       ) : (
         <div style={{ fontWeight: 500, fontSize: '15px', overflow: 'hidden', lineHeight: '40px', color: '#fff' }}>
@@ -447,12 +447,12 @@ const Dashboard = () => {
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <Grid container spacing={2}>
                 <Grid item lg={7} md={7} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
+                  <Paper className="dfs-card dfs-chart-card">
                     <OneGraph />
                   </Paper>
                 </Grid>
                 <Grid item lg={5} md={5} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
+                  <Paper className="dfs-card dfs-chart-card">
                     <TwoGraph />
                   </Paper>
                 </Grid>
@@ -464,12 +464,12 @@ const Dashboard = () => {
                 <Grid item lg={7} md={7} sm={12} xs={12}>
                   <Grid container spacing={4}>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
-                      <Paper className="ohm-card ohm-chart-card">
+                      <Paper className="dfs-card dfs-chart-card">
                         <ThreeGraph />
                       </Paper>
                     </Grid>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
-                      <Paper className="ohm-card ohm-chart-card">
+                      <Paper className="dfs-card dfs-chart-card">
                         <FourGraph />
                       </Paper>
                     </Grid>
@@ -478,17 +478,17 @@ const Dashboard = () => {
                 <Grid item lg={5} md={5} sm={12} xs={12}>
                   <Grid container spacing={2}>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
-                      <Paper className="ohm-card ohm-chart-card" style={{ height: '238px' }}>
+                      <Paper className="dfs-card dfs-chart-card" style={{ height: '238px' }}>
                         <FiveGraph />
                       </Paper>
                     </Grid>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
-                      <Paper className="ohm-card ohm-chart-card" style={{ height: '238px' }}>
+                      <Paper className="dfs-card dfs-chart-card" style={{ height: '238px' }}>
                         <SixGraph />
                       </Paper>
                     </Grid>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
-                      <Paper className="ohm-card ohm-chart-card" style={{ height: '238px' }}>
+                      <Paper className="dfs-card dfs-chart-card" style={{ height: '238px' }}>
                         <SevenGraph />
                       </Paper>
                     </Grid>
@@ -500,12 +500,12 @@ const Dashboard = () => {
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <Grid container spacing={2}>
                 <Grid item lg={7} md={7} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
+                  <Paper className="dfs-card dfs-chart-card">
                     <EightGraph />
                   </Paper>
                 </Grid>
                 <Grid item lg={5} md={5} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
+                  <Paper className="dfs-card dfs-chart-card">
                     <NineGraph />
                   </Paper>
                 </Grid>
@@ -513,7 +513,7 @@ const Dashboard = () => {
             </Grid>
 
             <Grid item lg={12} md={12} sm={12} xs={12}>
-              <Paper className="ohm-card ohm-chart-card">
+              <Paper className="dfs-card dfs-chart-card">
                 <TenGraph />
               </Paper>
             </Grid>
@@ -521,17 +521,17 @@ const Dashboard = () => {
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <Grid container spacing={2}>
                 <Grid item lg={4} md={4} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
+                  <Paper className="dfs-card dfs-chart-card">
                     <ElevenGraph />
                   </Paper>
                 </Grid>
                 <Grid item lg={4} md={4} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
+                  <Paper className="dfs-card dfs-chart-card">
                     <TwelveGraph />
                   </Paper>
                 </Grid>
                 <Grid item lg={4} md={4} sm={12} xs={12}>
-                  <Paper className="ohm-card ohm-chart-card">
+                  <Paper className="dfs-card dfs-chart-card">
                     <ThirteenGraph />
                   </Paper>
                 </Grid>

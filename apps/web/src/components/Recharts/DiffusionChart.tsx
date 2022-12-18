@@ -457,7 +457,7 @@ function DiffusionChart({
           // )
         )}
       </div>
-      <Box width="100%" minWidth={310} className="ohm-chart">
+      <Box width="100%" minWidth={310} className="dfs-chart">
         {loading || (data && data.length > 0) ? (
           <ResponsiveContainer minHeight={minHeight} width="100%">
             {renderChart(type, true)}
