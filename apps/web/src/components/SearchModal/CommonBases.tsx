@@ -4,13 +4,13 @@ import styled from 'styled-components'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useTranslation } from '@pancakeswap/localization'
 
+import { useToken } from 'hooks/Tokens'
+import { getDFSAddress } from 'utils/addressHelpers'
 import { SUGGESTED_BASES } from 'config/constants/exchange'
 import { AutoColumn } from '../Layout/Column'
 import { AutoRow } from '../Layout/Row'
 import { CurrencyLogo } from '../Logo'
 import { CommonBasesType } from './types'
-import { useToken } from 'hooks/Tokens'
-import { getDFSAddress } from 'utils/addressHelpers'
 
 const ButtonWrapper = styled.div`
   display: inline-block;

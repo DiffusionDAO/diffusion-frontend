@@ -48,19 +48,17 @@ const Logo: React.FC<React.PropsWithChildren<Props>> = ({ href }) => {
   const innerLogo = (
     <>
       <img src="/images/logo.png" style={{maxWidth: '60%'}}/>
-      {/* <LogoIcon className="mobile-icon" /> */}
-      {/* <LogoWithTextIcon className="desktop-icon" /> */}
     </>
   );
 
   return (
     <Flex>
       {isAbsoluteUrl ? (
-        <StyledLink as="a" href={href} aria-label="Pancake home page">
+        <StyledLink as="a" href={href} aria-label="Diffusion home page">
           {innerLogo}
         </StyledLink>
       ) : (
-        <StyledLink href={href} as={linkComponent} aria-label="Pancake home page">
+        <StyledLink href={href} as={linkComponent} aria-label="Diffusion home page">
           {innerLogo}
         </StyledLink>
       )}
@@ -68,4 +66,4 @@ const Logo: React.FC<React.PropsWithChildren<Props>> = ({ href }) => {
   );
 };
 
-export default React.memo(Logo);
+export default Logo;
