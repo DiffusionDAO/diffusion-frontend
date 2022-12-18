@@ -10,7 +10,7 @@ export const bscTokens = {
     18,
     'BNB',
     'BNB',
-    'https://www.pancakeswap.com/',
+    'https://www.app.diffusiondao.org/',
   ),
   usdt: USDT_BSC,
   busd: BUSD_BSC,

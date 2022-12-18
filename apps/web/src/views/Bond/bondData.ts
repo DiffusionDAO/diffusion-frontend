@@ -1,3 +1,5 @@
+import { BinanceIcon } from "@pancakeswap/uikit"
+
 const bondDatas = [
   {
     key: '1',
@@ -17,7 +19,7 @@ const bondDatas = [
     name: 'DFS-BNB',
     status: 'closed',
     from: '/images/bond/dfs.png',
-    to: '/images/bond/bsc.png',
+    to: BinanceIcon,
     price: '0',
     discount: 0,
     duration: '10 Days',

@@ -39,8 +39,8 @@ export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.ETHEREUM]: [USDC[ChainId.ETHEREUM], USDT[ChainId.ETHEREUM], WNATIVE[ChainId.ETHEREUM], WBTC_ETH],
   [ChainId.RINKEBY]: [USDC[ChainId.RINKEBY], WNATIVE[ChainId.RINKEBY], BUSD[ChainId.RINKEBY]],
   [ChainId.GOERLI]: [USDC[ChainId.GOERLI], WNATIVE[ChainId.GOERLI], BUSD[ChainId.GOERLI]],
-  [ChainId.BSC]: [bscTokens.usdt, bscTokens.dfs, bscTokens.busd],
-  [ChainId.BSC_TESTNET]: [bscTestnetTokens.usdt, BUSD_TESTNET, DFS_TESTNET],
+  [ChainId.BSC]: [bscTokens.usdt, bscTokens.dfs],
+  [ChainId.BSC_TESTNET]: [bscTestnetTokens.usdt, DFS_TESTNET],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -49,7 +49,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.RINKEBY]: [USDC[ChainId.RINKEBY], WNATIVE[ChainId.RINKEBY], BUSD[ChainId.RINKEBY]],
   [ChainId.GOERLI]: [USDC[ChainId.GOERLI], WNATIVE[ChainId.GOERLI], BUSD[ChainId.GOERLI]],
   [ChainId.BSC]: [bscTokens.wbnb, bscTokens.usdt, bscTokens.dfs],
-  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.dfs, bscTokens.usdt],
+  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.dfs, bscTestnetTokens.usdt],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
@@ -60,6 +60,9 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
   ],
   [ChainId.BSC]: [
     [bscTokens.usdt, bscTokens.dfs],
+  ],
+  [ChainId.BSC_TESTNET]: [
+    [bscTestnetTokens.usdt, bscTestnetTokens.dfs],
   ],
 }
 

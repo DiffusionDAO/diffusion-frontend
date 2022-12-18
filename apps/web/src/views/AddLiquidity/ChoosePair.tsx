@@ -4,11 +4,8 @@ import { AddIcon, Box, CardBody, CardFooter, Text, TooltipText, useTooltip, Flex
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { CurrencySelect } from 'components/CurrencySelect'
-import { RowBetween } from 'components/Layout/Row'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { usePair } from 'hooks/usePairs'
-import { formatAmount } from 'utils/formatInfoNumbers'
-// import { useLPApr } from 'state/swap/useLPApr'
 import { AppHeader } from '../../components/App'
 import { CommonBasesType } from '../../components/SearchModal/types'
 import { useCurrencySelectRoute } from './useCurrencySelectRoute'
@@ -24,7 +21,7 @@ export function ChoosePair({
   error?: string
   onNext?: () => void
 }) {
-  console.log(currencyA, currencyB)
+  console.log("currencyA:",currencyA, currencyB)
 
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()

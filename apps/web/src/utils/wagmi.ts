@@ -69,7 +69,7 @@ export const coinbaseConnector = new CoinbaseWalletConnector({
   chains,
   options: {
     appName: 'Diffusion',
-    appLogoUrl: 'https://pancakeswap.com/logo.png',
+    appLogoUrl: 'https://app.diffusiondao.org/logo.png',
   },
 })
 
