@@ -16,7 +16,7 @@ const getTokenLogoURL =
       return `/images/usdt-assets/usdt.png`
     } 
     if (token && token.address === DFS_MAINNET.address || token.address === DFS_TESTNET.address) {
-      return `/images/pdfs.png`
+      return `/images/dfs.png`
     } 
     return null
   }
