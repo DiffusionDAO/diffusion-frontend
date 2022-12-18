@@ -20,15 +20,24 @@ const tokens = {
     decimals: 18,
     projectLink: "https://tether.to/",
   },
-  cake: {
-    symbol: "CAKE",
+  dfs: {
+    symbol: "DFS",
     address: {
-      56: "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
-      97: "0xFa60D973F7642B748046464e165A65B7323b0DEE",
+      56: "0x2B806e6D78D8111dd09C58943B9855910baDe005",
+      97: "0xA7DA6F4D19a4E18eFBB9EeCe542E9Aec8AD54a35",
     },
     decimals: 18,
-    projectLink: "https://diffusionswap.finance/",
+    projectLink: "https://tether.to/",
   },
+  // cake: {
+  //   symbol: "CAKE",
+  //   address: {
+  //     56: "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+  //     97: "0xFa60D973F7642B748046464e165A65B7323b0DEE",
+  //   },
+  //   decimals: 18,
+  //   projectLink: "https://diffusionswap.finance/",
+  // },
   // txl: {
   //   symbol: "TXL",
   //   address: {

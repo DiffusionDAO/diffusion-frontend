@@ -80,21 +80,6 @@ export const fetchPublicPotteryValue = async (potteryVaultAddress: string) => {
   }
 }
 
-export const fetchTotalLockedValue = async (potteryVaultAddress: string) => {
-  try {
-    const contract = getBep20Contract(bscTokens.cake.address)
-    const totalLocked = await contract.balanceOf(potteryVaultAddress)
-
-    return {
-      totalLockedValue: new BigNumber(totalLocked.toString()).toJSON(),
-    }
-  } catch (error) {
-    console.error('Failed to fetch total lock value', error)
-    return {
-      totalLockedValue: BIG_ZERO.toJSON(),
-    }
-  }
-}
 
 export const fetchLatestRoundId = async () => {
   try {

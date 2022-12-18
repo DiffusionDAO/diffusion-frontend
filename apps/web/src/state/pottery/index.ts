@@ -12,7 +12,6 @@ import { fetchPotteryFinishedRound } from './fetchPotteryRound'
 import {
   fetchLastVaultAddress,
   fetchPublicPotteryValue,
-  fetchTotalLockedValue,
   fetchLatestRoundId,
 } from './fetchPottery'
 import {
@@ -62,20 +61,6 @@ export const fetchLastVaultAddressAsync = createAsyncThunk<string>('pottery/fetc
   return lastVaultAddress
 })
 
-// export const fetchPublicPotteryDataAsync = createAsyncThunk<SerializedPotteryPublicData>(
-//   'pottery/fetchPublicPotteryData',
-//   async (arg, { getState }) => {
-//     const state = getState()
-//     const potteryVaultAddress = (state as AppState).pottery.lastVaultAddress
-
-//     const [publicPotteryData, totalLockedValue, latestRoundId] = await Promise.all([
-//       fetchPublicPotteryValue(potteryVaultAddress),
-//       fetchTotalLockedValue(potteryVaultAddress),
-//       fetchLatestRoundId(),
-//     ])
-//     return { ...publicPotteryData, ...totalLockedValue, ...latestRoundId }
-//   },
-// )
 
 export const fetchPotteryUserDataAsync = createAsyncThunk<SerializedPotteryUserData, string>(
   'pottery/fetchPotteryUserData',

@@ -24,14 +24,10 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.GOERLI]: [WNATIVE[ChainId.RINKEBY], USDC[ChainId.RINKEBY], BUSD[ChainId.RINKEBY]],
   [ChainId.BSC]: [
     bscTokens.wbnb,
-    // bscTokens.cake,
-    // bscTokens.busd,
     bscTokens.usdt,
-    // bscTokens.btcb,
-    // bscTokens.eth,
-    // bscTokens.usdc,
+    bscTokens.dfs,
   ],
-  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd],
+  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.dfs, bscTestnetTokens.usdt],
 }
 
 
@@ -52,7 +48,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.RINKEBY]: [USDC[ChainId.RINKEBY], WNATIVE[ChainId.RINKEBY], BUSD[ChainId.RINKEBY]],
   [ChainId.GOERLI]: [USDC[ChainId.GOERLI], WNATIVE[ChainId.GOERLI], BUSD[ChainId.GOERLI]],
   [ChainId.BSC]: [],
-  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd],
+  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.dfs, bscTestnetTokens.usdt],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -65,8 +61,8 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ],
   [ChainId.RINKEBY]: [USDC[ChainId.RINKEBY], WNATIVE[ChainId.RINKEBY], BUSD[ChainId.RINKEBY]],
   [ChainId.GOERLI]: [USDC[ChainId.GOERLI], WNATIVE[ChainId.GOERLI], BUSD[ChainId.GOERLI]],
-  [ChainId.BSC]: [bscTokens.wbnb,  bscTokens.usdt, bscTokens.cake],
-  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd],
+  [ChainId.BSC]: [bscTokens.wbnb,  bscTokens.usdt, bscTokens.dfs],
+  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.dfs, bscTestnetTokens.usdt],
 }
 
 export const PINNED_PAIRS: {
@@ -77,5 +73,8 @@ export const PINNED_PAIRS: {
   ],
   [ChainId.BSC]: [
     [bscTokens.usdt, bscTokens.wbnb],
+  ],
+  [ChainId.BSC_TESTNET]: [
+    [bscTokens.usdt, bscTokens.dfs],
   ],
 }
