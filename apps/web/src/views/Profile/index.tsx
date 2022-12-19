@@ -7,7 +7,6 @@ import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import MarketPageHeader from '../Nft/market/components/MarketPageHeader'
-import TabMenu from './components/TabMenu'
 import { useNftsForAddress } from '../Nft/market/hooks/useNftsForAddress'
 
 const TabMenuWrapper = styled(Box)`
@@ -67,9 +66,8 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
 
   return (
     <>
-      <MarketPageHeader position="relative">
+      <MarketPageHeader position="relative" />
 
-      </MarketPageHeader>
       <Page style={{ minHeight: 'auto' }}>{children}</Page>
     </>
   )

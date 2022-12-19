@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 /* eslint-disable import/no-unresolved */
 import { Meta } from "@storybook/react/types-6-0";
-import TabMenu from "./TabMenu";
 import Tab from "./Tab";
 
 export default {
   title: "Components/Tab Menu",
-  component: TabMenu,
   argTypes: {},
 } as Meta;
 
@@ -25,7 +23,7 @@ export const Default: React.FC<React.PropsWithChildren> = () => {
 
   return (
     <>
-      <Row>
+      {/* <Row>
         <TabMenu activeIndex={index} onItemClick={handleClick}>
           <Tab>Total</Tab>
           <Tab>Cakers</Tab>
@@ -46,7 +44,7 @@ export const Default: React.FC<React.PropsWithChildren> = () => {
           <Tab>Short</Tab>
           <Tab>Medium length</Tab>
         </TabMenu>
-      </Row>
+      </Row> */}
     </>
   );
 };
