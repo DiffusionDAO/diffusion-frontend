@@ -26,7 +26,13 @@ import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import Halo from '../components/Halo'
 
-// const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
+import 'antd/dist/reset.css'
+import './ido.scss'
+import './index.scss'
+import './animation.scss'
+import './cover.scss'
+import './DiffusionChart.scss'
+import './Dashboard.scss'
 
 // This config is required for number formatting
 BigNumber.config({

@@ -57,6 +57,7 @@
     "mockjs": "^1.1.0",
     "react-tsparticles": "^2.6.0",
     "react-typed": "^1.2.0",
+    "sass": "^1.57.0",
     "tsparticles": "^2.6.0"
   }
 }
