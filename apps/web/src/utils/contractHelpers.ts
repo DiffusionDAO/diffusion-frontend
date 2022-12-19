@@ -428,42 +428,41 @@ export const getCrossFarmingProxyContract = (
   return getContract({ abi: crossFarmingProxyAbi, address: proxyContractAddress, chainId, signer }) as CrossFarmingProxy
 }
 
-export const getNftMarketContract = (signer?: Signer | Provider) => {
-  const address = getNftMarketAddress()
-  return getContract({ abi: nftMarketAbi, address, signer })
+export const getNftMarketContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: nftMarketAbi, address: getNftMarketAddress(chainId), signer })
 }
-export const getStarlightContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: starlightAbi, address: getStarlightAddress(), signer })
+export const getStarlightContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: starlightAbi, address: getStarlightAddress(chainId), signer })
 }
-export const getSocialNFTContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: socialNFTAbi, address: getSocialNFTAddress(), signer })
+export const getSocialNFTContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: socialNFTAbi, address: getSocialNFTAddress(chainId), signer })
 }
-export const getDiffusionAICatContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: diffusionAICatAbi, address: getDiffusionAICatAddress(), signer })
+export const getDiffusionAICatContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: diffusionAICatAbi, address: getDiffusionAICatAddress(chainId), signer })
 }
-export const getDFSContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: dfsAbi, address: getDFSAddress(), signer })
+export const getDFSContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: dfsAbi, address: getDFSAddress(chainId), signer })
 }
-export const getPDFSContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: pdfsAbi, address: getPDFSAddress(), signer })
+export const getPDFSContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: pdfsAbi, address: getPDFSAddress(chainId), signer })
 }
-export const getBondContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: dfsBond, address: getBondAddress(), signer })
+export const getBondContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: dfsBond, address: getBondAddress(chainId), signer })
 }
-export const getMineContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: mineAbi, address: getMiningAddress(), signer })
+export const getMineContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: mineAbi, address: getMiningAddress(chainId), signer })
 }
-export const getIDOContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: duffionIDOAbi, address: getIDOAddress(), signer })
+export const getIDOContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: duffionIDOAbi, address: getIDOAddress(chainId), signer })
 }
-export const getNFTDatabaseContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: aggregatorAbi, address: getNFTDatabaseAddress(), signer })
-}
-
-export const getHBondContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: hbond, address: getHBondAddress(), signer })
+export const getNFTDatabaseContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: aggregatorAbi, address: getNFTDatabaseAddress(chainId), signer })
 }
 
-export const getHDFSContract = (signer?: Signer | Provider) => {
-  return getContract({ abi: hdfs, address: getHDFSAddress(), signer })
+export const getHBondContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: hbond, address: getHBondAddress(chainId), signer })
+}
+
+export const getHDFSContract = (signer?: Signer | Provider, chainId?: number) => {
+  return getContract({ abi: hdfs, address: getHDFSAddress(chainId), signer })
 }

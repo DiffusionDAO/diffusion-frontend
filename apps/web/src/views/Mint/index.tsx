@@ -11,6 +11,7 @@ import { formatUnits } from '@ethersproject/units'
 import { useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
 import { formatBigNumber } from '@pancakeswap/utils/formatBalance'
 import { estimateGas } from 'utils/calls'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import {
   BondPageWrap,
@@ -42,6 +43,7 @@ import InsufficientBalance from './components/InsufficientBalance'
 import PlayBindBoxModal from './components/PlayMintBoxModal'
 
 const Mint = () => {
+  const {chainId} = useActiveChainId()
   const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
@@ -67,7 +69,7 @@ const Mint = () => {
     socialNFT.elementaryCost().then((oneCost) => setOneCost(oneCost))
     socialNFT.advancedCost().then((twoCost) => setTwoCost(twoCost))
   }, [account, balance])
-  const dfsAddress = getDFSAddress()
+  const dfsAddress = getDFSAddress(chainId)
   const DFS = useERC20(dfsAddress)
 
   const bond = useBondContract()

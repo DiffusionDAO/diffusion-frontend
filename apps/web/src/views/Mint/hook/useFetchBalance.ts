@@ -3,9 +3,11 @@ import useSWR from 'swr'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { getDFSAddress } from 'utils/addressHelpers'
 import { BigNumber } from '@ethersproject/bignumber'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 export const useFetchBalance = () => {
-  const address = getDFSAddress()
+  const {chainId} = useActiveChainId()
+  const address = getDFSAddress(chainId)
   const tokenContract = useTokenContract(address)
   const { account } = useWeb3React()
 
@@ -18,7 +20,8 @@ export const useFetchBalance = () => {
 }
 
 export const useFetchAllowance = (spender) => {
-  const address = getDFSAddress()
+  const {chainId} = useActiveChainId()
+  const address = getDFSAddress(chainId)
   const tokenContract = useTokenContract(address)
   const { account } = useWeb3React()
 

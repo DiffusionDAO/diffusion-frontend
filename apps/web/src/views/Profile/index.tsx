@@ -68,9 +68,9 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   return (
     <>
       <MarketPageHeader position="relative">
-        <TabMenuWrapper>
+        {/* <TabMenuWrapper>
           <TabMenu />
-        </TabMenuWrapper>
+        </TabMenuWrapper> */}
       </MarketPageHeader>
       <Page style={{ minHeight: 'auto' }}>{children}</Page>
     </>

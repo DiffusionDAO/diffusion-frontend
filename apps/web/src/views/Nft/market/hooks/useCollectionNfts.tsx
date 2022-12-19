@@ -33,6 +33,7 @@ import {
 import { useTranslation } from '@pancakeswap/localization'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import { ChainId } from '@pancakeswap/sdk'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { REQUEST_SIZE } from '../Collection/config'
 
 interface ItemListingSettings {
@@ -119,6 +120,7 @@ const tokenIdsFromFallback = (
 }
 
 export const useCollectionNfts = (collectionAddress: string) => {
+  const {chainId} = useActiveChainId()
   const fetchedNfts = useRef<NftToken[]>([])
   const fallbackMode = useRef(false)
   const fallbackModePage = useRef(0)
@@ -126,24 +128,24 @@ export const useCollectionNfts = (collectionAddress: string) => {
   const { t } = useTranslation()
   const [tokenIds, setTokenIds] = useState<number[]>()
   const [tokenIdsOnSale, setTokenIdsOnSale] = useState<number[]>()
-  const socialNFTAddress = getSocialNFTAddress()
-  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId: ChainId.BSC_TESTNET })
+  const socialNFTAddress = getSocialNFTAddress(chainId)
+  const socialNFT = getContract({ abi: socialNFTAbi, address: socialNFTAddress, chainId })
 
-  const starlightAddress = getStarlightAddress()
-  const starlight = getContract({ abi: socialNFTAbi, address: starlightAddress, chainId: ChainId.BSC_TESTNET })
+  const starlightAddress = getStarlightAddress(chainId)
+  const starlight = getContract({ abi: socialNFTAbi, address: starlightAddress, chainId })
 
-  const nftMarketAddress = getNftMarketAddress()
-  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
+  const nftMarketAddress = getNftMarketAddress(chainId)
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId })
 
-  const dfsMiningAddress = getMiningAddress()
-  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
+  const dfsMiningAddress = getMiningAddress(chainId)
+  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId })
 
-  const diffusionAICatAddress = getDiffusionAICatAddress()
+  const diffusionAICatAddress = getDiffusionAICatAddress(chainId)
 
   const diffusionAICatContract = getContract({
     abi: diffusionAICatAbi,
     address: diffusionAICatAddress,
-    chainId: ChainId.BSC_TESTNET,
+    chainId,
   })
   const erc721 = useERC721(collectionAddress)
 
@@ -299,7 +301,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
                 break
             }
             const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
-            const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress, name, thumbnail }
+            const nft: NFT = { ...token, ...sellPrice, collectionName, collectionAddress, name, thumbnail,chainId }
             const toToken = nftToNftToken(nft)
             return toToken
           }),

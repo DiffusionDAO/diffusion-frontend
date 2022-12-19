@@ -9,7 +9,7 @@ import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelp
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits, parseEther } from '@ethersproject/units'
 import { formatBigNumber, formatNumber } from '@pancakeswap/utils/formatBalance'
-import { USDT_BSC } from '@pancakeswap/tokens'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { Paper } from './style'
 import { DataCell } from './components/DataCell/DataCell'
 import {
@@ -63,12 +63,13 @@ const elementaryMintAddress = '0x3CF82399627C8c607f751e6aCE7DB6749Adb748d'
 const advancedMintAddress = '0xA5bDF766410C3846B8e782a1C6bcD2368DDc674b'
 
 const Dashboard = () => {
+  const {chainId} = useActiveChainId()
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const classes = useStyles()
   const [activeTab, setActiveTab] = useState<string>('Overview')
   const [holderLength, setHolderLength] = useState<number>(undefined)
-  const pair = usePairContract(getPairAddress())
+  const pair = usePairContract(getPairAddress(chainId))
 
   const clickTab = (tab: string) => {
     setActiveTab(tab)
@@ -76,8 +77,8 @@ const Dashboard = () => {
   const dfsMining = useDFSMiningContract()
   const dfs = useDFSContract()
   const bond = useBondContract()
-  const dfsAddress = getDFSAddress()
-  const usdtAddress = getUSDTAddress()
+  const dfsAddress = getDFSAddress(chainId)
+  const usdtAddress = getUSDTAddress(chainId)
 
   const { data } = useSWR('dashboard', async () => {
     const reserves = await pair.getReserves()

@@ -18,7 +18,7 @@ import dfsMiningAbi from 'config/abi/dfsMining.json'
 import { levelToName, levelToSPOS, NFT, tokenIdToName, zeroAddress } from 'pages/profile/[accountAddress]'
 import { formatUnits } from '@ethersproject/units'
 import { erc721ABI } from 'wagmi'
-import { ChainId } from '@pancakeswap/sdk'
+import { ChainId,ChainIdName } from '@pancakeswap/sdk'
 
 const IndividualNFTPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -40,30 +40,30 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { collectionAddress, tokenId } = params
-  if (typeof collectionAddress !== 'string' || typeof tokenId !== 'string') {
+  const { collectionAddress, tokenId,chainName } = params
+  if (typeof collectionAddress !== 'string' || typeof tokenId !== 'string' || typeof chainName !== 'string') {
     return {
       notFound: true,
     }
   }
-
-  console.log('getStaticProps:', collectionAddress, tokenId)
-  const socialNFTAddress = getSocialNFTAddress()
-  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
+  const chainId = ChainIdName[chainName]
+  console.log('getStaticProps:', collectionAddress, tokenId, ChainIdName[chainName])
+  const socialNFTAddress = getSocialNFTAddress(chainId)
+  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId})
   const getToken = await erc721a.getToken(tokenId)
   const level = getToken?.level
 
-  const nftMarketAddress = getNftMarketAddress()
-  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
+  const nftMarketAddress = getNftMarketAddress(chainId)
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId })
   const sellPrice = await nftMarket.sellPrice(collectionAddress, tokenId)
 
-  const dfsMiningAddress = getMiningAddress()
-  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId: ChainId.BSC_TESTNET })
+  const dfsMiningAddress = getMiningAddress(chainId)
+  const dfsMining = getContract({ abi: dfsMiningAbi, address: dfsMiningAddress, chainId})
 
   let name = await erc721a.name()
   let thumbnail
-  const starLightAddress = getStarlightAddress()
-  const diffusionCatAddress = getDiffusionAICatAddress()
+  const starLightAddress = getStarlightAddress(chainId)
+  const diffusionCatAddress = getDiffusionAICatAddress(chainId)
   thumbnail = `/images/nfts/${name.toLowerCase()}/${tokenId}`
   switch (collectionAddress) {
     case socialNFTAddress:
@@ -86,6 +86,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     thumbnail,
     name,
     staker: collectionAddress === socialNFTAddress ? await dfsMining.staker(tokenId) : zeroAddress,
+    chainId
   }
 
   let collection = await getCollection(collectionAddress)

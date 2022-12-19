@@ -34,6 +34,7 @@ import TransactionConfirmed from '../shared/TransactionConfirmed'
 import ReviewStage from './ReviewStage'
 import { StyledModal } from './styles'
 import { BuyingStage, PaymentCurrency } from './types'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
@@ -59,7 +60,7 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const { account, chainId } = useWeb3React()
-  const dfsAddress = getDFSAddress()
+  const dfsAddress = getDFSAddress(chainId)
   const dfsContractReader = useERC20(dfsAddress, false)
   const dfsContractApprover = useERC20(dfsAddress)
   const nftMarketContract = useNftMarketContract()
@@ -67,7 +68,7 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
   const database = useNFTDatabaseContract()
   const dfsContract = useERC20(dfsAddress)
   const socialNFT = useSocialNftContract()
-  const erc721a = getContract({ abi: socialNFTAbi, address: nftToBuy.collectionAddress, chainId: ChainId.BSC_TESTNET })
+  const erc721a = getContract({ abi: socialNFTAbi, address: nftToBuy.collectionAddress, chainId })
   // useEffect(() => {
   //   dfsContract.allowance(account, nftMarketContract.address).then(allowance => {
   //     if (allowance.lt(parseUnits(nftToBuy.marketData.currentAskPrice,"ether"))) {
@@ -89,7 +90,7 @@ const BuyModal: React.FC<React.PropsWithChildren<BuyModalProps>> = ({ nftToBuy, 
   // const formattedWbnbBalance = getBalanceNumber(wbnbBalance)
 
   // const walletBalance = paymentCurrency === PaymentCurrency.BNB ? formattedBnbBalance : formattedWbnbBalance
-  const { balance: walletBalance, fetchStatus: walletFetchStatus } = useTokenBalance(getDFSAddress())
+  const { balance: walletBalance, fetchStatus: walletFetchStatus } = useTokenBalance(getDFSAddress(chainId))
   const walletBalanceNumber = walletBalance.div(10 ** 18).toNumber()
   const notEnoughBnbForPurchase = walletBalance.lt(ethersToBigNumber(nftPriceWei)) ?? false
   useEffect(() => {

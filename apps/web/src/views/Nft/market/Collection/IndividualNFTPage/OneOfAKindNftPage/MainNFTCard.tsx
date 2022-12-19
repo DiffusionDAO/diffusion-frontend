@@ -31,6 +31,7 @@ import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
 import { nftsBaseUrl } from '../../../constants'
 import { CollectionLink, Container } from '../shared/styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface MainNFTCardProps {
   nft: NftToken
@@ -129,7 +130,6 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   const { isMobile } = useMatchBreakpoints()
 
   useEffect(() => {
-    const dfsAddress = getDFSAddress()
     dfs.balanceOf(account).then((res) => {
       setDfsBalance(res)
     })

@@ -3,6 +3,7 @@ import CardBody from './CardBody'
 import { CollectibleCardProps } from './types'
 import { nftsBaseUrl, pancakeBunniesAddress } from '../../constants'
 import { StyledCollectibleCard, CheckBoxWrap, CheckBox } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const CollectibleLinkCard: React.FC<React.PropsWithChildren<CollectibleCardProps>> = ({
   isSelected,
@@ -12,6 +13,7 @@ const CollectibleLinkCard: React.FC<React.PropsWithChildren<CollectibleCardProps
   ...props
 }) => {
   const urlId = nft.tokenId
+  const {chainId} = useActiveChainId()
   return (
     <StyledCollectibleCard {...props}>
       {isSelected ? (
@@ -22,7 +24,7 @@ const CollectibleLinkCard: React.FC<React.PropsWithChildren<CollectibleCardProps
           <CardBody nft={nft} nftLocation={nftLocation} currentAskPrice={currentAskPrice} />
         </>
       ) : (
-        <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${urlId}`}>
+        <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${urlId}/${chainId}`}>
           <CardBody nft={nft} nftLocation={nftLocation} currentAskPrice={currentAskPrice} />
         </NextLinkFromReactRouter>
       )}

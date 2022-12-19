@@ -11,6 +11,7 @@ import { AutoColumn } from '../Layout/Column'
 import { AutoRow } from '../Layout/Row'
 import { CurrencyLogo } from '../Logo'
 import { CommonBasesType } from './types'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const ButtonWrapper = styled.div`
   display: inline-block;
@@ -58,7 +59,7 @@ export default function CommonBases({
 }) {
   const native = useNativeCurrency()
   const { t } = useTranslation()
-  const dfs = useToken(getDFSAddress())
+  const dfs = useToken(getDFSAddress(chainId))
   const pinTokenDescText = commonBasesType === CommonBasesType.SWAP_LIMITORDER ? t('Common tokens') : t('Common bases')
 
   return (

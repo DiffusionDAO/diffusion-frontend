@@ -27,6 +27,7 @@ import { formatUnits } from '@ethersproject/units'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { ChainId } from '@pancakeswap/sdk'
 import useSWR from 'swr'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
@@ -55,6 +56,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   collectionAddress,
   tokenId,
 }) => {
+  const {chainId} = useActiveChainId()
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
@@ -63,10 +65,10 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   const collection = useGetCollection(collectionAddress)
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
-  const starLightAddress = getStarlightAddress()
-  const diffusionCatAddress = getDiffusionAICatAddress()
-  const socialNFTAddress = getSocialNFTAddress()
-  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
+  const starLightAddress = getStarlightAddress(chainId)
+  const diffusionCatAddress = getDiffusionAICatAddress(chainId)
+  const socialNFTAddress = getSocialNFTAddress(chainId)
+  const erc721a = getContract({ abi: socialNFTAbi, address: collectionAddress, chainId })
 
   let name = collection.name
 

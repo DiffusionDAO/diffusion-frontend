@@ -130,47 +130,47 @@ export const getCrossFarmingReceiverAddress = (chainId?: number) => {
   return getAddress(addresses.crossFarmingReceiver, chainId)
 }
 
-export const getNftMarketAddress = () => {
-  return getAddress(addresses.nftMarket)
+export const getNftMarketAddress = (chainId?: number) => {
+  return getAddress(addresses.nftMarket,chainId)
 }
-export const getDFSAddress = () => {
-  return getAddress(addresses.dfs)
+export const getDFSAddress = (chainId?: number) => {
+  return getAddress(addresses.dfs,chainId)
 }
-export const getPDFSAddress = () => {
-  return getAddress(addresses.pdfs)
+export const getPDFSAddress = (chainId?: number) => {
+  return getAddress(addresses.pdfs,chainId)
 }
-export const getPairAddress = () => {
-  return getAddress(addresses.pair)
+export const getPairAddress = (chainId?: number) => {
+  return getAddress(addresses.pair,chainId)
 }
-export const getBondAddress = () => {
-  return getAddress(addresses.bond)
+export const getBondAddress = (chainId?: number) => {
+  return getAddress(addresses.bond,chainId)
 }
-export const getMiningAddress = () => {
-  return getAddress(addresses.dfsMining)
+export const getMiningAddress = (chainId?: number) => {
+  return getAddress(addresses.dfsMining,chainId)
 }
-export const getIDOAddress = () => {
-  return getAddress(addresses.pdfs)
+export const getIDOAddress = (chainId?: number) => {
+  return getAddress(addresses.pdfs,chainId)
 }
-export const getSocialNFTAddress = () => {
-  return getAddress(addresses.socialNFT)
+export const getSocialNFTAddress = (chainId?: number) => {
+  return getAddress(addresses.socialNFT,chainId)
 }
-export const getStarlightAddress = () => {
-  return getAddress(addresses.starlightNft)
+export const getStarlightAddress = (chainId?: number) => {
+  return getAddress(addresses.starlightNft,chainId)
 }
-export const getNFTDatabaseAddress = () => {
-  return getAddress(addresses.nftDatabase)
+export const getNFTDatabaseAddress = (chainId?: number) => {
+  return getAddress(addresses.nftDatabase,chainId)
 }
-export const getHBondAddress = () => {
-  return getAddress(addresses.hbond)
+export const getHBondAddress = (chainId?: number) => {
+  return getAddress(addresses.hbond,chainId)
 }
-export const getHDFSAddress = () => {
-  return getAddress(addresses.hdfs)
-}
-
-export const getDiffusionAICatAddress = () => {
-  return getAddress(addresses.diffusionAICat)
+export const getHDFSAddress = (chainId?: number) => {
+  return getAddress(addresses.hdfs,chainId)
 }
 
-export const getUSDTAddress = () => {
-  return getAddress(addresses.usdt)
+export const getDiffusionAICatAddress = (chainId?: number) => {
+  return getAddress(addresses.diffusionAICat,chainId)
+}
+
+export const getUSDTAddress = (chainId?: number) => {
+  return getAddress(addresses.usdt,chainId)
 }

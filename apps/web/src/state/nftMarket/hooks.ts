@@ -11,6 +11,7 @@ import isEmpty from 'lodash/isEmpty'
 import shuffle from 'lodash/shuffle'
 
 import fromPairs from 'lodash/fromPairs'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { ApiCollections, NftToken, Collection, NftAttribute, MarketEvent } from './types'
 import { getCollection, getCollections } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
@@ -20,7 +21,8 @@ const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
 const EMPTY_OBJECT = {}
 
 export const useGetCollections = (): { data: ApiCollections; status: FetchStatus } => {
-  const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections())
+  const {chainId} = useActiveChainId()
+  const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections(chainId))
   const collections = data ?? ({} as ApiCollections)
   return { data: collections, status }
 }
@@ -36,7 +38,8 @@ export const useGetCollection = (collectionAddress: string): Collection | undefi
 }
 
 export const useGetShuffledCollections = (): { data: Collection[]; status: FetchStatus } => {
-  const { data } = useSWRImmutable(['nftMarket', 'collections'], async () => getCollections())
+  const {chainId} = useActiveChainId()
+  const { data } = useSWRImmutable(['nftMarket', 'collections'], async () => getCollections(chainId))
   const collections = data ?? ({} as ApiCollections)
   const { data: shuffledCollections, status } = useSWRImmutable(
     !isEmpty(collections) ? ['nftMarket', 'shuffledCollections'] : null,

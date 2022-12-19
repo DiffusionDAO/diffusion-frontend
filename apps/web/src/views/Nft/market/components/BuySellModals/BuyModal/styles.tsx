@@ -6,7 +6,7 @@ import { multiplyPriceByAmount } from 'utils/prices'
 import { usePairContract } from 'hooks/useContract'
 import useSWR from 'swr'
 import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
-import { USDT_BSC } from '@pancakeswap/tokens'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { BuyingStage } from './types'
 
 export const StyledModal = styled(Modal)<{ stage: BuyingStage }>`
@@ -48,10 +48,11 @@ export const DfsAmountCell: React.FC<React.PropsWithChildren<DfsAmountCellProps>
   isLoading,
   isInsufficient,
 }) => {
-  const pairAddress = getPairAddress()
+  const {chainId} = useActiveChainId()
+  const pairAddress = getPairAddress(chainId)
   const pair = usePairContract(pairAddress)
-  const usdtAddress = getUSDTAddress()
-  const dfsAddress = getDFSAddress()
+  const usdtAddress = getUSDTAddress(chainId)
+  const dfsAddress = getDFSAddress(chainId)
   const { data: dfsPrice, status } = useSWR('getPriceInUSDT', async () => {
     const reserves: any = await pair.getReserves()
 

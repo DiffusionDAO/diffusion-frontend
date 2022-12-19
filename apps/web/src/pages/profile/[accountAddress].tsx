@@ -51,6 +51,7 @@ import { formatBigNumber } from '@pancakeswap/utils/formatBalance'
 import { ZHCN } from '@pancakeswap/localization/src/config/languages'
 import { Flex, Text, useMatchBreakpoints,Select,OptionProps ,ScrollToTopButton} from '@pancakeswap/uikit'
 import { createPortal } from 'react-dom'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface noteProps {
   title: string
@@ -69,6 +70,7 @@ export interface NFT {
   price?: BigNumber
   staker?: string
   thumbnail?: string
+  chainId?: number
 }
 
 export const zeroAddress = '0x0000000000000000000000000000000000000000'
@@ -226,9 +228,9 @@ const SORT_FIELD_INDEX_MAP = new Map([
   [levelToName['6'], 7],
 ])
 
-const socialNFTAddress = getSocialNFTAddress()
 
 export const nftToNftToken = (nft: NFT) => {
+  const socialNFTAddress = getSocialNFTAddress(nft?.chainId)
   const tokenId = nft?.tokenId?.toString()
   const level = nft?.level
   const price = nft?.price ?? BigNumber.from(0)
@@ -270,6 +272,8 @@ export const nftToNftToken = (nft: NFT) => {
   return token
 }
 function NftProfilePage() {
+  const {chainId} = useActiveChainId()
+  const socialNFTAddress = getSocialNFTAddress(chainId)
   const { account } = useWeb3React()
   const { t, currentLanguage } = useTranslation()
   const [stakedNFTs, setStakedNFTs] = useState<NftToken[]>()
@@ -346,6 +350,7 @@ function NftProfilePage() {
               collectionAddress: socialNFT.address,
               name,
               thumbnail,
+              chainId
             }
             tokens.unstaked.push(nftToNftToken(nft))
           } catch (error: any) {
@@ -373,6 +378,7 @@ function NftProfilePage() {
               collectionAddress: diffusionAICatContract.address,
               name,
               thumbnail,
+              chainId
             }
             tokens.unstaked.push(nftToNftToken(nft))
           } catch (error: any) {
@@ -393,6 +399,7 @@ function NftProfilePage() {
             collectionName: t('SocialNFT'),
             collectionAddress: socialNFT.address,
             name,
+            chainId
           }
           tokens.staked.push(nftToNftToken(nft))
         }),
@@ -415,6 +422,7 @@ function NftProfilePage() {
               collectionAddress: socialNFT.address,
               collectionName,
               thumbnail,
+              chainId
             }
             tokens.onSale.push(nftToNftToken(nft))
           }
@@ -440,6 +448,7 @@ function NftProfilePage() {
               collectionAddress: diffusionAICatContract.address,
               collectionName,
               thumbnail,
+              chainId
             }
             tokens.onSale.push(nftToNftToken(nft))
           }
@@ -598,7 +607,7 @@ function NftProfilePage() {
   }
 
   const submitStake = async (selected) => {
-    const mineAddress = getMiningAddress()
+    const mineAddress = getMiningAddress(chainId)
     const tokenIds = selected.map((item) => item.tokenId)
     const approved = await socialNFT.isApprovedForAll(account, mineAddress)
     let receipt

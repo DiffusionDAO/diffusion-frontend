@@ -6,9 +6,8 @@ import { NftToken } from 'state/nftMarket/types'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import { usePairContract } from 'hooks/useContract'
 import useSWR from 'swr'
-import { BigNumber } from '@ethersproject/bignumber'
 import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
-import { USDT_BSC } from '@pancakeswap/tokens'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { Divider } from '../shared/styles'
 import { GreyedOutContainer, DfsAmountCell, RightAlignedInput, FeeAmountCell } from './styles'
 
@@ -39,6 +38,7 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
   setPrice,
   continueToNextStage,
 }) => {
+  const {chainId} = useActiveChainId()
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const adjustedPriceIsTheSame = variant === 'adjust' && parseFloat(currentPrice) === parseFloat(price)
@@ -48,10 +48,10 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
   const creatorFeeAsNumber = parseFloat(creatorFee)
   const tradingFeeAsNumber = parseFloat(tradingFee)
   // const bnbPrice = useBNBBusdPrice()
-  const pairAddress = getPairAddress()
+  const pairAddress = getPairAddress(chainId)
   const pair = usePairContract(pairAddress)
-  const usdtAddress = getUSDTAddress()
-  const dfsAddress = getDFSAddress()
+  const usdtAddress = getUSDTAddress(chainId)
+  const dfsAddress = getDFSAddress(chainId)
   const { data: dfsPrice, status } = useSWR('getPriceInUSDT', async () => {
     const reserves: any = await pair.getReserves()
 

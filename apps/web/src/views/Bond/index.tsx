@@ -14,6 +14,7 @@ import { formatUnits } from '@ethersproject/units'
 import useSWR from 'swr'
 import { foundation } from 'views/Dashboard'
 import { USDT_BSC } from '@pancakeswap/tokens'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import {
   BondPageWrap,
@@ -51,6 +52,7 @@ import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
 
 const Bond = () => {
+  const {chainId} = useActiveChainId()
   const { account } = useWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
@@ -69,10 +71,10 @@ const Bond = () => {
   const [marketPrice, setMarketPrice] = useState<number>(0)
   const bond = useBondContract()
   const dfs = useDFSContract()
-  const usdtAddress = getUSDTAddress()
+  const usdtAddress = getUSDTAddress(chainId)
   const usdt = useERC20(usdtAddress, true)
-  const pairAddress = getPairAddress()
-  const dfsAddress = getDFSAddress()
+  const pairAddress = getPairAddress(chainId)
+  const dfsAddress = getDFSAddress(chainId)
   const pair = usePairContract(pairAddress)
 
   const { data, status } = useSWR('dfsBond', async () => {

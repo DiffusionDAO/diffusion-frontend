@@ -14,6 +14,7 @@ import { getNFTDatabaseAddress, getNftMarketAddress } from 'utils/addressHelpers
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { formatUnits } from '@ethersproject/units'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { ChainId } from '@pancakeswap/sdk'
 import {
   ApiCollection,
@@ -40,16 +41,15 @@ import {
 import { baseNftFields, collectionBaseFields, baseTransactionFields } from './queries'
 
 
-export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
-  const nftDatabaseAddress = getNFTDatabaseAddress()
-  const nftMarketAddress = getNftMarketAddress()
-  
-  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId: ChainId.BSC_TESTNET })
-  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
+export const getCollectionsApi = async (chainId:number): Promise<ApiCollectionsResponse> => {
+  const nftDatabaseAddress = getNFTDatabaseAddress(chainId)
+  const nftMarketAddress = getNftMarketAddress(chainId)
+  const nftDatabase = getContract({ abi: nftDatabaseAbi, address: nftDatabaseAddress, chainId })
+  const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId })
   const collectionAddresses = await nftDatabase.getCollections()
   const data: ApiCollection[] = await Promise.all(
     collectionAddresses.map(async (collectionAddress) => {
-      const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
+      const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId })
       const totalSupply = await erc721.totalSupply()
       const name = await erc721.name()
       const totalVolume = await nftMarket.totalVolume(collectionAddress)
@@ -72,9 +72,9 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   return response
 }
 
-export const getCollections = async (): Promise<Record<string, any>> => {
+export const getCollections = async (chainId:number): Promise<Record<string, any>> => {
   try {
-    const collectionsApi = await getCollectionsApi()
+    const collectionsApi = await getCollectionsApi(chainId)
     const collections = collectionsApi.data.reduce((accm, collection, index) => {
       // eslint-disable-next-line no-param-reassign
       accm[collection.address] = collection
@@ -89,9 +89,10 @@ export const getCollections = async (): Promise<Record<string, any>> => {
 
 export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
   try {
-    const nftMarketAddress = getNftMarketAddress()
-    const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId: ChainId.BSC_TESTNET })
-    const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId: ChainId.BSC_TESTNET })
+    const {chainId} = useActiveChainId()
+    const nftMarketAddress = getNftMarketAddress(chainId)
+    const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId })
+    const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId })
     const name = await erc721.name()
     const totalSupply = await erc721.totalSupply()
     const totalVolume = await nftMarket.totalVolume(collectionAddress)
@@ -351,7 +352,8 @@ export const getAccountNftsOnChainMarketData = async (
   account: string,
 ): Promise<TokenMarketData[]> => {
   try {
-    const nftMarketAddress = getNftMarketAddress()
+    const {chainId} = useActiveChainId()
+    const nftMarketAddress = getNftMarketAddress(chainId)
     const collectionList = Object.values(collections)
     const askCalls = collectionList.map((collection) => {
       const { address: collectionAddress } = collection

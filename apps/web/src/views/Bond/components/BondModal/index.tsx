@@ -55,6 +55,7 @@ import {
   ReferralLable,
   ReferralInput,
 } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const { confirm } = Modal
 
@@ -75,6 +76,7 @@ const BondModal: React.FC<BondModalProps> = ({
   onClose,
   openSettingModal,
 }) => {
+  const {chainId} = useActiveChainId()
   const { t } = useTranslation()
   const router = useRouter()
 
@@ -113,13 +115,12 @@ const BondModal: React.FC<BondModalProps> = ({
   const dfsMining = useDFSMiningContract()
   const dfs = useDFSContract()
   const pdfs = usePDFSContract()
-  const usdtAddress = getUSDTAddress()
-  const dfsAddress = getDFSAddress()
+  const usdtAddress = getUSDTAddress(chainId)
+  const dfsAddress = getDFSAddress(chainId)
   const usdt = useERC20(usdtAddress, true)
-  const pairAddress = getPairAddress()
+  const pairAddress = getPairAddress(chainId)
   const pair = usePairContract(pairAddress)
   const bond = useBondContract()
-  const pancakeRouter = useRouterContract()
 
   useEffect(() => {
     if (inputRef && inputRef.current) {

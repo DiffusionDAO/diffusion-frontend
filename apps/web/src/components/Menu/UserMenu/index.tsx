@@ -61,7 +61,9 @@ const UserMenu = () => {
       <>
         <WalletUserMenuItem isWrongNetwork={isWrongNetwork} onPresentWalletModal={onClickWalletMenu} />
         <UserMenuDivider />
-
+        <NextLink href={`/profile/${account?.toLowerCase()}`} passHref>
+          <UserMenuItem as="a">{t('Your NFTs')}</UserMenuItem>
+        </NextLink>
         <UserMenuItem as="button" onClick={logout}>
           <Flex alignItems="center" justifyContent="space-between" width="100%">
             {t('Disconnect')}

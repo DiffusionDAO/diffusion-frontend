@@ -394,43 +394,53 @@ export const useCrossFarmingProxy = (proxyContractAddress: string, withSignerIfP
 }
 
 export const useDiffusionAICatContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getDiffusionAICatContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getDiffusionAICatContract(providerOrSigner,chainId), [providerOrSigner])
 }
 
 export const useSocialNftContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getSocialNFTContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getSocialNFTContract(providerOrSigner,chainId), [providerOrSigner])
 }
 export const useBondContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getBondContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getBondContract(providerOrSigner,chainId), [providerOrSigner])
 }
 export const useDFSMiningContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getMineContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getMineContract(providerOrSigner,chainId), [providerOrSigner])
 }
 export const useHBondContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getHBondContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getHBondContract(providerOrSigner,chainId), [providerOrSigner])
 }
 export const useHDFSContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getHDFSContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getHDFSContract(providerOrSigner,chainId), [providerOrSigner])
 }
 export const useDFSContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getDFSContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getDFSContract(providerOrSigner,chainId), [providerOrSigner])
 }
 export const usePDFSContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getPDFSContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getPDFSContract(providerOrSigner,chainId), [providerOrSigner])
 }
 export const useIDOContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getIDOContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getIDOContract(providerOrSigner,chainId), [providerOrSigner])
 }
 export const useNFTDatabaseContract = (withSignerIfPossible = true) => {
+  const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getNFTDatabaseContract(providerOrSigner), [providerOrSigner])
+  return useMemo(() => getNFTDatabaseContract(providerOrSigner,chainId), [providerOrSigner])
 }

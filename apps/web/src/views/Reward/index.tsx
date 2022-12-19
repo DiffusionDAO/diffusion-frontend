@@ -90,7 +90,7 @@ interface Referral {
 
 const Reward = () => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const router = useRouter()
   const [access, setAccess] = useState<boolean>(true)
   const [amount, setAmount] = useState('')
@@ -127,8 +127,7 @@ const Reward = () => {
   const dfsMining = useDFSMiningContract()
   const bond = useBondContract()
   const dfsContract = useDFSContract()
-  const dfsMineAddress = getMiningAddress()
-  const bondAddress = getBondAddress()
+  const dfsMineAddress = getMiningAddress(chainId)
 
   const slidesPerView = isMobile ? 1 : 3
   const swiperWrapBgImgUrl = isMobile ? '/images/reward/swiperWrapBgMobile.png' : '/images/reward/swiperWrapBg.png'

@@ -6,6 +6,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { getBscScanLinkForNft } from 'utils'
 import { HorizontalDivider, RoundedImage } from './BuySellModals/shared/styles'
 import { nftsBaseUrl, pancakeBunniesAddress } from '../constants'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 export const StyledModal = styled(Modal)`
   & > div:last-child {
@@ -25,7 +26,7 @@ interface ProfileNftModalProps extends InjectedModalProps {
 const ProfileNftModal: React.FC<React.PropsWithChildren<ProfileNftModalProps>> = ({ nft, onDismiss, onSuccess }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-
+  const {chainId} = useActiveChainId()
   const itemPageUrlId = nft.collectionAddress === pancakeBunniesAddress ? nft.attributes[0].value : nft.tokenId
 
   return (
@@ -53,7 +54,7 @@ const ProfileNftModal: React.FC<React.PropsWithChildren<ProfileNftModalProps>> =
               height="16px"
               external
               variant="text"
-              href={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${itemPageUrlId}`}
+              href={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${itemPageUrlId}/${chainId}`}
             >
               {t('View Item')}
             </Button>
