@@ -2,6 +2,7 @@ import { Box, ChevronLeftIcon, Flex,NextLinkFromReactRouter } from '@pancakeswap
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import SearchBar from '../components/SearchBar'
 
 const BackLink = styled(NextLinkFromReactRouter)`
@@ -13,10 +14,10 @@ const BackLink = styled(NextLinkFromReactRouter)`
 
 const TopBar: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
-
+  const {chainId} = useActiveChainId()
   return (
     <Flex alignItems="center" justifyContent="space-between" mb="24px">
-      <BackLink to={`${nftsBaseUrl}/collections`}>
+      <BackLink to={`${nftsBaseUrl}/collections/${chainId}`}>
         <ChevronLeftIcon color="primary" width="24px" />
         {t('All Collections')}
       </BackLink>

@@ -110,7 +110,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
   onSuccess,
 }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account,chainId } = useWeb3React()
   const router = useRouter()
   const { toastError } = useToast()
   const dfsMining = useDFSMiningContract()
@@ -201,7 +201,7 @@ const MainNFTCard: React.FC<React.PropsWithChildren<MainNFTCardProps>> = ({
             <Box>
               {isMobile ? (
                 <div style={{ marginBottom: '30px', marginTop: '330px' }}>
-                  <CollectionLink to={`${nftsBaseUrl}/collections/${nft?.collectionAddress}`}>
+                  <CollectionLink to={`${nftsBaseUrl}/collections/${nft?.collectionAddress}/${chainId}`}>
                     {nft?.collectionName}
                   </CollectionLink>
                   <Text fontSize="32px" bold mt="12px">

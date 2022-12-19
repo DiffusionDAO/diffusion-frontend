@@ -7,6 +7,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import CollapsibleCard from 'components/CollapsibleCard'
 import orderBy from 'lodash/orderBy'
 import { useGetCollection } from 'state/nftMarket/hooks'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useGetLowestPriceFromBunnyId } from '../../hooks/useGetLowestPrice'
 import { DFSAmountLabel } from '../../components/CollectibleCard/styles'
 import { nftsBaseUrl } from '../../constants'
@@ -38,6 +39,7 @@ const LowestPriceCell: React.FC<React.PropsWithChildren<{ bunnyId: string }>> = 
 
 const PancakeBunniesTraits: React.FC<React.PropsWithChildren<PancakeBunniesTraitsProps>> = ({ collectionAddress }) => {
   const [raritySort, setRaritySort] = useState<SortType>('asc')
+  const {chainId} = useActiveChainId()
   const collection = useGetCollection(collectionAddress)
   const totalBunnyCount = Number(collection?.totalSupply)
   const { t } = useTranslation()
@@ -87,7 +89,7 @@ const PancakeBunniesTraits: React.FC<React.PropsWithChildren<PancakeBunniesTrait
                   const count: number = token.tokenCount
                   const percentage = (count / totalBunnyCount) * 100
                   const handleClick = () => {
-                    push(`${nftsBaseUrl}/collections/${collectionAddress}/${token.tokenId}`)
+                    push(`${nftsBaseUrl}/collections/${collectionAddress}/${chainId}/${token.tokenId}`)
                   }
 
                   return (

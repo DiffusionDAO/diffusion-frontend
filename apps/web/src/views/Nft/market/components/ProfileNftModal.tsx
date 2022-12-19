@@ -54,7 +54,7 @@ const ProfileNftModal: React.FC<React.PropsWithChildren<ProfileNftModalProps>> =
               height="16px"
               external
               variant="text"
-              href={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${itemPageUrlId}/${chainId}`}
+              href={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${chainId}/${itemPageUrlId}`}
             >
               {t('View Item')}
             </Button>

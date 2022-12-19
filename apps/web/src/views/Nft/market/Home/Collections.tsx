@@ -4,6 +4,7 @@ import { Collection } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { useEffect } from 'react'
 import { formatUnits } from '@ethersproject/units'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { CollectionCard } from '../components/CollectibleCard'
 import { DFSAmountLabel } from '../components/CollectibleCard/styles'
 
@@ -14,7 +15,7 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
 }) => {
   const { t } = useTranslation()
   const addresses = Object.keys(collections)
-
+  const {chainId} = useActiveChainId()
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" mb="32px" mt="80px">
@@ -24,7 +25,7 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
         <Button
           style={{ borderRadius: '8px', border: '2px solid #EC6EFF', color: '#fff', width: '200px' }}
           as={NextLinkFromReactRouter}
-          to={`${nftsBaseUrl}/collections/`}
+          to={`${nftsBaseUrl}/collections/${chainId}`}
           variant="secondary"
           scale="sm"
           endIcon={<ChevronRightIcon color="#fff" width="24px" />}
@@ -41,7 +42,7 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
               bgSrc={collection?.banner?.small}
               avatarSrc={collection?.avatar}
               collectionName={collection?.name}
-              url={`${nftsBaseUrl}/collections/${collection?.address}`}
+              url={`${nftsBaseUrl}/collections/${collection?.address}/${chainId}`}
             >
               <Flex alignItems="center">
                 <Text fontSize="12px" color="textSubtle">

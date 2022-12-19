@@ -32,7 +32,7 @@ import { nftsBaseUrl } from 'views/Nft/market/constants'
 import PageLoader from 'components/Loader/PageLoader'
 import { formatUnits } from '@ethersproject/units'
 
-import ToggleView from 'components/ToggleView/ToggleView'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { CollectionCard } from '../components/CollectibleCard'
 import { DFSAmountLabel } from '../components/CollectibleCard/styles'
 
@@ -81,6 +81,7 @@ const getNewSortDirection = (oldSortField: string, newSortField: string, oldSort
 }
 
 const Collectible = () => {
+  const {chainId} = useActiveChainId()
   const { t } = useTranslation()
   const { data: shuffledCollections } = useGetShuffledCollections()
   const { isMobile } = useMatchBreakpoints()
@@ -286,7 +287,7 @@ const Collectible = () => {
                         return (
                           <tr key={collection.address} data-test="nft-collection-row">
                             <Td style={{ cursor: 'pointer', minWidth: '200px' }}>
-                              <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${collection.address}`}>
+                              <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${collection.address}/${chainId}`}>
                                 <Flex alignItems="center">
                                   <ProfileAvatar
                                     src={`/images/nfts/${collection.name.toLowerCase()}/avatar.jpg`}
@@ -342,7 +343,7 @@ const Collectible = () => {
                       bgSrc={`/images/nfts/${data?.name.toLowerCase()}/small.jpg`}
                       avatarSrc={data?.avatar}
                       collectionName={data?.name}
-                      url={`${nftsBaseUrl}/collections/${data?.address}`}
+                      url={`${nftsBaseUrl}/collections/${data?.address}/${chainId}`}
                     >
                       <Flex alignItems="center">
                         <Text fontSize="12px" color="textSubtle">

@@ -64,26 +64,7 @@ const EditStage: React.FC<React.PropsWithChildren<EditStageProps>> = ({
             {t('Token ID: %id%', { id: nftToSell.tokenId })}
           </Text>
         </Flex>
-        {/* <Flex justifyContent="space-between" flex="3">
-          <Button
-            as={Link}
-            p="0px"
-            height="16px"
-            external
-            variant="text"
-            href={`${nftsBaseUrl}/collections/${nftToSell.collectionAddress}/${itemPageUrlId}`}
-          >
-            {t('View Item')}
-          </Button>
-          <HorizontalDivider />
-          <LinkExternal
-            p="0px"
-            height="16px"
-            href={getBscScanLinkForNft(nftToSell.collectionAddress, nftToSell.tokenId)}
-          >
-            BscScan
-          </LinkExternal>
-        </Flex> */}
+
       </Flex>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
