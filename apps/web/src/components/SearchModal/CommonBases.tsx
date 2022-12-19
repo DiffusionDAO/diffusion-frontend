@@ -11,7 +11,6 @@ import { AutoColumn } from '../Layout/Column'
 import { AutoRow } from '../Layout/Row'
 import { CurrencyLogo } from '../Logo'
 import { CommonBasesType } from './types'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const ButtonWrapper = styled.div`
   display: inline-block;

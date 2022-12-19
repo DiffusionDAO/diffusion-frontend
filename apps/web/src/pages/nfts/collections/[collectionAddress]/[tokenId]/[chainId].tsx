@@ -89,7 +89,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     chainId
   }
 
-  let collection = await getCollection(collectionAddress)
+  let collection = await getCollection(collectionAddress, chainId)
   collection = JSON.parse(JSON.stringify(collection))
 
   if (!nft) {

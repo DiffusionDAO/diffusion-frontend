@@ -3,6 +3,7 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { SWRConfig, unstable_serialize } from 'swr'
 import { getCollection } from 'state/nftMarket/helpers'
 import CollectionPageRouter from 'views/Nft/market/Collection/CollectionPageRouter'
+import { ChainIdName } from '@pancakeswap/sdk'
 
 const CollectionPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -24,15 +25,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { collectionAddress } = params
-  if (typeof collectionAddress !== 'string') {
+  const { collectionAddress, chainName } = params
+  if (typeof collectionAddress !== 'string' || typeof chainName  !== 'string') {
     return {
       notFound: true,
     }
   }
 
   try {
-    const collection = await getCollection(collectionAddress)
+    const collection = await getCollection(collectionAddress, ChainIdName[chainName])
     console.log('collection:', collection)
     const jsonString = JSON.stringify(collection)
     const collectionData = JSON.parse(jsonString)

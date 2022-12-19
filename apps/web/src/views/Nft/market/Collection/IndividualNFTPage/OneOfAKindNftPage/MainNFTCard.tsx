@@ -31,7 +31,6 @@ import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
 import { nftsBaseUrl } from '../../../constants'
 import { CollectionLink, Container } from '../shared/styles'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface MainNFTCardProps {
   nft: NftToken

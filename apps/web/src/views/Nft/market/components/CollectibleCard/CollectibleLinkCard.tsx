@@ -1,9 +1,9 @@
 import { NextLinkFromReactRouter } from '@pancakeswap/uikit'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import CardBody from './CardBody'
 import { CollectibleCardProps } from './types'
 import { nftsBaseUrl, pancakeBunniesAddress } from '../../constants'
 import { StyledCollectibleCard, CheckBoxWrap, CheckBox } from './styles'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const CollectibleLinkCard: React.FC<React.PropsWithChildren<CollectibleCardProps>> = ({
   isSelected,

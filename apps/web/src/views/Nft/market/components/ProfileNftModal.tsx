@@ -3,10 +3,10 @@ import useTheme from 'hooks/useTheme'
 import styled from 'styled-components'
 import { NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBscScanLinkForNft } from 'utils'
 import { HorizontalDivider, RoundedImage } from './BuySellModals/shared/styles'
 import { nftsBaseUrl, pancakeBunniesAddress } from '../constants'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 export const StyledModal = styled(Modal)`
   & > div:last-child {

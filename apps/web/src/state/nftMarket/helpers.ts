@@ -87,9 +87,8 @@ export const getCollections = async (chainId:number): Promise<Record<string, any
   }
 }
 
-export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
+export const getCollection = async (collectionAddress: string, chainId:number): Promise<Record<string, Collection> | null> => {
   try {
-    const {chainId} = useActiveChainId()
     const nftMarketAddress = getNftMarketAddress(chainId)
     const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId })
     const erc721 = getContract({ abi: erc721Abi, address: collectionAddress, chainId })
@@ -347,58 +346,57 @@ export const getNftsUpdatedMarketData = async (
   }
 }
 
-export const getAccountNftsOnChainMarketData = async (
-  collections: ApiCollections,
-  account: string,
-): Promise<TokenMarketData[]> => {
-  try {
-    const {chainId} = useActiveChainId()
-    const nftMarketAddress = getNftMarketAddress(chainId)
-    const collectionList = Object.values(collections)
-    const askCalls = collectionList.map((collection) => {
-      const { address: collectionAddress } = collection
-      return {
-        address: nftMarketAddress,
-        name: 'viewAsksByCollectionAndSeller',
-        params: [collectionAddress, account, 0, 1000],
-      }
-    })
+// export const getAccountNftsOnChainMarketData = async (
+//   collections: ApiCollections,
+//   account: string,
+// ): Promise<TokenMarketData[]> => {
+//   try {
+//     const nftMarketAddress = getNftMarketAddress(chainId)
+//     const collectionList = Object.values(collections)
+//     const askCalls = collectionList.map((collection) => {
+//       const { address: collectionAddress } = collection
+//       return {
+//         address: nftMarketAddress,
+//         name: 'viewAsksByCollectionAndSeller',
+//         params: [collectionAddress, account, 0, 1000],
+//       }
+//     })
 
-    const askCallsResultsRaw = await multicallv2({
-      abi: nftMarketAbi,
-      calls: askCalls,
-      options: { requireSuccess: false },
-    })
-    const askCallsResults = askCallsResultsRaw
-      .map((askCallsResultRaw, askCallIndex) => {
-        if (!askCallsResultRaw?.tokenIds || !askCallsResultRaw?.askInfo || !collectionList[askCallIndex]?.address)
-          return null
-        return askCallsResultRaw.tokenIds
-          .map((tokenId, tokenIdIndex) => {
-            if (!tokenId || !askCallsResultRaw.askInfo[tokenIdIndex] || !askCallsResultRaw.askInfo[tokenIdIndex].price)
-              return null
+//     const askCallsResultsRaw = await multicallv2({
+//       abi: nftMarketAbi,
+//       calls: askCalls,
+//       options: { requireSuccess: false },
+//     })
+//     const askCallsResults = askCallsResultsRaw
+//       .map((askCallsResultRaw, askCallIndex) => {
+//         if (!askCallsResultRaw?.tokenIds || !askCallsResultRaw?.askInfo || !collectionList[askCallIndex]?.address)
+//           return null
+//         return askCallsResultRaw.tokenIds
+//           .map((tokenId, tokenIdIndex) => {
+//             if (!tokenId || !askCallsResultRaw.askInfo[tokenIdIndex] || !askCallsResultRaw.askInfo[tokenIdIndex].price)
+//               return null
 
-            const currentAskPrice = formatBigNumber(askCallsResultRaw.askInfo[tokenIdIndex].price)
+//             const currentAskPrice = formatBigNumber(askCallsResultRaw.askInfo[tokenIdIndex].price)
 
-            return {
-              collection: { id: collectionList[askCallIndex].address.toLowerCase() },
-              tokenId: tokenId.toString(),
-              account,
-              isTradable: true,
-              currentAskPrice,
-            }
-          })
-          .filter(Boolean)
-      })
-      .flat()
-      .filter(Boolean)
+//             return {
+//               collection: { id: collectionList[askCallIndex].address.toLowerCase() },
+//               tokenId: tokenId.toString(),
+//               account,
+//               isTradable: true,
+//               currentAskPrice,
+//             }
+//           })
+//           .filter(Boolean)
+//       })
+//       .flat()
+//       .filter(Boolean)
 
-    return askCallsResults
-  } catch (error) {
-    console.error('Failed to fetch NFTs onchain market data', error)
-    return []
-  }
-}
+//     return askCallsResults
+//   } catch (error) {
+//     console.error('Failed to fetch NFTs onchain market data', error)
+//     return []
+//   }
+// }
 
 export const getNftsMarketData = async (
   where = {},

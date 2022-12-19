@@ -22,6 +22,7 @@ import { useRouterContract } from 'utils/exchange'
 import { estimateGas } from 'utils/calls'
 import { USDT_BSC } from '@pancakeswap/tokens'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import {
   StyledModal,
@@ -55,7 +56,6 @@ import {
   ReferralLable,
   ReferralInput,
 } from './styles'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const { confirm } = Modal
 

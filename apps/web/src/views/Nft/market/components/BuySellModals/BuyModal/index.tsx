@@ -34,7 +34,6 @@ import TransactionConfirmed from '../shared/TransactionConfirmed'
 import ReviewStage from './ReviewStage'
 import { StyledModal } from './styles'
 import { BuyingStage, PaymentCurrency } from './types'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
