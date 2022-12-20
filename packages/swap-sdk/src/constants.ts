@@ -15,7 +15,7 @@ export const ChainIdName:Record<string, ChainId> = {
   '56': ChainId.BSC,
   '97': ChainId.BSC_TESTNET,
 }
-export const FACTORY_ADDRESS = '0xF542b3909324486061b7949952bAEB2123272673'
+export const FACTORY_ADDRESS = '0x442616abf565e88c972CEe43285CF3CC18EE9c45'
 
 const FACTORY_ADDRESS_ETH = '0x1097053Fd2ea711dad45caCcc45EfF7548fCB362'
 
