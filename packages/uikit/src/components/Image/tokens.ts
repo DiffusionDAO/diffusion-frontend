@@ -24,7 +24,7 @@ const tokens = {
     symbol: "DFS",
     address: {
       56: "0x2B806e6D78D8111dd09C58943B9855910baDe005",
-      97: "0xA7DA6F4D19a4E18eFBB9EeCe542E9Aec8AD54a35",
+      97: "0x4A5dF744691379c64F731fa9c6d6Ee7d5697C826",
     },
     decimals: 18,
     projectLink: "https://app.diffusiondao.org/",
