@@ -1,4 +1,4 @@
-import { CAKE, DFS, USDC, USDT } from '@pancakeswap/tokens'
+import { USDT } from '@pancakeswap/tokens'
 import { useCurrency } from 'hooks/Tokens'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { GetStaticPaths, GetStaticProps } from 'next'
@@ -11,6 +11,7 @@ import AddLiquidity from 'views/AddLiquidity'
 import AddStableLiquidity from 'views/AddLiquidity/AddStableLiquidity/index'
 import useStableConfig, { StableConfigContext } from 'views/Swap/StableSwap/hooks/useStableConfig'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { DFS } from '@pancakeswap/sdk'
 
 const AddLiquidityPage = () => {
   const router = useRouter()

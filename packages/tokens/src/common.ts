@@ -1,9 +1,11 @@
 import { ChainId, ERC20Token } from '@pancakeswap/sdk'
 
 
+
+
 export const USDT_TESTNET = new ERC20Token(
   ChainId.BSC_TESTNET,
-  '0x91677b943fbA6367297ac6Cb179b3436Fa8a4f3d',
+  '0x97FFefAf5d3E929F6F3Cd09354D6f340e3da117A',
   18,
   'USDT',
   'Tether USD',
@@ -132,28 +134,7 @@ export const BUSD_GOERLI = new ERC20Token(
   'https://www.paxos.com/busd/',
 )
 
-export const DFS_MAINNET = new ERC20Token(
-  ChainId.BSC,
-  '0x2B806e6D78D8111dd09C58943B9855910baDe005',
-  18,
-  'DFS',
-  'Diffusion Token',
-  'https://app.diffusiondao.org/',
-)
 
-export const DFS_TESTNET = new ERC20Token(
-  ChainId.BSC_TESTNET,
-  '0x4A5dF744691379c64F731fa9c6d6Ee7d5697C826',
-  18,
-  'DFS',
-  'Diffusion Token',
-  'https://app.diffusiondao.org/',
-)
-
-export const DFS = {
-  [ChainId.BSC]: DFS_MAINNET,
-  [ChainId.BSC_TESTNET]: DFS_TESTNET,
-}
 export const BUSD: Record<ChainId, ERC20Token> = {
   [ChainId.ETHEREUM]: BUSD_ETH,
   [ChainId.RINKEBY]: BUSD_RINKEBY,

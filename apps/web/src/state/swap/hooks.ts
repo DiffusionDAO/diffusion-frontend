@@ -1,5 +1,5 @@
 import { useAccount } from 'wagmi'
-import { Currency, CurrencyAmount, Trade, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Trade, TradeType, DFS } from '@pancakeswap/sdk'
 import { ParsedUrlQuery } from 'querystring'
 import { useEffect, useMemo, useState } from 'react'
 import { DEFAULT_INPUT_CURRENCY, DEFAULT_OUTPUT_CURRENCY } from 'config/constants/exchange'
@@ -12,8 +12,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { isAddress } from 'utils'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { computeSlippageAdjustedAmounts } from 'utils/exchange'
-import { CAKE, DFS, USDC, USDT } from '@pancakeswap/tokens'
-import getLpAddress from 'utils/getLpAddress'
+import {  USDT } from '@pancakeswap/tokens'
 import { getTokenAddress } from 'views/Swap/components/Chart/utils'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -64,6 +63,7 @@ export function useSingleTokenSwapInfo(
   outputCurrencyId: string | undefined,
   outputCurrency: Currency | undefined,
 ): { [key: string]: number } {
+  console.log('useSingleTokenSwapInfo:',outputCurrency)
   const token0Address = getTokenAddress(inputCurrencyId)
   const token1Address = getTokenAddress(outputCurrencyId)
 
@@ -97,6 +97,7 @@ export function useDerivedSwapInfo(
   v2Trade: Trade<Currency, Currency, TradeType> | undefined
   inputError?: string
 } {
+  console.log('useDerivedSwapInfo:', outputCurrency)
   const { address: account } = useAccount()
   const { t } = useTranslation()
 

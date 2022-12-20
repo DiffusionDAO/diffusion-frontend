@@ -13,8 +13,8 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   // PANCAKE_EXTENDED,
   // CMC,
   // COINGECKO,
-  ...UNSUPPORTED_LIST_URLS, // need to load unsupported tokens as well
-  ...WARNING_LIST_URLS,
+  // ...UNSUPPORTED_LIST_URLS, // need to load unsupported tokens as well
+  // ...WARNING_LIST_URLS,
 ]
 
 // default lists to be 'active' aka searched across

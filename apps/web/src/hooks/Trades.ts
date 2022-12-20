@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { isTradeBetter } from 'utils/trades'
-import { Currency, CurrencyAmount, Pair, Token, Trade, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Pair, Token, ERC20Token, Trade, TradeType } from '@pancakeswap/sdk'
 import flatMap from 'lodash/flatMap'
 import { useMemo } from 'react'
 
@@ -18,45 +18,48 @@ import { useActiveChainId } from './useActiveChainId'
 
 export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
   const { chainId } = useActiveChainId()
+  console.log('useAllCommonPairs currencyA:',currencyA, currencyB)
 
   const [tokenA, tokenB] = chainId
     ? [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
     : [undefined, undefined]
+  console.log('tokenA:',tokenA, tokenB)
 
-  const bases: Token[] = useMemo(() => {
+  const bases: ERC20Token[] = useMemo(() => {
     if (!chainId) return []
 
     const common = BASES_TO_CHECK_TRADES_AGAINST[chainId] ?? []
 
     return [...common]
   }, [chainId, tokenA, tokenB])
-
-  const basePairs: [Token, Token][] = useMemo(
-    () => flatMap(bases, (base): [Token, Token][] => bases.map((otherBase) => [base, otherBase])),
+  console.log('bases:',bases)
+  const basePairs: [ERC20Token, ERC20Token][] = useMemo(
+    () => flatMap(bases, (base): [ERC20Token, ERC20Token][] => bases.map((otherBase) => [base, otherBase])),
     [bases],
   )
+  console.log('basePairs:',basePairs)
 
-  const allPairCombinations: [Token, Token][] = useMemo(
+  const allPairCombinations: [ERC20Token, ERC20Token][] = useMemo(
     () =>
       tokenA && tokenB
         ? [
             // the direct pair
             [tokenA, tokenB],
             // token A against all bases
-            ...bases.map((base): [Token, Token] => [tokenA, base]),
+            ...bases.map((base): [ERC20Token, ERC20Token] => [tokenA, base]),
             // token B against all bases
-            ...bases.map((base): [Token, Token] => [tokenB, base]),
+            ...bases.map((base): [ERC20Token, ERC20Token] => [tokenB, base]),
             // each base against all bases
             ...basePairs,
           ]
-            .filter((tokens): tokens is [Token, Token] => Boolean(tokens[0] && tokens[1]))
+            .filter((tokens): tokens is [ERC20Token, ERC20Token] => Boolean(tokens[0] && tokens[1]))
             .filter(([t0, t1]) => t0.address !== t1.address)
             .filter(([tokenA_, tokenB_]) => {
               if (!chainId) return true
               const customBases = CUSTOM_BASES[chainId]
 
-              const customBasesA: Token[] | undefined = customBases?.[tokenA_.address]
-              const customBasesB: Token[] | undefined = customBases?.[tokenB_.address]
+              const customBasesA: ERC20Token[] | undefined = customBases?.[tokenA_.address]
+              const customBasesB: ERC20Token[] | undefined = customBases?.[tokenB_.address]
 
               if (!customBasesA && !customBasesB) return true
 
@@ -68,9 +71,9 @@ export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): P
         : [],
     [tokenA, tokenB, bases, basePairs, chainId],
   )
-
+  console.log('allPairCombinations:',allPairCombinations)
   const allPairs = usePairs(allPairCombinations)
-
+  console.log('allPairs:',allPairs)
   // only pass along valid pairs, non-duplicated pairs
   return useMemo(
     () =>

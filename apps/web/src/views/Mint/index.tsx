@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
-import { useBondContract, useSocialNftContract, useERC20 } from 'hooks/useContract'
+import { useBondContract, useSocialNftContract, useERC20, useDFSContract } from 'hooks/useContract'
 import { getDFSAddress, getSocialNFTAddress } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -69,8 +69,7 @@ const Mint = () => {
     socialNFT.elementaryCost().then((oneCost) => setOneCost(oneCost))
     socialNFT.advancedCost().then((twoCost) => setTwoCost(twoCost))
   }, [account, balance])
-  const dfsAddress = getDFSAddress(chainId)
-  const DFS = useERC20(dfsAddress)
+  const DFS = useDFSContract()
 
   const bond = useBondContract()
 

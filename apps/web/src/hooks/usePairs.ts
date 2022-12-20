@@ -18,7 +18,7 @@ export enum PairState {
 
 export function usePairs(currencies: [Currency | undefined, Currency | undefined][]): [PairState, Pair | null][] {
   const { chainId } = useActiveChainId()
-
+  console.log("userPairs:", currencies)
   const tokens = useMemo(
     () =>
       currencies.map(([currencyA, currencyB]) => [
@@ -27,11 +27,13 @@ export function usePairs(currencies: [Currency | undefined, Currency | undefined
       ]),
     [chainId, currencies],
   )
+  console.log("tokens:", tokens)
 
   const pairAddresses = useMemo(
     () =>
       tokens.map(([tokenA, tokenB]) => {
         try {
+          console.log("tokenA:", tokenA,tokenB,Pair.getAddress(tokenA, tokenB))
           return tokenA && tokenB && !tokenA.equals(tokenB) ? Pair.getAddress(tokenA, tokenB) : undefined
         } catch (error: any) {
           // Debug Invariant failed related to this line
@@ -46,14 +48,13 @@ export function usePairs(currencies: [Currency | undefined, Currency | undefined
       }),
     [tokens],
   )
-
   const results = useMultipleContractSingleData(pairAddresses, PAIR_INTERFACE, 'getReserves')
   return useMemo(() => {
     return results.map((result, i) => {
       const { result: reserves, loading } = result
       const tokenA = tokens[i][0]
       const tokenB = tokens[i][1]
-
+      // console.log('usePairs:',tokenA, tokenB)
       if (loading) return [PairState.LOADING, null]
       if (!tokenA || !tokenB || tokenA.equals(tokenB)) return [PairState.INVALID, null]
       if (!reserves) return [PairState.NOT_EXISTS, null]

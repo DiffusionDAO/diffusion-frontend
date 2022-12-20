@@ -490,6 +490,7 @@ export function useTrackedTokenPairs(): [ERC20Token, ERC20Token][] {
   const tokens = useOfficialsAndUserAddedTokens()
   // pinned pairs
   const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId] ?? [] : []), [chainId])
+  
   const { data: farmPairs = [] } = useSWRImmutable(chainId && ['track-farms-pairs', chainId], async () => {
     const farms = await getFarmConfig(chainId)
 

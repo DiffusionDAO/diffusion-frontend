@@ -14,8 +14,8 @@ const tokens = {
   usdt: {
     symbol: "USDT",
     address: {
-      56: "0xB2183e9aee1DBC7a49e5763e8A4395ee184f9925",
-      97: "0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5",
+      56: "0x55d398326f99059fF775485246999027B3197955",
+      97: "0x97FFefAf5d3E929F6F3Cd09354D6f340e3da117A",
     },
     decimals: 18,
     projectLink: "https://tether.to/",
@@ -24,7 +24,7 @@ const tokens = {
     symbol: "DFS",
     address: {
       56: "0x2B806e6D78D8111dd09C58943B9855910baDe005",
-      97: "0x4A5dF744691379c64F731fa9c6d6Ee7d5697C826",
+      97: "0xE4DE5CBD2904C4594c580d3c209F643A30450BEa",
     },
     decimals: 18,
     projectLink: "https://app.diffusiondao.org/",

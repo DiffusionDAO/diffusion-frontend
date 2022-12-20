@@ -6,10 +6,10 @@ const farms: SerializedFarmConfig[] = [
   {
     pid: 0,
     v1pid: 264,
-    lpSymbol: 'USDT-BNB LP',
-    lpAddress: '0x0dcBC4ab46b4ebE333d0017831f4E66900077eb8',
-    token: bscTokens.usdt,
-    quoteToken: bscTokens.wbnb,
+    lpSymbol: 'DFS-USDT LP',
+    lpAddress: '0xB5951ff6e65d1b3c07Ac1188039170A00aEF8de2',
+    token: bscTokens.dfs,
+    quoteToken: bscTokens.usdt,
   },
 ].map((p) => ({ ...p, token: p.token.serialize, quoteToken: p.quoteToken.serialize }))
 

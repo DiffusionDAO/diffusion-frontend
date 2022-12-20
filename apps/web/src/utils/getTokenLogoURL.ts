@@ -1,7 +1,7 @@
 import { getAddress } from '@ethersproject/address'
 import memoize from 'lodash/memoize'
-import { ChainId, Token, WBNB } from '@pancakeswap/sdk'
-import { DFS_MAINNET, DFS_TESTNET, USDT_BSC, USDT_TESTNET } from '@pancakeswap/tokens'
+import { ChainId, DFS_MAINNET, DFS_TESTNET, Token, WBNB } from '@pancakeswap/sdk'
+import { USDT_BSC, USDT_TESTNET } from '@pancakeswap/tokens'
 
 const mapping = {
   [ChainId.BSC]: 'smartchain',

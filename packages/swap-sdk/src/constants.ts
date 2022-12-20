@@ -15,7 +15,7 @@ export const ChainIdName:Record<string, ChainId> = {
   '56': ChainId.BSC,
   '97': ChainId.BSC_TESTNET,
 }
-export const FACTORY_ADDRESS = '0x442616abf565e88c972CEe43285CF3CC18EE9c45'
+export const FACTORY_ADDRESS = '0x49b1FFb8344989126A2fb4Bfd5d9B0e44840b784'
 
 const FACTORY_ADDRESS_ETH = '0x1097053Fd2ea711dad45caCcc45EfF7548fCB362'
 
@@ -81,6 +81,29 @@ export const WBNB = {
     'Wrapped BNB',
     'https://www.binance.org'
   ),
+}
+
+export const DFS_MAINNET = new ERC20Token(
+  ChainId.BSC,
+  '0x2B806e6D78D8111dd09C58943B9855910baDe005',
+  18,
+  'DFS',
+  'Diffusion Token',
+  'https://app.diffusiondao.org/',
+)
+
+export const DFS_TESTNET = new ERC20Token(
+  ChainId.BSC_TESTNET,
+  '0xE4DE5CBD2904C4594c580d3c209F643A30450BEa',
+  18,
+  'DFS',
+  'Diffusion Token',
+  'https://app.diffusiondao.org/',
+)
+
+export const DFS = {
+  [ChainId.BSC]: DFS_MAINNET,
+  [ChainId.BSC_TESTNET]: DFS_TESTNET,
 }
 
 export const WNATIVE: Record<number, ERC20Token> = {
