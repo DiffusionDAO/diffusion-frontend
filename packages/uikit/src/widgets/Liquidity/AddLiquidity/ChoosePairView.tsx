@@ -23,7 +23,6 @@ export function ChoosePairView({
   //     placement: "bottom",
   //   }
   // );
-  console.log("ChoosePairView")
   return (
     <>
       <CardBody>
