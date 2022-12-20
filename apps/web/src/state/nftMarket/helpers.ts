@@ -15,7 +15,6 @@ import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftDatabaseAbi from 'config/abi/nftDatabase.json'
 import { formatUnits } from '@ethersproject/units'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { ChainId } from '@pancakeswap/sdk'
 import {
   ApiCollection,
   ApiCollections,

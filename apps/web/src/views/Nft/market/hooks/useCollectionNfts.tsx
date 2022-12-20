@@ -153,7 +153,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
     const getTokenContract = getContract({
       abi: socialNFTAbi,
       address: collectionAddress,
-      chainId: ChainId.BSC,
+      chainId,
     })
     setTokenIds(await getTokenContract.allTokens())
 
