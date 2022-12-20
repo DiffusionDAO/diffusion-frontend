@@ -14,14 +14,14 @@ const getLpAddress = memoize(
       if (!checksummedToken1Address) {
         return null
       }
-      token1AsTokenInstance = new ERC20Token(chainId, checksummedToken1Address, 18, 'Diffusion-LP')
+      token1AsTokenInstance = new ERC20Token(chainId, checksummedToken1Address, 18, 'DFS-LP')
     }
     if (typeof token2 === 'string' || token2 instanceof String) {
       const checksummedToken2Address = isAddress(token2)
       if (!checksummedToken2Address) {
         return null
       }
-      token2AsTokenInstance = new ERC20Token(chainId, checksummedToken2Address, 18, 'Diffusion-LP')
+      token2AsTokenInstance = new ERC20Token(chainId, checksummedToken2Address, 18, 'DFS-LP')
     }
     return Pair.getAddress(token1AsTokenInstance as ERC20Token, token2AsTokenInstance as ERC20Token)
   },

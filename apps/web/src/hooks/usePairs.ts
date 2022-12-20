@@ -1,4 +1,4 @@
-import { CurrencyAmount, Pair, Currency } from '@pancakeswap/sdk'
+import { CurrencyAmount, Pair, Currency} from '@pancakeswap/sdk'
 import { useMemo } from 'react'
 import IPancakePairABI from 'config/abi/IPancakePair.json'
 import { Interface } from '@ethersproject/abi'
@@ -18,7 +18,6 @@ export enum PairState {
 
 export function usePairs(currencies: [Currency | undefined, Currency | undefined][]): [PairState, Pair | null][] {
   const { chainId } = useActiveChainId()
-  console.log("userPairs:", currencies)
   const tokens = useMemo(
     () =>
       currencies.map(([currencyA, currencyB]) => [
@@ -27,14 +26,13 @@ export function usePairs(currencies: [Currency | undefined, Currency | undefined
       ]),
     [chainId, currencies],
   )
-  console.log("tokens:", tokens)
 
   const pairAddresses = useMemo(
     () =>
       tokens.map(([tokenA, tokenB]) => {
         try {
-          console.log("tokenA:", tokenA,tokenB,Pair.getAddress(tokenA, tokenB))
-          return tokenA && tokenB && !tokenA.equals(tokenB) ? Pair.getAddress(tokenA, tokenB) : undefined
+          const address = tokenA && tokenB && !tokenA.equals(tokenB) ? Pair.getAddress(tokenA, tokenB) : undefined
+          return address
         } catch (error: any) {
           // Debug Invariant failed related to this line
           console.error(

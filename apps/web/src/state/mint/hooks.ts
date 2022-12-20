@@ -85,8 +85,6 @@ export function useDerivedMintInfo(
 
   const dependentField = independentField === Field.CURRENCY_A ? Field.CURRENCY_B : Field.CURRENCY_A
 
-  console.log("useDerivedMintInfo:", currencyA, currencyB, dependentField)
-
   // tokens
   const currencies: { [field in Field]?: Currency } = useMemo(
     () => ({
@@ -95,7 +93,7 @@ export function useDerivedMintInfo(
     }),
     [currencyA, currencyB],
   )
-  console.log("currencies:", currencies)
+  console.log("useDerivedMintInfo currencies:", currencies)
 
   // pair
   const [pairState, pair] = usePair(currencies[Field.CURRENCY_A], currencies[Field.CURRENCY_B])

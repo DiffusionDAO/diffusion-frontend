@@ -21,7 +21,6 @@ export function ChoosePair({
   error?: string
   onNext?: () => void
 }) {
-  console.log("currencyA:",currencyA, currencyB)
 
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()

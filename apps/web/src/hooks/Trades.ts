@@ -18,12 +18,10 @@ import { useActiveChainId } from './useActiveChainId'
 
 export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
   const { chainId } = useActiveChainId()
-  console.log('useAllCommonPairs currencyA:',currencyA, currencyB)
 
   const [tokenA, tokenB] = chainId
     ? [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
     : [undefined, undefined]
-  console.log('tokenA:',tokenA, tokenB)
 
   const bases: ERC20Token[] = useMemo(() => {
     if (!chainId) return []
@@ -32,12 +30,10 @@ export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): P
 
     return [...common]
   }, [chainId, tokenA, tokenB])
-  console.log('bases:',bases)
   const basePairs: [ERC20Token, ERC20Token][] = useMemo(
     () => flatMap(bases, (base): [ERC20Token, ERC20Token][] => bases.map((otherBase) => [base, otherBase])),
     [bases],
   )
-  console.log('basePairs:',basePairs)
 
   const allPairCombinations: [ERC20Token, ERC20Token][] = useMemo(
     () =>
@@ -71,9 +67,7 @@ export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): P
         : [],
     [tokenA, tokenB, bases, basePairs, chainId],
   )
-  console.log('allPairCombinations:',allPairCombinations)
   const allPairs = usePairs(allPairCombinations)
-  console.log('allPairs:',allPairs)
   // only pass along valid pairs, non-duplicated pairs
   return useMemo(
     () =>
@@ -101,7 +95,6 @@ export function useTradeExactIn(
   currencyOut?: Currency,
 ): Trade<Currency, Currency, TradeType> | null {
   const allowedPairs = useAllCommonPairs(currencyAmountIn?.currency, currencyOut)
-
   const [singleHopOnly] = useUserSingleHopOnly()
 
   return useMemo(() => {

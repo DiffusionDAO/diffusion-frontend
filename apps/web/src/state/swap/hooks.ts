@@ -97,7 +97,6 @@ export function useDerivedSwapInfo(
   v2Trade: Trade<Currency, Currency, TradeType> | undefined
   inputError?: string
 } {
-  console.log('useDerivedSwapInfo:', outputCurrency)
   const { address: account } = useAccount()
   const { t } = useTranslation()
 

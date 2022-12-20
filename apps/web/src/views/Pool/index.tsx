@@ -20,7 +20,6 @@ const Body = styled(CardBody)`
 export default function Pool() {
   const { address: account } = useAccount()
   const { t } = useTranslation()
-
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
   const tokenPairsWithLiquidityTokens = useMemo(
@@ -46,6 +45,7 @@ export default function Pool() {
       ),
     [tokenPairsWithLiquidityTokens, v2PairsBalances],
   )
+  console.log("Pool:",liquidityTokensWithBalances)
 
   const v2Pairs = usePairs(liquidityTokensWithBalances.map(({ tokens }) => tokens))
   const v2IsLoading =

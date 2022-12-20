@@ -24,7 +24,7 @@ export const FACTORY_ADDRESS_MAP: Record<number, string> = {
   [ChainId.RINKEBY]: FACTORY_ADDRESS_ETH,
   [ChainId.GOERLI]: FACTORY_ADDRESS_ETH,
   [ChainId.BSC]: FACTORY_ADDRESS,
-  [ChainId.BSC_TESTNET]: '0x6725f303b657a9451d8ba641348b6761a6cc7a17',
+  [ChainId.BSC_TESTNET]: '0x49b1FFb8344989126A2fb4Bfd5d9B0e44840b784',
 }
 export const INIT_CODE_HASH = '0x0b48ad3294cc404de400cc0cda387693caca877b7cfb6e7db01861e665492c4b'
 
@@ -34,7 +34,7 @@ export const INIT_CODE_HASH_MAP: Record<number, string> = {
   [ChainId.RINKEBY]: INIT_CODE_HASH_ETH,
   [ChainId.GOERLI]: INIT_CODE_HASH_ETH,
   [ChainId.BSC]: INIT_CODE_HASH,
-  [ChainId.BSC_TESTNET]: '0xd0d4c4cd0848c93cb4fd1f498d7013ee6bfb25783ea21593d5834f5d250ece66',
+  [ChainId.BSC_TESTNET]: '0x0b48ad3294cc404de400cc0cda387693caca877b7cfb6e7db01861e665492c4b',
 }
 
 export const WETH9 = {
