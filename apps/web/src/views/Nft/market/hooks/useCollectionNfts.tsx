@@ -208,7 +208,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
       const getTokenContract = getContract({
         abi: socialNFTAbi,
         address: collectionAddress,
-        chainId: ChainId.BSC,
+        chainId,
       })
       const tokens = await Promise.all(
         tokenIds.slice(page * REQUEST_SIZE, (page + 1) * REQUEST_SIZE).map(async (tokenId) => {
