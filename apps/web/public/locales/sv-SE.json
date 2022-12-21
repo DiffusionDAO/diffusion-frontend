@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "För varje handelstransaktion betalas en avgift på %amount%",
   "%amount% to LP token holders": "%amount% till LP-tokeninnehavare",
   "%amount% to the Treasury": "%amount% till kassan",
-  "%amount% towards BNB buyback and burn": "%amount% mot återköp och bränning av BNB-tokens",
+  "%amount% towards DFS buyback and burn": "%amount% mot återköp och bränning av DFS-tokens",
   "Routing through these tokens resulted in the best price for your trade.": "Dirigering genom dessa tokens gav det bästa priset på din handelstransaktion.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Din transaktion annulleras om det förekommer en stor och ogynnsam prisrörelse innan den bekräftas.",
   "Route": "Väg",

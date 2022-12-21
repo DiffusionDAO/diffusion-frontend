@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "Với mỗi giao dịch, một mức phí %amount% sẽ được thanh toán",
   "%amount% to LP token holders": "%amount% cho chủ sở hữu token LP",
   "%amount% to the Treasury": "%amount% cho Kho bạc",
-  "%amount% towards BNB buyback and burn": "%amount% để mua lại và đốt BNB",
+  "%amount% towards DFS buyback and burn": "%amount% để mua lại và đốt DFS",
   "Routing through these tokens resulted in the best price for your trade.": "Định tuyến qua các token này sẽ đem đến giá tốt nhất cho giao dịch của bạn.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Giao dịch sẽ được hoàn nguyên nếu có một biến động giá lớn và bất lợi trước khi nó được xác nhận.",
   "Route": "Định tuyến",

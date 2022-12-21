@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "За кожні торги сплачується комісія на суму %amount%",
   "%amount% to LP token holders": "%amount% тримачам токенів пулу ліквідності",
   "%amount% to the Treasury": "%amount% у скарбницю",
-  "%amount% towards BNB buyback and burn": "%amount% на викуп і спалення BNB",
+  "%amount% towards DFS buyback and burn": "%amount% на викуп і спалення DFS",
   "Routing through these tokens resulted in the best price for your trade.": "Маршрутизація через ці токени дає найкращу ціну ваших торгів.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Ваша транзакція повернеться, якщо до підтвердження відбудеться значна несприятлива зміна ціни.",
   "Route": "Маршрут",

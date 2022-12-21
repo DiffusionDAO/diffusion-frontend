@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "For each trade a %amount% fee is paid",
   "%amount% to LP token holders": "%amount% to LP token holders",
   "%amount% to the Treasury": "%amount% to the Treasury",
-  "%amount% towards BNB buyback and burn": "%amount% towards BNB buyback and burn",
+  "%amount% towards DFS buyback and burn": "%amount% towards DFS buyback and burn",
   "Routing through these tokens resulted in the best price for your trade.": "Routing through these tokens resulted in the best price for your trade.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.",
   "Route": "Route",

@@ -1085,7 +1085,7 @@
   "For each trade a %amount% fee is paid": "각 거래에 대해 %amount% 수수료가 지급되었습니다",
   "%amount% to LP token holders": "LP 토큰 홀더에게 %amount%",
   "%amount% to the Treasury": "금고로 %amount%",
-  "%amount% towards BNB buyback and burn": "BNB 환매 및 소각으로 %amount%",
+  "%amount% towards DFS buyback and burn": "DFS 환매 및 소각으로 %amount%",
   "Routing through these tokens resulted in the best price for your trade.": "이 토큰을 통한 라우팅으로 거래에서 가장 좋은 가격을 얻었습니다.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "확정 전에 가격이 크게 불리한 방향으로 움직일 경우, 트랜잭션이 취소됩니다.",
   "Route": "라우트",

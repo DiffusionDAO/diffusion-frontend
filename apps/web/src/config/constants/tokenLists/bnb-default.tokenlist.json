@@ -10,38 +10,7 @@
   "logoURI": "/images/dfs.png",
   "keywords": ["bnb", "default"],
   "tokens": [
-    {
-      "name": "DFS",
-      "symbol": "DFS",
-      "address": "0x2B806e6D78D8111dd09C58943B9855910baDe005",
-      "chainId": 56,
-      "decimals": 18,
-      "logoURI": "/images/dfs.png"
-    },
-    {
-      "name": "DFS",
-      "symbol": "DFS",
-      "address": "0xE4DE5CBD2904C4594c580d3c209F643A30450BEa",
-      "chainId": 97,
-      "decimals": 18,
-      "logoURI": "/images/dfs.png"
-    },
-    {
-      "name": "USDT",
-      "symbol": "USDT",
-      "address": "0x55d398326f99059fF775485246999027B3197955",
-      "chainId": 56,
-      "decimals": 18,
-      "logoURI": "/images/usdt-assets/usdt.png"
-    },
-    {
-      "name": "USDT",
-      "symbol": "USDT",
-      "address": "0x97FFefAf5d3E929F6F3Cd09354D6f340e3da117A",
-      "chainId": 97,
-      "decimals": 18,
-      "logoURI": "/images/usdt-assets/usdt.png"
-    }
+    
     
   ]
 }

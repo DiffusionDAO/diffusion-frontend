@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "Για κάθε συναλλαγή πληρώνεται ένα τέλος %amount%",
   "%amount% to LP token holders": "%amount% στους κατόχους νομισμάτων LP",
   "%amount% to the Treasury": "%amount% στο Ταμείο",
-  "%amount% towards BNB buyback and burn": "%amount% για αγορά BNB και κάψιμο",
+  "%amount% towards DFS buyback and burn": "%amount% για αγορά DFS και κάψιμο",
   "Routing through these tokens resulted in the best price for your trade.": "Η διαδρομή μέσα από αυτά τα νομίσματα είχε ως αποτέλεσμα την καλύτερη τιμή για την συναλλαγή σας.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Η συναλλαγή σας θα ακυρωθεί εάν υπάρξει μεγάλη δυσμενή μεταβολή των τιμών πριν επιβεβαιωθεί.",
   "Route": "Διαδρομή",

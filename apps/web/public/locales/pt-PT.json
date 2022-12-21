@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "Por cada transação é paga uma taxa de %amount%",
   "%amount% to LP token holders": "%amount% para titulares de tokens LP",
   "%amount% to the Treasury": "%amount% para o Tesouro",
-  "%amount% towards BNB buyback and burn": "%amount% para BNB buyback e queima",
+  "%amount% towards DFS buyback and burn": "%amount% para DFS buyback e queima",
   "Routing through these tokens resulted in the best price for your trade.": "O encaminhamento através destes tokens resultou no melhor preço para a sua transação.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "A sua transação será revertida se houver um grande e desfavorável movimento de preços antes de ser confirmada.",
   "Route": "Rota",

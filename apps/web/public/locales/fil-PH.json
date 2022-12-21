@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "Para sa bawat pag-trade, nagbabayad ng %amount% na fee",
   "%amount% to LP token holders": "%amount% sa mga holder ng token ng LP",
   "%amount% to the Treasury": "%amount% sa Treasury",
-  "%amount% towards BNB buyback and burn": "%amount% ang napupunta sa pagbili ulit at pag-burn ng BNB",
+  "%amount% towards DFS buyback and burn": "%amount% ang napupunta sa pagbili ulit at pag-burn ng DFS",
   "Routing through these tokens resulted in the best price for your trade.": "Ang pagdidirekta sa mga token na ito ay nagresulta sa pinakasulit na presyo para sa iyong pag-trade.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Maibabalik ang iyong transaksyon kung may malaki at hindi pabor na pagkilos ng presyo bago ito makumpirma.",
   "Route": "Idirekta",

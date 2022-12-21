@@ -1085,7 +1085,7 @@
   "For each trade a %amount% fee is paid": "各トレードに対して%amount%の手数料が支払われます",
   "%amount% to LP token holders": "LPトークン保有者へ%amount%",
   "%amount% to the Treasury": "Treasuryへ%amount%",
-  "%amount% towards BNB buyback and burn": "CAKEの買い戻しとバーンへ%amount%",
+  "%amount% towards DFS buyback and burn": "DFSの買い戻しとバーンへ%amount%",
   "Routing through these tokens resulted in the best price for your trade.": "これらのトークンを経由した結果、このトレードにおいての最良の価格となりました。",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "確定前に価格が不利に大きく変動した場合、取引は取り消されます。",
   "Route": "ルート",

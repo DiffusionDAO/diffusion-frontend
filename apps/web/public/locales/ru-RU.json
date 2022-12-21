@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "Комиссия за каждую сделку — %amount%",
   "%amount% to LP token holders": "%amount% держателям LP-токенов",
   "%amount% to the Treasury": "%amount% в фонд",
-  "%amount% towards BNB buyback and burn": "%amount% в счет выкупа и сожжения BNB",
+  "%amount% towards DFS buyback and burn": "%amount% в счет выкупа и сожжения DFS",
   "Routing through these tokens resulted in the best price for your trade.": "Проведение через эти токены дает наилучшую цену для сделки.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Транзакция будет возвращена, если до ее подтверждения произойдет значительное неблагоприятное изменение цены.",
   "Route": "Маршрут",

@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "Pentru fiecare tranzacție, se plătește o taxă de %amount%",
   "%amount% to LP token holders": "%amount% la posesori jetoane LP",
   "%amount% to the Treasury": "%amount% la trezorerie",
-  "%amount% towards BNB buyback and burn": "%amount% pentru răscumpărarea și consumarea BNB",
+  "%amount% towards DFS buyback and burn": "%amount% pentru răscumpărarea și consumarea DFS",
   "Routing through these tokens resulted in the best price for your trade.": "Rutarea acestor jetoane a dus la cel mai bun preț pentru tranzacția ta.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Tranzacția ta va fi anulată dacă există o mișcare de preț nefavorabilă de mari dimensiuni înainte de a fi confirmată.",
   "Route": "Rută",

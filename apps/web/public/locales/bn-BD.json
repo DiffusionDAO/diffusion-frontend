@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "প্রতিটি ট্রেডের জন্য %amount% ফি প্রদান করা হয়",
   "%amount% to LP token holders": "LP টোকেনধারীদের জন্য %amount%%",
   "%amount% to the Treasury": "ট্রেজারিতে %amount%",
-  "%amount% towards BNB buyback and burn": "BNB ফিরতি ক্রয় এবং বার্নের লক্ষ্যে %amount%",
+  "%amount% towards DFS buyback and burn": "DFS ফিরতি ক্রয় এবং বার্নের লক্ষ্যে %amount%",
   "Routing through these tokens resulted in the best price for your trade.": "এই টোকেনগুলোর মধ্য দিয়ে রাউটিংয়ের ফলে আপনার ট্রেডের সর্বোচ্চ মূল্য পাওয়া গেছে।",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "এটি নিশ্চিত হওয়ার পূর্বে কোনো বড় রকমের, প্রতিকূল দামের পরিবর্তন হলে আপনার লেনদেনটি ফিরে আসবে।",
   "Route": "রুট",

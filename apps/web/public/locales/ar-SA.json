@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "لكل عملية تداول يتم دفع رسوم %amount%",
   "%amount% to LP token holders": "%amount% إلى حاملي رموز LP المميزة",
   "%amount% to the Treasury": "%amount% إلى الخزينة",
-  "%amount% towards BNB buyback and burn": "%amount% إلى معاودة شراء BNB والحرق",
+  "%amount% towards DFS buyback and burn": "%amount% إلى معاودة شراء DFS والحرق",
   "Routing through these tokens resulted in the best price for your trade.": "لقد أدى التسيير من خلال هذه الرموز المميزة إلى تحقيق أفضل سعر لتداولك.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "سيتم رد معاملتك إذا كانت هناك حركة سعرية كبيرة وغير مواتية قبل تأكيدها.",
   "Route": "التسيير",

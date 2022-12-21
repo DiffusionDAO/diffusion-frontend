@@ -1082,7 +1082,7 @@
   "For each trade a %amount% fee is paid": "Untuk setiap perdagangan biaya sebesar %amount% dibayarkan",
   "%amount% to LP token holders": "%amount% untuk pemegang token LP",
   "%amount% to the Treasury": "%amount% untuk Perbendaharaan",
-  "%amount% towards BNB buyback and burn": "%amount% untuk beli balik BNB dan hangus",
+  "%amount% towards DFS buyback and burn": "%amount% untuk beli balik DFS dan hangus",
   "Routing through these tokens resulted in the best price for your trade.": "Perutean melalui token ini menghasilkan harga terbaik untuk perdagangan Anda.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Transaksi Anda akan dibalikkan jika ada pergerakan harga yang signifikan dan tidak menguntungkan sebelum dikonfirmasi.",
   "Route": "Rute",

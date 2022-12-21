@@ -180,7 +180,7 @@ export default {
   },
   pair: {
     56: '0xB5951ff6e65d1b3c07Ac1188039170A00aEF8de2',
-    97: '0x2Dd243A18d8Ab2dd828B2b6f2F5E65fe19e4961f',
+    97: '0x1250457A2355661c3e0DFf3AE39E26d5A9d68dDe',
   },
 
   bond: {
