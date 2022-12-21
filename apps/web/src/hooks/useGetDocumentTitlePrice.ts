@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
+import { useDFSBusdPrice } from 'hooks/useBUSDPrice'
 
 const useGetDocumentTitlePrice = () => {
-  const cakePriceBusd = useCakeBusdPrice()
+  const cakePriceBusd = useDFSBusdPrice()
   useEffect(() => {
     const cakePriceBusdString = cakePriceBusd ? cakePriceBusd.toFixed(2) : ''
     document.title = `Diffusion Swap - ${cakePriceBusdString}`

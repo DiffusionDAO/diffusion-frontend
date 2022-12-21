@@ -65,7 +65,7 @@ const PlaceBidModal: React.FC<React.PropsWithChildren<PlaceBidModalProps>> = ({
   const [userNotEnoughCake, setUserNotEnoughCake] = useState(false)
   const [errorText, setErrorText] = useState(null)
 
-  const { balance: userCake, fetchStatus } = useTokenBalance(bscTokens.cake.address)
+  const { balance: userCake, fetchStatus } = useTokenBalance(bscTokens.dfs.address)
   const userCakeBalance = getBalanceAmount(userCake)
 
   const cakePriceBusd = usePriceCakeBusd()

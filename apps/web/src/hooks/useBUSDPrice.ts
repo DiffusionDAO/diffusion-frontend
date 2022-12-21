@@ -9,9 +9,10 @@ import {
   WNATIVE,
   WBNB,
   ERC20Token,
+  DFS
 } from '@pancakeswap/sdk'
 import { FAST_INTERVAL } from 'config/constants'
-import { BUSD, CAKE, USDC, USDT } from '@pancakeswap/tokens'
+import { BUSD,  USDT } from '@pancakeswap/tokens'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 import getLpAddress from 'utils/getLpAddress'
@@ -155,7 +156,7 @@ export const useBUSDCurrencyAmount = (currency?: Currency, amount?: number): num
 }
 
 export const useBUSDCakeAmount = (amount: number): number | undefined => {
-  const cakeBusdPrice = useCakeBusdPrice()
+  const cakeBusdPrice = useDFSBusdPrice()
   if (cakeBusdPrice) {
     return multiplyPriceByAmount(cakeBusdPrice, amount)
   }
@@ -163,13 +164,13 @@ export const useBUSDCakeAmount = (amount: number): number | undefined => {
 }
 
 // @Note: only fetch from one pair
-export const useCakeBusdPrice = (
+export const useDFSBusdPrice = (
   { forceMainnet } = { forceMainnet: false },
 ): Price<ERC20Token, ERC20Token> | undefined => {
   const { chainId } = useActiveChainId()
   const isTestnet = !forceMainnet && isChainTestnet(chainId)
   // Return bsc testnet cake if chain is testnet
-  const cake: Token = isTestnet ? CAKE[ChainId.BSC_TESTNET] : CAKE[ChainId.BSC]
+  const cake: Token = isTestnet ? DFS[ChainId.BSC_TESTNET] : DFS[ChainId.BSC]
   return usePriceByPairs(BUSD[cake.chainId], cake)
 }
 

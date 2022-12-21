@@ -2,7 +2,7 @@ import { FixedNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { getFarmCakeRewardApr, SerializedFarmConfig } from '@pancakeswap/farms'
 import { ChainId, CurrencyAmount, Pair } from '@pancakeswap/sdk'
-import { BUSD, CAKE } from '@pancakeswap/tokens'
+import { BUSD, DFS } from '@pancakeswap/tokens'
 import { farmFetcher } from './helper'
 import { FarmKV, FarmResult } from './kv'
 import { updateLPsAPR } from './lpApr'
@@ -34,21 +34,21 @@ const pairAbi = [
   },
 ]
 
-const cakeBusdPairMap = {
+const dfsBusdPairMap = {
   [ChainId.BSC]: {
-    address: Pair.getAddress(CAKE[ChainId.BSC], BUSD[ChainId.BSC]),
-    tokenA: CAKE[ChainId.BSC],
+    address: Pair.getAddress(DFS[ChainId.BSC], BUSD[ChainId.BSC]),
+    tokenA: DFS[ChainId.BSC],
     tokenB: BUSD[ChainId.BSC],
   },
   [ChainId.BSC_TESTNET]: {
-    address: Pair.getAddress(CAKE[ChainId.BSC_TESTNET], BUSD[ChainId.BSC_TESTNET]),
-    tokenA: CAKE[ChainId.BSC_TESTNET],
+    address: Pair.getAddress(DFS[ChainId.BSC_TESTNET], BUSD[ChainId.BSC_TESTNET]),
+    tokenA: DFS[ChainId.BSC_TESTNET],
     tokenB: BUSD[ChainId.BSC_TESTNET],
   },
 }
 
 const getCakePrice = async (isTestnet: boolean) => {
-  const pairConfig = cakeBusdPairMap[isTestnet ? ChainId.BSC_TESTNET : ChainId.BSC]
+  const pairConfig = dfsBusdPairMap[isTestnet ? ChainId.BSC_TESTNET : ChainId.BSC]
   const pairContract = new Contract(pairConfig.address, pairAbi, isTestnet ? bscTestnetProvider : bscProvider)
   const reserves = await pairContract.getReserves()
   const { reserve0, reserve1 } = reserves

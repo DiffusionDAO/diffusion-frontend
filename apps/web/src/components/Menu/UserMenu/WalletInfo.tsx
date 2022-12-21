@@ -15,7 +15,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from '@pancakeswap/localization'
 import useAuth from 'hooks/useAuth'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import { useGetCakeBalance } from 'hooks/useTokenBalance'
+import { useGetDfsBalance } from 'hooks/useTokenBalance'
 import { ChainLogo } from 'components/Logo/ChainLogo'
 
 import { getBlockExploreLink, getBlockExploreName } from 'utils'
@@ -40,7 +40,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const bnbBalance = useBalance({ addressOrName: account, chainId })
   const nativeBalance = useBalance({ addressOrName: account, enabled: !isBSC })
   const native = useNativeCurrency()
-  const { balance: cakeBalance, fetchStatus: cakeFetchStatus } = useGetCakeBalance()
+  const { balance: cakeBalance, fetchStatus: cakeFetchStatus } = useGetDfsBalance()
   const { logout } = useAuth()
 
   const handleLogout = () => {
@@ -115,14 +115,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
             <Text>{formatBigNumber(bnbBalance.data.value, 6)}</Text>
           )}
         </Flex>
-        {/* <Flex alignItems="center" justifyContent="space-between">
-          <Text color="textSubtle">{t('CAKE Balance')}</Text>
-          {cakeFetchStatus !== FetchStatus.Fetched ? (
-            <Skeleton height="22px" width="60px" />
-          ) : (
-            <Text>{formatBigNumber(cakeBalance, 3)}</Text>
-          )}
-        </Flex> */}
+
       </Box>
       <Button variant="secondary" width="100%" onClick={handleLogout}>
         {t('Disconnect Wallet')}

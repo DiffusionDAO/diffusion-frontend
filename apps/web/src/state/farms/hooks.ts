@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { SLOW_INTERVAL } from 'config/constants'
-import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
+import { useDFSBusdPrice } from 'hooks/useBUSDPrice'
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
@@ -143,6 +143,6 @@ export const useLpTokenPrice = (symbol: string) => {
  * @deprecated use the BUSD hook in /hooks
  */
 export const usePriceCakeBusd = ({ forceMainnet } = { forceMainnet: false }): BigNumber => {
-  const price = useCakeBusdPrice({ forceMainnet })
+  const price = useDFSBusdPrice({ forceMainnet })
   return useMemo(() => (price ? new BigNumber(price.toSignificant(6)) : BIG_ZERO), [price])
 }
