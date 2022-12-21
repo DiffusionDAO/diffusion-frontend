@@ -26,7 +26,7 @@ import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import Halo from '../components/Halo'
 
-import 'antd/dist/reset.css'
+import 'antd/dist/antd.css'
 import './ido.scss'
 import './index.scss'
 import './animation.scss'
