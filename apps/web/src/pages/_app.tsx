@@ -35,6 +35,7 @@ import './animation.scss'
 import './cover.scss'
 import './DiffusionChart.scss'
 import './Dashboard.scss'
+import NotFound from 'views/NotFound'
 
 
 // This config is required for number formatting
@@ -129,7 +130,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       .catch((error) => console.log(error))
   }, [account, dfsMining])
   if (router.pathname === '/private' && !whitelist.includes(account)) {
-    return <></>
+    return <NotFound />
   }
   if (Component.pure) {
     return <Component {...pageProps} />
