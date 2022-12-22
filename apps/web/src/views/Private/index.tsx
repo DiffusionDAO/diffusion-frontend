@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useWallet } from 'hooks/useWallet'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Navigation } from 'swiper'
 import 'swiper/css'
@@ -22,7 +21,7 @@ import { useSWRContract, useSWRMulticall } from 'hooks/useSWRContract'
 import { MaxUint256 } from '@ethersproject/constants'
 import { getHDFSAddress, getMiningAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { formatUnits, parseUnits } from '@ethersproject/units'
-import { formatBigNumber, formatBigNumberToFixed, formatNumber } from 'utils/formatBalance'
+import { formatBigNumber, formatBigNumberToFixed, formatNumber } from '@pancakeswap/utils/formatBalance'
 import useSWR from 'swr'
 import { escapeRegExp } from 'utils'
 
@@ -92,8 +91,7 @@ const Private = () => {
   const n = (24 * 3600) / savingInterestEpochLength
 
   const refresh = async () => {
-    const stakers = await dfsMining.getStakers()
-    setStakers(stakers)
+    setStakers(await dfsMining.getStakers())
 
     const count = {
       s0: 0,
@@ -185,11 +183,9 @@ const Private = () => {
         }
       }),
     )
-    const dfsBalance = await dfs.balanceOf(account)
-    setDfsBalance(dfsBalance)
+    setDfsBalance(await dfs.balanceOf(account))
 
-    const savingInterestEpochLength = await dfsMining.savingInterestEpochLength()
-    setSavingInterestEpochLength(savingInterestEpochLength)
+    setSavingInterestEpochLength(await dfsMining.savingInterestEpochLength())
 
     setTotalPower(await dfsMining.totalPower())
     setTotalStakedSavings(await dfsMining.totalStakedSavings())

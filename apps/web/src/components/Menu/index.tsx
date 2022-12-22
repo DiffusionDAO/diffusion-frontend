@@ -3,12 +3,11 @@ import { useRouter } from 'next/router'
 import { Menu as UikitMenu, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import { useTranslation, languageList } from '@pancakeswap/localization'
 import { NetworkSwitcher } from 'components/NetworkSwitcher'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { useDFSMiningContract } from 'hooks/useContract'
 import UserMenu from './UserMenu'
 import { useMenuItems } from './hooks/useMenuItems'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
-import { footerLinks } from './config/footerConfig'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import { useDFSMiningContract } from 'hooks/useContract'
 
 const Menu = (props) => {
   const { currentLanguage, setLanguage, t } = useTranslation()
