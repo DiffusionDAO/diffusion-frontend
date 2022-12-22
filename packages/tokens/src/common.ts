@@ -73,7 +73,7 @@ export const USDC_GOERLI = new ERC20Token(
 
 export const USDT_BSC = new ERC20Token(
   ChainId.BSC,
-  '0xB2183e9aee1DBC7a49e5763e8A4395ee184f9925',
+  '0x55d398326f99059fF775485246999027B3197955',
   18,
   'USDT',
   'Tether USD',
