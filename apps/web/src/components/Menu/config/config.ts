@@ -50,9 +50,9 @@ const config: (
   isDark: boolean,
   languageCode?: string,
   chainId?: number,
-) => ConfigMenuItemsType[] = (t, isDark, languageCode, chainId) =>
-  [
-    
+  isPrivate?: boolean,
+) => ConfigMenuItemsType[] = (t, isDark, languageCode, chainId,isPrivate) => {
+  const items = [
     {
       label: t('Dashboard'),
       icon: DashboardIcon,
@@ -126,6 +126,19 @@ const config: (
           href: '/liquidity',
         }]
       }, 
+
   ].map((item) => addMenuItemSupported(item, chainId))
 
+  if (isPrivate) {
+    items.push({
+      label: t('Private'),
+      icon: NftMarketIcon,
+      fillIcon: NftMarketFillIcon,
+      href: `/private`,
+      showItemsOnMobile: false,
+      items: [],
+    })
+  }
+  return items
+}
 export default config

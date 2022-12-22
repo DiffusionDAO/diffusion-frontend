@@ -6,7 +6,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useMenuItemsStatus } from './useMenuItemsStatus'
 import config, { ConfigMenuItemsType } from '../config/config'
 
-export const useMenuItems = (): ConfigMenuItemsType[] => {
+export const useMenuItems = (isPrivate = false): ConfigMenuItemsType[] => {
   const {
     t,
     currentLanguage: { code: languageCode },
