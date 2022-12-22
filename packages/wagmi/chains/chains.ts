@@ -8,7 +8,7 @@ export const bsc: Chain = {
   name: 'Binance Smart Chain',
   network: 'bsc',
   rpcUrls: {
-    public: 'https://red-purple-meme.bsc.quiknode.pro/4dabd14fa4d6d0e7be2de8fb6b6d6519f68e43e7/',
+    public: 'https://red-purple-meme.bsc.quiknode.pro/4dabd14fa4d6d0e7be2de8fb6b6d6519f68e43e7/', //'https://bsc-dataseed1.defibit.io',
     default: 'https://red-purple-meme.bsc.quiknode.pro/4dabd14fa4d6d0e7be2de8fb6b6d6519f68e43e7/',
   },
   blockExplorers: {
