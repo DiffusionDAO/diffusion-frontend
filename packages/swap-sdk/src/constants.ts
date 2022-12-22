@@ -15,7 +15,7 @@ export const ChainIdName:Record<string, ChainId> = {
   '56': ChainId.BSC,
   '97': ChainId.BSC_TESTNET,
 }
-export const FACTORY_ADDRESS = '0x76740973CB87e3a6957a220E0Ed3e6b7de17b8a9'
+export const FACTORY_ADDRESS = '0x6bC286FCe1F82EFcE35ADc5dd99D30C1Ea262bfb'
 
 const FACTORY_ADDRESS_ETH = '0x1097053Fd2ea711dad45caCcc45EfF7548fCB362'
 
@@ -26,7 +26,7 @@ export const FACTORY_ADDRESS_MAP: Record<number, string> = {
   [ChainId.BSC]: FACTORY_ADDRESS,
   [ChainId.BSC_TESTNET]: '0x76740973CB87e3a6957a220E0Ed3e6b7de17b8a9',
 }
-export const INIT_CODE_HASH = '0x78c82361d292279922f7a1f534954255cfeef6c63e4992720a54719645991a99'
+export const INIT_CODE_HASH = '0xde7cd9bf65ddeffbdbf1b84453ff36d33a5f0a7cb82671c9b690cca5bbc9e88c'
 
 const INIT_CODE_HASH_ETH = '0x57224589c67f3f30a6b0d7a1b54cf3153ab84563bc609ef41dfb34f8b2974d2d'
 export const INIT_CODE_HASH_MAP: Record<number, string> = {
