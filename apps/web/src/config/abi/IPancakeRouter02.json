@@ -655,7 +655,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapETHForExactTokens",
+    "name": "DiffswapETHForExactTokens",
     "outputs": [
       {
         "internalType": "uint256[]",
@@ -689,7 +689,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapExactETHForTokens",
+    "name": "DiffswapExactETHForTokens",
     "outputs": [
       {
         "internalType": "uint256[]",
@@ -723,7 +723,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapExactETHForTokensSupportingFeeOnTransferTokens",
+    "name": "DiffswapExactETHForTokensSupportingFeeOnTransferTokens",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -756,7 +756,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapExactTokensForETH",
+    "name": "DiffswapExactTokensForETH",
     "outputs": [
       {
         "internalType": "uint256[]",
@@ -795,7 +795,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapExactTokensForETHSupportingFeeOnTransferTokens",
+    "name": "DiffswapExactTokensForETHSupportingFeeOnTransferTokens",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -828,7 +828,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapExactTokensForTokens",
+    "name": "DiffswapExactTokensForTokens",
     "outputs": [
       {
         "internalType": "uint256[]",
@@ -867,7 +867,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapExactTokensForTokensSupportingFeeOnTransferTokens",
+    "name": "DiffswapExactTokensForTokensSupportingFeeOnTransferTokens",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -900,7 +900,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapTokensForExactETH",
+    "name": "DiffswapTokensForExactETH",
     "outputs": [
       {
         "internalType": "uint256[]",
@@ -939,7 +939,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapTokensForExactTokens",
+    "name": "DiffswapTokensForExactTokens",
     "outputs": [
       {
         "internalType": "uint256[]",
