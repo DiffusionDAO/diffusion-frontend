@@ -1,7 +1,14 @@
 import { ChainId, ERC20Token } from '@pancakeswap/sdk'
 
 
-
+export const USDT_BSC = new ERC20Token(
+  ChainId.BSC,
+  '0x55d398326f99059fF775485246999027B3197955',
+  18,
+  'USDT',
+  'Tether USD',
+  'https://tether.to/',
+)
 
 export const USDT_TESTNET = new ERC20Token(
   ChainId.BSC_TESTNET,
@@ -71,14 +78,7 @@ export const USDC_GOERLI = new ERC20Token(
   'test USD Coin',
 )
 
-export const USDT_BSC = new ERC20Token(
-  ChainId.BSC,
-  '0x55d398326f99059fF775485246999027B3197955',
-  18,
-  'USDT',
-  'Tether USD',
-  'https://tether.to/',
-)
+
 
 export const USDT_ETH = new ERC20Token(
   ChainId.ETHEREUM,
