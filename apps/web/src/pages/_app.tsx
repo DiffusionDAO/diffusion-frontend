@@ -21,6 +21,8 @@ import { usePollBlockNumber } from 'state/block/hooks'
 import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useDFSMiningContract } from 'hooks/useContract'
+import NotFound from 'views/NotFound'
+
 import { Blocklist, Updaters } from '..'
 import { SentryErrorBoundary } from '../components/ErrorBoundary'
 import Menu from '../components/Menu'
@@ -35,7 +37,6 @@ import './animation.scss'
 import './cover.scss'
 import './DiffusionChart.scss'
 import './Dashboard.scss'
-import NotFound from 'views/NotFound'
 
 
 // This config is required for number formatting
