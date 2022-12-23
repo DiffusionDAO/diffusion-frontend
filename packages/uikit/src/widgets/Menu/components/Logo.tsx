@@ -50,7 +50,7 @@ const Logo: React.FC<React.PropsWithChildren<Props>> = ({ href }) => {
   const router = useRouter()
   const innerLogo = (
     <>
-      {(router.pathname === '/swap' || router.pathname === "/liquidity") ? <img src="/images/logo.png" style={{maxWidth: '60%'}}/> : <img src="/images/logo1.png" style={{maxWidth: '60%'}}/>}
+      {(router.pathname === '/swap' || router.pathname === "/liquidity") ? <img src="/images/logo.png" style={{maxWidth: '60%'}}/> : <img src="/images/logo1.png" />}
     </>
   );
 
