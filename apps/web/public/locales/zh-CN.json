@@ -1,4 +1,9 @@
 {
+  "Output is estimated. You will receive at least or the transaction will revert.": "输出为估值。您将获得至少，或者交易将被撤回。",
+  "View on %site%": "在 %site% 上查看",
+  "Add to Wallet": "添加到钱包",
+  "Add %asset% to Wallet": "将 %asset% 添加到钱包",
+  "Transaction Submitted": "已提交交易",
   "By adding liquidity you'll earn 0.17% of all trades on this pair proportional to your share in the trading pair. Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.": "By adding liquidity you'll earn 0.17% of all trades on this pair proportional to your share in the trading pair. Fees are added to the pair, accrue in real time and can be claimed by withdrawing your liquidity.",
   "Transaction receipt": "交易收据",
   "Select a currency": "选择币种",

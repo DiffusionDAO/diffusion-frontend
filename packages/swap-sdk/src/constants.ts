@@ -24,7 +24,7 @@ export const FACTORY_ADDRESS_MAP: Record<number, string> = {
   [ChainId.RINKEBY]: FACTORY_ADDRESS_ETH,
   [ChainId.GOERLI]: FACTORY_ADDRESS_ETH,
   [ChainId.BSC]: FACTORY_ADDRESS,
-  [ChainId.BSC_TESTNET]: '0x76740973CB87e3a6957a220E0Ed3e6b7de17b8a9',
+  [ChainId.BSC_TESTNET]: '0x245E9d086FE10B30B5EeF0f33b00377144465888',
 }
 export const INIT_CODE_HASH = '0xde7cd9bf65ddeffbdbf1b84453ff36d33a5f0a7cb82671c9b690cca5bbc9e88c'
 
@@ -34,8 +34,32 @@ export const INIT_CODE_HASH_MAP: Record<number, string> = {
   [ChainId.RINKEBY]: INIT_CODE_HASH_ETH,
   [ChainId.GOERLI]: INIT_CODE_HASH_ETH,
   [ChainId.BSC]: INIT_CODE_HASH,
-  [ChainId.BSC_TESTNET]: '0x78c82361d292279922f7a1f534954255cfeef6c63e4992720a54719645991a99',
+  [ChainId.BSC_TESTNET]: '0xf9f345a12b4e926ac097945222523cfc5c523d2f309c926975cc3c67a193d198',
 }
+
+export const DFS_MAINNET = new ERC20Token(
+  ChainId.BSC,
+  '0x2B806e6D78D8111dd09C58943B9855910baDe005',
+  18,
+  'DFS',
+  'Diffusion Token',
+  'https://app.diffusiondao.org/',
+)
+
+export const DFS_TESTNET = new ERC20Token(
+  ChainId.BSC_TESTNET,
+  '0x63A19519A1820b78DD568d43c1E0833089a9b611',
+  18,
+  'DFS',
+  'Diffusion Token',
+  'https://app.diffusiondao.org/',
+)
+
+export const DFS = {
+  [ChainId.BSC]: DFS_MAINNET,
+  [ChainId.BSC_TESTNET]: DFS_TESTNET,
+}
+
 
 export const WETH9 = {
   [ChainId.ETHEREUM]: new ERC20Token(
@@ -83,28 +107,6 @@ export const WBNB = {
   ),
 }
 
-export const DFS_MAINNET = new ERC20Token(
-  ChainId.BSC,
-  '0x2B806e6D78D8111dd09C58943B9855910baDe005',
-  18,
-  'DFS',
-  'Diffusion Token',
-  'https://app.diffusiondao.org/',
-)
-
-export const DFS_TESTNET = new ERC20Token(
-  ChainId.BSC_TESTNET,
-  '0xE4DE5CBD2904C4594c580d3c209F643A30450BEa',
-  18,
-  'DFS',
-  'Diffusion Token',
-  'https://app.diffusiondao.org/',
-)
-
-export const DFS = {
-  [ChainId.BSC]: DFS_MAINNET,
-  [ChainId.BSC_TESTNET]: DFS_TESTNET,
-}
 
 export const WNATIVE: Record<number, ERC20Token> = {
   [ChainId.ETHEREUM]: WETH9[ChainId.ETHEREUM],
