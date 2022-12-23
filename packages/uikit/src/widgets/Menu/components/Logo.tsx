@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
+import { Router } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import Flex from "../../../components/Box/Flex";
 import { LogoIcon, LogoWithTextIcon } from "../../../components/Svg";
 import { MenuContext } from "../context";
+import { useRouter } from 'next/router'
 
 interface Props {
   href: string;
@@ -43,11 +45,12 @@ const StyledLink = styled("a")`
 `;
 
 const Logo: React.FC<React.PropsWithChildren<Props>> = ({ href }) => {
-  const { linkComponent } = useContext(MenuContext);
-  const isAbsoluteUrl = href.startsWith("http");
+  const { linkComponent } = useContext(MenuContext)
+  const isAbsoluteUrl = href.startsWith("http")
+  const router = useRouter()
   const innerLogo = (
     <>
-      <img src="/images/logo.png" style={{maxWidth: '60%'}}/>
+      {(router.pathname === '/swap' || router.pathname === "/liquidity") ? <img src="/images/logo.png" style={{maxWidth: '60%'}}/> : <img src="/images/logo1.png" style={{maxWidth: '60%'}}/>}
     </>
   );
 
