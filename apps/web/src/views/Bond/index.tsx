@@ -83,7 +83,6 @@ const Bond = () => {
 
     setFoundationDFS(await dfs.balanceOf(foundation))
 
-    
     const reserves = await pairOld.getReserves()
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
