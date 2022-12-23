@@ -120,6 +120,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const usdt = useERC20(usdtAddress, true)
   const pairAddress = getPairAddress(chainId)
   const pair = usePairContract(pairAddress)
+  const pairOld = usePairContract("0xB5951ff6e65d1b3c07Ac1188039170A00aEF8de2")
   const bond = useBondContract()
 
   useEffect(() => {
@@ -159,7 +160,7 @@ const BondModal: React.FC<BondModalProps> = ({
       })
       .catch((error) => console.log(error))
 
-      pair.getReserves().then(reserves=>{
+      pairOld.getReserves().then(reserves=>{
         const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
         const marketPriceNumber = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
         setMarketPrice(marketPriceNumber)
