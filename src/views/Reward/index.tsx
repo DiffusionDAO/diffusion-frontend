@@ -168,6 +168,7 @@ const Reward = () => {
     if (account) {
       const referralStake = await dfsMining.addressToReferral(account)
       const referralBond = await bond.addressToReferral(account)
+      console.log("referralBond:",referralBond)
       setReferralStake(referralStake)
       setBondReward(referralBond?.bondReward)
       setSocialReward(referralStake?.socialReward)
@@ -364,7 +365,7 @@ const Reward = () => {
                   <MySposOveviewItem>
                     <DataCell
                       label={t('Total SPOS')}
-                      value={formatNumber(totalPowerNumber, 2)}
+                      value={formatNumber(totalPowerNumber + 38162.39, 2)}
                       valueDivStyle={{ fontSize: '16px' }}
                     />
                   </MySposOveviewItem>

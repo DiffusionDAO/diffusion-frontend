@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { getUSDTAddress, getMiningAddress, getDFSAddress, getPairAddress } from 'utils/addressHelpers'
+import { getUSDTAddress, getMiningAddress, getDFSAddress, getPairAddress, getBond1Address } from 'utils/addressHelpers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useBondContract, useDFSContract, useDFSMiningContract, useERC20, usePairContract } from 'hooks/useContract'
 import { formatBigNumber, formatNumber } from 'utils/formatBalance'
@@ -50,7 +50,7 @@ import BondModal from './components/BondModal'
 import SettingModal from './components/SettingModal'
 
 const Bond = () => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const [bondData, setBondData] = useState<any[]>(bondDatas)
@@ -67,6 +67,7 @@ const Bond = () => {
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
   const [marketPrice, setMarketPrice] = useState<number>(0)
   const bond = useBondContract()
+  const bond1Address = getBond1Address(chainId)
   const dfs = useDFSContract()
   const usdtAddress = getUSDTAddress()
   const usdt = useERC20(usdtAddress, true)
@@ -75,7 +76,8 @@ const Bond = () => {
 
   const { data, status } = useSWR('dfsBond', async () => {
     const bondDFS = await dfs.balanceOf(bond.address)
-    setBondDFS(bondDFS)
+    const bond1DFS = await dfs.balanceOf(bond1Address)
+    setBondDFS(bondDFS.add(bond1DFS))
 
     const foundationDFS = await dfs.balanceOf(foundation)
     setFoundationDFS(foundationDFS)
@@ -83,10 +85,7 @@ const Bond = () => {
     const pairAddress = getPairAddress()
     const dfsAddress = getDFSAddress()
     const usdtAddress = getUSDTAddress()
-    console.log("pairAddress:",pairAddress, dfsAddress ,usdtAddress)
-    console.log("pair:",pair)
     const reserves = await pair.getReserves()
-    console.log("reserves:",reserves, pairAddress)
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
     const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
