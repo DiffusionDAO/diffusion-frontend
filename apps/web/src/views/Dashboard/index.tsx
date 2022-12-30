@@ -5,7 +5,7 @@ import { useState } from 'react'
 import useSWR from 'swr'
 import { Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useBondContract, useDFSContract, useDFSMiningContract, usePairContract } from 'hooks/useContract'
-import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
+import { getBond1Address, getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits, parseEther } from '@ethersproject/units'
 import { formatBigNumber, formatNumber } from '@pancakeswap/utils/formatBalance'
@@ -50,16 +50,21 @@ const { one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelv
 export const dao = [
   '0x18d22D226C113390C6e5dA47B5b5F80Bc7c1f2f2',
   '0x139Ffb31d9F366333fDAd40B9CCDF9E12E078b0B',
-  '0x364abbFa8f7B8F7833BB09c0495aC70B9AbaD2c9',
-  '0x3db2C1e3C0F8AfE930029cC673073018A9C8C84F',
+  '0x999c3ad27d6637eC4F8450065debb51672D3a06e',
+  '0xf5677c2BBe031d9e45bC3d4FBF4747EE21C0C18e',
 ]
-export const foundation = '0xd4d98c31fA42cAA1Ca5f4041114114aEF2796617'
-const unstakeNFTAddress = '0xADdD2f688cdF4CaBF2b659DB1A4e577FE133B61D'
-const nftMarketDestroyAddress = '0x9d32D02f15E0802a8C54d46A5Ca379875401645B'
-const elementaryPayoutMintAddress = '0xE097af0b6581EcA559abE850105F394f49EDBD3c'
-const advancedPayoutMintAddress = '0x2dF7d9751A041BBF437e6601476cc9644f63ce62'
+export const foundation = '0x380A223E78dDE979cebF3a73ba747eB9d4153d7e'
 
-const elementaryMintAddress = '0x3CF82399627C8c607f751e6aCE7DB6749Adb748d'
+const unstakeNFTAddress = '0x0c39EC20E7dA68605Fe2f81Ea4D5A023Ba2a8745'
+
+const nftMarketDestroyAddress = '0x9d32D02f15E0802a8C54d46A5Ca379875401645B'
+
+const elementaryUnusedMintAddress = '0xF5E0Cc17BAf1f468a367E5a25A4a9e957e591228'
+
+const advancedUnusedMintAddress = '0x2dF7d9751A041BBF437e6601476cc9644f63ce62'
+
+const elementaryMintAddress = '0xF080E5De0d0D0f9fb18DE72B85aef60e3293613f'
+
 const advancedMintAddress = '0xA5bDF766410C3846B8e782a1C6bcD2368DDc674b'
 
 const Dashboard = () => {
@@ -79,6 +84,7 @@ const Dashboard = () => {
   const bond = useBondContract()
   const dfsAddress = getDFSAddress(chainId)
   const usdtAddress = getUSDTAddress(chainId)
+  const bondAddress1 = getBond1Address()
 
   const pairOld = usePairContract("0xB5951ff6e65d1b3c07Ac1188039170A00aEF8de2")
 
@@ -96,8 +102,8 @@ const Dashboard = () => {
       tvl: BigNumber.from(0),
       marketPrice,
       foundationDFS: await dfs.balanceOf(foundation),
-      elementaryPayoutMintAddressDfs: await dfs.balanceOf(elementaryPayoutMintAddress),
-      advancedPayoutMintAddressDfs: await dfs.balanceOf(advancedPayoutMintAddress),
+      elementaryUnusedMintAddressDfs: await dfs.balanceOf(elementaryUnusedMintAddress),
+      advancedUnusedMintAddressDfs: await dfs.balanceOf(advancedUnusedMintAddress),
       elementaryMintAddressDfs: await dfs.balanceOf(elementaryMintAddress),
       advancedMintAddressDfs: await dfs.balanceOf(advancedMintAddress),
       daoDFS: BigNumber.from(0),
@@ -143,11 +149,11 @@ const Dashboard = () => {
     dashboard.currentCirculationSupply = dashboard.dfsTotalSupply
       .sub(dashboard.daoDFS)
       .sub(dashboard.foundationDFS)
-      .sub(dashboard.bondDfs)
+      .sub(dashboard.bondDfs).sub(await dfs.balanceOf(bondAddress1))
       .sub(dashboard.unstakeNFTDFS)
       .sub(dashboard.nftMarketDestroyedDFS)
-      .sub(dashboard.elementaryPayoutMintAddressDfs)
-      .sub(dashboard.advancedPayoutMintAddressDfs)
+      .sub(dashboard.elementaryUnusedMintAddressDfs)
+      .sub(dashboard.advancedUnusedMintAddressDfs)
       .sub(dashboard.elementaryMintAddressDfs)
       .sub(dashboard.advancedMintAddressDfs)
       .sub(dashboard.initialSupply)
