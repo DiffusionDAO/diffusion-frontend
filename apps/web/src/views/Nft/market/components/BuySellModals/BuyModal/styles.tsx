@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Modal, Grid, Flex, Text, BinanceIcon, Skeleton, DfsIcon } from '@pancakeswap/uikit'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { usePairContract } from 'hooks/useContract'
+import { useBondContract, usePairContract } from 'hooks/useContract'
 import useSWR from 'swr'
 import { getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -50,6 +50,7 @@ export const DfsAmountCell: React.FC<React.PropsWithChildren<DfsAmountCellProps>
 }) => {
   const {chainId} = useActiveChainId()
   const pairAddress = getPairAddress(chainId)
+  const bond = useBondContract()
   const pair = usePairContract(pairAddress)
   const usdtAddress = getUSDTAddress(chainId)
   const dfsAddress = getDFSAddress(chainId)
@@ -57,12 +58,14 @@ export const DfsAmountCell: React.FC<React.PropsWithChildren<DfsAmountCellProps>
   
 
   const { data: dfsPrice, status } = useSWR('getPriceInUSDT', async () => {
-    const reserves: any = await pairOld.getReserves()
+    // const reserves: any = await pairOld.getReserves()
 
-    const [numerator, denominator] =
-      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+    // const [numerator, denominator] =
+    //   usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
 
-    const marketPrice = numerator / denominator
+    // const marketPrice = numerator / denominator
+    const marketPrice = await bond.price()
+
     return marketPrice
   })
 

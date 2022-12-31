@@ -92,7 +92,8 @@ const Dashboard = () => {
     const reserves = await pairOld.getReserves()
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
-    const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator))
+    // const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator))
+    const marketPrice = await bond.price()
 
     const dashboard = {
       callFactor: await dfsMining.totalCalls(),
