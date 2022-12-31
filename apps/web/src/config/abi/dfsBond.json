@@ -3,16 +3,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_pdfs",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_lpAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_usdtAddress",
         "type": "address"
       },
@@ -23,18 +13,13 @@
       },
       {
         "internalType": "address",
-        "name": "_lpReceiver",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_miningAddress",
         "type": "address"
       },
       {
-        "internalType": "address[4]",
+        "internalType": "address[2]",
         "name": "_dao",
-        "type": "address[4]"
+        "type": "address[2]"
       },
       {
         "internalType": "address",
@@ -268,7 +253,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      }
+    ],
     "name": "bondOf",
     "outputs": [
       {
@@ -586,13 +577,24 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getPriceInUSDT",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_receipt",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "vestingEnd",
+        "type": "uint32"
+      }
+    ],
+    "name": "includeBond",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bool",
         "name": "",
-        "type": "uint256"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -644,44 +646,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "includeContributor",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "includeIndirectChild",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address[]",
         "name": "_array",
         "type": "address[]"
@@ -704,61 +668,11 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "indirectChildren",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "mining",
     "outputs": [
       {
         "internalType": "contract IDFSMining",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "mintNFTAddress",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "multiSignAddress",
-    "outputs": [
-      {
-        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -782,19 +696,6 @@
   {
     "inputs": [],
     "name": "pair",
-    "outputs": [
-      {
-        "internalType": "contract IPancakePair",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pancakeswapV2Pair",
     "outputs": [
       {
         "internalType": "address",
@@ -845,51 +746,6 @@
   },
   {
     "inputs": [],
-    "name": "pdfs",
-    "outputs": [
-      {
-        "internalType": "contract IPDFS",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pdfsUsed",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "pendingBondReward",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "pendingOwner",
     "outputs": [
       {
@@ -908,6 +764,19 @@
       {
         "internalType": "uint256",
         "name": "pendingPayout_",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "price",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -963,17 +832,12 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_addressLP",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_addressUSDT",
-        "type": "address"
+        "internalType": "address[]",
+        "name": "_admins",
+        "type": "address[]"
       }
     ],
-    "name": "setAddress",
+    "name": "setAdmin",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -981,12 +845,164 @@
   {
     "inputs": [
       {
-        "internalType": "address[]",
-        "name": "_admins",
-        "type": "address[]"
+        "internalType": "address",
+        "name": "_advancedPayoutMintAddress",
+        "type": "address"
       }
     ],
-    "name": "setAdmin",
+    "name": "setAdvancedPayoutMintAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "self",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "payout",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "used",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint32",
+                "name": "lastTime",
+                "type": "uint32"
+              },
+              {
+                "internalType": "uint32",
+                "name": "vestingEnd",
+                "type": "uint32"
+              }
+            ],
+            "internalType": "struct Bond.BondInfo[]",
+            "name": "info",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct Bond.UserBondInfo[]",
+        "name": "info",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setBondInfo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "self",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "level",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bondUsed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bondReward",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bondRewardUnpaid",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bondRewardWithdrawed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastBondRewardWithdraw",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Bond.Referral[]",
+        "name": "referral",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setBondReferral",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "self",
+            "type": "address"
+          },
+          {
+            "internalType": "address[]",
+            "name": "contributors",
+            "type": "address[]"
+          }
+        ],
+        "internalType": "struct Bond.BondRewardContributor[]",
+        "name": "_bondRewardContributors",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setBondRewardContributors",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "parent",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "contributor",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Bond.BondRewardDetails[]",
+        "name": "details",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setBondRewardDetails",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1007,17 +1023,37 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_minimumPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_vestingTerm",
-        "type": "uint32"
+        "internalType": "address[]",
+        "name": "_buyers",
+        "type": "address[]"
       }
     ],
-    "name": "setBondTerms",
+    "name": "setBuyers",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "ref",
+            "type": "address"
+          },
+          {
+            "internalType": "address[]",
+            "name": "children",
+            "type": "address[]"
+          }
+        ],
+        "internalType": "struct Bond.RefChildren[]",
+        "name": "_refChildren",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setChildren",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1044,6 +1080,19 @@
       }
     ],
     "name": "setCustomSupply",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "dao",
+        "type": "address[]"
+      }
+    ],
+    "name": "setDAO",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1104,6 +1153,19 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_elementaryPayoutMintAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setElementaryPayoutMintAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_foundation",
         "type": "address"
       }
@@ -1135,45 +1197,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_mint",
-        "type": "address"
-      }
-    ],
-    "name": "setMintNFTAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
-      }
-    ],
-    "name": "setMultiSignAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_pdfs",
-        "type": "address"
-      }
-    ],
-    "name": "setPDFS",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_pair",
         "type": "address"
       }
@@ -1186,14 +1209,34 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
-      },
+        "internalType": "uint256",
+        "name": "_price",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPrice",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
-        "internalType": "address",
-        "name": "_referral",
-        "type": "address"
+        "components": [
+          {
+            "internalType": "address",
+            "name": "self",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "parent",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct Bond.Parent[]",
+        "name": "parents",
+        "type": "tuple[]"
       }
     ],
     "name": "setReferral",
@@ -1215,6 +1258,71 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_totalBondReward",
+        "type": "uint256"
+      }
+    ],
+    "name": "setTotalBondReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_totalCalls",
+        "type": "uint256"
+      }
+    ],
+    "name": "setTotalCalls",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_totalPayout",
+        "type": "uint256"
+      }
+    ],
+    "name": "setTotalPayout",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_usdt",
+        "type": "address"
+      }
+    ],
+    "name": "setUsdtAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_vestingTerm",
+        "type": "uint32"
+      }
+    ],
+    "name": "setVestingTerm",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "targetInflationRate",
     "outputs": [
@@ -1231,11 +1339,6 @@
     "inputs": [],
     "name": "terms",
     "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "minimumPrice",
-        "type": "uint256"
-      },
       {
         "internalType": "uint32",
         "name": "vestingTerm",
@@ -1305,19 +1408,6 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unstakeNFTAddress",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
