@@ -160,18 +160,14 @@ const BondModal: React.FC<BondModalProps> = ({
       })
       .catch((error) => console.log(error))
 
-      // pairOld.getReserves().then(reserves=>{
-      //   const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
-      //   const marketPriceNumber = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
-      //   setMarketPrice(marketPriceNumber)
-      //   setBondPrice(formatNumber(marketPriceNumber * (10000 - bondData.discount) / 10000,2))
-      // })
-        
-      bond.price().then(price=>{
-        const marketPriceNumber = parseFloat(formatUnits(price)) 
+      pairOld.getReserves().then(reserves=>{
+        const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+        const marketPriceNumber = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
         setMarketPrice(marketPriceNumber)
         setBondPrice(formatNumber(marketPriceNumber * (10000 - bondData.discount) / 10000,2))
       })
+        
+
     if (account) {
       bond
         .pendingPayoutFor()

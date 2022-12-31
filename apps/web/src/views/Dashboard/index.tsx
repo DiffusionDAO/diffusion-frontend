@@ -48,24 +48,22 @@ const { one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelv
   dashboardMock.OverviewData
 
 export const dao = [
-  '0x18d22D226C113390C6e5dA47B5b5F80Bc7c1f2f2',
-  '0x139Ffb31d9F366333fDAd40B9CCDF9E12E078b0B',
-  '0x999c3ad27d6637eC4F8450065debb51672D3a06e',
-  '0xf5677c2BBe031d9e45bC3d4FBF4747EE21C0C18e',
+  '0xb93260C33e95a966212B0b99c29089a790b8c3d8',
+  '0x1514FeE6D775DEb32DC464bE5bAb0b712573e9EC',
 ]
-export const foundation = '0x380A223E78dDE979cebF3a73ba747eB9d4153d7e'
+export const foundation = '0xe1F758081c7Bcaec75097294950959b3a91a088a'
 
-const unstakeNFTAddress = '0x0c39EC20E7dA68605Fe2f81Ea4D5A023Ba2a8745'
+const unstakeNFTAddress = '0x2f9869d3a11c28D1bc28cD70292a246c42d926E4'
 
-const nftMarketDestroyAddress = '0x9d32D02f15E0802a8C54d46A5Ca379875401645B'
+const nftMarketDestroyAddress = '0x7dA1BFCfcf7ccf26D700D0d98F0faef3f6D6797e'
 
-const elementaryUnusedMintAddress = '0xF5E0Cc17BAf1f468a367E5a25A4a9e957e591228'
+const elementaryUnusedMintAddress = '0xD294eBf617daECA9549995331941187Bd2E524ac'
 
-const advancedUnusedMintAddress = '0x2dF7d9751A041BBF437e6601476cc9644f63ce62'
+const advancedUnusedMintAddress = '0x7086B9740e7Fc304e5D85a4E6344063d649FBd0B'
 
-const elementaryMintAddress = '0xF080E5De0d0D0f9fb18DE72B85aef60e3293613f'
+const elementaryMintAddress = '0x06cE1EB2De0DfC29d801cF3885E90E35Dd26148D'
 
-const advancedMintAddress = '0xA5bDF766410C3846B8e782a1C6bcD2368DDc674b'
+const advancedMintAddress = '0x86eE0fef60958d47D81B026eb33e025D966e08Bc'
 
 const Dashboard = () => {
   const {chainId} = useActiveChainId()
@@ -86,14 +84,10 @@ const Dashboard = () => {
   const usdtAddress = getUSDTAddress(chainId)
   const bondAddress1 = getBond1Address()
 
-  const pairOld = usePairContract("0xB5951ff6e65d1b3c07Ac1188039170A00aEF8de2")
-
   const { data } = useSWR('dashboard', async () => {
-    const reserves = await pairOld.getReserves()
-    const [numerator, denominator] =
-      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
-    // const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator))
-    const marketPrice = await bond.price()
+    const reserves = await pair.getReserves()
+    const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+    const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator))
 
     const dashboard = {
       callFactor: await dfsMining.totalCalls(),
