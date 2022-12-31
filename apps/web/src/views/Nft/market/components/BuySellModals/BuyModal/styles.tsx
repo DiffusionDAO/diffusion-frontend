@@ -50,21 +50,18 @@ export const DfsAmountCell: React.FC<React.PropsWithChildren<DfsAmountCellProps>
 }) => {
   const {chainId} = useActiveChainId()
   const pairAddress = getPairAddress(chainId)
-  const bond = useBondContract()
   const pair = usePairContract(pairAddress)
   const usdtAddress = getUSDTAddress(chainId)
   const dfsAddress = getDFSAddress(chainId)
-  const pairOld = usePairContract("0xB5951ff6e65d1b3c07Ac1188039170A00aEF8de2")
   
 
   const { data: dfsPrice, status } = useSWR('getPriceInUSDT', async () => {
-    // const reserves: any = await pairOld.getReserves()
+    const reserves: any = await pair.getReserves()
 
-    // const [numerator, denominator] =
-    //   usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+    const [numerator, denominator] =
+      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
 
-    // const marketPrice = numerator / denominator
-    const marketPrice = await bond.price()
+    const marketPrice = numerator / denominator
 
     return marketPrice
   })

@@ -76,25 +76,20 @@ const Bond = () => {
   const pairAddress = getPairAddress(chainId)
   const dfsAddress = getDFSAddress(chainId)
   const pair = usePairContract(pairAddress)
-  const pairOld = usePairContract("0xB5951ff6e65d1b3c07Ac1188039170A00aEF8de2")
 
   const { data, status } = useSWR('dfsBond', async () => {
-    const price = await bond.price()
-
-    const marketPriceNumber = parseFloat(formatUnits(price))
-    console.log("marketPriceNumber:",marketPriceNumber)
-    bondDatas[0].price = formatNumber(marketPriceNumber,2)
-    setMarketPrice(marketPriceNumber)
-    
     setBondDFS(await dfs.balanceOf(bond.address))
 
     setFoundationDFS(await dfs.balanceOf(foundation))
 
-    const reserves = await pairOld.getReserves()
+    const reserves = await pair.getReserves()
     const [numerator, denominator] =
       usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
      
-
+    
+    const marketPriceNumber = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
+    bondDatas[0].price = formatNumber(marketPriceNumber,2)
+    setMarketPrice(marketPriceNumber)
 
     setDiscount((await bond.discount()).toNumber())
 
