@@ -29,7 +29,7 @@ export const socials = [
       },
       {
         label: "中文",
-        href: "https://t.me/DiffusionDAOChina",
+        href: "https://t.me/DiffusionMetafi",
       },
     ],
   },
