@@ -48,7 +48,7 @@ export const DFS_MAINNET = new ERC20Token(
 
 export const DFS_TESTNET = new ERC20Token(
   ChainId.BSC_TESTNET,
-  '0x94b185b9e33adB35EB8fF68150DF3Fd4fFfa60Df',
+  '0xA377c7E0b8c210d3f426Ef6d4e7079FD75a4d4d0',
   18,
   'DFS',
   'Diffusion Token',
