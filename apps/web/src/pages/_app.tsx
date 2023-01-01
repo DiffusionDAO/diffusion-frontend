@@ -122,7 +122,6 @@ const ProductionErrorBoundary = process.env.NODE_ENV === 'production' ? SentryEr
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const router = useRouter()
-  const [whitelist, setWhitelist] = useState<string[]>([])
   const { account } = useWeb3React()
   const dfsMining = useDFSMiningContract()
   const {data, status} = useSWR("AppGetPrivateList",async()=>{
