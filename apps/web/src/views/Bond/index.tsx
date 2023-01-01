@@ -77,6 +77,10 @@ const Bond = () => {
   const pair = usePairContract(pairAddress)
 
   const { data, status } = useSWR('setPriceDiscount', async () => {
+    setBondDFS(await dfs.balanceOf(bond.address))
+
+    setFoundationDFS(await dfs.balanceOf(foundation))
+
     const reserves = await pair.getReserves()
     const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
      
@@ -88,9 +92,6 @@ const Bond = () => {
 
     bondDatas[0].discount = discount
 
-    setBondDFS(await dfs.balanceOf(bond.address))
-
-    setFoundationDFS(await dfs.balanceOf(foundation))
 
   })
 
