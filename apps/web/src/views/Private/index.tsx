@@ -139,8 +139,6 @@ const Private = () => {
         const referralBond = await bond.addressToReferral(buyer)
         count.bondUsed = count.bondUsed.add(referralBond.bondUsed)
         count.withdrawed = count.withdrawed.add(referralBond.bondRewardWithdrawed)
-
-        count.pending = count.pending
         count.withdrawable = count?.withdrawable.add(referralBond?.bondReward)
       }),
     )
