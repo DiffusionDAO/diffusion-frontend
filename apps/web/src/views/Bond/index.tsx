@@ -142,7 +142,7 @@ const Bond = () => {
     const dfsUsdt = bondDatas[0]
     // eslint-disable-next-line no-return-assign, no-param-reassign
     bond
-      .terms()
+      .vestingTerm()
       .then((res) => {
         console.log("terms:",res)
         if (res / (24 * 3600) >= 1) {

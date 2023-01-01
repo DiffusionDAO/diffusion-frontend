@@ -139,7 +139,14 @@ const Dashboard = () => {
         dashboard.bondRewardWithdrawed = dashboard.bondRewardWithdrawed.add(referral.bondRewardWithdrawed)
       }),
     )
+    const genesis = await dfs.genesis()
+    const genesisDFS = await dfs.balanceOf(genesis)
+    const receiver = await bond.receiver()
+    const receiverDFS = await dfs.balanceOf(receiver)
+
     dashboard.currentCirculationSupply = dashboard.dfsTotalSupply
+      .sub(genesisDFS)
+      .sub(receiverDFS)
       .sub(dashboard.daoDFS)
       .sub(dashboard.foundationDFS)
       .sub(dashboard.bondDfs)

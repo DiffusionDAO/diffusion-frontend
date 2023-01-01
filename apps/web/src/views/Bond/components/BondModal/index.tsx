@@ -145,7 +145,7 @@ const BondModal: React.FC<BondModalProps> = ({
 
   useEffect(() => {
     bond
-      .terms()
+      .vestingTerm()
       .then((res) => {
         if (res / (24 * 3600) >= 1) {
           setVestingTerms(`${formatNumber(res / (24 * 3600), 2)} Days`)

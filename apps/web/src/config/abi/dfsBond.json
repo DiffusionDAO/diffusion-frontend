@@ -77,51 +77,12 @@
   },
   {
     "inputs": [],
-    "name": "DAO3",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "DAO4",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "Dfs",
     "outputs": [
       {
         "internalType": "contract IDFS",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "addLiquiditySupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -577,6 +538,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getPriceInUSDT",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -698,7 +672,7 @@
     "name": "pair",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IPancakePair",
         "name": "",
         "type": "address"
       }
@@ -772,19 +746,6 @@
   },
   {
     "inputs": [],
-    "name": "price",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "rate",
     "outputs": [
       {
@@ -811,20 +772,20 @@
   },
   {
     "inputs": [],
-    "name": "redeem",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "receiver",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_supply",
-        "type": "uint256"
-      }
-    ],
-    "name": "setAddLiquiditySupply",
+    "inputs": [],
+    "name": "redeem",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1209,12 +1170,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_price",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_receiver",
+        "type": "address"
       }
     ],
-    "name": "setPrice",
+    "name": "setReceiver",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1337,19 +1298,6 @@
   },
   {
     "inputs": [],
-    "name": "terms",
-    "outputs": [
-      {
-        "internalType": "uint32",
-        "name": "vestingTerm",
-        "type": "uint32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "totalBondReward",
     "outputs": [
       {
@@ -1450,6 +1398,19 @@
         "internalType": "uint256",
         "name": "used",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vestingTerm",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
