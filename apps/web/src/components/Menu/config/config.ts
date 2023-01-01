@@ -52,6 +52,7 @@ const config: (
   chainId?: number,
   isPrivate?: boolean,
 ) => ConfigMenuItemsType[] = (t, isDark, languageCode, chainId,isPrivate) => {
+  console.log("isPrivate:",isPrivate)
   const items = [
     {
       label: t('Dashboard'),

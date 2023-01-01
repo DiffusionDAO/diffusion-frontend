@@ -17,7 +17,7 @@ const TopBar: React.FC<React.PropsWithChildren> = () => {
   const {chainId} = useActiveChainId()
   return (
     <Flex alignItems="center" justifyContent="space-between" mb="24px">
-      <BackLink to={`${nftsBaseUrl}/collections/${chainId}`}>
+      <BackLink to={`${nftsBaseUrl}/collections`}>
         <ChevronLeftIcon color="primary" width="24px" />
         {t('All Collections')}
       </BackLink>

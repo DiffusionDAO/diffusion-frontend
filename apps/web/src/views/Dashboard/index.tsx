@@ -153,13 +153,8 @@ const Dashboard = () => {
       .add(dashboard.costSupply)
 
     dashboard.totalCirculationSupply = dashboard.totalPayout
-      .mul(1250)
+      .mul(1315)
       .div(1000)
-      .add(dashboard.withdrawedSocialReward)
-      .add(dashboard.withdrawedSavingReward)
-      .add(denominator)
-      .add(dashboard.customSupply)
-      .add(dashboard.costSupply)
 
     if (dashboard.currentCirculationSupply.gt(0)) {
       dashboard.solitaryReserves =
