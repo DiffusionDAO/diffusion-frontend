@@ -90,7 +90,6 @@ const Dashboard = () => {
 
     const dashboard = {
       callFactor: await dfsMining.totalCalls(),
-      initialSupply: await dfs.initialSupply(),
       DSGE: await dfsMining.DSGE(),
       houseHoldSavingsRate: await dfsMining.HouseHoldSavingsRate(),
       tvl: BigNumber.from(0),
@@ -121,7 +120,7 @@ const Dashboard = () => {
       targetInflationRate: await bond.targetInflationRate(),
     }
 
-    dashboard.tvl = numerator.mul(2).add(parseEther('10000'))
+    dashboard.tvl = numerator.mul(2)
 
     dashboard.daoDFS = (await Promise.all(dao.map(async (d) => dfs.balanceOf(d)))).reduce((accum, curr) => {
       // eslint-disable-next-line no-return-assign, no-param-reassign
@@ -129,10 +128,10 @@ const Dashboard = () => {
       return accum
     }, BigNumber.from(0))
 
-    setHolderLength(await dfs.getHoldersLength())
+    const getHoldersLength = await dfs.getHoldersLength()
+    setHolderLength(getHoldersLength)
 
     const buyers = await bond.getBuyers()
-
     await Promise.all(
       buyers.map(async (buyer) => {
         const referral = await bond.addressToReferral(buyer)
@@ -150,7 +149,6 @@ const Dashboard = () => {
       .sub(dashboard.advancedUnusedMintAddressDfs)
       .sub(dashboard.elementaryMintAddressDfs)
       .sub(dashboard.advancedMintAddressDfs)
-      .sub(dashboard.initialSupply)
       .add(dashboard.addLiquiditySupply)
       .add(dashboard.costSupply)
 

@@ -92,7 +92,6 @@ const BondModal: React.FC<BondModalProps> = ({
   const [payout, setPayoutFor] = useState<string>('0')
   const [pendingPayout, setPendingPayout] = useState<BigNumber>(BigNumber.from(0))
   const [bondUnused, setBondUnused] = useState<BigNumber>(BigNumber.from(0))
-  // const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
   const [bondUsed, setBondUsed] = useState<BigNumber>(BigNumber.from(0))
   const [refresh, setRefresh] = useState<boolean>(false)
 
