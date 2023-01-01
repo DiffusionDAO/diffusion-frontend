@@ -88,11 +88,13 @@ const Dashboard = () => {
     const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
     const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator))
 
-    const totalCalls = await dfsMining.totalCalls()
+    const miningTotalCalls = await dfsMining.totalCalls()
+    const dfsTotalCalls = await dfs.totalCalls()
+    const bondTotalCalls = await bond.totalCalls()
     const DSGE = await dfsMining.DSGE()
     const houseHoldSavingsRate = await dfsMining.HouseHoldSavingsRate()
     const dashboard = {
-      callFactor: totalCalls,
+      callFactor: miningTotalCalls.add(dfsTotalCalls).add(bondTotalCalls),
       DSGE,
       houseHoldSavingsRate,
       tvl: BigNumber.from(0),
