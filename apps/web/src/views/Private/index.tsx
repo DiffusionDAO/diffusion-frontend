@@ -140,15 +140,12 @@ const Private = () => {
         count.bondUsed = count.bondUsed.add(referralBond.bondUsed)
         count.withdrawed = count.withdrawed.add(referralBond.bondRewardWithdrawed)
 
-        const pendingBondReward = await bond.pendingBondReward(buyer)
-        count.pending = count.pending.add(pendingBondReward)
-        count.withdrawable = count?.withdrawable.add(pendingBondReward).add(referralBond?.bondReward)
-        count.unpaid = count?.unpaid.add(referralBond?.bondRewardUnpaid.sub(pendingBondReward))
+        count.pending = count.pending
+        count.withdrawable = count?.withdrawable.add(referralBond?.bondReward)
       }),
     )
     count.totalBondUsed = count.bondUsed
     count.totalBondRewardWithdrawed = count.withdrawed
-    count.totalBondRewardUnpaid = count.unpaid
     count.totalBondRewardWithdrawable = count.totalBondReward.sub(count.totalBondRewardWithdrawed).sub(count.unpaid)
     count.totalBondRewardUnwithdrawed = count.totalBondReward.sub(count.totalBondRewardWithdrawed)
 
@@ -248,9 +245,6 @@ const Private = () => {
       <br />
       <span>债券奖励可领取: {formatUnits(data?.totalBondRewardWithdrawable ?? 0)}</span>
       <br />
-      <span>债券奖励未支付: {formatUnits(data?.totalBondRewardUnpaid ?? 0)}</span>
-      <br />
-
       <span>社交奖励总余额:</span>
       <span>{parseFloat(formatUnits(totalReward ?? 0)) * 0.95}</span>
       <br />
