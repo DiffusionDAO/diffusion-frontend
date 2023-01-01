@@ -213,6 +213,6 @@ export default {
   },
   nftDatabase: {
     56: '0xEF86912ef8D523cb400a93437C3856392fE8dce1',
-    97: '0xe66605495E23088f6E7104F6e3c751bF7FaBCfD5',
+    97: '0xD1d0E66BE1456d07Be2B68dE459D3DCed1Cdb08E',
   },
 }
