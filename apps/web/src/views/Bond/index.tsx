@@ -68,6 +68,8 @@ const Bond = () => {
   const [bondItem, setBondItem] = useState<any>(null)
   const [dfsTotalSupply, setDfsTotalSupply] = useState<number>()
   const [marketPrice, setMarketPrice] = useState<number>(0)
+  const [previousCentral, setPreviousCentral] = useState<number>(0)
+  const [central, setCentral] = useState<number>(0)
   const bond = useBondContract()
   const dfs = useDFSContract()
   const usdtAddress = getUSDTAddress(chainId)
@@ -78,22 +80,29 @@ const Bond = () => {
 
   const { data, status } = useSWR('setPriceDiscount', async () => {
     const dfsOfBond = await dfs.balanceOf(bond.address)
-    console.log("dfsOfBond:",formatUnits(dfsOfBond), bond.address)
+    // console.log("dfsOfBond:",formatUnits(dfsOfBond), bond.address)
     setBondDFS(dfsOfBond)
 
-    setFoundationDFS(await dfs.balanceOf(foundation))
+    const dfsOfFoundation = await dfs.balanceOf(foundation)
+    setFoundationDFS(dfsOfFoundation)
+
+    const bondDiscount = await bond.discount()
+    setDiscount(bondDiscount.toNumber())
 
     const reserves = await pair.getReserves()
     const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
      
     const marketPriceNumber = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
     bondDatas[0].price = formatNumber(marketPriceNumber,2)
+    bondDatas[0].discount = bondDiscount
+
     setMarketPrice(marketPriceNumber)
 
-    setDiscount((await bond.discount()).toNumber())
-
-    bondDatas[0].discount = discount
-
+    const centralAssets = parseFloat(formatUnits(dfsOfFoundation.add(dfsOfBond))) * marketPriceNumber
+    setPreviousCentral(centralAssets)
+    if (centralAssets >= previousCentral) {
+      setCentral(centralAssets)
+    }
 
   })
 
@@ -135,12 +144,13 @@ const Bond = () => {
     bond
       .terms()
       .then((res) => {
-        if (res.vestingTerm / (24 * 3600) >= 1) {
-          dfsUsdt.duration = `${formatNumber(res.vestingTerm / (24 * 3600), 2)} Days`
-        } else if (res.vestingTerm / 3600 >= 1) {
-          dfsUsdt.duration = `${formatNumber(res.vestingTerm / 3600, 2)} Hours`
-        } else if (res.vestingTerm / 60 >= 1) {
-          dfsUsdt.duration = `${formatNumber(res.vestingTerm / 60, 2)} Minutes`
+        console.log("terms:",res)
+        if (res / (24 * 3600) >= 1) {
+          dfsUsdt.duration = `${formatNumber(res / (24 * 3600), 2)} Days`
+        } else if (res / 3600 >= 1) {
+          dfsUsdt.duration = `${formatNumber(res / 3600, 2)} Hours`
+        } else if (res / 60 >= 1) {
+          dfsUsdt.duration = `${formatNumber(res / 60, 2)} Minutes`
         }
       })
       .catch((error) => {
@@ -174,12 +184,9 @@ const Bond = () => {
         <OverviewCard isMobile={isMobile}>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
-            {marketPrice > 0 ? (
+            { marketPrice > 0 ? (
               <OverviewCardItemContent isMobile={isMobile}>
-                $
-                {(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * marketPrice ).toFixed(
-                  2,
-                )}
+                ${central.toFixed(2)}
               </OverviewCardItemContent>
             ) : (
               <Skeleton />

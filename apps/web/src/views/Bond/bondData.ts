@@ -7,7 +7,7 @@ const bondDatas = [
     from: '/images/dfs.png',
     to: '/images/bond/usdt.png',
     price: '0',
-    discount: 3,
+    discount: 300,
     duration: '10 Days',
     balance: 0,
     maxFee: '0',

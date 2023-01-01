@@ -92,7 +92,7 @@ const BondModal: React.FC<BondModalProps> = ({
   const [payout, setPayoutFor] = useState<string>('0')
   const [pendingPayout, setPendingPayout] = useState<BigNumber>(BigNumber.from(0))
   const [bondUnused, setBondUnused] = useState<BigNumber>(BigNumber.from(0))
-  const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
+  // const [pdfsBalance, setPdfsBalance] = useState<BigNumber>(BigNumber.from(0))
   const [bondUsed, setBondUsed] = useState<BigNumber>(BigNumber.from(0))
   const [refresh, setRefresh] = useState<boolean>(false)
 
@@ -148,13 +148,12 @@ const BondModal: React.FC<BondModalProps> = ({
     bond
       .terms()
       .then((res) => {
-        // setMinPrice(res.minimumPrice)
-        if (res.vestingTerm / (24 * 3600) >= 1) {
-          setVestingTerms(`${formatNumber(res.vestingTerm / (24 * 3600), 2)} Days`)
-        } else if (res.vestingTerm / 3600 >= 1) {
-          setVestingTerms(`${formatNumber(res.vestingTerm / 3600, 2)} Hours`)
-        } else if (res.vestingTerm / 60 >= 1) {
-          setVestingTerms(`${formatNumber(res.vestingTerm / 60, 2)} Minutes`)
+        if (res / (24 * 3600) >= 1) {
+          setVestingTerms(`${formatNumber(res / (24 * 3600), 2)} Days`)
+        } else if (res / 3600 >= 1) {
+          setVestingTerms(`${formatNumber(res / 3600, 2)} Hours`)
+        } else if (res / 60 >= 1) {
+          setVestingTerms(`${formatNumber(res / 60, 2)} Minutes`)
         }
       })
       .catch((error) => console.log(error))
@@ -175,10 +174,10 @@ const BondModal: React.FC<BondModalProps> = ({
           setPendingPayout(res)
         })
         .catch((error) => console.log(error))
+
       setRefresh(false)
 
       bond.addressToReferral(account).then((res) => {
-        console.log('res.bondUsed:', formatUnits(res.bondUsed, 18))
         setBondUsed(res.bondUsed)
       })
 
@@ -190,9 +189,6 @@ const BondModal: React.FC<BondModalProps> = ({
           setDfsBalance(formatBigNumber(res, 18))
         })
         .catch((error) => console.log(error))
-      pdfs.releaseInfo(account).then((res) => {
-        setPdfsBalance(res.balance)
-      })
     }
   }, [account, amount, refresh, activeTab])
 
@@ -370,12 +366,6 @@ const BondModal: React.FC<BondModalProps> = ({
           <ListLable>{t('Unused')}</ListLable>
           <ListContent>{formatBigNumber(bondUnused, 18)} DFS</ListContent>
         </ListItem>
-        {pdfsBalance.gt(0) && (
-          <ListItem>
-            <ListLable>{t('PDFS Released')}</ListLable>
-            <ListContent>{formatBigNumber(pdfsBalance) ?? 0} PDFS</ListContent>
-          </ListItem>
-        )}
 
         <ListItem>
           <ListLable>{t('Discount')}</ListLable>
