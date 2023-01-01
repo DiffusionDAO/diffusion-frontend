@@ -104,7 +104,6 @@ const Reward = () => {
   const [DfsBalance, setDfsBalance] = useState<BigNumber>(BigNumber.from(0))
   const [totalSavingsReward, setTotalSavingReward] = useState<BigNumber>(BigNumber.from(0))
   const [totalStakedSavings, setTotalStakedSavings] = useState<BigNumber>(BigNumber.from(0))
-  const [pendingBondReward, setPendingBondReward] = useState<BigNumber>(BigNumber.from(0))
   const [referralStake, setReferralStake] = useState<Referral>()
   const [nextSavingInterestChange, setNextSavingInterestChangeTime] = useState<number>(0)
   const [pendingSavingInterest, setPendingSavingInterest] = useState<BigNumber>(BigNumber.from(0))
@@ -186,7 +185,6 @@ const Reward = () => {
       const dfsBalance = await dfsContract.balanceOf(account)
       setDfsBalance(dfsBalance)
 
-      setPendingBondReward(await bond.pendingBondReward(account))
       setPendingSavingInterest(addressToReferralStake?.savingInterest.add(await dfsMining.pendingSavingInterest(account)))
     }
   }
@@ -331,7 +329,7 @@ const Reward = () => {
                 <Petal src="/images/reward/petal.png" isMobile={isMobile} />
                 <RewardText>{t('Rewards')}</RewardText>
                 <RewardValueDiv>
-                  {formatBigNumber(BigNumber.from(bondReward.add(pendingBondReward) ?? 0), 6)}
+                  {formatBigNumber(BigNumber.from(bondReward ?? 0), 6)}
                 </RewardValueDiv>
                 <ExtractBtn
                   onClick={async () => {
@@ -346,10 +344,6 @@ const Reward = () => {
                 >
                   {t('Withdraw')}
                 </ExtractBtn>
-                {/* <RewardText>{t('Unpaid Bond Rewards')}</RewardText>
-                <RewardValueDiv>
-                  {formatBigNumber(bondRewardUnpaid.sub(pendingBondReward) ?? BigNumber.from(0), 5)}
-                </RewardValueDiv> */}
               </DiffusionGoldWrap>
             </Grid>
             <Grid item lg={8} md={8} sm={12} xs={12}>
