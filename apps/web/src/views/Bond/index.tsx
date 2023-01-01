@@ -171,7 +171,7 @@ const Bond = () => {
         <OverviewCard isMobile={isMobile}>
           <OverviewCardItem>
             <OverviewCardItemTitle>{t('Central Financial Agreement Assets')}</OverviewCardItemTitle>
-            {foundationDFS && bondDFS && marketPrice > 0 ? (
+            {(foundationDFS.gt(0) || bondDFS.gt(0)) && marketPrice > 0 ? (
               <OverviewCardItemContent isMobile={isMobile}>
                 $
                 {(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * marketPrice ).toFixed(
