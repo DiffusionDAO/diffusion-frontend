@@ -60,7 +60,6 @@ const Bond = () => {
   const [bondModalVisible, setBondModalVisible] = useState<boolean>(false)
   const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false)
 
-  const [usdtAmount, setUsdtAmount] = useState<BigNumber>(BigNumber.from(0))
   const [bondDFS, setBondDFS] = useState<BigNumber>(BigNumber.from(0))
   const [foundationDFS, setFoundationDFS] = useState<BigNumber>(BigNumber.from(0))
   const [discount, setDiscount] = useState<number>(0)
@@ -77,16 +76,10 @@ const Bond = () => {
   const dfsAddress = getDFSAddress(chainId)
   const pair = usePairContract(pairAddress)
 
-  const { data, status } = useSWR('dfsBond', async () => {
-    setBondDFS(await dfs.balanceOf(bond.address))
-
-    setFoundationDFS(await dfs.balanceOf(foundation))
-
+  const { data, status } = useSWR('setPriceDiscount', async () => {
     const reserves = await pair.getReserves()
-    const [numerator, denominator] =
-      usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
+    const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
      
-    
     const marketPriceNumber = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
     bondDatas[0].price = formatNumber(marketPriceNumber,2)
     setMarketPrice(marketPriceNumber)
@@ -95,6 +88,9 @@ const Bond = () => {
 
     bondDatas[0].discount = discount
 
+    setBondDFS(await dfs.balanceOf(bond.address))
+
+    setFoundationDFS(await dfs.balanceOf(foundation))
 
   })
 
@@ -178,7 +174,7 @@ const Bond = () => {
             {foundationDFS && bondDFS && marketPrice > 0 ? (
               <OverviewCardItemContent isMobile={isMobile}>
                 $
-                {(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * marketPrice + 10000).toFixed(
+                {(parseFloat(formatUnits(foundationDFS.add(bondDFS))) * marketPrice ).toFixed(
                   2,
                 )}
               </OverviewCardItemContent>
