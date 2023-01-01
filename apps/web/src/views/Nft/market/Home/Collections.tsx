@@ -25,7 +25,7 @@ const Collections: React.FC<{ title: string; testId: string; collections: Collec
         <Button
           style={{ borderRadius: '8px', border: '2px solid #EC6EFF', color: '#fff', width: '200px' }}
           as={NextLinkFromReactRouter}
-          to={`${nftsBaseUrl}/collections/${chainId}`}
+          to={`${nftsBaseUrl}/collections`}
           variant="secondary"
           scale="sm"
           endIcon={<ChevronRightIcon color="#fff" width="24px" />}
