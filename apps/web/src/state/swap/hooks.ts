@@ -63,7 +63,6 @@ export function useSingleTokenSwapInfo(
   outputCurrencyId: string | undefined,
   outputCurrency: Currency | undefined,
 ): { [key: string]: number } {
-  console.log('useSingleTokenSwapInfo:',outputCurrency)
   const token0Address = getTokenAddress(inputCurrencyId)
   const token1Address = getTokenAddress(outputCurrencyId)
 

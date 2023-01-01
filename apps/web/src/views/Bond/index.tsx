@@ -80,7 +80,6 @@ const Bond = () => {
 
   const { data, status } = useSWR('setPriceDiscount', async () => {
     const dfsOfBond = await dfs.balanceOf(bond.address)
-    // console.log("dfsOfBond:",formatUnits(dfsOfBond), bond.address)
     setBondDFS(dfsOfBond)
 
     const dfsOfFoundation = await dfs.balanceOf(foundation)
@@ -93,16 +92,18 @@ const Bond = () => {
     const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
      
     const marketPriceNumber = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator)) 
-    bondDatas[0].price = formatNumber(marketPriceNumber,2)
+    bondDatas[0].price = formatNumber(marketPriceNumber * (10000 - bondDiscount) / 10000,2)
     bondDatas[0].discount = bondDiscount
 
     setMarketPrice(marketPriceNumber)
 
-    const centralAssets = parseFloat(formatUnits(dfsOfFoundation.add(dfsOfBond))) * marketPriceNumber
-    setPreviousCentral(centralAssets)
-    if (centralAssets >= previousCentral) {
-      setCentral(centralAssets)
-    }
+    // const centralAssets = parseFloat(formatUnits(dfsOfFoundation.add(dfsOfBond))) * marketPriceNumber
+    // setCentral(centralAssets)
+    // if (centralAssets >= previousCentral) {
+    //   setPreviousCentral(centralAssets)
+    // }
+    const totalPayout = await bond.totalPayout()
+    setCentral(parseFloat(formatUnits(totalPayout.mul(8))) * marketPriceNumber + 10000)
 
   })
 

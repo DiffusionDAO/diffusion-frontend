@@ -449,7 +449,7 @@ export const getPDFSContract = (signer?: Signer | Provider, chainId?: number) =>
 export const getBondContract = (signer?: Signer | Provider, chainId?: number) => {
   return getContract({ abi: dfsBond, address: getBondAddress(chainId), signer })
 }
-export const getMineContract = (signer?: Signer | Provider, chainId?: number) => {
+export const getMiningContract = (signer?: Signer | Provider, chainId?: number) => {
   return getContract({ abi: mineAbi, address: getMiningAddress(chainId), signer })
 }
 export const getIDOContract = (signer?: Signer | Provider, chainId?: number) => {

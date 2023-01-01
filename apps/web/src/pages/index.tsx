@@ -1,14 +1,13 @@
 
 import { bsc, bscTest } from '@pancakeswap/wagmi/chains'
-import Swap from '../views/Swap'
+// import Swap from '../views/Swap'
+import Dashboard from '../views/Dashboard'
 
 const IndexPage = () => {
   return (
-      <Swap />
+      <Dashboard />
   )
 }
 
-
-IndexPage.chains = []
 
 export default IndexPage

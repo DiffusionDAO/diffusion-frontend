@@ -61,7 +61,7 @@ import {
 
   getNftMarketContract,
   getSocialNFTContract,
-  getMineContract,
+  getMiningContract,
   getDFSContract,
   getPDFSContract,
   getIDOContract,
@@ -413,7 +413,7 @@ export const useBondContract = (withSignerIfPossible = true) => {
 export const useDFSMiningContract = (withSignerIfPossible = true) => {
   const { chainId } = useActiveChainId()
   const providerOrSigner = useProviderOrSigner(withSignerIfPossible)
-  return useMemo(() => getMineContract(providerOrSigner,chainId), [providerOrSigner])
+  return useMemo(() => getMiningContract(providerOrSigner,chainId), [providerOrSigner])
 }
 export const useHBondContract = (withSignerIfPossible = true) => {
   const { chainId } = useActiveChainId()

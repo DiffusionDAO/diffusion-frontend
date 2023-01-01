@@ -127,7 +127,6 @@ const Private = () => {
       level4Staked: await dfsMining.level4Staked(),
       level5Staked: await dfsMining.level5Staked(),
       level6Staked: await dfsMining.level6Staked(),
-      pdfsUsed: await bond.pdfsUsed(),
       totalPayout: await bond.totalPayout(),
       withdrawedSavingReward: await dfsMining.withdrawedSavingReward(),
       withdrawedSocialReward: await dfsMining.withdrawedSocialReward(),
@@ -230,8 +229,6 @@ const Private = () => {
       <span>债券总销售量: {formatUnits(data?.totalPayout ?? 0)}</span>
       <br />
       <span>债券已使用:{formatUnits(data?.totalBondUsed ?? 0)}</span>
-      <br />
-      <span>PDFS已使用:{formatUnits(data?.pdfsUsed ?? 0)}</span>
       <br />
       <span>债券未使用:{formatUnits(data?.totalPayout.sub(data?.totalBondUsed) ?? 0)}</span>
       <br />

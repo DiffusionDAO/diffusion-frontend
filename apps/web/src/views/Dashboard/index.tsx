@@ -88,10 +88,13 @@ const Dashboard = () => {
     const [numerator, denominator] = usdtAddress.toLowerCase() < dfsAddress.toLowerCase() ? [reserves[0], reserves[1]] : [reserves[1], reserves[0]]
     const marketPrice = parseFloat(formatUnits(numerator)) / parseFloat(formatUnits(denominator))
 
+    const totalCalls = await dfsMining.totalCalls()
+    const DSGE = await dfsMining.DSGE()
+    const houseHoldSavingsRate = await dfsMining.HouseHoldSavingsRate()
     const dashboard = {
-      callFactor: await dfsMining.totalCalls(),
-      DSGE: await dfsMining.DSGE(),
-      houseHoldSavingsRate: await dfsMining.HouseHoldSavingsRate(),
+      callFactor: totalCalls,
+      DSGE,
+      houseHoldSavingsRate,
       tvl: BigNumber.from(0),
       marketPrice,
       foundationDFS: await dfs.balanceOf(foundation),
@@ -101,8 +104,6 @@ const Dashboard = () => {
       advancedMintAddressDfs: await dfs.balanceOf(advancedMintAddress),
       daoDFS: BigNumber.from(0),
       bondDfs: await dfs.balanceOf(bond.address),
-      addLiquiditySupply: await bond.addLiquiditySupply(),
-      customSupply: await bond.customSupply(),
       dfsTotalSupply: await dfs.totalSupply(),
       costSupply: await bond.costSupply(),
       totalPayout: await bond.totalPayout(),
@@ -133,7 +134,7 @@ const Dashboard = () => {
 
     const buyers = await bond.getBuyers()
     await Promise.all(
-      buyers.map(async (buyer) => {
+      buyers?.map(async (buyer) => {
         const referral = await bond.addressToReferral(buyer)
         dashboard.bondUsed = dashboard.bondUsed.add(referral.bondUsed)
         dashboard.bondRewardWithdrawed = dashboard.bondRewardWithdrawed.add(referral.bondRewardWithdrawed)
@@ -156,7 +157,6 @@ const Dashboard = () => {
       .sub(dashboard.advancedUnusedMintAddressDfs)
       .sub(dashboard.elementaryMintAddressDfs)
       .sub(dashboard.advancedMintAddressDfs)
-      .add(dashboard.addLiquiditySupply)
       .add(dashboard.costSupply)
 
     dashboard.totalCirculationSupply = dashboard.totalPayout
@@ -212,12 +212,12 @@ const Dashboard = () => {
 
     const response = await fetch('https://middle.diffusiondao.org/dashboard')
     const json = await response.json()
-    return { ...dashboard, ...json }
-  })
 
-  const conentractions = Object.keys(data?.concentration ?? {}).map((key) => data?.concentration[key])
-  // eslint-disable-next-line no-return-assign, no-param-reassign
-  const avgConentraction = conentractions.reduce((acc, cur) => (acc += cur), 0) / conentractions.length
+    const concentractions = Object.keys(json?.concentration).map((key) => json?.concentration[key])
+    // eslint-disable-next-line no-return-assign, no-param-reassign
+    const avgConentraction = concentractions.reduce((acc, cur) => (acc += cur), 0) / concentractions.length
+    return { ...dashboard, avgConentraction }
+  })
 
   const time = new Date()
 
@@ -413,7 +413,7 @@ const Dashboard = () => {
                         />
                         <DataCell
                           title={t('Attention Factor')}
-                          data={conentractions && avgConentraction?.toString()}
+                          data={data?.avgConentraction?.toString()}
                           titleStyle={{ color: '#ABB6FF' }}
                         />
                         <DataCell

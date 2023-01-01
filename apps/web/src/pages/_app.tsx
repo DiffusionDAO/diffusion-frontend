@@ -22,6 +22,7 @@ import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useDFSMiningContract } from 'hooks/useContract'
 import NotFound from 'views/NotFound'
+import useSWR from 'swr'
 
 import { Blocklist, Updaters } from '..'
 import { SentryErrorBoundary } from '../components/ErrorBoundary'
@@ -124,13 +125,11 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const [whitelist, setWhitelist] = useState<string[]>([])
   const { account } = useWeb3React()
   const dfsMining = useDFSMiningContract()
-  useEffect(() => {
-    dfsMining
-      .getPrivateWhitelist()
-      .then((res) => setWhitelist(res))
-      .catch((error) => console.log(error))
-  }, [account, dfsMining])
-  if (router.pathname === '/private' && !whitelist.includes(account)) {
+  const {data, status} = useSWR("AppGetPrivateList",async()=>{
+    const whitelist = await dfsMining.getPrivateWhitelist()
+    return whitelist
+  })
+  if (router.pathname === '/private' && !data.includes(account)) {
     return <NotFound />
   }
   if (Component.pure) {

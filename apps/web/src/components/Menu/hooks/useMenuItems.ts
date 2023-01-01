@@ -16,8 +16,8 @@ export const useMenuItems = (isPrivate = false): ConfigMenuItemsType[] => {
   const menuItemsStatus = useMenuItemsStatus()
 
   const menuItems = useMemo(() => {
-    return config(t, isDark, languageCode, chainId)
-  }, [t, isDark, languageCode, chainId])
+    return config(t, isDark, languageCode, chainId, isPrivate)
+  }, [t, isDark, languageCode, chainId, isPrivate])
 
   return useMemo(() => {
     if (menuItemsStatus && Object.keys(menuItemsStatus).length) {
