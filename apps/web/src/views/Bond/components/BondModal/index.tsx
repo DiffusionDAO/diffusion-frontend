@@ -4,7 +4,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { CloseIcon, CogIcon, InfoIcon } from '@pancakeswap/uikit'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
-import { parseUnits, formatUnits } from '@ethersproject/units'
+import { parseUnits, formatUnits, parseEther } from '@ethersproject/units'
 import {
   useBondContract,
   useDFSContract,
@@ -103,7 +103,7 @@ const BondModal: React.FC<BondModalProps> = ({
       setAmount(nextUserInput)
       if (nextUserInput) {
         try {
-          const payoutFor = await bond.payoutFor(parseUnits(nextUserInput, 'ether'))
+          const payoutFor = await bond.payoutFor(parseEther(nextUserInput))
           setPayoutFor(formatBigNumber(payoutFor, 4))
         } catch (error: any) {
           window.alert(error.reason ?? error.data?.message ?? error.message)

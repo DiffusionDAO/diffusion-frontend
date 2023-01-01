@@ -5,7 +5,7 @@ import { useState } from 'react'
 import useSWR from 'swr'
 import { Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useBondContract, useDFSContract, useDFSMiningContract, usePairContract } from 'hooks/useContract'
-import { getBond1Address, getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
+import {  getDFSAddress, getPairAddress, getUSDTAddress } from 'utils/addressHelpers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatUnits, parseEther } from '@ethersproject/units'
 import { formatBigNumber, formatNumber } from '@pancakeswap/utils/formatBalance'
@@ -82,7 +82,6 @@ const Dashboard = () => {
   const bond = useBondContract()
   const dfsAddress = getDFSAddress(chainId)
   const usdtAddress = getUSDTAddress(chainId)
-  const bondAddress1 = getBond1Address()
 
   const { data } = useSWR('dashboard', async () => {
     const reserves = await pair.getReserves()
@@ -144,7 +143,7 @@ const Dashboard = () => {
     dashboard.currentCirculationSupply = dashboard.dfsTotalSupply
       .sub(dashboard.daoDFS)
       .sub(dashboard.foundationDFS)
-      .sub(dashboard.bondDfs).sub(await dfs.balanceOf(bondAddress1))
+      .sub(dashboard.bondDfs)
       .sub(dashboard.unstakeNFTDFS)
       .sub(dashboard.nftMarketDestroyedDFS)
       .sub(dashboard.elementaryUnusedMintAddressDfs)
