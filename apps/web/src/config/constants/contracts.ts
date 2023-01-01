@@ -198,7 +198,7 @@ export default {
   },
   socialNFT: {
     56: '0xEFA6c844C82b4A290176d52928fD254DD3751c60',
-    97: '0x0bfb2672f712fFb94b2ec57A04aF174D0dbBb354',
+    97: '0x5D3c2d1995574Fd6bD36dc3582A89041D4Fc00cA',
   },
   dfsMining: {
     56: '0x683a467D8b2B1dff876Ed4fCDE191176c15cd653',

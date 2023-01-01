@@ -120,7 +120,7 @@ const Dashboard = () => {
       targetInflationRate: await bond.targetInflationRate(),
     }
 
-    dashboard.tvl = numerator.mul(2)
+    dashboard.tvl = numerator.mul(2).add(parseEther("10000"))
 
     dashboard.daoDFS = (await Promise.all(dao.map(async (d) => dfs.balanceOf(d)))).reduce((accum, curr) => {
       // eslint-disable-next-line no-return-assign, no-param-reassign
