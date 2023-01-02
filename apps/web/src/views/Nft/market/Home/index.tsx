@@ -80,7 +80,6 @@ const Home = () => {
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  console.log("Home:")
   const { data: collections, status } = useGetCollections()
 
   const newestCollections = orderBy(

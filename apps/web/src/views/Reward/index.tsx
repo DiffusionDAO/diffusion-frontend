@@ -598,7 +598,7 @@ const Reward = () => {
         <DetailModal detailData={bondRewardDetailData} onClose={closeDetailModal} />
       ) : null}
       {powerRewardDetailModalVisible ? (
-        <DetailModal detailData={powerRewardDetailData} onClose={closeUnlockedDetailModal} />
+        <DetailModal detailData={powerRewardDetailData} onClose={closeUnlockedDetailModal} isBond={false}/>
       ) : null}
       {/* {!account && (
         <NoPower
