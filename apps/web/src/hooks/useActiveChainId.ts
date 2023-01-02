@@ -8,15 +8,15 @@ import { useSessionChainId } from './useSessionChainId'
 
 const queryChainIdAtom = atom(-1) // -1 unload, 0 no chainId on query
 
-// queryChainIdAtom.onMount = (set) => {
-//   const params = new URL(window.location.href).searchParams
-//   const c = params.get('chainId')
-//   if (isChainSupported(+c)) {
-//     set(+c)
-//   } else {
-//     set(0)
-//   }
-// }
+queryChainIdAtom.onMount = (set) => {
+  const params = new URL(window.location.href).searchParams
+  const c = params.get('chainId')
+  if (isChainSupported(+c)) {
+    set(+c)
+  } else {
+    set(0)
+  }
+}
 
 export function useLocalNetworkChain() {
   const [sessionChainId] = useSessionChainId()
@@ -36,7 +36,7 @@ export const useActiveChainId = () => {
   const localChainId = useLocalNetworkChain()
   const queryChainId = useAtomValue(queryChainIdAtom)
   const { chain } = useNetwork()
-  const chainId = localChainId ?? chain?.id ?? (queryChainId >= 0 ? ChainId.BSC : undefined)
+  const chainId = localChainId ?? chain?.id ?? (queryChainId >= 0 ? ChainId.BSC_TESTNET : undefined)
 
   const isNotMatched = useDeferredValue(chain && localChainId && chain.id !== localChainId)
   return {

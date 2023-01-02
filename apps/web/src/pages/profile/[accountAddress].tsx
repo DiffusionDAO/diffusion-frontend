@@ -52,6 +52,7 @@ import { ZHCN } from '@pancakeswap/localization/src/config/languages'
 import { Flex, Text, useMatchBreakpoints,Select,OptionProps ,ScrollToTopButton} from '@pancakeswap/uikit'
 import { createPortal } from 'react-dom'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import Page from 'components/Layout/Page'
 
 interface noteProps {
   title: string
@@ -286,9 +287,10 @@ function NftProfilePage() {
   const accountAddress = query.accountAddress as string
 
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
+  console.log("account:",account,"isConnectedProfile:",isConnectedProfile)
   if (account && !isConnectedProfile) {
     push(`/profile/${account?.toLowerCase()}`)
-  }
+  } 
   const [isSelected, setIsSelected] = useState<boolean>(false)
   const [option, setOption] = useState<string>('')
   const [sortField, setSortField] = useState(null)
@@ -846,6 +848,6 @@ function NftProfilePage() {
   )
 }
 
-NftProfilePage.Layout = NftProfileLayout
+// NftProfilePage.Layout = NftProfileLayout
 
 export default NftProfilePage

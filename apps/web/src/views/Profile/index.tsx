@@ -23,38 +23,16 @@ const TabMenuWrapper = styled(Box)`
 
 const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const accountAddress = useRouter().query.accountAddress as string
+  console.log("accountAddress:",accountAddress)
   const { t } = useTranslation()
 
   const invalidAddress = !accountAddress || isAddress(accountAddress) === false
-
-  const {
-    profile,
-    isValidating: isProfileValidating,
-    isFetching: isProfileFetching,
-    refresh: refreshProfile,
-  } = useProfileForAddress(accountAddress, {
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  })
-  // const { achievements, isFetching: isAchievementsFetching } = useAchievementsForAddress(accountAddress)
-  // const {
-  //   nfts: userNfts,
-  //   isLoading: isNftLoading,
-  //   refresh: refreshUserNfts,
-  // } = useNftsForAddress(accountAddress, profile, isProfileValidating)
-
-  // const onSuccess = useCallback(async () => {
-  //   await refreshProfile()
-  //   refreshUserNfts()
-  // }, [refreshProfile, refreshUserNfts])
 
   if (invalidAddress) {
     return (
       <>
         <Page style={{ minHeight: 'auto' }}>
           <Flex p="24px" flexDirection="column" alignItems="center">
-            {/* <NoNftsImage /> */}
             <Text textAlign="center" maxWidth="420px" pt="8px" bold>
               {t('Please enter a valid address, or connect your wallet to view your profile')}
             </Text>
@@ -66,8 +44,6 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
 
   return (
     <>
-      <MarketPageHeader position="relative" />
-
       <Page style={{ minHeight: 'auto' }}>{children}</Page>
     </>
   )
