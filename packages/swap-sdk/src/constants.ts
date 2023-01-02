@@ -15,7 +15,7 @@ export const ChainIdName:Record<string, ChainId> = {
   '56': ChainId.BSC,
   '97': ChainId.BSC_TESTNET,
 }
-export const FACTORY_ADDRESS = '0x6bC286FCe1F82EFcE35ADc5dd99D30C1Ea262bfb'
+export const FACTORY_ADDRESS = '0xdF024b5dda32fc4045e4142877B4DF38B03363b1'
 
 const FACTORY_ADDRESS_ETH = '0x1097053Fd2ea711dad45caCcc45EfF7548fCB362'
 
@@ -26,7 +26,7 @@ export const FACTORY_ADDRESS_MAP: Record<number, string> = {
   [ChainId.BSC]: FACTORY_ADDRESS,
   [ChainId.BSC_TESTNET]: '0x9d19eb33607fB9074FAf66F40ed9b939a2379e50',
 }
-export const INIT_CODE_HASH = '0xde7cd9bf65ddeffbdbf1b84453ff36d33a5f0a7cb82671c9b690cca5bbc9e88c'
+export const INIT_CODE_HASH = '0x5e1db4a23bd803343b915006b0696e1028c9047271b929a9c0af25b5d163882a'
 
 const INIT_CODE_HASH_ETH = '0x57224589c67f3f30a6b0d7a1b54cf3153ab84563bc609ef41dfb34f8b2974d2d'
 export const INIT_CODE_HASH_MAP: Record<number, string> = {
@@ -39,7 +39,7 @@ export const INIT_CODE_HASH_MAP: Record<number, string> = {
 
 export const DFS_MAINNET = new ERC20Token(
   ChainId.BSC,
-  '0x2B806e6D78D8111dd09C58943B9855910baDe005',
+  '0xB38Ca15cDA6520538C40cf50b5fF876bAfEd2Af5',
   18,
   'DFS',
   'Diffusion Token',
