@@ -124,7 +124,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       fallback: {
-        [unstable_serialize(['nft', token.collectionAddress, token.tokenId])]: token,
+        [unstable_serialize(['nft', token.collectionAddress,chainId, token.tokenId])]: token,
         ...(collection && {
           [unstable_serialize(['nftMarket', 'collections', collectionAddress.toLowerCase()])]: collection,
         }),

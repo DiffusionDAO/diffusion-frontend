@@ -125,7 +125,7 @@ const Bond = () => {
     usdt
       .approve(bond.address, MaxUint256)
       .then((receipt) =>
-        dfs.approve(bond.address, MaxUint256).then((res) => res.wait().then(() => setIsApprove(true))),
+        receipt.wait().then(() => setIsApprove(true))
       )
   }
   useEffect(() => {

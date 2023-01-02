@@ -27,7 +27,6 @@ import { formatUnits } from '@ethersproject/units'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { ChainId } from '@pancakeswap/sdk'
 import useSWR from 'swr'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import PropertiesCard from '../shared/PropertiesCard'
@@ -56,8 +55,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
   collectionAddress,
   tokenId,
 }) => {
-  const {chainId} = useActiveChainId()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const bgImg = isMobile ? "url('/images/nfts/mretc.png')" : "url('/images/nfts/smxl.png')"
@@ -81,10 +79,10 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
     switch (collectionAddress) {
       case socialNFTAddress:
         thumbnail = `/images/nfts/${name.toLowerCase()}/${nft?.level?.toString()}`
-        name = `${levelToName[nft?.level]}#${tokenId}`
+        name = `${t(levelToName[nft?.level])}#${tokenId}`
         break
       case diffusionCatAddress:
-        name = `${tokenIdToName[tokenId]}`
+        name = `${t(tokenIdToName[tokenId])}`
         break
       case starLightAddress:
         name = `StarLight#${token.tokenId}`
@@ -120,7 +118,7 @@ const IndividualNFTPage: React.FC<React.PropsWithChildren<IndividualNFTPageProps
     }
     return nftToken
   }
-  const { data: nftToken, status, mutate } = useSWR('IndividualNFTPage', getToken)
+  const { data: nftToken, status, mutate } = useSWR(['nft', collectionAddress,chainId, tokenId], getToken)
 
   useEffect(() => {
     mutate(getToken())

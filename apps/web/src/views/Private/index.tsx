@@ -300,7 +300,7 @@ const Private = () => {
         {runway && runway !== 0 && (totalRewardNumber * 5) / (n * runway * parseFloat(formatUnits(totalStakedSavings)))}{' '}
         %
       </span>
-      <ContentWrap>
+      {/* <ContentWrap>
         {account && (
           <>
             <MoneyInput
@@ -325,7 +325,7 @@ const Private = () => {
           <ListLable>{t('DFS balance')}</ListLable>
           <ListContent>{formatBigNumber(dfsBalance, 5) ?? 0} DFS</ListContent>
         </ListItem>
-      </ContentWrap>
+      </ContentWrap> */}
     </StyledModal>
   )
 }
