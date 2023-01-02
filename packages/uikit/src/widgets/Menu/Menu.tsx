@@ -192,7 +192,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
           </BodyWrapper>
         </Wrapper>
       </AtomBox>
-      <Footer
+      {/* <Footer
         items={footerLinks}
         isDark={isDark}
         toggleTheme={toggleTheme}
@@ -202,7 +202,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
         cakePriceUsd={cakePriceUsd}
         buyCakeLabel={buyCakeLabel}
         mb={[`${MOBILE_MENU_HEIGHT}px`, null, "0px"]}
-      />
+      /> */}
       <AtomBox display={{ xs: "block", md: "none" }}>
         <BottomNav items={links} activeItem={activeItem} activeSubItem={activeSubItem} />
       </AtomBox>

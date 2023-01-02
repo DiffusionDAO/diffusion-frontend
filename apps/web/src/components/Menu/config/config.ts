@@ -108,24 +108,24 @@ const config: (
       image: '/images/decorations/pe2.png',
       items: [
       ].map((item) => addMenuItemSupported(item, chainId)),
-    },
-    {
-      label: t('Trade'),
-      icon: SwapIcon,
-      fillIcon: SwapFillIcon,
-      href: '/swap',
-      supportChainIds: SUPPORT_ZAP,
-      showItemsOnMobile: false,
-      items: [
-        {
-          label: t('Swap'),
-          href: '/swap',
-        },
-        {
-          label: t('Liquidity'),
-          href: '/liquidity',
-        }]
-      }, 
+    }
+    // {
+      // label: t('Trade'),
+      // icon: SwapIcon,
+      // fillIcon: SwapFillIcon,
+      // href: '/swap',
+      // supportChainIds: SUPPORT_ZAP,
+      // showItemsOnMobile: false,
+      // items: [
+      //   {
+      //     label: t('Swap'),
+      //     href: '/swap',
+      //   },
+      //   {
+      //     label: t('Liquidity'),
+      //     href: '/liquidity',
+      //   }]
+      // }, 
 
   ].map((item) => addMenuItemSupported(item, chainId))
 

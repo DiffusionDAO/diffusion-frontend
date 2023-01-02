@@ -22,7 +22,7 @@ import { FooterProps } from "./types";
 import { SkeletonV2 } from "../Skeleton";
 import { Logo } from "../../widgets/Menu";
 
-const MenuItem: React.FC<React.PropsWithChildren<FooterProps>> = ({
+const Footer: React.FC<React.PropsWithChildren<FooterProps>> = ({
   items,
   isDark,
   toggleTheme,
@@ -33,7 +33,7 @@ const MenuItem: React.FC<React.PropsWithChildren<FooterProps>> = ({
   buyCakeLabel,
   ...props
 }) => {
-  const isMounted = useIsMounted();
+  const isMounted = useIsMounted()
   return (
     <StyledFooter
       data-theme="dark"
@@ -118,4 +118,4 @@ const MenuItem: React.FC<React.PropsWithChildren<FooterProps>> = ({
   );
 };
 
-export default MenuItem;
+export default Footer;
