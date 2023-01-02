@@ -329,7 +329,6 @@ function NftProfilePage() {
   const nftMarket = useNftMarketContract()
   const dfsMining = useDFSMiningContract()
   const socialNFT = useSocialNftContract()
-  const database = useNFTDatabaseContract()
   const diffusionAICatContract = useDiffusionAICatContract()
 
   const getProfileToken = async () => {
