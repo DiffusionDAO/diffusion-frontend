@@ -333,11 +333,11 @@ function NftProfilePage() {
 
   const getProfileToken = async () => {
     const tokens = { unstaked: [], staked: [], onSale: [] }
-    if (account) {
+    if (account && isConnectedProfile) {
       const diffusionAICatTokenIds = await diffusionAICatContract.tokensOfOwner(account)
       const tokenIds = await socialNFT.tokensOfOwner(account)
       await Promise.all(
-        tokenIds.map(async (tokenId) => {
+        tokenIds?.map(async (tokenId) => {
           try {
             const collectionName = await socialNFT.name()
             const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
@@ -360,7 +360,7 @@ function NftProfilePage() {
         }),
       )
       await Promise.all(
-        diffusionAICatTokenIds.map(async (tokenId) => {
+        diffusionAICatTokenIds?.map(async (tokenId) => {
           try {
             const collectionName = await diffusionAICatContract.name()
             const sellPrice = await nftMarket.sellPrice(diffusionAICatContract.address, tokenId)
@@ -390,7 +390,7 @@ function NftProfilePage() {
 
       const staked = await dfsMining.getTokensStakedByOwner(account)
       await Promise.all(
-        staked.map(async (tokenId) => {
+        staked?.map(async (tokenId) => {
           const token = await socialNFT.getToken(tokenId)
           const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
           const name = `${t(levelToName[token.level])}#${token.tokenId}`
@@ -408,7 +408,7 @@ function NftProfilePage() {
       const onSaleTokenIds = await socialNFT.tokensOfOwner(nftMarket.address)
       const onSaleDiffusionAICat = await diffusionAICatContract.tokensOfOwner(nftMarket.address)
       await Promise.all(
-        onSaleTokenIds.map(async (tokenId) => {
+        onSaleTokenIds?.map(async (tokenId) => {
           const { seller, price } = await nftMarket.sellPrice(socialNFT.address, tokenId)
           if (seller === account) {
             const collectionName = await socialNFT.name()
@@ -430,7 +430,7 @@ function NftProfilePage() {
         }),
       )
       await Promise.all(
-        onSaleDiffusionAICat.map(async (tokenId) => {
+        onSaleDiffusionAICat?.map(async (tokenId) => {
           const { seller, price } = await nftMarket.sellPrice(diffusionAICatContract.address, tokenId)
           if (seller === account) {
             const collectionName = await diffusionAICatContract.name()
@@ -480,7 +480,7 @@ function NftProfilePage() {
     setStakedNFTs([])
     setOnSaleNFT([])
     mutate(getProfileToken())
-  }, [account, accountAddress])
+  }, [account, accountAddress, isConnectedProfile])
 
   const handleSort = useCallback(
     (level: number) => {
@@ -732,7 +732,7 @@ function NftProfilePage() {
           <Tabs
             defaultActiveKey={activeTab}
             onChange={changeTab}
-            items={tabs.map((item) => {
+            items={tabs?.map((item) => {
               return {
                 label: (
                   <span>
