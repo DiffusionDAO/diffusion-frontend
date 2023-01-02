@@ -107,7 +107,6 @@ const Dashboard = () => {
       daoDFS: BigNumber.from(0),
       bondDfs: await dfs.balanceOf(bond.address),
       dfsTotalSupply: await dfs.totalSupply(),
-      costSupply: await bond.costSupply(),
       totalPayout: await bond.totalPayout(),
       unstakeNFTDFS: await dfs.balanceOf(unstakeNFTAddress),
       nftMarketDestroyedDFS: await dfs.balanceOf(nftMarketDestroyAddress),
@@ -159,7 +158,6 @@ const Dashboard = () => {
       .sub(dashboard.advancedUnusedMintAddressDfs)
       .sub(dashboard.elementaryMintAddressDfs)
       .sub(dashboard.advancedMintAddressDfs)
-      .add(dashboard.costSupply)
 
     dashboard.totalCirculationSupply = dashboard.totalPayout
       .mul(1315)

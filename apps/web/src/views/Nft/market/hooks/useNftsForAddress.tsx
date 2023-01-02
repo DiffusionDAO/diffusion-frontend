@@ -10,6 +10,7 @@ import { usePreviousValue } from '@pancakeswap/hooks'
 import { isAddress } from 'utils'
 
 export const useNftsForAddress = (account: string, profile: Profile, isProfileFetching: boolean) => {
+  console.log("useNftsForAddress:")
   const { data: collections } = useGetCollections()
 
   const { nfts, isLoading, refresh } = useCollectionsNftsForAddress(account, profile, isProfileFetching, collections)

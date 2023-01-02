@@ -55,7 +55,7 @@ export const getCollectionsApi = async (chainId:number): Promise<ApiCollectionsR
       const apiCollection: ApiCollection = {
         name,
         address: collectionAddress,
-        totalSupply: formatUnits(totalSupply),
+        totalSupply,
         totalVolume: formatUnits(totalVolume),
         avatar: `/images/nfts/${name.toLowerCase()}/avatar.jpg`,
         banner: {
