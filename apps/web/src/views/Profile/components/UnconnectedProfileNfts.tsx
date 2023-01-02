@@ -13,7 +13,6 @@ const UserNfts: React.FC<React.PropsWithChildren<{ nfts: NftToken[]; isLoading: 
       {/* User has no NFTs */}
       {nfts.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
-          {/* <NoNftsImage /> */}
           <Text pt="8px" bold>
             {t('No NFTs found')}
           </Text>

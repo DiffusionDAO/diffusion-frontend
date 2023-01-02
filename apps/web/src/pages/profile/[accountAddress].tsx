@@ -437,7 +437,7 @@ function NftProfilePage() {
             let name = tokenIdToName[tokenId]
             if (name.includes('#')) {
               const splitted = tokenIdToName[tokenId].split('#')
-              name = `${splitted[0]}#${splitted[1]}`
+              name = `${t(splitted[0])}#${splitted[1]}`
             }
             const thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${tokenId}`
             const nft: NFT = {
@@ -483,7 +483,7 @@ function NftProfilePage() {
 
   const handleSort = useCallback(
     (level: number) => {
-      const filtered = unstakedNFTs.filter((nft: NftToken) => nft.level === level)
+      const filtered = unstakedNFTs.filter((nft: NftToken) => nft.collectionAddress === socialNFTAddress && nft.level === level)
       if (filtered.length > 0) {
         setUnstakedNFTs(filtered)
       } else {

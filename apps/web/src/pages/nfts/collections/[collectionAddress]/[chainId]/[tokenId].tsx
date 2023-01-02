@@ -47,7 +47,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
   const chainIdName = ChainIdName[chainId]
-  console.log('getStaticProps:', collectionAddress, tokenId,chainIdName)
 
   const nftMarketAddress = getNftMarketAddress(chainIdName)
   const nftMarket = getContract({ abi: nftMarketAbi, address: nftMarketAddress, chainId:chainIdName })
