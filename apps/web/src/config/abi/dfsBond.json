@@ -120,11 +120,6 @@
       },
       {
         "internalType": "uint256",
-        "name": "bondRewardUnpaid",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
         "name": "bondRewardWithdrawed",
         "type": "uint256"
       },
@@ -712,6 +707,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "payoutUnder",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "pendingOwner",
     "outputs": [
@@ -852,11 +866,6 @@
           {
             "internalType": "uint256",
             "name": "bondReward",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "bondRewardUnpaid",
             "type": "uint256"
           },
           {
