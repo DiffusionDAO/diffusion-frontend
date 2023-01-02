@@ -391,15 +391,18 @@ function NftProfilePage() {
       const staked = await dfsMining.getTokensStakedByOwner(account)
       await Promise.all(
         staked?.map(async (tokenId) => {
+          const collectionName = await socialNFT.name()
           const token = await socialNFT.getToken(tokenId)
           const sellPrice = await nftMarket.sellPrice(socialNFT.address, tokenId)
           const name = `${t(levelToName[token.level])}#${token.tokenId}`
+          const thumbnail = `/images/nfts/${collectionName.toLowerCase()}/${token?.level}`
           const nft: NFT = {
             ...token,
             ...sellPrice,
-            collectionName: t('SocialNFT'),
-            collectionAddress: socialNFT.address,
             name,
+            collectionAddress: socialNFT.address,
+            collectionName,
+            thumbnail,
             chainId
           }
           tokens.staked.push(nftToNftToken(nft))

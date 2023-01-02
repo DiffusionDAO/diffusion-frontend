@@ -33,8 +33,8 @@ const CollectibleCardBody: React.FC<React.PropsWithChildren<CollectibleCardProps
       </Flex>
       <div style={{ display: 'flex', justifyContent: 'space-between', height: '8px', alignItems: 'center' }}>
         <Text small>{translatedName}</Text>
-        {nft?.attributes && nft?.attributes[0].value && (
-          <img alt="" src={`/images/grade/${nft.attributes[0].value}.png`} />
+        { nft?.level && (
+          <img alt="" src={`/images/grade/${nft.level}.png`} />
         )}
       </div>
 
