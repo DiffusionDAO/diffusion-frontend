@@ -32,10 +32,10 @@ export const featured = {
   start_date: Date.parse(new Date('2022-04-22 09:00:00 GMT+0800')),
   end_date: Date.parse(new Date('2022-12-31 09:00:00 GMT+0800')),
   pool_type: 'featured',
-  title: 'PDFS',
-  up_pool_raise: 10 / 20,
+  title: 'BITV',
+  up_pool_raise: 10,
   usd_per_share: 1,
-  content: 'To create an economic crony type DAO organization.',
+  content: 'これは新しい時代の幕開けです。',
   images: '',
   min_allocation: '',
   max_allocation: '',
@@ -43,7 +43,7 @@ export const featured = {
   participants: 0,
   swap_amount: null,
   min_swap_level: '',
-  symbol: 'PDFS',
+  symbol: 'BITV',
   decimal: 18,
   // testnet
   // usdt: '0xc362B3ed5039447dB7a06F0a3d0bd9238E74d57c',
@@ -61,7 +61,7 @@ export const featured = {
   raised: 0,
   total_supply: 500000,
   idoPercent: 1,
-  description: '<p>PDFS Eco</p>',
+  description: '<p>BITV Eco</p>',
   twitter_link: '',
   git_link: '',
   telegram_link: '',
@@ -340,7 +340,6 @@ export function IDOPool(props) {
         }
       }
     }
-    console.log(referral1, referral2, stake.toString(), usdtPercent1, usdtPercent2)
     try {
       await pdfs.attendIDO(referral1, referral2, stake, usdtPercent1, usdtPercent2)
     } catch (error) {
@@ -573,14 +572,14 @@ export function IDOPool(props) {
                           <div>
                             {isMobile ? (
                               <>
-                                <p>PDFS: {trim(formatUnits(pool.PDFSBalance, 18), 9)}</p>
+                                <p>BITV: {trim(formatUnits(pool.PDFSBalance, 18), 9)}</p>
                               </>
                             ) : (
                               <>
                                 <p>
                                   IDO {t('Balance')}: {formatUnits(pool.balance, 18)} USDT
                                 </p>
-                                <p>PDFS: {formatUnits(pool.PDFSBalance, 18)}</p>
+                                <p>BITV: {formatUnits(pool.PDFSBalance, 18)}</p>
                               </>
                             )}
                           </div>

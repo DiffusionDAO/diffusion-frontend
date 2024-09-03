@@ -10,7 +10,7 @@ function IDO(props) {
   let inputEle = useRef(null)
   return (
     <Page>
-      <Referral account={account} inputEle={inputEle}/>
+      {/* <Referral account={account} inputEle={inputEle}/> */}
       <IDOPool account={account} inputEle={inputEle}/>
     </Page>
   )

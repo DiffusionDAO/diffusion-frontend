@@ -13,7 +13,7 @@ import { useState, useEffect } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import cloneDeep from "lodash/cloneDeep";
 import CompoundConfirmModal from 'views/Nft/market/Profile/components/CompoundConfirmModal'
-import { nftDatasMock } from './MockNftDatas'
+// import { nftDatasMock } from './MockNftDatas'
 
 function NftProfilePage() {
   const { account } = useWeb3React()
@@ -34,7 +34,7 @@ function NftProfilePage() {
   const [isCompound, setIsCompound] = useState(false)
   const [selectNfts, setSelectedNfts] = useState<NftToken[]>([])
 
-  const [nftDatas, setNftDatas] = useState<NftToken[]>(nftDatasMock)
+  const [nftDatas, setNftDatas] = useState<NftToken[]>()
 
   const sortByItems = [
     { label: t('Recently listed'), value: { field: 'updatedAt', direction: 'desc' } },
@@ -74,7 +74,6 @@ function NftProfilePage() {
     }
   }, [selectNfts])
 
-  // 选中nft
   const selectNft = (nft) => {
     const data = cloneDeep(nftDatas)
     data.map((item: NftToken) => {
